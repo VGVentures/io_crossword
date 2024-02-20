@@ -17,6 +17,16 @@
       ]
     },
     {
+      "name": "web development",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--target",
+        "lib/main_development.dart"
+      ]
+    },
+    {
       "name": "Launch staging",
       "request": "launch",
       "type": "dart",
