@@ -10,4 +10,9 @@ class AuthenticationException implements Exception {
 
   /// The stack trace associated with the error.
   final StackTrace stackTrace;
+
+  @override
+  String toString() {
+    return error.toString();
+  }
 }
