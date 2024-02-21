@@ -7,7 +7,6 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:http/http.dart' as http;
 import 'package:jose/jose.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
-import 'package:jwt_middleware/src/jwt.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:x509/x509.dart';
