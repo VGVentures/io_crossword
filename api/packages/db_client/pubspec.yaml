@@ -1,0 +1,20 @@
+name: db_client
+description: Client used to access the game database.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  equatable: ^2.0.5
+  firedart:
+    git:
+      url: https://github.com/VGVentures/firedart.git
+      ref: master
+  grpc: ^3.1.0
+
+dev_dependencies:
+  mocktail: ^1.0.0
+  test: ^1.19.2
+  very_good_analysis: ^5.1.0
