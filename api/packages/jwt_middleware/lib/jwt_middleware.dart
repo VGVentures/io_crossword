@@ -1,4 +1,4 @@
-/// A Very Good Project created by Very Good CLI.
+/// A dart_frog middleware for checking JWT authorization.
 library jwt_middleware;
 
 export 'src/authenticated_user.dart';
