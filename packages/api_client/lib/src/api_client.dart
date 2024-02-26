@@ -1,60 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:encrypt/encrypt.dart';
+import 'package:api_client/api_client.dart';
 import 'package:http/http.dart' as http;
 
-/// {@template api_client_error}
-/// Error throw when accessing api failed.
-///
-/// Check [cause] and [stackTrace] for specific details.
-/// {@endtemplate}
-class ApiClientError implements Exception {
-  /// {@macro api_client_error}
-  ApiClientError(this.cause, this.stackTrace);
-
-  /// Error cause.
-  final dynamic cause;
-
-  /// The stack trace of the error.
-  final StackTrace stackTrace;
-
-  @override
-  String toString() {
-    return cause.toString();
-  }
-}
-
-/// Definition of a post call used by this client.
-typedef PostCall = Future<http.Response> Function(
-  Uri, {
-  Object? body,
-  Map<String, String>? headers,
-});
-
-/// Definition of a patch call used by this client.
-typedef PatchCall = Future<http.Response> Function(
-  Uri, {
-  Object? body,
-  Map<String, String>? headers,
-});
-
-/// Definition of a put call used by this client.
-typedef PutCall = Future<http.Response> Function(
-  Uri, {
-  Object? body,
-  Map<String, String>? headers,
-});
-
-/// Definition of a get call used by this client.
-typedef GetCall = Future<http.Response> Function(
-  Uri, {
-  Map<String, String>? headers,
-});
-
 /// {@template api_client}
-/// A Very Good Project created by Very Good CLI.
+/// Client to access the api.
 /// {@endtemplate}
 class ApiClient {
   /// {@macro api_client}
@@ -208,54 +159,5 @@ class ApiClient {
 
       return response;
     });
-  }
-}
-
-extension on http.Response {
-  http.Response get decrypted {
-    if (body.isEmpty) return this;
-
-    final key = Key.fromUtf8(_encryptionKey);
-    final iv = IV.fromUtf8(_encryptionIV);
-
-    final encrypter = Encrypter(AES(key));
-
-    final decrypted = encrypter.decrypt64(body, iv: iv);
-
-    return http.Response(
-      jsonDecode(decrypted).toString(),
-      statusCode,
-      headers: headers,
-      isRedirect: isRedirect,
-      persistentConnection: persistentConnection,
-      reasonPhrase: reasonPhrase,
-      request: request,
-    );
-  }
-
-  String get _encryptionKey {
-    const value = String.fromEnvironment(
-      'ENCRYPTION_KEY',
-      // Default value is set at 32 characters to match required length of
-      // AES key. The default value can then be used for testing purposes.
-      defaultValue: 'encryption_key_not_set_123456789',
-    );
-    return value;
-  }
-
-  String get _encryptionIV {
-    const value = String.fromEnvironment(
-      'ENCRYPTION_IV',
-      // Default value is set at 116 characters to match required length of
-      // IV key. The default value can then be used for testing purposes.
-      defaultValue: 'iv_not_set_12345',
-    );
-    return value;
-  }
-}
-
-extension on Map<String, String> {
-  void addContentTypeJson() {
-    addAll({HttpHeaders.contentTypeHeader: ContentType.json.value});
   }
 }

@@ -535,14 +535,5 @@ void main() {
         ).called(1);
       });
     });
-
-    group('ApiClientError', () {
-      test('toString returns the cause', () {
-        expect(
-          ApiClientError('Ops', StackTrace.empty).toString(),
-          equals('Ops'),
-        );
-      });
-    });
   });
 }
