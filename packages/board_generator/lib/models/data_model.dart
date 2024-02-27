@@ -2,15 +2,9 @@ library data_model;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
 import 'package:characters/characters.dart';
 
 part 'data_model.g.dart';
-
-@SerializersFor([Location, Crossword, CrosswordCharacter])
-
-/// The global [Serializers] object.
-final Serializers serializers = _$serializers;
 
 ///{@template crossword}
 /// A crossword puzzle data model.
@@ -20,9 +14,6 @@ abstract class Crossword implements Built<Crossword, CrosswordBuilder> {
   factory Crossword([void Function(CrosswordBuilder) updates]) = _$Crossword;
 
   Crossword._();
-
-  /// The serializer for this data model.
-  static Serializer<Crossword> get serializer => _$crosswordSerializer;
 
   /// The list of unused candidate words that can be added to this crossword.
   BuiltList<String> get candidates;
@@ -199,10 +190,9 @@ abstract class Crossword implements Built<Crossword, CrosswordBuilder> {
       for (final (idx, character) in word.characters.indexed) {
         final characterLocation =
             location.rebuild((b) => b..across = location.across + idx);
-        b.characters.updateValue(
+        b.characters.putIfAbsent(
           characterLocation,
-          (b) => b.rebuild((b) => b.acrossWord = word),
-          ifAbsent: () => CrosswordCharacter(
+          () => CrosswordCharacter(
             (b) => b
               ..acrossWord = word
               ..character = character,
@@ -240,9 +230,6 @@ abstract class Location implements Built<Location, LocationBuilder> {
 
   Location._();
 
-  /// The serializer for this data model.
-  static Serializer<Location> get serializer => _$locationSerializer;
-
   /// The horizontal part of the location.
   int get across;
 
@@ -261,10 +248,6 @@ abstract class CrosswordCharacter
   ]) = _$CrosswordCharacter;
 
   CrosswordCharacter._();
-
-  /// The serializer for this data model.
-  static Serializer<CrosswordCharacter> get serializer =>
-      _$crosswordCharacterSerializer;
 
   /// The character at this location.
   String get character;

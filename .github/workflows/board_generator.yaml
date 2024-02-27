@@ -18,3 +18,4 @@ jobs:
     with:
       dart_sdk: stable
       working_directory: packages/board_generator
+      coverage_excludes: "**/*.g.dart"
