@@ -7,7 +7,6 @@ export ENCRYPTION_KEY=X9YTchZdcnyZTNBSBgzj29p7RMBAIubD
 export ENCRYPTION_IV=FxC21ctRg9SgiXuZ
 export INITIALS_BLACKLIST_ID=MdOoZMhusnJTcwfYE0nL
 export FB_STORAGE_BUCKET=io-crossword-dev.appspot.com
-export SCRIPTS_ENABLED=true
 
 echo ' ######################## '
 echo ' ## Starting dart frog ## '
