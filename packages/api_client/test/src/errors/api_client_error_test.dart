@@ -5,8 +5,11 @@ void main() {
   group('ApiClientError', () {
     test('toString returns the cause', () {
       expect(
-        ApiClientError('Ops', StackTrace.empty).toString(),
-        equals('Ops'),
+        ApiClientError('Ops', StackTrace.fromString('stackTrace')).toString(),
+        equals('''
+cause: Ops
+stackTrace: stackTrace
+'''),
       );
     });
   });

@@ -15,6 +15,9 @@ class ApiClientError implements Exception {
 
   @override
   String toString() {
-    return cause.toString();
+    return '''
+cause: $cause
+stackTrace: $stackTrace
+''';
   }
 }
