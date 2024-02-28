@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:db_client/db_client.dart';
 import 'package:firedart/firedart.dart';
-import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

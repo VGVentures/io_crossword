@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:firedart/firedart.dart';
-import 'package:grpc/grpc.dart';
 
 /// {@template db_entity_record}
 /// A model representing a record in an entity.
