@@ -5,8 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'word.g.dart';
 
 /// {@template word}
-/// A model that represents a board section with all the words that
-/// are contained.
+/// A model that represents a word in the crossword.
 /// {@endtemplate}
 @JsonSerializable(ignoreUnannotated: true)
 class Word extends Equatable {
@@ -24,8 +23,7 @@ class Word extends Equatable {
   /// {@macro word}
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
-  /// Unique identifier of the leaderboard player object
-  /// and session id for the player.
+  /// Unique identifier of the word.
   @JsonKey()
   final String id;
 

@@ -6,7 +6,7 @@ part 'board_section.g.dart';
 
 /// {@template board_section}
 /// A model that represents a board section with all the words that
-/// are contained.
+/// it contains.
 /// {@endtemplate}
 @JsonSerializable(ignoreUnannotated: true)
 class BoardSection extends Equatable {
@@ -23,8 +23,7 @@ class BoardSection extends Equatable {
   factory BoardSection.fromJson(Map<String, dynamic> json) =>
       _$BoardSectionFromJson(json);
 
-  /// Unique identifier of the leaderboard player object
-  /// and session id for the player.
+  /// Unique identifier of board section.
   @JsonKey()
   final String id;
 
@@ -54,5 +53,6 @@ class BoardSection extends Equatable {
         position,
         width,
         height,
+        words,
       ];
 }
