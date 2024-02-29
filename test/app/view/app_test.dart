@@ -5,7 +5,8 @@ void main() {
   group('App', () {
     testWidgets('renders AppView', (tester) async {
       await tester.pumpWidget(const App());
-      await tester.pumpAndSettle(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 700));
       expect(find.byType(AppView), findsOneWidget);
     });
   });

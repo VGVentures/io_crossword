@@ -70,11 +70,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
 
       expect(textWidgetFinder().data, 'Loading Beautiful scenery...');
-      await tester.pump(const Duration(milliseconds: 500));
-      // await tester.pump(const Duration(milliseconds: 300));
 
       /// flush animation timers
-      // await tester.pumpAndSettle(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 500));
     });
 
     testWidgets('redirects after loading', (tester) async {
