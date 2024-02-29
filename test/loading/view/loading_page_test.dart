@@ -55,10 +55,12 @@ void main() {
         return find.textContaining('Loading').evaluate().first.widget as Text;
       }
 
-      await tester.pumpApp(BlocProvider.value(
-        value: preloadCubit,
-        child: LoadingPage(),
-      ));
+      await tester.pumpApp(
+        BlocProvider.value(
+          value: preloadCubit,
+          child: LoadingPage(),
+        ),
+      );
 
       expect(textWidgetFinder().data, 'Loading  ...');
 
