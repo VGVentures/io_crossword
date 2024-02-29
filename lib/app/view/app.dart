@@ -1,9 +1,31 @@
+import 'package:flame/cache.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:io_crossword/counter/counter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => PreloadCubit(
+            Images(prefix: ''),
+            AudioCache(prefix: ''),
+          )..loadSequentially(),
+        ),
+      ],
+      child: const AppView(),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +38,7 @@ class App extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const LoadingPage(),
     );
   }
 }
