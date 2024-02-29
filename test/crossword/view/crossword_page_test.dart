@@ -39,7 +39,8 @@ void main() {
     });
 
     testWidgets('renders CrosswordView', (tester) async {
-      await tester.pumpApp(CrosswordPage());
+      await tester.pumpRoute(CrosswordPage.route());
+      await tester.pump();
       expect(find.byType(CrosswordView), findsOneWidget);
     });
 

@@ -6,12 +6,19 @@ import 'package:io_crossword/crossword/crossword.dart';
 class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
 
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => BlocProvider(
+        create: (BuildContext context) =>
+            CrosswordBloc()..add(const InitialBoardLoadRequested()),
+        child: const CrosswordPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CrosswordBloc()..add(const InitialBoardLoadRequested()),
-      child: const CrosswordView(),
-    );
+    return const CrosswordView();
   }
 }
 
