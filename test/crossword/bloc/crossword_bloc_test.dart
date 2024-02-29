@@ -18,6 +18,7 @@ void main() {
         CrosswordLoaded(
           width: 40,
           height: 40,
+          sectionSize: 400,
           sections: [
             BoardSection(
               id: '1',

@@ -30,6 +30,7 @@ void main() {
           CrosswordLoaded(
             width: 40,
             height: 40,
+            sectionSize: 400,
             sections: const [
               BoardSection(
                 id: '1',
@@ -59,6 +60,7 @@ void main() {
           CrosswordLoaded(
             width: 40,
             height: 40,
+            sectionSize: 400,
             sections: const [
               BoardSection(
                 id: '1',
@@ -83,6 +85,7 @@ void main() {
           CrosswordLoaded(
             width: 40,
             height: 40,
+            sectionSize: 400,
             sections: const [
               BoardSection(
                 id: '1',
