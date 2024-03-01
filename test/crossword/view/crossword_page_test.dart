@@ -73,7 +73,7 @@ void main() {
           height: 40,
           sectionSize: 40,
           sections: {
-            (0, 0) :BoardSection(
+            (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               width: 40,

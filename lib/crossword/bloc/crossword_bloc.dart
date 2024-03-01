@@ -70,7 +70,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           ),
           Word(
             id: '',
-            axis: Axis.horizontal,
+            axis: Axis.vertical,
             position: Point(4, 1),
             answer: 'android',
             clue: 'flutter',
@@ -80,7 +80,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           ),
           Word(
             id: '',
-            axis: Axis.horizontal,
+            axis: Axis.vertical,
             position: Point(8, 3),
             answer: 'dino',
             clue: 'flutter',

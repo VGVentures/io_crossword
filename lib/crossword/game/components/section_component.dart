@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
@@ -64,10 +64,16 @@ class SectionComponent extends PositionComponent
           CrosswordGame.cellSize.toDouble(),
         );
 
+        final x = word.axis == Axis.horizontal
+            ? word.position.x + c
+            : word.position.x;
+
+        final y =
+            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
         final offset = sectionPosition +
             Vector2(
-              (word.position.x + c) * CrosswordGame.cellSize.toDouble(),
-              word.position.y * CrosswordGame.cellSize.toDouble(),
+              x * CrosswordGame.cellSize.toDouble(),
+              y * CrosswordGame.cellSize.toDouble(),
             );
 
         spriteBatch.add(
