@@ -16,6 +16,7 @@ void main() {
           Word(
             id: 'id',
             position: Point(1, 2),
+            axis: Axis.horizontal,
             answer: 'answer',
             clue: 'clue',
             hints: ['hints'],
@@ -37,6 +38,7 @@ void main() {
             {
               'id': 'id',
               'position': {'x': 1, 'y': 2},
+              'axis': 'horizontal',
               'answer': 'answer',
               'clue': 'clue',
               'hints': ['hints'],
@@ -58,6 +60,7 @@ void main() {
           {
             'id': 'id',
             'position': {'x': 1, 'y': 2},
+            'axis': 'horizontal',
             'answer': 'answer',
             'clue': 'clue',
             'hints': ['hints'],
@@ -79,6 +82,7 @@ void main() {
               Word(
                 id: 'id',
                 position: Point(1, 2),
+                axis: Axis.horizontal,
                 answer: 'answer',
                 clue: 'clue',
                 hints: ['hints'],
