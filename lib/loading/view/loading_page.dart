@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/game/view/game_page.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 
@@ -18,7 +18,7 @@ class _LoadingPageState extends State<LoadingPage> {
     if (!mounted) {
       return;
     }
-    await navigator.pushReplacement<void, void>(GamePage.route());
+    await navigator.pushReplacement<void, void>(CrosswordPage.route());
   }
 
   @override

@@ -19,3 +19,34 @@ extension PumpApp on WidgetTester {
     );
   }
 }
+
+extension PumpRoute on WidgetTester {
+  Future<void> pumpRoute(
+    Route<dynamic> route, {
+    MockNavigator? navigator,
+  }) async {
+    final widget = Center(
+      child: Builder(
+        builder: (context) {
+          return ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(route);
+            },
+            child: const Text('Push Route'),
+          );
+        },
+      ),
+    );
+    await pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: navigator != null
+            ? MockNavigatorProvider(navigator: navigator, child: widget)
+            : widget,
+      ),
+    );
+    await tap(find.text('Push Route'));
+    await pump();
+  }
+}
