@@ -22,6 +22,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       words: [
         Word(
           id: '1',
+          axis: Axis.horizontal,
           position: Point(0, 0),
           answer: 'flutter',
           clue: 'flutter',

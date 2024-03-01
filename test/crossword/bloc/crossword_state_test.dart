@@ -39,6 +39,7 @@ void main() {
                 words: [
                   Word(
                     id: '1',
+                    axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',
@@ -67,6 +68,7 @@ void main() {
                 words: [
                   Word(
                     id: '1',
+                    axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',
@@ -90,6 +92,7 @@ void main() {
                 words: [
                   Word(
                     id: '1',
+                    axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',

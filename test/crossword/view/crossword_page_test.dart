@@ -2,7 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -79,6 +79,7 @@ void main() {
               words: [
                 Word(
                   id: '1',
+                  axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
