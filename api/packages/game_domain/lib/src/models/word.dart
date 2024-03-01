@@ -13,6 +13,7 @@ class Word extends Equatable {
   const Word({
     required this.id,
     required this.position,
+    required this.axis,
     required this.answer,
     required this.clue,
     required this.hints,
@@ -31,6 +32,10 @@ class Word extends Equatable {
   @JsonKey()
   @PointConverter()
   final Point<int> position;
+
+  /// The axis of the word in the board.
+  @JsonKey()
+  final Axis axis;
 
   /// The word answer to display in the crossword when solved.
   @JsonKey()
@@ -62,10 +67,20 @@ class Word extends Equatable {
   List<Object?> get props => [
         id,
         position,
+        axis,
         answer,
         clue,
         hints,
         visible,
         solvedTimestamp,
       ];
+}
+
+/// The two possible axis for a word in the board.
+enum Axis {
+  /// From left to right.
+  horizontal,
+
+  /// From top to bottom.
+  vertical,
 }
