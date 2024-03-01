@@ -275,10 +275,11 @@ packages:
   flame:
     dependency: "direct main"
     description:
-      name: flame
-      sha256: bb42a35fa5dabdea535daebe5b020e21a2fce8192b67b7e55cd30fed86d29f69
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/flame"
+      ref: "erick.spritebatch-replace-and-length"
+      resolved-ref: a9eb4c8a177f81daa1b5e99faa74aa113ddec154
+      url: "https://github.com/flame-engine/flame.git"
+    source: git
     version: "1.16.0"
   flame_audio:
     dependency: "direct main"
@@ -296,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flame_bloc:
+    dependency: "direct main"
+    description:
+      name: flame_bloc
+      sha256: "0681f60e18c7370e8f363194e222912bb17e507b1fc5ab354677c548cf0c0c81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.11.0"
   flame_test:
     dependency: "direct main"
     description:

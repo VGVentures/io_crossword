@@ -324,6 +324,93 @@ void main() {
           },
         );
       });
+
+      group('withSelectedWord returns a copy with selected word', () {
+        final state = CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 400,
+          sections: const {
+            (0, 0): BoardSection(
+              id: '1',
+              position: Point(0, 0),
+              width: 40,
+              height: 40,
+              words: [
+                Word(
+                  id: '1',
+                  axis: Axis.horizontal,
+                  position: Point(0, 0),
+                  answer: 'flutter',
+                  clue: 'flutter',
+                  hints: ['dart', 'mobile', 'cross-platform'],
+                  visible: true,
+                  solvedTimestamp: null,
+                ),
+              ],
+            ),
+          },
+        );
+
+        test('returns a copy with selected word', () {
+          final newState = state.withSelectedWord(
+            WordSelection(
+              section: (0, 0),
+              wordId: '1',
+            ),
+          );
+          expect(
+            (newState as CrosswordLoaded).selectedWord,
+            WordSelection(
+              section: (0, 0),
+              wordId: '1',
+            ),
+          );
+        });
+
+        test('returns a copy with null selected word', () {
+          final newState = state.withSelectedWord(null);
+          expect((newState as CrosswordLoaded).selectedWord, null);
+        });
+      });
+
+      group('WordSelection', () {
+        test('can be instantiated', () {
+          expect(
+            WordSelection(
+              section: (0, 0),
+              wordId: '',
+            ),
+            isA<WordSelection>(),
+          );
+        });
+
+        test('supports value comparisons', () {
+          expect(
+            WordSelection(
+              section: (0, 0),
+              wordId: '',
+            ),
+            WordSelection(
+              section: (0, 0),
+              wordId: '',
+            ),
+          );
+
+          expect(
+            WordSelection(
+              section: (0, 0),
+              wordId: '',
+            ),
+            isNot(
+              WordSelection(
+                section: (0, 0),
+                wordId: '1',
+              ),
+            ),
+          );
+        });
+      });
     });
 
     group('CrosswordError', () {
