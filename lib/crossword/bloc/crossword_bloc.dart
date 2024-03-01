@@ -60,6 +60,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         words: const [
           Word(
             id: '',
+            axis: Axis.horizontal,
             position: Point(0, 0),
             answer: 'flutter',
             clue: 'flutter',
@@ -69,6 +70,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           ),
           Word(
             id: '',
+            axis: Axis.horizontal,
             position: Point(4, 1),
             answer: 'android',
             clue: 'flutter',
@@ -78,6 +80,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           ),
           Word(
             id: '',
+            axis: Axis.horizontal,
             position: Point(8, 3),
             answer: 'dino',
             clue: 'flutter',
@@ -88,6 +91,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           Word(
             id: '',
             position: Point(4, 6),
+            axis: Axis.horizontal,
             answer: 'sparky',
             clue: 'flutter',
             hints: ['dart', 'mobile', 'cross-platform'],
