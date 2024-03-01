@@ -3,10 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-
-class _MockDocumentReference<T> extends Mock implements DocumentReference<T> {}
 
 void main() {
   group('CrosswordRepository', () {
