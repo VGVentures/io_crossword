@@ -60,11 +60,30 @@ void main() {
       });
     });
 
-    group('WatchSection', () {
+    group('watchSection', () {
       test('returns the requested section', () async {
         expect(
           crosswordRepository.watchSection('id'),
           emits(boardSection1),
+        );
+      });
+    });
+
+    group('addSection', () {
+      test('returns the requested section', () async {
+        final section = BoardSection(
+          id: 'id2',
+          position: Point(1, 1),
+          width: 10,
+          height: 10,
+          words: [
+            word,
+          ],
+        );
+        await crosswordRepository.addSection(section);
+        expect(
+          crosswordRepository.getSections(),
+          emits([boardSection1, section]),
         );
       });
     });
