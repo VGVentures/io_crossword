@@ -9,6 +9,7 @@ void main() {
       final word = Word(
         id: 'id',
         position: Point(1, 2),
+        axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
@@ -22,6 +23,7 @@ void main() {
         equals({
           'id': 'id',
           'position': {'x': 1, 'y': 2},
+          'axis': 'horizontal',
           'answer': 'test',
           'clue': 'clue',
           'hints': ['hint'],
@@ -35,6 +37,7 @@ void main() {
       final json = {
         'id': 'id',
         'position': {'x': 1, 'y': 2},
+        'axis': 'horizontal',
         'answer': 'test',
         'clue': 'clue',
         'hints': ['hint'],
@@ -47,6 +50,7 @@ void main() {
           Word(
             id: 'id',
             position: Point(1, 2),
+            axis: Axis.horizontal,
             answer: 'test',
             clue: 'clue',
             hints: const ['hint'],
@@ -61,6 +65,7 @@ void main() {
       final firstWord = Word(
         id: 'id',
         position: Point(1, 2),
+        axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
@@ -70,6 +75,7 @@ void main() {
       final secondWord = Word(
         id: 'id',
         position: Point(1, 2),
+        axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
