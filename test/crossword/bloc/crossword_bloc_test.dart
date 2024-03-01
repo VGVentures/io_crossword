@@ -106,7 +106,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
-            )
+            ),
           },
         ),
       ],
