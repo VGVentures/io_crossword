@@ -14,9 +14,9 @@ class BoardSection extends Equatable {
   const BoardSection({
     required this.id,
     required this.position,
-    required this.width,
-    required this.height,
+    required this.size,
     required this.words,
+    required this.borderWords,
   });
 
   /// {@macro board_section}
@@ -24,7 +24,9 @@ class BoardSection extends Equatable {
       _$BoardSectionFromJson(json);
 
   /// Unique identifier of board section.
-  @JsonKey()
+  ///
+  /// Intentionally left out of serialization to avoid redundancy.
+  @JsonKey(includeToJson: false)
   final String id;
 
   /// Position of the board section in the board. The origin is the top left.
@@ -32,17 +34,17 @@ class BoardSection extends Equatable {
   @PointConverter()
   final Point<int> position;
 
-  /// Width of the board section.
+  /// Size of the squared board section.
   @JsonKey()
-  final int width;
+  final int size;
 
-  /// Height of the board section.
-  @JsonKey()
-  final int height;
-
-  /// The words that are contained in this board section.
+  /// The words that start in this board section.
   @JsonKey()
   final List<Word> words;
+
+  /// The words that end in this board section, but don't start in it.
+  @JsonKey()
+  final List<Word> borderWords;
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$BoardSectionToJson(this);
@@ -51,8 +53,8 @@ class BoardSection extends Equatable {
   List<Object?> get props => [
         id,
         position,
-        width,
-        height,
+        size,
         words,
+        borderWords,
       ];
 }

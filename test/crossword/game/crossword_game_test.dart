@@ -68,9 +68,9 @@ void main() {
             (0, 0): BoardSection(
               id: '',
               position: Point(2, 2),
-              width: 400,
-              height: 400,
+              size: 400,
               words: [],
+              borderWords: [],
             ),
           },
         );

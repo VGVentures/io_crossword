@@ -11,7 +11,6 @@ part 'word.g.dart';
 class Word extends Equatable {
   /// {@macro word}
   const Word({
-    required this.id,
     required this.position,
     required this.axis,
     required this.answer,
@@ -19,13 +18,15 @@ class Word extends Equatable {
     required this.hints,
     required this.visible,
     required this.solvedTimestamp,
-  });
+  }) : id = '$position-$axis';
 
   /// {@macro word}
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
-  /// Unique identifier of the word.
-  @JsonKey()
+  /// Unique identifier of the word determined by its position and axis.
+  ///
+  /// Intentionally left out of serialization to avoid redundancy.
+  @JsonKey(includeToJson: false)
   final String id;
 
   /// Position of the board section in the board. The origin is the top left.

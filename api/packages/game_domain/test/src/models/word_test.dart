@@ -7,7 +7,6 @@ void main() {
   group('Word', () {
     test('creates correct json object from Word object', () {
       final word = Word(
-        id: 'id',
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
@@ -21,7 +20,6 @@ void main() {
       expect(
         json,
         equals({
-          'id': 'id',
           'position': {'x': 1, 'y': 2},
           'axis': 'horizontal',
           'answer': 'test',
@@ -48,7 +46,6 @@ void main() {
         word,
         equals(
           Word(
-            id: 'id',
             position: Point(1, 2),
             axis: Axis.horizontal,
             answer: 'test',
@@ -63,7 +60,6 @@ void main() {
 
     test('supports equality', () {
       final firstWord = Word(
-        id: 'id',
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
@@ -73,7 +69,6 @@ void main() {
         solvedTimestamp: 0,
       );
       final secondWord = Word(
-        id: 'id',
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
