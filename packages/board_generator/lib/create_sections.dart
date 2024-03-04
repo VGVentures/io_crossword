@@ -66,28 +66,14 @@ void main(List<String> args) async {
     var sectionY = minY;
     while (sectionY < maxY) {
       final sectionWords = words.where((word) {
-        final isStartInSection = word.position.x >= sectionX &&
-            word.position.x < sectionX + sectionSize &&
-            word.position.y >= sectionY &&
-            word.position.y < sectionY + sectionSize;
-        return isStartInSection;
+        return word.isStartInSection(sectionX, sectionY, sectionSize);
       }).toList();
 
       final borderWords = words.where((word) {
-        final isStartInSection = word.position.x >= sectionX &&
-            word.position.x < sectionX + sectionSize &&
-            word.position.y >= sectionY &&
-            word.position.y < sectionY + sectionSize;
-        final endX = word.axis == Axis.horizontal
-            ? word.position.x + word.answer.length - 1
-            : word.position.x;
-        final endY = word.axis == Axis.vertical
-            ? word.position.y + word.answer.length - 1
-            : word.position.y;
-        final isEndInSection = endX >= sectionX &&
-            endX < sectionX + sectionSize &&
-            endY >= sectionY &&
-            endY < sectionY + sectionSize;
+        final isStartInSection =
+            word.isStartInSection(sectionX, sectionY, sectionSize);
+        final isEndInSection =
+            word.isEndInSection(sectionX, sectionY, sectionSize);
         return !isStartInSection && isEndInSection;
       }).toList();
 
@@ -106,7 +92,28 @@ void main(List<String> args) async {
   }
 
   await crosswordRepository.addSections(sections);
-  // await crosswordRepository.deleteSections();
 
   print('Added all ${sections.length} section to the database.');
+}
+
+/// An extension on [Word] to check if it is in a section.
+extension SectionBelonging on Word {
+  /// Returns true if the word starting letter is in the section.
+  bool isStartInSection(int sectionX, int sectionY, int sectionSize) {
+    return position.x >= sectionX &&
+        position.x < sectionX + sectionSize &&
+        position.y >= sectionY &&
+        position.y < sectionY + sectionSize;
+  }
+
+  /// Returns true if the word ending letter is in the section.
+  bool isEndInSection(int sectionX, int sectionY, int sectionSize) {
+    final (endX, endY) = axis == Axis.horizontal
+        ? (position.x + answer.length - 1, position.y)
+        : (position.x, position.y + answer.length - 1);
+    return endX >= sectionX &&
+        endX < sectionX + sectionSize &&
+        endY >= sectionY &&
+        endY < sectionY + sectionSize;
+  }
 }
