@@ -296,6 +296,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flame_test:
+    dependency: "direct main"
+    description:
+      name: flame_test
+      sha256: "297f79147c4afd6e363ab898da52fa9e6301f6da0f6f5fd916901f797f51e16f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.16.0"
   flutter:
     dependency: "direct main"
     description: flutter

@@ -41,6 +41,7 @@ void main() {
     testWidgets('renders CrosswordView', (tester) async {
       await tester.pumpRoute(CrosswordPage.route());
       await tester.pump();
+
       expect(find.byType(CrosswordView), findsOneWidget);
     });
 
@@ -70,8 +71,9 @@ void main() {
         const CrosswordLoaded(
           width: 40,
           height: 40,
-          sections: [
-            BoardSection(
+          sectionSize: 40,
+          sections: {
+            (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               width: 40,
@@ -89,7 +91,7 @@ void main() {
                 ),
               ],
             ),
-          ],
+          },
         ),
       );
 
