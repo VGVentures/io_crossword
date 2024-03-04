@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:board_generator/src/models/data_model.dart';
+import 'package:game_domain/game_domain.dart';
 
 /// Generates a crossword.
 Crossword generateCrossword(List<String> wordList, String filePath) {
@@ -37,12 +38,14 @@ Crossword generateCrossword(List<String> wordList, String filePath) {
       final buffer = StringBuffer();
       for (final entry in newAcrossWords.entries) {
         buffer.writeln(
-          '${entry.key.across},${entry.key.down},${entry.value},horizontal',
+          '${entry.key.across},${entry.key.down},${entry.value},'
+          '${Axis.horizontal}',
         );
       }
       for (final entry in newDownWords.entries) {
         buffer.writeln(
-          '${entry.key.across},${entry.key.down},${entry.value},vertical',
+          '${entry.key.across},${entry.key.down},${entry.value},'
+          '${Axis.vertical}',
         );
       }
 

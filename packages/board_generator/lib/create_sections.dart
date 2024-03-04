@@ -23,7 +23,7 @@ void main(List<String> args) async {
   final crosswordRepository = CrosswordRepository(firestore: firestore);
 
   // Read the file
-  final fileString = File('board.txt').readAsStringSync();
+  final fileString = File('assets/board.txt').readAsStringSync();
   final rows = const CsvToListConverter(eol: '\n').convert(fileString);
 
   // Convert to custom object

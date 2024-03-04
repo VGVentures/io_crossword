@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:board_generator/src/board_generator.dart';
 
 void main(List<String> args) async {
-  final file = File('allWords.json');
+  final file = File('assets/allWords.json');
 
   final string = await file.readAsString();
   final map = jsonDecode(string) as Map<String, dynamic>;
@@ -19,5 +19,5 @@ void main(List<String> args) async {
       (element) => !regex.hasMatch(element),
     );
 
-  generateCrossword(filteredWords, 'board.txt');
+  generateCrossword(filteredWords, 'assets/board.txt');
 }
