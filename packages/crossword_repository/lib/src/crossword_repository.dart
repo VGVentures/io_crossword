@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
 
-/// Thrown when adding a board section fails
-class AddSectionError extends Error {}
-
 /// {@template crossword_repository}
 /// Repository to manage the crossword.
 /// {@endtemplate}
