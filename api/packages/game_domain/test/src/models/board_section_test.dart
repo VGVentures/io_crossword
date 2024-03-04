@@ -10,8 +10,7 @@ void main() {
       final boardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        width: 3,
-        height: 4,
+        size: 200,
         words: [
           Word(
             id: 'id',
@@ -24,6 +23,7 @@ void main() {
             solvedTimestamp: 1234,
           ),
         ],
+        borderWords: [],
       );
       final json = boardSection.toJson();
 
@@ -32,8 +32,7 @@ void main() {
         equals({
           'id': 'id',
           'position': {'x': 1, 'y': 2},
-          'width': 3,
-          'height': 4,
+          'size': 200,
           'words': [
             {
               'id': 'id',
@@ -46,6 +45,7 @@ void main() {
               'solvedTimestamp': 1234,
             },
           ],
+          'borderWords': <Map<String, dynamic>>[],
         }),
       );
     });
@@ -54,8 +54,7 @@ void main() {
       final json = {
         'id': 'id',
         'position': {'x': 1, 'y': 2},
-        'width': 3,
-        'height': 4,
+        'size': 200,
         'words': [
           {
             'id': 'id',
@@ -68,6 +67,7 @@ void main() {
             'solvedTimestamp': 1234,
           },
         ],
+        'borderWords': <Map<String, dynamic>>[],
       };
       final boardSection = BoardSection.fromJson(json);
       expect(
@@ -76,8 +76,7 @@ void main() {
           BoardSection(
             id: 'id',
             position: Point(1, 2),
-            width: 3,
-            height: 4,
+            size: 200,
             words: [
               Word(
                 id: 'id',
@@ -90,6 +89,7 @@ void main() {
                 solvedTimestamp: 1234,
               ),
             ],
+            borderWords: [],
           ),
         ),
       );
@@ -99,16 +99,16 @@ void main() {
       final firstBoardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        width: 3,
-        height: 4,
+        size: 300,
         words: [],
+        borderWords: [],
       );
       final secondBoardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        width: 3,
-        height: 4,
+        size: 300,
         words: [],
+        borderWords: [],
       );
 
       expect(firstBoardSection, equals(secondBoardSection));
