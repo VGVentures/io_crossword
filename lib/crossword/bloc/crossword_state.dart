@@ -22,29 +22,33 @@ class CrosswordLoaded extends CrosswordState {
     required this.height,
     required this.sectionSize,
     required this.sections,
+    required this.allSections,
   });
 
   final int width;
   final int height;
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
+  final Map<(int, int), BoardSection> allSections;
 
   CrosswordLoaded copyWith({
     int? width,
     int? height,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
+    Map<(int, int), BoardSection>? allSections,
   }) {
     return CrosswordLoaded(
       width: width ?? this.width,
       height: height ?? this.height,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
+      allSections: allSections ?? this.allSections,
     );
   }
 
   @override
-  List<Object> get props => [width, height, sectionSize, sections];
+  List<Object> get props => [width, height, sectionSize, sections, allSections];
 }
 
 class CrosswordError extends CrosswordState {

@@ -49,6 +49,17 @@ class BoardSection extends Equatable {
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$BoardSectionToJson(this);
 
+  BoardSection copyWith({
+    Point<int>? position,
+  }) =>
+      BoardSection(
+        id: id,
+        position: position ?? this.position,
+        size: size,
+        words: words,
+        borderWords: borderWords,
+      );
+
   @override
   List<Object?> get props => [
         id,

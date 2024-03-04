@@ -44,6 +44,7 @@ class SectionComponent extends PositionComponent
   void _loadBoardSection(BoardSection section) {
     final spriteBatch = SpriteBatch(gameRef.lettersSprite);
 
+    print(section.position);
     final sectionPosition = Vector2(
       (index.$1 * gameRef.sectionSize).toDouble(),
       (index.$2 * gameRef.sectionSize).toDouble(),
