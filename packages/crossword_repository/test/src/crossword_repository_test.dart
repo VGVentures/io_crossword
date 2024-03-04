@@ -51,7 +51,7 @@ void main() {
     group('getSections', () {
       test('returns all the sections', () {
         expect(
-          crosswordRepository.getSections(),
+          crosswordRepository.watchSections(),
           emits([boardSection1]),
         );
       });
@@ -79,7 +79,7 @@ void main() {
         );
         await crosswordRepository.addSection(section);
         expect(
-          crosswordRepository.getSections(),
+          crosswordRepository.watchSections(),
           emits([boardSection1, section]),
         );
       });

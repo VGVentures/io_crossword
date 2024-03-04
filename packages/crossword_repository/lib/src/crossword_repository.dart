@@ -27,13 +27,13 @@ class CrosswordRepository {
     final docStream = ref.snapshots();
     return docStream.map((snapshot) {
       final id = snapshot.id;
-      final data = {...snapshot.data()!, 'id': id};
+      final data = {...snapshot.data() ?? {}, 'id': id};
       return BoardSection.fromJson(data);
     });
   }
 
-  /// Get all the sections of the crossword board
-  Stream<List<BoardSection>> getSections() {
+  /// Watches all the sections of the crossword board
+  Stream<List<BoardSection>> watchSections() {
     final snapshot = sectionCollection.snapshots();
     return snapshot.map(
       (snapshot) => snapshot.docs.map((doc) {
