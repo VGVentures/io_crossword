@@ -118,8 +118,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -132,6 +131,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -147,8 +147,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -161,6 +160,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -177,8 +177,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -191,6 +190,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -207,8 +207,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -221,6 +220,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -237,8 +237,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -251,6 +250,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -259,8 +259,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -273,12 +272,12 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
             (0, 1): BoardSection(
               id: '2',
               position: Point(0, 1),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '2',
@@ -291,6 +290,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );
@@ -300,8 +300,7 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -314,12 +313,12 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
             (0, 1): BoardSection(
               id: '2',
               position: Point(0, 1),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '2',
@@ -332,6 +331,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           },
         );

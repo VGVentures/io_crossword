@@ -20,11 +20,11 @@ void main() {
     final boardSection1 = BoardSection(
       id: 'id',
       position: Point(1, 1),
-      width: 10,
-      height: 10,
+      size: 10,
       words: [
         word,
       ],
+      borderWords: const [],
     );
     const sectionsCollection = 'sections';
 
@@ -71,11 +71,11 @@ void main() {
         final section = BoardSection(
           id: 'id2',
           position: Point(1, 1),
-          width: 10,
-          height: 10,
+          size: 10,
           words: [
             word,
           ],
+          borderWords: const [],
         );
         await crosswordRepository.addSection(section);
         expect(

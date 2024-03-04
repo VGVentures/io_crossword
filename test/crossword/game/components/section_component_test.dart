@@ -64,8 +64,7 @@ void main() {
               (100, 100): BoardSection(
                 id: '',
                 position: Point(100, 100),
-                width: 400,
-                height: 400,
+                size: 400,
                 words: [
                   Word(
                     id: '',
@@ -88,6 +87,7 @@ void main() {
                     solvedTimestamp: null,
                   ),
                 ],
+                borderWords: [],
               ),
             },
           ),
@@ -136,8 +136,7 @@ void main() {
               (100, 100): BoardSection(
                 id: '',
                 position: Point(100, 100),
-                width: 400,
-                height: 400,
+                size: 400,
                 words: [
                   Word(
                     id: '',
@@ -160,6 +159,7 @@ void main() {
                     solvedTimestamp: null,
                   ),
                 ],
+                borderWords: [],
               ),
             },
           ),
