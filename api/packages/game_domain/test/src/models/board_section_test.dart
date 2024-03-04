@@ -13,7 +13,6 @@ void main() {
         size: 200,
         words: [
           Word(
-            id: 'id',
             position: Point(1, 2),
             axis: Axis.horizontal,
             answer: 'answer',
@@ -77,7 +76,6 @@ void main() {
             size: 200,
             words: [
               Word(
-                id: 'id',
                 position: Point(1, 2),
                 axis: Axis.horizontal,
                 answer: 'answer',

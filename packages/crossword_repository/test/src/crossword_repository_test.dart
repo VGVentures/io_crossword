@@ -8,7 +8,6 @@ import 'package:test/test.dart';
 void main() {
   group('CrosswordRepository', () {
     final word = Word(
-      id: 'id',
       position: Point(1, 1),
       axis: Axis.horizontal,
       answer: 'answer',

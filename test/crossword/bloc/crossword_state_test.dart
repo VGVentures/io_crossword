@@ -31,24 +31,23 @@ void main() {
             width: 40,
             height: 40,
             sectionSize: 400,
-            sections: const {
+            sections: {
               (0, 0): BoardSection(
                 id: '1',
                 position: Point(0, 0),
                 size: 40,
                 words: [
                   Word(
-                    id: '1',
                     axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',
-                    hints: ['dart', 'mobile', 'cross-platform'],
+                    hints: const ['dart', 'mobile', 'cross-platform'],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
-                borderWords: [],
+                borderWords: const [],
               ),
             },
           ),
@@ -61,24 +60,23 @@ void main() {
             width: 40,
             height: 40,
             sectionSize: 400,
-            sections: const {
+            sections: {
               (0, 0): BoardSection(
                 id: '1',
                 position: Point(0, 0),
                 size: 40,
                 words: [
                   Word(
-                    id: '1',
                     axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',
-                    hints: ['dart', 'mobile', 'cross-platform'],
+                    hints: const ['dart', 'mobile', 'cross-platform'],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
-                borderWords: [],
+                borderWords: const [],
               ),
             },
           ),
@@ -86,24 +84,23 @@ void main() {
             width: 40,
             height: 40,
             sectionSize: 400,
-            sections: const {
+            sections: {
               (0, 0): BoardSection(
                 id: '1',
                 position: Point(0, 0),
                 size: 40,
                 words: [
                   Word(
-                    id: '1',
                     axis: Axis.horizontal,
                     position: Point(0, 0),
                     answer: 'flutter',
                     clue: 'flutter',
-                    hints: ['dart', 'mobile', 'cross-platform'],
+                    hints: const ['dart', 'mobile', 'cross-platform'],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
-                borderWords: [],
+                borderWords: const [],
               ),
             },
           ),
@@ -114,24 +111,23 @@ void main() {
           width: 40,
           height: 40,
           sectionSize: 400,
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
@@ -143,24 +139,23 @@ void main() {
           width: 40,
           height: 40,
           sectionSize: 400,
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
@@ -173,24 +168,23 @@ void main() {
           width: 40,
           height: 40,
           sectionSize: 400,
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
@@ -203,24 +197,23 @@ void main() {
           width: 40,
           height: 40,
           sectionSize: 400,
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
@@ -233,46 +226,44 @@ void main() {
           width: 40,
           height: 40,
           sectionSize: 400,
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
         final newState = state.copyWith(
-          sections: const {
+          sections: {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
             (0, 1): BoardSection(
               id: '2',
@@ -280,40 +271,38 @@ void main() {
               size: 40,
               words: [
                 Word(
-                  id: '2',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );
         expect(
           newState.sections,
-          const {
+          {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
             (0, 1): BoardSection(
               id: '2',
@@ -321,17 +310,16 @@ void main() {
               size: 40,
               words: [
                 Word(
-                  id: '2',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         );

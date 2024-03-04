@@ -14,7 +14,7 @@ void main() {
       'emits [CrosswordLoaded] when InitialBoardLoadRequested is added',
       build: CrosswordBloc.new,
       act: (bloc) => bloc.add(const InitialBoardLoadRequested()),
-      expect: () => const <CrosswordState>[
+      expect: () => <CrosswordState>[
         CrosswordLoaded(
           width: 40,
           height: 40,
@@ -22,21 +22,20 @@ void main() {
           sections: {
             (2, 2): BoardSection(
               id: '1',
-              position: Point(2, 2),
+              position: const Point(2, 2),
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
-                  position: Point(0, 0),
+                  position: const Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         ),
@@ -53,7 +52,7 @@ void main() {
         sections: {},
       ),
       act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
-      expect: () => const <CrosswordState>[
+      expect: () => <CrosswordState>[
         CrosswordLoaded(
           width: 40,
           height: 40,
@@ -61,51 +60,47 @@ void main() {
           sections: {
             (1, 1): BoardSection(
               id: '',
-              position: Point(1, 1),
+              position: const Point(1, 1),
               size: 40,
               words: [
                 Word(
-                  id: '',
                   axis: Axis.horizontal,
-                  position: Point(0, 0),
+                  position: const Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
                 Word(
-                  id: '',
                   axis: Axis.vertical,
-                  position: Point(4, 1),
+                  position: const Point(4, 1),
                   answer: 'android',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
                 Word(
-                  id: '',
                   axis: Axis.vertical,
-                  position: Point(8, 3),
+                  position: const Point(8, 3),
                   answer: 'dino',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
                 Word(
-                  id: '',
-                  position: Point(4, 6),
+                  position: const Point(4, 6),
                   axis: Axis.horizontal,
                   answer: 'sparky',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         ),

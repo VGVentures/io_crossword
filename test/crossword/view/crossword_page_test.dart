@@ -68,7 +68,7 @@ void main() {
 
     testWidgets('renders game when is loaded', (tester) async {
       when(() => bloc.state).thenReturn(
-        const CrosswordLoaded(
+        CrosswordLoaded(
           width: 40,
           height: 40,
           sectionSize: 40,
@@ -79,17 +79,16 @@ void main() {
               size: 40,
               words: [
                 Word(
-                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
                   clue: 'flutter',
-                  hints: ['dart', 'mobile', 'cross-platform'],
+                  hints: const ['dart', 'mobile', 'cross-platform'],
                   visible: true,
                   solvedTimestamp: null,
                 ),
               ],
-              borderWords: [],
+              borderWords: const [],
             ),
           },
         ),

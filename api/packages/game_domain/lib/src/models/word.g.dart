@@ -7,7 +7,6 @@ part of 'word.dart';
 // **************************************************************************
 
 Word _$WordFromJson(Map<String, dynamic> json) => Word(
-      id: json['id'] as String,
       position: const PointConverter()
           .fromJson(json['position'] as Map<String, dynamic>),
       axis: $enumDecode(_$AxisEnumMap, json['axis']),

@@ -56,38 +56,36 @@ void main() {
       createGame,
       (game) async {
         mockState(
-          const CrosswordLoaded(
+          CrosswordLoaded(
             width: 40,
             height: 40,
             sectionSize: 400,
             sections: {
               (100, 100): BoardSection(
                 id: '',
-                position: Point(100, 100),
+                position: const Point(100, 100),
                 size: 400,
                 words: [
                   Word(
-                    id: '',
-                    position: Point(0, 0),
+                    position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
                     clue: '',
-                    hints: [],
+                    hints: const [],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                   Word(
-                    id: '',
-                    position: Point(0, 0),
+                    position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
                     clue: '',
-                    hints: [],
+                    hints: const [],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
-                borderWords: [],
+                borderWords: const [],
               ),
             },
           ),
@@ -128,38 +126,36 @@ void main() {
 
         expect(spriteBatchComponent, isNull);
         streamController.add(
-          const CrosswordLoaded(
+          CrosswordLoaded(
             width: 40,
             height: 40,
             sectionSize: 400,
             sections: {
               (100, 100): BoardSection(
                 id: '',
-                position: Point(100, 100),
+                position: const Point(100, 100),
                 size: 400,
                 words: [
                   Word(
-                    id: '',
-                    position: Point(0, 0),
+                    position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
                     clue: '',
-                    hints: [],
+                    hints: const [],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                   Word(
-                    id: '',
-                    position: Point(0, 0),
+                    position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
                     clue: '',
-                    hints: [],
+                    hints: const [],
                     visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
-                borderWords: [],
+                borderWords: const [],
               ),
             },
           ),
