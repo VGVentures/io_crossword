@@ -53,7 +53,7 @@ class SectionComponent extends PositionComponent
 
   final (int, int) index;
 
-  late SpriteBatchComponent? spriteBatchComponent;
+  SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
   late final StreamSubscription<CrosswordState> _subscription;
 

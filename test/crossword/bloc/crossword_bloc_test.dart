@@ -97,5 +97,65 @@ void main() {
         ),
       ],
     );
+
+    blocTest<CrosswordBloc, CrosswordState>(
+      'selectd a word on WordSelected',
+      build: CrosswordBloc.new,
+      act: (bloc) => bloc.add(const WordSelected((0, 0), 'flutter')),
+      seed: () => CrosswordLoaded(
+        width: 40,
+        height: 40,
+        sectionSize: 400,
+        sections: {
+          (2, 2): BoardSection(
+            id: '0',
+            position: const Point(2, 2),
+            size: 40,
+            words: [
+              Word(
+                axis: Axis.horizontal,
+                position: const Point(0, 0),
+                answer: 'flutter',
+                clue: 'flutter',
+                hints: const ['dart', 'mobile', 'cross-platform'],
+                visible: true,
+                solvedTimestamp: null,
+              ),
+            ],
+            borderWords: const [],
+          ),
+        },
+      ),
+      expect: () => <CrosswordState>[
+        CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 400,
+          selectedWord: const WordSelection(
+            section: (0, 0),
+            wordId: 'flutter',
+          ),
+          sections: {
+            (2, 2): BoardSection(
+              id: '0',
+              position: const Point(2, 2),
+              size: 40,
+              words: [
+                Word(
+                  axis: Axis.horizontal,
+                  position: const Point(0, 0),
+                  answer: 'flutter',
+                  clue: 'flutter',
+                  hints: const ['dart', 'mobile', 'cross-platform'],
+                  visible: true,
+                  solvedTimestamp: null,
+                ),
+              ],
+              borderWords: const [],
+            ),
+          },
+        ),
+      ],
+    );
   });
 }
