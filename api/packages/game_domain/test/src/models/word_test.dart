@@ -21,7 +21,6 @@ void main() {
       expect(
         json,
         equals({
-          'id': 'id',
           'position': {'x': 1, 'y': 2},
           'axis': 'horizontal',
           'answer': 'test',

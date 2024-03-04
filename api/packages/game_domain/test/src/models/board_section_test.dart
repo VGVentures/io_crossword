@@ -30,12 +30,10 @@ void main() {
       expect(
         json,
         equals({
-          'id': 'id',
           'position': {'x': 1, 'y': 2},
           'size': 200,
           'words': [
             {
-              'id': 'id',
               'position': {'x': 1, 'y': 2},
               'axis': 'horizontal',
               'answer': 'answer',
