@@ -22,8 +22,7 @@ void main() {
             BoardSection(
               id: '1',
               position: Point(0, 0),
-              width: 40,
-              height: 40,
+              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -36,6 +35,7 @@ void main() {
                   solvedTimestamp: null,
                 ),
               ],
+              borderWords: [],
             ),
           ],
         ),
