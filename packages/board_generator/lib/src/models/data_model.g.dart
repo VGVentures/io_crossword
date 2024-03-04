@@ -10,6 +10,8 @@ class _$Crossword extends Crossword {
   @override
   final BuiltList<String> candidates;
   @override
+  final BuiltList<Location> candidateLocations;
+  @override
   final BuiltMap<Location, String> downWords;
   @override
   final BuiltMap<Location, String> acrossWords;
@@ -21,12 +23,15 @@ class _$Crossword extends Crossword {
 
   _$Crossword._(
       {required this.candidates,
+      required this.candidateLocations,
       required this.downWords,
       required this.acrossWords,
       required this.characters})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         candidates, r'Crossword', 'candidates');
+    BuiltValueNullFieldError.checkNotNull(
+        candidateLocations, r'Crossword', 'candidateLocations');
     BuiltValueNullFieldError.checkNotNull(downWords, r'Crossword', 'downWords');
     BuiltValueNullFieldError.checkNotNull(
         acrossWords, r'Crossword', 'acrossWords');
@@ -46,6 +51,7 @@ class _$Crossword extends Crossword {
     if (identical(other, this)) return true;
     return other is Crossword &&
         candidates == other.candidates &&
+        candidateLocations == other.candidateLocations &&
         downWords == other.downWords &&
         acrossWords == other.acrossWords &&
         characters == other.characters;
@@ -55,6 +61,7 @@ class _$Crossword extends Crossword {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, candidates.hashCode);
+    _$hash = $jc(_$hash, candidateLocations.hashCode);
     _$hash = $jc(_$hash, downWords.hashCode);
     _$hash = $jc(_$hash, acrossWords.hashCode);
     _$hash = $jc(_$hash, characters.hashCode);
@@ -66,6 +73,7 @@ class _$Crossword extends Crossword {
   String toString() {
     return (newBuiltValueToStringHelper(r'Crossword')
           ..add('candidates', candidates)
+          ..add('candidateLocations', candidateLocations)
           ..add('downWords', downWords)
           ..add('acrossWords', acrossWords)
           ..add('characters', characters))
@@ -81,6 +89,12 @@ class CrosswordBuilder implements Builder<Crossword, CrosswordBuilder> {
       _$this._candidates ??= new ListBuilder<String>();
   set candidates(ListBuilder<String>? candidates) =>
       _$this._candidates = candidates;
+
+  ListBuilder<Location>? _candidateLocations;
+  ListBuilder<Location> get candidateLocations =>
+      _$this._candidateLocations ??= new ListBuilder<Location>();
+  set candidateLocations(ListBuilder<Location>? candidateLocations) =>
+      _$this._candidateLocations = candidateLocations;
 
   MapBuilder<Location, String>? _downWords;
   MapBuilder<Location, String> get downWords =>
@@ -106,6 +120,7 @@ class CrosswordBuilder implements Builder<Crossword, CrosswordBuilder> {
     final $v = _$v;
     if ($v != null) {
       _candidates = $v.candidates.toBuilder();
+      _candidateLocations = $v.candidateLocations.toBuilder();
       _downWords = $v.downWords.toBuilder();
       _acrossWords = $v.acrossWords.toBuilder();
       _characters = $v.characters.toBuilder();
@@ -135,6 +150,7 @@ class CrosswordBuilder implements Builder<Crossword, CrosswordBuilder> {
       _$result = _$v ??
           new _$Crossword._(
               candidates: candidates.build(),
+              candidateLocations: candidateLocations.build(),
               downWords: downWords.build(),
               acrossWords: acrossWords.build(),
               characters: characters.build());
@@ -143,6 +159,8 @@ class CrosswordBuilder implements Builder<Crossword, CrosswordBuilder> {
       try {
         _$failedField = 'candidates';
         candidates.build();
+        _$failedField = 'candidateLocations';
+        candidateLocations.build();
         _$failedField = 'downWords';
         downWords.build();
         _$failedField = 'acrossWords';
