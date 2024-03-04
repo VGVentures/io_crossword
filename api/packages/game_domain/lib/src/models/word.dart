@@ -25,7 +25,9 @@ class Word extends Equatable {
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
   /// Unique identifier of the word.
-  @JsonKey()
+  ///
+  /// Intentionally left out of serialization to avoid redundancy.
+  @JsonKey(includeToJson: false)
   final String id;
 
   /// Position of the board section in the board. The origin is the top left.
