@@ -41,8 +41,10 @@ class CrosswordView extends StatelessWidget {
     } else if (state is CrosswordError) {
       child = const Center(child: Text('Error loading crossword'));
     } else if (state is CrosswordLoaded) {
-      child = const GameWidget.controlled(
-        gameFactory: CrosswordGame.new,
+      child = GameWidget.controlled(
+        gameFactory: () => CrosswordGame(
+          context.read(),
+        ),
       );
     }
 

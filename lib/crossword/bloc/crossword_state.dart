@@ -20,15 +20,31 @@ class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.width,
     required this.height,
+    required this.sectionSize,
     required this.sections,
   });
 
   final int width;
   final int height;
-  final List<BoardSection> sections;
+  final int sectionSize;
+  final Map<(int, int), BoardSection> sections;
+
+  CrosswordLoaded copyWith({
+    int? width,
+    int? height,
+    int? sectionSize,
+    Map<(int, int), BoardSection>? sections,
+  }) {
+    return CrosswordLoaded(
+      width: width ?? this.width,
+      height: height ?? this.height,
+      sectionSize: sectionSize ?? this.sectionSize,
+      sections: sections ?? this.sections,
+    );
+  }
 
   @override
-  List<Object> get props => [width, height, sections];
+  List<Object> get props => [width, height, sectionSize, sections];
 }
 
 class CrosswordError extends CrosswordState {
