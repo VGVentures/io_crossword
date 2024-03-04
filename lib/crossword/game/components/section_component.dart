@@ -83,6 +83,7 @@ class SectionComponent extends PositionComponent
   }
 
   String? _lastSelectedWord;
+  (int, int)? _lastSelectedSection;
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
@@ -93,12 +94,17 @@ class SectionComponent extends PositionComponent
         }
       } else {
         final selectedWord = state.selectedWord?.wordId;
-        if (selectedWord != _lastSelectedWord) {
+        final selectedSection = state.selectedWord?.section;
+        if (selectedWord != _lastSelectedWord ||
+            selectedSection != _lastSelectedSection) {
           _updateSelection(
             previousWord: _lastSelectedWord,
             newWord: selectedWord,
+            previousSection: _lastSelectedSection,
+            newSection: selectedSection,
           );
           _lastSelectedWord = selectedWord;
+          _lastSelectedSection = selectedSection;
         }
       }
     }
@@ -107,9 +113,13 @@ class SectionComponent extends PositionComponent
   void _updateSelection({
     String? previousWord,
     String? newWord,
+    (int, int)? previousSection,
+    (int, int)? newSection,
   }) {
     final indexes = <(String, Color, (int, int))>[];
-    if (previousWord != null && _wordIndex.containsKey(previousWord)) {
+    if (previousSection == index &&
+        previousWord != null &&
+        _wordIndex.containsKey(previousWord)) {
       indexes.add(
         (
           previousWord,
@@ -119,7 +129,9 @@ class SectionComponent extends PositionComponent
       );
     }
 
-    if (newWord != null && _wordIndex.containsKey(newWord)) {
+    if (newSection == index &&
+        newWord != null &&
+        _wordIndex.containsKey(newWord)) {
       indexes.add(
         (
           newWord,

@@ -21,7 +21,7 @@ void main() {
           sectionSize: 400,
           sections: {
             (2, 2): BoardSection(
-              id: '1',
+              id: '0',
               position: const Point(2, 2),
               size: 40,
               words: [
@@ -59,7 +59,7 @@ void main() {
           sectionSize: 400,
           sections: {
             (1, 1): BoardSection(
-              id: '',
+              id: '1',
               position: const Point(1, 1),
               size: 40,
               words: [
@@ -69,16 +69,7 @@ void main() {
                   answer: 'flutter',
                   clue: 'flutter',
                   hints: const ['dart', 'mobile', 'cross-platform'],
-                  visible: true,
-                  solvedTimestamp: null,
-                ),
-                Word(
-                  axis: Axis.vertical,
-                  position: const Point(4, 1),
-                  answer: 'android',
-                  clue: 'flutter',
-                  hints: const ['dart', 'mobile', 'cross-platform'],
-                  visible: true,
+                  visible: false,
                   solvedTimestamp: null,
                 ),
                 Word(
