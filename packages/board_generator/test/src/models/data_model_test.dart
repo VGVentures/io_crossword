@@ -1,4 +1,4 @@
-import 'package:board_generator/models/data_model.dart';
+import 'package:board_generator/src/models/data_model.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -177,59 +177,45 @@ void main() {
       (b) => b..candidates.addAll(wordList),
     );
 
-    final crossword1 = crossword0.generate().first;
+    final crossword1 = crossword0.generate();
     expect(crossword1.valid, true);
     expect(crossword1.acrossWords.length, 1);
     expect(crossword1.candidates.length, crossword0.candidates.length - 1);
 
-    final crossword2 = crossword1.generate().first;
+    final crossword2 = crossword1.generate();
     expect(crossword2.valid, true);
     expect(crossword2.acrossWords.length, 1);
     expect(crossword2.downWords.length, 1);
     expect(crossword2.candidates.length, crossword1.candidates.length - 1);
 
-    final crossword3 = crossword2.generate().first;
+    final crossword3 = crossword2.generate();
     expect(crossword3.valid, true);
     expect(crossword3.acrossWords.length + crossword3.downWords.length, 3);
     expect(crossword3.candidates.length, crossword2.candidates.length - 1);
 
-    final crossword4 = crossword3.generate().first;
+    final crossword4 = crossword3.generate();
     expect(crossword4.valid, true);
     expect(crossword4.acrossWords.length + crossword4.downWords.length, 4);
     expect(crossword4.candidates.length, crossword3.candidates.length - 1);
 
-    final crossword5 = crossword4.generate().first;
+    final crossword5 = crossword4.generate();
     expect(crossword5.valid, true);
     expect(crossword5.acrossWords.length + crossword5.downWords.length, 5);
     expect(crossword5.candidates.length, crossword4.candidates.length - 1);
 
-    final crossword6 = crossword5.generate().first;
+    final crossword6 = crossword5.generate();
     expect(crossword6.valid, true);
     expect(crossword6.acrossWords.length + crossword6.downWords.length, 6);
     expect(crossword6.candidates.length, crossword5.candidates.length - 1);
 
-    final crossword7 = crossword6.generate().first;
+    final crossword7 = crossword6.generate();
     expect(crossword7.valid, true);
     expect(crossword7.acrossWords.length + crossword7.downWords.length, 7);
     expect(crossword7.candidates.length, crossword6.candidates.length - 1);
 
-    final iterable = crossword7.generate();
-    expect(iterable.isEmpty, false);
-    expect(iterable.isNotEmpty, true);
-
-    final iterator = iterable.iterator;
-    expect(iterator.moveNext(), true);
-    expect(iterator.current, isNotNull);
-    final crossword8 = iterator.current;
+    final crossword8 = crossword7.generate();
     expect(crossword8.valid, true);
     expect(crossword8.acrossWords.length + crossword8.downWords.length, 8);
     expect(crossword8.candidates.length, crossword7.candidates.length - 1);
-
-    expect(iterator.moveNext(), true);
-    expect(iterator.current, isNotNull);
-    final crossword9 = iterator.current;
-    expect(crossword9.valid, true);
-    expect(crossword9.acrossWords.length + crossword9.downWords.length, 8);
-    expect(crossword9.candidates.length, crossword7.candidates.length - 1);
   });
 }

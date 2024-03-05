@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:board_generator/board_generator.dart';
+import 'dart:io';
+
+import 'package:board_generator/src/board_generator.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -23,16 +25,12 @@ void main() {
 
   group('BoardGenerator', () {
     test('generate crosswords', () {
-      var depth = 0;
-      for (final crossword in generateCrosswords(wordList)) {
-        depth++;
-        expect(crossword.valid, true);
-        expect(
-          crossword.acrossWords.length + crossword.downWords.length,
-          depth,
-        );
-        if (depth >= wordList.length) break;
-      }
+      final crossword = generateCrossword(wordList, 'test-board.txt');
+
+      final size = crossword.acrossWords.length + crossword.downWords.length;
+      expect(size, wordList.length);
+
+      File('test-board.txt').deleteSync();
     });
   });
 }
