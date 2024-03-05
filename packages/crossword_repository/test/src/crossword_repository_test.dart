@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 void main() {
   group('CrosswordRepository', () {
     final word = Word(
-      position: Point(1, 1),
+      position: Point(0, 1),
       axis: Axis.horizontal,
       answer: 'answer',
       clue: 'clue',
@@ -19,7 +19,7 @@ void main() {
     final boardSection1 = BoardSection(
       id: 'id',
       position: Point(1, 1),
-      size: 10,
+      size: 9,
       words: [
         word,
       ],
@@ -47,7 +47,7 @@ void main() {
       );
     });
 
-    group('getSections', () {
+    group('watchSections', () {
       test('returns all the sections', () {
         expect(
           crosswordRepository.watchSections(),
@@ -65,21 +65,28 @@ void main() {
       });
     });
 
-    group('addSection', () {
-      test('returns the requested section', () async {
-        final section = BoardSection(
-          id: 'id2',
-          position: Point(1, 1),
-          size: 10,
-          words: [
-            word,
-          ],
-          borderWords: const [],
-        );
-        await crosswordRepository.addSection(section);
+    group('watchSectionsFromPositions', () {
+      final section = BoardSection(
+        id: 'id2',
+        position: Point(0, 1),
+        size: 10,
+        words: [
+          word,
+        ],
+        borderWords: const [],
+      );
+
+      setUp(() async {
+        await firebaseFirestore
+            .collection(sectionsCollection)
+            .doc(section.id)
+            .set(section.toJson());
+      });
+
+      test('returns the requested sections depending on position', () {
         expect(
-          crosswordRepository.watchSections(),
-          emits([boardSection1, section]),
+          crosswordRepository.watchSectionsFromPositions([Point(0, 1)]),
+          emits([section]),
         );
       });
     });

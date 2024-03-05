@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crossword_repository/src/extensions/board_section_from_snapshot.dart';
 import 'package:game_domain/game_domain.dart';
 
 /// {@template crossword_repository}
@@ -33,16 +34,22 @@ class CrosswordRepository {
   Stream<List<BoardSection>> watchSections() {
     final snapshot = sectionCollection.snapshots();
     return snapshot.map(
-      (snapshot) => snapshot.docs.map((doc) {
-        final dataJson = doc.data();
-        dataJson['id'] = doc.id;
-        return BoardSection.fromJson(dataJson);
-      }).toList(),
+      (snapshot) => snapshot.toBoardSectionList(),
     );
   }
 
-  /// Adds a board section
-  Future<void> addSection(BoardSection section) async {
-    await sectionCollection.doc(section.id).set(section.toJson());
+  /// Watches all the sections of the crossword board
+  Stream<List<BoardSection>> watchSectionsFromPositions(
+    List<Point<int>> positions,
+  ) {
+    final snapshot = sectionCollection
+        .where(
+          'position',
+          whereIn: positions,
+        )
+        .snapshots();
+    return snapshot.map(
+      (snapshot) => snapshot.toBoardSectionList(),
+    );
   }
 }
