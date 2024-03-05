@@ -7,22 +7,28 @@ import 'package:game_domain/game_domain.dart';
 part 'crossword_event.dart';
 part 'crossword_state.dart';
 
+var _id = 0;
+int _defaultIdGenerator() => _id++;
+
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
-  CrosswordBloc() : super(const CrosswordInitial()) {
+  CrosswordBloc({
+    int Function()? idGenerator,
+  })  : _idGenerator = idGenerator ?? _defaultIdGenerator,
+        super(const CrosswordInitial()) {
     on<InitialBoardLoadRequested>(_onInitialBoardLoadRequested);
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
   }
 
   // TODO(any): Replace with real data
-  static int _id = 0;
+  final int Function() _idGenerator;
 
   Future<void> _onInitialBoardLoadRequested(
     InitialBoardLoadRequested event,
     Emitter<CrosswordState> emit,
   ) async {
     final section = BoardSection(
-      id: '${_id++}',
+      id: '${_idGenerator()}',
       position: const Point(2, 2),
       size: 40,
       words: [
@@ -58,7 +64,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     final loadedState = state;
     if (loadedState is CrosswordLoaded) {
       final section = BoardSection(
-        id: '${_id++}',
+        id: '${_idGenerator()}',
         position: Point(event.position.$1, event.position.$2),
         size: 40,
         words: [

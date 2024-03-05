@@ -3,6 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
+// TODO(any): remove this class when the real one is implemented
+class _IdGenerator {
+  int _id = 0;
+
+  int next() => _id++;
+}
+
 void main() {
   group('CrosswordBloc', () {
     test('can be instantiated', () {
@@ -12,7 +19,7 @@ void main() {
 
     blocTest<CrosswordBloc, CrosswordState>(
       'emits [CrosswordLoaded] when InitialBoardLoadRequested is added',
-      build: CrosswordBloc.new,
+      build: () => CrosswordBloc(idGenerator: _IdGenerator().next),
       act: (bloc) => bloc.add(const InitialBoardLoadRequested()),
       expect: () => <CrosswordState>[
         CrosswordLoaded(
@@ -44,7 +51,7 @@ void main() {
 
     blocTest<CrosswordBloc, CrosswordState>(
       'adds new sections when BoardSectionRequested is added',
-      build: CrosswordBloc.new,
+      build: () => CrosswordBloc(idGenerator: _IdGenerator().next),
       seed: () => const CrosswordLoaded(
         width: 40,
         height: 40,
@@ -59,7 +66,7 @@ void main() {
           sectionSize: 400,
           sections: {
             (1, 1): BoardSection(
-              id: '1',
+              id: '0',
               position: const Point(1, 1),
               size: 40,
               words: [
@@ -100,7 +107,7 @@ void main() {
 
     blocTest<CrosswordBloc, CrosswordState>(
       'selectd a word on WordSelected',
-      build: CrosswordBloc.new,
+      build: () => CrosswordBloc(idGenerator: _IdGenerator().next),
       act: (bloc) => bloc.add(const WordSelected((0, 0), 'flutter')),
       seed: () => CrosswordLoaded(
         width: 40,
