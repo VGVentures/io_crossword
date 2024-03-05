@@ -61,10 +61,15 @@ void main(List<String> args) async {
   final sections = <BoardSection>[];
   const sectionSize = 300;
 
-  var sectionX = minX;
-  while (sectionX < maxX) {
-    var sectionY = minY;
-    while (sectionY < maxY) {
+  final minSectionX = (minX / sectionSize).floor();
+  final maxSectionX = (maxX / sectionSize).ceil();
+  final minSectionY = (minY / sectionSize).floor();
+  final maxSectionY = (maxY / sectionSize).ceil();
+
+  for (var i = minSectionX; i < maxSectionX; i++) {
+    for (var j = minSectionY; j < maxSectionY; j++) {
+      final sectionX = i * sectionSize;
+      final sectionY = j * sectionSize;
       final sectionWords = words.where((word) {
         return word.isStartInSection(sectionX, sectionY, sectionSize);
       }).toList();
@@ -79,16 +84,13 @@ void main(List<String> args) async {
 
       final section = BoardSection(
         id: '',
-        position: Point(sectionX, sectionY),
+        position: Point(i, j),
         size: sectionSize,
         words: sectionWords,
         borderWords: borderWords,
       );
       sections.add(section);
-
-      sectionY += sectionSize;
     }
-    sectionX += sectionSize;
   }
 
   await crosswordRepository.addSections(sections);
