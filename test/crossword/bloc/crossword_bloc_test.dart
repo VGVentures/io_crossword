@@ -1,18 +1,28 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 void main() {
   group('CrosswordBloc', () {
+    late CrosswordRepository crosswordRepository;
+
+    setUp(() {
+      crosswordRepository = _MockCrosswordRepository();
+    });
+
     test('can be instantiated', () {
       // ignore: prefer_const_constructors
-      expect(CrosswordBloc(), isA<CrosswordBloc>());
+      expect(CrosswordBloc(crosswordRepository), isA<CrosswordBloc>());
     });
 
     blocTest<CrosswordBloc, CrosswordState>(
       'emits [CrosswordLoaded] when InitialBoardLoadRequested is added',
-      build: CrosswordBloc.new,
+      build: () => CrosswordBloc(crosswordRepository),
       act: (bloc) => bloc.add(const InitialBoardLoadRequested()),
       expect: () => <CrosswordState>[
         CrosswordLoaded(
@@ -44,7 +54,7 @@ void main() {
 
     blocTest<CrosswordBloc, CrosswordState>(
       'adds new sections when BoardSectionRequested is added',
-      build: CrosswordBloc.new,
+      build: () => CrosswordBloc(crosswordRepository),
       seed: () => const CrosswordLoaded(
         width: 40,
         height: 40,
