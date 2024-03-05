@@ -59,11 +59,19 @@ class SectionComponent extends PositionComponent
 
   BoardSection? _boardSection;
 
+  @visibleForTesting
+  String? lastSelectedWord;
+  @visibleForTesting
+  (int, int)? lastSelectedSection;
+
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
     _subscription = gameRef.bloc.stream.listen(_onNewState);
+    
+    lastSelectedWord = gameRef.state.selectedWord?.wordId;
+    lastSelectedSection = gameRef.state.selectedWord?.section;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
@@ -82,8 +90,6 @@ class SectionComponent extends PositionComponent
     _subscription.cancel();
   }
 
-  String? _lastSelectedWord;
-  (int, int)? _lastSelectedSection;
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
@@ -95,17 +101,17 @@ class SectionComponent extends PositionComponent
       } else {
         final selectedWord = state.selectedWord?.wordId;
         final selectedSection = state.selectedWord?.section;
-        if (selectedWord != _lastSelectedWord ||
-            selectedSection != _lastSelectedSection) {
+        if (selectedWord != lastSelectedWord ||
+            selectedSection != lastSelectedSection) {
           _updateSelection(
-            previousWord: _lastSelectedWord,
+            previousWord: lastSelectedWord,
             newWord: selectedWord,
-            previousSection: _lastSelectedSection,
+            previousSection: lastSelectedSection,
             newSection: selectedSection,
           );
-          _lastSelectedWord = selectedWord;
-          _lastSelectedSection = selectedSection;
         }
+        lastSelectedWord = selectedWord;
+        lastSelectedSection = selectedSection;
       }
     }
   }

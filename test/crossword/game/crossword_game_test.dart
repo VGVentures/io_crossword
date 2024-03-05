@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -88,7 +90,7 @@ void main() {
     );
 
     testWithGame(
-      'can tap a word',
+      'can tap words',
       createGame,
       (game) async {
         final state = CrosswordLoaded(
@@ -134,14 +136,102 @@ void main() {
             .first;
 
         final event = _MockTapUpEvent();
-        // Find the correct coordinate to trigger the selection
         when(() => event.localPosition).thenReturn(Vector2.all(0));
 
         targetSection.children.whereType<SectionTapController>().first.onTapUp(
               event,
             );
+
+        verify(
+          () => bloc.add(
+            const WordSelected(
+              (2, 2),
+              'Point(0, 0)-Axis.vertical',
+            ),
+          ),
+        ).called(1);
       },
     );
+
+    group('highlighted word', () {
+      late StreamController<CrosswordState> stateController;
+      final state = CrosswordLoaded(
+        width: 40,
+        height: 40,
+        sectionSize: 400,
+        sections: {
+          (2, 2): BoardSection(
+            id: '1',
+            position: const Point(2, 2),
+            size: 400,
+            words: [
+              Word(
+                position: const Point(0, 0),
+                axis: Axis.vertical,
+                answer: 'Flutter',
+                clue: '',
+                hints: const [],
+                visible: true,
+                solvedTimestamp: null,
+              ),
+              Word(
+                position: const Point(2, 2),
+                axis: Axis.horizontal,
+                answer: 'Android',
+                clue: '',
+                hints: const [],
+                visible: false,
+                solvedTimestamp: null,
+              ),
+            ],
+            borderWords: const [],
+          ),
+        },
+        selectedWord: const WordSelection(
+          section: (2, 2),
+          wordId: 'Point(0, 0)-Axis.vertical',
+        ),
+      );
+
+      setUp(() {
+        stateController = StreamController<CrosswordState>.broadcast();
+        whenListen(
+          bloc,
+          stateController.stream,
+          initialState: state,
+        );
+      });
+
+      testWithGame(
+        'changes the highlighted word',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection = game.world.children
+              .whereType<SectionComponent>()
+              .where((element) => element.index == (2, 2))
+              .first;
+
+          expect(targetSection.lastSelectedWord, 'Point(0, 0)-Axis.vertical');
+          expect(targetSection.lastSelectedSection, (2, 2));
+
+          stateController.add(
+            state.withSelectedWord(
+              const WordSelection(
+                section: (2, 2),
+                wordId: 'Point(2, 2)-Axis.horizontal',
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+
+          expect(targetSection.lastSelectedWord, 'Point(2, 2)-Axis.horizontal');
+          expect(targetSection.lastSelectedSection, (2, 2));
+        },
+      );
+    });
 
     test(
         'throws ArgumentError when accessing the state in the wrong '
