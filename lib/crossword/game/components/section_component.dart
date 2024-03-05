@@ -69,7 +69,7 @@ class SectionComponent extends PositionComponent
     await super.onLoad();
 
     _subscription = gameRef.bloc.stream.listen(_onNewState);
-    
+
     lastSelectedWord = gameRef.state.selectedWord?.wordId;
     lastSelectedSection = gameRef.state.selectedWord?.section;
 
