@@ -7,6 +7,10 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  board_renderer:
+    path: packages/board_renderer
+  crossword_repository:
+    path: packages/crossword_repository
   dart_frog: ^1.1.0
   db_client:
     path: packages/db_client
