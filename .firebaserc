@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "io-crossword-dev"
+  },
+  "targets": {
+    "io-crossword-dev": {
+      "hosting": {
+        "app_dev": [
+          "e7b2896c65fabc0480edc6c0e"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

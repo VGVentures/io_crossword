@@ -5,6 +5,3 @@
 .packages
 build/
 pubspec.lock
-
-allWords.json
-board.txt

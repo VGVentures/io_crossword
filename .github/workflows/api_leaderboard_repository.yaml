@@ -1,4 +1,4 @@
-name: board_generator
+name: api_leaderboard_repository
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -7,8 +7,8 @@ concurrency:
 on:
   pull_request:
     paths:
-      - "packages/board_generator/**"
-      - ".github/workflows/board_generator.yaml"
+      - "api/packages/leaderboard_repository/**"
+      - ".github/workflows/api_leaderboard_repository.yaml"
     branches:
       - main
 
@@ -17,6 +17,4 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
     with:
       dart_sdk: stable
-      working_directory: packages/board_generator
-      coverage_excludes: "**/*.g.dart"
-      min_coverage: 90
+      working_directory: api/packages/leaderboard_repository
