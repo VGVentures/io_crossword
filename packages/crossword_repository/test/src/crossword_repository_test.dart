@@ -80,6 +80,13 @@ void main() {
           emits(section),
         );
       });
+
+      test('returns null if there is no section with the position', () {
+        expect(
+          crosswordRepository.watchSectionFromPosition(Point(2, 2)),
+          emits(null),
+        );
+      });
     });
   });
 }
