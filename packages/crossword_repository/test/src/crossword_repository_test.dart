@@ -47,15 +47,6 @@ void main() {
       );
     });
 
-    group('watchSections', () {
-      test('returns all the sections', () {
-        expect(
-          crosswordRepository.watchSections(),
-          emits([boardSection1]),
-        );
-      });
-    });
-
     group('watchSection', () {
       test('returns the requested section', () async {
         expect(
@@ -85,8 +76,8 @@ void main() {
 
       test('returns the requested sections depending on position', () {
         expect(
-          crosswordRepository.watchSectionsFromPositions([Point(0, 1)]),
-          emits([section]),
+          crosswordRepository.watchSectionFromPositions(Point(0, 1)),
+          emits(section),
         );
       });
     });

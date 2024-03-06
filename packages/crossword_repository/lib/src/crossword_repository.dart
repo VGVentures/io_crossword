@@ -31,25 +31,21 @@ class CrosswordRepository {
   }
 
   /// Watches all the sections of the crossword board
-  Stream<List<BoardSection>> watchSections() {
-    final snapshot = sectionCollection.snapshots();
-    return snapshot.map(
-      (snapshot) => snapshot.toBoardSectionList(),
-    );
-  }
-
-  /// Watches all the sections of the crossword board
-  Stream<List<BoardSection>> watchSectionsFromPositions(
-    List<Point<int>> positions,
+  Stream<BoardSection> watchSectionFromPositions(
+    Point<int> position,
   ) {
     final snapshot = sectionCollection
         .where(
-          'position',
-          whereIn: positions,
+          'position.x',
+          isEqualTo: position.x,
+        )
+        .where(
+          'position.y',
+          isEqualTo: position.y,
         )
         .snapshots();
     return snapshot.map(
-      (snapshot) => snapshot.toBoardSectionList(),
+      (snapshot) => snapshot.toBoardSectionList().first,
     );
   }
 }
