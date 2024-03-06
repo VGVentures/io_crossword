@@ -2,7 +2,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:google_cloud/google_cloud.dart';
 import 'package:logging/logging.dart';
 
-import '../../main.dart';
+import '../main.dart';
 
 Handler middleware(Handler handler) {
   return handler
