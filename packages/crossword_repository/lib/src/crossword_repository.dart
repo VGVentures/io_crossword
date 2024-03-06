@@ -29,20 +29,30 @@ class CrosswordRepository {
     });
   }
 
-  /// Watches all the sections of the crossword board
-  Stream<List<BoardSection>> watchSections() {
-    final snapshot = sectionCollection.snapshots();
+  /// Watches the section having the corresponding [position]
+  Stream<BoardSection?> watchSectionFromPosition(
+    Point<int> position,
+  ) {
+    final snapshot = sectionCollection
+        .where(
+          'position.x',
+          isEqualTo: position.x,
+        )
+        .where(
+          'position.y',
+          isEqualTo: position.y,
+        )
+        .snapshots();
     return snapshot.map(
-      (snapshot) => snapshot.docs.map((doc) {
-        final dataJson = doc.data();
-        dataJson['id'] = doc.id;
-        return BoardSection.fromJson(dataJson);
-      }).toList(),
+      (snapshot) {
+        final doc = snapshot.docs.firstOrNull;
+        if (doc != null) {
+          final dataJson = doc.data();
+          dataJson['id'] = doc.id;
+          return BoardSection.fromJson(dataJson);
+        }
+        return null;
+      },
     );
-  }
-
-  /// Adds a board section
-  Future<void> addSection(BoardSection section) async {
-    await sectionCollection.doc(section.id).set(section.toJson());
   }
 }
