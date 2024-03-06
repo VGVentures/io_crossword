@@ -1,6 +1,7 @@
 name: deploy_api_dev
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "api/**"
