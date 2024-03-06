@@ -10,12 +10,12 @@ LeaderboardPlayer _$LeaderboardPlayerFromJson(Map<String, dynamic> json) =>
     LeaderboardPlayer(
       id: json['id'] as String,
       initials: json['initials'] as String,
-      numSolved: json['numSolved'] as int,
+      score: json['score'] as int,
     );
 
 Map<String, dynamic> _$LeaderboardPlayerToJson(LeaderboardPlayer instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'numSolved': instance.numSolved,
+      'score': instance.score,
       'initials': instance.initials,
     };

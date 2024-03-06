@@ -19,7 +19,7 @@ class LeaderboardRepository {
   ///
   /// The players are ordered by longest streak and returns the top 10.
   Future<List<LeaderboardPlayer>> getLeaderboard() async {
-    final results = await _dbClient.orderBy('leaderboard', 'numSolved');
+    final results = await _dbClient.orderBy('leaderboard', 'score');
 
     return results
         .map(

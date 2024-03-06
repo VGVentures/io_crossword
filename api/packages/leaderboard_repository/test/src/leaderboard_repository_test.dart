@@ -37,29 +37,29 @@ void main() {
         const playerOne = LeaderboardPlayer(
           id: 'id',
           initials: 'AAA',
-          numSolved: 20,
+          score: 20,
         );
         const playerTwo = LeaderboardPlayer(
           id: 'id2',
           initials: 'BBB',
-          numSolved: 10,
+          score: 10,
         );
 
-        when(() => dbClient.orderBy('leaderboard', 'numSolved'))
+        when(() => dbClient.orderBy('leaderboard', 'score'))
             .thenAnswer((_) async {
           return [
             DbEntityRecord(
               id: 'id',
               data: {
                 'initials': playerOne.initials,
-                'numSolved': 20,
+                'score': 20,
               },
             ),
             DbEntityRecord(
               id: 'id2',
               data: {
                 'initials': playerTwo.initials,
-                'numSolved': 10,
+                'score': 10,
               },
             ),
           ];
@@ -71,7 +71,7 @@ void main() {
       });
 
       test('returns empty list if results are empty', () async {
-        when(() => dbClient.orderBy('leaderboard', 'numSolved'))
+        when(() => dbClient.orderBy('leaderboard', 'score'))
             .thenAnswer((_) async {
           return [];
         });
@@ -86,7 +86,7 @@ void main() {
         final leaderboardPlayer = LeaderboardPlayer(
           id: 'id',
           initials: 'initials',
-          numSolved: 40,
+          score: 40,
         );
 
         when(() => dbClient.add('leaderboard', leaderboardPlayer.toJson()))
