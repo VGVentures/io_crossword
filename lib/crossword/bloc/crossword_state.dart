@@ -10,24 +10,40 @@ class CrosswordInitial extends CrosswordState {
   List<Object> get props => [];
 }
 
+class WordSelection extends Equatable {
+  const WordSelection({
+    required this.section,
+    required this.wordId,
+  });
+
+  final (int, int) section;
+  final String wordId;
+
+  @override
+  List<Object> get props => [section, wordId];
+}
+
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.width,
     required this.height,
     required this.sectionSize,
     required this.sections,
+    this.selectedWord,
   });
 
   const CrosswordLoaded.initial()
       : width = 40,
         height = 40,
         sectionSize = 300,
-        sections = const {};
+        sections = const {},
+        selectedWord = null;
 
   final int width;
   final int height;
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
+  final WordSelection? selectedWord;
 
   CrosswordLoaded copyWith({
     int? width,
@@ -44,8 +60,24 @@ class CrosswordLoaded extends CrosswordState {
     );
   }
 
+  CrosswordState withSelectedWord(WordSelection? selectedWord) {
+    return CrosswordLoaded(
+      width: width,
+      height: height,
+      sectionSize: sectionSize,
+      sections: sections,
+      selectedWord: selectedWord,
+    );
+  }
+
   @override
-  List<Object> get props => [width, height, sectionSize, sections];
+  List<Object?> get props => [
+        width,
+        height,
+        sectionSize,
+        sections,
+        selectedWord,
+      ];
 }
 
 class CrosswordError extends CrosswordState {

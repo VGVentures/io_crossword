@@ -21,5 +21,25 @@ void main() {
         );
       });
     });
+    group('WordSelected', () {
+      test('can be instantiated', () {
+        expect(WordSelected((0, 0), '1'), isA<WordSelected>());
+      });
+      test('supports value comparisons', () {
+        expect(WordSelected((0, 0), '1'), WordSelected((0, 0), '1'));
+        expect(
+          WordSelected((0, 0), '1'),
+          isNot(
+            WordSelected((0, 0), '2'),
+          ),
+        );
+        expect(
+          WordSelected((0, 0), '1'),
+          isNot(
+            WordSelected((0, 1), '1'),
+          ),
+        );
+      });
+    });
   });
 }

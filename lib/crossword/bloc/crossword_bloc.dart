@@ -11,6 +11,7 @@ part 'crossword_state.dart';
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc(this.crosswordRepository) : super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
+    on<WordSelected>(_onWordSelected);
   }
 
   final CrosswordRepository crosswordRepository;
@@ -28,7 +29,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         final newSection = {
           (section.position.x, section.position.y): section,
         };
-        print('rezrze');
 
         return CrosswordLoaded(
           width: 40,
@@ -43,5 +43,22 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         );
       },
     );
+  }
+
+  FutureOr<void> _onWordSelected(
+    WordSelected event,
+    Emitter<CrosswordState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is CrosswordLoaded) {
+      emit(
+        currentState.withSelectedWord(
+          WordSelection(
+            section: event.section,
+            wordId: event.wordId,
+          ),
+        ),
+      );
+    }
   }
 }
