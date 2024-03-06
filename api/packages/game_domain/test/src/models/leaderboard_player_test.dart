@@ -10,6 +10,7 @@ void main() {
         LeaderboardPlayer(
           id: 'id',
           initials: 'TST',
+          score: 10,
         ),
         isNotNull,
       );
@@ -18,6 +19,7 @@ void main() {
     final leaderboardPlayer = LeaderboardPlayer(
       id: 'id',
       initials: 'TST',
+      score: 20,
     );
 
     test('toJson returns the instance as json', () {
@@ -26,6 +28,7 @@ void main() {
         equals({
           'id': 'id',
           'initials': 'TST',
+          'score': 20,
         }),
       );
     });
@@ -35,6 +38,7 @@ void main() {
         LeaderboardPlayer.fromJson(const {
           'id': 'id',
           'initials': 'TST',
+          'score': 20,
         }),
         equals(leaderboardPlayer),
       );
@@ -42,14 +46,15 @@ void main() {
 
     test('supports equality', () {
       expect(
-        LeaderboardPlayer(id: '', initials: 'TST'),
-        equals(LeaderboardPlayer(id: '', initials: 'TST')),
+        LeaderboardPlayer(id: '', initials: 'TST', score: 20),
+        equals(LeaderboardPlayer(id: '', initials: 'TST', score: 20)),
       );
 
       expect(
         LeaderboardPlayer(
           id: '',
           initials: 'TST',
+          score: 20,
         ),
         isNot(
           equals(leaderboardPlayer),
@@ -60,6 +65,7 @@ void main() {
         LeaderboardPlayer(
           id: 'id',
           initials: 'WOW',
+          score: 20,
         ),
         isNot(
           equals(leaderboardPlayer),

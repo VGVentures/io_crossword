@@ -12,6 +12,7 @@ class LeaderboardPlayer extends Equatable {
   const LeaderboardPlayer({
     required this.id,
     required this.initials,
+    required this.score,
   });
 
   /// {@macro leaderboard_player}
@@ -23,6 +24,10 @@ class LeaderboardPlayer extends Equatable {
   @JsonKey()
   final String id;
 
+  /// Number of crosswords solved.
+  @JsonKey()
+  final int score;
+
   /// Initials of the player.
   @JsonKey()
   final String initials;
@@ -31,5 +36,5 @@ class LeaderboardPlayer extends Equatable {
   Map<String, dynamic> toJson() => _$LeaderboardPlayerToJson(this);
 
   @override
-  List<Object?> get props => [id, initials];
+  List<Object?> get props => [id, score, initials];
 }
