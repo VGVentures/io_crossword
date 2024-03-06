@@ -10,12 +10,6 @@ class CrosswordInitial extends CrosswordState {
   List<Object> get props => [];
 }
 
-class CrosswordLoading extends CrosswordState {
-  const CrosswordLoading();
-  @override
-  List<Object> get props => [];
-}
-
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.width,
@@ -23,6 +17,12 @@ class CrosswordLoaded extends CrosswordState {
     required this.sectionSize,
     required this.sections,
   });
+
+  const CrosswordLoaded.initial()
+      : width = 40,
+        height = 40,
+        sectionSize = 300,
+        sections = const {};
 
   final int width;
   final int height;

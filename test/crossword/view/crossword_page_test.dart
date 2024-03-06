@@ -34,7 +34,7 @@ void main() {
       whenListen(
         bloc,
         Stream.fromIterable(const <CrosswordState>[]),
-        initialState: const CrosswordInitial(),
+        initialState: const CrosswordLoaded.initial(),
       );
     });
 
@@ -47,13 +47,6 @@ void main() {
 
     testWidgets('renders loading when is initial', (tester) async {
       when(() => bloc.state).thenReturn(const CrosswordInitial());
-
-      await tester.pumpCrosswordView(bloc);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
-
-    testWidgets('renders loading when is loading', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordLoading());
 
       await tester.pumpCrosswordView(bloc);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);

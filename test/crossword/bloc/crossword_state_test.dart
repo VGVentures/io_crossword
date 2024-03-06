@@ -15,15 +15,6 @@ void main() {
       });
     });
 
-    group('CrosswordLoading', () {
-      test('can be instantiated', () {
-        expect(CrosswordLoading(), isA<CrosswordLoading>());
-      });
-      test('supports value comparisons', () {
-        expect(CrosswordLoading(), CrosswordLoading());
-      });
-    });
-
     group('CrosswordLoaded', () {
       test('can be instantiated', () {
         expect(

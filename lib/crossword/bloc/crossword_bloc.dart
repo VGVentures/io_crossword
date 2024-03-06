@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -7,15 +9,7 @@ part 'crossword_event.dart';
 part 'crossword_state.dart';
 
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
-  CrosswordBloc(this.crosswordRepository)
-      : super(
-          const CrosswordLoaded(
-            width: 40,
-            height: 40,
-            sectionSize: 300,
-            sections: {},
-          ),
-        ) {
+  CrosswordBloc(this.crosswordRepository) : super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
   }
 
@@ -25,25 +19,29 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) async {
-    final loadedState = state;
-    if (loadedState is CrosswordLoaded) {
-      return emit.forEach(
-        crosswordRepository.watchSectionFromPosition(
-          Point(event.position.$1, event.position.$2),
-        ),
-        onData: (section) {
-          if (section == null) return state;
-          return CrosswordLoaded(
-            width: 40,
-            height: 40,
-            sectionSize: 300,
-            sections: {
-              ...loadedState.sections,
-              (section.position.x, section.position.y): section,
-            },
-          );
-        },
-      );
-    }
+    return emit.forEach(
+      crosswordRepository.watchSectionFromPosition(
+        Point(event.position.$1, event.position.$2),
+      ),
+      onData: (section) {
+        if (section == null) return state;
+        final newSection = {
+          (section.position.x, section.position.y): section,
+        };
+        print('rezrze');
+
+        return CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 300,
+          sections: state is CrosswordLoaded
+              ? {
+                  ...(state as CrosswordLoaded).sections,
+                  ...newSection,
+                }
+              : {...newSection},
+        );
+      },
+    );
   }
 }

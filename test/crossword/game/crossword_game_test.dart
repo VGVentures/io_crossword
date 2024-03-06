@@ -63,12 +63,12 @@ void main() {
         const state = CrosswordLoaded(
           width: 40,
           height: 40,
-          sectionSize: 400,
+          sectionSize: 300,
           sections: {
-            (0, 0): BoardSection(
+            (2, 2): BoardSection(
               id: '',
               position: Point(2, 2),
-              size: 400,
+              size: 300,
               words: [],
               borderWords: [],
             ),

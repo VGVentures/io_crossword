@@ -12,7 +12,7 @@ class CrosswordPage extends StatelessWidget {
       builder: (_) => BlocProvider(
         create: (BuildContext context) => CrosswordBloc(
           context.read<CrosswordRepository>(),
-        ),
+        )..add(const BoardSectionRequested((0, 0))),
         child: const CrosswordPage(),
       ),
     );
@@ -33,10 +33,6 @@ class CrosswordView extends StatelessWidget {
 
     late final Widget child;
     if (state is CrosswordInitial) {
-      child = const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is CrosswordLoading) {
       child = const Center(
         child: CircularProgressIndicator(),
       );
