@@ -1,20 +1,32 @@
+import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:provider/provider.dart';
+
+class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
+    CrosswordRepository? crosswordRepository,
     MockNavigator? navigator,
   }) {
     return pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: navigator != null
-            ? MockNavigatorProvider(navigator: navigator, child: widget)
-            : widget,
+      MultiProvider(
+        providers: [
+          Provider.value(
+            value: crosswordRepository ?? _MockCrosswordRepository(),
+          ),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: navigator != null
+              ? MockNavigatorProvider(navigator: navigator, child: widget)
+              : widget,
+        ),
       ),
     );
   }

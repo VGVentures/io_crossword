@@ -10,9 +10,9 @@ class CrosswordPage extends StatelessWidget {
   static Route<void> route() {
     return MaterialPageRoute<void>(
       builder: (_) => BlocProvider(
-        create: (BuildContext context) =>
-            CrosswordBloc(context.read<CrosswordRepository>())
-              ..add(const InitialBoardLoadRequested()),
+        create: (BuildContext context) => CrosswordBloc(
+          context.read<CrosswordRepository>(),
+        ),
         child: const CrosswordPage(),
       ),
     );

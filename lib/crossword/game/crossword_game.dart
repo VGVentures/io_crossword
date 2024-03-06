@@ -36,7 +36,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     // TODO(erickzanardo): Use the assets cubit instead
     lettersSprite = await images.load('letters.png');
 
-    sectionSize = state.sectionSize;
+    sectionSize = state.sectionSize * 40;
 
     totalArea = Size(
       (state.width * cellSize).toDouble(),
@@ -47,8 +47,8 @@ class CrosswordGame extends FlameGame with PanDetector {
       ..priority = 1
       ..viewport = (MaxViewport()..anchor = Anchor.topLeft)
       ..viewfinder.position = Vector2(
-        totalArea.width / 2,
-        totalArea.height / 2,
+        totalArea.width,
+        totalArea.height,
       );
 
     _updateVisibleSections();

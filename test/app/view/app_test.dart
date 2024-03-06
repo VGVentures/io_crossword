@@ -7,6 +7,15 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 void main() {
   group('App', () {
+    late CrosswordRepository crosswordRepository;
+
+    setUp(() {
+      crosswordRepository = _MockCrosswordRepository();
+
+      when(
+        () => crosswordRepository.watchSectionFromPosition(any()),
+      ).thenAnswer((_) => Stream.value(null));
+    });
     testWidgets('renders AppView', (tester) async {
       await tester.pumpWidget(
         App(
