@@ -76,7 +76,7 @@ void main() {
 
       test('returns the requested sections depending on position', () {
         expect(
-          crosswordRepository.watchSectionFromPositions(Point(0, 1)),
+          crosswordRepository.watchSectionFromPosition(Point(0, 1)),
           emits(section),
         );
       });

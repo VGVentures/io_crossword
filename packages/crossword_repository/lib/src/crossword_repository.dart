@@ -30,8 +30,8 @@ class CrosswordRepository {
     });
   }
 
-  /// Watches all the sections of the crossword board
-  Stream<BoardSection> watchSectionFromPositions(
+  /// Watches the section having the corresponding [position]
+  Stream<BoardSection> watchSectionFromPosition(
     Point<int> position,
   ) {
     final snapshot = sectionCollection
