@@ -7,13 +7,16 @@
       "hosting": {
         "app_dev": [
           "e7b2896c65fabc0480edc6c0e"
+        ],
+        "app_stg": [
+          "stg-e7b2896c65fabc0480edc6c0e"
         ]
       }
     },
     "io-crossword": {
       "hosting": {
         "app_prod": [
-          "9961b3776301c37db86d9038f"
+          "prod-9961b3776301c37db86d9038f"
         ]
       }
     }
