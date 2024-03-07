@@ -24,7 +24,7 @@ class LeaderboardRepository {
     return results
         .map(
           (e) => LeaderboardPlayer.fromJson({
-            'id': e.id,
+            'userId': e.id,
             ...e.data,
           }),
         )
@@ -32,12 +32,15 @@ class LeaderboardRepository {
   }
 
   /// Saves player to the leaderboard.
-  Future<String> addPlayerToLeaderboard({
+  Future<void> addPlayerToLeaderboard({
     required LeaderboardPlayer leaderboardPlayer,
   }) async {
-    return _dbClient.add(
+    return _dbClient.set(
       'leaderboard',
-      leaderboardPlayer.toJson(),
+      DbEntityRecord(
+        id: leaderboardPlayer.userId,
+        data: leaderboardPlayer.toJson()..remove('userId'),
+      ),
     );
   }
 

@@ -10,6 +10,9 @@
 
 <!--- Describe your changes in detail -->
 
+## Screenshots/Video
+<!--- Add a screenshot or a video showcasing the changes -->
+
 ## Type of Change
 
 <!--- Put an `x` in all the boxes that apply: -->
@@ -21,3 +24,6 @@
 - [ ] ✅ Build configuration change
 - [ ] 📝 Documentation
 - [ ] 🗑️ Chore
+
+## Monday.com Item IDs
+<!--- Input the Monday.com Item IDs for features addressed in the PR -->
