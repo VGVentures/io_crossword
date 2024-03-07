@@ -7,6 +7,9 @@
       "hosting": {
         "app_dev": [
           "e7b2896c65fabc0480edc6c0e"
+        ],
+        "app_stg": [
+          "stg-e7b2896c65fabc0480edc6c0e"
         ]
       }
     },
