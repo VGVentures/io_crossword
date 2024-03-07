@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
@@ -35,12 +37,12 @@ void main() {
     group('getLeaderboard', () {
       test('returns list of leaderboard players', () async {
         const playerOne = LeaderboardPlayer(
-          id: 'id',
+          userId: 'id',
           initials: 'AAA',
           score: 20,
         );
         const playerTwo = LeaderboardPlayer(
-          id: 'id2',
+          userId: 'id2',
           initials: 'BBB',
           score: 10,
         );
@@ -82,23 +84,29 @@ void main() {
     });
 
     group('addPlayerToLeaderboard', () {
-      test('returns empty list if results are empty', () async {
+      test('calls set with correct entity and record', () async {
         final leaderboardPlayer = LeaderboardPlayer(
-          id: 'id',
+          userId: 'user-id',
           initials: 'initials',
           score: 40,
         );
 
-        when(() => dbClient.add('leaderboard', leaderboardPlayer.toJson()))
-            .thenAnswer((_) async {
-          return '12345678';
-        });
+        final record = DbEntityRecord(
+          id: 'user-id',
+          data: {
+            'initials': 'initials',
+            'score': 40,
+          },
+        );
 
-        final response = await leaderboardRepository.addPlayerToLeaderboard(
+        when(() => dbClient.set('leaderboard', record))
+            .thenAnswer((_) async {});
+
+        await leaderboardRepository.addPlayerToLeaderboard(
           leaderboardPlayer: leaderboardPlayer,
         );
 
-        expect(response, equals('12345678'));
+        verify(() => dbClient.set('leaderboard', record)).called(1);
       });
     });
 

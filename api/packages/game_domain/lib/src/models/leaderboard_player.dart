@@ -10,7 +10,7 @@ part 'leaderboard_player.g.dart';
 class LeaderboardPlayer extends Equatable {
   /// {@macro leaderboard_player}
   const LeaderboardPlayer({
-    required this.id,
+    required this.userId,
     required this.initials,
     required this.score,
   });
@@ -22,7 +22,7 @@ class LeaderboardPlayer extends Equatable {
   /// Unique identifier of the leaderboard player object
   /// and session id for the player.
   @JsonKey()
-  final String id;
+  final String userId;
 
   /// Number of crosswords solved.
   @JsonKey()
@@ -36,5 +36,5 @@ class LeaderboardPlayer extends Equatable {
   Map<String, dynamic> toJson() => _$LeaderboardPlayerToJson(this);
 
   @override
-  List<Object?> get props => [id, score, initials];
+  List<Object?> get props => [userId, score, initials];
 }
