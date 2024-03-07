@@ -17,9 +17,9 @@ dependencies:
   google_cloud: ^0.2.0
   jwt_middleware:
     path: packages/jwt_middleware
-  logging: ^1.2.0
   leaderboard_repository:
     path: packages/leaderboard_repository
+  logging: ^1.2.0
 
 dev_dependencies:
   mocktail: ^1.0.3
