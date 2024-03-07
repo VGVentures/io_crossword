@@ -32,13 +32,6 @@ class CrosswordLoaded extends CrosswordState {
     this.selectedWord,
   });
 
-  const CrosswordLoaded.initial()
-      : width = 40,
-        height = 40,
-        sectionSize = 300,
-        sections = const {},
-        selectedWord = null;
-
   final int width;
   final int height;
   final int sectionSize;
@@ -50,23 +43,14 @@ class CrosswordLoaded extends CrosswordState {
     int? height,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
-    Map<(int, int), BoardSection>? allSections,
+    WordSelection? selectedWord,
   }) {
     return CrosswordLoaded(
       width: width ?? this.width,
       height: height ?? this.height,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
-    );
-  }
-
-  CrosswordState withSelectedWord(WordSelection? selectedWord) {
-    return CrosswordLoaded(
-      width: width,
-      height: height,
-      sectionSize: sectionSize,
-      sections: sections,
-      selectedWord: selectedWord,
+      selectedWord: selectedWord ?? this.selectedWord,
     );
   }
 

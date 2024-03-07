@@ -25,7 +25,7 @@ void main() {
       ],
       borderWords: const [],
     );
-    const sectionsCollection = 'sections';
+    const sectionsCollection = 'boardSections';
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;
@@ -56,7 +56,7 @@ void main() {
       });
     });
 
-    group('watchSectionsFromPositions', () {
+    group('watchSectionFromPosition', () {
       final section = BoardSection(
         id: 'id2',
         position: Point(0, 1),
@@ -74,7 +74,7 @@ void main() {
             .set(section.toJson());
       });
 
-      test('returns the requested sections depending on position', () {
+      test('returns the requested section depending on position', () {
         expect(
           crosswordRepository.watchSectionFromPosition(Point(0, 1)),
           emits(section),

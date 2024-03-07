@@ -52,8 +52,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     final currentState = state;
     if (currentState is CrosswordLoaded) {
       emit(
-        currentState.withSelectedWord(
-          WordSelection(
+        currentState.copyWith(
+          selectedWord: WordSelection(
             section: event.section,
             wordId: event.wordId,
           ),

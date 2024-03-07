@@ -98,9 +98,9 @@ void main() {
           height: 40,
           sectionSize: 400,
           sections: {
-            (2, 2): BoardSection(
+            (0, 0): BoardSection(
               id: '1',
-              position: const Point(2, 2),
+              position: const Point(0, 0),
               size: 400,
               words: [
                 Word(
@@ -126,13 +126,14 @@ void main() {
             ),
           },
         );
+
         mockState(state);
 
         await game.ready();
 
         final targetSection = game.world.children
             .whereType<SectionComponent>()
-            .where((element) => element.index == (2, 2))
+            .where((element) => element.index == (0, 0))
             .first;
 
         final event = _MockTapUpEvent();
@@ -145,7 +146,7 @@ void main() {
         verify(
           () => bloc.add(
             const WordSelected(
-              (2, 2),
+              (0, 0),
               'Point(0, 0)-Axis.vertical',
             ),
           ),
@@ -160,9 +161,9 @@ void main() {
         height: 40,
         sectionSize: 400,
         sections: {
-          (2, 2): BoardSection(
+          (0, 0): BoardSection(
             id: '1',
-            position: const Point(2, 2),
+            position: const Point(0, 0),
             size: 400,
             words: [
               Word(
@@ -188,7 +189,7 @@ void main() {
           ),
         },
         selectedWord: const WordSelection(
-          section: (2, 2),
+          section: (0, 0),
           wordId: 'Point(0, 0)-Axis.vertical',
         ),
       );
@@ -210,16 +211,16 @@ void main() {
 
           final targetSection = game.world.children
               .whereType<SectionComponent>()
-              .where((element) => element.index == (2, 2))
+              .where((element) => element.index == (0, 0))
               .first;
 
           expect(targetSection.lastSelectedWord, 'Point(0, 0)-Axis.vertical');
-          expect(targetSection.lastSelectedSection, (2, 2));
+          expect(targetSection.lastSelectedSection, (0, 0));
 
           stateController.add(
-            state.withSelectedWord(
-              const WordSelection(
-                section: (2, 2),
+            state.copyWith(
+              selectedWord: const WordSelection(
+                section: (0, 0),
                 wordId: 'Point(2, 2)-Axis.horizontal',
               ),
             ),
@@ -228,7 +229,7 @@ void main() {
           await Future.microtask(() {});
 
           expect(targetSection.lastSelectedWord, 'Point(2, 2)-Axis.horizontal');
-          expect(targetSection.lastSelectedSection, (2, 2));
+          expect(targetSection.lastSelectedSection, (0, 0));
         },
       );
     });
@@ -243,16 +244,31 @@ void main() {
     });
 
     testWithGame(
-      'remove sections that are not visible when paning',
-      () {
+      'remove sections that are not visible when panning',
+      createGame,
+      (game) async {
         const state = CrosswordLoaded(
           width: 40,
           height: 40,
           sectionSize: 300,
           sections: {
-            (2, 2): BoardSection(
+            (-1, 0): BoardSection(
               id: '',
-              position: Point(2, 2),
+              position: Point(-1, 0),
+              size: 300,
+              words: [],
+              borderWords: [],
+            ),
+            (0, 0): BoardSection(
+              id: '',
+              position: Point(0, 0),
+              size: 300,
+              words: [],
+              borderWords: [],
+            ),
+            (1, 0): BoardSection(
+              id: '',
+              position: Point(1, 0),
               size: 300,
               words: [],
               borderWords: [],
@@ -260,15 +276,12 @@ void main() {
           },
         );
         mockState(state);
-        return createGame();
-      },
-      (game) async {
         await game.ready();
         final currentSections =
             game.world.children.whereType<SectionComponent>();
 
         final subjectComponent =
-            currentSections.firstWhere((element) => element.index == (2, 2));
+            currentSections.firstWhere((element) => element.index == (-1, 0));
 
         final removed = subjectComponent.removed;
 

@@ -210,11 +210,10 @@ class SectionComponent extends PositionComponent
 
         final y =
             word.axis == Axis.vertical ? word.position.y + c : word.position.y;
-        final offset = sectionPosition +
-            Vector2(
-              x * CrosswordGame.cellSize.toDouble(),
-              y * CrosswordGame.cellSize.toDouble(),
-            );
+        final offset = Vector2(
+          x * CrosswordGame.cellSize.toDouble(),
+          y * CrosswordGame.cellSize.toDouble(),
+        );
 
         spriteBatch.add(
           source: rect,

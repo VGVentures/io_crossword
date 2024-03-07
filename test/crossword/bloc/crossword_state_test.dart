@@ -343,24 +343,19 @@ void main() {
         );
 
         test('returns a copy with selected word', () {
-          final newState = state.withSelectedWord(
-            WordSelection(
+          final newState = state.copyWith(
+            selectedWord: WordSelection(
               section: (0, 0),
               wordId: '1',
             ),
           );
           expect(
-            (newState as CrosswordLoaded).selectedWord,
+            newState.selectedWord,
             WordSelection(
               section: (0, 0),
               wordId: '1',
             ),
           );
-        });
-
-        test('returns a copy with null selected word', () {
-          final newState = state.withSelectedWord(null);
-          expect((newState as CrosswordLoaded).selectedWord, null);
         });
       });
 

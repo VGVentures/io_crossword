@@ -34,7 +34,7 @@ void main() {
       whenListen(
         bloc,
         Stream.fromIterable(const <CrosswordState>[]),
-        initialState: const CrosswordLoaded.initial(),
+        initialState: const CrosswordInitial(),
       );
     });
 
