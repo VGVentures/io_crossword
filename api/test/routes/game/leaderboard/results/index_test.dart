@@ -23,17 +23,17 @@ void main() {
 
     const leaderboardPlayers = [
       LeaderboardPlayer(
-        id: 'id',
+        userId: 'id',
         score: 1,
         initials: 'AAA',
       ),
       LeaderboardPlayer(
-        id: 'id2',
+        userId: 'id2',
         score: 2,
         initials: 'BBB',
       ),
       LeaderboardPlayer(
-        id: 'id3',
+        userId: 'id3',
         score: 3,
         initials: 'CCC',
       ),

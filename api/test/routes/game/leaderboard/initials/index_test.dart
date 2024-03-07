@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -29,7 +32,6 @@ void main() {
           .thenAnswer((_) async => blacklist);
 
       request = _MockRequest();
-      when(() => request.method).thenReturn(HttpMethod.post);
 
       context = _MockRequestContext();
       when(() => context.request).thenReturn(request);
@@ -37,69 +39,133 @@ void main() {
           .thenReturn(leaderboardRepository);
     });
 
-    test('responds with a 204 on success', () async {
+    test('calls addPlayerToLeaderboard with player leaderboard information',
+        () async {
+      final leaderboardPlayer = LeaderboardPlayer(
+        userId: 'user-id',
+        initials: 'AAA',
+        score: 10,
+      );
+
       when(
         () => leaderboardRepository.addPlayerToLeaderboard(
-          leaderboardPlayer: any(),
+          leaderboardPlayer: leaderboardPlayer,
         ),
-      ).thenAnswer((_) async => 'id');
+      ).thenAnswer((_) async {});
 
-      when(request.json).thenAnswer(
-        (_) async => {
-          'initials': 'AAA',
-          'score': 10,
-        },
+      when(() => request.method).thenReturn(HttpMethod.post);
+
+      when(request.json).thenAnswer((_) async => leaderboardPlayer.toJson());
+
+      await route.onRequest(context);
+
+      verify(
+        () => leaderboardRepository.addPlayerToLeaderboard(
+          leaderboardPlayer: leaderboardPlayer,
+        ),
+      ).called(1);
+    });
+
+    test('responds with a 204 on success', () async {
+      final leaderboardPlayer = LeaderboardPlayer(
+        userId: 'user-id',
+        initials: 'AAA',
+        score: 10,
       );
+
+      when(() => request.method).thenReturn(HttpMethod.post);
+
+      when(
+        () => leaderboardRepository.addPlayerToLeaderboard(
+          leaderboardPlayer: leaderboardPlayer,
+        ),
+      ).thenAnswer((_) async {});
+
+      when(request.json).thenAnswer((_) async => leaderboardPlayer.toJson());
 
       final response = await route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.noContent));
     });
 
     test('responds with a 400 when request is invalid', () async {
+      when(() => request.method).thenReturn(HttpMethod.post);
       when(request.json).thenAnswer((_) async => {'test': 'test'});
+
       final response = await route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.badRequest));
     });
 
     test('responds with a 400 when initials are blacklisted', () async {
+      when(() => request.method).thenReturn(HttpMethod.post);
       when(request.json).thenAnswer(
         (_) async => {
+          'userId': 'user-id',
           'initials': 'CCC',
           'score': 10,
         },
       );
+
       final response = await route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.badRequest));
     });
 
     test('responds with a 400 when lowercase initials are blacklisted',
         () async {
+      when(() => request.method).thenReturn(HttpMethod.post);
       when(request.json).thenAnswer(
         (_) async => {
+          'userId': 'user-id',
           'initials': 'ccc',
-          'scoreCardId': scoreCardId,
+          'score': 10,
         },
       );
+
       final response = await route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.badRequest));
     });
 
-    test("responds with a 400 when lowercase initials aren't 3 characters long",
-        () async {
-      when(request.json).thenAnswer(
-        (_) async => {
-          'initials': 'aaaa',
-          'scoreCardId': scoreCardId,
-        },
-      );
-      final response = await route.onRequest(context);
-      expect(response.statusCode, equals(HttpStatus.badRequest));
-    });
+    test(
+      'responds with a 400 when initials are less than 3 characters long',
+      () async {
+        when(() => request.method).thenReturn(HttpMethod.post);
+        when(request.json).thenAnswer(
+          (_) async => {
+            'userId': 'user-id',
+            'initials': 'aa',
+            'score': 10,
+          },
+        );
 
-    test('allows only post methods', () async {
-      when(() => request.method).thenReturn(HttpMethod.get);
-      final response = await route.onRequest(context);
-      expect(response.statusCode, equals(HttpStatus.methodNotAllowed));
-    });
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.badRequest));
+      },
+    );
+
+    test(
+      'responds with a 400 when initials are more than 3 characters long',
+      () async {
+        when(() => request.method).thenReturn(HttpMethod.post);
+        when(request.json).thenAnswer(
+          (_) async => {
+            'userId': 'user-id',
+            'initials': 'aaaa',
+            'score': 10,
+          },
+        );
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.badRequest));
+      },
+    );
+
+    for (final httpMethod in HttpMethod.values.toList()
+      ..remove(HttpMethod.post)) {
+      test('does not allow $httpMethod', () async {
+        when(() => request.method).thenReturn(httpMethod);
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.methodNotAllowed));
+      });
+    }
   });
 }
