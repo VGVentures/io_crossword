@@ -85,17 +85,17 @@ void main() {
         equals({
           'leaderboardPlayers': [
             {
-              'id': 'id',
+              'userId': 'id',
               'score': 1,
               'initials': 'AAA',
             },
             {
-              'id': 'id2',
+              'userId': 'id2',
               'score': 2,
               'initials': 'BBB',
             },
             {
-              'id': 'id3',
+              'userId': 'id3',
               'score': 3,
               'initials': 'CCC',
             },

@@ -26,7 +26,7 @@ void main() {
       expect(
         leaderboardPlayer.toJson(),
         equals({
-          'id': 'id',
+          'userId': 'id',
           'initials': 'TST',
           'score': 20,
         }),
@@ -36,7 +36,7 @@ void main() {
     test('fromJson returns the correct instance', () {
       expect(
         LeaderboardPlayer.fromJson(const {
-          'id': 'id',
+          'userId': 'id',
           'initials': 'TST',
           'score': 20,
         }),
