@@ -14,6 +14,17 @@ class _MockDocumentReference extends Mock implements DocumentReference {}
 
 class _MockQueryReference extends Mock implements QueryReference {}
 
+class _MockPageDocument extends Mock implements Page<Document> {
+  _MockPageDocument(this.elements);
+
+  final List<Document> elements;
+
+  @override
+  Iterable<T> map<T>(T Function(Document element) f) {
+    return elements.map(f);
+  }
+}
+
 void main() {
   group('DbEntityRecord', () {
     test('supports equality', () {
@@ -490,6 +501,80 @@ void main() {
 
         final result = await client.orderBy('birds', 'score');
         expect(result, isEmpty);
+      });
+    });
+
+    group('listAll', () {
+      test('lists all of records of an entity', () async {
+        final firestore = _MockFirestore();
+        final collection = _MockCollectionReference();
+        when(() => firestore.collection('birds')).thenReturn(collection);
+
+        final document1 = _MockDocument();
+        when(() => document1.id).thenReturn('1');
+        when(() => document1.map).thenReturn({'name': 'dash'});
+
+        final document2 = _MockDocument();
+        when(() => document2.id).thenReturn('2');
+        when(() => document2.map).thenReturn({'name': 'furn'});
+
+        final page = _MockPageDocument([document1, document2]);
+        when(() => page.hasNextPage).thenReturn(false);
+        when(() => page.length).thenReturn(2);
+        when(() => page.isNotEmpty).thenReturn(true);
+
+        when(collection.get).thenAnswer(
+          (_) async => page,
+        );
+
+        final client = DbClient(firestore: firestore);
+        final result = await client.listAll('birds');
+        expect(result.length, equals(2));
+        expect(result.first.id, equals('1'));
+        expect(result.first.data, equals({'name': 'dash'}));
+        expect(result.last.id, equals('2'));
+        expect(result.last.data, equals({'name': 'furn'}));
+      });
+
+      test('lists all of records of an entity', () async {
+        final firestore = _MockFirestore();
+        final collection = _MockCollectionReference();
+        when(() => firestore.collection('birds')).thenReturn(collection);
+
+        final document1 = _MockDocument();
+        when(() => document1.id).thenReturn('1');
+        when(() => document1.map).thenReturn({'name': 'dash'});
+
+        final document2 = _MockDocument();
+        when(() => document2.id).thenReturn('2');
+        when(() => document2.map).thenReturn({'name': 'furn'});
+
+        final page1 = _MockPageDocument([document1]);
+        when(() => page1.hasNextPage).thenReturn(true);
+        when(() => page1.nextPageToken).thenReturn('1');
+        when(() => page1.length).thenReturn(1);
+        when(() => page1.isNotEmpty).thenReturn(true);
+
+        when(collection.get).thenAnswer(
+          (_) async => page1,
+        );
+
+        final page2 = _MockPageDocument([document2]);
+        when(() => page2.hasNextPage).thenReturn(false);
+        when(() => page2.length).thenReturn(1);
+        when(() => page2.isNotEmpty).thenReturn(true);
+
+        when(() => collection.get(nextPageToken: '1')).thenAnswer(
+          (_) async => page2,
+        );
+
+        final client = DbClient(firestore: firestore);
+        final result = await client.listAll('birds');
+        expect(result.length, equals(2));
+        expect(result.first.id, equals('1'));
+        expect(result.first.data, equals({'name': 'dash'}));
+        expect(result.last.id, equals('2'));
+        expect(result.last.data, equals({'name': 'furn'}));
       });
     });
   });

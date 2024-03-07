@@ -6,6 +6,26 @@ import 'package:image/image.dart' as img;
 /// A function that creates a command to execute.
 typedef CreateCommand = img.Command Function();
 
+/// A function that creates an image.
+typedef CreateImage = img.Image Function({
+  required int width,
+  required int height,
+});
+
+/// A function that draws a rectangle in an image.
+typedef DrawRect = img.Image Function(
+  img.Image dst, {
+  required int x1,
+  required int y1,
+  required int x2,
+  required int y2,
+  required img.Color color,
+  num thickness,
+  num radius,
+  img.Image? mask,
+  img.Channel maskChannel,
+});
+
 /// {@template board_renderer_failure}
 /// Exception thrown when a board rendering fails.
 /// {@endtemplate}
@@ -27,9 +47,15 @@ class BoardRenderer {
   /// {@macro board_renderer}
   const BoardRenderer({
     CreateCommand createCommand = img.Command.new,
-  }) : _createCommand = createCommand;
+    CreateImage createImage = img.Image.new,
+    DrawRect drawRect = img.drawRect,
+  })  : _createCommand = createCommand,
+        _createImage = createImage,
+        _drawRect = drawRect;
 
   final CreateCommand _createCommand;
+  final CreateImage _createImage;
+  final DrawRect _drawRect;
 
   /// The size of each cell in the board.
   static const cellSize = 4;
@@ -66,7 +92,7 @@ class BoardRenderer {
     final centerX = (totalWidth / 2).round();
     final centerY = (totalHeight / 2).round();
 
-    final image = img.Image(
+    final image = _createImage(
       width: totalWidth + cellSize,
       height: totalHeight + cellSize,
     );
@@ -81,7 +107,7 @@ class BoardRenderer {
       final wordCharacters = word.answer.split('');
 
       for (var i = 0; i < wordCharacters.length; i++) {
-        img.drawRect(
+        _drawRect(
           image,
           x1: (isHorizontal
                   ? wordPosition.$1 + i * cellSize
