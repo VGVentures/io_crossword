@@ -1,152 +1,142 @@
-[{"position":{"x":-1,"y":-1},
-"size":300,"words":[
-    {"position":{"x":-7,"y":-2},
-    "axis":"vertical","answer":"pillager","clue":"The answer is: pillager","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-1,"y":-9},
-    "axis":"vertical","answer":"clause","clue":"The answer is: clause","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-15,"y":-10},
-    "axis":"vertical","answer":"commiserate","clue":"The answer is: commiserate","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-24,"y":-7},
-    "axis":"vertical","answer":"beetlejuice","clue":"The answer is: beetlejuice","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-11,"y":-17},
-    "axis":"vertical","answer":"fivestar","clue":"The answer is: fivestar","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-30,"y":-4},
-    "axis":"vertical","answer":"railroader","clue":"The answer is: railroader","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-9,"y":-23},
-    "axis":"vertical","answer":"delimitate","clue":"The answer is: delimitate","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-34,"y":-7},
-    "axis":"vertical","answer":"lituus","clue":"The answer is: lituus","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-7,"y":-6},
-    "axis":"vertical","answer":"croup","clue":"The answer is: croup","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-5,"y":-13},
-    "axis":"vertical","answer":"interferingly","clue":"The answer is: interferingly","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-11,"y":-17},
-    "axis":"vertical","answer":"factualize","clue":"The answer is: factualize","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-15,"y":-10},
-    "axis":"vertical","answer":"chuck","clue":"The answer is: chuck","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-22,"y":-7},
-    "axis":"vertical","answer":"exteriorization","clue":"The answer is: exteriorization","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-8,"y":-24},
-    "axis":"vertical","answer":"neckware","clue":"The answer is: neckware","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":-29,"y":-12},
-    "axis":"vertical","answer":"depersonalizing","clue":"The answer is: depersonalizing","hints":[],"visible":false,"solvedTimestamp":null}
-    ],"borderWords":[]},
-    {"position":{"x":-1,"y":0},
-"size":300,"words":[{"position":{"x":-7,"y":6},
-"axis":"vertical","answer":"sophistically","clue":"The answer is: sophistically","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-14,"y":15},
-"axis":"vertical","answer":"agencies","clue":"The answer is: agencies","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-9,"y":11},
-"axis":"vertical","answer":"straws","clue":"The answer is: straws","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-14,"y":19},
-"axis":"vertical","answer":"gwyneth","clue":"The answer is: gwyneth","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-7,"y":9},
-"axis":"vertical","answer":"blady","clue":"The answer is: blady","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-14,"y":23},
-"axis":"vertical","answer":"archbishopally","clue":"The answer is: archbishopally","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-21,"y":31},
-"axis":"vertical","answer":"comfortabilize","clue":"The answer is: comfortabilize","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-17,"y":12},
-"axis":"vertical","answer":"lacerate","clue":"The answer is: lacerate","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-12,"y":37},
-"axis":"vertical","answer":"covetously","clue":"The answer is: covetously","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-30,"y":4},
-"axis":"vertical","answer":"coldheartedness","clue":"The answer is: coldheartedness","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-5,"y":44},
-"axis":"vertical","answer":"disaffiliate","clue":"The answer is: disaffiliate","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-24,"y":22},
-"axis":"vertical","answer":"frightens","clue":"The answer is: frightens","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-2,"y":50},
-"axis":"vertical","answer":"stenographically","clue":"The answer is: stenographically","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-23,"y":7},
-"axis":"vertical","answer":"unveils","clue":"The answer is: unveils","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-3,"y":19},
-"axis":"vertical","answer":"voluptuosity","clue":"The answer is: voluptuosity","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-36,"y":7},
-"axis":"vertical","answer":"droughtly","clue":"The answer is: droughtly","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-31,"y":14},
-"axis":"vertical","answer":"rozzle","clue":"The answer is: rozzle","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-22,"y":39},
-"axis":"vertical","answer":"unfamiliarly","clue":"The answer is: unfamiliarly","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-2,"y":39},
-"axis":"vertical","answer":"extroversionly","clue":"The answer is: extroversionly","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-3,"y":57},
-"axis":"vertical","answer":"hemispherical","clue":"The answer is: hemispherical","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-7,"y":6},
-"axis":"vertical","answer":"somberness","clue":"The answer is: somberness","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-14,"y":9},
-"axis":"vertical","answer":"penetratingly","clue":"The answer is: penetratingly","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-8,"y":18},
-"axis":"vertical","answer":"checksum","clue":"The answer is: checksum","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-14,"y":23},
-"axis":"vertical","answer":"appropriatorily","clue":"The answer is: appropriatorily","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-11,"y":29},
-"axis":"vertical","answer":"culminatory","clue":"The answer is: culminatory","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-1,"y":18},
-"axis":"vertical","answer":"flinty","clue":"The answer is: flinty","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-19,"y":20},
-"axis":"vertical","answer":"afternoontimeness","clue":"The answer is: afternoontimeness","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-4,"y":36},
-"axis":"vertical","answer":"electronization","clue":"The answer is: electronization","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-2,"y":44},
-"axis":"vertical","answer":"admonished","clue":"The answer is: admonished","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-21,"y":29},
-"axis":"vertical","answer":"uncapped","clue":"The answer is: uncapped","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-30,"y":4},
-"axis":"vertical","answer":"contribution","clue":"The answer is: contribution","hints":[],"visible":false,"solvedTimestamp":null},
-        {"position":{"x":-22,"y":16},
-"axis":"vertical","answer":"disoblige","clue":"The answer is: disoblige","hints":[],"visible":false,"solvedTimestamp":null}],"borderWords":[{"position":{"x":-7,"y":-2},
-"axis":"vertical","answer":"pillager","clue":"The answer is: pillager","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":-15,"y":-10},
-"axis":"vertical","answer":"commiserate","clue":"The answer is: commiserate","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":-24,"y":-7},
-"axis":"vertical","answer":"beetlejuice","clue":"The answer is: beetlejuice","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":-30,"y":-4},
-"axis":"vertical","answer":"railroader","clue":"The answer is: railroader","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":-22,"y":-7},
-"axis":"vertical","answer":"exteriorization","clue":"The answer is: exteriorization","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":-29,"y":-12},
-"axis":"vertical","answer":"depersonalizing","clue":"The answer is: depersonalizing","hints":[],"visible":false,"solvedTimestamp":null}]},
-{"position":{"x":0,"y":-1},
-"size":300,"words":[{"position":{"x":7,"y":-6},
-"axis":"vertical","answer":"diocesan","clue":"The answer is: diocesan","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":5,"y":-3},
-"axis":"vertical","answer":"disco","clue":"The answer is: disco","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":10,"y":-2},
-"axis":"vertical","answer":"snowleopard","clue":"The answer is: snowleopard","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":0,"y":-11},
-"axis":"vertical","answer":"selfcentered","clue":"The answer is: selfcentered","hints":[],"visible":false,"solvedTimestamp":null},
-    {"position":{"x":4,"y":-15},
-"axis":"vertical","answer":"turbulet","clue":"The answer is: turbulet","hints":[],"visible":false,"solvedTimestamp":null}],"borderWords":[]},
-{"position":{"x":0,"y":0},
-"size":300,"words":[{"position":{"x":0,"y":0},
-"axis":"vertical","answer":"denunciation","clue":"The answer is: denunciation","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":9,"y":6},
-"axis":"vertical","answer":"washes","clue":"The answer is: washes","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":0,"y":8},
-"axis":"vertical","answer":"superintend","clue":"The answer is: superintend","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":2,"y":13},
-"axis":"vertical","answer":"mazey","clue":"The answer is: mazey","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":8,"y":7},
-"axis":"vertical","answer":"seeking","clue":"The answer is: seeking","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":2,"y":6},
-"axis":"vertical","answer":"aspartame","clue":"The answer is: aspartame","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":13,"y":4},
-"axis":"vertical","answer":"crewless","clue":"The answer is: crewless","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":5,"y":49},
-"axis":"vertical","answer":"pawky","clue":"The answer is: pawky","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":2,"y":37},
-"axis":"vertical","answer":"groundfloor","clue":"The answer is: groundfloor","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":9,"y":50},
-"axis":"vertical","answer":"clientele","clue":"The answer is: clientele","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":11,"y":42},
-"axis":"vertical","answer":"peppermill","clue":"The answer is: peppermill","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":8,"y":35},
-"axis":"vertical","answer":"addlor","clue":"The answer is: addlor","hints":[],"visible":false,"solvedTimestamp":null}],"borderWords":[{"position":{"x":7,"y":-6},
-"axis":"vertical","answer":"diocesan","clue":"The answer is: diocesan","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":5,"y":-3},
-"axis":"vertical","answer":"disco","clue":"The answer is: disco","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":10,"y":-2},
-"axis":"vertical","answer":"snowleopard","clue":"The answer is: snowleopard","hints":[],"visible":false,"solvedTimestamp":null},
-{"position":{"x":0,"y":-11},
-"axis":"vertical","answer":"selfcentered","clue":"The answer is: selfcentered","hints":[],"visible":false,"solvedTimestamp":null}]}]
+[
+{"position":{"x":-2,"y":-1},"size":20,"words":[
+{"position":{"x":-24,"y":-7},"axis":"vertical","answer":"beetlejuice","clue":"The answer is: beetlejuice","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-30,"y":-4},"axis":"vertical","answer":"railroader","clue":"The answer is: railroader","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-34,"y":-7},"axis":"vertical","answer":"lituus","clue":"The answer is: lituus","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-22,"y":-7},"axis":"vertical","answer":"exteriorization","clue":"The answer is: exteriorization","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-29,"y":-12},"axis":"vertical","answer":"depersonalizing","clue":"The answer is: depersonalizing","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+]
+},
+{"position":{"x":-2,"y":0},"size":20,"words":[
+{"position":{"x":-30,"y":4},"axis":"vertical","answer":"coldheartedness","clue":"The answer is: coldheartedness","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-23,"y":7},"axis":"vertical","answer":"unveils","clue":"The answer is: unveils","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-36,"y":7},"axis":"vertical","answer":"droughtly","clue":"The answer is: droughtly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-31,"y":14},"axis":"vertical","answer":"rozzle","clue":"The answer is: rozzle","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-30,"y":4},"axis":"vertical","answer":"contribution","clue":"The answer is: contribution","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-22,"y":16},"axis":"vertical","answer":"disoblige","clue":"The answer is: disoblige","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-24,"y":-7},"axis":"vertical","answer":"beetlejuice","clue":"The answer is: beetlejuice","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-30,"y":-4},"axis":"vertical","answer":"railroader","clue":"The answer is: railroader","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-22,"y":-7},"axis":"vertical","answer":"exteriorization","clue":"The answer is: exteriorization","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-29,"y":-12},"axis":"vertical","answer":"depersonalizing","clue":"The answer is: depersonalizing","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-2,"y":1},"size":20,"words":[
+{"position":{"x":-21,"y":31},"axis":"vertical","answer":"comfortabilize","clue":"The answer is: comfortabilize","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-24,"y":22},"axis":"vertical","answer":"frightens","clue":"The answer is: frightens","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-22,"y":39},"axis":"vertical","answer":"unfamiliarly","clue":"The answer is: unfamiliarly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-21,"y":29},"axis":"vertical","answer":"uncapped","clue":"The answer is: uncapped","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-22,"y":16},"axis":"vertical","answer":"disoblige","clue":"The answer is: disoblige","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-2,"y":2},"size":20,"words":[
+],"borderWords":[
+{"position":{"x":-21,"y":31},"axis":"vertical","answer":"comfortabilize","clue":"The answer is: comfortabilize","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-22,"y":39},"axis":"vertical","answer":"unfamiliarly","clue":"The answer is: unfamiliarly","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-1,"y":-2},"size":20,"words":[
+{"position":{"x":-9,"y":-23},"axis":"vertical","answer":"delimitate","clue":"The answer is: delimitate","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-8,"y":-24},"axis":"vertical","answer":"neckware","clue":"The answer is: neckware","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+]
+},
+{"position":{"x":-1,"y":-1},"size":20,"words":[
+{"position":{"x":-7,"y":-2},"axis":"vertical","answer":"pillager","clue":"The answer is: pillager","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-1,"y":-9},"axis":"vertical","answer":"clause","clue":"The answer is: clause","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-15,"y":-10},"axis":"vertical","answer":"commiserate","clue":"The answer is: commiserate","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-11,"y":-17},"axis":"vertical","answer":"fivestar","clue":"The answer is: fivestar","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-7,"y":-6},"axis":"vertical","answer":"croup","clue":"The answer is: croup","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-5,"y":-13},"axis":"vertical","answer":"interferingly","clue":"The answer is: interferingly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-11,"y":-17},"axis":"vertical","answer":"factualize","clue":"The answer is: factualize","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-15,"y":-10},"axis":"vertical","answer":"chuck","clue":"The answer is: chuck","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-9,"y":-23},"axis":"vertical","answer":"delimitate","clue":"The answer is: delimitate","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-8,"y":-24},"axis":"vertical","answer":"neckware","clue":"The answer is: neckware","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-1,"y":0},"size":20,"words":[
+{"position":{"x":-7,"y":6},"axis":"vertical","answer":"sophistically","clue":"The answer is: sophistically","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":15},"axis":"vertical","answer":"agencies","clue":"The answer is: agencies","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-9,"y":11},"axis":"vertical","answer":"straws","clue":"The answer is: straws","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":19},"axis":"vertical","answer":"gwyneth","clue":"The answer is: gwyneth","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-7,"y":9},"axis":"vertical","answer":"blady","clue":"The answer is: blady","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-17,"y":12},"axis":"vertical","answer":"lacerate","clue":"The answer is: lacerate","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-3,"y":19},"axis":"vertical","answer":"voluptuosity","clue":"The answer is: voluptuosity","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-7,"y":6},"axis":"vertical","answer":"somberness","clue":"The answer is: somberness","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":9},"axis":"vertical","answer":"penetratingly","clue":"The answer is: penetratingly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-8,"y":18},"axis":"vertical","answer":"checksum","clue":"The answer is: checksum","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-1,"y":18},"axis":"vertical","answer":"flinty","clue":"The answer is: flinty","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-7,"y":-2},"axis":"vertical","answer":"pillager","clue":"The answer is: pillager","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-15,"y":-10},"axis":"vertical","answer":"commiserate","clue":"The answer is: commiserate","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-1,"y":1},"size":20,"words":[
+{"position":{"x":-14,"y":23},"axis":"vertical","answer":"archbishopally","clue":"The answer is: archbishopally","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-12,"y":37},"axis":"vertical","answer":"covetously","clue":"The answer is: covetously","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-2,"y":39},"axis":"vertical","answer":"extroversionly","clue":"The answer is: extroversionly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":23},"axis":"vertical","answer":"appropriatorily","clue":"The answer is: appropriatorily","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-11,"y":29},"axis":"vertical","answer":"culminatory","clue":"The answer is: culminatory","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-19,"y":20},"axis":"vertical","answer":"afternoontimeness","clue":"The answer is: afternoontimeness","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-4,"y":36},"axis":"vertical","answer":"electronization","clue":"The answer is: electronization","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-14,"y":15},"axis":"vertical","answer":"agencies","clue":"The answer is: agencies","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":19},"axis":"vertical","answer":"gwyneth","clue":"The answer is: gwyneth","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-3,"y":19},"axis":"vertical","answer":"voluptuosity","clue":"The answer is: voluptuosity","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-14,"y":9},"axis":"vertical","answer":"penetratingly","clue":"The answer is: penetratingly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-8,"y":18},"axis":"vertical","answer":"checksum","clue":"The answer is: checksum","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-1,"y":18},"axis":"vertical","answer":"flinty","clue":"The answer is: flinty","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":-1,"y":2},"size":20,"words":[
+{"position":{"x":-5,"y":44},"axis":"vertical","answer":"disaffiliate","clue":"The answer is: disaffiliate","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-2,"y":50},"axis":"vertical","answer":"stenographically","clue":"The answer is: stenographically","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-3,"y":57},"axis":"vertical","answer":"hemispherical","clue":"The answer is: hemispherical","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-2,"y":44},"axis":"vertical","answer":"admonished","clue":"The answer is: admonished","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":-12,"y":37},"axis":"vertical","answer":"covetously","clue":"The answer is: covetously","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-2,"y":39},"axis":"vertical","answer":"extroversionly","clue":"The answer is: extroversionly","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":-4,"y":36},"axis":"vertical","answer":"electronization","clue":"The answer is: electronization","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":0,"y":-1},"size":20,"words":[
+{"position":{"x":7,"y":-6},"axis":"vertical","answer":"diocesan","clue":"The answer is: diocesan","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":5,"y":-3},"axis":"vertical","answer":"disco","clue":"The answer is: disco","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":10,"y":-2},"axis":"vertical","answer":"snowleopard","clue":"The answer is: snowleopard","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":0,"y":-11},"axis":"vertical","answer":"selfcentered","clue":"The answer is: selfcentered","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":4,"y":-15},"axis":"vertical","answer":"turbulet","clue":"The answer is: turbulet","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+]
+},
+{"position":{"x":0,"y":0},"size":20,"words":[
+{"position":{"x":0,"y":0},"axis":"vertical","answer":"denunciation","clue":"The answer is: denunciation","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":9,"y":6},"axis":"vertical","answer":"washes","clue":"The answer is: washes","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":0,"y":8},"axis":"vertical","answer":"superintend","clue":"The answer is: superintend","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":2,"y":13},"axis":"vertical","answer":"mazey","clue":"The answer is: mazey","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":8,"y":7},"axis":"vertical","answer":"seeking","clue":"The answer is: seeking","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":2,"y":6},"axis":"vertical","answer":"aspartame","clue":"The answer is: aspartame","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":13,"y":4},"axis":"vertical","answer":"crewless","clue":"The answer is: crewless","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":7,"y":-6},"axis":"vertical","answer":"diocesan","clue":"The answer is: diocesan","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":5,"y":-3},"axis":"vertical","answer":"disco","clue":"The answer is: disco","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":10,"y":-2},"axis":"vertical","answer":"snowleopard","clue":"The answer is: snowleopard","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":0,"y":-11},"axis":"vertical","answer":"selfcentered","clue":"The answer is: selfcentered","hints":[
+],"visible":false,"solvedTimestamp":null}]
+},
+{"position":{"x":0,"y":1},"size":20,"words":[
+{"position":{"x":2,"y":37},"axis":"vertical","answer":"groundfloor","clue":"The answer is: groundfloor","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":8,"y":35},"axis":"vertical","answer":"addlor","clue":"The answer is: addlor","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+]
+},
+{"position":{"x":0,"y":2},"size":20,"words":[
+{"position":{"x":5,"y":49},"axis":"vertical","answer":"pawky","clue":"The answer is: pawky","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":9,"y":50},"axis":"vertical","answer":"clientele","clue":"The answer is: clientele","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":11,"y":42},"axis":"vertical","answer":"peppermill","clue":"The answer is: peppermill","hints":[
+],"visible":false,"solvedTimestamp":null}],"borderWords":[
+{"position":{"x":2,"y":37},"axis":"vertical","answer":"groundfloor","clue":"The answer is: groundfloor","hints":[
+],"visible":false,"solvedTimestamp":null},{"position":{"x":8,"y":35},"axis":"vertical","answer":"addlor","clue":"The answer is: addlor","hints":[
+],"visible":false,"solvedTimestamp":null}]}]
