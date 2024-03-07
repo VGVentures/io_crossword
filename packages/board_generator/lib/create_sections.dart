@@ -59,7 +59,7 @@ void main(List<String> args) async {
   print('Crossword size: $boardWidth x $boardHeight.');
 
   final sections = <BoardSection>[];
-  const sectionSize = 300;
+  const sectionSize = 20;
 
   final minSectionX = (minX / sectionSize).floor();
   final maxSectionX = (maxX / sectionSize).ceil();
@@ -77,9 +77,9 @@ void main(List<String> args) async {
       final borderWords = words.where((word) {
         final isStartInSection =
             word.isStartInSection(sectionX, sectionY, sectionSize);
-        final isEndInSection =
-            word.isEndInSection(sectionX, sectionY, sectionSize);
-        return !isStartInSection && isEndInSection;
+        final isInSection =
+            word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
+        return !isStartInSection && isInSection;
       }).toList();
 
       final section = BoardSection(
@@ -89,7 +89,11 @@ void main(List<String> args) async {
         words: sectionWords,
         borderWords: borderWords,
       );
-      sections.add(section);
+
+      // Add only sections that have words
+      if (section.words.isNotEmpty || section.borderWords.isNotEmpty) {
+        sections.add(section);
+      }
     }
   }
 
@@ -117,5 +121,32 @@ extension SectionBelonging on Word {
         endX < sectionX + sectionSize &&
         endY >= sectionY &&
         endY < sectionY + sectionSize;
+  }
+
+  /// Returns true if any of its letters is in the section.
+  bool isAnyLetterInSection(int sectionX, int sectionY, int sectionSize) {
+    return allLetters
+        .any((e) => _isInSection(e.$1, e.$2, sectionX, sectionY, sectionSize));
+  }
+
+  /// Returns all the letter positions of the word.
+  List<(int, int)> get allLetters {
+    return axis == Axis.horizontal
+        ? [
+            for (var i = 0; i < answer.length; i++)
+              (position.x + i, position.y),
+          ]
+        : [
+            for (var j = 0; j < answer.length; j++)
+              (position.x, position.y + j),
+          ];
+  }
+
+  /// Returns true if the point is in the section.
+  bool _isInSection(int x, int y, int sectionX, int sectionY, int sectionSize) {
+    return x >= sectionX &&
+        x < sectionX + sectionSize &&
+        y >= sectionY &&
+        y < sectionY + sectionSize;
   }
 }
