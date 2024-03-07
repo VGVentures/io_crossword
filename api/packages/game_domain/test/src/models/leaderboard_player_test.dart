@@ -8,7 +8,7 @@ void main() {
     test('can be instantiated', () {
       expect(
         LeaderboardPlayer(
-          id: 'id',
+          userId: 'id',
           initials: 'TST',
           score: 10,
         ),
@@ -17,7 +17,7 @@ void main() {
     });
 
     final leaderboardPlayer = LeaderboardPlayer(
-      id: 'id',
+      userId: 'id',
       initials: 'TST',
       score: 20,
     );
@@ -26,7 +26,7 @@ void main() {
       expect(
         leaderboardPlayer.toJson(),
         equals({
-          'id': 'id',
+          'userId': 'id',
           'initials': 'TST',
           'score': 20,
         }),
@@ -36,7 +36,7 @@ void main() {
     test('fromJson returns the correct instance', () {
       expect(
         LeaderboardPlayer.fromJson(const {
-          'id': 'id',
+          'userId': 'id',
           'initials': 'TST',
           'score': 20,
         }),
@@ -46,13 +46,13 @@ void main() {
 
     test('supports equality', () {
       expect(
-        LeaderboardPlayer(id: '', initials: 'TST', score: 20),
-        equals(LeaderboardPlayer(id: '', initials: 'TST', score: 20)),
+        LeaderboardPlayer(userId: '', initials: 'TST', score: 20),
+        equals(LeaderboardPlayer(userId: '', initials: 'TST', score: 20)),
       );
 
       expect(
         LeaderboardPlayer(
-          id: '',
+          userId: '',
           initials: 'TST',
           score: 20,
         ),
@@ -63,7 +63,7 @@ void main() {
 
       expect(
         LeaderboardPlayer(
-          id: 'id',
+          userId: 'id',
           initials: 'WOW',
           score: 20,
         ),
