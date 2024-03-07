@@ -8,6 +8,10 @@ environment:
 
 dependencies:
   dart_frog: ^1.1.0
+  game_domain:
+    path: packages/game_domain
+  leaderboard_repository:
+    path: packages/leaderboard_repository
 
 dev_dependencies:
   mocktail: ^1.0.0
