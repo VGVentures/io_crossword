@@ -128,7 +128,7 @@ void main() {
             (section.position.x, section.position.y): section,
         },
         selectedWord: const WordSelection(
-          section: (1, 1),
+          section: (0, 0),
           wordId: 'Point(-7, -2)-Axis.vertical',
         ),
       );
@@ -148,27 +148,32 @@ void main() {
         (game) async {
           await game.ready();
 
-          final targetSection = game.world.children
-              .whereType<SectionComponent>()
-              .where((element) => element.index == (-1, 0))
-              .first;
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
 
-          expect(targetSection.lastSelectedWord, 'Point(-7, 6)-Axis.vertical');
-          expect(targetSection.lastSelectedSection, (-1, 0));
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
 
           stateController.add(
             state.copyWith(
-              selectedWord: const WordSelection(
-                section: (-1, -1),
-                wordId: 'Point(-15, -10)-Axis.vertical',
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                wordId: targetWord.id,
               ),
             ),
           );
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, 'Point(2, 2)-Axis.horizontal');
-          expect(targetSection.lastSelectedSection, (0, 0));
+          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(
+            targetSection.lastSelectedSection,
+            equals(targetSection.index),
+          );
         },
       );
     });
@@ -200,8 +205,10 @@ void main() {
         final currentSections =
             game.world.children.whereType<SectionComponent>();
 
-        final subjectComponent =
-            currentSections.firstWhere((element) => element.index == (-1, 0));
+        final subjectComponent = currentSections.reduce(
+          (value, element) =>
+              value.index.$1 < element.index.$1 ? value : element,
+        );
 
         final removed = subjectComponent.removed;
 
@@ -212,13 +219,17 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: const Offset(-600, 30),
+                delta: Offset(sections.first.size * state.width * 1.5, 30),
               ),
             ),
           )
           ..update(0);
 
+        final newCurrentSections =
+            game.world.children.whereType<SectionComponent>();
+
         expect(removed, completes);
+        expect(newCurrentSections.contains(subjectComponent), isFalse);
       },
     );
   });
