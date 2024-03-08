@@ -41,13 +41,65 @@ class CrosswordView extends StatelessWidget {
     } else if (state is CrosswordError) {
       child = const Center(child: Text('Error loading crossword'));
     } else if (state is CrosswordLoaded) {
-      child = GameWidget.controlled(
-        gameFactory: () => CrosswordGame(
-          context.read(),
-        ),
-      );
+      child = const LoadedBoardView();
     }
 
     return Scaffold(body: child);
+  }
+}
+
+class LoadedBoardView extends StatefulWidget {
+  const LoadedBoardView({super.key});
+
+  @visibleForTesting
+  static const zoomInKey = Key('game_zoomIn');
+  @visibleForTesting
+  static const zoomOutKey = Key('game_zoomOut');
+
+  @override
+  State<LoadedBoardView> createState() => LoadedBoardViewState();
+}
+
+@visibleForTesting
+class LoadedBoardViewState extends State<LoadedBoardView> {
+  late final CrosswordGame game;
+
+  @override
+  void initState() {
+    super.initState();
+
+    game = CrosswordGame(context.read());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: Column(
+            children: [
+              ElevatedButton(
+                key: LoadedBoardView.zoomInKey,
+                onPressed: () {
+                  game.zoomIn();
+                },
+                child: const Icon(Icons.zoom_in),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                key: LoadedBoardView.zoomOutKey,
+                onPressed: () {
+                  game.zoomOut();
+                },
+                child: const Icon(Icons.zoom_out),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

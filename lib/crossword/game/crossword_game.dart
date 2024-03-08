@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -136,5 +137,22 @@ class CrosswordGame extends FlameGame with PanDetector {
       _distanceMoved = 0;
       _updateVisibleSections();
     }
+  }
+
+  void zoomOut() {
+    if (camera.viewfinder.zoom <= 0.05) {
+      return;
+    }
+    camera.viewport.position /= 1.05;
+    camera.viewfinder.zoom = camera.viewfinder.zoom - 0.05;
+
+    _updateVisibleSections();
+  }
+
+  void zoomIn() {
+    camera.viewport.position *= 1.05;
+    camera.viewfinder.zoom += 0.05;
+
+    _updateVisibleSections();
   }
 }

@@ -288,5 +288,61 @@ void main() {
         expect(removed, completes);
       },
     );
+
+    testWithGame(
+      'can zoom in',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 400,
+          sections: {},
+        );
+        mockState(state);
+
+        await game.ready();
+        game.zoomIn();
+        expect(game.camera.viewfinder.zoom, 1.05);
+      },
+    );
+
+    testWithGame(
+      'can zoom out',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 400,
+          sections: {},
+        );
+        mockState(state);
+
+        await game.ready();
+        game.zoomOut();
+        expect(game.camera.viewfinder.zoom, .95);
+      },
+    );
+
+    testWithGame(
+      'cannot zoom out more than 0.05',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 400,
+          sections: {},
+        );
+        mockState(state);
+
+        await game.ready();
+        for (var i = 0; i < 100; i++) {
+          game.zoomOut();
+        }
+        expect(game.camera.viewfinder.zoom, greaterThan(0));
+      },
+    );
   });
 }
