@@ -110,11 +110,12 @@ void main() {
 
       await tester.pumpCrosswordView(bloc);
 
-      await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
-
       final crosswordViewState = tester.state<LoadedBoardViewState>(
         find.byType(LoadedBoardView),
       );
+      await crosswordViewState.game.loaded;
+
+      await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
 
       expect(
         crosswordViewState.game.camera.viewfinder.zoom,
@@ -133,12 +134,12 @@ void main() {
       );
 
       await tester.pumpCrosswordView(bloc);
-
-      await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
-
       final crosswordViewState = tester.state<LoadedBoardViewState>(
         find.byType(LoadedBoardView),
       );
+      await crosswordViewState.game.loaded;
+
+      await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
 
       expect(
         crosswordViewState.game.camera.viewfinder.zoom,
