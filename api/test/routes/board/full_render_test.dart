@@ -94,5 +94,12 @@ void main() {
 
       expect(response.statusCode, HttpStatus.ok);
     });
+
+    test('returns method not allowed when not a get method', () async {
+      when(() => request.method).thenReturn(HttpMethod.post);
+      final response = await route.onRequest(requestContext);
+
+      expect(response.statusCode, HttpStatus.methodNotAllowed);
+    });
   });
 }
