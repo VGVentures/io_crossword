@@ -9,6 +9,8 @@ COPY packages/db_client ./packages/db_client
 COPY packages/encryption_middleware ./packages/encryption_middleware
 COPY packages/game_domain ./packages/game_domain
 COPY packages/jwt_middleware ./packages/jwt_middleware
+COPY packages/board_renderer ./packages/board_renderer
+COPY packages/crossword_repository ./packages/crossword_repository
 
 # Install Dependencies
 RUN dart pub get -C packages/db_client
