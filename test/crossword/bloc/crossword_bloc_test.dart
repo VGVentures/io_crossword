@@ -49,10 +49,11 @@ void main() {
         solvedTimestamp: null,
       ),
     ];
+    const sectionSize = 40;
     final section = BoardSection(
       id: '',
       position: const Point(1, 1),
-      size: 40,
+      size: sectionSize,
       words: words,
       borderWords: const [],
     );
@@ -80,7 +81,7 @@ void main() {
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
-            sectionSize: 300,
+            sectionSize: sectionSize,
             sections: {
               (1, 1): section,
             },
@@ -97,13 +98,13 @@ void main() {
           ).thenAnswer((_) => Stream.value(section));
         },
         seed: () => const CrosswordLoaded(
-          sectionSize: 300,
+          sectionSize: sectionSize,
           sections: {},
         ),
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
-            sectionSize: 300,
+            sectionSize: sectionSize,
             sections: {
               (1, 1): section,
             },
@@ -117,12 +118,12 @@ void main() {
       build: () => CrosswordBloc(crosswordRepository),
       act: (bloc) => bloc.add(const WordSelected((0, 0), 'flutter')),
       seed: () => CrosswordLoaded(
-        sectionSize: 400,
+        sectionSize: sectionSize,
         sections: {
           (2, 2): BoardSection(
             id: '0',
             position: const Point(2, 2),
-            size: 40,
+            size: sectionSize,
             words: [
               Word(
                 axis: Axis.horizontal,
@@ -140,7 +141,7 @@ void main() {
       ),
       expect: () => <CrosswordState>[
         CrosswordLoaded(
-          sectionSize: 400,
+          sectionSize: sectionSize,
           selectedWord: const WordSelection(
             section: (0, 0),
             wordId: 'flutter',
@@ -149,7 +150,7 @@ void main() {
             (2, 2): BoardSection(
               id: '0',
               position: const Point(2, 2),
-              size: 40,
+              size: sectionSize,
               words: [
                 Word(
                   axis: Axis.horizontal,

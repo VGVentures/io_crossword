@@ -81,13 +81,13 @@ void main() {
 
         await game.ready();
 
-        final targetSection = game.world.children
-            .whereType<SectionComponent>()
-            .where((element) => element.index == (-1, -1))
-            .first;
+        final targetSection =
+            game.world.children.whereType<SectionComponent>().first;
 
         final targetBoardSection = sections.firstWhere(
-          (element) => element.position.x == -1 && element.position.y == -1,
+          (element) =>
+              element.position.x == targetSection.index.$1 &&
+              element.position.y == targetSection.index.$2,
         );
         final targetWord = targetBoardSection.words.first;
         final targetPosition =
@@ -104,9 +104,9 @@ void main() {
 
         verify(
           () => bloc.add(
-            const WordSelected(
-              (-1, -1),
-              'Point(-7, -2)-Axis.vertical',
+            WordSelected(
+              targetSection.index,
+              targetWord.id,
             ),
           ),
         ).called(1);
