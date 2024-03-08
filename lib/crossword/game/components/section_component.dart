@@ -16,10 +16,16 @@ class SectionTapController extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    final localPosition = event.localPosition;
     final boardSection = parent._boardSection;
 
     if (boardSection != null) {
+      final boardPosition =
+          boardSection.position * CrosswordGame.cellSize * boardSection.size;
+      final localPosition = event.localPosition +
+          Vector2(
+            boardPosition.x.toDouble(),
+            boardPosition.y.toDouble(),
+          );
       for (final word in boardSection.words) {
         final wordLength =
             (word.answer.length * CrosswordGame.cellSize).toDouble();

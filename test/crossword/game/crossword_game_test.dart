@@ -7,9 +7,10 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../helpers/test_sections.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 
@@ -18,6 +19,7 @@ class _MockTapUpEvent extends Mock implements TapUpEvent {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('CrosswordGame', () {
+    final sections = getTestSections();
     late CrosswordBloc bloc;
 
     void mockState(CrosswordState state) {
@@ -49,34 +51,10 @@ void main() {
         final state = CrosswordLoaded(
           width: 40,
           height: 40,
-          sectionSize: 400,
+          sectionSize: 20,
           sections: {
-            (0, 0): BoardSection(
-              id: '1',
-              position: const Point(2, 2),
-              size: 400,
-              words: [
-                Word(
-                  position: const Point(0, 0),
-                  axis: Axis.vertical,
-                  answer: 'Flutter',
-                  clue: '',
-                  hints: const [],
-                  visible: true,
-                  solvedTimestamp: null,
-                ),
-                Word(
-                  position: const Point(2, 2),
-                  axis: Axis.horizontal,
-                  answer: 'Android',
-                  clue: '',
-                  hints: const [],
-                  visible: false,
-                  solvedTimestamp: null,
-                ),
-              ],
-              borderWords: const [],
-            ),
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
           },
         );
         mockState(state);
@@ -96,34 +74,10 @@ void main() {
         final state = CrosswordLoaded(
           width: 40,
           height: 40,
-          sectionSize: 400,
+          sectionSize: 20,
           sections: {
-            (0, 0): BoardSection(
-              id: '1',
-              position: const Point(0, 0),
-              size: 400,
-              words: [
-                Word(
-                  position: const Point(0, 0),
-                  axis: Axis.vertical,
-                  answer: 'Flutter',
-                  clue: '',
-                  hints: const [],
-                  visible: true,
-                  solvedTimestamp: null,
-                ),
-                Word(
-                  position: const Point(2, 2),
-                  axis: Axis.horizontal,
-                  answer: 'Android',
-                  clue: '',
-                  hints: const [],
-                  visible: false,
-                  solvedTimestamp: null,
-                ),
-              ],
-              borderWords: const [],
-            ),
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
           },
         );
 
@@ -133,11 +87,20 @@ void main() {
 
         final targetSection = game.world.children
             .whereType<SectionComponent>()
-            .where((element) => element.index == (0, 0))
+            .where((element) => element.index == (-1, -1))
             .first;
 
+        final targetBoardSection = sections.firstWhere(
+          (element) => element.position.x == -1 && element.position.y == -1,
+        );
+        final targetWord = targetBoardSection.words.first;
+        final targetPosition =
+            targetWord.position * 40 - (targetBoardSection.position * 40 * 20);
+
         final event = _MockTapUpEvent();
-        when(() => event.localPosition).thenReturn(Vector2.all(0));
+        when(() => event.localPosition).thenReturn(
+          Vector2(targetPosition.x.toDouble(), targetPosition.y.toDouble()),
+        );
 
         targetSection.children.whereType<SectionTapController>().first.onTapUp(
               event,
@@ -146,8 +109,8 @@ void main() {
         verify(
           () => bloc.add(
             const WordSelected(
-              (0, 0),
-              'Point(0, 0)-Axis.vertical',
+              (-1, -1),
+              'Point(-7, -2)-Axis.vertical',
             ),
           ),
         ).called(1);
@@ -159,38 +122,14 @@ void main() {
       final state = CrosswordLoaded(
         width: 40,
         height: 40,
-        sectionSize: 400,
+        sectionSize: 20,
         sections: {
-          (0, 0): BoardSection(
-            id: '1',
-            position: const Point(0, 0),
-            size: 400,
-            words: [
-              Word(
-                position: const Point(0, 0),
-                axis: Axis.vertical,
-                answer: 'Flutter',
-                clue: '',
-                hints: const [],
-                visible: true,
-                solvedTimestamp: null,
-              ),
-              Word(
-                position: const Point(2, 2),
-                axis: Axis.horizontal,
-                answer: 'Android',
-                clue: '',
-                hints: const [],
-                visible: false,
-                solvedTimestamp: null,
-              ),
-            ],
-            borderWords: const [],
-          ),
+          for (final section in sections)
+            (section.position.x, section.position.y): section,
         },
         selectedWord: const WordSelection(
-          section: (0, 0),
-          wordId: 'Point(0, 0)-Axis.vertical',
+          section: (1, 1),
+          wordId: 'Point(-7, -2)-Axis.vertical',
         ),
       );
 
@@ -211,17 +150,17 @@ void main() {
 
           final targetSection = game.world.children
               .whereType<SectionComponent>()
-              .where((element) => element.index == (0, 0))
+              .where((element) => element.index == (-1, 0))
               .first;
 
-          expect(targetSection.lastSelectedWord, 'Point(0, 0)-Axis.vertical');
-          expect(targetSection.lastSelectedSection, (0, 0));
+          expect(targetSection.lastSelectedWord, 'Point(-7, 6)-Axis.vertical');
+          expect(targetSection.lastSelectedSection, (-1, 0));
 
           stateController.add(
             state.copyWith(
               selectedWord: const WordSelection(
-                section: (0, 0),
-                wordId: 'Point(2, 2)-Axis.horizontal',
+                section: (-1, -1),
+                wordId: 'Point(-15, -10)-Axis.vertical',
               ),
             ),
           );
@@ -247,32 +186,13 @@ void main() {
       'remove sections that are not visible when panning',
       createGame,
       (game) async {
-        const state = CrosswordLoaded(
+        final state = CrosswordLoaded(
           width: 40,
           height: 40,
-          sectionSize: 300,
+          sectionSize: 20,
           sections: {
-            (-1, 0): BoardSection(
-              id: '',
-              position: Point(-1, 0),
-              size: 300,
-              words: [],
-              borderWords: [],
-            ),
-            (0, 0): BoardSection(
-              id: '',
-              position: Point(0, 0),
-              size: 300,
-              words: [],
-              borderWords: [],
-            ),
-            (1, 0): BoardSection(
-              id: '',
-              position: Point(1, 0),
-              size: 300,
-              words: [],
-              borderWords: [],
-            ),
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
           },
         );
         mockState(state);
@@ -292,7 +212,7 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: const Offset(2400, 30),
+                delta: const Offset(-600, 30),
               ),
             ),
           )
