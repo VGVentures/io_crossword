@@ -9,6 +9,7 @@ COPY packages/db_client ./packages/db_client
 COPY packages/encryption_middleware ./packages/encryption_middleware
 COPY packages/game_domain ./packages/game_domain
 COPY packages/jwt_middleware ./packages/jwt_middleware
+COPY packages/leaderboard_repository ./packages/leaderboard_repository
 COPY packages/board_renderer ./packages/board_renderer
 COPY packages/crossword_repository ./packages/crossword_repository
 
@@ -17,6 +18,7 @@ RUN dart pub get -C packages/db_client
 RUN dart pub get -C packages/encryption_middleware
 RUN dart pub get -C packages/game_domain
 RUN dart pub get -C packages/jwt_middleware
+RUN dart pub get -C packages/leaderboard_repository
 
 # Resolve app dependencies.
 COPY pubspec.* ./

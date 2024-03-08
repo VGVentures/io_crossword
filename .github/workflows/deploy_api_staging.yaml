@@ -1,4 +1,4 @@
-name: deploy_api_prod
+name: deploy_api_staging
 
 on: workflow_dispatch
 
