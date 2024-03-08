@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:game_domain/game_domain.dart';
+import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 
 /// A function that creates a command to execute.
@@ -26,6 +27,9 @@ typedef DrawRect = img.Image Function(
   img.Channel maskChannel,
 });
 
+/// A function that makes a GET request.
+typedef GetCall = Future<http.Response> Function(Uri uri);
+
 /// {@template board_renderer_failure}
 /// Exception thrown when a board rendering fails.
 /// {@endtemplate}
@@ -49,19 +53,21 @@ class BoardRenderer {
     CreateCommand createCommand = img.Command.new,
     CreateImage createImage = img.Image.new,
     DrawRect drawRect = img.drawRect,
+    GetCall get = http.get,
   })  : _createCommand = createCommand,
         _createImage = createImage,
-        _drawRect = drawRect;
+        _drawRect = drawRect,
+        _get = get;
 
   final CreateCommand _createCommand;
   final CreateImage _createImage;
   final DrawRect _drawRect;
-
-  /// The size of each cell in the board.
-  static const cellSize = 4;
+  final GetCall _get;
 
   /// Renders the full board in a single image.
   Future<Uint8List> renderBoard(List<Word> words) async {
+    /// The size of each cell in the board when rendering in full size.
+    const cellSize = 4;
     var minPositionX = 0;
     var minPositionY = 0;
 
@@ -126,6 +132,99 @@ class BoardRenderer {
                   : wordPosition.$2 + i * cellSize + cellSize) +
               centerY,
           color: color,
+        );
+      }
+    }
+
+    final createdCommand = _createCommand()
+      ..image(image)
+      ..encodePng();
+
+    await createdCommand.execute();
+
+    final outputBytes = createdCommand.outputBytes;
+    if (outputBytes == null) {
+      throw BoardRendererFailure('Failed to render the board');
+    }
+
+    return outputBytes;
+  }
+
+  Future<Uint8List> _getFile(Uri uri) async {
+    final response = await _get(uri);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get image from $uri');
+    }
+
+    return response.bodyBytes;
+  }
+
+  /// Renders a section of the board in an image.
+  Future<Uint8List> renderSection(BoardSection section) async {
+    final words = section.words;
+
+    const cellSize = 40;
+
+    var maxPositionX = 0;
+    var maxPositionY = 0;
+
+    for (final word in words) {
+      final sizeX = word.axis == Axis.horizontal
+          ? word.position.x + word.answer.length
+          : word.position.x;
+
+      final sizeY = word.axis == Axis.vertical
+          ? word.position.y + word.answer.length
+          : word.position.y;
+
+      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
+      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
+    }
+
+    final totalWidth = maxPositionX * cellSize;
+    final totalHeight = maxPositionY * cellSize;
+
+    final image = _createImage(
+      width: totalWidth + cellSize,
+      height: totalHeight + cellSize,
+    );
+
+    const url = 'http://127.0.0.1:8080/assets/letters.png';
+    final textureImage = await _getFile(Uri.parse(url));
+
+    final texture = img.decodePng(textureImage);
+    if (texture == null) {
+      throw BoardRendererFailure('Failed to load the texture');
+    }
+
+    for (final word in words) {
+      final position = (
+        word.position.x - section.position.x,
+        word.position.y - section.position.y,
+      );
+
+      final wordCharacters = word.answer.split('');
+
+      for (var c = 0; c < wordCharacters.length; c++) {
+        final char = wordCharacters.elementAt(c);
+        final charIndex = char.codeUnitAt(0) - 65;
+
+        img.compositeImage(
+          image,
+          texture,
+          dstX: word.axis == Axis.horizontal
+              ? (position.$1 + c) * cellSize
+              : position.$1 * cellSize,
+          dstY: word.axis == Axis.vertical
+              ? (position.$2 + c) * cellSize
+              : position.$2 * cellSize,
+          dstW: cellSize,
+          dstH: cellSize,
+          srcX: charIndex * cellSize,
+          srcY: 0,
+          srcW: cellSize,
+          srcH: cellSize,
         );
       }
     }
