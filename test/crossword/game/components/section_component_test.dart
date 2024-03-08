@@ -27,8 +27,6 @@ void main() {
       bloc = _MockCrosswordBloc();
 
       const state = CrosswordLoaded(
-        width: 40,
-        height: 40,
         sectionSize: 400,
         sections: {},
       );
@@ -57,8 +55,6 @@ void main() {
       (game) async {
         mockState(
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {
               (100, 100): BoardSection(
@@ -113,8 +109,6 @@ void main() {
         when(() => bloc.stream).thenAnswer((_) => streamController.stream);
         when(() => bloc.state).thenReturn(
           const CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {},
           ),
@@ -127,8 +121,6 @@ void main() {
         expect(spriteBatchComponent, isNull);
         streamController.add(
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {
               (100, 100): BoardSection(

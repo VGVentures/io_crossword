@@ -31,8 +31,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         };
 
         return CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: section.size,
           sections: state is CrosswordLoaded
               ? {

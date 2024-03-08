@@ -18,8 +18,10 @@ class _MockTapUpEvent extends Mock implements TapUpEvent {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  final sections = getTestSections();
+  final sectionSize = sections.first.size;
+
   group('CrosswordGame', () {
-    final sections = getTestSections();
     late CrosswordBloc bloc;
 
     void mockState(CrosswordState state) {
@@ -33,11 +35,9 @@ void main() {
     setUp(() {
       bloc = _MockCrosswordBloc();
 
-      const state = CrosswordLoaded(
-        width: 40,
-        height: 40,
-        sectionSize: 400,
-        sections: {},
+      final state = CrosswordLoaded(
+        sectionSize: sectionSize,
+        sections: const {},
       );
       mockState(state);
     });
@@ -49,9 +49,7 @@ void main() {
       createGame,
       (game) async {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
-          sectionSize: 20,
+          sectionSize: sectionSize,
           sections: {
             for (final section in sections)
               (section.position.x, section.position.y): section,
@@ -72,9 +70,7 @@ void main() {
       createGame,
       (game) async {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
-          sectionSize: 20,
+          sectionSize: sectionSize,
           sections: {
             for (final section in sections)
               (section.position.x, section.position.y): section,
@@ -120,9 +116,7 @@ void main() {
     group('highlighted word', () {
       late StreamController<CrosswordState> stateController;
       final state = CrosswordLoaded(
-        width: 40,
-        height: 40,
-        sectionSize: 20,
+        sectionSize: sectionSize,
         sections: {
           for (final section in sections)
             (section.position.x, section.position.y): section,
@@ -192,9 +186,7 @@ void main() {
       createGame,
       (game) async {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
-          sectionSize: 20,
+          sectionSize: sectionSize,
           sections: {
             for (final section in sections)
               (section.position.x, section.position.y): section,
@@ -211,7 +203,6 @@ void main() {
         );
 
         final removed = subjectComponent.removed;
-
         game
           ..onPanUpdate(
             DragUpdateInfo.fromDetails(
@@ -219,7 +210,7 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: Offset(sections.first.size * state.width * 1.5, 30),
+                delta: Offset(-sections.first.size * state.width * 1.5, 30),
               ),
             ),
           )

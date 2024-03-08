@@ -60,9 +60,9 @@ class CrosswordGame extends FlameGame with PanDetector {
     final viewportMiddle = visibleViewport.size / 2;
 
     final horizontalSectionsVisibleInViewport =
-        (visibleViewport.width / sectionSize).ceilToDouble() + 1;
+        (visibleViewport.width / sectionSize).ceilToDouble();
     final verticalSectionsVisibleInViewport =
-        (visibleViewport.height / sectionSize).ceilToDouble() + 1;
+        (visibleViewport.height / sectionSize).ceilToDouble();
 
     final cameraPosition =
         camera.viewfinder.position + viewportMiddle.toVector2();

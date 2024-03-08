@@ -19,8 +19,6 @@ void main() {
       test('can be instantiated', () {
         expect(
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {
               (0, 0): BoardSection(
@@ -48,8 +46,6 @@ void main() {
       test('supports value comparisons', () {
         expect(
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {
               (0, 0): BoardSection(
@@ -72,8 +68,6 @@ void main() {
             },
           ),
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 400,
             sections: {
               (0, 0): BoardSection(
@@ -99,8 +93,6 @@ void main() {
       });
       test('copyWith returns same object', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -127,8 +119,6 @@ void main() {
 
       test('copyWith returns an instance with new width', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -156,8 +146,6 @@ void main() {
 
       test('copyWith returns an instance with new height', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -185,8 +173,6 @@ void main() {
 
       test('copyWith returns an instance with new sectionSize', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -214,8 +200,6 @@ void main() {
 
       test('copyWith returns an instance with new sections', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -318,8 +302,6 @@ void main() {
 
       group('withSelectedWord returns a copy with selected word', () {
         final state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(

@@ -80,8 +80,6 @@ void main() {
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 300,
             sections: {
               (1, 1): section,
@@ -99,16 +97,12 @@ void main() {
           ).thenAnswer((_) => Stream.value(section));
         },
         seed: () => const CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 300,
           sections: {},
         ),
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
-            width: 40,
-            height: 40,
             sectionSize: 300,
             sections: {
               (1, 1): section,
@@ -123,8 +117,6 @@ void main() {
       build: () => CrosswordBloc(crosswordRepository),
       act: (bloc) => bloc.add(const WordSelected((0, 0), 'flutter')),
       seed: () => CrosswordLoaded(
-        width: 40,
-        height: 40,
         sectionSize: 400,
         sections: {
           (2, 2): BoardSection(
@@ -148,8 +140,6 @@ void main() {
       ),
       expect: () => <CrosswordState>[
         CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           selectedWord: const WordSelection(
             section: (0, 0),

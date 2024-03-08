@@ -62,8 +62,6 @@ void main() {
     testWidgets('renders game when is loaded', (tester) async {
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 40,
           sections: {
             (0, 0): BoardSection(

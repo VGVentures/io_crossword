@@ -25,10 +25,10 @@ class WordSelection extends Equatable {
 
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
-    required this.width,
-    required this.height,
     required this.sectionSize,
     required this.sections,
+    this.width = 40,
+    this.height = 40,
     this.selectedWord,
   });
 
