@@ -1,4 +1,4 @@
-name: deploy_app_dev
+name: deploy_app_staging
 
 on: workflow_dispatch
 
