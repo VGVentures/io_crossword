@@ -172,6 +172,24 @@ class DbClient {
     return [];
   }
 
+  /// Lists all records in the given [entity].
+  Future<List<DbEntityRecord>> listAll(
+    String entity,
+  ) async {
+    final collection = _firestore.collection(entity);
+
+    var results = await collection.get();
+
+    final records = List<DbEntityRecord>.from(_mapResult(results));
+
+    while (results.hasNextPage) {
+      results = await collection.get(nextPageToken: results.nextPageToken);
+      records.addAll(_mapResult(results));
+    }
+
+    return records;
+  }
+
   /// Search for records where the [field] match the [value].
   Future<List<DbEntityRecord>> findBy(
     String entity,
