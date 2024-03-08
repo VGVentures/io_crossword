@@ -49,5 +49,3 @@ String get _initialsBlacklistId {
 bool get _useEmulator => Platform.environment['USE_EMULATOR'] == 'true';
 
 String get projectId => _appId;
-
-bool get _useEmulator => Platform.environment['USE_EMULATOR'] == 'true';
