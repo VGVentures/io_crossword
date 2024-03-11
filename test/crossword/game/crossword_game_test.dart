@@ -205,6 +205,63 @@ void main() {
           );
         },
       );
+
+      testWithGame(
+        'changes selected word',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord1 = boardSection.words.firstWhere(
+            (element) => element.axis == Axis.horizontal,
+          );
+          final targetWord2 = boardSection.words.firstWhere(
+            (element) => element.axis == Axis.vertical,
+          );
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                wordId: targetWord1.id,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+
+          expect(targetSection.lastSelectedWord, equals(targetWord1.id));
+          expect(
+            targetSection.lastSelectedSection,
+            equals(targetSection.index),
+          );
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                wordId: targetWord2.id,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+
+          expect(targetSection.lastSelectedWord, equals(targetWord2.id));
+          expect(
+            targetSection.lastSelectedSection,
+            equals(targetSection.index),
+          );
+        },
+      );
     });
 
     test(
