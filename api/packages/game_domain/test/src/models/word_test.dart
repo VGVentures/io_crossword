@@ -24,7 +24,6 @@ void main() {
           'answer': 'test',
           'clue': 'clue',
           'hints': ['hint'],
-          'visible': true,
           'solvedTimestamp': 0,
         }),
       );
@@ -38,7 +37,6 @@ void main() {
         'answer': 'test',
         'clue': 'clue',
         'hints': ['hint'],
-        'visible': true,
       };
       final word = Word.fromJson(json);
       expect(
