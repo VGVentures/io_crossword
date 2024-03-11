@@ -27,12 +27,12 @@ void main() {
 
     setUpAll(() {
       registerFallbackValue(
-        BoardSection(
+        const BoardSection(
           id: '',
           position: Point(0, 0),
           size: 10,
-          words: const [],
-          borderWords: const [],
+          words: [],
+          borderWords: [],
         ),
       );
     });
