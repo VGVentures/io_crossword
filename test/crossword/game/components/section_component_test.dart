@@ -68,7 +68,6 @@ void main() {
                     answer: 'Flutter',
                     clue: '',
                     hints: const [],
-                    visible: true,
                     solvedTimestamp: null,
                   ),
                   Word(
@@ -77,7 +76,6 @@ void main() {
                     answer: 'Firebase',
                     clue: '',
                     hints: const [],
-                    visible: true,
                     solvedTimestamp: null,
                   ),
                 ],
@@ -97,6 +95,60 @@ void main() {
         expect(spriteBatch, isNotNull);
         // 15 because Flutter has 7 letters and Firebase has 8
         expect(spriteBatch?.sources, hasLength(15));
+      },
+    );
+
+    testWithGame(
+      'build the words with letters when the section is already loaded and'
+      ' contains word with resolveTimestamp not null',
+      createGame,
+      (game) async {
+        mockState(
+          CrosswordLoaded(
+            sectionSize: 400,
+            sections: {
+              (100, 100): BoardSection(
+                id: '',
+                position: const Point(100, 100),
+                size: 400,
+                words: [
+                  Word(
+                    position: const Point(0, 0),
+                    axis: Axis.vertical,
+                    answer: 'Flutter',
+                    clue: '',
+                    hints: const [],
+                    solvedTimestamp: 1,
+                  ),
+                  Word(
+                    position: const Point(0, 0),
+                    axis: Axis.horizontal,
+                    answer: 'Firebase',
+                    clue: '',
+                    hints: const [],
+                    solvedTimestamp: null,
+                  ),
+                ],
+                borderWords: const [],
+              ),
+            },
+          ),
+        );
+        final component = SectionComponent(index: (100, 100));
+        await game.world.ensureAdd(component);
+
+        final spriteBatchComponent =
+            component.firstChild<SpriteBatchComponent>();
+        expect(spriteBatchComponent, isNotNull);
+
+        final spriteBatch = spriteBatchComponent?.spriteBatch;
+        expect(spriteBatch, isNotNull);
+        // 15 because Flutter has 7 letters and Firebase has 8
+
+        expect(
+          spriteBatch?.sources.any((element) => element.left != 1040),
+          isTrue,
+        );
       },
     );
 
@@ -134,7 +186,6 @@ void main() {
                     answer: 'Flutter',
                     clue: '',
                     hints: const [],
-                    visible: true,
                     solvedTimestamp: null,
                   ),
                   Word(
@@ -143,7 +194,6 @@ void main() {
                     answer: 'Firebase',
                     clue: '',
                     hints: const [],
-                    visible: true,
                     solvedTimestamp: null,
                   ),
                 ],

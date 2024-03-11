@@ -12,7 +12,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
       final json = word.toJson();
@@ -51,7 +50,6 @@ void main() {
             answer: 'test',
             clue: 'clue',
             hints: const ['hint'],
-            visible: true,
             solvedTimestamp: null,
           ),
         ),
@@ -65,7 +63,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
       final secondWord = Word(
@@ -74,7 +71,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
 

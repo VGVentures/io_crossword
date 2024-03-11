@@ -16,7 +16,6 @@ class Word extends Equatable {
     required this.answer,
     required this.clue,
     required this.hints,
-    required this.visible,
     required this.solvedTimestamp,
   }) : id = '$position-$axis';
 
@@ -50,12 +49,6 @@ class Word extends Equatable {
   @JsonKey()
   final List<String> hints;
 
-  /// Whether the word should be visible or not in the board. Independent of
-  /// the word being solved or not.
-  /// Every solved word is visible, but not every visible word is solved.
-  @JsonKey()
-  final bool visible;
-
   /// The timestamp when the word was solved. In milliseconds since epoch.
   /// If the word is not solved, this value is null.
   @JsonKey()
@@ -72,7 +65,6 @@ class Word extends Equatable {
         answer,
         clue,
         hints,
-        visible,
         solvedTimestamp,
       ];
 }

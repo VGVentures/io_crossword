@@ -18,7 +18,6 @@ void main() {
         answer: 'flutter',
         clue: 'flutter',
         hints: const ['dart', 'mobile', 'cross-platform'],
-        visible: true,
         solvedTimestamp: null,
       ),
       Word(
@@ -27,7 +26,6 @@ void main() {
         answer: 'android',
         clue: 'flutter',
         hints: const ['dart', 'mobile', 'cross-platform'],
-        visible: true,
         solvedTimestamp: null,
       ),
       Word(
@@ -36,7 +34,6 @@ void main() {
         answer: 'dino',
         clue: 'flutter',
         hints: const ['dart', 'mobile', 'cross-platform'],
-        visible: true,
         solvedTimestamp: null,
       ),
       Word(
@@ -45,7 +42,6 @@ void main() {
         answer: 'sparky',
         clue: 'flutter',
         hints: const ['dart', 'mobile', 'cross-platform'],
-        visible: true,
         solvedTimestamp: null,
       ),
     ];
@@ -131,7 +127,6 @@ void main() {
                 answer: 'flutter',
                 clue: 'flutter',
                 hints: const ['dart', 'mobile', 'cross-platform'],
-                visible: true,
                 solvedTimestamp: null,
               ),
             ],
@@ -158,7 +153,6 @@ void main() {
                   answer: 'flutter',
                   clue: 'flutter',
                   hints: const ['dart', 'mobile', 'cross-platform'],
-                  visible: true,
                   solvedTimestamp: null,
                 ),
               ],

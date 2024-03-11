@@ -33,7 +33,6 @@ void main(List<String> args) async {
       answer: row[2] as String,
       clue: 'The answer is: ${row[2]}',
       hints: const [],
-      visible: false,
       axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
       solvedTimestamp: null,
     );
