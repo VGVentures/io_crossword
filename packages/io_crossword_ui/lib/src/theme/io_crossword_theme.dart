@@ -16,9 +16,6 @@ class IoCrosswordTheme {
         displayColor: IoCrosswordColors.seedWhite,
         decorationColor: IoCrosswordColors.seedWhite,
       ),
-      tabBarTheme: _tabBarTheme,
-      dialogTheme: _dialogTheme,
-      bottomNavigationBarTheme: _bottomNavigationBarTheme,
     );
   }
 
@@ -36,35 +33,5 @@ class IoCrosswordTheme {
     return isMobile
         ? IoCrosswordTextStyles.mobile.textTheme
         : IoCrosswordTextStyles.desktop.textTheme;
-  }
-
-  static TabBarTheme get _tabBarTheme {
-    const yellow = IoCrosswordColors.seedYellow;
-    const grey = IoCrosswordColors.seedGrey50;
-
-    return const TabBarTheme(
-      labelColor: yellow,
-      indicatorColor: yellow,
-      unselectedLabelColor: grey,
-      dividerColor: grey,
-      indicator: UnderlineTabIndicator(
-        borderSide: BorderSide(color: yellow),
-      ),
-    );
-  }
-
-  static DialogTheme get _dialogTheme {
-    const black = IoCrosswordColors.seedBlack;
-
-    return const DialogTheme(
-      backgroundColor: black,
-      surfaceTintColor: Colors.transparent,
-    );
-  }
-
-  static BottomNavigationBarThemeData get _bottomNavigationBarTheme {
-    return const BottomNavigationBarThemeData(
-      backgroundColor: Colors.transparent,
-    );
   }
 }
