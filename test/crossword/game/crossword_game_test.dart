@@ -7,6 +7,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -113,7 +114,7 @@ void main() {
       },
     );
 
-    group('highlighted word', () {
+    group('highlights word', () {
       late StreamController<CrosswordState> stateController;
       final state = CrosswordLoaded(
         sectionSize: sectionSize,
@@ -121,10 +122,6 @@ void main() {
           for (final section in sections)
             (section.position.x, section.position.y): section,
         },
-        selectedWord: const WordSelection(
-          section: (0, 0),
-          wordId: 'Point(-7, -2)-Axis.vertical',
-        ),
       );
 
       setUp(() {
@@ -137,20 +134,68 @@ void main() {
       });
 
       testWithGame(
-        'changes the highlighted word',
+        'works on vertical word',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          game.world.children.whereType<SectionComponent>().forEach(
+                (element) => print(element.index),
+              );
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          print('-----');
+          sections.forEach(
+            (element) => print(element.position),
+          );
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.firstWhere(
+            (element) => element.axis == Axis.vertical,
+          );
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                wordId: targetWord.id,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+
+          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(
+            targetSection.lastSelectedSection,
+            equals(targetSection.index),
+          );
+        },
+      );
+
+      testWithGame(
+        'works on horizontal word',
         createGame,
         (game) async {
           await game.ready();
 
           final targetSection =
               game.world.children.whereType<SectionComponent>().first;
+          print(targetSection.index);
 
           final boardSection = sections.firstWhere(
             (element) =>
                 element.position.x == targetSection.index.$1 &&
                 element.position.y == targetSection.index.$2,
           );
-          final targetWord = boardSection.words.first;
+          print(boardSection.words);
+          final targetWord = boardSection.words.firstWhere(
+            (element) => element.axis == Axis.horizontal,
+          );
+          print(targetWord.id);
 
           stateController.add(
             state.copyWith(
