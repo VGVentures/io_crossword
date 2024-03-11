@@ -39,13 +39,13 @@ Crossword generateCrossword(List<String> wordList, String filePath) {
       for (final entry in newAcrossWords.entries) {
         buffer.writeln(
           '${entry.key.across},${entry.key.down},${entry.value},'
-          '${Axis.horizontal}',
+          '${Axis.horizontal.name}',
         );
       }
       for (final entry in newDownWords.entries) {
         buffer.writeln(
           '${entry.key.across},${entry.key.down},${entry.value},'
-          '${Axis.vertical}',
+          '${Axis.vertical.name}',
         );
       }
 

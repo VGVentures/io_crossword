@@ -52,13 +52,6 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('renders loading when is loading', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordLoading());
-
-      await tester.pumpCrosswordView(bloc);
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
-
     testWidgets('renders error when is error', (tester) async {
       when(() => bloc.state).thenReturn(const CrosswordError(''));
 
@@ -69,8 +62,6 @@ void main() {
     testWidgets('renders game when is loaded', (tester) async {
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 40,
           sections: {
             (0, 0): BoardSection(
