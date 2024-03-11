@@ -139,15 +139,8 @@ void main() {
         (game) async {
           await game.ready();
 
-          game.world.children.whereType<SectionComponent>().forEach(
-                (element) => print(element.index),
-              );
           final targetSection =
               game.world.children.whereType<SectionComponent>().first;
-          print('-----');
-          sections.forEach(
-            (element) => print(element.position),
-          );
           final boardSection = sections.firstWhere(
             (element) =>
                 element.position.x == targetSection.index.$1 &&
@@ -184,18 +177,15 @@ void main() {
 
           final targetSection =
               game.world.children.whereType<SectionComponent>().first;
-          print(targetSection.index);
 
           final boardSection = sections.firstWhere(
             (element) =>
                 element.position.x == targetSection.index.$1 &&
                 element.position.y == targetSection.index.$2,
           );
-          print(boardSection.words);
           final targetWord = boardSection.words.firstWhere(
             (element) => element.axis == Axis.horizontal,
           );
-          print(targetWord.id);
 
           stateController.add(
             state.copyWith(
