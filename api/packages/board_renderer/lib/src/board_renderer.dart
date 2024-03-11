@@ -27,8 +27,30 @@ typedef DrawRect = img.Image Function(
   img.Channel maskChannel,
 });
 
+/// A function that composites an image.
+typedef CompositeImage = img.Image Function(
+  img.Image dst,
+  img.Image src, {
+  int? dstX,
+  int? dstY,
+  int? dstW,
+  int? dstH,
+  int? srcX,
+  int? srcY,
+  int? srcW,
+  int? srcH,
+  img.BlendMode blend,
+  bool linearBlend,
+  bool center,
+  img.Image? mask,
+  img.Channel maskChannel,
+});
+
 /// A function that makes a GET request.
 typedef GetCall = Future<http.Response> Function(Uri uri);
+
+/// A function that decodes a PNG image.
+typedef DecodePng = img.Image? Function(Uint8List data);
 
 /// {@template board_renderer_failure}
 /// Exception thrown when a board rendering fails.
@@ -53,15 +75,22 @@ class BoardRenderer {
     CreateCommand createCommand = img.Command.new,
     CreateImage createImage = img.Image.new,
     DrawRect drawRect = img.drawRect,
+    CompositeImage compositeImage = img.compositeImage,
+    DecodePng decodePng = img.decodePng,
     GetCall get = http.get,
   })  : _createCommand = createCommand,
         _createImage = createImage,
         _drawRect = drawRect,
+        _compositeImage = compositeImage,
+        _decodePng = decodePng,
         _get = get;
 
   final CreateCommand _createCommand;
   final CreateImage _createImage;
   final DrawRect _drawRect;
+  final CompositeImage _compositeImage;
+  final DecodePng _decodePng;
+
   final GetCall _get;
 
   /// Renders the full board in a single image.
@@ -154,7 +183,7 @@ class BoardRenderer {
     final response = await _get(uri);
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to get image from $uri');
+      throw BoardRendererFailure('Failed to get image from $uri');
     }
 
     return response.bodyBytes;
@@ -170,47 +199,45 @@ class BoardRenderer {
     var maxPositionY = 0;
 
     for (final word in words) {
-      final sizeX = word.axis == Axis.horizontal
-          ? word.position.x + word.answer.length
-          : word.position.x;
+      final x = word.position.x - section.position.x * section.size;
+      final y = word.position.y - section.position.y * section.size;
 
-      final sizeY = word.axis == Axis.vertical
-          ? word.position.y + word.answer.length
-          : word.position.y;
+      final sizeX = word.axis == Axis.horizontal ? word.answer.length : 1;
+      final sizeY = word.axis == Axis.vertical ? word.answer.length : 1;
 
-      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
-      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
+      maxPositionX = math.max(maxPositionX, x + sizeX);
+      maxPositionY = math.max(maxPositionY, y + sizeY);
     }
 
     final totalWidth = maxPositionX * cellSize;
     final totalHeight = maxPositionY * cellSize;
 
     final image = _createImage(
-      width: totalWidth + cellSize,
-      height: totalHeight + cellSize,
+      width: totalWidth,
+      height: totalHeight,
     );
 
     const url = 'http://127.0.0.1:8080/assets/letters.png';
     final textureImage = await _getFile(Uri.parse(url));
 
-    final texture = img.decodePng(textureImage);
+    final texture = _decodePng(textureImage);
     if (texture == null) {
       throw BoardRendererFailure('Failed to load the texture');
     }
 
     for (final word in words) {
-      final position = (
-        word.position.x - section.position.x,
-        word.position.y - section.position.y,
-      );
+      final x = word.position.x - section.position.x * section.size;
+      final y = word.position.y - section.position.y * section.size;
+
+      final position = (x, y);
 
       final wordCharacters = word.answer.split('');
 
       for (var c = 0; c < wordCharacters.length; c++) {
-        final char = wordCharacters.elementAt(c);
+        final char = wordCharacters.elementAt(c).toUpperCase();
         final charIndex = char.codeUnitAt(0) - 65;
 
-        img.compositeImage(
+        _compositeImage(
           image,
           texture,
           dstX: word.axis == Axis.horizontal
@@ -237,7 +264,7 @@ class BoardRenderer {
 
     final outputBytes = createdCommand.outputBytes;
     if (outputBytes == null) {
-      throw BoardRendererFailure('Failed to render the board');
+      throw BoardRendererFailure('Failed to render the section');
     }
 
     return outputBytes;
