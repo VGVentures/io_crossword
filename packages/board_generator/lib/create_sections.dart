@@ -34,7 +34,7 @@ void main(List<String> args) async {
       clue: 'The answer is: ${row[2]}',
       hints: const [],
       visible: false,
-      axis: row[3] == 'Axis.horizontal' ? Axis.horizontal : Axis.vertical,
+      axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
       solvedTimestamp: null,
     );
   }).toList();
