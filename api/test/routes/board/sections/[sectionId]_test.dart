@@ -25,6 +25,18 @@ void main() {
     late CrosswordRepository crosswordRepository;
     late BoardRenderer boardRenderer;
 
+    setUpAll(() {
+      registerFallbackValue(
+        BoardSection(
+          id: '',
+          position: Point(0, 0),
+          size: 10,
+          words: const [],
+          borderWords: const [],
+        ),
+      );
+    });
+
     setUp(() {
       requestContext = _MockRequestContext();
       request = _MockRequest();
@@ -73,6 +85,22 @@ void main() {
       expect(response.statusCode, HttpStatus.ok);
     });
 
+    test('returns 404 when the board is not found', () async {
+      when(() => crosswordRepository.findSectionByPosition(0, 0)).thenAnswer(
+        (_) async => null,
+      );
+
+      when(
+        () => boardRenderer.renderSection(any()),
+      ).thenAnswer((_) async {
+        return Uint8List(0);
+      });
+
+      final response = await route.onRequest(requestContext, '0,0');
+
+      expect(response.statusCode, HttpStatus.notFound);
+    });
+
     test('returns method not allowed when not a get method', () async {
       when(() => request.method).thenReturn(HttpMethod.post);
       final response = await route.onRequest(requestContext, '0,0');
@@ -83,6 +111,13 @@ void main() {
     test('returns bad request when the id is invalid', () async {
       when(() => request.method).thenReturn(HttpMethod.get);
       final response = await route.onRequest(requestContext, 'a,0');
+
+      expect(response.statusCode, HttpStatus.badRequest);
+    });
+
+    test('returns bad request when the id is incomplete', () async {
+      when(() => request.method).thenReturn(HttpMethod.get);
+      final response = await route.onRequest(requestContext, ',0');
 
       expect(response.statusCode, HttpStatus.badRequest);
     });
