@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:board_generator/src/crossword_repository.dart';
@@ -98,10 +97,8 @@ void main(List<String> args) async {
     }
   }
 
- // await crosswordRepository.addSections(sections);
-  final file = File('assets/test_board.json');
-//  await crosswordRepository.addSections(sections);
-  file.writeAsStringSync(jsonEncode(sections), mode: FileMode.append);
+  await crosswordRepository.addSections(sections);
+
   print('Added all ${sections.length} section to the database.');
 }
 
