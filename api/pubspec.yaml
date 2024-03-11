@@ -7,9 +7,25 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  board_renderer:
+    path: packages/board_renderer
+  crossword_repository:
+    path: packages/crossword_repository
   dart_frog: ^1.1.0
+  db_client:
+    path: packages/db_client
+  encryption_middleware:
+    path: packages/encryption_middleware
+  game_domain:
+    path: packages/game_domain
+  google_cloud: ^0.2.0
+  jwt_middleware:
+    path: packages/jwt_middleware
+  leaderboard_repository:
+    path: packages/leaderboard_repository
+  logging: ^1.2.0
 
 dev_dependencies:
-  mocktail: ^1.0.0
+  mocktail: ^1.0.3
   test: ^1.19.2
   very_good_analysis: ^5.1.0

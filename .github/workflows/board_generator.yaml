@@ -19,3 +19,4 @@ jobs:
       dart_sdk: stable
       working_directory: packages/board_generator
       coverage_excludes: "**/*.g.dart"
+      min_coverage: 90

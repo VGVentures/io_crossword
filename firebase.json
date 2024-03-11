@@ -1,0 +1,34 @@
+{
+  "hosting": [
+    {
+      "target": "app_dev",
+      "public": "build/web",
+      "ignore": [
+        ".firebase",
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "app_stg",
+      "public": "build/web",
+      "ignore": [
+        ".firebase",
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "app_prod",
+      "public": "build/web",
+      "ignore": [
+        ".firebase",
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+name: deploy_api_prod
+
+on: workflow_dispatch
+
+env:
+  PROJECT_ID: io-crossword
+  SERVICE: io-crossword-api
+  REGION: us-central1
+  GAME_URL: https://prod-9961b3776301c37db86d9038f.web.app/
+  INITIALS_BLACKLIST_ID: placeholder
+  FB_STORAGE_BUCKET: io-crossword.appspot.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install Dart Frog
+        run: dart pub global activate dart_frog_cli
+
+      - name: Create Dev Build
+        working-directory: ./api
+        run: dart_frog build
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.CLOUD_RUN_PROD_SERVICE_ACCOUNT }}
+
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
+
+      - name: Build and Push Container
+        run: |-
+          cp api/Dockerfile api/build/Dockerfile
+          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }} api/build
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+          region: ${{ env.REGION }}
+          env_vars: |
+            FB_APP_ID=${{ env.PROJECT_ID }}
+            GAME_URL=${{ env.GAME_URL }}
+            INITIALS_BLACKLIST_ID=${{ env.INITIALS_BLACKLIST_ID }}
+            FB_STORAGE_BUCKET=${{ env.FB_STORAGE_BUCKET }}
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
+      - name: Ping
+        run: curl "${{ steps.deploy.outputs.url }}"
