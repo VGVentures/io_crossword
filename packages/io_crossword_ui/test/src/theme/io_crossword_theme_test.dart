@@ -39,7 +39,8 @@ void main() {
         expect(
           IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
           equals(
-              IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize),
+            IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
+          ),
         );
         debugDefaultTargetPlatformOverride = null;
       });
@@ -49,7 +50,8 @@ void main() {
         expect(
           IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
           equals(
-              IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize),
+            IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
+          ),
         );
         debugDefaultTargetPlatformOverride = null;
       });
@@ -59,7 +61,8 @@ void main() {
         expect(
           IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
           equals(
-              IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize),
+            IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
+          ),
         );
         debugDefaultTargetPlatformOverride = null;
       });
