@@ -117,7 +117,7 @@ void main() {
 
     test('returns bad request when the id is incomplete', () async {
       when(() => request.method).thenReturn(HttpMethod.get);
-      final response = await route.onRequest(requestContext, ',0');
+      final response = await route.onRequest(requestContext, '0');
 
       expect(response.statusCode, HttpStatus.badRequest);
     });
