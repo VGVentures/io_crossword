@@ -88,5 +88,54 @@ void main() {
       await tester.pumpCrosswordView(bloc);
       expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
     });
+
+    testWidgets('can zoom in', (tester) async {
+      when(() => bloc.state).thenReturn(
+        CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 40,
+          sections: const {},
+        ),
+      );
+
+      await tester.pumpCrosswordView(bloc);
+
+      final crosswordViewState = tester.state<LoadedBoardViewState>(
+        find.byType(LoadedBoardView),
+      );
+      await crosswordViewState.game.loaded;
+
+      await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
+
+      expect(
+        crosswordViewState.game.camera.viewfinder.zoom,
+        greaterThan(1),
+      );
+    });
+
+    testWidgets('can zoom out', (tester) async {
+      when(() => bloc.state).thenReturn(
+        CrosswordLoaded(
+          width: 40,
+          height: 40,
+          sectionSize: 40,
+          sections: const {},
+        ),
+      );
+
+      await tester.pumpCrosswordView(bloc);
+      final crosswordViewState = tester.state<LoadedBoardViewState>(
+        find.byType(LoadedBoardView),
+      );
+      await crosswordViewState.game.loaded;
+
+      await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
+
+      expect(
+        crosswordViewState.game.camera.viewfinder.zoom,
+        lessThan(1),
+      );
+    });
   });
 }

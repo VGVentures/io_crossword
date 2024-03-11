@@ -137,4 +137,21 @@ class CrosswordGame extends FlameGame with PanDetector {
       _updateVisibleSections();
     }
   }
+
+  void zoomOut() {
+    if (camera.viewfinder.zoom <= 0.05) {
+      return;
+    }
+    camera.viewport.position /= 1.05;
+    camera.viewfinder.zoom = camera.viewfinder.zoom - 0.05;
+
+    _updateVisibleSections();
+  }
+
+  void zoomIn() {
+    camera.viewport.position *= 1.05;
+    camera.viewfinder.zoom += 0.05;
+
+    _updateVisibleSections();
+  }
 }
