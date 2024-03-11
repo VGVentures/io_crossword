@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:math';
-
+// ignore_for_file: prefer_const_constructorsssword_repository/crossword_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/app/app.dart';
@@ -17,7 +14,7 @@ void main() {
       crosswordRepository = _MockCrosswordRepository();
 
       when(
-        () => crosswordRepository.watchSectionFromPosition(Point(0, 0)),
+        () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));
     });
 

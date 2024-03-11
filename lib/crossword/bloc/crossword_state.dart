@@ -6,6 +6,7 @@ sealed class CrosswordState extends Equatable {
 
 class CrosswordInitial extends CrosswordState {
   const CrosswordInitial();
+
   @override
   List<Object> get props => [];
 }
@@ -27,6 +28,7 @@ class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
     required this.sections,
+    // TODO(any): get configuration from db
     this.width = 40,
     this.height = 40,
     this.selectedWord,

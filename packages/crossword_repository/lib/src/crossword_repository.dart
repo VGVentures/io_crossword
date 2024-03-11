@@ -29,18 +29,19 @@ class CrosswordRepository {
     });
   }
 
-  /// Watches the section having the corresponding [position]
+  /// Watches the section having the corresponding position
   Stream<BoardSection?> watchSectionFromPosition(
-    Point<int> position,
+    int x,
+    int y,
   ) {
     final snapshot = sectionCollection
         .where(
           'position.x',
-          isEqualTo: position.x,
+          isEqualTo: x,
         )
         .where(
           'position.y',
-          isEqualTo: position.y,
+          isEqualTo: y,
         )
         .snapshots();
     return snapshot.map(

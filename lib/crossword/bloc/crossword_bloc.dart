@@ -22,7 +22,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) async {
     return emit.forEach(
       crosswordRepository.watchSectionFromPosition(
-        Point(event.position.$1, event.position.$2),
+        event.position.$1,
+        event.position.$2,
       ),
       onData: (section) {
         if (section == null) return state;

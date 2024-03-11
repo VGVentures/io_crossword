@@ -76,14 +76,14 @@ void main() {
 
       test('returns the requested section depending on position', () {
         expect(
-          crosswordRepository.watchSectionFromPosition(Point(0, 1)),
+          crosswordRepository.watchSectionFromPosition(0, 1),
           emits(section),
         );
       });
 
       test('returns null if there is no section with the position', () {
         expect(
-          crosswordRepository.watchSectionFromPosition(Point(2, 2)),
+          crosswordRepository.watchSectionFromPosition(2, 2),
           emits(null),
         );
       });

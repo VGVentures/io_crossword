@@ -19,12 +19,12 @@ class SectionTapController extends PositionComponent
     final boardSection = parent._boardSection;
 
     if (boardSection != null) {
-      final boardPosition =
+      final absolutePosition =
           boardSection.position * CrosswordGame.cellSize * boardSection.size;
       final localPosition = event.localPosition +
           Vector2(
-            boardPosition.x.toDouble(),
-            boardPosition.y.toDouble(),
+            absolutePosition.x.toDouble(),
+            absolutePosition.y.toDouble(),
           );
       for (final word in boardSection.words) {
         final wordLength =

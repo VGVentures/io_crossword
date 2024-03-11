@@ -21,7 +21,7 @@ extension PumpApp on WidgetTester {
     final mockedCrosswordRepository = _MockCrosswordRepository();
     registerFallbackValue(Point(0, 0));
     when(
-      () => mockedCrosswordRepository.watchSectionFromPosition(any()),
+      () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
 
     return pumpWidget(
@@ -62,9 +62,8 @@ extension PumpRoute on WidgetTester {
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
-    registerFallbackValue(Point(0, 0));
     when(
-      () => mockedCrosswordRepository.watchSectionFromPosition(any()),
+      () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
 
     await pumpWidget(

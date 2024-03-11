@@ -91,12 +91,18 @@ void main() {
               element.position.y == targetSection.index.$2,
         );
         final targetWord = targetBoardSection.words.first;
-        final targetPosition =
-            targetWord.position * 40 - (targetBoardSection.position * 40 * 20);
+        final targetAbsolutePosition =
+            targetWord.position * CrosswordGame.cellSize -
+                (targetBoardSection.position *
+                    CrosswordGame.cellSize *
+                    sectionSize);
 
         final event = _MockTapUpEvent();
         when(() => event.localPosition).thenReturn(
-          Vector2(targetPosition.x.toDouble(), targetPosition.y.toDouble()),
+          Vector2(
+            targetAbsolutePosition.x.toDouble(),
+            targetAbsolutePosition.y.toDouble(),
+          ),
         );
 
         targetSection.children.whereType<SectionTapController>().first.onTapUp(

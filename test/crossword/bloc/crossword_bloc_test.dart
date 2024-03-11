@@ -74,7 +74,7 @@ void main() {
         build: () => CrosswordBloc(crosswordRepository),
         setUp: () {
           when(
-            () => crosswordRepository.watchSectionFromPosition(Point(1, 1)),
+            () => crosswordRepository.watchSectionFromPosition(1, 1),
           ).thenAnswer((_) => Stream.value(section));
         },
         seed: () => const CrosswordInitial(),
@@ -94,7 +94,7 @@ void main() {
         build: () => CrosswordBloc(crosswordRepository),
         setUp: () {
           when(
-            () => crosswordRepository.watchSectionFromPosition(Point(1, 1)),
+            () => crosswordRepository.watchSectionFromPosition(1, 1),
           ).thenAnswer((_) => Stream.value(section));
         },
         seed: () => const CrosswordLoaded(
