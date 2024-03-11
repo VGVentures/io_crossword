@@ -5,14 +5,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 
 void main() {
   group('CrosswordEvent', () {
-    group('InitialBoardLoadRequested', () {
-      test('can be instantiated', () {
-        expect(InitialBoardLoadRequested(), isA<InitialBoardLoadRequested>());
-      });
-      test('supports value comparisons', () {
-        expect(InitialBoardLoadRequested(), InitialBoardLoadRequested());
-      });
-    });
     group('BoardSectionRequested', () {
       test('can be instantiated', () {
         expect(BoardSectionRequested((1, 1)), isA<BoardSectionRequested>());
