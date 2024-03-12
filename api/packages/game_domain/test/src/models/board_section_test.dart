@@ -41,6 +41,7 @@ void main() {
             },
           ],
           'borderWords': <Map<String, dynamic>>[],
+          'snapshotUrl': null,
         }),
       );
     });
@@ -62,6 +63,7 @@ void main() {
           },
         ],
         'borderWords': <Map<String, dynamic>>[],
+        'snapshotUrl': null,
       };
       final boardSection = BoardSection.fromJson(json);
       expect(
