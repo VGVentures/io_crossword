@@ -464,7 +464,8 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the previous section in the vertical axis',
+        'selects a word from the previous section '
+        'in the negative vertical axis',
         setUp: () {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
