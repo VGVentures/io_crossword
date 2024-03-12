@@ -327,8 +327,6 @@ void main() {
       createGame,
       (game) async {
         const state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {},
         );
@@ -345,8 +343,6 @@ void main() {
       createGame,
       (game) async {
         const state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {},
         );
@@ -363,8 +359,6 @@ void main() {
       createGame,
       (game) async {
         const state = CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 400,
           sections: {},
         );
