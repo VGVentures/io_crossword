@@ -9,11 +9,9 @@ class IoCrosswordCard extends StatelessWidget {
   /// {@macro app_card}
   const IoCrosswordCard({super.key, this.child});
 
-  static const _preferredSize = Size(358, 540);
-
   /// The widget below this widget in the tree.
   ///
-  /// If this widget's size is bigger than the [IoCrosswordCard._preferredSize],
+  /// If this widget's size is bigger than the [IoCrosswordCard]'s size,
   /// you should consider scrolling the content.
   final Widget? child;
 
@@ -21,14 +19,15 @@ class IoCrosswordCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        final size = switch (orientation) {
-          Orientation.portrait => _preferredSize,
+        final constraints = switch (orientation) {
+          Orientation.portrait =>
+            const BoxConstraints(maxWidth: 358, maxHeight: 540),
           Orientation.landscape =>
-            Size(_preferredSize.height, _preferredSize.width),
+            const BoxConstraints(maxWidth: 540, maxHeight: 358),
         };
 
         return ConstrainedBox(
-          constraints: BoxConstraints.loose(size),
+          constraints: constraints,
           child: Material(
             type: MaterialType.card,
             borderRadius: BorderRadius.circular(24),
