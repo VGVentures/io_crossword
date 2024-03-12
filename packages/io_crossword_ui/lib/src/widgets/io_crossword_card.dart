@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// not meant to be nested between each other.
 ///
 /// It has a fixed maximum size that adjusts according to the device's
-/// layout size. Note that, it does not support orientation changes, it assumes
+/// layout size. Note that it does not support orientation changes, it assumes
 /// the orientation is fixed to portrait.
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
