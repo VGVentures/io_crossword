@@ -26,7 +26,8 @@ class SectionTapController extends PositionComponent
             absolutePosition.x.toDouble(),
             absolutePosition.y.toDouble(),
           );
-      for (final word in boardSection.words) {
+
+      for (final word in [...boardSection.words, ...boardSection.borderWords]) {
         final wordLength =
             (word.answer.length * CrosswordGame.cellSize).toDouble();
         final wordRect = Rect.fromLTWH(
@@ -42,8 +43,9 @@ class SectionTapController extends PositionComponent
 
         if (wordRect.contains(localPosition.toOffset())) {
           parent.gameRef.bloc.add(
-            WordSelected(parent.index, word.id),
+            WordSelected(parent.index, word),
           );
+          break;
         }
       }
     }
