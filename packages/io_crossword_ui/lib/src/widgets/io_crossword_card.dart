@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 /// {@template io_crossword_card}
 /// A panel with slightly rounded corners and an elevation shadow.
 ///
+/// [IoCrosswordCard] are not meant to be nested, instead they are meant to be
+/// the main container of the page.
+///
 /// It has a fixed maximum size that adjusts according to the device's
 /// layout size.
 ///
