@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// {@template app_card}
+/// {@template io_crossword_card}
 /// A panel with slightly rounded corners and an elevation shadow.
 ///
 /// It has a fixed maximum size that adjusts according to the device's
 /// orientation.
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
-  /// {@macro app_card}
+  /// {@macro io_crossword_card}
   const IoCrosswordCard({super.key, this.child});
 
   /// The widget below this widget in the tree.
