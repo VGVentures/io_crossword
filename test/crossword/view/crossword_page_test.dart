@@ -93,8 +93,6 @@ void main() {
     testWidgets('can zoom in', (tester) async {
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 40,
           sections: const {},
         ),
@@ -118,8 +116,6 @@ void main() {
     testWidgets('can zoom out', (tester) async {
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
-          width: 40,
-          height: 40,
           sectionSize: 40,
           sections: const {},
         ),
