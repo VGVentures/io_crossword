@@ -44,17 +44,54 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     );
   }
 
+  (int, int) _findWordInSection(
+    CrosswordLoaded state,
+    Word word,
+    (int, int) section, {
+    int attempt = 1,
+  }) {
+    final sections = state.sections;
+
+    // TODO(Ayad): If it fails because the section is not loaded we
+    // should fetch the section
+    if (sections[section]!.words.contains(word)) {
+      return section;
+    }
+
+    // TODO(Ayad): control error handle
+    if (attempt >= 3) {
+      throw Exception('Word not found in crossword');
+    }
+
+    final previousSection = word.axis == Axis.horizontal
+        ? (section.$1 - 1, section.$2)
+        : (section.$1, section.$2 - 1);
+
+    return _findWordInSection(
+      state,
+      word,
+      previousSection,
+      attempt: attempt + 1,
+    );
+  }
+
   FutureOr<void> _onWordSelected(
     WordSelected event,
     Emitter<CrosswordState> emit,
   ) {
     final currentState = state;
     if (currentState is CrosswordLoaded) {
+      final section = _findWordInSection(
+        currentState,
+        event.word,
+        event.section,
+      );
+
       emit(
         currentState.copyWith(
           selectedWord: WordSelection(
-            section: event.section,
-            wordId: event.wordId,
+            section: section,
+            wordId: event.word.id,
           ),
         ),
       );
