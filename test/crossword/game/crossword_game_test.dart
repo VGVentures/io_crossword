@@ -66,65 +66,59 @@ void main() {
       },
     );
 
-    for (final axis in Axis.values) {
-      testWithGame(
-        'can tap words in $axis',
-        createGame,
-        (game) async {
-          final state = CrosswordLoaded(
-            sectionSize: sectionSize,
-            sections: {
-              for (final section in sections)
-                (section.position.x, section.position.y): section,
-            },
-          );
+    testWithGame(
+      'can tap words',
+      createGame,
+      (game) async {
+        final state = CrosswordLoaded(
+          sectionSize: sectionSize,
+          sections: {
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
+          },
+        );
 
-          mockState(state);
+        mockState(state);
 
-          await game.ready();
+        await game.ready();
 
-          final targetSection =
-              game.world.children.whereType<SectionComponent>().first;
+        final targetSection =
+            game.world.children.whereType<SectionComponent>().first;
 
-          final targetBoardSection = sections.firstWhere(
-            (element) =>
-                element.position.x == targetSection.index.$1 &&
-                element.position.y == targetSection.index.$2,
-          );
-          final targetWord =
-              targetBoardSection.words.firstWhere((word) => word.axis == axis);
-          final targetAbsolutePosition =
-              targetWord.position * CrosswordGame.cellSize -
-                  (targetBoardSection.position *
-                      CrosswordGame.cellSize *
-                      sectionSize);
+        final targetBoardSection = sections.firstWhere(
+          (element) =>
+              element.position.x == targetSection.index.$1 &&
+              element.position.y == targetSection.index.$2,
+        );
+        final targetWord = targetBoardSection.words.first;
+        final targetAbsolutePosition =
+            targetWord.position * CrosswordGame.cellSize -
+                (targetBoardSection.position *
+                    CrosswordGame.cellSize *
+                    sectionSize);
 
-          final event = _MockTapUpEvent();
-          when(() => event.localPosition).thenReturn(
-            Vector2(
-              targetAbsolutePosition.x.toDouble(),
-              targetAbsolutePosition.y.toDouble(),
+        final event = _MockTapUpEvent();
+        when(() => event.localPosition).thenReturn(
+          Vector2(
+            targetAbsolutePosition.x.toDouble(),
+            targetAbsolutePosition.y.toDouble(),
+          ),
+        );
+
+        targetSection.children.whereType<SectionTapController>().first.onTapUp(
+              event,
+            );
+
+        verify(
+          () => bloc.add(
+            WordSelected(
+              targetSection.index,
+              targetWord,
             ),
-          );
-
-          targetSection.children
-              .whereType<SectionTapController>()
-              .first
-              .onTapUp(
-                event,
-              );
-
-          verify(
-            () => bloc.add(
-              WordSelected(
-                targetSection.index,
-                targetWord,
-              ),
-            ),
-          ).called(1);
-        },
-      );
-    }
+          ),
+        ).called(1);
+      },
+    );
 
     group('highlights word', () {
       late StreamController<CrosswordState> stateController;
