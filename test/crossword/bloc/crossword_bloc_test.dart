@@ -163,7 +163,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the previous section in the horizontal axis',
+        'selects a word from the border section in the horizontal axis',
         setUp: () {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
@@ -217,7 +217,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the previous section in the vertical axis',
+        'selects a word from the border section in the vertical axis',
         setUp: () {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
@@ -271,7 +271,8 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the two previous section in the horizontal axis',
+        'selects a word starting two sections from current '
+        'in the horizontal axis',
         setUp: () {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
@@ -339,7 +340,8 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the two previous section in the vertical axis',
+        'selects a word starting two sections from current '
+        'in the vertical axis',
         setUp: () {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
