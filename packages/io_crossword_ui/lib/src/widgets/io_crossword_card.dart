@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template io_crossword_card}
 /// A panel with slightly rounded corners and an elevation shadow.
