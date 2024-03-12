@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 /// {@template io_crossword_card}
 /// A panel with slightly rounded corners and an elevation shadow.
 ///
-/// [IoCrosswordCard] are not meant to be nested, instead they are meant to be
-/// the main container of the page.
+/// An [IoCrosswordCard] is meant to be the main container of the page. They are
+/// not meant to be nested between each other.
 ///
 /// It has a fixed maximum size that adjusts according to the device's
-/// layout size.
-///
-/// Does not support orientation changes, it assumes the orientation is fixed
-/// to portrait.
+/// layout size. Note that, it does not support orientation changes, it assumes
+/// the orientation is fixed to portrait.
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
   /// {@macro io_crossword_card}
