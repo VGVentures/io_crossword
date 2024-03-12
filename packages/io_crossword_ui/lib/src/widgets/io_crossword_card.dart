@@ -12,8 +12,10 @@ class IoCrosswordCard extends StatelessWidget {
 
   /// The widget below this widget in the tree.
   ///
-  /// If this widget's size is bigger than the [IoCrosswordCard]'s size,
+  /// If this [child] size is bigger than the [IoCrosswordCard]'s size,
   /// you should consider scrolling the content.
+  ///
+  /// The [child] will be expanded to fill the [IoCrosswordCard].
   final Widget? child;
 
   @override
