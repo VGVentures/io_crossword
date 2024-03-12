@@ -16,10 +16,16 @@ class SectionTapController extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    final localPosition = event.localPosition;
     final boardSection = parent._boardSection;
 
     if (boardSection != null) {
+      final absolutePosition =
+          boardSection.position * CrosswordGame.cellSize * boardSection.size;
+      final localPosition = event.localPosition +
+          Vector2(
+            absolutePosition.x.toDouble(),
+            absolutePosition.y.toDouble(),
+          );
       for (final word in boardSection.words) {
         final wordLength =
             (word.answer.length * CrosswordGame.cellSize).toDouble();
@@ -210,11 +216,10 @@ class SectionComponent extends PositionComponent
 
         final y =
             word.axis == Axis.vertical ? word.position.y + c : word.position.y;
-        final offset = sectionPosition +
-            Vector2(
-              x * CrosswordGame.cellSize.toDouble(),
-              y * CrosswordGame.cellSize.toDouble(),
-            );
+        final offset = Vector2(
+          x * CrosswordGame.cellSize.toDouble(),
+          y * CrosswordGame.cellSize.toDouble(),
+        );
 
         spriteBatch.add(
           source: rect,

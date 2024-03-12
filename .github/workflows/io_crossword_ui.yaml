@@ -1,0 +1,20 @@
+name: io_crossword_ui
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths:
+      - "packages/io_crossword_ui/**"
+      - ".github/workflows/io_crossword_ui.yaml"
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      working_directory: packages/io_crossword_ui

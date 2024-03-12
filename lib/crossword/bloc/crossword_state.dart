@@ -6,12 +6,7 @@ sealed class CrosswordState extends Equatable {
 
 class CrosswordInitial extends CrosswordState {
   const CrosswordInitial();
-  @override
-  List<Object> get props => [];
-}
 
-class CrosswordLoading extends CrosswordState {
-  const CrosswordLoading();
   @override
   List<Object> get props => [];
 }
@@ -31,10 +26,11 @@ class WordSelection extends Equatable {
 
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
-    required this.width,
-    required this.height,
     required this.sectionSize,
     required this.sections,
+    // TODO(any): get configuration from db
+    this.width = 40,
+    this.height = 40,
     this.selectedWord,
   });
 
@@ -49,22 +45,14 @@ class CrosswordLoaded extends CrosswordState {
     int? height,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
+    WordSelection? selectedWord,
   }) {
     return CrosswordLoaded(
       width: width ?? this.width,
       height: height ?? this.height,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
-    );
-  }
-
-  CrosswordState withSelectedWord(WordSelection? selectedWord) {
-    return CrosswordLoaded(
-      width: width,
-      height: height,
-      sectionSize: sectionSize,
-      sections: sections,
-      selectedWord: selectedWord,
+      selectedWord: selectedWord ?? this.selectedWord,
     );
   }
 
