@@ -9,6 +9,7 @@ environment:
 dependencies:
   game_domain:
     path: ../game_domain
+  http: ^1.2.1
   image: ^4.1.7
 
 dev_dependencies:
