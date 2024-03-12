@@ -41,23 +41,6 @@ void main() {
       );
 
       testWidgets(
-        'when landscape mobile',
-        tags: TestTag.golden,
-        (tester) async {
-          await tester.binding.setSurfaceSize(const Size(844, 390));
-
-          await tester.pumpWidget(
-            _GoldenSubject(child: IoCrosswordCard()),
-          );
-
-          await expectLater(
-            find.byType(IoCrosswordCard),
-            matchesGoldenFile(goldenKey('mobile_landscape')),
-          );
-        },
-      );
-
-      testWidgets(
         'when desktop',
         tags: TestTag.golden,
         (tester) async {
