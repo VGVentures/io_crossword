@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 /// {@template app_card}
-/// An app-styled [Card].
+/// A panel with slightly rounded corners and an elevation shadow.
 ///
-/// It has a [_preferredSize] that adapts to the screen orientation.
+/// It has a fixed maximum size.
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
   /// {@macro app_card}
@@ -24,14 +24,12 @@ class IoCrosswordCard extends StatelessWidget {
             Size(_preferredSize.height, _preferredSize.width),
         };
 
-        return Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.loose(size),
-            child: Material(
-              type: MaterialType.card,
-              borderRadius: BorderRadius.circular(24),
-              child: SizedBox.expand(child: child),
-            ),
+        return ConstrainedBox(
+          constraints: BoxConstraints.loose(size),
+          child: Material(
+            type: MaterialType.card,
+            borderRadius: BorderRadius.circular(24),
+            child: SizedBox.expand(child: child),
           ),
         );
       },

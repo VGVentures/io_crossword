@@ -87,9 +87,11 @@ class _GoldenSubject extends StatelessWidget {
     final themeData = IoCrosswordTheme.themeData;
     return Theme(
       data: IoCrosswordTheme.themeData,
-      child: ColoredBox(
-        color: themeData.colorScheme.background,
-        child: child,
+      child: Center(
+        child: ColoredBox(
+          color: themeData.colorScheme.background,
+          child: child,
+        ),
       ),
     );
   }
