@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+  <head>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -15,93 +15,303 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF">
+    <base href="$FLUTTER_BASE_HREF">
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Google I/O Crossword game">
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="Google I/O Crossword game">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Io Crossword">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="I/O Crossword">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans:400,500"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans+Text:400,500"
+      rel="stylesheet"
+    />
 
-  <title>Io Crossword</title>
-  <link rel="manifest" href="manifest.json">
-</head>
+    <title>Google I/O Crossword</title>
+    <link rel="manifest" href="manifest.json" />
 
-<body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
-  <script>
-    var serviceWorkerVersion = null;
-    var scriptLoaded = false;
-    function loadMainDartJs() {
-      if (scriptLoaded) {
-        return;
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-67589403-11"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date()); 
+      gtag('config', 'UA-67589403-11');
+    </script>
+    <style type="text/css">
+      html {
+        height: 100%;
       }
-      scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
-    }
 
-    if ('serviceWorker' in navigator) {
-      // Service workers are supported. Use them.
-      window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <script> tag.
-        // Otherwise, the browser will load the script multiple times,
-        // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              // No active web worker and we have installed or are installing
-              // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing || reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              // When the app updates the serviceWorkerVersion changes, so we
-              // need to ask the service worker to update.
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              // Existing service worker is still good.
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
+      body.loading-mode {
+        min-height: 100%;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        overflow: hidden;
+        margin: 0;
+        background-color: #020F30;
+      }
+
+      .loading-mode p {
+        font-family: "Google Sans Text";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        letter-spacing: 0.25px;
+        color: #ffffff;
+      }
+
+      #circular-loader{
+        animation: rotate 2s linear infinite;
+        height: 100px;
+        position: relative;
+        width: 100px;
+      }
+
+      #circular-loader .path {
+        stroke-dasharray: 1,200;
+        stroke-dashoffset: 0;
+        stroke:#ffffff;
+        animation: dash 2s ease-in-out infinite;
+      }
+
+      @keyframes rotate{
+        100%{
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes dash{
+        0%{
+          stroke-dasharray: 1,200;
+          stroke-dashoffset: 0;
+        }
+        50%{
+          stroke-dasharray: 89,200;
+          stroke-dashoffset: -35;
+        }
+        100%{
+          stroke-dasharray: 89,200;
+          stroke-dashoffset: -124;
+        }
+      }
+
+      #splash_copy {
+        margin: 32px;
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      #cookie-bar {
+        position: fixed;
+        padding: 24px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #CDDAFB;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+      }
+
+      #cookie-bar p {
+        margin: 0;
+        padding-bottom: 4px;
+        font-size: 12px;
+        font-weight: 400;
+        font-family: "Google Sans";
+        color: #000000;
+      }
+
+      #cookie-bar a {
+        text-decoration: underline;
+        color: #000000;
+      }
+
+      #cookie-bar button {
+        cursor: pointer;
+        margin-top: 20px;
+        padding: 8px 60px;
+        background: #2448DE;
+        border-width: 0px;
+        border-radius: 100px;
+        font-family: "Google Sans";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.25px;
+        text-decoration: none;
+        color: #ffffff;
+      }
+    </style>
+
+    <script>
+      // The value below is injected by flutter build, do not touch.
+      var serviceWorkerVersion = null;
+    </script>
+  </head>
+  <body class="loading-mode">
+    <img id="splash_logo" src = "logo-placeholder.svg" alt="I/O Crossword logo"/>
+    <p id="splash_copy">
+      Help solve the World's Largest Crossword,<br>
+      built with Gemini for Google I/O 2024
+    </p>
+    <svg id="circular-loader">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+    </svg>
+    <div id="cookie-bar">
+      <p>
+        This site uses cookies from Google to deliver and enhance the quality of
+        its services and to analyze traffic. <link><a href="https://policies.google.com/technologies/cookies">Learn More.</a></link>
+      </p>
+      <p>
+        By continuing you are also accepting our <link><a href="https://policies.google.com/terms">Terms of Use.</a></link>
+      </p>
+      <button id="confirm-cookies">Ok, got it</button>
+    </div>
+    <script>
+      (function () {
+        const cookieBar = document.querySelector("#cookie-bar");
+        const cookieBarButton = document.querySelector("#confirm-cookies");
+        const circularLoader = document.querySelector("#circular-loader");
+        const splashCopy = document.querySelector("#splash_copy");
+        const splashLogo = document.querySelector("#splash_logo");
+
+        const additionalScripts = [];
+
+        let cookiesAcceptanceCompleter;
+        let hasUserAcceptedCookies = new Promise((resolve) => {
+          cookiesAcceptanceCompleter = resolve;
+        });
+
+        cookieBarButton.addEventListener("click", function () {
+            cookieBar.remove();
+            cookiesAcceptanceCompleter();
+        });
+
+        function injectScript(url) {
+          return new Promise(function (resolve) {
+            let scriptTag = document.createElement("script");
+            scriptTag.src = url;
+            scriptTag.type = "application/javascript";
+            scriptTag.onload = function () {
+              resolve();
+            };
+
+            document.body.append(scriptTag);
           });
+        }
 
-        // If service worker doesn't succeed in a reasonable amount of time,
-        // fallback to plaint <script> tag.
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain <script> tag.',
-            );
-            loadMainDartJs();
+        function beginPreloading(manifestAssets) {
+          var assets = [
+            "flutter.js",
+            "main.dart.js",
+
+            ...additionalScripts,
+            ...manifestAssets,
+          ];
+          let totalAssets = assets.length + 1;
+          let loaded = 0;
+
+          const batchSize = 20;
+
+          async function reportProgress() {
+            loaded++;
+
+            if (assets.length == 0) {
+              dispatchAppLoad();
+            } else {
+              load(assets.shift());
+            }
           }
-        }, 4000);
-      });
-    } else {
-      // Service workers not supported. Just drop the <script> tag.
-      loadMainDartJs();
-    }
-  </script>
-</body>
 
+          function load(url) {
+            const req = new XMLHttpRequest();
+            req.onload = reportProgress;
+            req.open("get", url);
+            req.send();
+          }
+
+          function startBatch() {
+            const end = Math.min(batchSize, assets.length);
+            for (let i = 0; i < end; i++) {
+              load(assets.shift());
+            }
+          }
+
+          var scriptLoaded = false;
+          async function dispatchAppLoad() {
+            if (scriptLoaded) {
+              return;
+            }
+            scriptLoaded = true;
+
+            for (let i = 0; i < additionalScripts.length; i++) {
+              await injectScript(additionalScripts[i]);
+            }
+
+            await injectScript("flutter.js");
+
+            // Download main.dart.js
+            _flutter.loader.loadEntrypoint({
+              serviceWorker: {
+                serviceWorkerVersion: serviceWorkerVersion,
+              },
+              onEntrypointLoaded: function (engineInitializer) {
+                engineInitializer
+                  .initializeEngine()
+                  .then(async function (appRunner) {
+                    await hasUserAcceptedCookies;
+                    window.addEventListener(
+                      "flutter-first-frame",
+                      function () {
+                        circularLoader.remove();
+                        splashLogo.remove();
+                        splashCopy.remove();
+                        document.body.classList.remove("loading-mode");
+                      }
+                    );
+
+                    appRunner.runApp();
+                });
+              },
+            });
+          }
+
+          startBatch();
+        }
+
+        window.addEventListener("load", async function (ev) {
+          const response = await fetch("assets/AssetManifest.json");
+          const manifest = await response.json();
+          const assets = Object.values(manifest)
+            .map((list) => list.map((url) => "assets/" + url))
+            .reduce((arr, curr) => [...arr, ...curr]);
+
+          beginPreloading(assets);
+        });
+      })();
+    </script>
+  </body>
 </html>
