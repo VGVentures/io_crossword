@@ -12,6 +12,9 @@ class IoCrosswordCard extends StatelessWidget {
   static const _preferredSize = Size(358, 540);
 
   /// The widget below this widget in the tree.
+  ///
+  /// If this widget's size is bigger than the [IoCrosswordCard._preferredSize],
+  /// you should consider scrolling the content.
   final Widget? child;
 
   @override
