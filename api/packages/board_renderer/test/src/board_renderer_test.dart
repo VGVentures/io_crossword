@@ -55,7 +55,6 @@ void main() {
             answer: 'hello',
             clue: '',
             hints: const [],
-            visible: true,
             solvedTimestamp: null,
           ),
           Word(
@@ -64,7 +63,6 @@ void main() {
             answer: 'there',
             clue: '',
             hints: const [],
-            visible: true,
             solvedTimestamp: null,
           ),
         ];
@@ -110,7 +108,6 @@ void main() {
               answer: 'hello',
               clue: '',
               hints: const [],
-              visible: true,
               solvedTimestamp: null,
             ),
           ];
@@ -140,7 +137,6 @@ void main() {
           answer: 'hello',
           clue: '',
           hints: const [],
-          visible: true,
           solvedTimestamp: null,
         ),
         Word(
@@ -149,7 +145,6 @@ void main() {
           answer: 'there',
           clue: '',
           hints: const [],
-          visible: true,
           solvedTimestamp: null,
         ),
       ];

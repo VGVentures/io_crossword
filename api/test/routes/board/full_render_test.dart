@@ -7,6 +7,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
+
 import '../../../routes/board/full_render.dart' as route;
 
 class _MockRequestContext extends Mock implements RequestContext {}
@@ -50,7 +51,6 @@ void main() {
             answer: 'flutter',
             clue: '',
             hints: const [],
-            visible: true,
             solvedTimestamp: null,
           ),
         ],
@@ -68,7 +68,6 @@ void main() {
             answer: 'firebase',
             clue: '',
             hints: const [],
-            visible: true,
             solvedTimestamp: null,
           ),
         ],

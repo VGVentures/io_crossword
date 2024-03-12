@@ -75,7 +75,6 @@ void main() {
                   answer: 'flutter',
                   clue: 'flutter',
                   hints: const ['dart', 'mobile', 'cross-platform'],
-                  visible: true,
                   solvedTimestamp: null,
                 ),
               ],
