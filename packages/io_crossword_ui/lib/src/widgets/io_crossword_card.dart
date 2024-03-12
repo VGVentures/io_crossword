@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 /// {@template app_card}
 /// A panel with slightly rounded corners and an elevation shadow.
 ///
-/// It has a fixed maximum size.
+/// It has a fixed maximum size that adjusts according to the device's
+/// orientation.
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
   /// {@macro app_card}
