@@ -12,7 +12,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
       final json = word.toJson();
@@ -25,7 +24,6 @@ void main() {
           'answer': 'test',
           'clue': 'clue',
           'hints': ['hint'],
-          'visible': true,
           'solvedTimestamp': 0,
         }),
       );
@@ -39,7 +37,6 @@ void main() {
         'answer': 'test',
         'clue': 'clue',
         'hints': ['hint'],
-        'visible': true,
       };
       final word = Word.fromJson(json);
       expect(
@@ -51,7 +48,6 @@ void main() {
             answer: 'test',
             clue: 'clue',
             hints: const ['hint'],
-            visible: true,
             solvedTimestamp: null,
           ),
         ),
@@ -65,7 +61,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
       final secondWord = Word(
@@ -74,7 +69,6 @@ void main() {
         answer: 'test',
         clue: 'clue',
         hints: const ['hint'],
-        visible: true,
         solvedTimestamp: 0,
       );
 

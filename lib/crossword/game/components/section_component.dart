@@ -194,7 +194,7 @@ class SectionComponent extends PositionComponent
       final wordIndexStart = spriteBatch.length;
       for (var c = 0; c < wordCharacters.length; c++) {
         late Rect rect;
-        if (word.visible) {
+        if (word.solvedTimestamp != null) {
           final char = wordCharacters.elementAt(c);
           final charIndex = char.codeUnitAt(0) - 65;
           rect = Rect.fromLTWH(

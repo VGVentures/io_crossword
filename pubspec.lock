@@ -144,6 +144,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: "31cfa4d65d6e9ea837234fffe121304034c30c9214c06207b4a35867e3757900"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.15.8"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: a0097a26569b015faf8142e159e855241609ea9a1738b5fd1c40bfe8411b41a0
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.9"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: ed680ece29a5750985119c09cdc276b460c3a2fa80e8c12f9b7241f6b4a7ca16
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.8"
   collection:
     dependency: transitive
     description:
@@ -168,6 +192,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.2"
+  crossword_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/crossword_repository"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   crypto:
     dependency: transitive
     description:
@@ -613,7 +644,7 @@ packages:
     source: hosted
     version: "1.5.1"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
@@ -837,10 +868,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "464f5674532865248444b4c3daca12bd9bf2d7c47f759ce2617986e7229494a8"
+      sha256: "8cb58b45c47dcb42ab3651533626161d6b67a2921917d8d429791f76972b3480"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -858,5 +889,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0-279.1.beta <4.0.0"
+  dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.19.0"

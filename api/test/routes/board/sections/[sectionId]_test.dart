@@ -63,7 +63,6 @@ void main() {
             answer: 'flutter',
             clue: '',
             hints: const [],
-            visible: true,
             solvedTimestamp: null,
           ),
         ],
