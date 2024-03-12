@@ -16,10 +16,6 @@ class IoCrosswordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(alestiago): Style once we have a Theme.
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6232557243
-    const surfaceColor = Color(0xFFFFFFFF);
-
     return OrientationBuilder(
       builder: (context, orientation) {
         final size = switch (orientation) {
