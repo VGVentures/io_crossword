@@ -46,5 +46,56 @@ void main() {
         ),
       ]);
     });
+
+    test('findSectionByPosition returns a section', () async {
+      final record = _MockDbEntityRecord();
+      when(() => record.id).thenReturn('id');
+      when(() => record.data).thenReturn(
+        {
+          'position': {'x': 1, 'y': 1},
+          'size': 300,
+          'words': const <dynamic>[],
+          'borderWords': const <dynamic>[],
+        },
+      );
+      when(
+        () => dbClient.find(
+          'boardSections',
+          {
+            'position.x': 1,
+            'position.y': 1,
+          },
+        ),
+      ).thenAnswer((_) async => [record]);
+
+      final repository = CrosswordRepository(dbClient: dbClient);
+      final section = await repository.findSectionByPosition(1, 1);
+      expect(
+        section,
+        BoardSection(
+          id: 'id',
+          position: Point(1, 1),
+          size: 300,
+          words: const [],
+          borderWords: const [],
+        ),
+      );
+    });
+
+    test('findSectionByPosition returns null when empty', () async {
+      when(
+        () => dbClient.find(
+          'boardSections',
+          {
+            'position.x': 1,
+            'position.y': 1,
+          },
+        ),
+      ).thenAnswer((_) async => []);
+
+      final repository = CrosswordRepository(dbClient: dbClient);
+      final section = await repository.findSectionByPosition(1, 1);
+      expect(section, isNull);
+    });
   });
 }
