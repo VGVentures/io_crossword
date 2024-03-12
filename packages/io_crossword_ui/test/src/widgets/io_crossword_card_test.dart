@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -28,10 +30,7 @@ void main() {
           await tester.binding.setSurfaceSize(const Size(390, 844));
 
           await tester.pumpWidget(
-            const ColoredBox(
-              color: Color(0xFF020F30),
-              child: IoCrosswordCard(),
-            ),
+            _GoldenSubject(child: IoCrosswordCard()),
           );
 
           await expectLater(
@@ -48,10 +47,7 @@ void main() {
           await tester.binding.setSurfaceSize(const Size(844, 390));
 
           await tester.pumpWidget(
-            const ColoredBox(
-              color: Color(0xFF020F30),
-              child: IoCrosswordCard(),
-            ),
+            _GoldenSubject(child: IoCrosswordCard()),
           );
 
           await expectLater(
@@ -68,10 +64,7 @@ void main() {
           await tester.binding.setSurfaceSize(const Size(1440, 800));
 
           await tester.pumpWidget(
-            const ColoredBox(
-              color: Color(0xFF020F30),
-              child: IoCrosswordCard(),
-            ),
+            _GoldenSubject(child: IoCrosswordCard()),
           );
 
           await expectLater(
@@ -82,4 +75,22 @@ void main() {
       );
     });
   });
+}
+
+class _GoldenSubject extends StatelessWidget {
+  const _GoldenSubject({required this.child});
+
+  final IoCrosswordCard child;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = IoCrosswordTheme.themeData;
+    return Theme(
+      data: IoCrosswordTheme.themeData,
+      child: ColoredBox(
+        color: themeData.colorScheme.background,
+        child: child,
+      ),
+    );
+  }
 }

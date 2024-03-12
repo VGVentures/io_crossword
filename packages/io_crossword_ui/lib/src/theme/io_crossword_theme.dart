@@ -24,6 +24,7 @@ class IoCrosswordTheme {
       seedColor: IoCrosswordColors.seedBlue,
       background: IoCrosswordColors.seedBlack,
       surface: IoCrosswordColors.seedWhite,
+      surfaceTint: IoCrosswordColors.seedWhite,
     );
   }
 
