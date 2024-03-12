@@ -14,11 +14,11 @@ class BoardSectionRequested extends CrosswordEvent {
 }
 
 class WordSelected extends CrosswordEvent {
-  const WordSelected(this.section, this.wordId);
+  const WordSelected(this.section, this.word);
 
   final (int, int) section;
-  final String wordId;
+  final Word word;
 
   @override
-  List<Object> get props => [section, wordId];
+  List<Object> get props => [section, word];
 }

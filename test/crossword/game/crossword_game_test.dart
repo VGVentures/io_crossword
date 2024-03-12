@@ -113,7 +113,7 @@ void main() {
           () => bloc.add(
             WordSelected(
               targetSection.index,
-              targetWord.id,
+              targetWord,
             ),
           ),
         ).called(1);
