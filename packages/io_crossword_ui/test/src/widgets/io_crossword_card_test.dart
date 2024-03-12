@@ -21,7 +21,7 @@ void main() {
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>
-          Uri.parse('goldens/io_crossword__card_$name.png');
+          Uri.parse('goldens/io_crossword_card__$name.png');
 
       testWidgets(
         'when portrait mobile',
