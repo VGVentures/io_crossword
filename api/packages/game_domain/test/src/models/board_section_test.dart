@@ -41,6 +41,7 @@ void main() {
             },
           ],
           'borderWords': <Map<String, dynamic>>[],
+          'snapshotUrl': null,
         }),
       );
     });
@@ -62,6 +63,7 @@ void main() {
           },
         ],
         'borderWords': <Map<String, dynamic>>[],
+        'snapshotUrl': null,
       };
       final boardSection = BoardSection.fromJson(json);
       expect(
@@ -105,5 +107,220 @@ void main() {
 
       expect(firstBoardSection, equals(secondBoardSection));
     });
+
+    test('copyWith with a new id creates correct BoardSection object', () {
+      final boardSection = BoardSection(
+        id: 'id',
+        position: Point(1, 2),
+        size: 300,
+        words: [],
+        borderWords: [],
+      );
+      final newBoardSection = boardSection.copyWith(id: 'newId');
+
+      expect(
+        newBoardSection,
+        equals(
+          BoardSection(
+            id: 'newId',
+            position: Point(1, 2),
+            size: 300,
+            words: [],
+            borderWords: [],
+          ),
+        ),
+      );
+    });
+
+    test(
+      'copyWith with a new position creates correct BoardSection object',
+      () {
+        final boardSection = BoardSection(
+          id: 'id',
+          position: Point(1, 2),
+          size: 300,
+          words: [],
+          borderWords: [],
+        );
+        final newBoardSection = boardSection.copyWith(position: Point(3, 4));
+
+        expect(
+          newBoardSection,
+          equals(
+            BoardSection(
+              id: 'id',
+              position: Point(3, 4),
+              size: 300,
+              words: [],
+              borderWords: [],
+            ),
+          ),
+        );
+      },
+    );
+
+    test('copyWith with a new size creates correct BoardSection object', () {
+      final boardSection = BoardSection(
+        id: 'id',
+        position: Point(1, 2),
+        size: 300,
+        words: [],
+        borderWords: [],
+      );
+      final newBoardSection = boardSection.copyWith(size: 400);
+
+      expect(
+        newBoardSection,
+        equals(
+          BoardSection(
+            id: 'id',
+            position: Point(1, 2),
+            size: 400,
+            words: [],
+            borderWords: [],
+          ),
+        ),
+      );
+    });
+
+    test('copyWith with new words creates correct BoardSection object', () {
+      final boardSection = BoardSection(
+        id: 'id',
+        position: Point(1, 2),
+        size: 300,
+        words: [
+          Word(
+            position: Point(1, 2),
+            axis: Axis.horizontal,
+            answer: 'answer',
+            clue: 'clue',
+            hints: ['hints'],
+            solvedTimestamp: 1234,
+          ),
+        ],
+        borderWords: [],
+      );
+      final newBoardSection = boardSection.copyWith(
+        words: [
+          Word(
+            position: Point(3, 4),
+            axis: Axis.vertical,
+            answer: 'newAnswer',
+            clue: 'newClue',
+            hints: ['newHints'],
+            solvedTimestamp: 5678,
+          ),
+        ],
+      );
+
+      expect(
+        newBoardSection,
+        equals(
+          BoardSection(
+            id: 'id',
+            position: Point(1, 2),
+            size: 300,
+            words: [
+              Word(
+                position: Point(3, 4),
+                axis: Axis.vertical,
+                answer: 'newAnswer',
+                clue: 'newClue',
+                hints: ['newHints'],
+                solvedTimestamp: 5678,
+              ),
+            ],
+            borderWords: [],
+          ),
+        ),
+      );
+    });
+
+    test(
+      'copyWith with new borderWords creates correct BoardSection object',
+      () {
+        final boardSection = BoardSection(
+          id: 'id',
+          position: Point(1, 2),
+          size: 300,
+          words: [],
+          borderWords: [
+            Word(
+              position: Point(1, 2),
+              axis: Axis.horizontal,
+              answer: 'answer',
+              clue: 'clue',
+              hints: ['hints'],
+              solvedTimestamp: 1234,
+            ),
+          ],
+        );
+        final newBoardSection = boardSection.copyWith(
+          borderWords: [
+            Word(
+              position: Point(3, 4),
+              axis: Axis.vertical,
+              answer: 'newAnswer',
+              clue: 'newClue',
+              hints: ['newHints'],
+              solvedTimestamp: 5678,
+            ),
+          ],
+        );
+
+        expect(
+          newBoardSection,
+          equals(
+            BoardSection(
+              id: 'id',
+              position: Point(1, 2),
+              size: 300,
+              words: [],
+              borderWords: [
+                Word(
+                  position: Point(3, 4),
+                  axis: Axis.vertical,
+                  answer: 'newAnswer',
+                  clue: 'newClue',
+                  hints: ['newHints'],
+                  solvedTimestamp: 5678,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'copyWith with new snapshotUrl creates correct BoardSection object',
+      () {
+        final boardSection = BoardSection(
+          id: 'id',
+          position: Point(1, 2),
+          size: 300,
+          words: [],
+          borderWords: [],
+          snapshotUrl: 'snapshotUrl',
+        );
+        final newBoardSection = boardSection.copyWith(
+          snapshotUrl: 'newSnapshotUrl',
+        );
+
+        expect(
+          newBoardSection,
+          equals(
+            BoardSection(
+              id: 'id',
+              position: Point(1, 2),
+              size: 300,
+              words: [],
+              borderWords: [],
+              snapshotUrl: 'newSnapshotUrl',
+            ),
+          ),
+        );
+      },
+    );
   });
 }

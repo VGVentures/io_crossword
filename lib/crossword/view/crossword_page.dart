@@ -9,18 +9,18 @@ class CrosswordPage extends StatelessWidget {
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider(
-        create: (BuildContext context) => CrosswordBloc(
-          context.read<CrosswordRepository>(),
-        )..add(const BoardSectionRequested((0, 0))),
-        child: const CrosswordPage(),
-      ),
+      builder: (_) => const CrosswordPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const CrosswordView();
+    return BlocProvider(
+      create: (BuildContext context) => CrosswordBloc(
+        context.read<CrosswordRepository>(),
+      )..add(const BoardSectionRequested((0, 0))),
+      child: const CrosswordView(),
+    );
   }
 }
 

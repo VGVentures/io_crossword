@@ -132,7 +132,7 @@ void main() {
     group('renderSection', () {
       final words = [
         Word(
-          position: Point(1, 1),
+          position: Point(18, 12),
           axis: Axis.horizontal,
           answer: 'hello',
           clue: '',
@@ -140,7 +140,7 @@ void main() {
           solvedTimestamp: null,
         ),
         Word(
-          position: Point(2, 7),
+          position: Point(10, 11),
           axis: Axis.vertical,
           answer: 'there',
           clue: '',
@@ -154,10 +154,10 @@ void main() {
         position: Point(1, 1),
         size: 10,
         words: words,
-        borderWords: const [],
+        borderWords: words,
       );
 
-      test('render the received section', () async {
+      test('render the received section words', () async {
         final command = _MockCommand();
         final image = _MockImage();
 
@@ -216,7 +216,7 @@ void main() {
 
         await renderer.renderSection(section);
 
-        expect(calls, 10);
+        expect(calls, 14);
       });
 
       test("throws when can't get the texture", () async {

@@ -17,6 +17,7 @@ BoardSection _$BoardSectionFromJson(Map<String, dynamic> json) => BoardSection(
       borderWords: (json['borderWords'] as List<dynamic>)
           .map((e) => Word.fromJson(e as Map<String, dynamic>))
           .toList(),
+      snapshotUrl: json['snapshotUrl'] as String?,
     );
 
 Map<String, dynamic> _$BoardSectionToJson(BoardSection instance) =>
@@ -25,4 +26,5 @@ Map<String, dynamic> _$BoardSectionToJson(BoardSection instance) =>
       'size': instance.size,
       'words': instance.words.map((e) => e.toJson()).toList(),
       'borderWords': instance.borderWords.map((e) => e.toJson()).toList(),
+      'snapshotUrl': instance.snapshotUrl,
     };

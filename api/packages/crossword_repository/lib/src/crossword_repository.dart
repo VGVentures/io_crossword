@@ -43,4 +43,15 @@ class CrosswordRepository {
 
     return null;
   }
+
+  /// Updates a section.
+  Future<void> updateSection(BoardSection section) async {
+    await _dbClient.update(
+      'boardSections',
+      DbEntityRecord(
+        id: section.id,
+        data: section.toJson()..remove('id'),
+      ),
+    );
+  }
 }
