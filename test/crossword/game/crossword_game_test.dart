@@ -11,7 +11,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../helpers/test_sections.dart';
+import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 

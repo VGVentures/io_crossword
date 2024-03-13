@@ -17,6 +17,7 @@ class BoardSection extends Equatable {
     required this.size,
     required this.words,
     required this.borderWords,
+    this.snapshotUrl,
   });
 
   /// {@macro board_section}
@@ -46,8 +47,32 @@ class BoardSection extends Equatable {
   @JsonKey()
   final List<Word> borderWords;
 
+  /// The url of the snapshot of the board section.
+  @JsonKey()
+  final String? snapshotUrl;
+
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$BoardSectionToJson(this);
+
+  /// Returns a copy of this instance with the given fields replaced with the
+  /// new values.
+  BoardSection copyWith({
+    String? id,
+    Point<int>? position,
+    int? size,
+    List<Word>? words,
+    List<Word>? borderWords,
+    String? snapshotUrl,
+  }) {
+    return BoardSection(
+      id: id ?? this.id,
+      position: position ?? this.position,
+      size: size ?? this.size,
+      words: words ?? this.words,
+      borderWords: borderWords ?? this.borderWords,
+      snapshotUrl: snapshotUrl ?? this.snapshotUrl,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -56,5 +81,6 @@ class BoardSection extends Equatable {
         size,
         words,
         borderWords,
+        snapshotUrl,
       ];
 }
