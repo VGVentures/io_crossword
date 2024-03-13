@@ -7,6 +7,17 @@
 API used on the I/O Crossword game for Google I/O.
 Built with dart_frog.
 
+# Running
+
+To run the API the following arguments needs to be passed:
+
+```
+FB_APP_ID=APP_ID \
+INITIALS_BLACKLIST_ID=ID \
+FB_STORAGE_BUCKET=FIREBASE_BUCKET_NAME \
+dart_frog dev
+```
+
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg

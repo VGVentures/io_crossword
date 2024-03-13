@@ -4,12 +4,14 @@ import 'package:board_renderer/board_renderer.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:db_client/db_client.dart';
+import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
 
 late CrosswordRepository crosswordRepository;
 late BoardRenderer boardRenderer;
 late LeaderboardRepository leaderboardRepository;
+late FirebaseCloudStorage firebaseCloudStorage;
 
 Future<HttpServer> run(Handler handler, InternetAddress ip, int port) async {
   final dbClient = DbClient.initialize(_appId, useEmulator: _useEmulator);
@@ -20,6 +22,10 @@ Future<HttpServer> run(Handler handler, InternetAddress ip, int port) async {
   leaderboardRepository = LeaderboardRepository(
     dbClient: dbClient,
     blacklistDocumentId: _initialsBlacklistId,
+  );
+
+  firebaseCloudStorage = FirebaseCloudStorage(
+    bucketName: _firebaseStorageBucket,
   );
 
   Logger.root.onRecord.listen((record) {
@@ -42,6 +48,14 @@ String get _initialsBlacklistId {
   final value = Platform.environment['INITIALS_BLACKLIST_ID'];
   if (value == null) {
     throw ArgumentError('INITIALS_BLACKLIST_ID is required to run the API');
+  }
+  return value;
+}
+
+String get _firebaseStorageBucket {
+  final value = Platform.environment['FB_STORAGE_BUCKET'];
+  if (value == null) {
+    throw ArgumentError('FB_STORAGE_BUCKET is required to run the API');
   }
   return value;
 }
