@@ -1,0 +1,7 @@
+{
+    "@@locale": "en",
+    "generateSectionSnapshots": "Generate Section Snapshots",
+    "@generateSectionSnapshots": {
+        "description": "Label for the generate section snapshots feature"
+    }
+}
