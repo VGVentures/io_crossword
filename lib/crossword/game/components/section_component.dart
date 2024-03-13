@@ -52,8 +52,42 @@ class SectionTapController extends PositionComponent
   }
 }
 
-class SectionComponent extends PositionComponent
-    with HasGameRef<CrosswordGame> {
+class SectionDebugOutline extends RectangleComponent
+    with ParentIsA<SectionComponent> {
+  SectionDebugOutline({
+    required Vector2 position,
+    required Vector2 size,
+    super.priority,
+  }) : super(
+          position: position,
+          size: size,
+          paint: Paint()
+            ..color = Colors.pink
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 2,
+        );
+}
+
+class SectionDebugIndex extends TextComponent
+    with ParentIsA<SectionComponent>, HasGameRef<CrosswordGame> {
+  SectionDebugIndex({
+    required Vector2 position,
+    required (int, int) index,
+    super.priority,
+  }) : super(
+          position: position,
+          text: '(${index.$1}, ${index.$2})',
+          textRenderer: TextPaint(
+            style: const TextStyle(
+              color: Colors.pink,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        );
+}
+
+class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   SectionComponent({
     required this.index,
     super.key,
@@ -88,6 +122,29 @@ class SectionComponent extends PositionComponent
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
+      );
+    }
+
+    if (gameRef.showDebugOverlay) {
+      await addAll(
+        [
+          SectionDebugOutline(
+            priority: 8,
+            position: Vector2(
+              index.$1 * gameRef.sectionSize.toDouble(),
+              index.$2 * gameRef.sectionSize.toDouble(),
+            ),
+            size: Vector2.all(gameRef.sectionSize.toDouble()),
+          ),
+          SectionDebugIndex(
+            priority: 10,
+            index: index,
+            position: Vector2(
+              index.$1 * gameRef.sectionSize.toDouble(),
+              index.$2 * gameRef.sectionSize.toDouble(),
+            ),
+          ),
+        ],
       );
     }
   }
