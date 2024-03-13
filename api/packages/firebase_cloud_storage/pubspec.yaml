@@ -11,6 +11,6 @@ dependencies:
   http: ^1.2.1
 
 dev_dependencies:
-  mocktail: ^0.3.0
+  mocktail: ^1.0.3
   test: ^1.19.2
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^5.1.0
