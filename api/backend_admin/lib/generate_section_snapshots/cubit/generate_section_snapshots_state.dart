@@ -9,7 +9,6 @@ enum GenerateSectionSnapshotsStatus {
 }
 
 class GenerateSectionSnapshotsState extends Equatable {
-
   const GenerateSectionSnapshotsState({
     this.status = GenerateSectionSnapshotsStatus.initial,
     this.sections = const [],
@@ -38,9 +37,9 @@ class GenerateSectionSnapshotsState extends Equatable {
 
   @override
   List<Object?> get props => [
-    status,
-    sections,
-    error,
-    sectionsGenerated,
-  ];
+        status,
+        sections,
+        error,
+        sectionsGenerated,
+      ];
 }

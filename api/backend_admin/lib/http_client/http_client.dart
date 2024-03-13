@@ -1,7 +1,6 @@
 import 'package:http/http.dart' as http;
 
 class HttpClient {
-
   HttpClient({required this.baseUrl});
 
   final String baseUrl;
