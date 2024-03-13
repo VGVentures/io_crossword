@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_const_constructorsssword_repository/crossword_repository.dart';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/app/app.dart';
@@ -24,8 +25,7 @@ void main() {
           crosswordRepository: crosswordRepository,
         ),
       );
-      await tester.pumpAndSettle();
-      await tester.pump(const Duration(milliseconds: 700));
+
       expect(find.byType(AppView), findsOneWidget);
     });
   });

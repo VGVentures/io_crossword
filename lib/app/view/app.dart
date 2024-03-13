@@ -1,10 +1,7 @@
 import 'package:crossword_repository/crossword_repository.dart';
-import 'package:flame/cache.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/loading/loading.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -17,12 +14,6 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider.value(value: crosswordRepository),
-        BlocProvider(
-          create: (_) => PreloadCubit(
-            Images(prefix: ''),
-            AudioCache(prefix: ''),
-          )..loadSequentially(),
-        ),
       ],
       child: const AppView(),
     );
@@ -43,7 +34,7 @@ class AppView extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const LoadingPage(),
+      home: const CrosswordPage(),
     );
   }
 }
