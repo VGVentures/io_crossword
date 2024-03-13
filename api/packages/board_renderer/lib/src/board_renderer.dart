@@ -98,7 +98,6 @@ class BoardRenderer {
   Future<Uint8List> renderBoard(List<Word> words) async {
     /// The size of each cell in the board when rendering in full size.
     const cellSize = 4;
-    // use bigger value
     var minPositionX = 0;
     var minPositionY = 0;
 
