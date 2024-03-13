@@ -12,6 +12,7 @@ COPY packages/jwt_middleware ./packages/jwt_middleware
 COPY packages/leaderboard_repository ./packages/leaderboard_repository
 COPY packages/board_renderer ./packages/board_renderer
 COPY packages/crossword_repository ./packages/crossword_repository
+COPY packages/firebase_cloud_storage ./packages/firebase_cloud_storage
 
 # Install Dependencies
 RUN dart pub get -C packages/db_client
