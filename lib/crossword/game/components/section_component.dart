@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:game_domain/game_domain.dart';
+import 'package:http/http.dart' as http;
 import 'package:io_crossword/crossword/crossword.dart';
 
 class SectionTapController extends PositionComponent
@@ -60,6 +62,8 @@ class SectionComponent extends PositionComponent
   });
 
   final (int, int) index;
+  Image? spriteImage;
+  late RenderMode renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
@@ -80,11 +84,12 @@ class SectionComponent extends PositionComponent
 
     lastSelectedWord = gameRef.state.selectedWord?.wordId;
     lastSelectedSection = gameRef.state.selectedWord?.section;
+    renderMode = gameRef.state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
       _boardSection = boardSection;
-      _loadBoardSection(boardSection);
+      _loadBoardSection();
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
@@ -104,9 +109,16 @@ class SectionComponent extends PositionComponent
         final boardSection = state.sections[index];
         if (boardSection != null) {
           _boardSection = boardSection;
-          _loadBoardSection(boardSection);
+          _loadBoardSection();
         }
       } else {
+        if (state.renderMode != renderMode) {
+          for (final child in children) {
+            child.removeFromParent();
+          }
+          renderMode = state.renderMode;
+          _loadBoardSection();
+        }
         final selectedWord = state.selectedWord?.wordId;
         final selectedSection = state.selectedWord?.section;
         if (selectedWord != lastSelectedWord ||
@@ -165,8 +177,8 @@ class SectionComponent extends PositionComponent
     }
   }
 
-  void _loadBoardSection(BoardSection section) {
-    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
+  void _loadBoardSection() {
+    if (_boardSection == null) return;
 
     final sectionPosition = Vector2(
       (index.$1 * gameRef.sectionSize).toDouble(),
@@ -183,11 +195,37 @@ class SectionComponent extends PositionComponent
       ),
     );
 
+    if (renderMode == RenderMode.snapshot) {
+      _loadBoardSectionImage();
+    } else {
+      _loadBoardSectionBatch();
+    }
+  }
+
+  Future<void> _loadBoardSectionImage() async {
+    final response = await http.get(Uri.parse(_boardSection!.snapshotUrl!));
+    spriteImage = await decodeImageFromList(response.bodyBytes);
+    final sectionSprite = Sprite(spriteImage!);
+    final sectionPosition = Vector2(
+      (index.$1 * gameRef.sectionSize).toDouble(),
+      (index.$2 * gameRef.sectionSize).toDouble(),
+    );
+    add(
+      SpriteComponent(
+        sprite: sectionSprite,
+        position: sectionPosition,
+      ),
+    );
+  }
+
+  void _loadBoardSectionBatch() {
+    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
+
     _wordIndex = {};
 
     final color = Colors.white.withOpacity(.2);
-    for (var i = 0; i < section.words.length; i++) {
-      final word = section.words[i];
+    for (var i = 0; i < _boardSection!.words.length; i++) {
+      final word = _boardSection!.words[i];
 
       final wordCharacters = word.answer.toUpperCase().characters;
 

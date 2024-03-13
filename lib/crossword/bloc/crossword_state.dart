@@ -24,6 +24,8 @@ class WordSelection extends Equatable {
   List<Object> get props => [section, wordId];
 }
 
+enum RenderMode { game, snapshot }
+
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
@@ -32,11 +34,13 @@ class CrosswordLoaded extends CrosswordState {
     this.width = 40,
     this.height = 40,
     this.selectedWord,
+    this.renderMode = RenderMode.game,
   });
 
   final int width;
   final int height;
   final int sectionSize;
+  final RenderMode renderMode;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
 
@@ -46,6 +50,7 @@ class CrosswordLoaded extends CrosswordState {
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
+    RenderMode? renderMode,
   }) {
     return CrosswordLoaded(
       width: width ?? this.width,
@@ -53,6 +58,7 @@ class CrosswordLoaded extends CrosswordState {
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
+      renderMode: renderMode ?? this.renderMode,
     );
   }
 
@@ -63,6 +69,7 @@ class CrosswordLoaded extends CrosswordState {
         sectionSize,
         sections,
         selectedWord,
+        renderMode,
       ];
 }
 

@@ -12,6 +12,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc(this.crosswordRepository) : super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
+    on<SwitchRenderMode>(_onSwitchRenderMode);
   }
 
   final CrosswordRepository crosswordRepository;
@@ -31,14 +32,21 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           (section.position.x, section.position.y): section,
         };
 
+        if (state is CrosswordLoaded) {
+          final loadedState = state as CrosswordLoaded;
+          return CrosswordLoaded(
+            sectionSize: section.size,
+            sections: {
+              ...loadedState.sections,
+              ...newSection,
+            },
+            renderMode: loadedState.renderMode,
+          );
+        }
+
         return CrosswordLoaded(
           sectionSize: section.size,
-          sections: state is CrosswordLoaded
-              ? {
-                  ...(state as CrosswordLoaded).sections,
-                  ...newSection,
-                }
-              : {...newSection},
+          sections: newSection,
         );
       },
     );
@@ -93,6 +101,22 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
             section: section,
             wordId: event.word.id,
           ),
+        ),
+      );
+    }
+  }
+
+  void _onSwitchRenderMode(
+    SwitchRenderMode event,
+    Emitter<CrosswordState> emit,
+  ) {
+    if (state is CrosswordLoaded) {
+      final loadedState = state as CrosswordLoaded;
+      emit(
+        loadedState.copyWith(
+          renderMode: loadedState.renderMode == RenderMode.game
+              ? RenderMode.snapshot
+              : RenderMode.game,
         ),
       );
     }

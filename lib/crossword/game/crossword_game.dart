@@ -143,15 +143,25 @@ class CrosswordGame extends FlameGame with PanDetector {
       return;
     }
     camera.viewport.position /= 1.05;
-    camera.viewfinder.zoom = camera.viewfinder.zoom - 0.05;
 
+    final oldZoom = camera.viewfinder.zoom;
+    camera.viewfinder.zoom -= 0.05;
+
+    if (camera.viewfinder.zoom < 0.8 && oldZoom > 0.8) {
+      bloc.add(const SwitchRenderMode());
+    }
     _updateVisibleSections();
   }
 
   void zoomIn() {
     camera.viewport.position *= 1.05;
+
+    final oldZoom = camera.viewfinder.zoom;
     camera.viewfinder.zoom += 0.05;
 
+    if (camera.viewfinder.zoom > 0.8 && oldZoom < 0.8) {
+      bloc.add(const SwitchRenderMode());
+    }
     _updateVisibleSections();
   }
 }
