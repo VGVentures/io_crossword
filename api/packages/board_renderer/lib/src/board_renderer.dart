@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:game_domain/game_domain.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
@@ -191,26 +192,12 @@ class BoardRenderer {
 
   /// Renders a section of the board in an image.
   Future<Uint8List> renderSection(BoardSection section) async {
-    final words = section.words;
+    final words = [...section.words, ...section.borderWords];
 
     const cellSize = 40;
 
-    var maxPositionX = 0;
-    var maxPositionY = 0;
-
-    for (final word in words) {
-      final x = word.position.x - section.position.x * section.size;
-      final y = word.position.y - section.position.y * section.size;
-
-      final sizeX = word.axis == Axis.horizontal ? word.answer.length : 1;
-      final sizeY = word.axis == Axis.vertical ? word.answer.length : 1;
-
-      maxPositionX = math.max(maxPositionX, x + sizeX);
-      maxPositionY = math.max(maxPositionY, y + sizeY);
-    }
-
-    final totalWidth = maxPositionX * cellSize;
-    final totalHeight = maxPositionY * cellSize;
+    final totalWidth = section.size * cellSize;
+    final totalHeight = section.size * cellSize;
 
     final image = _createImage(
       width: totalWidth,
@@ -237,22 +224,28 @@ class BoardRenderer {
         final char = wordCharacters.elementAt(c).toUpperCase();
         final charIndex = char.codeUnitAt(0) - 65;
 
-        _compositeImage(
-          image,
-          texture,
-          dstX: word.axis == Axis.horizontal
+        final (dstX, dstY) = (
+          word.axis == Axis.horizontal
               ? (position.$1 + c) * cellSize
               : position.$1 * cellSize,
-          dstY: word.axis == Axis.vertical
+          word.axis == Axis.vertical
               ? (position.$2 + c) * cellSize
-              : position.$2 * cellSize,
-          dstW: cellSize,
-          dstH: cellSize,
-          srcX: charIndex * cellSize,
-          srcY: 0,
-          srcW: cellSize,
-          srcH: cellSize,
+              : position.$2 * cellSize
         );
+        if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
+          _compositeImage(
+            image,
+            texture,
+            dstX: dstX,
+            dstY: dstY,
+            dstW: cellSize,
+            dstH: cellSize,
+            srcX: charIndex * cellSize,
+            srcY: 0,
+            srcW: cellSize,
+            srcH: cellSize,
+          );
+        }
       }
     }
 
