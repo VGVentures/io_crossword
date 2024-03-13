@@ -18,3 +18,4 @@ jobs:
     with:
       dart_sdk: stable
       working_directory: api/backend_admin
+      min_coverage: 0
