@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -26,6 +27,15 @@ extension on WidgetTester {
 
 void main() {
   group('CrosswordPage', () {
+    testWidgets('renders CrosswordView', (tester) async {
+      await tester.pumpRoute(CrosswordPage.route());
+      await tester.pump();
+
+      expect(find.byType(CrosswordView), findsOneWidget);
+    });
+  });
+
+  group('CrosswordView', () {
     late CrosswordBloc bloc;
 
     setUp(() {
@@ -38,11 +48,12 @@ void main() {
       );
     });
 
-    testWidgets('renders CrosswordView', (tester) async {
-      await tester.pumpRoute(CrosswordPage.route());
-      await tester.pump();
+    testWidgets('shows the game intro page dialog', (tester) async {
+      when(() => bloc.state).thenReturn(const CrosswordInitial());
 
-      expect(find.byType(CrosswordView), findsOneWidget);
+      await tester.pumpCrosswordView(bloc);
+      await tester.pump();
+      expect(find.byType(GameIntroPage), findsOneWidget);
     });
 
     testWidgets('renders loading when is initial', (tester) async {
