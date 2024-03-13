@@ -24,11 +24,8 @@ class IoCrosswordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      // This margin not only ensures the card respects the edges of the screen,
-      // but also the distance between the card and the virtual keyboard, if
-      // any.
-      padding: const EdgeInsets.all(16),
+    return SafeArea(
+      minimum: const EdgeInsets.all(16),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 358, maxHeight: 540),
         child: Material(
