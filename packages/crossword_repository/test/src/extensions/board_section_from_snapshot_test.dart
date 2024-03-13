@@ -18,7 +18,6 @@ void main() {
     answer: 'answer',
     clue: 'clue',
     hints: const ['hint'],
-    visible: true,
     solvedTimestamp: null,
   );
   final boardSection1 = BoardSection(

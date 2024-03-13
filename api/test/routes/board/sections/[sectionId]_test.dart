@@ -8,7 +8,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../../../routes/board/full_render.dart' as route;
+import '../../../../routes/board/sections/[sectionId].dart' as route;
 
 class _MockRequestContext extends Mock implements RequestContext {}
 
@@ -19,11 +19,23 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 class _MockBoardRenderer extends Mock implements BoardRenderer {}
 
 void main() {
-  group('GET /board/full_render', () {
+  group('GET /board/sections/[sectionId]', () {
     late RequestContext requestContext;
     late Request request;
     late CrosswordRepository crosswordRepository;
     late BoardRenderer boardRenderer;
+
+    setUpAll(() {
+      registerFallbackValue(
+        const BoardSection(
+          id: '',
+          position: Point(0, 0),
+          size: 10,
+          words: [],
+          borderWords: [],
+        ),
+      );
+    });
 
     setUp(() {
       requestContext = _MockRequestContext();
@@ -40,7 +52,7 @@ void main() {
     });
 
     test('returns the image of the rendered board', () async {
-      final board1 = BoardSection(
+      final section = BoardSection(
         id: '1',
         position: const Point(1, 1),
         size: 100,
@@ -57,48 +69,56 @@ void main() {
         borderWords: const [],
       );
 
-      final board2 = BoardSection(
-        id: '2',
-        position: const Point(2, 1),
-        size: 100,
-        words: [
-          Word(
-            position: const Point(2, 1),
-            axis: Axis.vertical,
-            answer: 'firebase',
-            clue: '',
-            hints: const [],
-            solvedTimestamp: null,
-          ),
-        ],
-        borderWords: const [],
-      );
-
-      when(crosswordRepository.listAllSections).thenAnswer(
-        (_) async => [board1, board2],
+      when(() => crosswordRepository.findSectionByPosition(0, 0)).thenAnswer(
+        (_) async => section,
       );
 
       when(
-        () => boardRenderer.renderBoard(
-          [
-            board1.words.first,
-            board2.words.first,
-          ],
-        ),
+        () => boardRenderer.renderSection(section),
       ).thenAnswer((_) async {
         return Uint8List(0);
       });
 
-      final response = await route.onRequest(requestContext);
+      final response = await route.onRequest(requestContext, '0,0');
 
       expect(response.statusCode, HttpStatus.ok);
     });
 
+    test('returns 404 when the board is not found', () async {
+      when(() => crosswordRepository.findSectionByPosition(0, 0)).thenAnswer(
+        (_) async => null,
+      );
+
+      when(
+        () => boardRenderer.renderSection(any()),
+      ).thenAnswer((_) async {
+        return Uint8List(0);
+      });
+
+      final response = await route.onRequest(requestContext, '0,0');
+
+      expect(response.statusCode, HttpStatus.notFound);
+    });
+
     test('returns method not allowed when not a get method', () async {
       when(() => request.method).thenReturn(HttpMethod.post);
-      final response = await route.onRequest(requestContext);
+      final response = await route.onRequest(requestContext, '0,0');
 
       expect(response.statusCode, HttpStatus.methodNotAllowed);
+    });
+
+    test('returns bad request when the id is invalid', () async {
+      when(() => request.method).thenReturn(HttpMethod.get);
+      final response = await route.onRequest(requestContext, 'a,0');
+
+      expect(response.statusCode, HttpStatus.badRequest);
+    });
+
+    test('returns bad request when the id is incomplete', () async {
+      when(() => request.method).thenReturn(HttpMethod.get);
+      final response = await route.onRequest(requestContext, '0');
+
+      expect(response.statusCode, HttpStatus.badRequest);
     });
   });
 }

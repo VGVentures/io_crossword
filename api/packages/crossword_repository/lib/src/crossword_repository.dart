@@ -23,4 +23,24 @@ class CrosswordRepository {
       });
     }).toList();
   }
+
+  /// Fetches a section by its position.
+  Future<BoardSection?> findSectionByPosition(int x, int y) async {
+    final result = await _dbClient.find(
+      'boardSections',
+      {
+        'position.x': x,
+        'position.y': y,
+      },
+    );
+
+    if (result.isNotEmpty) {
+      return BoardSection.fromJson({
+        'id': result.first.id,
+        ...result.first.data,
+      });
+    }
+
+    return null;
+  }
 }
