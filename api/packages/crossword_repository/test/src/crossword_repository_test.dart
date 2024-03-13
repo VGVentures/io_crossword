@@ -13,6 +13,10 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
+    setUpAll(() {
+      registerFallbackValue(_MockDbEntityRecord());
+    });
+
     setUp(() {
       dbClient = _MockDbClient();
     });
@@ -96,6 +100,42 @@ void main() {
       final repository = CrosswordRepository(dbClient: dbClient);
       final section = await repository.findSectionByPosition(1, 1);
       expect(section, isNull);
+    });
+
+    test('updateSection updates the section in the db', () async {
+      when(
+        () => dbClient.update(
+          'boardSections',
+          any(that: isA<DbEntityRecord>()),
+        ),
+      ).thenAnswer((_) async {});
+      final repository = CrosswordRepository(dbClient: dbClient);
+      final section = BoardSection(
+        id: 'id',
+        position: Point(1, 1),
+        size: 300,
+        words: const [],
+        borderWords: const [],
+      );
+      await repository.updateSection(section);
+      final captured = verify(
+        () => dbClient.update(
+          'boardSections',
+          captureAny(),
+        ),
+      ).captured.single as DbEntityRecord;
+
+      expect(captured.id, 'id');
+      expect(
+        captured.data,
+        {
+          'position': {'x': 1, 'y': 1},
+          'size': 300,
+          'words': <String>[],
+          'borderWords': <String>[],
+          'snapshotUrl': null,
+        },
+      );
     });
   });
 }
