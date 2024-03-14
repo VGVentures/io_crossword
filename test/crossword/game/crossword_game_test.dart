@@ -3,8 +3,9 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/components.dart';
+import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Axis;
@@ -45,7 +46,10 @@ void main() {
       mockState(state);
     });
 
-    CrosswordGame createGame() => CrosswordGame(bloc);
+    CrosswordGame createGame({
+      bool? showDebugOverlay,
+    }) =>
+        CrosswordGame(bloc, showDebugOverlay: showDebugOverlay);
 
     testWithGame(
       'loads',
@@ -64,6 +68,29 @@ void main() {
         expect(
           game.world.children.whereType<SectionComponent>(),
           isNotEmpty,
+        );
+      },
+    );
+
+    testWithGame(
+      'adds debug components when debugOverlay is true',
+      () => createGame(showDebugOverlay: true),
+      (game) async {
+        final state = CrosswordLoaded(
+          sectionSize: sectionSize,
+          sections: {
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
+          },
+        );
+        mockState(state);
+
+        await game.ready();
+        expect(game.firstChild<FpsComponent>(), isNotNull);
+        expect(game.firstChild<FpsTextComponent>(), isNotNull);
+        expect(
+          game.firstChild<ChildCounterComponent<SectionComponent>>(),
+          isNotNull,
         );
       },
     );
