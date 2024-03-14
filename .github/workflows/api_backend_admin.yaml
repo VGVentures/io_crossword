@@ -8,7 +8,7 @@ on:
   pull_request:
     paths:
       - "api/backend_admin/**"
-      - ".github/workflows/backend_admin.yaml"
+      - ".github/workflows/api_backend_admin.yaml"
     branches:
       - main
 
