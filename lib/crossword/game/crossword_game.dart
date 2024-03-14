@@ -13,7 +13,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     bool? showDebugOverlay,
   }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
 
-  static const cellSize = 40;
+  static const cellSize = 80;
 
   static bool debugOverlay = false;
   final bool showDebugOverlay;
@@ -184,5 +184,10 @@ class CrosswordGame extends FlameGame with PanDetector {
     camera.viewfinder.zoom += 0.05;
 
     _updateVisibleSections();
+  }
+
+  @override
+  Color backgroundColor() {
+    return const Color(0xFFFFFFFF);
   }
 }
