@@ -3,7 +3,6 @@ import 'package:backend_admin/http_client/http_client.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
 
 class GenerateSectionSnapshotsPage extends StatelessWidget {
   const GenerateSectionSnapshotsPage({
