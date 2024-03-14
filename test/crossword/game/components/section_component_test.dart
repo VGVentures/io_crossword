@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/components.dart';
@@ -9,6 +10,14 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class FakeImage extends Fake implements ui.Image {
+  @override
+  int get width => 100;
+
+  @override
+  int get height => 100;
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -234,7 +243,6 @@ void main() {
       createGame,
       (game) async {
         final streamController = StreamController<CrosswordState>.broadcast();
-        when(() => bloc.stream).thenAnswer((_) => streamController.stream);
         final state = CrosswordLoaded(
           sectionSize: 400,
           sections: {
@@ -266,17 +274,31 @@ void main() {
           },
         );
         when(() => bloc.state).thenReturn(state);
+        whenListen(bloc, streamController.stream, initialState: state);
         await game.ready();
 
-        streamController.add(state.copyWith(renderMode: RenderMode.snapshot));
+        streamController.add(
+          state.copyWith(
+            renderMode: RenderMode.snapshot,
+            sectionsSnapshots: {
+              (0, 0): FakeImage(),
+            },
+          ),
+        );
 
-        final sectionComponent = game.firstChild<SectionComponent>();
-        final spriteBatchComponent =
-            sectionComponent?.firstChild<SpriteBatchComponent>();
+        await Future.microtask(() {});
+        game.update(0);
+
+        final sectionComponent = game.world.children
+            .whereType<SectionComponent>()
+            .firstWhere((element) => element.index == (0, 0));
         expect(sectionComponent, isNotNull);
+
+        final spriteBatchComponent =
+            sectionComponent.firstChild<SpriteBatchComponent>();
         expect(spriteBatchComponent, isNull);
 
-        final spriteComponent = game.firstChild<SpriteComponent>();
+        final spriteComponent = sectionComponent.firstChild<SpriteComponent>();
         expect(spriteComponent, isNotNull);
       },
     );
