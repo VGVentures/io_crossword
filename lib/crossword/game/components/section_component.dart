@@ -62,7 +62,7 @@ class SectionComponent extends PositionComponent
 
   final (int, int) index;
   Image? _sectionImage;
-  late RenderMode renderMode;
+  late RenderMode _renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
@@ -83,7 +83,7 @@ class SectionComponent extends PositionComponent
 
     lastSelectedWord = gameRef.state.selectedWord?.wordId;
     lastSelectedSection = gameRef.state.selectedWord?.section;
-    renderMode = gameRef.state.renderMode;
+    _renderMode = gameRef.state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
@@ -105,19 +105,18 @@ class SectionComponent extends PositionComponent
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       _sectionImage = state.sectionsSnapshots[index];
+      _renderMode = state.renderMode;
       if (_boardSection == null) {
         final boardSection = state.sections[index];
-        renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
           _loadBoardSection();
         }
       } else {
-        if (state.renderMode != renderMode) {
+        if (state.renderMode != _renderMode) {
           for (final child in children) {
             child.removeFromParent();
           }
-          renderMode = state.renderMode;
           _loadBoardSection();
         }
         final selectedWord = state.selectedWord?.wordId;
@@ -196,7 +195,7 @@ class SectionComponent extends PositionComponent
       ),
     );
 
-    if (renderMode == RenderMode.snapshot && _sectionImage != null) {
+    if (_renderMode == RenderMode.snapshot && _sectionImage != null) {
       _loadBoardSectionImage();
     } else {
       _loadBoardSectionBatch();

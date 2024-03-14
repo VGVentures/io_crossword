@@ -45,13 +45,11 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
 
         if (state is CrosswordLoaded) {
           final loadedState = state as CrosswordLoaded;
-          return CrosswordLoaded(
-            sectionSize: section.size,
+          return loadedState.copyWith(
             sections: {
               ...loadedState.sections,
               ...newSection,
             },
-            renderMode: loadedState.renderMode,
           );
         }
 

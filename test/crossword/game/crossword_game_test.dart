@@ -357,7 +357,7 @@ void main() {
     );
 
     testWithGame(
-      'zoom out adds RenderModeSwitched to snapshot when less than 0.8',
+      'zoom out adds RenderModeSwitched with snapshot mode when less than 0.8',
       createGame,
       (game) async {
         const state = CrosswordLoaded(
@@ -378,7 +378,7 @@ void main() {
     );
 
     testWithGame(
-      'zoom in adds SwitchRenderMode when more than 0.8',
+      'zoom in adds SwitchRenderMode with game mode when more than 0.8',
       createGame,
       (game) async {
         const state = CrosswordLoaded(
