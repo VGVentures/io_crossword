@@ -22,7 +22,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
-    on<SwitchRenderMode>(_onSwitchRenderMode);
+    on<RenderModeSwitched>(_onRenderModeSwitched);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -110,16 +110,18 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     }
   }
 
-  Future<void> _onSwitchRenderMode(
-    SwitchRenderMode event,
+  Future<void> _onRenderModeSwitched(
+    RenderModeSwitched event,
     Emitter<CrosswordState> emit,
   ) async {
     if (state is CrosswordLoaded) {
       var loadedState = state as CrosswordLoaded;
 
       if (loadedState.renderMode == RenderMode.game) {
-        for (final section in loadedState.sections.values
-            .where((section) => section.snapshotUrl != null)) {
+        final sectionsWithSnapshot = loadedState.sections.values
+            .where((section) => section.snapshotUrl != null);
+
+        for (final section in sectionsWithSnapshot) {
           final bytes = await _crosswordRepository.fetchSectionSnapshotBytes(
             section.snapshotUrl!,
           );

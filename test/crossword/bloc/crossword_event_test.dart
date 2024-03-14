@@ -53,12 +53,12 @@ void main() {
       });
     });
 
-    group('SwitchRenderMode', () {
+    group('RenderModeSwitched', () {
       test('can be instantiated', () {
-        expect(SwitchRenderMode(), isA<SwitchRenderMode>());
+        expect(RenderModeSwitched(), isA<RenderModeSwitched>());
       });
       test('supports value comparisons', () {
-        expect(SwitchRenderMode(), SwitchRenderMode());
+        expect(RenderModeSwitched(), RenderModeSwitched());
       });
     });
   });

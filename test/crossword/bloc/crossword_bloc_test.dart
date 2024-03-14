@@ -629,7 +629,7 @@ void main() {
       );
     });
 
-    group('SwitchRenderMode', () {
+    group('RenderModeSwitched', () {
       blocTest<CrosswordBloc, CrosswordState>(
         'emits state with sections snapshots if render switch from game'
         ' to snapshot',
@@ -655,7 +655,7 @@ void main() {
             ),
           },
         ),
-        act: (bloc) => bloc.add(const SwitchRenderMode()),
+        act: (bloc) => bloc.add(const RenderModeSwitched()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,
