@@ -25,6 +25,16 @@ void main() {
     });
 
     testWidgets(
+      'renders the record progress',
+      (tester) async {
+        when(() => bloc.state).thenReturn(const GameIntroState());
+        await tester.pumpApp(child);
+
+        expect(find.byType(RecordProgress), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'adds WelcomeCompleted event when tapping button',
       (tester) async {
         when(() => bloc.state).thenReturn(const GameIntroState());
