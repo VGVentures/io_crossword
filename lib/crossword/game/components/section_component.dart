@@ -262,7 +262,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
           );
         } else {
           rect = Rect.fromLTWH(
-            1040,
+            2080,
             0,
             CrosswordGame.cellSize.toDouble(),
             CrosswordGame.cellSize.toDouble(),
