@@ -16,6 +16,5 @@ jobs:
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      dart_sdk: stable
       working_directory: api/backend_admin
       min_coverage: 0
