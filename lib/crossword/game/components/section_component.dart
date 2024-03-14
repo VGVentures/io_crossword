@@ -6,7 +6,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:game_domain/game_domain.dart';
-import 'package:http/http.dart' as http;
 import 'package:io_crossword/crossword/crossword.dart';
 
 class SectionTapController extends PositionComponent
@@ -62,7 +61,7 @@ class SectionComponent extends PositionComponent
   });
 
   final (int, int) index;
-  Image? spriteImage;
+  Image? _sectionImage;
   late RenderMode renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
@@ -105,8 +104,10 @@ class SectionComponent extends PositionComponent
 
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
+      _sectionImage = state.sectionsSnapshots[index];
       if (_boardSection == null) {
         final boardSection = state.sections[index];
+        renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
           _loadBoardSection();
@@ -195,7 +196,7 @@ class SectionComponent extends PositionComponent
       ),
     );
 
-    if (renderMode == RenderMode.snapshot) {
+    if (renderMode == RenderMode.snapshot && _sectionImage != null) {
       _loadBoardSectionImage();
     } else {
       _loadBoardSectionBatch();
@@ -203,9 +204,7 @@ class SectionComponent extends PositionComponent
   }
 
   Future<void> _loadBoardSectionImage() async {
-    final response = await http.get(Uri.parse(_boardSection!.snapshotUrl!));
-    spriteImage = await decodeImageFromList(response.bodyBytes);
-    final sectionSprite = Sprite(spriteImage!);
+    final sectionSprite = Sprite(_sectionImage!);
     final sectionPosition = Vector2(
       (index.$1 * gameRef.sectionSize).toDouble(),
       (index.$2 * gameRef.sectionSize).toDouble(),

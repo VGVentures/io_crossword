@@ -228,5 +228,57 @@ void main() {
         ).called(1);
       },
     );
+
+    testWithGame(
+      'switches rendering to snapshot when render mode changes',
+      createGame,
+      (game) async {
+        final streamController = StreamController<CrosswordState>.broadcast();
+        when(() => bloc.stream).thenAnswer((_) => streamController.stream);
+        final state = CrosswordLoaded(
+          sectionSize: 400,
+          sections: {
+            (0, 0): BoardSection(
+              id: '',
+              position: const Point(0, 0),
+              size: 400,
+              words: [
+                Word(
+                  position: const Point(0, 0),
+                  axis: Axis.vertical,
+                  answer: 'Flutter',
+                  clue: '',
+                  hints: const [],
+                  solvedTimestamp: null,
+                ),
+                Word(
+                  position: const Point(0, 0),
+                  axis: Axis.horizontal,
+                  answer: 'Firebase',
+                  clue: '',
+                  hints: const [],
+                  solvedTimestamp: null,
+                ),
+              ],
+              snapshotUrl: 'snapshotUrl',
+              borderWords: const [],
+            ),
+          },
+        );
+        when(() => bloc.state).thenReturn(state);
+        await game.ready();
+
+        streamController.add(state.copyWith(renderMode: RenderMode.snapshot));
+
+        final sectionComponent = game.firstChild<SectionComponent>();
+        final spriteBatchComponent =
+            sectionComponent?.firstChild<SpriteBatchComponent>();
+        expect(sectionComponent, isNotNull);
+        expect(spriteBatchComponent, isNull);
+
+        final spriteComponent = game.firstChild<SpriteComponent>();
+        expect(spriteComponent, isNotNull);
+      },
+    );
   });
 }

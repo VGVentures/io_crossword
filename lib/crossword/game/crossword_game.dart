@@ -148,7 +148,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     camera.viewfinder.zoom -= 0.05;
 
     if (camera.viewfinder.zoom < 0.8 && oldZoom > 0.8) {
-      bloc.add(const SwitchRenderMode());
+      bloc.add(const RenderModeSwitched(RenderMode.snapshot));
     }
     _updateVisibleSections();
   }
@@ -160,7 +160,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     camera.viewfinder.zoom += 0.05;
 
     if (camera.viewfinder.zoom > 0.8 && oldZoom < 0.8) {
-      bloc.add(const SwitchRenderMode());
+      bloc.add(const RenderModeSwitched(RenderMode.game));
     }
     _updateVisibleSections();
   }

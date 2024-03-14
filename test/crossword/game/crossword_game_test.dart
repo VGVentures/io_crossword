@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -351,6 +353,47 @@ void main() {
         await game.ready();
         game.zoomOut();
         expect(game.camera.viewfinder.zoom, .95);
+      },
+    );
+
+    testWithGame(
+      'zoom out adds RenderModeSwitched to snapshot when less than 0.8',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          sectionSize: 400,
+          sections: {},
+        );
+        mockState(state);
+
+        await game.ready();
+        for (var i = 0; i < 5; i++) {
+          game.zoomOut();
+        }
+
+        verify(
+          () => bloc.add(RenderModeSwitched(RenderMode.snapshot)),
+        ).called(1);
+      },
+    );
+
+    testWithGame(
+      'zoom in adds SwitchRenderMode when more than 0.8',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          sectionSize: 400,
+          sections: {},
+        );
+        mockState(state);
+
+        await game.ready();
+        for (var i = 0; i < 4; i++) {
+          game.zoomOut();
+        }
+
+        game.zoomIn();
+        verify(() => bloc.add(RenderModeSwitched(RenderMode.game))).called(1);
       },
     );
 

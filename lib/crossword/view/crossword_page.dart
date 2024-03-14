@@ -3,29 +3,49 @@ import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 
 class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider(
-        create: (BuildContext context) => CrosswordBloc(
-          context.read<CrosswordRepository>(),
-        )..add(const BoardSectionRequested((0, 0))),
-        child: const CrosswordPage(),
-      ),
+      builder: (_) => const CrosswordPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const CrosswordView();
+    return BlocProvider(
+      create: (BuildContext context) => CrosswordBloc(
+        crosswordRepository: context.read<CrosswordRepository>(),
+      )..add(const BoardSectionRequested((0, 0))),
+      child: const CrosswordView(),
+    );
   }
 }
 
-class CrosswordView extends StatelessWidget {
+class CrosswordView extends StatefulWidget {
   const CrosswordView({super.key});
+
+  @override
+  State<CrosswordView> createState() => _CrosswordViewState();
+}
+
+class _CrosswordViewState extends State<CrosswordView> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const GameIntroPage(),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<CrosswordBloc>();

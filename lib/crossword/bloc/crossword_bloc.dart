@@ -1,28 +1,39 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:bloc/bloc.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:game_domain/game_domain.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
 
+typedef ImageDecodeCall = Future<ui.Image> Function(Uint8List);
+
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
-  CrosswordBloc(this.crosswordRepository) : super(const CrosswordInitial()) {
+  CrosswordBloc({
+    required CrosswordRepository crosswordRepository,
+    ImageDecodeCall? imageDecodeCall,
+  })  : _crosswordRepository = crosswordRepository,
+        _imageDecodeCall = imageDecodeCall ?? decodeImageFromList,
+        super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
-    on<SwitchRenderMode>(_onSwitchRenderMode);
+    on<RenderModeSwitched>(_onRenderModeSwitched);
   }
 
-  final CrosswordRepository crosswordRepository;
+  final CrosswordRepository _crosswordRepository;
+  final ImageDecodeCall _imageDecodeCall;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) async {
     return emit.forEach(
-      crosswordRepository.watchSectionFromPosition(
+      _crosswordRepository.watchSectionFromPosition(
         event.position.$1,
         event.position.$2,
       ),
@@ -106,17 +117,43 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     }
   }
 
-  void _onSwitchRenderMode(
-    SwitchRenderMode event,
+  Future<void> _onRenderModeSwitched(
+    RenderModeSwitched event,
     Emitter<CrosswordState> emit,
-  ) {
+  ) async {
     if (state is CrosswordLoaded) {
-      final loadedState = state as CrosswordLoaded;
+      var loadedState = state as CrosswordLoaded;
+
+      if (event.renderMode == RenderMode.snapshot) {
+        final sectionsWithSnapshot = loadedState.sections.values
+            .where((section) => section.snapshotUrl != null);
+        final sectionsToLoad = sectionsWithSnapshot.where(
+          (section) =>
+              loadedState.sectionsSnapshots[(
+                section.position.x,
+                section.position.y
+              )] ==
+              null,
+        );
+
+        for (final section in sectionsToLoad) {
+          final bytes = await _crosswordRepository.fetchSectionSnapshotBytes(
+            section.snapshotUrl!,
+          );
+          final image = await _imageDecodeCall(bytes);
+
+          loadedState = loadedState.copyWith(
+            sectionsSnapshots: {
+              ...loadedState.sectionsSnapshots,
+              (section.position.x, section.position.y): image,
+            },
+          );
+        }
+      }
+
       emit(
         loadedState.copyWith(
-          renderMode: loadedState.renderMode == RenderMode.game
-              ? RenderMode.snapshot
-              : RenderMode.game,
+          renderMode: event.renderMode,
         ),
       );
     }
