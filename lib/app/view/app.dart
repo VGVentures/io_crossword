@@ -2,6 +2,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -26,12 +27,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        useMaterial3: true,
-      ),
+      theme: IoCrosswordTheme.themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const CrosswordPage(),
