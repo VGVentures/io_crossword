@@ -240,10 +240,8 @@ class BoardRenderer {
               : position.$2 * cellSize
         );
         if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
-
-          final srcX = word.solvedTimestamp == null
-              ? 2080
-              : charIndex * cellSize;
+          final srcX =
+              word.solvedTimestamp == null ? 2080 : charIndex * cellSize;
 
           _compositeImage(
             image,
