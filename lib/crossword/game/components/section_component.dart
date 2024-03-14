@@ -105,9 +105,9 @@ class SectionComponent extends PositionComponent
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       _sectionImage = state.sectionsSnapshots[index];
-      _renderMode = state.renderMode;
       if (_boardSection == null) {
         final boardSection = state.sections[index];
+        _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
           _loadBoardSection();
@@ -117,6 +117,7 @@ class SectionComponent extends PositionComponent
           for (final child in children) {
             child.removeFromParent();
           }
+          _renderMode = state.renderMode;
           _loadBoardSection();
         }
         final selectedWord = state.selectedWord?.wordId;
