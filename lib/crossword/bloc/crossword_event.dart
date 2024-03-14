@@ -22,3 +22,10 @@ class WordSelected extends CrosswordEvent {
   @override
   List<Object> get props => [section, word];
 }
+
+class SwitchRenderMode extends CrosswordEvent {
+  const SwitchRenderMode();
+
+  @override
+  List<Object?> get props => [];
+}

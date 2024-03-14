@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +14,8 @@ import 'package:mocktail/mocktail.dart';
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockWord extends Mock implements Word {}
+
+class FakeImage extends Fake implements ui.Image {}
 
 void main() {
   group('CrosswordBloc', () {
@@ -49,6 +54,7 @@ void main() {
       ),
     ];
     const sectionSize = 40;
+    final sectionImage = FakeImage();
     final section = BoardSection(
       id: '',
       position: const Point(1, 1),
@@ -56,21 +62,27 @@ void main() {
       words: words,
       borderWords: const [],
     );
+
     late CrosswordRepository crosswordRepository;
+
+    Future<ui.Image> decodeImage(Uint8List bytes) async => sectionImage;
 
     setUp(() {
       crosswordRepository = _MockCrosswordRepository();
     });
 
     test('can be instantiated', () {
-      expect(CrosswordBloc(crosswordRepository), isA<CrosswordBloc>());
+      expect(
+        CrosswordBloc(crosswordRepository: crosswordRepository),
+        isA<CrosswordBloc>(),
+      );
     });
 
     group('BoardSectionRequested', () {
       blocTest<CrosswordBloc, CrosswordState>(
         'adds first sections when BoardSectionRequested is '
         'called for the first time',
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         setUp: () {
           when(
             () => crosswordRepository.watchSectionFromPosition(1, 1),
@@ -90,7 +102,7 @@ void main() {
 
       blocTest<CrosswordBloc, CrosswordState>(
         'adds new sections when BoardSectionRequested is added',
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         setUp: () {
           when(
             () => crosswordRepository.watchSectionFromPosition(1, 1),
@@ -124,7 +136,7 @@ void main() {
         setUp: () {
           when(() => word.id).thenReturn('word-id');
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -164,7 +176,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((1, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -218,7 +230,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 1), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -273,7 +285,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((2, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -342,7 +354,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 2), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -411,7 +423,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -466,7 +478,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -521,7 +533,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((3, 0), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -572,7 +584,7 @@ void main() {
           when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
-        build: () => CrosswordBloc(crosswordRepository),
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
         act: (bloc) => bloc.add(WordSelected((0, 3), word)),
         seed: () => CrosswordLoaded(
           sectionSize: sectionSize,
@@ -612,6 +624,55 @@ void main() {
             (error) => error.toString(),
             'description',
             'Exception: Word not found in crossword',
+          ),
+        ],
+      );
+    });
+
+    group('SwitchRenderMode', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits state with sections snapshots if render switch from game'
+        ' to snapshot',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          imageDecodeCall: decodeImage,
+        ),
+        setUp: () {
+          when(
+            () => crosswordRepository.fetchSectionSnapshotBytes(any()),
+          ).thenAnswer((_) async => Future.value(Uint8List(0)));
+        },
+        seed: () => const CrosswordLoaded(
+          sectionSize: sectionSize,
+          sections: {
+            (0, 0): BoardSection(
+              id: '0',
+              position: Point(0, 0),
+              size: sectionSize,
+              words: [],
+              borderWords: [],
+              snapshotUrl: 'url',
+            ),
+          },
+        ),
+        act: (bloc) => bloc.add(const SwitchRenderMode()),
+        expect: () => <CrosswordState>[
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {
+              (0, 0): BoardSection(
+                id: '0',
+                position: Point(0, 0),
+                size: sectionSize,
+                words: [],
+                borderWords: [],
+                snapshotUrl: 'url',
+              ),
+            },
+            sectionsSnapshots: {
+              (0, 0): sectionImage,
+            },
+            renderMode: RenderMode.snapshot,
           ),
         ],
       );

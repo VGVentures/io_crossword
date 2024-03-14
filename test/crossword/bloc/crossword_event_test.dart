@@ -52,5 +52,14 @@ void main() {
         );
       });
     });
+
+    group('SwitchRenderMode', () {
+      test('can be instantiated', () {
+        expect(SwitchRenderMode(), isA<SwitchRenderMode>());
+      });
+      test('supports value comparisons', () {
+        expect(SwitchRenderMode(), SwitchRenderMode());
+      });
+    });
   });
 }
