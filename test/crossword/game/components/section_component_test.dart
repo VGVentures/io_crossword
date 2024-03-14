@@ -33,7 +33,10 @@ void main() {
       mockState(state);
     });
 
-    CrosswordGame createGame() => CrosswordGame(bloc);
+    CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
+          bloc,
+          showDebugOverlay: showDebugOverlay,
+        );
 
     testWithGame(
       'loads',
@@ -46,6 +49,18 @@ void main() {
               ),
           hasLength(1),
         );
+      },
+    );
+
+    testWithGame(
+      'adds debug components when the game is showing debug overlay',
+      () => createGame(showDebugOverlay: true),
+      (game) async {
+        final section = SectionComponent(index: (100, 100));
+        await game.world.ensureAdd(section);
+
+        expect(section.firstChild<SectionDebugIndex>(), isNotNull);
+        expect(section.firstChild<SectionDebugOutline>(), isNotNull);
       },
     );
 
@@ -223,7 +238,7 @@ void main() {
 
         verify(
           () => bloc.add(
-            const BoardSectionRequested((1, 1)),
+            const BoardSectionRequested((100, 100)),
           ),
         ).called(1);
       },
