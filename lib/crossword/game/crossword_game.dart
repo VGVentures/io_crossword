@@ -78,8 +78,8 @@ class CrosswordGame extends FlameGame with PanDetector {
     final cameraPosition = camera.viewfinder.position;
 
     final cameraPositionIndex = Vector2(
-      cameraPosition.x / sectionSize,
-      cameraPosition.y / sectionSize,
+      (cameraPosition.x / sectionSize).floorToDouble(),
+      (cameraPosition.y / sectionSize).floorToDouble(),
     );
 
     final startSection = cameraPositionIndex -
