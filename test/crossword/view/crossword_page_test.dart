@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -26,6 +27,15 @@ extension on WidgetTester {
 
 void main() {
   group('CrosswordPage', () {
+    testWidgets('renders CrosswordView', (tester) async {
+      await tester.pumpRoute(CrosswordPage.route());
+      await tester.pump();
+
+      expect(find.byType(CrosswordView), findsOneWidget);
+    });
+  });
+
+  group('CrosswordView', () {
     late CrosswordBloc bloc;
 
     setUp(() {
@@ -38,11 +48,12 @@ void main() {
       );
     });
 
-    testWidgets('renders CrosswordView', (tester) async {
-      await tester.pumpRoute(CrosswordPage.route());
-      await tester.pump();
+    testWidgets('shows the game intro page dialog', (tester) async {
+      when(() => bloc.state).thenReturn(const CrosswordInitial());
 
-      expect(find.byType(CrosswordView), findsOneWidget);
+      await tester.pumpCrosswordView(bloc);
+      await tester.pump();
+      expect(find.byType(GameIntroPage), findsOneWidget);
     });
 
     testWidgets('renders loading when is initial', (tester) async {
@@ -88,49 +99,57 @@ void main() {
       expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
     });
 
-    testWidgets('can zoom in', (tester) async {
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: const {},
-        ),
-      );
+    testWidgets(
+      'can zoom in',
+      (tester) async {
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: const {},
+          ),
+        );
 
-      await tester.pumpCrosswordView(bloc);
+        await tester.pumpCrosswordView(bloc);
 
-      final crosswordViewState = tester.state<LoadedBoardViewState>(
-        find.byType(LoadedBoardView),
-      );
-      await crosswordViewState.game.loaded;
+        final crosswordViewState = tester.state<LoadedBoardViewState>(
+          find.byType(LoadedBoardView),
+        );
+        await crosswordViewState.game.loaded;
 
-      await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
+        await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
 
-      expect(
-        crosswordViewState.game.camera.viewfinder.zoom,
-        greaterThan(1),
-      );
-    });
+        expect(
+          crosswordViewState.game.camera.viewfinder.zoom,
+          greaterThan(1),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 30)),
+    );
 
-    testWidgets('can zoom out', (tester) async {
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: const {},
-        ),
-      );
+    testWidgets(
+      'can zoom out',
+      (tester) async {
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: const {},
+          ),
+        );
 
-      await tester.pumpCrosswordView(bloc);
-      final crosswordViewState = tester.state<LoadedBoardViewState>(
-        find.byType(LoadedBoardView),
-      );
-      await crosswordViewState.game.loaded;
+        await tester.pumpCrosswordView(bloc);
+        final crosswordViewState = tester.state<LoadedBoardViewState>(
+          find.byType(LoadedBoardView),
+        );
+        await crosswordViewState.game.loaded;
 
-      await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
+        await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
 
-      expect(
-        crosswordViewState.game.camera.viewfinder.zoom,
-        lessThan(1),
-      );
-    });
+        expect(
+          crosswordViewState.game.camera.viewfinder.zoom,
+          lessThan(1),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 30)),
+    );
   });
 }
