@@ -55,10 +55,19 @@ void main() {
 
     group('RenderModeSwitched', () {
       test('can be instantiated', () {
-        expect(RenderModeSwitched(), isA<RenderModeSwitched>());
+        expect(RenderModeSwitched(RenderMode.game), isA<RenderModeSwitched>());
       });
       test('supports value comparisons', () {
-        expect(RenderModeSwitched(), RenderModeSwitched());
+        expect(
+          RenderModeSwitched(RenderMode.game),
+          RenderModeSwitched(RenderMode.game),
+        );
+        expect(
+          RenderModeSwitched(RenderMode.game),
+          isNot(
+            RenderModeSwitched(RenderMode.snapshot),
+          ),
+        );
       });
     });
   });

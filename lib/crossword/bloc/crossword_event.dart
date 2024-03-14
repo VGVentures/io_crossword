@@ -24,8 +24,10 @@ class WordSelected extends CrosswordEvent {
 }
 
 class RenderModeSwitched extends CrosswordEvent {
-  const RenderModeSwitched();
+  const RenderModeSwitched(this.renderMode);
+
+  final RenderMode renderMode;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [renderMode];
 }

@@ -117,7 +117,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     if (state is CrosswordLoaded) {
       var loadedState = state as CrosswordLoaded;
 
-      if (loadedState.renderMode == RenderMode.game) {
+      if (event.renderMode == RenderMode.snapshot) {
         final sectionsWithSnapshot = loadedState.sections.values
             .where((section) => section.snapshotUrl != null);
 
@@ -138,9 +138,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
 
       emit(
         loadedState.copyWith(
-          renderMode: loadedState.renderMode == RenderMode.game
-              ? RenderMode.snapshot
-              : RenderMode.game,
+          renderMode: event.renderMode,
         ),
       );
     }

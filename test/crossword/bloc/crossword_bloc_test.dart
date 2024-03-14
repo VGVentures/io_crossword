@@ -655,7 +655,7 @@ void main() {
             ),
           },
         ),
-        act: (bloc) => bloc.add(const RenderModeSwitched()),
+        act: (bloc) => bloc.add(const RenderModeSwitched(RenderMode.snapshot)),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,
