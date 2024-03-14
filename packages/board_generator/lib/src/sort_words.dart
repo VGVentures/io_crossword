@@ -70,7 +70,7 @@ Map<int, Map<int, Map<String, Set<String>>>> sortWords(
       final mapCharacterPosition = map[word.length]![i]!;
 
       if (!mapCharacterPosition.containsKey(character)) {
-        mapCharacterPosition[character] = <String>{word};
+        mapCharacterPosition[character] = <String>{};
       }
 
       mapCharacterPosition[character]!.add(word);
