@@ -187,7 +187,7 @@ class CrosswordGame extends FlameGame with PanDetector {
   }
 
   @override
-    Color backgroundColor() {
-      return const Color(0xFFFFFFFF);
-    }
+  Color backgroundColor() {
+    return const Color(0xFFFFFFFF);
+  }
 }
