@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template primary_button}
 /// A primary button.
@@ -24,7 +25,10 @@ class PrimaryButton extends StatelessWidget {
       height: 48,
       child: FilledButton(
         onPressed: onPressed,
-        child: Text(label),
+        child: Text(
+          label,
+          style: IoCrosswordTextStyles.bodyLG,
+        ),
       ),
     );
   }
