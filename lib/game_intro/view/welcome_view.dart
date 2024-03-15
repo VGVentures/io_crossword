@@ -15,7 +15,7 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return CardScrollableContentWithButton(
       buttonLabel: l10n.getStarted,
@@ -29,7 +29,7 @@ class WelcomeView extends StatelessWidget {
           const SizedBox(height: IoCrosswordSpacing.xlg),
           Text(
             l10n.welcome,
-            // style: IoCrosswordTextStyles.headlineMD,
+            style: textTheme.headlineLarge,
           ),
           const SizedBox(height: IoCrosswordSpacing.sm),
           Text(
