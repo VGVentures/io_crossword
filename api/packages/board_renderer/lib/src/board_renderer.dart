@@ -12,6 +12,8 @@ typedef CreateCommand = img.Command Function();
 typedef CreateImage = img.Image Function({
   required int width,
   required int height,
+  int numChannels,
+  img.Color backgroundColor,
 });
 
 /// A function that draws a rectangle in an image.
@@ -131,6 +133,8 @@ class BoardRenderer {
     final image = _createImage(
       width: totalWidth + cellSize,
       height: totalHeight + cellSize,
+      numChannels: 4,
+      backgroundColor: img.ColorRgba8(0, 255, 255, 255),
     );
 
     for (final word in words) {
@@ -168,6 +172,7 @@ class BoardRenderer {
 
     final createdCommand = _createCommand()
       ..image(image)
+      ..convert(numChannels: 4, alpha: 0)
       ..encodePng();
 
     await createdCommand.execute();
@@ -194,7 +199,7 @@ class BoardRenderer {
   Future<Uint8List> renderSection(BoardSection section) async {
     final words = [...section.words, ...section.borderWords];
 
-    const cellSize = 40;
+    const cellSize = 80;
 
     final totalWidth = section.size * cellSize;
     final totalHeight = section.size * cellSize;
@@ -202,6 +207,8 @@ class BoardRenderer {
     final image = _createImage(
       width: totalWidth,
       height: totalHeight,
+      numChannels: 4,
+      backgroundColor: img.ColorRgba8(0, 255, 255, 255),
     );
 
     const url = 'http://127.0.0.1:8080/assets/letters.png';
@@ -233,6 +240,9 @@ class BoardRenderer {
               : position.$2 * cellSize
         );
         if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
+          final srcX =
+              word.solvedTimestamp == null ? 2080 : charIndex * cellSize;
+
           _compositeImage(
             image,
             texture,
@@ -240,7 +250,7 @@ class BoardRenderer {
             dstY: dstY,
             dstW: cellSize,
             dstH: cellSize,
-            srcX: charIndex * cellSize,
+            srcX: srcX,
             srcY: 0,
             srcW: cellSize,
             srcH: cellSize,
