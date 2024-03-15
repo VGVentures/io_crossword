@@ -21,7 +21,7 @@ void main() {
 
       child = BlocProvider.value(
         value: bloc,
-        child: const WelcomeView(),
+        child: const IoCrosswordCard(child: WelcomeView()),
       );
     });
 
