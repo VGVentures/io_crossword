@@ -16,33 +16,33 @@ class WelcomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Placeholder(fallbackHeight: 150),
-        const SizedBox(height: IoCrosswordSpacing.xlg),
-        Text(
-          l10n.welcome,
-          style: IoCrosswordTextStyles.headlineMD,
-        ),
-        const SizedBox(height: IoCrosswordSpacing.sm),
-        Text(
-          l10n.welcomeSubtitle,
-          style: IoCrosswordTextStyles.bodyLG,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const Spacer(),
-        const RecordProgress(),
-        const SizedBox(height: IoCrosswordSpacing.xxlg),
-        PrimaryButton(
-          onPressed: () {
-            context.read<GameIntroBloc>().add(const WelcomeCompleted());
-          },
-          label: l10n.getStarted,
-        ),
-      ],
+    return CardScrollableContentWithButton(
+      buttonLabel: l10n.getStarted,
+      onPressed: () {
+        context.read<GameIntroBloc>().add(const WelcomeCompleted());
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Placeholder(fallbackHeight: 150),
+          const SizedBox(height: IoCrosswordSpacing.xlg),
+          Text(
+            l10n.welcome,
+            style: IoCrosswordTextStyles.bodyLG,
+          ),
+          const SizedBox(height: IoCrosswordSpacing.sm),
+          Text(
+            l10n.welcomeSubtitle,
+            style: IoCrosswordTextStyles.bodyLG,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          const RecordProgress(),
+          const SizedBox(height: IoCrosswordSpacing.xxlg),
+        ],
+      ),
     );
   }
 }

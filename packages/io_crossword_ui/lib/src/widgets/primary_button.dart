@@ -18,11 +18,14 @@ class PrimaryButton extends StatelessWidget {
   /// The text to display in the button.
   final String label;
 
+  /// The default height of the [PrimaryButton].
+  static const defaultHeight = 48.0;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 48,
+      height: defaultHeight,
       child: FilledButton(
         onPressed: onPressed,
         child: Text(
