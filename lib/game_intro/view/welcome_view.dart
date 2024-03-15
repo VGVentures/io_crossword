@@ -30,6 +30,8 @@ class WelcomeView extends StatelessWidget {
           l10n.welcomeSubtitle,
           style: IoCrosswordTextStyles.bodyLG,
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         const Spacer(),
         const RecordProgress(),
