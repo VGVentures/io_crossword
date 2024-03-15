@@ -15,7 +15,6 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
 
     return CardScrollableContentWithButton(
       buttonLabel: l10n.getStarted,
@@ -29,7 +28,7 @@ class WelcomeView extends StatelessWidget {
           const SizedBox(height: IoCrosswordSpacing.xlg),
           Text(
             l10n.welcome,
-            style: textTheme.headlineLarge,
+            style: IoCrosswordTextStyles.bodyLG,
           ),
           const SizedBox(height: IoCrosswordSpacing.sm),
           Text(
@@ -63,7 +62,10 @@ class RecordProgress extends StatelessWidget {
 
     return Column(
       children: [
-        Text(l10n.wordsToBreakRecord),
+        Text(
+          l10n.wordsToBreakRecord,
+          style: IoCrosswordTextStyles.bodyLG,
+        ),
         const SizedBox(height: IoCrosswordSpacing.sm),
         LinearProgressIndicator(
           value: 0.5,
@@ -71,7 +73,10 @@ class RecordProgress extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
-        Text('${f.format(solvedWords)} / ${f.format(totalWords)}'),
+        Text(
+          '${f.format(solvedWords)} / ${f.format(totalWords)}',
+          style: IoCrosswordTextStyles.bodyLG.medium,
+        ),
       ],
     );
   }
