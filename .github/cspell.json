@@ -23,6 +23,7 @@
     "página",
     "Texto",
     "goldens",
-    "gsutil"
+    "gsutil",
+    "appspot"
   ]
 }
