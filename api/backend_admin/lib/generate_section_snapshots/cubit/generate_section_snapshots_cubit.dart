@@ -46,15 +46,24 @@ class GenerateSectionSnapshotsCubit
       ),
     );
     try {
-      for (final section in state.sections) {
-        await httpClient.generateSectionSnapshot(
-          '${section.position.x},${section.position.y}',
-        );
-        emit(
-          state.copyWith(
-            sectionsGenerated: state.sectionsGenerated + 1,
-          ),
-        );
+      final allSections = List<BoardSection>.from(state.sections);
+      while (allSections.isNotEmpty) {
+        final taken = allSections.take(8);
+        allSections.removeWhere(taken.contains);
+        final futures = taken.map((section) {
+          return httpClient
+              .generateSectionSnapshot(
+            '${section.position.x},${section.position.y}',
+          )
+              .then((_) {
+            emit(
+              state.copyWith(
+                sectionsGenerated: state.sectionsGenerated + 1,
+              ),
+            );
+          });
+        });
+        await Future.wait(futures);
       }
       emit(state.copyWith(status: GenerateSectionSnapshotsStatus.success));
     } on Exception catch (e) {

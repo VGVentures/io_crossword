@@ -36,6 +36,7 @@ class CrosswordLoaded extends CrosswordState {
     this.selectedWord,
     this.renderMode = RenderMode.game,
     this.sectionsSnapshots = const {},
+    this.mascot = Mascots.dash,
   });
 
   final int width;
@@ -45,6 +46,7 @@ class CrosswordLoaded extends CrosswordState {
   final Map<(int, int), BoardSection> sections;
   final Map<(int, int), ui.Image> sectionsSnapshots;
   final WordSelection? selectedWord;
+  final Mascots mascot;
 
   CrosswordLoaded copyWith({
     int? width,
@@ -54,6 +56,7 @@ class CrosswordLoaded extends CrosswordState {
     Map<(int, int), ui.Image>? sectionsSnapshots,
     WordSelection? selectedWord,
     RenderMode? renderMode,
+    Mascots? mascot,
   }) {
     return CrosswordLoaded(
       width: width ?? this.width,
@@ -63,6 +66,7 @@ class CrosswordLoaded extends CrosswordState {
       sectionsSnapshots: sectionsSnapshots ?? this.sectionsSnapshots,
       selectedWord: selectedWord ?? this.selectedWord,
       renderMode: renderMode ?? this.renderMode,
+      mascot: mascot ?? this.mascot,
     );
   }
 
@@ -75,6 +79,7 @@ class CrosswordLoaded extends CrosswordState {
         sectionsSnapshots,
         selectedWord,
         renderMode,
+        mascot,
       ];
 }
 

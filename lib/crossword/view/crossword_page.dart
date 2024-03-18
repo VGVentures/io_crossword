@@ -38,10 +38,14 @@ class _CrosswordViewState extends State<CrosswordView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bloc = context.read<CrosswordBloc>();
       showDialog<void>(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const GameIntroPage(),
+        builder: (context) => BlocProvider.value(
+          value: bloc,
+          child: const GameIntroPage(),
+        ),
       );
     });
   }
