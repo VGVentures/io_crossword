@@ -1,8 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -20,19 +24,49 @@ void main() {
 
       child = BlocProvider.value(
         value: bloc,
-        child: const MascotSelectionView(),
+        child: Material(child: MascotSelectionView()),
       );
     });
 
     testWidgets(
-      'adds MascotSubmitted event when tapping button',
+      'adds MascotSubmitted event when tapping button and a mascot is selected',
       (tester) async {
-        when(() => bloc.state).thenReturn(const GameIntroState());
+        when(() => bloc.state).thenReturn(
+          GameIntroState(
+            status: GameIntroStatus.mascotSelection,
+            selectedMascot: Mascots.dash,
+          ),
+        );
         await tester.pumpApp(child);
 
-        await tester.tap(find.byType(ElevatedButton));
+        await tester.tap(find.byType(PrimaryButton));
 
-        verify(() => bloc.add(const MascotSubmitted())).called(1);
+        verify(() => bloc.add(MascotSubmitted())).called(1);
+      },
+    );
+
+    testWidgets(
+      'renders 4 mascot items',
+      (tester) async {
+        when(() => bloc.state).thenReturn(GameIntroState());
+        await tester.pumpApp(child);
+
+        expect(find.byType(MascotItem), findsNWidgets(4));
+      },
+    );
+
+    testWidgets(
+      'emits MascotUpdated when tapping a mascot item',
+      (tester) async {
+        when(() => bloc.state).thenReturn(GameIntroState());
+        await tester.pumpApp(child);
+
+        final dashMascotItem = find.byWidgetPredicate(
+          (widget) => widget is MascotItem && widget.mascot == Mascots.dash,
+        );
+        await tester.tap(dashMascotItem);
+
+        verify(() => bloc.add(MascotUpdated(Mascots.dash))).called(1);
       },
     );
   });

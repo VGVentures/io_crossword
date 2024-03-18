@@ -12,7 +12,12 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class IoCrosswordCard extends StatelessWidget {
   /// {@macro io_crossword_card}
-  const IoCrosswordCard({super.key, this.child});
+  const IoCrosswordCard({
+    super.key,
+    this.maxWidth,
+    this.maxHeight,
+    this.child,
+  });
 
   /// The widget below this widget in the tree.
   ///
@@ -22,12 +27,29 @@ class IoCrosswordCard extends StatelessWidget {
   /// The [child] will be expanded to fill the [IoCrosswordCard].
   final Widget? child;
 
+  /// The maximum width of the [IoCrosswordCard].
+  /// If null, it will use [defaultMaxWidth].
+  final double? maxWidth;
+
+  /// The maximum height of the [IoCrosswordCard].
+  /// If null, it will use [defaultMaxHeight].
+  final double? maxHeight;
+
+  /// The maximum width of the [IoCrosswordCard].
+  static const defaultMaxWidth = 358.0;
+
+  /// The maximum height of the [IoCrosswordCard].
+  static const defaultMaxHeight = 540.0;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: const EdgeInsets.all(16),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 358, maxHeight: 540),
+        constraints: BoxConstraints(
+          maxWidth: maxWidth ?? defaultMaxWidth,
+          maxHeight: maxHeight ?? defaultMaxHeight,
+        ),
         child: Material(
           type: MaterialType.card,
           borderRadius: BorderRadius.circular(24),
