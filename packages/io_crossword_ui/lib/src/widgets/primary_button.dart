@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+// TODO(Ayad): delete because we can use [FilledButton] with theme update
+
 /// {@template primary_button}
 /// A primary button.
 /// {@endtemplate}

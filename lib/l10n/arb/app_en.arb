@@ -1,19 +1,95 @@
 {
-    "@@locale": "en",
-    "welcome": "Welcome!",
-    "@welcome": {
-        "description": "Welcome label"
-    },
-    "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
-    "@welcomeSubtitle": {
-        "description": "Subtitle to be displayed in the welcome modal"
-    },
-    "wordsToBreakRecord": "Words to break the world record",
-    "@wordsToBreakRecord": {
-        "description": "Label for the title regarding words to break the world record"
-    },
-    "getStarted": "Get Started",
-    "@getStarted": {
-        "description": "Get started label"
-    }
+  "@@locale": "en",
+  "welcome": "Welcome!",
+  "@welcome": {
+    "description": "Welcome label"
+  },
+  "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
+  "@welcomeSubtitle": {
+    "description": "Subtitle to be displayed in the welcome modal"
+  },
+  "wordsToBreakRecord": "Words to break the world record",
+  "@wordsToBreakRecord": {
+    "description": "Label for the title regarding words to break the world record"
+  },
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Get started label"
+  },
+  "aboutCrossword": "About I/O Crossword",
+  "@aboutCrossword": {
+    "description": "Title of the about modal"
+  },
+  "howToPlay": "How to play",
+  "@howToPlay": {
+    "description": "How to play label used in about modal tab"
+  },
+  "projectDetails": "Project Details",
+  "@projectDetails": {
+    "description": "Project Details label used in about modal tab"
+  },
+  "playNow": "Play now",
+  "@playNow": {
+    "description": "Play now label"
+  },
+  "couldNotOpenUrl": "Could not open url",
+  "@couldNotOpenUrl": {
+    "description": "Could not open url error message when trying to open link"
+  },
+  "learn": "Learn",
+  "@learn": {
+    "description": "learn label"
+  },
+  "howMade": "how I/O Crossword was made",
+  "@howMade": {
+    "description": "how I/O Crossword was made label that is used to open link"
+  },
+  "and": "and",
+  "@and": {
+    "description": "And label"
+  },
+  "openSourceCode": "grab the open source code",
+  "@openSourceCode": {
+    "description": "Open source code text to open link"
+  },
+  "otherLinks": "Other links",
+  "@otherLinks": {
+    "description": "Other links label"
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "Privacy Policy label"
+  },
+  "termsOfService": "Terms of Service",
+  "@termsOfService": {
+    "description": "Terms of Service label"
+  },
+  "faqs": "FAQs",
+  "@faqs": {
+    "description": "FAQs label"
+  },
+  "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
+  "@aboutHowToPlayFirstInstructions": {
+    "description": "The first step instruction on how to play"
+  },
+
+  "aboutHowToPlaySecondInstructions": "Tap an empty word on the board or the “Find a new word” button to get your clue. If you're stuck and need a hand, press the 'hint' button to get help from Google Gemini. You'll have 3 hints throughout the game.",
+  "@aboutHowToPlaySecondInstructions": {
+    "description": "The Second step instruction on how to play"
+  },
+
+  "aboutHowToPlayThirdInstructions": "The team who solves the word first claims that spot on the board. If you’re working on a word and it’s solved by another team, keep playing; you’ll still get points for solving it.",
+  "@aboutHowToPlayThirdInstructions": {
+    "description": "The Third step instruction on how to play"
+  },
+
+  "aboutHowToPlayFourthInstructions": "Correctly solve two or more words in a row without errors to build a streak. Streaks multiply the points you earn each time you solve a word.",
+  "@aboutHowToPlayFourthInstructions": {
+    "description": "The Fourth step instruction on how to play"
+  },
+
+  "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
+  "@aboutHowToPlayFifthInstructions": {
+    "description": "The Fifth step instruction on how to play"
+  }
 }

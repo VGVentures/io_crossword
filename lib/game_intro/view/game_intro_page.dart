@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -22,9 +23,16 @@ class GameIntroView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) => current.isIntroCompleted,
+      listenWhen: (previous, current) =>
+          !previous.isIntroCompleted && current.isIntroCompleted,
       listener: (context, state) {
         Navigator.of(context).pop();
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return const AboutView();
+          },
+        );
       },
       child: Center(
         child: IoCrosswordCard(
