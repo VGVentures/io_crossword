@@ -30,7 +30,13 @@ void main() {
 
         final renderer = BoardRenderer(
           createCommand: () => command,
-          createImage: ({required width, required height}) => image,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
           drawRect: (
             img.Image dst, {
             required int x1,
@@ -84,7 +90,13 @@ void main() {
 
           final renderer = BoardRenderer(
             createCommand: () => command,
-            createImage: ({required width, required height}) => image,
+            createImage: ({
+              required width,
+              required height,
+              int numChannels = 4,
+              img.Color? backgroundColor,
+            }) =>
+                image,
             drawRect: (
               img.Image dst, {
               required int x1,
@@ -165,7 +177,13 @@ void main() {
 
         final renderer = BoardRenderer(
           createCommand: () => command,
-          createImage: ({required width, required height}) => image,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
           drawRect: (
             img.Image dst, {
             required int x1,
@@ -225,7 +243,13 @@ void main() {
 
         final renderer = BoardRenderer(
           createCommand: () => command,
-          createImage: ({required width, required height}) => image,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
           drawRect: (
             img.Image dst, {
             required int x1,
@@ -293,7 +317,13 @@ void main() {
 
         final renderer = BoardRenderer(
           createCommand: () => command,
-          createImage: ({required width, required height}) => image,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
           drawRect: (
             img.Image dst, {
             required int x1,
@@ -359,7 +389,13 @@ void main() {
 
         final renderer = BoardRenderer(
           createCommand: () => command,
-          createImage: ({required width, required height}) => image,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
           drawRect: (
             img.Image dst, {
             required int x1,

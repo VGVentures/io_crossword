@@ -77,558 +77,149 @@ abstract class IoCrosswordTextStyles {
   /// Label small text style.
   TextStyle get labelSmall;
 
-  /// logo
-  static const TextStyle logo = TextStyle(
-    fontFamily: 'Roboto Serif',
-    fontWeight: FontWeight.bold,
-    fontSize: 40,
-    height: 1,
-    letterSpacing: 0,
-    package: package,
-  );
-
-  /// headlineH1
-  static const TextStyle headlineH1 = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 48,
-    height: 1.17,
-    letterSpacing: -2,
-    package: package,
-  );
-
-  /// headlineH2
-  static const TextStyle headlineH2 = TextStyle(
+  /// displayLG
+  static const TextStyle displayLG = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
+    fontSize: 57,
+    height: 1.12,
+    package: package,
+  );
+
+  /// displayMD
+  static const TextStyle displayMD = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w400,
+    fontSize: 45,
+    height: 1.15,
+    package: package,
+  );
+
+  /// displaySM
+  static const TextStyle displaySM = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w400,
     fontSize: 36,
-    height: 1.33,
-    letterSpacing: -1,
+    height: 1.22,
     package: package,
   );
 
-  /// headlineH3
-  static const TextStyle headlineH3 = TextStyle(
+  /// headlineLG
+  static const TextStyle headlineLG = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 32,
     height: 1.25,
-    letterSpacing: -0.5,
     package: package,
   );
 
-  /// headlineH4
-  static const TextStyle headlineH4 = TextStyle(
+  /// headlineMD
+  static const TextStyle headlineMD = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 28,
-    height: 1.14,
-    letterSpacing: -0.5,
+    height: 1.28,
     package: package,
   );
 
-  /// headlineH4Light
-  static const TextStyle headlineH4Light = TextStyle(
+  /// headlineSM
+  static const TextStyle headlineSM = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 28,
-    height: 1.29,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// headlineH5
-  static const TextStyle headlineH5 = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 24,
-    height: 1.17,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// headlineH5Light
-  static const TextStyle headlineH5Light = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 24,
-    height: 1.17,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// headlineH6
-  static const TextStyle headlineH6 = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 20,
-    height: 1.4,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// headlineH6Light
-  static const TextStyle headlineH6Light = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 20,
-    height: 1.4,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// mobileH1
-  static const TextStyle mobileH1 = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 36,
-    height: 1.33,
-    letterSpacing: -2,
-    package: package,
-  );
-
-  /// mobileH2
-  static const TextStyle mobileH2 = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 32,
-    height: 1.25,
-    letterSpacing: -1,
-    package: package,
-  );
-
-  /// mobileH3
-  static const TextStyle mobileH3 = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 28,
-    height: 1.29,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// mobileH4
-  static const TextStyle mobileH4 = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 24,
     height: 1.33,
-    letterSpacing: -0.5,
     package: package,
   );
 
-  /// mobileH4Light
-  static const TextStyle mobileH4Light = TextStyle(
+  /// titleLG
+  static const TextStyle titleLG = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 24,
-    height: 1.33,
-    letterSpacing: -0.5,
+    fontWeight: FontWeight.w400,
+    fontSize: 22,
+    height: 1.27,
     package: package,
   );
 
-  /// mobileH5
-  static const TextStyle mobileH5 = TextStyle(
+  /// titleMD
+  static const TextStyle titleMD = TextStyle(
     fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 20,
     height: 1.4,
-    letterSpacing: -0.25,
     package: package,
   );
 
-  /// mobileH5Light
-  static const TextStyle mobileH5Light = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 20,
-    height: 1.4,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// mobileH6
-  static const TextStyle mobileH6 = TextStyle(
+  /// titleSM
+  static const TextStyle titleSM = TextStyle(
     fontFamily: 'Google Sans',
     fontWeight: FontWeight.w500,
-    fontSize: 18,
-    height: 1.33,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// mobileH6Light
-  static const TextStyle mobileH6Light = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 18,
-    height: 1.33,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// bodyXL
-  static const TextStyle bodyXL = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 18,
-    height: 1.56,
-    letterSpacing: 0.15,
+    fontSize: 14,
+    height: 1.43,
     package: package,
   );
 
   /// bodyLG
   static const TextStyle bodyLG = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w400,
     fontSize: 16,
     height: 1.5,
-    letterSpacing: 0.15,
+    letterSpacing: -0.01,
     package: package,
   );
 
   /// bodyMD
   static const TextStyle bodyMD = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w400,
     fontSize: 14,
     height: 1.43,
-    letterSpacing: 0.5,
     package: package,
   );
 
   /// bodySM
   static const TextStyle bodySM = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w400,
     fontSize: 12,
-    height: 1.5,
-    letterSpacing: 0.25,
-    package: package,
-  );
-
-  /// bodyXS
-  static const TextStyle bodyXS = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 10,
-    height: 1.6,
-    letterSpacing: 0.5,
-    package: package,
-  );
-
-  /// bodyXSBold
-  static const TextStyle bodyXSBold = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.normal,
-    fontSize: 10,
-    height: 1.6,
-    letterSpacing: 0.5,
-    package: package,
-  );
-
-  /// buttonLG
-  static const TextStyle buttonLG = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    height: 1.5,
-    letterSpacing: 0.25,
-    package: package,
-  );
-
-  /// buttonMD
-  static const TextStyle buttonMD = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.w500,
-    fontSize: 14,
-    height: 1.43,
-    letterSpacing: 0.25,
-    package: package,
-  );
-
-  /// buttonSM
-  static const TextStyle buttonSM = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
-    height: 1.29,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// linkXL
-  static const TextStyle linkXL = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 18,
-    height: 1.56,
-    letterSpacing: 0.15,
-    decoration: TextDecoration.underline,
-    package: package,
-  );
-
-  /// linkLG
-  static const TextStyle linkLG = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 16,
-    height: 1.5,
-    letterSpacing: 0.15,
-    decoration: TextDecoration.underline,
-    package: package,
-  );
-
-  /// linkMD
-  static const TextStyle linkMD = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 14,
-    height: 1.43,
-    letterSpacing: 0.5,
-    decoration: TextDecoration.underline,
-    package: package,
-  );
-
-  /// linkSM
-  static const TextStyle linkSM = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 12,
-    height: 1.5,
-    letterSpacing: 0.25,
-    decoration: TextDecoration.underline,
-    package: package,
-  );
-
-  /// linkXS
-  static const TextStyle linkXS = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.normal,
-    fontSize: 10,
-    height: 1.6,
-    letterSpacing: 0.5,
-    decoration: TextDecoration.underline,
-    package: package,
-  );
-
-  /// cardNumberXXL
-  static const TextStyle cardNumberXXL = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 64,
-    height: 1,
-    letterSpacing: -1,
-    package: package,
-  );
-
-  /// cardNumberXL
-  static const TextStyle cardNumberXL = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 54,
-    height: 1,
-    letterSpacing: -1,
-    package: package,
-  );
-
-  /// cardNumberLG
-  static const TextStyle cardNumberLG = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 44,
-    height: 1,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// cardNumberMD
-  static const TextStyle cardNumberMD = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 34,
-    height: 1,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// cardNumberSM
-  static const TextStyle cardNumberSM = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 28,
-    height: 1,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardNumberXS
-  static const TextStyle cardNumberXS = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-    height: 1,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardNumberXXS
-  static const TextStyle cardNumberXXS = TextStyle(
-    fontFamily: 'Google Sans',
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-    height: 1,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardTitleXXL
-  static const TextStyle cardTitleXXL = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 28,
-    height: 1.14,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// cardTitleXL
-  static const TextStyle cardTitleXL = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 24,
-    height: 1.17,
-    letterSpacing: -0.5,
-    package: package,
-  );
-
-  /// cardTitleLG
-  static const TextStyle cardTitleLG = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 19,
-    height: 1.16,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardTitleMD
-  static const TextStyle cardTitleMD = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 15,
-    height: 1.13,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardTitleSM
-  static const TextStyle cardTitleSM = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-    height: 1.17,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardTitleXS
-  static const TextStyle cardTitleXS = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 8.5,
-    height: 1.18,
-    letterSpacing: -0.25,
-    package: package,
-  );
-
-  /// cardTitleXXS
-  static const TextStyle cardTitleXXS = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.bold,
-    fontSize: 4.5,
     height: 1.33,
-    letterSpacing: -0.25,
     package: package,
   );
 
-  /// cardDescriptionXXL
-  static const TextStyle cardDescriptionXXL = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
+  /// labelLG
+  static const TextStyle labelLG = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w500,
     fontSize: 14,
-    height: 1.29,
-    letterSpacing: 0,
+    height: 1.43,
     package: package,
   );
 
-  /// cardDescriptionXL
-  static const TextStyle cardDescriptionXL = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
+  /// labelMD
+  static const TextStyle labelMD = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w500,
     fontSize: 12,
-    height: 1.25,
-    letterSpacing: 0,
+    height: 1.66,
     package: package,
   );
 
-  /// cardDescriptionLG
-  static const TextStyle cardDescriptionLG = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
-    fontSize: 10,
-    height: 1.2,
-    letterSpacing: 0,
+  /// labelSM
+  static const TextStyle labelSM = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w500,
+    fontSize: 11,
+    height: 1.45,
     package: package,
   );
 
-  /// cardDescriptionMD
-  static const TextStyle cardDescriptionMD = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
-    fontSize: 7.5,
+  /// gridLetter
+  static const TextStyle gridLetter = TextStyle(
+    fontFamily: 'Google Sans',
+    fontWeight: FontWeight.w700,
+    fontSize: 16,
     height: 1.27,
-    letterSpacing: 0,
-    package: package,
-  );
-
-  /// cardDescriptionSM
-  static const TextStyle cardDescriptionSM = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
-    fontSize: 6,
-    height: 1.25,
-    letterSpacing: 0,
-    package: package,
-  );
-
-  /// cardDescriptionXS
-  static const TextStyle cardDescriptionXS = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
-    fontSize: 4.5,
-    height: 1.22,
-    letterSpacing: 0,
-    package: package,
-  );
-
-  /// cardDescriptionXXS
-  static const TextStyle cardDescriptionXXS = TextStyle(
-    fontFamily: 'Google Sans Text',
-    fontWeight: FontWeight.w400,
-    fontSize: 2.4000000953674316,
-    height: 1.25,
-    letterSpacing: 0,
-    package: package,
-  );
-
-  /// initialsInitial
-  static const TextStyle initialsInitial = TextStyle(
-    fontFamily: 'Saira',
-    fontWeight: FontWeight.w600,
-    fontSize: 48,
-    height: 1.17,
-    letterSpacing: 2,
+    letterSpacing: 1.2,
     package: package,
   );
 }
@@ -637,31 +228,31 @@ class _TextStylesDesktop extends IoCrosswordTextStyles {
   const _TextStylesDesktop._() : super._();
 
   @override
-  TextStyle get displayLarge => IoCrosswordTextStyles.headlineH1;
+  TextStyle get displayLarge => IoCrosswordTextStyles.displayLG;
 
   @override
-  TextStyle get displayMedium => IoCrosswordTextStyles.headlineH2;
+  TextStyle get displayMedium => IoCrosswordTextStyles.displayMD;
 
   @override
-  TextStyle get displaySmall => IoCrosswordTextStyles.headlineH3;
+  TextStyle get displaySmall => IoCrosswordTextStyles.displaySM;
 
   @override
-  TextStyle get headlineLarge => IoCrosswordTextStyles.headlineH4;
+  TextStyle get headlineLarge => IoCrosswordTextStyles.headlineLG;
 
   @override
-  TextStyle get headlineMedium => IoCrosswordTextStyles.headlineH4Light;
+  TextStyle get headlineMedium => IoCrosswordTextStyles.headlineMD;
 
   @override
-  TextStyle get headlineSmall => IoCrosswordTextStyles.headlineH5;
+  TextStyle get headlineSmall => IoCrosswordTextStyles.headlineSM;
 
   @override
-  TextStyle get titleLarge => IoCrosswordTextStyles.cardTitleXL;
+  TextStyle get titleLarge => IoCrosswordTextStyles.titleLG;
 
   @override
-  TextStyle get titleMedium => IoCrosswordTextStyles.cardTitleLG;
+  TextStyle get titleMedium => IoCrosswordTextStyles.titleMD;
 
   @override
-  TextStyle get titleSmall => IoCrosswordTextStyles.cardTitleMD;
+  TextStyle get titleSmall => IoCrosswordTextStyles.titleSM;
 
   @override
   TextStyle get bodyLarge => IoCrosswordTextStyles.bodyLG;
@@ -673,44 +264,44 @@ class _TextStylesDesktop extends IoCrosswordTextStyles {
   TextStyle get bodySmall => IoCrosswordTextStyles.bodySM;
 
   @override
-  TextStyle get labelLarge => IoCrosswordTextStyles.bodyLG;
+  TextStyle get labelLarge => IoCrosswordTextStyles.labelLG;
 
   @override
-  TextStyle get labelMedium => IoCrosswordTextStyles.bodySM;
+  TextStyle get labelMedium => IoCrosswordTextStyles.labelMD;
 
   @override
-  TextStyle get labelSmall => IoCrosswordTextStyles.bodyXS;
+  TextStyle get labelSmall => IoCrosswordTextStyles.labelSM;
 }
 
 class _TextStylesMobile extends IoCrosswordTextStyles {
   const _TextStylesMobile._() : super._();
 
   @override
-  TextStyle get displayLarge => IoCrosswordTextStyles.mobileH1;
+  TextStyle get displayLarge => IoCrosswordTextStyles.displayLG;
 
   @override
-  TextStyle get displayMedium => IoCrosswordTextStyles.mobileH2;
+  TextStyle get displayMedium => IoCrosswordTextStyles.displayMD;
 
   @override
-  TextStyle get displaySmall => IoCrosswordTextStyles.mobileH3;
+  TextStyle get displaySmall => IoCrosswordTextStyles.displaySM;
 
   @override
-  TextStyle get headlineLarge => IoCrosswordTextStyles.mobileH4;
+  TextStyle get headlineLarge => IoCrosswordTextStyles.headlineLG;
 
   @override
-  TextStyle get headlineMedium => IoCrosswordTextStyles.mobileH4Light;
+  TextStyle get headlineMedium => IoCrosswordTextStyles.headlineMD;
 
   @override
-  TextStyle get headlineSmall => IoCrosswordTextStyles.mobileH5;
+  TextStyle get headlineSmall => IoCrosswordTextStyles.headlineSM;
 
   @override
-  TextStyle get titleLarge => IoCrosswordTextStyles.cardTitleXL;
+  TextStyle get titleLarge => IoCrosswordTextStyles.titleLG;
 
   @override
-  TextStyle get titleMedium => IoCrosswordTextStyles.cardTitleLG;
+  TextStyle get titleMedium => IoCrosswordTextStyles.titleMD;
 
   @override
-  TextStyle get titleSmall => IoCrosswordTextStyles.cardTitleMD;
+  TextStyle get titleSmall => IoCrosswordTextStyles.titleSM;
 
   @override
   TextStyle get bodyLarge => IoCrosswordTextStyles.bodyLG;
@@ -722,11 +313,23 @@ class _TextStylesMobile extends IoCrosswordTextStyles {
   TextStyle get bodySmall => IoCrosswordTextStyles.bodySM;
 
   @override
-  TextStyle get labelLarge => IoCrosswordTextStyles.bodyLG;
+  TextStyle get labelLarge => IoCrosswordTextStyles.labelLG;
 
   @override
-  TextStyle get labelMedium => IoCrosswordTextStyles.bodySM;
+  TextStyle get labelMedium => IoCrosswordTextStyles.labelMD;
 
   @override
-  TextStyle get labelSmall => IoCrosswordTextStyles.bodyXS;
+  TextStyle get labelSmall => IoCrosswordTextStyles.labelSM;
+}
+
+/// Extension for [TextStyle] to add Font Weight
+extension TextStyleX on TextStyle? {
+  /// Copy with [FontWeight.w700]
+  TextStyle? get bold => this?.copyWith(fontWeight: FontWeight.w700);
+
+  /// Copy with [FontWeight.w500]
+  TextStyle? get medium => this?.copyWith(fontWeight: FontWeight.w500);
+
+  /// Copy with [FontWeight.w400]
+  TextStyle? get regular => this?.copyWith(fontWeight: FontWeight.w400);
 }

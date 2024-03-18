@@ -11,11 +11,7 @@ class IoCrosswordTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: _colorScheme,
-      textTheme: _textTheme.apply(
-        bodyColor: IoCrosswordColors.seedWhite,
-        displayColor: IoCrosswordColors.seedWhite,
-        decorationColor: IoCrosswordColors.seedWhite,
-      ),
+      textTheme: _textTheme,
     );
   }
 

@@ -1,25 +1,19 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+    "welcome": "Welcome!",
+    "@welcome": {
+        "description": "Welcome label"
     },
-    "loading": "Loading {label}...",
-    "@loading": {
-        "description": "Text for the loading page",
-        "placeholders": {
-            "label": {
-                "type": "String",
-                "example": "Stuff",
-                "description": "Label for what is being loaded"
-            }
-        }
+    "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
+    "@welcomeSubtitle": {
+        "description": "Subtitle to be displayed in the welcome modal"
     },
-    "loadingPhaseLabel": "{loadingPhase, select, audio{Delightful music} images{Beautiful scenery} other{ }}",
-    "@loadingPhaseLabel": {
-        "description": "Loading phases",
-        "placeholders": {
-            "loadingPhase": {}
-        }
+    "wordsToBreakRecord": "Words to break the world record",
+    "@wordsToBreakRecord": {
+        "description": "Label for the title regarding words to break the world record"
+    },
+    "getStarted": "Get Started",
+    "@getStarted": {
+        "description": "Get started label"
     }
 }
