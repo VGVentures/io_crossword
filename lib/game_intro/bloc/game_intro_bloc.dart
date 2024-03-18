@@ -24,15 +24,15 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     BoardProgressRequested event,
     Emitter<GameIntroState> emit,
   ) async {
-    final response = await Future.wait([
+    final [solved, total] = await Future.wait([
       _boardInfoRepository.getSolvedWordsCount(),
       _boardInfoRepository.getTotalWordsCount(),
     ]);
 
     emit(
       state.copyWith(
-        solvedWords: response.first,
-        totalWords: response.last,
+        solvedWords: solved,
+        totalWords: total,
       ),
     );
   }
