@@ -1,31 +1,43 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 
 void main() {
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with mascot selection status when WelcomeCompleted is added',
     build: GameIntroBloc.new,
-    act: (bloc) => bloc.add(const WelcomeCompleted()),
+    act: (bloc) => bloc.add(WelcomeCompleted()),
     expect: () => <GameIntroState>[
-      const GameIntroState(status: GameIntroStatus.mascotSelection),
+      GameIntroState(status: GameIntroStatus.mascotSelection),
+    ],
+  );
+
+  blocTest<GameIntroBloc, GameIntroState>(
+    'emits state with updated selected mascot when MascotUpdated is added',
+    build: GameIntroBloc.new,
+    act: (bloc) => bloc.add(MascotUpdated(Mascots.dino)),
+    expect: () => <GameIntroState>[
+      GameIntroState(selectedMascot: Mascots.dino),
     ],
   );
 
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with initials input status when MascotSubmitted is added',
     build: GameIntroBloc.new,
-    act: (bloc) => bloc.add(const MascotSubmitted()),
+    act: (bloc) => bloc.add(MascotSubmitted()),
     expect: () => <GameIntroState>[
-      const GameIntroState(status: GameIntroStatus.initialsInput),
+      GameIntroState(status: GameIntroStatus.initialsInput),
     ],
   );
 
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with intro completed when InitialsSubmitted is added',
     build: GameIntroBloc.new,
-    act: (bloc) => bloc.add(const InitialsSubmitted()),
+    act: (bloc) => bloc.add(InitialsSubmitted()),
     expect: () => <GameIntroState>[
-      const GameIntroState(isIntroCompleted: true),
+      GameIntroState(isIntroCompleted: true),
     ],
   );
 }
