@@ -6,6 +6,15 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 
 void main() {
   group('GameIntroEvent', () {
+    group('BoardProgressRequested', () {
+      test('supports value comparisons', () {
+        expect(
+          BoardProgressRequested(),
+          equals(BoardProgressRequested()),
+        );
+      });
+    });
+
     group('WelcomeCompleted', () {
       test('supports value comparisons', () {
         expect(

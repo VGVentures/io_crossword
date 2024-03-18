@@ -4,6 +4,13 @@ sealed class GameIntroEvent extends Equatable {
   const GameIntroEvent();
 }
 
+class BoardProgressRequested extends GameIntroEvent {
+  const BoardProgressRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
 class WelcomeCompleted extends GameIntroEvent {
   const WelcomeCompleted();
 

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -6,11 +7,34 @@ part 'game_intro_event.dart';
 part 'game_intro_state.dart';
 
 class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
-  GameIntroBloc() : super(const GameIntroState()) {
+  GameIntroBloc({
+    required BoardInfoRepository boardInfoRepository,
+  })  : _boardInfoRepository = boardInfoRepository,
+        super(const GameIntroState()) {
+    on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
     on<MascotSubmitted>(_onMascotSubmitted);
     on<InitialsSubmitted>(_onInitialsSubmitted);
+  }
+
+  final BoardInfoRepository _boardInfoRepository;
+
+  Future<void> _onBoardProgressRequested(
+    BoardProgressRequested event,
+    Emitter<GameIntroState> emit,
+  ) async {
+    final response = await Future.wait([
+      _boardInfoRepository.getSolvedWordsCount(),
+      _boardInfoRepository.getTotalWordsCount(),
+    ]);
+
+    emit(
+      state.copyWith(
+        solvedWords: response.first,
+        totalWords: response.last,
+      ),
+    );
   }
 
   void _onWelcomeCompleted(
