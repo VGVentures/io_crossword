@@ -31,3 +31,12 @@ class RenderModeSwitched extends CrosswordEvent {
   @override
   List<Object?> get props => [renderMode];
 }
+
+class MascotSelected extends CrosswordEvent {
+  const MascotSelected(this.mascot);
+
+  final Mascots mascot;
+
+  @override
+  List<Object> get props => [mascot];
+}
