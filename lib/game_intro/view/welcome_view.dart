@@ -54,9 +54,10 @@ class RecordProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    // TODO(any): Replace with real data
-    const solvedWords = 50234;
-    const totalWords = 100123;
+    final solvedWords =
+        context.select((GameIntroBloc bloc) => bloc.state.solvedWords);
+    final totalWords =
+        context.select((GameIntroBloc bloc) => bloc.state.totalWords);
 
     final f = NumberFormat.decimalPattern(l10n.localeName);
 
@@ -68,7 +69,7 @@ class RecordProgress extends StatelessWidget {
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
         LinearProgressIndicator(
-          value: 0.5,
+          value: totalWords == 0 ? 0 : solvedWords / totalWords,
           minHeight: 4,
           borderRadius: BorderRadius.circular(4),
         ),

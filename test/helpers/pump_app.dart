@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,10 +13,13 @@ import 'package:provider/provider.dart';
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
+class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     CrosswordRepository? crosswordRepository,
+    BoardInfoRepository? boardInfoRepository,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordRepository = _MockCrosswordRepository();
@@ -23,12 +27,20 @@ extension PumpApp on WidgetTester {
     when(
       () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
+    final mockedBoardInfoRepository = _MockBoardInfoRepository();
+    when(mockedBoardInfoRepository.getSolvedWordsCount)
+        .thenAnswer((_) => Future.value(123));
+    when(mockedBoardInfoRepository.getTotalWordsCount)
+        .thenAnswer((_) => Future.value(8900));
 
     return pumpWidget(
       MultiProvider(
         providers: [
           Provider.value(
             value: crosswordRepository ?? mockedCrosswordRepository,
+          ),
+          Provider.value(
+            value: boardInfoRepository ?? mockedBoardInfoRepository,
           ),
         ],
         child: MaterialApp(
@@ -47,6 +59,7 @@ extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
     CrosswordRepository? crosswordRepository,
+    BoardInfoRepository? boardInfoRepository,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -66,11 +79,20 @@ extension PumpRoute on WidgetTester {
       () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
 
+    final mockedBoardInfoRepository = _MockBoardInfoRepository();
+    when(mockedBoardInfoRepository.getSolvedWordsCount)
+        .thenAnswer((_) => Future.value(123));
+    when(mockedBoardInfoRepository.getTotalWordsCount)
+        .thenAnswer((_) => Future.value(8900));
+
     await pumpWidget(
       MultiRepositoryProvider(
         providers: [
           RepositoryProvider.value(
             value: crosswordRepository ?? mockedCrosswordRepository,
+          ),
+          Provider.value(
+            value: boardInfoRepository ?? mockedBoardInfoRepository,
           ),
         ],
         child: MaterialApp(
