@@ -28,6 +28,20 @@ void main() {
         );
       });
 
+      test('updates solvedWords', () {
+        expect(
+          GameIntroState().copyWith(solvedWords: 987),
+          equals(GameIntroState(solvedWords: 987)),
+        );
+      });
+
+      test('updates totalWords', () {
+        expect(
+          GameIntroState().copyWith(totalWords: 1234),
+          equals(GameIntroState(totalWords: 1234)),
+        );
+      });
+
       test('updates selectedMascot', () {
         expect(
           GameIntroState().copyWith(selectedMascot: Mascots.android),

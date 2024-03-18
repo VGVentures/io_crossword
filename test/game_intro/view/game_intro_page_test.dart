@@ -20,7 +20,7 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
 void main() {
   group('GameIntroPage', () {
     testWidgets('renders GameIntroView', (tester) async {
-      await tester.pumpApp(const GameIntroPage());
+      await tester.pumpApp(GameIntroPage());
 
       expect(find.byType(GameIntroView), findsOneWidget);
     });
