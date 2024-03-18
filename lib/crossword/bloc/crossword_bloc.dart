@@ -23,6 +23,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
     on<RenderModeSwitched>(_onRenderModeSwitched);
+    on<MascotSelected>(_onMascotSelected);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -140,6 +141,17 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         loadedState.copyWith(
           renderMode: event.renderMode,
         ),
+      );
+    }
+  }
+
+  Future<void> _onMascotSelected(
+    MascotSelected event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).copyWith(mascot: event.mascot),
       );
     }
   }

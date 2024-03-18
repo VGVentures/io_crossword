@@ -13,7 +13,7 @@ class PrimaryButton extends StatelessWidget {
   });
 
   /// The callback called when the button is tapped.
-  final VoidCallback onPressed;
+  final void Function()? onPressed;
 
   /// The text to display in the button.
   final String label;

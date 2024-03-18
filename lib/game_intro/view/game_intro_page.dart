@@ -1,6 +1,8 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -22,9 +24,17 @@ class GameIntroView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) => current.isIntroCompleted,
+      listenWhen: (previous, current) =>
+          (previous.status != current.status) || current.isIntroCompleted,
       listener: (context, state) {
-        Navigator.of(context).pop();
+        if (state.status == GameIntroStatus.initialsInput) {
+          context
+              .read<CrosswordBloc>()
+              .add(MascotSelected(state.selectedMascot ?? Mascots.dash));
+        }
+        if (state.isIntroCompleted) {
+          Navigator.of(context).pop();
+        }
       },
       child: Center(
         child: IoCrosswordCard(

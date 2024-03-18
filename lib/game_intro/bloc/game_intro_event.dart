@@ -11,6 +11,15 @@ class WelcomeCompleted extends GameIntroEvent {
   List<Object> get props => [];
 }
 
+class MascotUpdated extends GameIntroEvent {
+  const MascotUpdated(this.mascot);
+
+  final Mascots mascot;
+
+  @override
+  List<Object> get props => [mascot];
+}
+
 class MascotSubmitted extends GameIntroEvent {
   const MascotSubmitted();
 

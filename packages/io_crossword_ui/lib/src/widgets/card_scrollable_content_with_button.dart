@@ -24,7 +24,7 @@ class CardScrollableContentWithButton extends StatelessWidget {
   final String buttonLabel;
 
   /// The callback called when the button is tapped.
-  final VoidCallback onPressed;
+  final void Function()? onPressed;
 
   /// The padding around the content area and the button.
   final EdgeInsets padding;
