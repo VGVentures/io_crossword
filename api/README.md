@@ -18,6 +18,15 @@ FB_STORAGE_BUCKET=FIREBASE_BUCKET_NAME \
 dart_frog dev
 ```
 
+# Configure snapshot cors
+
+By default Firebase cloud storage does not allow for accessing images from a cross domain.
+
+To configure it to be able to receive request, do the following:
+
+ - Install and have [gsutil](https://cloud.google.com/storage/docs/gsutil_install) installed.
+ - Run, inside this folder: `gsutil cors set cors.json gs://bucket-url.appsot.com`
+
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg

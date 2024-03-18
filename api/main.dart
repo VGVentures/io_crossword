@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:api/game_url.dart';
 import 'package:board_renderer/board_renderer.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
 
+final gameUrl = GameUrl(_gameUrl);
 late CrosswordRepository crosswordRepository;
 late BoardRenderer boardRenderer;
 late LeaderboardRepository leaderboardRepository;
@@ -61,5 +63,13 @@ String get _firebaseStorageBucket {
 }
 
 bool get _useEmulator => Platform.environment['USE_EMULATOR'] == 'true';
+
+String get _gameUrl {
+  final value = Platform.environment['GAME_URL'];
+  if (value == null) {
+    throw ArgumentError('GAME_URL is required to run the API');
+  }
+  return value;
+}
 
 String get projectId => _appId;
