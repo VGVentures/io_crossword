@@ -61,24 +61,20 @@ class WordEntry extends Equatable {
   ///  3  -  -  *  -  -
   /// ```
   Set<Location> surroundings() {
-    final prefix = direction == Direction.across
-        ? start.copyWith(x: start.x - 1)
-        : start.copyWith(y: start.y - 1);
-    final suffix = direction == Direction.across
-        ? start.copyWith(x: start.x + word.length)
-        : start.copyWith(y: start.y + word.length);
+    final prefix = direction == Direction.across ? start.left() : start.up();
+    final suffix = direction == Direction.across ? end.right() : end.down();
 
-    return <Location>{
+    return {
       prefix,
       suffix,
       for (var i = 0; i < word.length; i++)
         direction == Direction.across
-            ? Location(x: start.x + i, y: start.y - 1)
-            : Location(x: start.x - 1, y: start.y + i),
+            ? start.shift(x: i, y: -1)
+            : start.shift(x: -1, y: i),
       for (var i = 0; i < word.length; i++)
         direction == Direction.across
-            ? Location(x: start.x + i, y: start.y + 1)
-            : Location(x: start.x + 1, y: start.y + i),
+            ? start.shift(x: i, y: 1)
+            : start.shift(x: 1, y: i),
     };
   }
 
