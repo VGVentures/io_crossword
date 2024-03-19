@@ -226,6 +226,20 @@ void main() {
       });
     });
 
+    group('overrides', () {
+      test('returns false when complete empty spot', () {
+        final board = Crossword1();
+
+        const word = WordEntry(
+          word: 'egg',
+          location: Location(x: 1, y: -1),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isFalse);
+      });
+    });
+
     group('connections', () {
       test('gets 4 connections for usa down at (1, -2)', () {
         final board = Crossword1();

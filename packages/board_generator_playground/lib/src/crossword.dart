@@ -286,7 +286,7 @@ class Crossword {
       }
     }
 
-    return true;
+    return false;
   }
 
   /// The words at a given [location].
