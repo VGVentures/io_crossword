@@ -226,10 +226,24 @@ class Crossword {
       Direction.down => characterMap[location.copyWith(y: y + word.length)],
     };
 
-    return suffix != null || prefix != null || charactersSyncPosition(entry);
+    return suffix != null || prefix != null || !overrides(entry);
   }
 
-  bool charactersSyncPosition(WordEntry entry) {
+  /// Whether the new [entry] overrides an existing word.
+  ///
+  /// For example:
+  ///
+  /// Considering this board:
+  /// ```
+  ///    -1 -2  0  1  2
+  /// -2  -  -  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
+  /// Adding "ALBUS" at (0, -2) would override "BUS" completely.
+  bool overrides(WordEntry entry) {
     final location = entry.location;
     final word = entry.word;
     final direction = entry.direction;
