@@ -34,6 +34,9 @@ class Crossword {
   /// The largest word length that can be added to the board.
   static const largestWordLength = 18;
 
+  /// The shortest word length that can be added to the board.
+  static const shortestWordLength = 3;
+
   /// The origin of the coordinate system.
   ///
   /// The origin (0, 0) is the middle letter of the first word added to the
@@ -342,40 +345,65 @@ class Crossword {
   /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
   /// is something we would like to consider in the future.
   ///
+  /// If a word can't be added at a given location, it will return `null`.
+  ///
   /// It assumes that the [candidate] is valid, meaning that it doesn't
   /// [overlaps] and it [isConnected].
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    for (var i = 0; i < largestWordLength; i++) {
-      switch (candidate.direction) {
-        case Direction.across:
-          final x = candidate.location.x + i;
-          final y = candidate.location.y;
+    var maximumLength = 0;
+    for (var i = 1; i < largestWordLength; i++) {
+      final positiveSideLocation = switch (candidate.direction) {
+        Direction.across => candidate.location.copyWith(
+            x: candidate.location.x + i,
+            y: candidate.location.y + 1,
+          ),
+        Direction.down => candidate.location.copyWith(
+            y: candidate.location.y + i,
+            x: candidate.location.x + 1,
+          ),
+      };
+      final negativeSideLocation = switch (candidate.direction) {
+        Direction.across => candidate.location.copyWith(
+            x: candidate.location.x + i,
+            y: candidate.location.y - 1,
+          ),
+        Direction.down => candidate.location.copyWith(
+            y: candidate.location.y + i,
+            x: candidate.location.x - 1,
+          ),
+      };
 
-        // positions.addAll(
-        //   [
-        //     Location(x: x, y: y - 1),
-        //     Location(x: x, y: y + 1),
-        //     if (isFirstCharacter) Location(x: x - 1, y: y),
-        //     if (isLastCharacter) Location(x: x + 1, y: y),
-        //   ],
-        // );
-        case Direction.down:
-          final x = candidate.location.x;
-          final y = candidate.location.y + i;
+      final words = {
+        ...wordsAt(positiveSideLocation),
+        ...wordsAt(negativeSideLocation),
+      };
+      final hasMatchingDirection =
+          words.any((word) => word.direction == candidate.direction);
+      if (hasMatchingDirection) break;
+      maximumLength++;
+    }
 
-          final leftLocation = Location(x: x - 1, y: y);
+    if (maximumLength < shortestWordLength) return null;
 
-          final rightValue = characterMap[leftLocation];
-
-          positions.addAll(
-            [
-              Location(x: x - 1, y: y),
-              Location(x: x + 1, y: y),
-              if (isFirstCharacter) Location(x: x, y: y - 1),
-              if (isLastCharacter) Location(x: x, y: y + 1),
-            ],
-          );
+    final constraints = <int, String>{};
+    for (var i = 0; i < maximumLength; i++) {
+      final location = switch (candidate.direction) {
+        Direction.across =>
+          candidate.location.copyWith(x: candidate.location.x + i),
+        Direction.down =>
+          candidate.location.copyWith(y: candidate.location.y + i),
+      };
+      final characterData = characterMap[location];
+      if (characterData != null) {
+        constraints[i] = characterData.character;
       }
     }
+
+    return ConstrainedWordCandidate(
+      maximumLength: maximumLength,
+      location: candidate.location,
+      direction: candidate.direction,
+      constraints: constraints,
+    );
   }
 }
