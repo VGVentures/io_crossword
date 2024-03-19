@@ -99,7 +99,7 @@ class Crossword {
   /// - - - - - N - -
   /// ```
   ///
-  /// Adding the word "USA down the "U" in "ALBUS" would have a total of
+  /// Adding the word "USA" down the "U" in "ALBUS" would have a total of
   /// 4 connections:
   ///
   /// ```
