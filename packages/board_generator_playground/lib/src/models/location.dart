@@ -16,21 +16,34 @@ final class Location extends Equatable {
   /// The vertical part of the location.
   final int y;
 
-  /// Returns a new [Location] that is one unit to the left of this location.
+  /// Moves `this` to the left by the given [units].
   Location left([int units = 1]) => copyWith(x: x - units);
 
-  /// Returns a new [Location] that is one unit to the right of this location.
+  /// Moves `this` to the right by the given [units].
   Location right([int units = 1]) => copyWith(x: x + units);
 
-  /// Returns a new [Location] that is one unit above this location.
+  /// Moves `this` up by the given [units].
   Location up([int units = 1]) => copyWith(y: y - units);
 
-  /// Returns a new [Location] that is one unit below this location.
+  /// Moves `this` down by the given [units].
   Location down([int units = 1]) => copyWith(y: y + units);
 
-  /// Returns a new [Location] that is shifted by the given [x] and [y] values.
+  /// Shifts `this` by the given [x] and [y] values.
   Location shift({int x = 0, int y = 0}) =>
       copyWith(x: this.x + x, y: this.y + y);
+
+  /// Finds all the locations between `this` and [target].
+  ///
+  /// The result `this` and [target] are inclusive.
+  Set<Location> to(Location target) {
+    final locations = <Location>{};
+    for (var i = x; i <= target.x; i++) {
+      for (var j = y; j <= target.y; j++) {
+        locations.add(Location(x: i, y: j));
+      }
+    }
+    return locations;
+  }
 
   /// Creates a new [Location] with the same values as this location.
   Location copyWith({

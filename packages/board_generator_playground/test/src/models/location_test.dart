@@ -65,6 +65,42 @@ void main() {
       });
     });
 
+    group('to', () {
+      test('returns a set of locations between the two locations', () {
+        final location = Location(x: 0, y: 0);
+        expect(location.to(Location(x: 1, y: 1)), {
+          Location(x: 0, y: 0),
+          Location(x: 0, y: 1),
+          Location(x: 1, y: 0),
+          Location(x: 1, y: 1),
+        });
+      });
+
+      test(
+        'returns a set of locations between the two horizontal locations',
+        () {
+          final location = Location(x: 0, y: 0);
+          expect(location.to(Location(x: 0, y: 2)), {
+            Location(x: 0, y: 0),
+            Location(x: 0, y: 1),
+            Location(x: 0, y: 2),
+          });
+        },
+      );
+
+      test(
+        'returns a set of locations between the two vertical locations',
+        () {
+          final location = Location(x: 0, y: 0);
+          expect(location.to(Location(x: 2, y: 0)), {
+            Location(x: 0, y: 0),
+            Location(x: 1, y: 0),
+            Location(x: 2, y: 0),
+          });
+        },
+      );
+    });
+
     group('copyWith', () {
       test('returns a new location with the same values', () {
         final location = Location(x: 1, y: 1);
