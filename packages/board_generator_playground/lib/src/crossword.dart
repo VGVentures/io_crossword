@@ -1,5 +1,4 @@
 import 'package:board_generator_playground/src/models/models.dart';
-import 'package:equatable/equatable.dart';
 
 /// {@template character_map}
 /// Maps a [Location] to a [CharacterData].
