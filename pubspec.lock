@@ -315,7 +315,7 @@ packages:
     description:
       path: "packages/flame"
       ref: main
-      resolved-ref: bf3c282dd669e9a32a550b86770dba7fb8472afa
+      resolved-ref: e3e755c6dec35f36b4a42893afeea5f64ff025b7
       url: "https://github.com/flame-engine/flame.git"
     source: git
     version: "1.16.0"

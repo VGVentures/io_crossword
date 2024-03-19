@@ -11,14 +11,26 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     required BoardInfoRepository boardInfoRepository,
   })  : _boardInfoRepository = boardInfoRepository,
         super(const GameIntroState()) {
+    on<BlacklistRequested>(_onBlacklistRequested);
     on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
     on<MascotSubmitted>(_onMascotSubmitted);
+    on<InitialsUpdated>(_onInitialsUpdated);
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
   final BoardInfoRepository _boardInfoRepository;
+  final initialsRegex = RegExp('[A-Z]{3}');
+
+  Future<void> _onBlacklistRequested(
+    BlacklistRequested event,
+    Emitter<GameIntroState> emit,
+  ) async {
+    // TODO(jaime): fetch blacklist from server
+    final blacklist = ['TST'];
+    emit(state.copyWith(initialsBlacklist: blacklist));
+  }
 
   Future<void> _onBoardProgressRequested(
     BoardProgressRequested event,
@@ -64,12 +76,47 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     );
   }
 
-  void _onInitialsSubmitted(
-    InitialsSubmitted event,
+  void _onInitialsUpdated(
+    InitialsUpdated event,
     Emitter<GameIntroState> emit,
   ) {
-    emit(
-      state.copyWith(isIntroCompleted: true),
-    );
+    final initials = [...state.initials];
+    initials[event.index] = event.character;
+    final initialsStatus =
+        (state.initialsStatus == InitialsFormStatus.blacklisted)
+            ? InitialsFormStatus.initial
+            : state.initialsStatus;
+    emit(state.copyWith(initials: initials, initialsStatus: initialsStatus));
+  }
+
+  Future<void> _onInitialsSubmitted(
+    InitialsSubmitted event,
+    Emitter<GameIntroState> emit,
+  ) async {
+    if (!_hasValidPattern()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.invalid));
+    } else if (_isBlacklisted()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.blacklisted));
+    } else {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
+
+      // TODO(jaime): create a leaderboard entry for user
+
+      emit(
+        state.copyWith(
+          initialsStatus: InitialsFormStatus.success,
+          isIntroCompleted: true,
+        ),
+      );
+    }
+  }
+
+  bool _hasValidPattern() {
+    final value = state.initials;
+    return value.isNotEmpty && initialsRegex.hasMatch(value.join());
+  }
+
+  bool _isBlacklisted() {
+    return state.initialsBlacklist.contains(state.initials.join());
   }
 }
