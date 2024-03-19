@@ -1,0 +1,4 @@
+enum Direction {
+  across,
+  down,
+}
