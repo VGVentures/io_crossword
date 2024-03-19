@@ -24,7 +24,7 @@ class AboutHowToPlayContent extends StatelessWidget {
             ),
           ),
           FilledButton.icon(
-            icon: const Icon(Icons.play_circle),
+            icon: const Icon(Icons.play_circle, size: 18),
             label: Text(l10n.playNow),
             onPressed: () {
               Navigator.pop(context);
