@@ -212,10 +212,10 @@ class Crossword {
         }
     }
 
-    return _wordsAreTheSameInDirection(entry);
+    return charactersSyncPosition(entry);
   }
 
-  bool _wordsAreTheSameInDirection(WordEntry entry) {
+  bool charactersSyncPosition(WordEntry entry) {
     final location = entry.location;
     final word = entry.word;
     final direction = entry.direction;
