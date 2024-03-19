@@ -1,4 +1,2 @@
-/// Board generator playground
+///  Ephemeral package used to experiment with the board generation process.
 library;
-
-export 'src/board_generator_playground.dart';
