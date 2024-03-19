@@ -344,6 +344,37 @@ class Crossword {
   /// It assumes that the [candidate] is valid, meaning that it doesn't
   /// [overlaps] and it [isConnected].
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    throw UnimplementedError();
+    for (var i = 0; i < largestWordLength; i++) {
+      switch (candidate.direction) {
+        case Direction.across:
+          final x = candidate.location.x + i;
+          final y = candidate.location.y;
+
+        // positions.addAll(
+        //   [
+        //     Location(x: x, y: y - 1),
+        //     Location(x: x, y: y + 1),
+        //     if (isFirstCharacter) Location(x: x - 1, y: y),
+        //     if (isLastCharacter) Location(x: x + 1, y: y),
+        //   ],
+        // );
+        case Direction.down:
+          final x = candidate.location.x;
+          final y = candidate.location.y + i;
+
+          final leftLocation = Location(x: x - 1, y: y);
+
+          final rightValue = characterMap[leftLocation];
+
+          positions.addAll(
+            [
+              Location(x: x - 1, y: y),
+              Location(x: x + 1, y: y),
+              if (isFirstCharacter) Location(x: x, y: y - 1),
+              if (isLastCharacter) Location(x: x, y: y + 1),
+            ],
+          );
+      }
+    }
   }
 }
