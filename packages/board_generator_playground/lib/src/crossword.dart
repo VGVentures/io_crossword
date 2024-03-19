@@ -68,7 +68,21 @@ class Crossword {
   /// N - - - - N - -
   /// ```
   bool isConnected(WordEntry entry) {
-    throw UnimplementedError();
+    final location = entry.location;
+    final word = entry.word;
+    final direction = entry.direction;
+
+    for (var i = 0; i < word.length; i++) {
+      final newLocation = direction == Direction.across
+          ? location.copyWith(x: location.x + i)
+          : location.copyWith(y: location.y + i);
+
+      if (characterMap[newLocation] != null) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /// Determines all the connections for a new [entry].
@@ -96,7 +110,49 @@ class Crossword {
   /// - - - - - N - -
   /// ```
   Set<Location> connections(WordEntry entry) {
-    throw UnimplementedError();
+    final location = entry.location;
+    final word = entry.word;
+    final direction = entry.direction;
+
+    final positions = <Location>[];
+
+    for (var i = 0; i < word.length; i++) {
+      final x = location.x + i;
+      final y = location.y + i;
+
+      final isFirstCharacter = i == 0;
+      final isLastCharacter = i >= word.length;
+
+      switch (direction) {
+        case Direction.across:
+          positions.addAll(
+            [
+              location.copyWith(y: y - 1),
+              location.copyWith(y: y + 1),
+              if (isFirstCharacter) location.copyWith(x: x - 1),
+              if (isLastCharacter) location.copyWith(x: x + 1),
+            ],
+          );
+        case Direction.down:
+          positions.addAll(
+            [
+              location.copyWith(x: x - 1),
+              location.copyWith(x: x + 1),
+              if (isFirstCharacter) location.copyWith(y: y - 1),
+              if (isLastCharacter) location.copyWith(y: y + 1),
+            ],
+          );
+      }
+    }
+
+    final connections = <Location>{};
+    for (final position in positions) {
+      if (characterMap[position] != null) {
+        connections.add(position);
+      }
+    }
+
+    return connections;
   }
 
   /// Whether the new [entry] overlaps an existing word.
@@ -137,6 +193,34 @@ class Crossword {
   ///
   /// Overlaps are not allowed since they would create invalid words.
   bool overlaps(WordEntry entry) {
-    throw UnimplementedError();
+    final location = entry.location;
+    final word = entry.word;
+    final direction = entry.direction;
+
+    for (var i = 0; i < word.length; i++) {
+      switch (direction) {
+        case Direction.across:
+          final x = location.x + i;
+
+          // Before
+          if (characterMap[location.copyWith(x: x - 1)] != null) {
+            if (characterMap[location.copyWith(x: x - 2)] != null) {
+              return true;
+            }
+          }
+
+          // Current
+          if (characterMap[location.copyWith(x: x - 1)])
+          // After
+          if (characterMap[location.copyWith(x: x + 1)] != null) {
+            if (characterMap[location.copyWith(x: x + 2)] != null) {
+              return true;
+            }
+          }
+        case Direction.down:
+      }
+    }
+
+    return false;
   }
 }
