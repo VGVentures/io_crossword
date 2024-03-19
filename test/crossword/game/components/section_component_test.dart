@@ -371,9 +371,7 @@ void main() {
           ),
         );
 
-        await Future.microtask(() {});
-        await Future.microtask(() {});
-        game.update(0);
+        await game.ready();
 
         verify(() => flameNetworkImages.load(any())).called(1);
 
@@ -437,9 +435,7 @@ void main() {
           ),
         );
 
-        await Future.microtask(() {});
-        await Future.microtask(() {});
-        game.update(0);
+        await game.ready();
 
         final sectionComponent = game.world.children
             .whereType<SectionComponent>()
