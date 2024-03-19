@@ -250,8 +250,8 @@ class Crossword {
   ///
   /// Adding a word down at (2, -2) would have a single
   /// [ConstrainedWordCandidate], with one constraint one at position 0 for the
-  /// character 'S' with a maximum length of 3. Since a longer word would
-  /// [overlaps] with the word "NAN".
+  /// character 'S' with an invalid length of 4, since it would overlap with
+  /// the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
   /// [ConstrainedWordCandidate], those cases will be return `null`. These
