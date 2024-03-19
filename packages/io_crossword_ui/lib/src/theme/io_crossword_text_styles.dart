@@ -217,7 +217,7 @@ abstract class IoCrosswordTextStyles {
   static const TextStyle gridLetter = TextStyle(
     fontFamily: 'Google Sans',
     fontWeight: FontWeight.w700,
-    fontSize: 16,
+    fontSize: 32,
     height: 1.27,
     letterSpacing: 1.2,
     package: package,
