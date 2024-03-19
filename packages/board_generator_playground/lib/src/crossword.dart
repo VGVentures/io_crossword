@@ -45,33 +45,34 @@ class Crossword {
   /// For example, consider the following board:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - -
-  /// - - - - - H - -
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   ///
-  /// Adding the word "SUN" down at the end of the word "ALBUS" would be
-  /// connected:
+  /// Adding the word "SUN" at (2, -2) would be connected:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - U
-  /// - - - - - H - N
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  U
+  ///  0  -  -  H  -  N
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   ///
-  /// However, adding the word "SUN" at the bottom left corner would not be
-  /// connected:
+  /// However, adding the word "SUN" at (-2, 0) would not be connected:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - -
-  /// S - - - - H - -
-  /// U - - - - A - -
-  /// N - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  S  -  H  -  -
+  ///  1  U  -  A  -  -
+  ///  2  N  -  N  -  -
   /// ```
   bool isConnected(WordEntry entry) {
     final location = entry.start;
@@ -96,22 +97,23 @@ class Crossword {
   /// For example, considering the following board:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - -
-  /// - - - - - H - -
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   ///
-  /// Adding the word "USA" down the "U" in "ALBUS" would have a total of
-  /// 4 connections:
+  /// Adding the word "USA" at (1, -2) would have four connections:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E S -
-  /// - - - - - H A -
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  S  -
+  ///  0  -  -  H  A  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   Set<Location> connections(WordEntry entry) {
     return entry.surroundings().where((location) {
