@@ -7,8 +7,7 @@ environment:
   sdk: ^3.3.0
 
 dependencies:
-  game_domain:
-    path: ../../api/packages/game_domain
+  equatable: ^2.0.5
 
 dev_dependencies:
   mocktail: ^1.0.3
