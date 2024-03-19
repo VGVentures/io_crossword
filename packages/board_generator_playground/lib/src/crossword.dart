@@ -171,33 +171,34 @@ class Crossword {
   /// Considering this board:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - -
-  /// - - - - - H - -
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -5 -4 -3 -2 -1  0  1  2
+  /// -2  -  -  -  A  L  B  U  S
+  /// -1  -  -  -  -  -  E  -  -
+  ///  0  -  -  -  -  -  H  -  -
+  ///  1  -  -  -  -  -  A  -  -
+  ///  2  -  -  -  -  -  N  -  -
   /// ```
   ///
-  /// Adding the word "USA" across to the right of the word "ALBUS" would
-  /// overlap:
+  /// Adding the word "USA" at (-5, -2) would overlap with "ALBUS":
   ///
   /// ```
-  /// U S A A L B U S
-  /// - - - - - E - -
-  /// - - - - - H - -
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -5 -4 -3 -2 -1  0  1  2
+  /// -2  U  S  A  A  L  B  U  S
+  /// -1  -  -  -  -  -  E  -  -
+  ///  0  -  -  -  -  -  H  -  -
+  ///  1  -  -  -  -  -  A  -  -
+  ///  2  -  -  -  -  -  N  -  -
   /// ```
   ///
-  /// However, adding the word "SUN" down at the end of the word "ALBUS" would
-  /// not overlap:
+  /// However, adding the word "SUN" at (2, -2) would not overlap:
   ///
   /// ```
-  /// - - - A L B U S
-  /// - - - - - E - U
-  /// - - - - - H - N
-  /// - - - - - A - -
-  /// - - - - - N - -
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   ///
   /// Overlaps are not allowed since they would create invalid words or
