@@ -192,30 +192,47 @@ class Crossword {
     final word = entry.word;
     final direction = entry.direction;
 
+    switch (direction) {
+      case Direction.across:
+        final x = location.x;
+
+        if (characterMap[location.copyWith(x: x - 1)] != null ||
+            characterMap[location.copyWith(x: x + word.length - 1)] != null) {
+          return true;
+        }
+
+      // Check if the word can be added check position with the character
+
+      case Direction.down:
+        final y = location.y;
+
+        if (characterMap[location.copyWith(y: y - 1)] != null ||
+            characterMap[location.copyWith(y: y + word.length - 1)] != null) {
+          return true;
+        }
+    }
+
+    return _wordsAreTheSameInDirection(entry);
+  }
+
+  bool _wordsAreTheSameInDirection(WordEntry entry) {
+    final location = entry.location;
+    final word = entry.word;
+    final direction = entry.direction;
+
     for (var i = 0; i < word.length; i++) {
-      switch (direction) {
-        case Direction.across:
-          final x = location.x + i;
+      final character = word[i];
+      final newLocation = direction == Direction.across
+          ? location.copyWith(x: location.x + i)
+          : location.copyWith(y: location.y + i);
 
-          // Before
-          if (characterMap[location.copyWith(x: x - 1)] != null) {
-            if (characterMap[location.copyWith(x: x - 2)] != null) {
-              return true;
-            }
-          }
+      final currentCharacter = characterMap[newLocation];
 
-          // Current
-          if (characterMap[location.copyWith(x: x - 1)])
-          // After
-          if (characterMap[location.copyWith(x: x + 1)] != null) {
-            if (characterMap[location.copyWith(x: x + 2)] != null) {
-              return true;
-            }
-          }
-        case Direction.down:
+      if (currentCharacter != null && currentCharacter != character) {
+        return false;
       }
     }
 
-    return false;
+    return true;
   }
 }
