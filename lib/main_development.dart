@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
@@ -27,6 +28,7 @@ void main() async {
 
         return App(
           crosswordRepository: CrosswordRepository(db: firestore),
+          boardInfoRepository: BoardInfoRepository(firestore: firestore),
         );
       },
     ),

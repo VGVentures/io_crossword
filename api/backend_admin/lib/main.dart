@@ -14,7 +14,7 @@ void main() async {
   final crosswordRepository = CrosswordRepository(dbClient: dbClient);
 
   final httpClient = HttpClient(
-    baseUrl: 'http://localhost:8080',
+    baseUrl: _apiUrl,
   );
 
   unawaited(
@@ -31,5 +31,10 @@ void main() async {
 
 String get _appId {
   const value = String.fromEnvironment('FB_APP_ID');
+  return value;
+}
+
+String get _apiUrl {
+  const value = String.fromEnvironment('API_URL');
   return value;
 }

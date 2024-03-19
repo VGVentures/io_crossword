@@ -641,5 +641,22 @@ void main() {
         ],
       );
     });
+
+    group('MascotSelected', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits crossword loaded state with the selected mascot '
+        'when MascotSelected is added',
+        build: () => CrosswordBloc(crosswordRepository: crosswordRepository),
+        seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
+        act: (bloc) => bloc.add(MascotSelected(Mascots.android)),
+        expect: () => <CrosswordState>[
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {},
+            mascot: Mascots.android,
+          ),
+        ],
+      );
+    });
   });
 }
