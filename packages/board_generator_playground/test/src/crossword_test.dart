@@ -222,37 +222,37 @@ void main() {
       test('connected to the board in the position (2, -2) with s', () {
         final board = _TestCrossword();
 
-        const sunWordEntry = WordEntry(
+        const sun = WordEntry(
           word: 'sun',
           location: Location(x: 2, y: -2),
           direction: Direction.down,
         );
 
-        expect(board.isConnected(sunWordEntry), isTrue);
+        expect(board.isConnected(sun), isTrue);
       });
 
       test('not connected to the board in the position (2, -1) with s', () {
         final board = _TestCrossword();
 
-        const sunWordEntry = WordEntry(
+        const sun = WordEntry(
           word: 'sun',
           location: Location(x: 2, y: -1),
           direction: Direction.down,
         );
 
-        expect(board.isConnected(sunWordEntry), isFalse);
+        expect(board.isConnected(sun), isFalse);
       });
 
       test('connected to the board in the position (0, 0) with h', () {
         final board = _TestCrossword();
 
-        const sunWordEntry = WordEntry(
+        const hat = WordEntry(
           word: 'hat',
           location: Location(x: 0, y: 0),
           direction: Direction.across,
         );
 
-        expect(board.isConnected(sunWordEntry), isTrue);
+        expect(board.isConnected(hat), isTrue);
       });
     });
 
@@ -260,14 +260,14 @@ void main() {
       test('gets 4 connections for usa at (1, -2)', () {
         final board = _TestCrossword();
 
-        const sunWordEntry = WordEntry(
+        const usa = WordEntry(
           word: 'usa',
           location: Location(x: 1, y: -2),
           direction: Direction.down,
         );
 
         expect(
-          board.connections(sunWordEntry),
+          board.connections(usa),
           <Location>{
             Location(x: 2, y: -2),
             Location(x: 0, y: -2),
