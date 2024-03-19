@@ -16,6 +16,18 @@ final class Location extends Equatable {
   /// The vertical part of the location.
   final int y;
 
+  /// Returns a new [Location] that is one unit to the left of this location.
+  Location left([int units = 1]) => copyWith(x: x - units);
+
+  /// Returns a new [Location] that is one unit to the right of this location.
+  Location right([int units = 1]) => copyWith(x: x + units);
+
+  /// Returns a new [Location] that is one unit above this location.
+  Location up([int units = 1]) => copyWith(y: y - units);
+
+  /// Returns a new [Location] that is one unit below this location.
+  Location down([int units = 1]) => copyWith(y: y + units);
+
   /// Creates a new [Location] with the same values as this location.
   Location copyWith({
     int? x,
