@@ -6,6 +6,15 @@ enum GameIntroStatus {
   initialsInput,
 }
 
+enum InitialsFormStatus {
+  initial,
+  loading,
+  success,
+  invalid,
+  failure,
+  blacklisted,
+}
+
 class GameIntroState extends Equatable {
   const GameIntroState({
     this.status = GameIntroStatus.welcome,
@@ -13,6 +22,8 @@ class GameIntroState extends Equatable {
     this.solvedWords = 0,
     this.totalWords = 0,
     this.selectedMascot,
+    this.initials = const ['', '', ''],
+    this.initialsStatus = InitialsFormStatus.initial,
   });
 
   final GameIntroStatus status;
@@ -20,6 +31,8 @@ class GameIntroState extends Equatable {
   final int solvedWords;
   final int totalWords;
   final Mascots? selectedMascot;
+  final List<String> initials;
+  final InitialsFormStatus initialsStatus;
 
   GameIntroState copyWith({
     GameIntroStatus? status,
@@ -27,6 +40,8 @@ class GameIntroState extends Equatable {
     int? solvedWords,
     int? totalWords,
     Mascots? selectedMascot,
+    List<String>? initials,
+    InitialsFormStatus? initialsStatus,
   }) {
     return GameIntroState(
       status: status ?? this.status,
@@ -34,6 +49,8 @@ class GameIntroState extends Equatable {
       solvedWords: solvedWords ?? this.solvedWords,
       totalWords: totalWords ?? this.totalWords,
       selectedMascot: selectedMascot ?? this.selectedMascot,
+      initials: initials ?? this.initials,
+      initialsStatus: initialsStatus ?? this.initialsStatus,
     );
   }
 
@@ -44,5 +61,7 @@ class GameIntroState extends Equatable {
         solvedWords,
         totalWords,
         selectedMascot,
+        initials,
+        initialsStatus,
       ];
 }

@@ -15,6 +15,7 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
     on<MascotSubmitted>(_onMascotSubmitted);
+    on<InitialsUpdated>(_onInitialsUpdated);
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
@@ -62,6 +63,19 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     emit(
       state.copyWith(status: GameIntroStatus.initialsInput),
     );
+  }
+
+  void _onInitialsUpdated(
+    InitialsUpdated event,
+    Emitter<GameIntroState> emit,
+  ) {
+    final initials = [...state.initials];
+    initials[event.index] = event.character;
+    final initialsStatus =
+        (state.initialsStatus == InitialsFormStatus.blacklisted)
+            ? InitialsFormStatus.initial
+            : state.initialsStatus;
+    emit(state.copyWith(initials: initials, initialsStatus: initialsStatus));
   }
 
   void _onInitialsSubmitted(
