@@ -34,7 +34,7 @@ class _InitialsFormViewState extends State<InitialsFormView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _InitialFormField(
+                InitialFormField(
                   0,
                   focusNode: focusNodes[0],
                   key: ObjectKey(focusNodes[0]),
@@ -46,7 +46,7 @@ class _InitialsFormViewState extends State<InitialsFormView> {
                   },
                 ),
                 const SizedBox(width: 16),
-                _InitialFormField(
+                InitialFormField(
                   1,
                   key: ObjectKey(focusNodes[1]),
                   focusNode: focusNodes[1],
@@ -58,7 +58,7 @@ class _InitialsFormViewState extends State<InitialsFormView> {
                   },
                 ),
                 const SizedBox(width: 16),
-                _InitialFormField(
+                InitialFormField(
                   2,
                   key: ObjectKey(focusNodes[2]),
                   focusNode: focusNodes[2],
@@ -117,8 +117,9 @@ class _InitialsFormViewState extends State<InitialsFormView> {
   }
 }
 
-class _InitialFormField extends StatefulWidget {
-  const _InitialFormField(
+class InitialFormField extends StatefulWidget {
+  @visibleForTesting
+  const InitialFormField(
     this.index, {
     required this.onChanged,
     required this.focusNode,
@@ -132,10 +133,10 @@ class _InitialFormField extends StatefulWidget {
   final FocusNode focusNode;
 
   @override
-  State<_InitialFormField> createState() => _InitialFormFieldState();
+  State<InitialFormField> createState() => _InitialFormFieldState();
 }
 
-class _InitialFormFieldState extends State<_InitialFormField> {
+class _InitialFormFieldState extends State<InitialFormField> {
   late final TextEditingController controller =
       TextEditingController.fromValue(lastValue);
 
