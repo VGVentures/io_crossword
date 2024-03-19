@@ -6,11 +6,12 @@ import 'package:test/test.dart';
 
 void main() {
   group('$Crossword', () {
-    /// A L B U S
-    /// - - E - -
-    /// - - H (0, 0)
-    /// - - A - -
-    /// - - N - -
+    ///    -1 -2  0  1  2
+    /// -2  A  L  B  U  S
+    /// -1  -  -  E  -  -
+    ///  0  -  -  H  -  -
+    ///  1  -  -  A  -  -
+    ///  2  -  -  N  -  -
     final characterMap = {
       Location(x: 0, y: -2): 'b',
       Location(x: 0, y: -1): 'e',
