@@ -54,15 +54,15 @@ void main() {
           {
             Location(x: 0, y: -1): CharacterData(
               character: 'u',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
             Location(x: 0, y: 0): CharacterData(
               character: 'r',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
             Location(x: 0, y: 1): CharacterData(
               character: 'l',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
           },
         );
@@ -83,17 +83,39 @@ void main() {
           {
             Location(x: -1, y: 0): CharacterData(
               character: 'u',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
             Location(x: 0, y: 0): CharacterData(
               character: 'r',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
             Location(x: 1, y: 0): CharacterData(
               character: 'l',
-              wordEntry: const {url},
+              wordEntry: {url},
             ),
           },
+        );
+      });
+
+      test('adds crossing words', () {
+        final behan = WordEntry(
+          word: 'behan',
+          location: Location(x: 0, y: -2),
+          direction: Direction.down,
+        );
+        final albus = WordEntry(
+          word: 'albus',
+          location: Location(x: -2, y: -2),
+          direction: Direction.across,
+        );
+
+        final board = Crossword()
+          ..add(behan)
+          ..add(albus);
+
+        expect(
+          board.characterMap,
+          {},
         );
       });
     });
