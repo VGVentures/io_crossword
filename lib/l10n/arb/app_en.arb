@@ -16,6 +16,15 @@
   "@getStarted": {
     "description": "Get started label"
   },
+
+    "continueLabel": "Continue",
+    "@continueLabel": {
+        "description": "Continue label"
+    },
+    "chooseTeam": "Choose a team",
+    "@chooseTeam": {
+        "description": "Label displayed in the team selection modal"
+    },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
     "description": "Title of the about modal"

@@ -70,5 +70,22 @@ void main() {
         );
       });
     });
+
+    group('MascotSelected', () {
+      test('can be instantiated', () {
+        expect(MascotSelected(Mascots.sparky), isA<MascotSelected>());
+      });
+
+      test('supports value comparisons', () {
+        expect(
+          MascotSelected(Mascots.sparky),
+          equals(MascotSelected(Mascots.sparky)),
+        );
+        expect(
+          MascotSelected(Mascots.sparky),
+          isNot(equals(MascotSelected(Mascots.dash))),
+        );
+      });
+    });
   });
 }

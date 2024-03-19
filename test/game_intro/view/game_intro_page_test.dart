@@ -1,7 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -10,24 +14,32 @@ import '../../helpers/helpers.dart';
 class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
     implements GameIntroBloc {}
 
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
 void main() {
   group('GameIntroPage', () {
     testWidgets('renders GameIntroView', (tester) async {
-      await tester.pumpApp(const GameIntroPage());
+      await tester.pumpApp(GameIntroPage());
 
       expect(find.byType(GameIntroView), findsOneWidget);
     });
   });
 
   group('GameIntroView', () {
+    late CrosswordBloc crosswordBloc;
     late GameIntroBloc gameIntroBloc;
     late Widget child;
 
     setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
       gameIntroBloc = _MockGameIntroBloc();
 
-      child = BlocProvider.value(
-        value: gameIntroBloc,
+      child = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: gameIntroBloc),
+          BlocProvider.value(value: crosswordBloc),
+        ],
         child: const GameIntroView(),
       );
     });
@@ -53,6 +65,25 @@ void main() {
         await tester.pumpApp(child);
 
         expect(find.byType(MascotSelectionView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'adds MascotSelected event to the crossword bloc when the mascot '
+      'is selected',
+      (tester) async {
+        whenListen(
+          gameIntroBloc,
+          Stream.value(
+            GameIntroState(
+              status: GameIntroStatus.initialsInput,
+              selectedMascot: Mascots.dash,
+            ),
+          ),
+          initialState: GameIntroState(status: GameIntroStatus.mascotSelection),
+        );
+        await tester.pumpApp(child);
+        verify(() => crosswordBloc.add(MascotSelected(Mascots.dash))).called(1);
       },
     );
 

@@ -1,6 +1,9 @@
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -11,7 +14,9 @@ class GameIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GameIntroBloc(),
+      create: (context) => GameIntroBloc(
+        boardInfoRepository: context.read<BoardInfoRepository>(),
+      )..add(const BoardProgressRequested()),
       child: const GameIntroView(),
     );
   }
@@ -24,15 +29,22 @@ class GameIntroView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<GameIntroBloc, GameIntroState>(
       listenWhen: (previous, current) =>
-          !previous.isIntroCompleted && current.isIntroCompleted,
+          (previous.status != current.status) || current.isIntroCompleted,
       listener: (context, state) {
-        Navigator.of(context).pop();
-        showDialog<void>(
-          context: context,
-          builder: (context) {
-            return const AboutView();
-          },
-        );
+        if (state.status == GameIntroStatus.initialsInput) {
+          context
+              .read<CrosswordBloc>()
+              .add(MascotSelected(state.selectedMascot ?? Mascots.dash));
+        }
+        if (state.isIntroCompleted) {
+          Navigator.of(context).pop();
+          showDialog<void>(
+            context: context,
+            builder: (context) {
+              return const AboutView();
+            },
+          );
+        }
       },
       child: Center(
         child: IoCrosswordCard(

@@ -26,6 +26,7 @@ dependencies:
   leaderboard_repository:
     path: packages/leaderboard_repository
   logging: ^1.2.0
+  shelf_cors_headers: ^0.1.5
 
 dev_dependencies:
   mocktail: ^1.0.3

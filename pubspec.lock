@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.6"
+  board_info_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/board_info_repository"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -307,8 +314,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/flame"
-      ref: "erick.spritebatch-replace-and-length"
-      resolved-ref: a9eb4c8a177f81daa1b5e99faa74aa113ddec154
+      ref: main
+      resolved-ref: bf3c282dd669e9a32a550b86770dba7fb8472afa
       url: "https://github.com/flame-engine/flame.git"
     source: git
     version: "1.16.0"
