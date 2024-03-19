@@ -196,24 +196,19 @@ class Crossword {
     final word = entry.word;
     final direction = entry.direction;
 
-    switch (direction) {
-      case Direction.across:
-        final x = location.x;
+    final x = location.x;
+    final y = location.y;
+    final prefix = switch (direction) {
+      Direction.across => characterMap[location.copyWith(x: x - 1)],
+      Direction.down => characterMap[location.copyWith(y: y - 1)],
+    };
+    final suffix = switch (direction) {
+      Direction.across => characterMap[location.copyWith(x: x + word.length)],
+      Direction.down => characterMap[location.copyWith(y: y + word.length)],
+    };
 
-        if (characterMap[location.copyWith(x: x - 1)] != null ||
-            characterMap[location.copyWith(x: x + word.length - 1)] != null) {
-          return true;
-        }
-
-      // Check if the word can be added check position with the character
-
-      case Direction.down:
-        final y = location.y;
-
-        if (characterMap[location.copyWith(y: y - 1)] != null ||
-            characterMap[location.copyWith(y: y + word.length - 1)] != null) {
-          return true;
-        }
+    if (suffix != null || prefix != null) {
+      return true;
     }
 
     return charactersSyncPosition(entry);
