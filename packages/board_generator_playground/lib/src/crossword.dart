@@ -203,20 +203,18 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
-    final location = entry.location;
-    final word = entry.word;
-    final direction = entry.direction;
+    final surroundings = entry.surroundings();
+    final surroundingWords = surroundings.map(wordsAt).expand((e) => e);
+    final endsAtSurrounding = surroundingWords.any((e) {
+      final start = e.location;
+      final end = switch (e.direction) {
+        Direction.across => start.copyWith(x: start.x + e.word.length),
+        Direction.down => start.copyWith(y: start.y + e.word.length),
+      };
+      return surroundings.contains(end);
+    });
 
-    final x = location.x;
-    final y = location.y;
-    final prefix = characterMap[location];
-
-    final suffix = switch (direction) {
-      Direction.across => characterMap[location.copyWith(x: x + word.length)],
-      Direction.down => characterMap[location.copyWith(y: y + word.length)],
-    };
-
-    return suffix != null || prefix != null || !overrides(entry);
+    return overrides(entry) || endsAtSurrounding;
   }
 
   /// Whether the new [entry] overrides an existing word.
