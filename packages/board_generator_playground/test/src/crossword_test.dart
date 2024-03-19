@@ -374,6 +374,50 @@ void main() {
           ),
         );
       });
+
+      test('derives successfully two constraints down', () {
+        final board = Crossword2();
+
+        final candidate = WordCandidate(
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              maximumLength: Crossword.largestWordLength,
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: const {0: 's', 4: 'w'},
+            ),
+          ),
+        );
+      });
+
+      test('derives successfully two constraints down with capped length', () {
+        final board = Crossword3();
+
+        final candidate = WordCandidate(
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              maximumLength: 3,
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: const {0: 's', 4: 'w'},
+            ),
+          ),
+        );
+      });
     });
   });
 }

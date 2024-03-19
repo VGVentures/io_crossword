@@ -377,9 +377,11 @@ class Crossword {
         ...wordsAt(positiveSideLocation),
         ...wordsAt(negativeSideLocation),
       };
+
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      if (hasMatchingDirection) break;
+      final hasOverlappingWords = words.any(overlaps);
+      if (hasMatchingDirection || hasOverlappingWords) break;
       maximumLength++;
     }
 
