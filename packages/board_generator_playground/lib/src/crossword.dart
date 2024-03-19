@@ -115,7 +115,6 @@ class Crossword {
     final direction = entry.direction;
 
     final positions = <Location>[];
-
     for (var i = 0; i < word.length; i++) {
       final x = location.x + i;
       final y = location.y + i;
@@ -145,14 +144,10 @@ class Crossword {
       }
     }
 
-    final connections = <Location>{};
-    for (final position in positions) {
-      if (characterMap[position] != null) {
-        connections.add(position);
-      }
-    }
-
-    return connections;
+    return {
+      for (final position in positions)
+        if (characterMap[position] != null) position,
+    };
   }
 
   /// Whether the new [entry] overlaps an existing word.
