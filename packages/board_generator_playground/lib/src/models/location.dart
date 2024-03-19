@@ -35,9 +35,7 @@ final class Location extends Equatable {
   Location shift({int x = 0, int y = 0}) =>
       copyWith(x: this.x + x, y: this.y + y);
 
-  /// Finds all the locations between `this` and [target].
-  ///
-  /// The result `this` and [target] are inclusive.
+  /// Finds all the locations between `this` and [target], inclusive.
   Set<Location> to(Location target) {
     final locations = <Location>{};
     for (var i = x; i <= target.x; i++) {
