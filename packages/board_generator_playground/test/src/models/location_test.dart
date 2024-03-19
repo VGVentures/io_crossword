@@ -53,6 +53,18 @@ void main() {
       });
     });
 
+    group('shift', () {
+      test('does nothing when no argument is specified', () {
+        final location = Location(x: 0, y: 0);
+        expect(location.shift(), Location(x: 0, y: 0));
+      });
+
+      test('returns a new location shifted by the given x and y values', () {
+        final location = Location(x: 0, y: 0);
+        expect(location.shift(x: 1, y: 1), Location(x: 1, y: 1));
+      });
+    });
+
     group('copyWith', () {
       test('returns a new location with the same values', () {
         final location = Location(x: 1, y: 1);

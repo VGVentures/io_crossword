@@ -28,6 +28,10 @@ final class Location extends Equatable {
   /// Returns a new [Location] that is one unit below this location.
   Location down([int units = 1]) => copyWith(y: y + units);
 
+  /// Returns a new [Location] that is shifted by the given [x] and [y] values.
+  Location shift({int x = 0, int y = 0}) =>
+      copyWith(x: this.x + x, y: this.y + y);
+
   /// Creates a new [Location] with the same values as this location.
   Location copyWith({
     int? x,
