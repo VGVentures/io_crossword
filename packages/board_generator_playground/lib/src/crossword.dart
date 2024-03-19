@@ -207,11 +207,7 @@ class Crossword {
       Direction.down => characterMap[location.copyWith(y: y + word.length)],
     };
 
-    if (suffix != null || prefix != null) {
-      return true;
-    }
-
-    return charactersSyncPosition(entry);
+    return suffix != null || prefix != null || charactersSyncPosition(entry);
   }
 
   bool charactersSyncPosition(WordEntry entry) {
