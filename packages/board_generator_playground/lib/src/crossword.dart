@@ -125,7 +125,7 @@ class Crossword {
 
   /// Whether the new [entry] overlaps an existing word.
   ///
-  /// Overalapping a word means that adding such [entry] would change an
+  /// Overlapping a word means that adding such [entry] would change an
   /// existing word or overwrite it completely.
   ///
   /// For example:
