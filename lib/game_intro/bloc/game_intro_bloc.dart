@@ -11,6 +11,7 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     required BoardInfoRepository boardInfoRepository,
   })  : _boardInfoRepository = boardInfoRepository,
         super(const GameIntroState()) {
+    _setBlacklist();
     on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
@@ -20,6 +21,13 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   }
 
   final BoardInfoRepository _boardInfoRepository;
+  final initialsRegex = RegExp('[A-Z]{3}');
+  late final List<String> blacklist;
+
+  Future<void> _setBlacklist() async {
+    // TODO(jaime): fetch blacklist from server
+    blacklist = ['TST'];
+  }
 
   Future<void> _onBoardProgressRequested(
     BoardProgressRequested event,
@@ -78,12 +86,35 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     emit(state.copyWith(initials: initials, initialsStatus: initialsStatus));
   }
 
-  void _onInitialsSubmitted(
+  Future<void> _onInitialsSubmitted(
     InitialsSubmitted event,
     Emitter<GameIntroState> emit,
-  ) {
-    emit(
-      state.copyWith(isIntroCompleted: true),
-    );
+  ) async {
+    if (!_hasValidPattern()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.invalid));
+    } else if (_isBlacklisted()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.blacklisted));
+    } else {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
+
+      // TODO(jaime): createa leaderboard entry for user
+      await Future<void>.delayed(const Duration(seconds: 1));
+
+      emit(
+        state.copyWith(
+          initialsStatus: InitialsFormStatus.success,
+          isIntroCompleted: true,
+        ),
+      );
+    }
+  }
+
+  bool _hasValidPattern() {
+    final value = state.initials;
+    return value.isNotEmpty && initialsRegex.hasMatch(value.join());
+  }
+
+  bool _isBlacklisted() {
+    return blacklist.contains(state.initials.join());
   }
 }
