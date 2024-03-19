@@ -42,6 +42,15 @@ void main() {
       });
     });
 
+    group('InitialsUpdated', () {
+      test('supports value comparisons', () {
+        expect(
+          InitialsUpdated(character: 'J', index: 0),
+          equals(InitialsUpdated(character: 'J', index: 0)),
+        );
+      });
+    });
+
     group('InitialsSubmitted', () {
       test('supports value comparisons', () {
         expect(

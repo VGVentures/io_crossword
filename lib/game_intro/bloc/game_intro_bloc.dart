@@ -97,8 +97,7 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     } else {
       emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
 
-      // TODO(jaime): createa leaderboard entry for user
-      await Future<void>.delayed(const Duration(seconds: 1));
+      // TODO(jaime): create a leaderboard entry for user
 
       emit(
         state.copyWith(
