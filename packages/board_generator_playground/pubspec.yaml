@@ -1,0 +1,16 @@
+name: board_generator_playground
+description: Board generator playground
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: "^3.3.0"
+
+dependencies:
+  game_domain:
+    path: ../../api/packages/game_domain
+
+dev_dependencies:
+  mocktail: ^1.0.3
+  test: ^1.25.2
+  very_good_analysis: ^5.1.0

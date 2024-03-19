@@ -1,0 +1,22 @@
+name: board_generator_playground
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths:
+      - "packages/board_generator_playground/**"
+      - ".github/workflows/board_generator_playground.yaml"
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+    with:
+      dart_sdk: stable
+      working_directory: packages/board_generator_playground
+      coverage_excludes: "**/*.g.dart"
+      min_coverage: 100
