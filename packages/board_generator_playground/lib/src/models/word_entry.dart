@@ -1,9 +1,10 @@
 import 'package:board_generator_playground/src/models/models.dart';
+import 'package:equatable/equatable.dart';
 
 /// {@template word_entry}
 /// A word entry on the board.
 /// {@endtemplate}
-class WordEntry {
+class WordEntry extends Equatable {
   /// {@macro word_entry}
   const WordEntry({
     required this.word,
@@ -19,4 +20,7 @@ class WordEntry {
 
   /// {@macro direction}
   final Direction direction;
+
+  @override
+  List<Object?> get props => [word, location, direction];
 }
