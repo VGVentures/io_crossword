@@ -1,9 +1,26 @@
 import 'package:board_generator_playground/src/models/models.dart';
 
 /// {@template character_map}
-/// Maps a [Location] to a character.
+/// Maps a [Location] to a [CharacterData].
 /// {@endtemplate}
-typedef CharacterMap = Map<Location, String>;
+typedef CharacterMap = Map<Location, CharacterData>;
+
+/// {@template character_data}
+/// The data for a character on the board.
+/// {@endtemplate}
+class CharacterData {
+  /// {@macro character_data}
+  CharacterData({
+    required this.character,
+    required this.wordEntry,
+  });
+
+  /// The character.
+  final String character;
+
+  /// The words that contain this character.
+  final Set<WordEntry> wordEntry;
+}
 
 /// The board for the crossword puzzle.
 class Crossword {
@@ -28,7 +45,9 @@ class Crossword {
           ? location.copyWith(x: location.x + i)
           : location.copyWith(y: location.y + i);
 
-      characterMap[newLocation] = character;
+      final data = (characterMap[newLocation]?..wordEntry.add(entry)) ??
+          CharacterData(character: character, wordEntry: {entry});
+      characterMap[newLocation] = data;
     }
   }
 
@@ -229,5 +248,22 @@ class Crossword {
     }
 
     return true;
+  }
+
+  /// The words at a given [location].
+  ///
+  /// For example:
+  ///
+  /// ```
+  ///    -1 -2  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
+  /// The words at location (0, -2) are "ALBUS" and "BEHAN".
+  Set<WordEntry> wordsAt(Location location) {
+    return characterMap[location]?.wordEntry ?? {};
   }
 }
