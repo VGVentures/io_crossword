@@ -5,13 +5,16 @@ import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
 class CrosswordGame extends FlameGame with PanDetector {
   CrosswordGame(
     this.bloc, {
     bool? showDebugOverlay,
-  }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
+    FlameNetworkImages? networkImages,
+  })  : showDebugOverlay = showDebugOverlay ?? debugOverlay,
+        networkImages = networkImages ?? FlameNetworkImages();
 
   static const cellSize = 80;
 
@@ -26,6 +29,8 @@ class CrosswordGame extends FlameGame with PanDetector {
   late final Image lettersSprite;
 
   var _visibleSections = <(double, double)>[];
+
+  final FlameNetworkImages networkImages;
 
   CrosswordLoaded get state {
     final state = bloc.state;
@@ -174,15 +179,24 @@ class CrosswordGame extends FlameGame with PanDetector {
       return;
     }
     camera.viewport.position /= 1.05;
-    camera.viewfinder.zoom = camera.viewfinder.zoom - 0.05;
 
+    camera.viewfinder.zoom -= 0.05;
+
+    if (camera.viewfinder.zoom <= 0.80 &&
+        state.renderMode != RenderMode.snapshot) {
+      bloc.add(const RenderModeSwitched(RenderMode.snapshot));
+    }
     _updateVisibleSections();
   }
 
   void zoomIn() {
     camera.viewport.position *= 1.05;
+
     camera.viewfinder.zoom += 0.05;
 
+    if (camera.viewfinder.zoom >= 0.80 && state.renderMode != RenderMode.game) {
+      bloc.add(const RenderModeSwitched(RenderMode.game));
+    }
     _updateVisibleSections();
   }
 

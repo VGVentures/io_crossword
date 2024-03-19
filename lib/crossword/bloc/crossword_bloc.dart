@@ -5,7 +5,6 @@ import 'dart:ui' as ui;
 import 'package:bloc/bloc.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart' hide Axis;
 import 'package:game_domain/game_domain.dart';
 
 part 'crossword_event.dart';
@@ -16,9 +15,7 @@ typedef ImageDecodeCall = Future<ui.Image> Function(Uint8List);
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
-    ImageDecodeCall? imageDecodeCall,
   })  : _crosswordRepository = crosswordRepository,
-        _imageDecodeCall = imageDecodeCall ?? decodeImageFromList,
         super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
@@ -27,7 +24,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   }
 
   final CrosswordRepository _crosswordRepository;
-  final ImageDecodeCall _imageDecodeCall;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
@@ -44,14 +40,19 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           (section.position.x, section.position.y): section,
         };
 
+        if (state is CrosswordLoaded) {
+          final loadedState = state as CrosswordLoaded;
+          return loadedState.copyWith(
+            sections: {
+              ...loadedState.sections,
+              ...newSection,
+            },
+          );
+        }
+
         return CrosswordLoaded(
           sectionSize: section.size,
-          sections: state is CrosswordLoaded
-              ? {
-                  ...(state as CrosswordLoaded).sections,
-                  ...newSection,
-                }
-              : {...newSection},
+          sections: newSection,
         );
       },
     );
@@ -116,26 +117,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     Emitter<CrosswordState> emit,
   ) async {
     if (state is CrosswordLoaded) {
-      var loadedState = state as CrosswordLoaded;
-
-      if (event.renderMode == RenderMode.snapshot) {
-        final sectionsWithSnapshot = loadedState.sections.values
-            .where((section) => section.snapshotUrl != null);
-
-        for (final section in sectionsWithSnapshot) {
-          final bytes = await _crosswordRepository.fetchSectionSnapshotBytes(
-            section.snapshotUrl!,
-          );
-          final image = await _imageDecodeCall(bytes);
-
-          loadedState = loadedState.copyWith(
-            sectionsSnapshots: {
-              ...loadedState.sectionsSnapshots,
-              (section.position.x, section.position.y): image,
-            },
-          );
-        }
-      }
+      final loadedState = state as CrosswordLoaded;
 
       emit(
         loadedState.copyWith(
