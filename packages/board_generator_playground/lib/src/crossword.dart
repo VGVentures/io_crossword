@@ -162,10 +162,10 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
-    final surroundings = entry.surroundings();
-    final surroundingWords = surroundings.map(wordsAt).expand((e) => e);
-    final endsAtSurrounding = surroundingWords.any(
-      (e) => surroundings.contains(e.end),
+    final connections = this.connections(entry);
+    final connectedWords = connections.map(wordsAt).expand((e) => e);
+    final endsAtSurrounding = connectedWords.any(
+      (e) => connections.contains(e.end),
     );
 
     return endsAtSurrounding || overrides(entry);
