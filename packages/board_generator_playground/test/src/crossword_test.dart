@@ -391,6 +391,18 @@ void main() {
     });
 
     group('constraints', () {
+      test('returns null if neighboring word has matching direction', () {
+        final board = Crossword1();
+
+        final candidate = WordCandidate(
+          location: Location(x: 1, y: -2),
+          direction: Direction.down,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(constraints, isNull);
+      });
+
       test('derives successfully a single constraint down', () {
         final board = Crossword1();
 

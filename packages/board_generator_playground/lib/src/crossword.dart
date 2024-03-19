@@ -254,8 +254,8 @@ class Crossword {
   /// [overlaps] with the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will be highly constrained. This
-  /// cases are not properly considered, it is something we would like to
+  /// [ConstrainedWordCandidate], those cases will be return `null`. These
+  /// cases are yet not properly considered, it is something we would like to
   /// contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
@@ -278,8 +278,9 @@ class Crossword {
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      final hasOverlappingWords = words.any(overlaps);
-      if (hasMatchingDirection || hasOverlappingWords) {
+      if (hasMatchingDirection) return null;
+
+      if (words.any(overlaps)) {
         invalidLengths.add(i);
       } else if (i > maximumLength) {
         maximumLength = i;
