@@ -115,7 +115,105 @@ void main() {
 
         expect(
           board.characterMap,
-          {},
+          equals(
+            {
+              Location(x: 0, y: -2): CharacterData(
+                character: 'b',
+                wordEntry: {
+                  WordEntry(
+                    word: 'behan',
+                    location: Location(x: 0, y: -2),
+                    direction: Direction.down,
+                  ),
+                  WordEntry(
+                    word: 'albus',
+                    location: Location(x: -2, y: -2),
+                    direction: Direction.across,
+                  ),
+                },
+              ),
+              Location(x: 0, y: -1): CharacterData(
+                character: 'e',
+                wordEntry: {
+                  WordEntry(
+                    word: 'behan',
+                    location: Location(x: 0, y: -2),
+                    direction: Direction.down,
+                  ),
+                },
+              ),
+              Location(x: 0, y: 0): CharacterData(
+                character: 'h',
+                wordEntry: {
+                  WordEntry(
+                    word: 'behan',
+                    location: Location(x: 0, y: -2),
+                    direction: Direction.down,
+                  ),
+                },
+              ),
+              Location(x: 0, y: 1): CharacterData(
+                character: 'a',
+                wordEntry: {
+                  WordEntry(
+                    word: 'behan',
+                    location: Location(x: 0, y: -2),
+                    direction: Direction.down,
+                  ),
+                },
+              ),
+              Location(x: 0, y: 2): CharacterData(
+                character: 'n',
+                wordEntry: {
+                  WordEntry(
+                    word: 'behan',
+                    location: Location(x: 0, y: -2),
+                    direction: Direction.down,
+                  ),
+                },
+              ),
+              Location(x: -2, y: -2): CharacterData(
+                character: 'a',
+                wordEntry: {
+                  WordEntry(
+                    word: 'albus',
+                    location: Location(x: -2, y: -2),
+                    direction: Direction.across,
+                  ),
+                },
+              ),
+              Location(x: -1, y: -2): CharacterData(
+                character: 'l',
+                wordEntry: {
+                  WordEntry(
+                    word: 'albus',
+                    location: Location(x: -2, y: -2),
+                    direction: Direction.across,
+                  ),
+                },
+              ),
+              Location(x: 1, y: -2): CharacterData(
+                character: 'u',
+                wordEntry: {
+                  WordEntry(
+                    word: 'albus',
+                    location: Location(x: -2, y: -2),
+                    direction: Direction.across,
+                  ),
+                },
+              ),
+              Location(x: 2, y: -2): CharacterData(
+                character: 's',
+                wordEntry: {
+                  WordEntry(
+                    word: 'albus',
+                    location: Location(x: -2, y: -2),
+                    direction: Direction.across,
+                  ),
+                },
+              ),
+            },
+          ),
         );
       });
     });
