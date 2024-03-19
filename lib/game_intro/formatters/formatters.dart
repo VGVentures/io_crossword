@@ -62,7 +62,7 @@ class BackspaceFormatter extends TextInputFormatter {
 class JustOneCharacterFormatter extends TextInputFormatter {
   JustOneCharacterFormatter(this.onSameValue);
 
-  /// If after truncation the text is the same as the previous one,
+  /// If after truncating the text is the same as the previous one,
   /// this callback will force an "onChange" behavior.
   final ValueChanged<String> onSameValue;
 
