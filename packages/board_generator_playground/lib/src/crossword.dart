@@ -323,7 +323,7 @@ class Crossword {
   /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
   /// is something we would like to consider in the future.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    var invalidLengths = <int>{};
+    final invalidLengths = <int>{};
     var maximumLength = 1;
     for (var i = 1; i < largestWordLength; i++) {
       final positiveSideLocation = switch (candidate.direction) {
