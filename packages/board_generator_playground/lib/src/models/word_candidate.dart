@@ -43,6 +43,7 @@ class ConstrainedWordCandidate extends WordCandidate {
   /// ```dart
   /// {1:'a', 3:'b'}
   /// ```
+  ///
   /// Means the second character must be an 'a' and the fourth character must be
   /// a 'b'.
   final Map<int, String> constraints;

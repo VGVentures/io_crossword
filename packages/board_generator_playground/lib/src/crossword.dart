@@ -42,9 +42,7 @@ class Crossword {
 
   /// Determines if a new [entry] will be connected to the existing board.
   ///
-  /// For example:
-  ///
-  /// Considering this board:
+  /// For example, consider the following board:
   ///
   /// ```
   /// - - - A L B U S
@@ -95,9 +93,7 @@ class Crossword {
 
   /// Determines all the connections for a new [entry].
   ///
-  /// For example:
-  ///
-  /// Considering this board:
+  /// For example, considering the following board:
   ///
   /// ```
   /// - - - A L B U S
@@ -128,9 +124,7 @@ class Crossword {
   /// Overlapping a word means that adding such [entry] would change an
   /// existing word or overwrite it completely.
   ///
-  /// For example:
-  ///
-  /// Considering this board:
+  /// For example, consider the following board:
   ///
   /// ```
   ///    -5 -4 -3 -2 -1  0  1  2
@@ -177,9 +171,8 @@ class Crossword {
 
   /// Whether the new [entry] overrides an existing word.
   ///
-  /// For example:
+  /// For example, consider the following board:
   ///
-  /// Considering this board:
   /// ```
   ///    -2 -1  0  1  2
   /// -2  -  -  B  U  S
@@ -207,7 +200,7 @@ class Crossword {
 
   /// The words at a given [location].
   ///
-  /// For example:
+  /// For example, consider the following board:
   ///
   /// ```
   ///    -2 -1  0  1  2
@@ -217,6 +210,7 @@ class Crossword {
   ///  1  -  -  A  -  -
   ///  2  -  -  N  -  -
   /// ```
+  ///
   /// The words at location (0, -2) are "ALBUS" and "BEHAN".
   Set<WordEntry> wordsAt(Location location) {
     return characterMap[location]?.wordEntry ?? {};
@@ -224,9 +218,7 @@ class Crossword {
 
   /// The constraints for a given [candidate].
   ///
-  /// For example:
-  ///
-  /// Consider this board:
+  /// For example, consider the following board:
   ///
   /// ```
   ///    -2 -1  0  1  2
@@ -243,6 +235,7 @@ class Crossword {
   /// maximum length of [largestWordLength].
   ///
   /// If we consider this other board:
+  ///
   /// ```
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S

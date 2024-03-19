@@ -28,19 +28,17 @@ class WordEntry extends Equatable {
 
   /// The surrounding locations of the word entry.
   ///
-  /// For example:
-  ///
-  /// Consider the following board
+  /// For example, consider the following board:
   ///
   /// ```
-  ///    -2 -1  0  1  2
-  /// -3  -  -  -  -  -
-  /// -2  -  -  B  U  S
-  /// -1  -  -  E  -  -
-  ///  0  -  -  H  -  -
-  ///  1  -  -  A  -  -
-  ///  2  -  -  N  -  -
-  ///  3  -  -  -  -  -
+  ///    -1  0  1  2
+  /// -3  -  -  -  -
+  /// -2  -  B  U  S
+  /// -1  -  E  -  -
+  ///  0  -  H  -  -
+  ///  1  -  A  -  -
+  ///  2  -  N  -  -
+  ///  3  -  -  -  -
   /// ```
   ///
   /// The surrounding locations of the word "BUSH" are:
@@ -51,14 +49,14 @@ class WordEntry extends Equatable {
   ///
   ///
   /// ```
-  ///    -2 -1  0  1  2
-  /// -3  -  -  *  -  -
-  /// -2  -  *  B  *  S
-  /// -1  -  *  E  *  -
-  ///  0  -  *  H  *  -
-  ///  1  -  *  A  *  -
-  ///  2  -  *  N  *  -
-  ///  3  -  -  *  -  -
+  ///    -1  0  1  2
+  /// -3  -  *  -  -
+  /// -2  *  B  *  S
+  /// -1  *  E  *  -
+  ///  0  *  H  *  -
+  ///  1  *  A  *  -
+  ///  2  *  N  *  -
+  ///  3  -  *  -  -
   /// ```
   Set<Location> surroundings() {
     final prefix = direction == Direction.across ? start.left() : start.up();
