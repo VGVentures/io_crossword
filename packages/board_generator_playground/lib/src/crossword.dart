@@ -227,10 +227,8 @@ class Crossword {
 
     final x = location.x;
     final y = location.y;
-    final prefix = switch (direction) {
-      Direction.across => characterMap[location.copyWith(x: x - 1)],
-      Direction.down => characterMap[location.copyWith(y: y - 1)],
-    };
+    final prefix = characterMap[location];
+
     final suffix = switch (direction) {
       Direction.across => characterMap[location.copyWith(x: x + word.length)],
       Direction.down => characterMap[location.copyWith(y: y + word.length)],

@@ -240,6 +240,32 @@ void main() {
       });
     });
 
+    group('overlaps', () {
+      test('returns true when complete empty spot', () {
+        final board = Crossword3();
+
+        const word = WordEntry(
+          word: 'sandy',
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        expect(board.overlaps(word), isTrue);
+      });
+
+      test('returns true when complete empty spot', () {
+        final board = Crossword3();
+
+        const word = WordEntry(
+          word: 'sandy',
+          location: Location(x: 2, y: -1),
+          direction: Direction.down,
+        );
+
+        expect(board.overlaps(word), isTrue);
+      });
+    });
+
     group('connections', () {
       test('gets 4 connections for usa down at (1, -2)', () {
         final board = Crossword1();
