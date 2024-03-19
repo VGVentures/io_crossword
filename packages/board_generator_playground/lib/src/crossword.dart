@@ -254,24 +254,26 @@ class Crossword {
   /// [overlaps] with the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
-  /// is something we would like to consider in the future.
+  /// [ConstrainedWordCandidate], those cases will be highly constrained. This
+  /// cases are not properly considered, it is something we would like to
+  /// contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
     var maximumLength = 1;
     for (var i = 1; i < largestWordLength; i++) {
-      final positiveSideLocation = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i, y: 1),
-        Direction.down => candidate.location.shift(x: 1, y: i),
-      };
-      final negativeSideLocation = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i, y: -1),
-        Direction.down => candidate.location.shift(x: -1, y: i),
-      };
-
       final words = {
-        ...wordsAt(positiveSideLocation),
-        ...wordsAt(negativeSideLocation),
+        ...wordsAt(
+          switch (candidate.direction) {
+            Direction.across => candidate.location.shift(x: i, y: 1),
+            Direction.down => candidate.location.shift(x: 1, y: i),
+          },
+        ),
+        ...wordsAt(
+          switch (candidate.direction) {
+            Direction.across => candidate.location.shift(x: i, y: -1),
+            Direction.down => candidate.location.shift(x: -1, y: i),
+          },
+        ),
       };
 
       final hasMatchingDirection =
