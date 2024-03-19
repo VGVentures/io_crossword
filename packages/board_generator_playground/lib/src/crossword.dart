@@ -24,7 +24,7 @@ class Crossword {
 
   /// Adds a word to the board.
   void add(WordEntry entry) {
-    final location = entry.location;
+    final location = entry.start;
     final word = entry.word;
     final direction = entry.direction;
 
@@ -76,7 +76,7 @@ class Crossword {
   /// N - - - - N - -
   /// ```
   bool isConnected(WordEntry entry) {
-    final location = entry.location;
+    final location = entry.start;
     final word = entry.word;
     final direction = entry.direction;
 
@@ -118,7 +118,7 @@ class Crossword {
   /// - - - - - N - -
   /// ```
   Set<Location> connections(WordEntry entry) {
-    final location = entry.location;
+    final location = entry.start;
     final word = entry.word;
     final direction = entry.direction;
 
@@ -206,7 +206,7 @@ class Crossword {
     final surroundings = entry.surroundings();
     final surroundingWords = surroundings.map(wordsAt).expand((e) => e);
     final endsAtSurrounding = surroundingWords.any((e) {
-      final start = e.location;
+      final start = e.start;
       final end = switch (e.direction) {
         Direction.across => start.copyWith(x: start.x + e.word.length),
         Direction.down => start.copyWith(y: start.y + e.word.length),
@@ -236,7 +236,7 @@ class Crossword {
   ///
   /// * [overlaps] for a more general check.
   bool overrides(WordEntry entry) {
-    final location = entry.location;
+    final location = entry.start;
     final word = entry.word;
     final direction = entry.direction;
 
@@ -252,7 +252,7 @@ class Crossword {
     }
 
     for (final innerWordEntry in innerWordEntries) {
-      final start = innerWordEntry.location;
+      final start = innerWordEntry.start;
       final end = switch (innerWordEntry.direction) {
         Direction.across =>
           start.copyWith(x: start.x + innerWordEntry.word.length),

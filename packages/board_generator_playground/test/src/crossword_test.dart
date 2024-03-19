@@ -14,7 +14,7 @@ void main() {
 
         const url = WordEntry(
           word: 'url',
-          location: Location(x: 0, y: -1),
+          start: Location(x: 0, y: -1),
           direction: Direction.down,
         );
         board.add(url);
@@ -43,7 +43,7 @@ void main() {
 
         const url = WordEntry(
           word: 'url',
-          location: Location(x: -1, y: 0),
+          start: Location(x: -1, y: 0),
           direction: Direction.across,
         );
         board.add(url);
@@ -70,12 +70,12 @@ void main() {
       test('adds crossing words', () {
         final behan = WordEntry(
           word: 'behan',
-          location: Location(x: 0, y: -2),
+          start: Location(x: 0, y: -2),
           direction: Direction.down,
         );
         final albus = WordEntry(
           word: 'albus',
-          location: Location(x: -2, y: -2),
+          start: Location(x: -2, y: -2),
           direction: Direction.across,
         );
 
@@ -92,12 +92,12 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'behan',
-                    location: Location(x: 0, y: -2),
+                    start: Location(x: 0, y: -2),
                     direction: Direction.down,
                   ),
                   WordEntry(
                     word: 'albus',
-                    location: Location(x: -2, y: -2),
+                    start: Location(x: -2, y: -2),
                     direction: Direction.across,
                   ),
                 },
@@ -107,7 +107,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'behan',
-                    location: Location(x: 0, y: -2),
+                    start: Location(x: 0, y: -2),
                     direction: Direction.down,
                   ),
                 },
@@ -117,7 +117,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'behan',
-                    location: Location(x: 0, y: -2),
+                    start: Location(x: 0, y: -2),
                     direction: Direction.down,
                   ),
                 },
@@ -127,7 +127,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'behan',
-                    location: Location(x: 0, y: -2),
+                    start: Location(x: 0, y: -2),
                     direction: Direction.down,
                   ),
                 },
@@ -137,7 +137,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'behan',
-                    location: Location(x: 0, y: -2),
+                    start: Location(x: 0, y: -2),
                     direction: Direction.down,
                   ),
                 },
@@ -147,7 +147,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'albus',
-                    location: Location(x: -2, y: -2),
+                    start: Location(x: -2, y: -2),
                     direction: Direction.across,
                   ),
                 },
@@ -157,7 +157,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'albus',
-                    location: Location(x: -2, y: -2),
+                    start: Location(x: -2, y: -2),
                     direction: Direction.across,
                   ),
                 },
@@ -167,7 +167,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'albus',
-                    location: Location(x: -2, y: -2),
+                    start: Location(x: -2, y: -2),
                     direction: Direction.across,
                   ),
                 },
@@ -177,7 +177,7 @@ void main() {
                 wordEntry: {
                   WordEntry(
                     word: 'albus',
-                    location: Location(x: -2, y: -2),
+                    start: Location(x: -2, y: -2),
                     direction: Direction.across,
                   ),
                 },
@@ -194,7 +194,7 @@ void main() {
 
         const sun = WordEntry(
           word: 'sun',
-          location: Location(x: 2, y: -2),
+          start: Location(x: 2, y: -2),
           direction: Direction.down,
         );
 
@@ -206,7 +206,7 @@ void main() {
 
         const sun = WordEntry(
           word: 'sun',
-          location: Location(x: 2, y: -1),
+          start: Location(x: 2, y: -1),
           direction: Direction.down,
         );
 
@@ -218,7 +218,7 @@ void main() {
 
         const hat = WordEntry(
           word: 'hat',
-          location: Location(x: 0, y: 0),
+          start: Location(x: 0, y: 0),
           direction: Direction.across,
         );
 
@@ -232,7 +232,7 @@ void main() {
 
         const word = WordEntry(
           word: 'egg',
-          location: Location(x: 1, y: -1),
+          start: Location(x: 1, y: -1),
           direction: Direction.across,
         );
 
@@ -246,7 +246,7 @@ void main() {
 
         const word = WordEntry(
           word: 'sandy',
-          location: Location(x: 2, y: -2),
+          start: Location(x: 2, y: -2),
           direction: Direction.down,
         );
 
@@ -258,7 +258,7 @@ void main() {
 
         const word = WordEntry(
           word: 'sand',
-          location: Location(x: 2, y: -2),
+          start: Location(x: 2, y: -2),
           direction: Direction.down,
         );
 
@@ -270,7 +270,7 @@ void main() {
 
         const word = WordEntry(
           word: 'sandy',
-          location: Location(x: 2, y: -1),
+          start: Location(x: 2, y: -1),
           direction: Direction.down,
         );
 
@@ -284,7 +284,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'usa',
-          location: Location(x: 1, y: -2),
+          start: Location(x: 1, y: -2),
           direction: Direction.down,
         );
 
@@ -304,7 +304,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'sand',
-          location: Location(x: 2, y: -2),
+          start: Location(x: 2, y: -2),
           direction: Direction.down,
         );
 
@@ -321,7 +321,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'sa',
-          location: Location(x: 1, y: -1),
+          start: Location(x: 1, y: -1),
           direction: Direction.down,
         );
 
@@ -340,7 +340,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'usa',
-          location: Location(x: -2, y: 1),
+          start: Location(x: -2, y: 1),
           direction: Direction.across,
         );
 
@@ -358,7 +358,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'sand',
-          location: Location(x: 2, y: -2),
+          start: Location(x: 2, y: -2),
           direction: Direction.across,
         );
 
@@ -375,7 +375,7 @@ void main() {
 
         const usa = WordEntry(
           word: 'egg',
-          location: Location(x: 1, y: -1),
+          start: Location(x: 1, y: -1),
           direction: Direction.across,
         );
 

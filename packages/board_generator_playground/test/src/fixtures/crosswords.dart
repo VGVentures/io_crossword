@@ -19,14 +19,14 @@ class Crossword1 extends Crossword {
     add(
       const WordEntry(
         word: 'behan',
-        location: Location(x: 0, y: -2),
+        start: Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
       const WordEntry(
         word: 'albus',
-        location: Location(x: -2, y: -2),
+        start: Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
@@ -51,21 +51,21 @@ class Crossword2 extends Crossword {
     add(
       const WordEntry(
         word: 'behan',
-        location: Location(x: 0, y: -2),
+        start: Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
       const WordEntry(
         word: 'albus',
-        location: Location(x: -2, y: -2),
+        start: Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
     add(
       const WordEntry(
         word: 'now',
-        location: Location(x: 0, y: 2),
+        start: Location(x: 0, y: 2),
         direction: Direction.across,
       ),
     );
@@ -90,28 +90,28 @@ class Crossword3 extends Crossword {
     add(
       const WordEntry(
         word: 'behan',
-        location: Location(x: 0, y: -2),
+        start: Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
       const WordEntry(
         word: 'albus',
-        location: Location(x: -2, y: -2),
+        start: Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
     add(
       const WordEntry(
         word: 'now',
-        location: Location(x: 0, y: 2),
+        start: Location(x: 0, y: 2),
         direction: Direction.across,
       ),
     );
     add(
       const WordEntry(
         word: 'nan',
-        location: Location(x: -1, y: 1),
+        start: Location(x: -1, y: 1),
         direction: Direction.across,
       ),
     );
@@ -136,14 +136,14 @@ class Crossword4 extends Crossword {
     add(
       const WordEntry(
         word: 'behan',
-        location: Location(x: 0, y: -2),
+        start: Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
       const WordEntry(
         word: 'albus',
-        location: Location(x: -2, y: -2),
+        start: Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
@@ -151,7 +151,7 @@ class Crossword4 extends Crossword {
     add(
       const WordEntry(
         word: 'nan',
-        location: Location(x: -1, y: 1),
+        start: Location(x: -1, y: 1),
         direction: Direction.across,
       ),
     );

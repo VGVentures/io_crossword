@@ -19,7 +19,7 @@ void main() {
         // ```
         final entry = WordEntry(
           word: 'BUS',
-          location: Location(x: -1, y: -2),
+          start: Location(x: -1, y: -2),
           direction: Direction.across,
         );
 
@@ -52,7 +52,7 @@ void main() {
         // ```
         final entry = WordEntry(
           word: 'BUS',
-          location: Location(x: -1, y: -2),
+          start: Location(x: -1, y: -2),
           direction: Direction.down,
         );
 

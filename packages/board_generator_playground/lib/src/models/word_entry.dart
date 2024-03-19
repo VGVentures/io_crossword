@@ -8,7 +8,7 @@ class WordEntry extends Equatable {
   /// {@macro word_entry}
   const WordEntry({
     required this.word,
-    required this.location,
+    required this.start,
     required this.direction,
   });
 
@@ -16,7 +16,7 @@ class WordEntry extends Equatable {
   final String word;
 
   /// {@macro location}
-  final Location location;
+  final Location start;
 
   /// {@macro direction}
   final Direction direction;
@@ -57,26 +57,26 @@ class WordEntry extends Equatable {
   /// ```
   Set<Location> surroundings() {
     final prefix = direction == Direction.across
-        ? location.copyWith(x: location.x - 1)
-        : location.copyWith(y: location.y - 1);
+        ? start.copyWith(x: start.x - 1)
+        : start.copyWith(y: start.y - 1);
     final suffix = direction == Direction.across
-        ? location.copyWith(x: location.x + word.length)
-        : location.copyWith(y: location.y + word.length);
+        ? start.copyWith(x: start.x + word.length)
+        : start.copyWith(y: start.y + word.length);
 
     return <Location>{
       prefix,
       suffix,
       for (var i = 0; i < word.length; i++)
         direction == Direction.across
-            ? Location(x: location.x + i, y: location.y - 1)
-            : Location(x: location.x - 1, y: location.y + i),
+            ? Location(x: start.x + i, y: start.y - 1)
+            : Location(x: start.x - 1, y: start.y + i),
       for (var i = 0; i < word.length; i++)
         direction == Direction.across
-            ? Location(x: location.x + i, y: location.y + 1)
-            : Location(x: location.x + 1, y: location.y + i),
+            ? Location(x: start.x + i, y: start.y + 1)
+            : Location(x: start.x + 1, y: start.y + i),
     };
   }
 
   @override
-  List<Object?> get props => [word, location, direction];
+  List<Object?> get props => [word, start, direction];
 }
