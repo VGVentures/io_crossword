@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/game_intro/formatters/formatters.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -181,15 +182,18 @@ class _InitialFormFieldState extends State<_InitialFormField> {
     final blacklisted = initialsStatus == InitialsFormStatus.blacklisted;
     final isFilled = RegExp('[A-Z]').hasMatch(controller.text);
 
+    final mascot =
+        context.select((GameIntroBloc bloc) => bloc.state.selectedMascot);
+
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.circular(6),
-      color: isFilled ? IoCrosswordColors.seedYellow : Colors.transparent,
+      color: isFilled ? mascot.color : Colors.transparent,
       border: Border.all(
         color: blacklisted
             ? IoCrosswordColors.seedRed
             : widget.focusNode.hasPrimaryFocus
                 ? IoCrosswordColors.accessibleBlack
-                : IoCrosswordColors.seedYellow,
+                : mascot.color,
         width: 3,
       ),
     );
