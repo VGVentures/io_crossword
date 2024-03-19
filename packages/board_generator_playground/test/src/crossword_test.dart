@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:board_generator_playground/src/board.dart';
+import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('$Board', () {
+  group('$Crossword', () {
     group('add', () {
       test('adds a down word to the character map', () {
-        final board = Board();
+        final board = Crossword();
 
         const urlWordEntry = WordEntry(
           word: 'url',
@@ -28,7 +28,7 @@ void main() {
       });
 
       test('adds an across word to the character map', () {
-        final board = Board();
+        final board = Crossword();
 
         const urlWordEntry = WordEntry(
           word: 'url',

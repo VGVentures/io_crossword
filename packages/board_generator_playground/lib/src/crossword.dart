@@ -5,7 +5,8 @@ import 'package:board_generator_playground/src/models/models.dart';
 /// {@endtemplate}
 typedef CharacterMap = Map<Location, String>;
 
-class Board {
+/// The board for the crossword puzzle.
+class Crossword {
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
