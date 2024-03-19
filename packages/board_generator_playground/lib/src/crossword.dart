@@ -118,47 +118,9 @@ class Crossword {
   /// - - - - - N - -
   /// ```
   Set<Location> connections(WordEntry entry) {
-    final location = entry.start;
-    final word = entry.word;
-    final direction = entry.direction;
-
-    final positions = <Location>[];
-    for (var i = 0; i < word.length; i++) {
-      final isFirstCharacter = i == 0;
-      final isLastCharacter = i >= word.length;
-
-      switch (direction) {
-        case Direction.across:
-          final x = location.x + i;
-          final y = location.y;
-
-          positions.addAll(
-            [
-              Location(x: x, y: y - 1),
-              Location(x: x, y: y + 1),
-              if (isFirstCharacter) Location(x: x - 1, y: y),
-              if (isLastCharacter) Location(x: x + 1, y: y),
-            ],
-          );
-        case Direction.down:
-          final x = location.x;
-          final y = location.y + i;
-
-          positions.addAll(
-            [
-              Location(x: x - 1, y: y),
-              Location(x: x + 1, y: y),
-              if (isFirstCharacter) Location(x: x, y: y - 1),
-              if (isLastCharacter) Location(x: x, y: y + 1),
-            ],
-          );
-      }
-    }
-
-    return {
-      for (final position in positions)
-        if (characterMap[position] != null) position,
-    };
+    return entry.surroundings().where((location) {
+      return characterMap[location] != null;
+    }).toSet();
   }
 
   /// Whether the new [entry] overlaps an existing word.
