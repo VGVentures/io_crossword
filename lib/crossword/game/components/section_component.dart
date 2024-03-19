@@ -61,7 +61,6 @@ class SectionComponent extends PositionComponent
   });
 
   final (int, int) index;
-  Image? _sectionImage;
   late RenderMode _renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
@@ -79,11 +78,13 @@ class SectionComponent extends PositionComponent
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
+    final state = gameRef.state;
+
     _subscription = gameRef.bloc.stream.listen(_onNewState);
 
-    lastSelectedWord = gameRef.state.selectedWord?.wordId;
-    lastSelectedSection = gameRef.state.selectedWord?.section;
-    _renderMode = gameRef.state.renderMode;
+    lastSelectedWord = state.selectedWord?.wordId;
+    lastSelectedSection = state.selectedWord?.section;
+    _renderMode = state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
@@ -104,21 +105,25 @@ class SectionComponent extends PositionComponent
 
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
-      _sectionImage = state.sectionsSnapshots[index];
       if (_boardSection == null) {
         final boardSection = state.sections[index];
         _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
-          _loadBoardSection();
+          if (state.renderMode == RenderMode.snapshot) {
+            _loadSnapshot();
+          } else {
+            _loadBoardSection();
+          }
         }
       } else {
-        if (state.renderMode != _renderMode) {
-          for (final child in children) {
-            child.removeFromParent();
-          }
+        if (_renderMode != state.renderMode) {
           _renderMode = state.renderMode;
-          _loadBoardSection();
+          if (state.renderMode == RenderMode.snapshot) {
+            _loadSnapshot();
+          } else {
+            _loadBoardSection();
+          }
         }
         final selectedWord = state.selectedWord?.wordId;
         final selectedSection = state.selectedWord?.section;
@@ -137,87 +142,33 @@ class SectionComponent extends PositionComponent
     }
   }
 
-  void _updateSelection({
-    String? previousWord,
-    String? newWord,
-    (int, int)? previousSection,
-    (int, int)? newSection,
-  }) {
-    final indexes = <(String, Color, (int, int))>[];
-    if (previousSection == index &&
-        previousWord != null &&
-        _wordIndex.containsKey(previousWord)) {
-      indexes.add(
-        (
-          previousWord,
-          Colors.white.withOpacity(.2),
-          _wordIndex[previousWord]!,
-        ),
+  Vector2 get sectionPosition => Vector2(
+        index.$1 * gameRef.sectionSize.toDouble(),
+        index.$2 * gameRef.sectionSize.toDouble(),
       );
-    }
 
-    if (newSection == index &&
-        newWord != null &&
-        _wordIndex.containsKey(newWord)) {
-      indexes.add(
-        (
-          newWord,
-          Colors.white,
-          _wordIndex[newWord]!,
-        ),
-      );
-    }
+  Future<void> _loadSnapshot() async {
+    final snapshot = await gameRef.networkImages.load(
+      _boardSection!.snapshotUrl!,
+    );
 
-    for (final index in indexes) {
-      for (var i = index.$3.$1; i < index.$3.$2; i++) {
-        spriteBatchComponent?.spriteBatch?.replace(
-          i,
-          color: index.$2,
-        );
-      }
-    }
+    spriteBatchComponent?.removeFromParent();
+    add(
+      SpriteComponent.fromImage(
+        position: sectionPosition,
+        snapshot,
+      ),
+    );
   }
 
   void _loadBoardSection() {
-    if (_boardSection == null) return;
-
-    final sectionPosition = Vector2(
-      (index.$1 * gameRef.sectionSize).toDouble(),
-      (index.$2 * gameRef.sectionSize).toDouble(),
-    );
-
-    add(
-      SectionTapController(
-        position: sectionPosition,
-        size: Vector2(
-          gameRef.sectionSize.toDouble(),
-          gameRef.sectionSize.toDouble(),
-        ),
-      ),
-    );
-
-    if (_renderMode == RenderMode.snapshot && _sectionImage != null) {
-      _loadBoardSectionImage();
-    } else {
-      _loadBoardSectionBatch();
+    final section = _boardSection;
+    if (section == null) {
+      return;
     }
-  }
 
-  Future<void> _loadBoardSectionImage() async {
-    final sectionSprite = Sprite(_sectionImage!);
-    final sectionPosition = Vector2(
-      (index.$1 * gameRef.sectionSize).toDouble(),
-      (index.$2 * gameRef.sectionSize).toDouble(),
-    );
-    add(
-      SpriteComponent(
-        sprite: sectionSprite,
-        position: sectionPosition,
-      ),
-    );
-  }
+    firstChild<SpriteComponent>()?.removeFromParent();
 
-  void _loadBoardSectionBatch() {
     final spriteBatch = SpriteBatch(gameRef.lettersSprite);
 
     _wordIndex = {};
@@ -276,5 +227,46 @@ class SectionComponent extends PositionComponent
         blendMode: BlendMode.srcATop,
       ),
     );
+  }
+
+  void _updateSelection({
+    String? previousWord,
+    String? newWord,
+    (int, int)? previousSection,
+    (int, int)? newSection,
+  }) {
+    final indexes = <(String, Color, (int, int))>[];
+    if (previousSection == index &&
+        previousWord != null &&
+        _wordIndex.containsKey(previousWord)) {
+      indexes.add(
+        (
+          previousWord,
+          Colors.white.withOpacity(.2),
+          _wordIndex[previousWord]!,
+        ),
+      );
+    }
+
+    if (newSection == index &&
+        newWord != null &&
+        _wordIndex.containsKey(newWord)) {
+      indexes.add(
+        (
+          newWord,
+          Colors.white,
+          _wordIndex[newWord]!,
+        ),
+      );
+    }
+
+    for (final index in indexes) {
+      for (var i = index.$3.$1; i < index.$3.$2; i++) {
+        spriteBatchComponent?.spriteBatch?.replace(
+          i,
+          color: index.$2,
+        );
+      }
+    }
   }
 }

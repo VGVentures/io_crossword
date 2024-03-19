@@ -207,6 +207,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dev:
+    dependency: transitive
+    description:
+      name: dev
+      sha256: e7e806af20d53e293a7878212d2246d3e9fccd2b49d597600f9898ed83501cb4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   diff_match_patch:
     dependency: transitive
     description:
@@ -336,6 +344,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  flame_network_assets:
+    dependency: "direct main"
+    description:
+      path: "packages/flame_network_assets"
+      ref: main
+      resolved-ref: e3e755c6dec35f36b4a42893afeea5f64ff025b7
+      url: "https://github.com/flame-engine/flame.git"
+    source: git
+    version: "0.3.0"
   flame_test:
     dependency: "direct main"
     description:
@@ -395,6 +412,14 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  gestures:
+    dependency: transitive
+    description:
+      name: gestures
+      sha256: "6e75e4ba1ad033a8be9a682974dfe6a2be96ab07b4aa8335ed37bbecb75b7770"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   glob:
     dependency: transitive
     description:
@@ -404,7 +429,7 @@ packages:
     source: hosted
     version: "2.1.2"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/components.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -10,6 +11,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockFlameNetworkImages extends Mock implements FlameNetworkImages {}
 
 class FakeImage extends Fake implements ui.Image {
   @override
@@ -22,6 +25,7 @@ class FakeImage extends Fake implements ui.Image {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('SectionComponent', () {
+    late FlameNetworkImages flameNetworkImages;
     late CrosswordBloc bloc;
 
     void mockState(CrosswordState state) {
@@ -33,6 +37,7 @@ void main() {
     }
 
     setUp(() {
+      flameNetworkImages = _MockFlameNetworkImages();
       bloc = _MockCrosswordBloc();
 
       const state = CrosswordLoaded(
@@ -40,9 +45,16 @@ void main() {
         sections: {},
       );
       mockState(state);
+
+      when(
+        () => flameNetworkImages.load(any()),
+      ).thenAnswer((_) async => FakeImage());
     });
 
-    CrosswordGame createGame() => CrosswordGame(bloc);
+    CrosswordGame createGame() => CrosswordGame(
+          bloc,
+          networkImages: flameNetworkImages,
+        );
 
     testWithGame(
       'loads',
@@ -252,7 +264,7 @@ void main() {
               size: 400,
               words: [
                 Word(
-                  position: const Point(0, 0),
+                  position: const Point(1, 0),
                   axis: Axis.vertical,
                   answer: 'Flutter',
                   clue: '',
@@ -280,14 +292,14 @@ void main() {
         streamController.add(
           state.copyWith(
             renderMode: RenderMode.snapshot,
-            sectionsSnapshots: {
-              (0, 0): FakeImage(),
-            },
           ),
         );
 
         await Future.microtask(() {});
+        await Future.microtask(() {});
         game.update(0);
+
+        verify(() => flameNetworkImages.load(any())).called(1);
 
         final sectionComponent = game.world.children
             .whereType<SectionComponent>()
