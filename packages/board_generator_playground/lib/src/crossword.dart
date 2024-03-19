@@ -1,4 +1,5 @@
 import 'package:board_generator_playground/src/models/models.dart';
+import 'package:equatable/equatable.dart';
 
 /// {@template character_map}
 /// Maps a [Location] to a [CharacterData].
@@ -8,9 +9,9 @@ typedef CharacterMap = Map<Location, CharacterData>;
 /// {@template character_data}
 /// The data for a character on the board.
 /// {@endtemplate}
-class CharacterData {
+class CharacterData extends Equatable {
   /// {@macro character_data}
-  CharacterData({
+  const CharacterData({
     required this.character,
     required this.wordEntry,
   });
@@ -20,6 +21,9 @@ class CharacterData {
 
   /// The words that contain this character.
   final Set<WordEntry> wordEntry;
+
+  @override
+  List<Object?> get props => [character, wordEntry];
 }
 
 /// The board for the crossword puzzle.
@@ -235,7 +239,7 @@ class Crossword {
   ///
   /// Considering this board:
   /// ```
-  ///    -1 -2  0  1  2
+  ///    -2 -1  0  1  2
   /// -2  -  -  B  U  S
   /// -1  -  -  E  -  -
   ///  0  -  -  H  -  -
@@ -284,7 +288,7 @@ class Crossword {
   /// For example:
   ///
   /// ```
-  ///    -1 -2  0  1  2
+  ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
   ///  0  -  -  H  -  -

@@ -4,43 +4,66 @@ import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
 import 'package:test/test.dart';
 
+/// {@template test_crossword}
+/// A pre-defined crossword for testing.
+///
+/// ```
+///    -2 -1  0  1  2
+/// -2  A  L  B  U  S
+/// -1  -  -  E  -  -
+///  0  -  -  H  -  -
+///  1  -  -  A  -  -
+///  2  -  -  N  -  -
+/// ```
+/// {@endtemplate}
+class _TestCrossword extends Crossword {
+  /// {@macro test_crossword}
+  _TestCrossword() {
+    add(
+      WordEntry(
+        word: 'behan',
+        location: Location(x: 0, y: -2),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'albus',
+        location: Location(x: -2, y: -2),
+        direction: Direction.across,
+      ),
+    );
+  }
+}
+
 void main() {
   group('$Crossword', () {
-    ///    -1 -2  0  1  2
-    /// -2  A  L  B  U  S
-    /// -1  -  -  E  -  -
-    ///  0  -  -  H  -  -
-    ///  1  -  -  A  -  -
-    ///  2  -  -  N  -  -
-    final characterMap = {
-      Location(x: 0, y: -2): 'b',
-      Location(x: 0, y: -1): 'e',
-      Location(x: 0, y: 0): 'h',
-      Location(x: 0, y: 1): 'a',
-      Location(x: 0, y: 2): 'n',
-      Location(x: -2, y: -2): 'a',
-      Location(x: -1, y: -2): 'l',
-      Location(x: 1, y: -2): 'u',
-      Location(x: 2, y: -2): 's',
-    };
-
     group('add', () {
       test('adds a down word to the character map', () {
         final board = Crossword();
 
-        const urlWordEntry = WordEntry(
+        const url = WordEntry(
           word: 'url',
           location: Location(x: 0, y: -1),
           direction: Direction.down,
         );
-        board.add(urlWordEntry);
+        board.add(url);
 
         expect(
           board.characterMap,
           {
-            Location(x: 0, y: -1): 'u',
-            Location(x: 0, y: 0): 'r',
-            Location(x: 0, y: 1): 'l',
+            Location(x: 0, y: -1): CharacterData(
+              character: 'u',
+              wordEntry: const {url},
+            ),
+            Location(x: 0, y: 0): CharacterData(
+              character: 'r',
+              wordEntry: const {url},
+            ),
+            Location(x: 0, y: 1): CharacterData(
+              character: 'l',
+              wordEntry: const {url},
+            ),
           },
         );
       });
@@ -48,19 +71,28 @@ void main() {
       test('adds an across word to the character map', () {
         final board = Crossword();
 
-        const urlWordEntry = WordEntry(
+        const url = WordEntry(
           word: 'url',
           location: Location(x: -1, y: 0),
           direction: Direction.across,
         );
-        board.add(urlWordEntry);
+        board.add(url);
 
         expect(
           board.characterMap,
           {
-            Location(x: -1, y: 0): 'u',
-            Location(x: 0, y: 0): 'r',
-            Location(x: 1, y: 0): 'l',
+            Location(x: -1, y: 0): CharacterData(
+              character: 'u',
+              wordEntry: const {url},
+            ),
+            Location(x: 0, y: 0): CharacterData(
+              character: 'r',
+              wordEntry: const {url},
+            ),
+            Location(x: 1, y: 0): CharacterData(
+              character: 'l',
+              wordEntry: const {url},
+            ),
           },
         );
       });
@@ -68,7 +100,7 @@ void main() {
 
     group('isConnected', () {
       test('connected to the board in the position (2, -2) with s', () {
-        final board = Crossword()..characterMap.addAll(characterMap);
+        final board = _TestCrossword();
 
         const sunWordEntry = WordEntry(
           word: 'sun',
@@ -80,7 +112,7 @@ void main() {
       });
 
       test('not connected to the board in the position (2, -1) with s', () {
-        final board = Crossword()..characterMap.addAll(characterMap);
+        final board = _TestCrossword();
 
         const sunWordEntry = WordEntry(
           word: 'sun',
@@ -92,7 +124,7 @@ void main() {
       });
 
       test('connected to the board in the position (0, 0) with h', () {
-        final board = Crossword()..characterMap.addAll(characterMap);
+        final board = _TestCrossword();
 
         const sunWordEntry = WordEntry(
           word: 'hat',
@@ -106,7 +138,7 @@ void main() {
 
     group('connections', () {
       test('gets 4 connections for usa at (1, -2)', () {
-        final board = Crossword()..characterMap.addAll(characterMap);
+        final board = _TestCrossword();
 
         const sunWordEntry = WordEntry(
           word: 'usa',
