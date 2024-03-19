@@ -199,37 +199,39 @@ class _InitialFormFieldState extends State<InitialFormField> {
       ),
     );
 
-    return Container(
+    return SizedBox(
       width: 58,
       height: 58,
-      decoration: decoration,
-      child: TextFormField(
-        key: Key('initial_form_field_${widget.index}'),
-        controller: controller,
-        autofocus: widget.index == 0,
-        focusNode: widget.focusNode,
-        showCursor: false,
-        textInputAction: TextInputAction.next,
-        inputFormatters: [
-          BackspaceFormatter(
-            onBackspace: () => widget.onBackspace(widget.index),
+      child: DecoratedBox(
+        decoration: decoration,
+        child: TextFormField(
+          key: Key('initial_form_field_${widget.index}'),
+          controller: controller,
+          autofocus: widget.index == 0,
+          focusNode: widget.focusNode,
+          showCursor: false,
+          textInputAction: TextInputAction.next,
+          inputFormatters: [
+            BackspaceFormatter(
+              onBackspace: () => widget.onBackspace(widget.index),
+            ),
+            FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+            UpperCaseTextFormatter(),
+            JustOneCharacterFormatter((value) {
+              widget.onChanged(widget.index, value);
+            }),
+            EmptyCharacterAtEndFormatter(),
+          ],
+          style: IoCrosswordTextStyles.gridLetter,
+          textCapitalization: TextCapitalization.characters,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
           ),
-          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-          UpperCaseTextFormatter(),
-          JustOneCharacterFormatter((value) {
+          textAlign: TextAlign.center,
+          onChanged: (value) {
             widget.onChanged(widget.index, value);
-          }),
-          EmptyCharacterAtEndFormatter(),
-        ],
-        style: IoCrosswordTextStyles.gridLetter,
-        textCapitalization: TextCapitalization.characters,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
+          },
         ),
-        textAlign: TextAlign.center,
-        onChanged: (value) {
-          widget.onChanged(widget.index, value);
-        },
       ),
     );
   }

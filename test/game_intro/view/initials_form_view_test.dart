@@ -247,9 +247,9 @@ void main() {
         await tester.pumpApp(child);
         final blacklistDecoration = find.byWidgetPredicate(
           (widget) =>
-              widget is Container &&
+              widget is DecoratedBox &&
               widget.decoration is BoxDecoration &&
-              ((widget.decoration! as BoxDecoration).border ==
+              ((widget.decoration as BoxDecoration).border ==
                   Border.all(color: IoCrosswordColors.seedRed, width: 3)),
         );
 
