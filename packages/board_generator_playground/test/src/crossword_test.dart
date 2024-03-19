@@ -257,7 +257,7 @@ void main() {
     });
 
     group('connections', () {
-      test('gets 4 connections for usa at (1, -2)', () {
+      test('gets 4 connections for usa down at (1, -2)', () {
         final board = _TestCrossword();
 
         const usa = WordEntry(
@@ -273,6 +273,96 @@ void main() {
             Location(x: 0, y: -2),
             Location(x: 0, y: -1),
             Location(x: 0, y: 0),
+          },
+        );
+      });
+
+      test('gets 1 connections for usa down at (2, -2)', () {
+        final board = _TestCrossword();
+
+        const usa = WordEntry(
+          word: 'sand',
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        expect(
+          board.connections(usa),
+          <Location>{
+            Location(x: 1, y: -2),
+          },
+        );
+      });
+
+      test('gets 3 connections for usa down at (2, -2)', () {
+        final board = _TestCrossword();
+
+        const usa = WordEntry(
+          word: 'sa',
+          location: Location(x: 1, y: -1),
+          direction: Direction.down,
+        );
+
+        expect(
+          board.connections(usa),
+          <Location>{
+            Location(x: 1, y: -2),
+            Location(x: 0, y: -1),
+            Location(x: 0, y: 0),
+          },
+        );
+      });
+
+      test('gets 2 connections for across down at (-1, 1)', () {
+        final board = _TestCrossword();
+
+        const usa = WordEntry(
+          word: 'usa',
+          location: Location(x: -2, y: 1),
+          direction: Direction.across,
+        );
+
+        expect(
+          board.connections(usa),
+          <Location>{
+            Location(x: 0, y: 0),
+            Location(x: 0, y: 2),
+          },
+        );
+      });
+
+      test('gets 1 connections for sand across at (2, -2)', () {
+        final board = _TestCrossword();
+
+        const usa = WordEntry(
+          word: 'sand',
+          location: Location(x: 2, y: -2),
+          direction: Direction.across,
+        );
+
+        expect(
+          board.connections(usa),
+          <Location>{
+            Location(x: 1, y: -2),
+          },
+        );
+      });
+
+      test('gets 3 connections for usa across at (2, -2)', () {
+        final board = _TestCrossword();
+
+        const usa = WordEntry(
+          word: 'egg',
+          location: Location(x: 1, y: -1),
+          direction: Direction.across,
+        );
+
+        expect(
+          board.connections(usa),
+          <Location>{
+            Location(x: 1, y: -2),
+            Location(x: 0, y: -1),
+            Location(x: 2, y: -2),
           },
         );
       });
