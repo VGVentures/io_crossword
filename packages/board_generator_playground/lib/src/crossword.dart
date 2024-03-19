@@ -181,6 +181,7 @@ class Crossword {
   ///  1  -  -  A  -  -
   ///  2  -  -  N  -  -
   /// ```
+  ///
   /// Adding "ALBUS" at (0, -2) would override "BUS" completely.
   ///
   /// See also:
