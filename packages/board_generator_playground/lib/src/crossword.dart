@@ -31,6 +31,7 @@ class Crossword {
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
+  /// The largest word length that can be added to the board.
   static const largestWordLength = 18;
 
   /// The origin of the coordinate system.
