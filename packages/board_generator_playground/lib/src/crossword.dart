@@ -243,21 +243,36 @@ class Crossword {
   ///  2  -  -  N  -  -
   /// ```
   /// Adding "ALBUS" at (0, -2) would override "BUS" completely.
+  ///
+  /// See also:
+  ///
+  /// * [overlaps] for a more general check.
   bool overrides(WordEntry entry) {
     final location = entry.location;
     final word = entry.word;
     final direction = entry.direction;
 
+    final innerWordEntries = <WordEntry>{};
     for (var i = 0; i < word.length; i++) {
-      final character = word[i];
       final newLocation = direction == Direction.across
           ? location.copyWith(x: location.x + i)
           : location.copyWith(y: location.y + i);
+      final characterData = characterMap[newLocation];
+      if (characterData != null) {
+        innerWordEntries.addAll(characterData.wordEntry);
+      }
+    }
 
-      final currentCharacter = characterMap[newLocation];
-
-      if (currentCharacter != null && currentCharacter != character) {
-        return false;
+    for (final innerWordEntry in innerWordEntries) {
+      final start = innerWordEntry.location;
+      final end = switch (innerWordEntry.direction) {
+        Direction.across =>
+          start.copyWith(x: start.x + innerWordEntry.word.length),
+        Direction.down =>
+          start.copyWith(y: start.y + innerWordEntry.word.length),
+      };
+      if (start.x <= location.x && end.x >= location.x) {
+        return true;
       }
     }
 
