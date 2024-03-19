@@ -322,12 +322,8 @@ class Crossword {
   /// Adding a word down at (-1, -2) would have more than one
   /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
   /// is something we would like to consider in the future.
-  ///
-  /// If a word can't be added at a given location, it will return `null`.
-  ///
-  /// It assumes that the [candidate] is valid, meaning that it doesn't
-  /// [overlaps] and it [isConnected].
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
+    var invalidLengths = <int>{};
     var maximumLength = 1;
     for (var i = 1; i < largestWordLength; i++) {
       final positiveSideLocation = switch (candidate.direction) {
@@ -359,11 +355,12 @@ class Crossword {
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
       final hasOverlappingWords = words.any(overlaps);
-      if (hasMatchingDirection || hasOverlappingWords) break;
-      maximumLength++;
+      if (hasMatchingDirection || hasOverlappingWords) {
+        invalidLengths.add(i);
+      } else if (i > maximumLength) {
+        maximumLength = i;
+      }
     }
-
-    if (maximumLength < shortestWordLength) return null;
 
     final constraints = <int, String>{};
     for (var i = 0; i < maximumLength; i++) {
@@ -380,7 +377,7 @@ class Crossword {
     }
 
     return ConstrainedWordCandidate(
-      maximumLength: maximumLength,
+      invalidLengths: invalidLengths,
       location: candidate.location,
       direction: candidate.direction,
       constraints: constraints,

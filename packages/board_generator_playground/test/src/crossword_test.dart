@@ -404,7 +404,7 @@ void main() {
           constraints,
           equals(
             ConstrainedWordCandidate(
-              maximumLength: Crossword.largestWordLength,
+              invalidLengths: const {},
               location: candidate.location,
               direction: candidate.direction,
               constraints: const {0: 's'},
@@ -426,7 +426,7 @@ void main() {
           constraints,
           equals(
             ConstrainedWordCandidate(
-              maximumLength: Crossword.largestWordLength,
+              invalidLengths: const {4},
               location: candidate.location,
               direction: candidate.direction,
               constraints: const {0: 's', 4: 'w'},
@@ -448,7 +448,7 @@ void main() {
           constraints,
           equals(
             ConstrainedWordCandidate(
-              maximumLength: 3,
+              invalidLengths: const {3, 4},
               location: candidate.location,
               direction: candidate.direction,
               constraints: const {0: 's', 4: 'w'},
