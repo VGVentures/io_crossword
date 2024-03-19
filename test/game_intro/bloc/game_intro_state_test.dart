@@ -57,6 +57,13 @@ void main() {
         );
       });
 
+      test('updates initialsBlacklist', () {
+        expect(
+          GameIntroState().copyWith(initialsBlacklist: ['WOW']),
+          equals(GameIntroState(initialsBlacklist: ['WOW'])),
+        );
+      });
+
       test('updates initialsStatus', () {
         expect(
           GameIntroState().copyWith(initialsStatus: InitialsFormStatus.success),

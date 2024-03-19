@@ -19,6 +19,17 @@ void main() {
   });
 
   blocTest<GameIntroBloc, GameIntroState>(
+    'sets blacklist when BlacklistRequested is added',
+    build: () => GameIntroBloc(boardInfoRepository: boardInfoRepository),
+    act: (bloc) => bloc.add(BlacklistRequested()),
+    expect: () => <GameIntroState>[
+      GameIntroState(
+        initialsBlacklist: ['TST'],
+      ),
+    ],
+  );
+
+  blocTest<GameIntroBloc, GameIntroState>(
     'emits state with updated board progress data '
     'when BoardProgressRequested is added',
     build: () => GameIntroBloc(boardInfoRepository: boardInfoRepository),
@@ -94,10 +105,14 @@ void main() {
     'emits state with initials status blacklisted when InitialsSubmitted '
     'is added and initials are blacklisted',
     build: () => GameIntroBloc(boardInfoRepository: boardInfoRepository),
-    seed: () => GameIntroState(initials: ['T', 'S', 'T']),
+    seed: () => GameIntroState(
+      initialsBlacklist: ['TST'],
+      initials: ['T', 'S', 'T'],
+    ),
     act: (bloc) => bloc.add(InitialsSubmitted()),
     expect: () => <GameIntroState>[
       GameIntroState(
+        initialsBlacklist: ['TST'],
         initialsStatus: InitialsFormStatus.blacklisted,
         initials: ['T', 'S', 'T'],
       ),

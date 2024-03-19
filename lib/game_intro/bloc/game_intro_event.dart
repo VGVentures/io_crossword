@@ -11,6 +11,13 @@ class BoardProgressRequested extends GameIntroEvent {
   List<Object> get props => [];
 }
 
+class BlacklistRequested extends GameIntroEvent {
+  const BlacklistRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
 class WelcomeCompleted extends GameIntroEvent {
   const WelcomeCompleted();
 

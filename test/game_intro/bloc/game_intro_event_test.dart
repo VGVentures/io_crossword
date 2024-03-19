@@ -15,6 +15,15 @@ void main() {
       });
     });
 
+    group('BlacklistRequested', () {
+      test('supports value comparisons', () {
+        expect(
+          BlacklistRequested(),
+          equals(BlacklistRequested()),
+        );
+      });
+    });
+
     group('WelcomeCompleted', () {
       test('supports value comparisons', () {
         expect(

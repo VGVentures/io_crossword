@@ -11,7 +11,7 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     required BoardInfoRepository boardInfoRepository,
   })  : _boardInfoRepository = boardInfoRepository,
         super(const GameIntroState()) {
-    _setBlacklist();
+    on<BlacklistRequested>(_onBlacklistRequested);
     on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
@@ -22,11 +22,14 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
 
   final BoardInfoRepository _boardInfoRepository;
   final initialsRegex = RegExp('[A-Z]{3}');
-  late final List<String> blacklist;
 
-  Future<void> _setBlacklist() async {
+  Future<void> _onBlacklistRequested(
+    BlacklistRequested event,
+    Emitter<GameIntroState> emit,
+  ) async {
     // TODO(jaime): fetch blacklist from server
-    blacklist = ['TST'];
+    final blacklist = ['TST'];
+    emit(state.copyWith(initialsBlacklist: blacklist));
   }
 
   Future<void> _onBoardProgressRequested(
@@ -114,6 +117,6 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   }
 
   bool _isBlacklisted() {
-    return blacklist.contains(state.initials.join());
+    return state.initialsBlacklist.contains(state.initials.join());
   }
 }

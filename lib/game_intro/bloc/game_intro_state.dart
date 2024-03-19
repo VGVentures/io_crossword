@@ -23,6 +23,7 @@ class GameIntroState extends Equatable {
     this.totalWords = 0,
     this.selectedMascot,
     this.initials = const ['', '', ''],
+    this.initialsBlacklist = const [],
     this.initialsStatus = InitialsFormStatus.initial,
   });
 
@@ -32,6 +33,7 @@ class GameIntroState extends Equatable {
   final int totalWords;
   final Mascots? selectedMascot;
   final List<String> initials;
+  final List<String> initialsBlacklist;
   final InitialsFormStatus initialsStatus;
 
   GameIntroState copyWith({
@@ -41,6 +43,7 @@ class GameIntroState extends Equatable {
     int? totalWords,
     Mascots? selectedMascot,
     List<String>? initials,
+    List<String>? initialsBlacklist,
     InitialsFormStatus? initialsStatus,
   }) {
     return GameIntroState(
@@ -50,6 +53,7 @@ class GameIntroState extends Equatable {
       totalWords: totalWords ?? this.totalWords,
       selectedMascot: selectedMascot ?? this.selectedMascot,
       initials: initials ?? this.initials,
+      initialsBlacklist: initialsBlacklist ?? this.initialsBlacklist,
       initialsStatus: initialsStatus ?? this.initialsStatus,
     );
   }
@@ -62,6 +66,7 @@ class GameIntroState extends Equatable {
         totalWords,
         selectedMascot,
         initials,
+        initialsBlacklist,
         initialsStatus,
       ];
 }
