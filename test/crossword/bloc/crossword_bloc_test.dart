@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,8 +11,6 @@ import 'package:mocktail/mocktail.dart';
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockWord extends Mock implements Word {}
-
-class FakeImage extends Fake implements ui.Image {}
 
 void main() {
   group('CrosswordBloc', () {
@@ -54,7 +49,6 @@ void main() {
       ),
     ];
     const sectionSize = 40;
-    final sectionImage = FakeImage();
     final section = BoardSection(
       id: '',
       position: const Point(1, 1),
@@ -64,8 +58,6 @@ void main() {
     );
 
     late CrosswordRepository crosswordRepository;
-
-    Future<ui.Image> decodeImage(Uint8List bytes) async => sectionImage;
 
     setUp(() {
       crosswordRepository = _MockCrosswordRepository();
@@ -631,47 +623,19 @@ void main() {
 
     group('RenderModeSwitched', () {
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits state with sections snapshots if render switch from game'
-        ' to snapshot',
+        'emits state with new render mode',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
-          imageDecodeCall: decodeImage,
         ),
-        setUp: () {
-          when(
-            () => crosswordRepository.fetchSectionSnapshotBytes(any()),
-          ).thenAnswer((_) async => Future.value(Uint8List(0)));
-        },
         seed: () => const CrosswordLoaded(
           sectionSize: sectionSize,
-          sections: {
-            (0, 0): BoardSection(
-              id: '0',
-              position: Point(0, 0),
-              size: sectionSize,
-              words: [],
-              borderWords: [],
-              snapshotUrl: 'url',
-            ),
-          },
+          sections: {},
         ),
         act: (bloc) => bloc.add(const RenderModeSwitched(RenderMode.snapshot)),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,
-            sections: {
-              (0, 0): BoardSection(
-                id: '0',
-                position: Point(0, 0),
-                size: sectionSize,
-                words: [],
-                borderWords: [],
-                snapshotUrl: 'url',
-              ),
-            },
-            sectionsSnapshots: {
-              (0, 0): sectionImage,
-            },
+            sections: {},
             renderMode: RenderMode.snapshot,
           ),
         ],

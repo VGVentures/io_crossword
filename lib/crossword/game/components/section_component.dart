@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
@@ -94,6 +95,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   });
 
   final (int, int) index;
+  late RenderMode _renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
@@ -110,15 +112,18 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
+    final state = gameRef.state;
+
     _subscription = gameRef.bloc.stream.listen(_onNewState);
 
-    lastSelectedWord = gameRef.state.selectedWord?.wordId;
-    lastSelectedSection = gameRef.state.selectedWord?.section;
+    lastSelectedWord = state.selectedWord?.wordId;
+    lastSelectedSection = state.selectedWord?.section;
+    _renderMode = state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
       _boardSection = boardSection;
-      _loadBoardSection(boardSection);
+      _loadBoardSection();
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
@@ -155,15 +160,28 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     _subscription.cancel();
   }
 
+  void _loadWithCurrentRenderMode() {
+    if (_renderMode == RenderMode.snapshot) {
+      _loadSnapshot();
+    } else {
+      _loadBoardSection();
+    }
+  }
+
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
         final boardSection = state.sections[index];
+        _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
-          _loadBoardSection(boardSection);
+          _loadWithCurrentRenderMode();
         }
       } else {
+        if (_renderMode != state.renderMode) {
+          _renderMode = state.renderMode;
+          _loadWithCurrentRenderMode();
+        }
         final selectedWord = state.selectedWord?.wordId;
         final selectedSection = state.selectedWord?.section;
         if (selectedWord != lastSelectedWord ||
@@ -181,54 +199,30 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     }
   }
 
-  void _updateSelection({
-    String? previousWord,
-    String? newWord,
-    (int, int)? previousSection,
-    (int, int)? newSection,
-  }) {
-    final indexes = <(String, Color, (int, int))>[];
-    if (previousSection == index &&
-        previousWord != null &&
-        _wordIndex.containsKey(previousWord)) {
-      indexes.add(
-        (
-          previousWord,
-          Colors.white.withOpacity(.2),
-          _wordIndex[previousWord]!,
-        ),
+  Vector2 get sectionPosition => Vector2(
+        index.$1 * gameRef.sectionSize.toDouble(),
+        index.$2 * gameRef.sectionSize.toDouble(),
       );
-    }
 
-    if (newSection == index &&
-        newWord != null &&
-        _wordIndex.containsKey(newWord)) {
-      indexes.add(
-        (
-          newWord,
-          Colors.white,
-          _wordIndex[newWord]!,
-        ),
-      );
-    }
+  Future<void> _loadSnapshot() async {
+    final snapshot = await gameRef.networkImages.load(
+      _boardSection!.snapshotUrl!,
+    );
 
-    for (final index in indexes) {
-      for (var i = index.$3.$1; i < index.$3.$2; i++) {
-        spriteBatchComponent?.spriteBatch?.replace(
-          i,
-          color: index.$2,
-        );
-      }
-    }
+    spriteBatchComponent?.removeFromParent();
+    add(
+      SpriteComponent.fromImage(
+        position: sectionPosition,
+        snapshot,
+      ),
+    );
   }
 
-  void _loadBoardSection(BoardSection section) {
-    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
-
-    final sectionPosition = Vector2(
-      (index.$1 * gameRef.sectionSize).toDouble(),
-      (index.$2 * gameRef.sectionSize).toDouble(),
-    );
+  void _loadBoardSection() {
+    final section = _boardSection;
+    if (section == null) {
+      return;
+    }
 
     add(
       SectionTapController(
@@ -240,11 +234,15 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       ),
     );
 
+    firstChild<SpriteComponent>()?.removeFromParent();
+
+    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
+
     _wordIndex = {};
 
     final color = Colors.white.withOpacity(.2);
-    for (var i = 0; i < section.words.length; i++) {
-      final word = section.words[i];
+    for (var i = 0; i < _boardSection!.words.length; i++) {
+      final word = _boardSection!.words[i];
 
       final wordCharacters = word.answer.toUpperCase().characters;
 
@@ -299,5 +297,46 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         blendMode: BlendMode.srcATop,
       ),
     );
+  }
+
+  void _updateSelection({
+    String? previousWord,
+    String? newWord,
+    (int, int)? previousSection,
+    (int, int)? newSection,
+  }) {
+    final indexes = <(String, Color, (int, int))>[];
+    if (previousSection == index &&
+        previousWord != null &&
+        _wordIndex.containsKey(previousWord)) {
+      indexes.add(
+        (
+          previousWord,
+          Colors.white.withOpacity(.2),
+          _wordIndex[previousWord]!,
+        ),
+      );
+    }
+
+    if (newSection == index &&
+        newWord != null &&
+        _wordIndex.containsKey(newWord)) {
+      indexes.add(
+        (
+          newWord,
+          Colors.white,
+          _wordIndex[newWord]!,
+        ),
+      );
+    }
+
+    for (final index in indexes) {
+      for (var i = index.$3.$1; i < index.$3.$2; i++) {
+        spriteBatchComponent?.spriteBatch?.replace(
+          i,
+          color: index.$2,
+        );
+      }
+    }
   }
 }

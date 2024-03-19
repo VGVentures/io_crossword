@@ -23,6 +23,11 @@ dependencies:
   flame_audio: ^2.1.3
   flame_behaviors: ^1.0.0
   flame_bloc: ^1.11.0
+  flame_network_assets:
+    git:
+      url: https://github.com/flame-engine/flame.git
+      ref: main
+      path: packages/flame_network_assets
   flame_test: ^1.16.0
   flow_builder: ^0.0.10
   flutter:
@@ -32,6 +37,7 @@ dependencies:
     sdk: flutter
   game_domain:
     path: api/packages/game_domain
+  http: ^1.2.1
   intl: ^0.18.1
   io_crossword_ui:
     path: packages/io_crossword_ui

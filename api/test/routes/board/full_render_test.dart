@@ -79,7 +79,7 @@ void main() {
       );
 
       when(
-        () => boardRenderer.renderBoard(
+        () => boardRenderer.renderBoardWireframe(
           [
             board1.words.first,
             board2.words.first,

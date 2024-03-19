@@ -1,9 +1,40 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:board_renderer/board_renderer.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
+
+extension on List<Word> {
+  (int, int) totalSize(int cellSize) {
+    var minPositionX = 0;
+    var minPositionY = 0;
+
+    var maxPositionX = 0;
+    var maxPositionY = 0;
+
+    for (final word in this) {
+      minPositionX = math.min(minPositionX, word.position.x);
+      minPositionY = math.min(minPositionY, word.position.y);
+
+      final sizeX = word.axis == Axis.horizontal
+          ? word.position.x + word.answer.length
+          : word.position.x;
+
+      final sizeY = word.axis == Axis.vertical
+          ? word.position.y + word.answer.length
+          : word.position.y;
+
+      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
+      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
+    }
+
+    final totalWidth = (maxPositionX + minPositionX.abs()) * cellSize;
+    final totalHeight = (maxPositionY + minPositionY.abs()) * cellSize;
+
+    return (totalWidth, totalHeight);
+  }
+}
 
 /// A function that creates a command to execute.
 typedef CreateCommand = img.Command Function();
@@ -49,9 +80,6 @@ typedef CompositeImage = img.Image Function(
   img.Channel maskChannel,
 });
 
-/// A function that makes a GET request.
-typedef GetCall = Future<http.Response> Function(Uri uri);
-
 /// A function that decodes a PNG image.
 typedef DecodePng = img.Image? Function(Uint8List data);
 
@@ -80,52 +108,31 @@ class BoardRenderer {
     DrawRect drawRect = img.drawRect,
     CompositeImage compositeImage = img.compositeImage,
     DecodePng decodePng = img.decodePng,
-    GetCall get = http.get,
+    AssetResolver assetResolver = const HttpAssetResolver(),
   })  : _createCommand = createCommand,
         _createImage = createImage,
         _drawRect = drawRect,
         _compositeImage = compositeImage,
         _decodePng = decodePng,
-        _get = get;
+        _assetResolver = assetResolver;
 
   final CreateCommand _createCommand;
   final CreateImage _createImage;
   final DrawRect _drawRect;
   final CompositeImage _compositeImage;
   final DecodePng _decodePng;
+  final AssetResolver _assetResolver;
 
-  final GetCall _get;
-
-  /// Renders the full board in a single image.
-  Future<Uint8List> renderBoard(List<Word> words) async {
+  /// Renders the full frame of the board.
+  Future<Uint8List> renderBoardWireframe(List<Word> words) async {
     /// The size of each cell in the board when rendering in full size.
     const cellSize = 4;
-    var minPositionX = 0;
-    var minPositionY = 0;
-
-    var maxPositionX = 0;
-    var maxPositionY = 0;
 
     final color = img.ColorRgb8(255, 255, 255);
 
-    for (final word in words) {
-      minPositionX = math.min(minPositionX, word.position.x);
-      minPositionY = math.min(minPositionY, word.position.y);
-
-      final sizeX = word.axis == Axis.horizontal
-          ? word.position.x + word.answer.length
-          : word.position.x;
-
-      final sizeY = word.axis == Axis.vertical
-          ? word.position.y + word.answer.length
-          : word.position.y;
-
-      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
-      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
-    }
-
-    final totalWidth = (maxPositionX + minPositionX.abs()) * cellSize;
-    final totalHeight = (maxPositionY + minPositionY.abs()) * cellSize;
+    final totalSize = words.totalSize(cellSize);
+    final totalWidth = totalSize.$1;
+    final totalHeight = totalSize.$2;
 
     final centerX = (totalWidth / 2).round();
     final centerY = (totalHeight / 2).round();
@@ -185,14 +192,81 @@ class BoardRenderer {
     return outputBytes;
   }
 
-  Future<Uint8List> _getFile(Uri uri) async {
-    final response = await _get(uri);
+  /// Renders a section of the board in an image.
+  Future<Uint8List> renderWords(List<Word> words) async {
+    const cellSize = 80;
 
-    if (response.statusCode != 200) {
-      throw BoardRendererFailure('Failed to get image from $uri');
+    final totalSize = words.totalSize(cellSize);
+
+    final totalWidth = totalSize.$1;
+    final totalHeight = totalSize.$2;
+
+    final image = _createImage(
+      width: totalWidth,
+      height: totalHeight,
+      numChannels: 4,
+      backgroundColor: img.ColorRgba8(0, 255, 255, 255),
+    );
+
+    final textureImage = await _assetResolver.resolveWordImage();
+
+    final texture = _decodePng(textureImage);
+    if (texture == null) {
+      throw BoardRendererFailure('Failed to load the texture');
     }
 
-    return response.bodyBytes;
+    for (final word in words) {
+      final x = word.position.x;
+      final y = word.position.y;
+
+      final position = (x, y);
+
+      final wordCharacters = word.answer.split('');
+
+      for (var c = 0; c < wordCharacters.length; c++) {
+        final char = wordCharacters.elementAt(c).toUpperCase();
+        final charIndex = char.codeUnitAt(0) - 65;
+
+        final (dstX, dstY) = (
+          word.axis == Axis.horizontal
+              ? (position.$1 + c) * cellSize
+              : position.$1 * cellSize,
+          word.axis == Axis.vertical
+              ? (position.$2 + c) * cellSize
+              : position.$2 * cellSize
+        );
+        if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
+          final srcX =
+              word.solvedTimestamp == null ? 2080 : charIndex * cellSize;
+
+          _compositeImage(
+            image,
+            texture,
+            dstX: dstX,
+            dstY: dstY,
+            dstW: cellSize,
+            dstH: cellSize,
+            srcX: srcX,
+            srcY: 0,
+            srcW: cellSize,
+            srcH: cellSize,
+          );
+        }
+      }
+    }
+
+    final createdCommand = _createCommand()
+      ..image(image)
+      ..encodePng();
+
+    await createdCommand.execute();
+
+    final outputBytes = createdCommand.outputBytes;
+    if (outputBytes == null) {
+      throw BoardRendererFailure('Failed to render the section');
+    }
+
+    return outputBytes;
   }
 
   /// Renders a section of the board in an image.
@@ -211,8 +285,7 @@ class BoardRenderer {
       backgroundColor: img.ColorRgba8(0, 255, 255, 255),
     );
 
-    const url = 'http://127.0.0.1:8080/assets/letters.png';
-    final textureImage = await _getFile(Uri.parse(url));
+    final textureImage = await _assetResolver.resolveWordImage();
 
     final texture = _decodePng(textureImage);
     if (texture == null) {
