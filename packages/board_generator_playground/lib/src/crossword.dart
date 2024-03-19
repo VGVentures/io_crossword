@@ -126,10 +126,10 @@ class Crossword {
 
           positions.addAll(
             [
-              location.copyWith(y: y - 1),
-              location.copyWith(y: y + 1),
-              if (isFirstCharacter) location.copyWith(x: x - 1),
-              if (isLastCharacter) location.copyWith(x: x + 1),
+              Location(x: x, y: y - 1),
+              Location(x: x, y: y + 1),
+              if (isFirstCharacter) Location(x: x - 1, y: y),
+              if (isLastCharacter) Location(x: x + 1, y: y),
             ],
           );
         case Direction.down:
@@ -138,10 +138,10 @@ class Crossword {
 
           positions.addAll(
             [
-              location.copyWith(x: x - 1),
-              location.copyWith(x: x + 1),
-              if (isFirstCharacter) location.copyWith(y: y - 1),
-              if (isLastCharacter) location.copyWith(y: y + 1),
+              Location(x: x - 1, y: y),
+              Location(x: x + 1, y: y),
+              if (isFirstCharacter) Location(x: x, y: y - 1),
+              if (isLastCharacter) Location(x: x, y: y + 1),
             ],
           );
       }
