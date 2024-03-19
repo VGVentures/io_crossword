@@ -189,7 +189,8 @@ class Crossword {
   /// - - - - - N - -
   /// ```
   ///
-  /// Overlaps are not allowed since they would create invalid words.
+  /// Overlaps are not allowed since they would create invalid words or
+  /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
     final location = entry.location;
     final word = entry.word;
