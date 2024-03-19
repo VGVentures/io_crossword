@@ -12,7 +12,7 @@ void main() {
       test('adds a down word to the character map', () {
         final board = Crossword();
 
-        const url = WordEntry(
+        final url = WordEntry(
           word: 'url',
           start: Location(x: 0, y: -1),
           direction: Direction.down,
@@ -41,7 +41,7 @@ void main() {
       test('adds an across word to the character map', () {
         final board = Crossword();
 
-        const url = WordEntry(
+        final url = WordEntry(
           word: 'url',
           start: Location(x: -1, y: 0),
           direction: Direction.across,
@@ -192,7 +192,7 @@ void main() {
       test('connected to the board in the position (2, -2) with s', () {
         final board = Crossword1();
 
-        const sun = WordEntry(
+        final sun = WordEntry(
           word: 'sun',
           start: Location(x: 2, y: -2),
           direction: Direction.down,
@@ -204,7 +204,7 @@ void main() {
       test('not connected to the board in the position (2, -1) with s', () {
         final board = Crossword1();
 
-        const sun = WordEntry(
+        final sun = WordEntry(
           word: 'sun',
           start: Location(x: 2, y: -1),
           direction: Direction.down,
@@ -216,7 +216,7 @@ void main() {
       test('connected to the board in the position (0, 0) with h', () {
         final board = Crossword1();
 
-        const hat = WordEntry(
+        final hat = WordEntry(
           word: 'hat',
           start: Location(x: 0, y: 0),
           direction: Direction.across,
@@ -230,7 +230,7 @@ void main() {
       test('returns false when complete empty spot', () {
         final board = Crossword1();
 
-        const word = WordEntry(
+        final word = WordEntry(
           word: 'egg',
           start: Location(x: 1, y: -1),
           direction: Direction.across,
@@ -244,7 +244,7 @@ void main() {
       test('returns true when complete empty spot', () {
         final board = Crossword3();
 
-        const word = WordEntry(
+        final word = WordEntry(
           word: 'sandy',
           start: Location(x: 2, y: -2),
           direction: Direction.down,
@@ -256,7 +256,7 @@ void main() {
       test('returns true when overlaps horizontal', () {
         final board = Crossword4();
 
-        const word = WordEntry(
+        final word = WordEntry(
           word: 'sand',
           start: Location(x: 2, y: -2),
           direction: Direction.down,
@@ -268,7 +268,7 @@ void main() {
       test('returns true when complete empty spot', () {
         final board = Crossword3();
 
-        const word = WordEntry(
+        final word = WordEntry(
           word: 'sandy',
           start: Location(x: 2, y: -1),
           direction: Direction.down,
@@ -282,7 +282,7 @@ void main() {
       test('gets 4 connections for usa down at (1, -2)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'usa',
           start: Location(x: 1, y: -2),
           direction: Direction.down,
@@ -302,7 +302,7 @@ void main() {
       test('gets 1 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'sand',
           start: Location(x: 2, y: -2),
           direction: Direction.down,
@@ -319,7 +319,7 @@ void main() {
       test('gets 3 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'sa',
           start: Location(x: 1, y: -1),
           direction: Direction.down,
@@ -338,7 +338,7 @@ void main() {
       test('gets 2 connections for across down at (-1, 1)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'usa',
           start: Location(x: -2, y: 1),
           direction: Direction.across,
@@ -356,7 +356,7 @@ void main() {
       test('gets 1 connections for sand across at (2, -2)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'sand',
           start: Location(x: 2, y: -2),
           direction: Direction.across,
@@ -373,7 +373,7 @@ void main() {
       test('gets 3 connections for usa across at (2, -2)', () {
         final board = Crossword1();
 
-        const usa = WordEntry(
+        final usa = WordEntry(
           word: 'egg',
           start: Location(x: 1, y: -1),
           direction: Direction.across,

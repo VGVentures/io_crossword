@@ -17,16 +17,16 @@ class Crossword1 extends Crossword {
   /// {@macro crossword1}
   Crossword1() {
     add(
-      const WordEntry(
+      WordEntry(
         word: 'behan',
-        start: Location(x: 0, y: -2),
+        start: const Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'albus',
-        start: Location(x: -2, y: -2),
+        start: const Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
@@ -49,23 +49,23 @@ class Crossword2 extends Crossword {
   /// {@macro crossword2}
   Crossword2() {
     add(
-      const WordEntry(
+      WordEntry(
         word: 'behan',
-        start: Location(x: 0, y: -2),
+        start: const Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'albus',
-        start: Location(x: -2, y: -2),
+        start: const Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'now',
-        start: Location(x: 0, y: 2),
+        start: const Location(x: 0, y: 2),
         direction: Direction.across,
       ),
     );
@@ -88,30 +88,30 @@ class Crossword3 extends Crossword {
   /// {@macro crossword3}
   Crossword3() {
     add(
-      const WordEntry(
+      WordEntry(
         word: 'behan',
-        start: Location(x: 0, y: -2),
+        start: const Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'albus',
-        start: Location(x: -2, y: -2),
+        start: const Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'now',
-        start: Location(x: 0, y: 2),
+        start: const Location(x: 0, y: 2),
         direction: Direction.across,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'nan',
-        start: Location(x: -1, y: 1),
+        start: const Location(x: -1, y: 1),
         direction: Direction.across,
       ),
     );
@@ -134,24 +134,24 @@ class Crossword4 extends Crossword {
   /// {@macro crossword4}
   Crossword4() {
     add(
-      const WordEntry(
+      WordEntry(
         word: 'behan',
-        start: Location(x: 0, y: -2),
+        start: const Location(x: 0, y: -2),
         direction: Direction.down,
       ),
     );
     add(
-      const WordEntry(
+      WordEntry(
         word: 'albus',
-        start: Location(x: -2, y: -2),
+        start: const Location(x: -2, y: -2),
         direction: Direction.across,
       ),
     );
 
     add(
-      const WordEntry(
+      WordEntry(
         word: 'nan',
-        start: Location(x: -1, y: 1),
+        start: const Location(x: -1, y: 1),
         direction: Direction.across,
       ),
     );

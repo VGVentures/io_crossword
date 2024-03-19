@@ -5,6 +5,22 @@ import 'package:test/test.dart';
 
 void main() {
   group('$WordEntry', () {
+    test('end is as expected', () {
+      // ```
+      //    -2 -1  0  1  2
+      // -3  -  *  *  *  -
+      // -2  *  B  U  S  *
+      // -1  -  *  *  *  -
+      // ```
+      final entry = WordEntry(
+        word: 'BUS',
+        start: Location(x: -1, y: -2),
+        direction: Direction.across,
+      );
+
+      expect(entry.end, Location(x: 1, y: -2));
+    });
+
     group('surroundings', () {
       test('returns as expected when across', () {
         // ```
@@ -12,10 +28,6 @@ void main() {
         // -3  -  *  *  *  -
         // -2  *  B  U  S  *
         // -1  -  *  *  *  -
-        //  0  -  -  -  -  -
-        //  1  -  -  -  -  -
-        //  2  -  -  -  -  -
-        //  3  -  -  -  -  -
         // ```
         final entry = WordEntry(
           word: 'BUS',
@@ -41,14 +53,12 @@ void main() {
 
       test('returns as expected when down', () {
         // ```
-        //    -2 -1  0  1  2
-        // -3  -  *  -  -  -
-        // -2  *  B  *  -  -
-        // -1  *  U  *  -  -
-        //  0  *  S  *  -  -
-        //  1  -  *  -  -  -
-        //  2  -  -  -  -  -
-        //  3  -  -  -  -  -
+        //    -2 -1  0
+        // -3  -  *  -
+        // -2  *  B  *
+        // -1  *  U  *
+        //  0  *  S  *
+        //  1  -  *  -
         // ```
         final entry = WordEntry(
           word: 'BUS',

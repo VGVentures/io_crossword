@@ -6,17 +6,22 @@ import 'package:equatable/equatable.dart';
 /// {@endtemplate}
 class WordEntry extends Equatable {
   /// {@macro word_entry}
-  const WordEntry({
+  WordEntry({
     required this.word,
     required this.start,
     required this.direction,
-  });
+  }) : end = direction == Direction.across
+            ? start.shift(x: word.length - 1)
+            : start.shift(y: word.length - 1);
 
   /// The word to add to the board.
   final String word;
 
-  /// {@macro location}
+  /// The location of the first letter of the word.
   final Location start;
+
+  /// The location of the last letter of the word.
+  final Location end;
 
   /// {@macro direction}
   final Direction direction;
