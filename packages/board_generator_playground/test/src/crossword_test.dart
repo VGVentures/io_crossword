@@ -253,6 +253,18 @@ void main() {
         expect(board.overlaps(word), isTrue);
       });
 
+      test('returns true when overlaps horizontal', () {
+        final board = Crossword4();
+
+        const word = WordEntry(
+          word: 'sand',
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        expect(board.overlaps(word), isTrue);
+      });
+
       test('returns true when complete empty spot', () {
         final board = Crossword3();
 
