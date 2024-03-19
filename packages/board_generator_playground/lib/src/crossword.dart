@@ -210,7 +210,7 @@ class Crossword {
       (e) => surroundings.contains(e.end),
     );
 
-    return overrides(entry) || endsAtSurrounding;
+    return endsAtSurrounding || overrides(entry);
   }
 
   /// Whether the new [entry] overrides an existing word.
