@@ -164,11 +164,11 @@ class Crossword {
   bool overlaps(WordEntry entry) {
     final connections = this.connections(entry);
     final connectedWords = connections.map(wordsAt).expand((e) => e);
-    final endsAtSurrounding = connectedWords.any(
+    final endsAtConnection = connectedWords.any(
       (e) => connections.contains(e.end),
     );
 
-    return endsAtSurrounding || overrides(entry);
+    return endsAtConnection || overrides(entry);
   }
 
   /// Whether the new [entry] overrides an existing word.
