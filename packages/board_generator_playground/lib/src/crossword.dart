@@ -340,6 +340,9 @@ class Crossword {
   /// Adding a word down at (-1, -2) would have more than one
   /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
   /// is something we would like to consider in the future.
+  ///
+  /// It assumes that the [candidate] is valid, meaning that it doesn't
+  /// [overlaps] and it [isConnected].
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     throw UnimplementedError();
   }
