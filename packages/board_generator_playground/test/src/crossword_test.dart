@@ -1,40 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
 import 'package:test/test.dart';
 
-/// {@template test_crossword}
-/// A pre-defined crossword for testing.
-///
-/// ```
-///    -2 -1  0  1  2
-/// -2  A  L  B  U  S
-/// -1  -  -  E  -  -
-///  0  -  -  H  -  -
-///  1  -  -  A  -  -
-///  2  -  -  N  -  -
-/// ```
-/// {@endtemplate}
-class _TestCrossword extends Crossword {
-  /// {@macro test_crossword}
-  _TestCrossword() {
-    add(
-      WordEntry(
-        word: 'behan',
-        location: Location(x: 0, y: -2),
-        direction: Direction.down,
-      ),
-    );
-    add(
-      WordEntry(
-        word: 'albus',
-        location: Location(x: -2, y: -2),
-        direction: Direction.across,
-      ),
-    );
-  }
-}
+import 'fixtures/crosswords.dart';
 
 void main() {
   group('$Crossword', () {
@@ -220,7 +190,7 @@ void main() {
 
     group('isConnected', () {
       test('connected to the board in the position (2, -2) with s', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const sun = WordEntry(
           word: 'sun',
@@ -232,7 +202,7 @@ void main() {
       });
 
       test('not connected to the board in the position (2, -1) with s', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const sun = WordEntry(
           word: 'sun',
@@ -244,7 +214,7 @@ void main() {
       });
 
       test('connected to the board in the position (0, 0) with h', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const hat = WordEntry(
           word: 'hat',
@@ -258,7 +228,7 @@ void main() {
 
     group('connections', () {
       test('gets 4 connections for usa down at (1, -2)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'usa',
@@ -278,7 +248,7 @@ void main() {
       });
 
       test('gets 1 connections for usa down at (2, -2)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'sand',
@@ -295,7 +265,7 @@ void main() {
       });
 
       test('gets 3 connections for usa down at (2, -2)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'sa',
@@ -314,7 +284,7 @@ void main() {
       });
 
       test('gets 2 connections for across down at (-1, 1)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'usa',
@@ -332,7 +302,7 @@ void main() {
       });
 
       test('gets 1 connections for sand across at (2, -2)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'sand',
@@ -349,7 +319,7 @@ void main() {
       });
 
       test('gets 3 connections for usa across at (2, -2)', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         const usa = WordEntry(
           word: 'egg',
@@ -370,7 +340,7 @@ void main() {
 
     group('constraints', () {
       test('derives successfully a single constraint down', () {
-        final board = _TestCrossword();
+        final board = Crossword1();
 
         final candidate = WordCandidate(
           location: Location(x: 2, y: -2),
@@ -385,7 +355,7 @@ void main() {
               maximumLength: Crossword.largestWordLength,
               location: candidate.location,
               direction: candidate.direction,
-              constraints: {0: 's'},
+              constraints: const {0: 's'},
             ),
           ),
         );
