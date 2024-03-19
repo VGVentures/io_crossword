@@ -327,24 +327,12 @@ class Crossword {
     var maximumLength = 1;
     for (var i = 1; i < largestWordLength; i++) {
       final positiveSideLocation = switch (candidate.direction) {
-        Direction.across => candidate.location.copyWith(
-            x: candidate.location.x + i,
-            y: candidate.location.y + 1,
-          ),
-        Direction.down => candidate.location.copyWith(
-            y: candidate.location.y + i,
-            x: candidate.location.x + 1,
-          ),
+        Direction.across => candidate.location.shift(x: i, y: 1),
+        Direction.down => candidate.location.shift(x: 1, y: i),
       };
       final negativeSideLocation = switch (candidate.direction) {
-        Direction.across => candidate.location.copyWith(
-            x: candidate.location.x + i,
-            y: candidate.location.y - 1,
-          ),
-        Direction.down => candidate.location.copyWith(
-            y: candidate.location.y + i,
-            x: candidate.location.x - 1,
-          ),
+        Direction.across => candidate.location.shift(x: i, y: -1),
+        Direction.down => candidate.location.shift(x: -1, y: i),
       };
 
       final words = {
@@ -365,10 +353,8 @@ class Crossword {
     final constraints = <int, String>{};
     for (var i = 0; i < maximumLength; i++) {
       final location = switch (candidate.direction) {
-        Direction.across =>
-          candidate.location.copyWith(x: candidate.location.x + i),
-        Direction.down =>
-          candidate.location.copyWith(y: candidate.location.y + i),
+        Direction.across => candidate.location.shift(x: i),
+        Direction.down => candidate.location.shift(y: i),
       };
       final characterData = characterMap[location];
       if (characterData != null) {
