@@ -31,8 +31,8 @@ class Crossword {
     for (var i = 0; i < word.length; i++) {
       final character = word[i];
       final newLocation = direction == Direction.across
-          ? location.copyWith(x: location.x + i)
-          : location.copyWith(y: location.y + i);
+          ? location.shift(x: i)
+          : location.shift(y: i);
 
       final data = (characterMap[newLocation]?..wordEntry.add(entry)) ??
           CharacterData(character: character, wordEntry: {entry});
@@ -82,8 +82,8 @@ class Crossword {
 
     for (var i = 0; i < word.length; i++) {
       final newLocation = direction == Direction.across
-          ? location.copyWith(x: location.x + i)
-          : location.copyWith(y: location.y + i);
+          ? location.shift(x: i)
+          : location.shift(y: i);
 
       if (characterMap[newLocation] != null) {
         return true;
@@ -205,14 +205,9 @@ class Crossword {
   bool overlaps(WordEntry entry) {
     final surroundings = entry.surroundings();
     final surroundingWords = surroundings.map(wordsAt).expand((e) => e);
-    final endsAtSurrounding = surroundingWords.any((e) {
-      final start = e.start;
-      final end = switch (e.direction) {
-        Direction.across => start.copyWith(x: start.x + e.word.length),
-        Direction.down => start.copyWith(y: start.y + e.word.length),
-      };
-      return surroundings.contains(end);
-    });
+    final endsAtSurrounding = surroundingWords.any(
+      (e) => surroundings.contains(e.end),
+    );
 
     return overrides(entry) || endsAtSurrounding;
   }
@@ -243,8 +238,8 @@ class Crossword {
     final innerWordEntries = <WordEntry>{};
     for (var i = 0; i < word.length; i++) {
       final newLocation = direction == Direction.across
-          ? location.copyWith(x: location.x + i)
-          : location.copyWith(y: location.y + i);
+          ? location.shift(x: i)
+          : location.shift(y: i);
       final characterData = characterMap[newLocation];
       if (characterData != null) {
         innerWordEntries.addAll(characterData.wordEntry);
@@ -253,12 +248,7 @@ class Crossword {
 
     for (final innerWordEntry in innerWordEntries) {
       final start = innerWordEntry.start;
-      final end = switch (innerWordEntry.direction) {
-        Direction.across =>
-          start.copyWith(x: start.x + innerWordEntry.word.length),
-        Direction.down =>
-          start.copyWith(y: start.y + innerWordEntry.word.length),
-      };
+      final end = innerWordEntry.end;
       if (start.x <= location.x && end.x >= location.x) {
         return true;
       }
