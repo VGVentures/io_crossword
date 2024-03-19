@@ -31,6 +31,8 @@ class Crossword {
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
+  static const largestWordLength = 18;
+
   /// The origin of the coordinate system.
   ///
   /// The origin (0, 0) is the middle letter of the first word added to the
@@ -298,5 +300,47 @@ class Crossword {
   /// The words at location (0, -2) are "ALBUS" and "BEHAN".
   Set<WordEntry> wordsAt(Location location) {
     return characterMap[location]?.wordEntry ?? {};
+  }
+
+  /// The constraints for a given [candidate].
+  ///
+  /// For example:
+  ///
+  /// Consider this board:
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  O  W
+  /// ```
+  ///
+  /// Adding a word down at (2, -2) would have a single
+  /// [ConstrainedWordCandidate], with two constraints one at position 0 for the
+  /// character 'S' and another at position 4 for the character 'W' with a
+  /// maximum length of [largestWordLength].
+  ///
+  /// If we consider this other board:
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  N  A  N  -
+  ///  2  -  -  N  O  W
+  /// ```
+  ///
+  /// Adding a word down at (2, -2) would have a single
+  /// [ConstrainedWordCandidate], with one constraint one at position 0 for the
+  /// character 'S' with a maximum length of 3. Since a longer word would
+  /// [overlaps] with the word "NAN".
+  ///
+  /// Adding a word down at (-1, -2) would have more than one
+  /// [ConstrainedWordCandidate], those cases will return `null`. This behavior
+  /// is something we would like to consider in the future.
+  ConstrainedWordCandidate? constraints(WordCandidate candidate) {
+    throw UnimplementedError();
   }
 }
