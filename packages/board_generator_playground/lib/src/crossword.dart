@@ -6,26 +6,6 @@ import 'package:equatable/equatable.dart';
 /// {@endtemplate}
 typedef CharacterMap = Map<Location, CharacterData>;
 
-/// {@template character_data}
-/// The data for a character on the board.
-/// {@endtemplate}
-class CharacterData extends Equatable {
-  /// {@macro character_data}
-  const CharacterData({
-    required this.character,
-    required this.wordEntry,
-  });
-
-  /// The character.
-  final String character;
-
-  /// The words that contain this character.
-  final Set<WordEntry> wordEntry;
-
-  @override
-  List<Object?> get props => [character, wordEntry];
-}
-
 /// The board for the crossword puzzle.
 class Crossword {
   /// {@macro character_map}
