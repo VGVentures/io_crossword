@@ -22,6 +22,8 @@
     "mostrado",
     "página",
     "Texto",
-    "goldens"
+    "goldens",
+    "gsutil",
+    "appspot"
   ]
 }

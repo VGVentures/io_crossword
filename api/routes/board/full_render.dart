@@ -20,7 +20,7 @@ Future<Response> _onGet(RequestContext request) async {
 
   final words = sections.expand((section) => section.words);
 
-  final image = await boardrenderer.renderBoard(words.toList());
+  final image = await boardrenderer.renderBoardWireframe(words.toList());
 
   return Response.bytes(
     body: image,

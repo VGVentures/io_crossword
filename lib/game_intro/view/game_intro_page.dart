@@ -15,7 +15,9 @@ class GameIntroPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => GameIntroBloc(
         boardInfoRepository: context.read<BoardInfoRepository>(),
-      )..add(const BoardProgressRequested()),
+      )
+        ..add(const BoardProgressRequested())
+        ..add(const BlacklistRequested()),
       child: const GameIntroView(),
     );
   }

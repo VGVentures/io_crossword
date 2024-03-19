@@ -15,6 +15,15 @@ void main() {
       });
     });
 
+    group('BlacklistRequested', () {
+      test('supports value comparisons', () {
+        expect(
+          BlacklistRequested(),
+          equals(BlacklistRequested()),
+        );
+      });
+    });
+
     group('WelcomeCompleted', () {
       test('supports value comparisons', () {
         expect(
@@ -38,6 +47,15 @@ void main() {
         expect(
           MascotSubmitted(),
           equals(MascotSubmitted()),
+        );
+      });
+    });
+
+    group('InitialsUpdated', () {
+      test('supports value comparisons', () {
+        expect(
+          InitialsUpdated(character: 'J', index: 0),
+          equals(InitialsUpdated(character: 'J', index: 0)),
         );
       });
     });

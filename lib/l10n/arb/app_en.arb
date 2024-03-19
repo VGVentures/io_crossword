@@ -23,5 +23,25 @@
     "chooseTeam": "Choose a team",
     "@chooseTeam": {
         "description": "Label displayed in the team selection modal"
+    },
+    "enterInitials": "Enter your initials for the leaderboard",
+    "@enterInitials": {
+        "description": "Label displayed in the initials form modal"
+    },
+    "initialsBlacklistedMessage": "Keep it PG, use different initials",
+    "@initialsBlacklistedMessage": {
+        "description": "Text shown in the score submission page"
+    },
+    "initialsErrorMessage": "Please enter three initials",
+    "@initialsErrorMessage": {
+        "description": "Text shown in the score submission page"
+    },
+    "initialsSubmissionErrorMessage": "There was an error creating your player.\nPlease try again.",
+    "@initialsSubmissionErrorMessage": {
+        "description": "Text shown in the initials input page"
+    },
+    "enter": "Enter",
+    "@enter": {
+        "description": "Enter label"
     }
 }

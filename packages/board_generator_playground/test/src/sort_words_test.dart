@@ -1,4 +1,4 @@
-import 'package:board_generator/src/sort_words.dart';
+import 'package:board_generator_playground/src/sort_words.dart';
 import 'package:test/test.dart';
 
 void main() {
