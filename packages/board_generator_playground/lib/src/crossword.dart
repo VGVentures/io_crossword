@@ -232,30 +232,15 @@ class Crossword {
   ///
   /// * [overlaps] for a more general check.
   bool overrides(WordEntry entry) {
-    final location = entry.start;
-    final word = entry.word;
-    final direction = entry.direction;
+    final spans = entry.start.to(entry.end);
+    final innerWordEntries = spans
+        .map(wordsAt)
+        .expand((e) => e)
+        .where((word) => word.direction == entry.direction);
 
-    final innerWordEntries = <WordEntry>{};
-    for (var i = 0; i < word.length; i++) {
-      final newLocation = direction == Direction.across
-          ? location.shift(x: i)
-          : location.shift(y: i);
-      final characterData = characterMap[newLocation];
-      if (characterData != null) {
-        innerWordEntries.addAll(characterData.wordEntry);
-      }
-    }
-
-    for (final innerWordEntry in innerWordEntries) {
-      final start = innerWordEntry.start;
-      final end = innerWordEntry.end;
-      if (start.x <= location.x && end.x >= location.x) {
-        return true;
-      }
-    }
-
-    return false;
+    return innerWordEntries.any((e) {
+      return spans.contains(e.start) && spans.contains(e.end);
+    });
   }
 
   /// The words at a given [location].
