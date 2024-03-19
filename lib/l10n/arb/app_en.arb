@@ -16,15 +16,14 @@
   "@getStarted": {
     "description": "Get started label"
   },
-
-    "continueLabel": "Continue",
-    "@continueLabel": {
-        "description": "Continue label"
-    },
-    "chooseTeam": "Choose a team",
-    "@chooseTeam": {
-        "description": "Label displayed in the team selection modal"
-    },
+  "continueLabel": "Continue",
+  "@continueLabel": {
+    "description": "Continue label"
+  },
+  "chooseTeam": "Choose a team",
+  "@chooseTeam": {
+    "description": "Label displayed in the team selection modal"
+  },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
     "description": "Title of the about modal"
@@ -81,22 +80,18 @@
   "@aboutHowToPlayFirstInstructions": {
     "description": "The first step instruction on how to play"
   },
-
   "aboutHowToPlaySecondInstructions": "Tap an empty word on the board or the “Find a new word” button to get your clue. If you're stuck and need a hand, press the 'hint' button to get help from Google Gemini. You'll have 3 hints throughout the game.",
   "@aboutHowToPlaySecondInstructions": {
     "description": "The Second step instruction on how to play"
   },
-
   "aboutHowToPlayThirdInstructions": "The team who solves the word first claims that spot on the board. If you’re working on a word and it’s solved by another team, keep playing; you’ll still get points for solving it.",
   "@aboutHowToPlayThirdInstructions": {
     "description": "The Third step instruction on how to play"
   },
-
   "aboutHowToPlayFourthInstructions": "Correctly solve two or more words in a row without errors to build a streak. Streaks multiply the points you earn each time you solve a word.",
   "@aboutHowToPlayFourthInstructions": {
     "description": "The Fourth step instruction on how to play"
   },
-
   "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
   "@aboutHowToPlayFifthInstructions": {
     "description": "The Fifth step instruction on how to play"
