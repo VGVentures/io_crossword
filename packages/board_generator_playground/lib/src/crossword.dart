@@ -350,7 +350,7 @@ class Crossword {
   /// It assumes that the [candidate] is valid, meaning that it doesn't
   /// [overlaps] and it [isConnected].
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    var maximumLength = 0;
+    var maximumLength = 1;
     for (var i = 1; i < largestWordLength; i++) {
       final positiveSideLocation = switch (candidate.direction) {
         Direction.across => candidate.location.copyWith(

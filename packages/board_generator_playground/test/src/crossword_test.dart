@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
@@ -364,6 +364,30 @@ void main() {
             Location(x: 0, y: -1),
             Location(x: 2, y: -2),
           },
+        );
+      });
+    });
+
+    group('constraints', () {
+      test('derives successfully a single constraint down', () {
+        final board = _TestCrossword();
+
+        final candidate = WordCandidate(
+          location: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              maximumLength: Crossword.largestWordLength,
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: {0: 's'},
+            ),
+          ),
         );
       });
     });
