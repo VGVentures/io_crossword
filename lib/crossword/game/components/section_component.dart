@@ -160,6 +160,14 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     _subscription.cancel();
   }
 
+  void _loadWithCurrentRenderMode() {
+    if (_renderMode == RenderMode.snapshot) {
+      _loadSnapshot();
+    } else {
+      _loadBoardSection();
+    }
+  }
+
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
@@ -167,20 +175,12 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
-          if (state.renderMode == RenderMode.snapshot) {
-            _loadSnapshot();
-          } else {
-            _loadBoardSection();
-          }
+          _loadWithCurrentRenderMode();
         }
       } else {
         if (_renderMode != state.renderMode) {
           _renderMode = state.renderMode;
-          if (state.renderMode == RenderMode.snapshot) {
-            _loadSnapshot();
-          } else {
-            _loadBoardSection();
-          }
+          _loadWithCurrentRenderMode();
         }
         final selectedWord = state.selectedWord?.wordId;
         final selectedSection = state.selectedWord?.section;
