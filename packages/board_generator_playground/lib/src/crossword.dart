@@ -20,7 +20,7 @@ class Crossword {
   ///
   /// The origin (0, 0) is the middle letter of the first word added to the
   /// board. The first word should have an odd number of letters.
-  static const origin = Location(x: 0, y: 0);
+  static const origin = Location.zero;
 
   /// Adds a word to the board.
   void add(WordEntry entry) {

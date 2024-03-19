@@ -10,6 +10,9 @@ final class Location extends Equatable {
     required this.y,
   });
 
+  /// A location with the x and y values set to 0.
+  static const zero = Location(x: 0, y: 0);
+
   /// The coordinate of the location.
   final int x;
 
