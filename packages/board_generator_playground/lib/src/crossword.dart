@@ -116,14 +116,14 @@ class Crossword {
 
     final positions = <Location>[];
     for (var i = 0; i < word.length; i++) {
-      final x = location.x + i;
-      final y = location.y + i;
-
       final isFirstCharacter = i == 0;
       final isLastCharacter = i >= word.length;
 
       switch (direction) {
         case Direction.across:
+          final x = location.x + i;
+          final y = location.y;
+
           positions.addAll(
             [
               location.copyWith(y: y - 1),
@@ -133,6 +133,9 @@ class Crossword {
             ],
           );
         case Direction.down:
+          final x = location.x;
+          final y = location.y + i;
+
           positions.addAll(
             [
               location.copyWith(x: x - 1),
