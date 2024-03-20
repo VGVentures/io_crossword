@@ -178,7 +178,6 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
-    // FIXME: Tweak so all tests pass.
     if (overrides(entry)) return true;
 
     final span = entry.start.to(entry.end);
