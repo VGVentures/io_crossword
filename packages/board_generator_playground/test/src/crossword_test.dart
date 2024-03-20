@@ -399,8 +399,8 @@ void main() {
       });
 
       test(
-        'returns false when matches first character '
-        'and does not change word meaning with direction down',
+        'returns true when matches first character '
+        'and does change word meaning with direction down',
         () {
           final board = Crossword1();
 
