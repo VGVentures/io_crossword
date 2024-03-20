@@ -116,7 +116,12 @@ class Crossword {
   ///  2  -  -  N  -  -
   /// ```
   Set<Location> connections(WordEntry entry) {
-    return entry.surroundings().where((location) {
+    final area = {
+      ...entry.start.to(entry.end),
+      ...entry.surroundings(),
+    };
+
+    return area.where((location) {
       return characterMap[location] != null;
     }).toSet();
   }
