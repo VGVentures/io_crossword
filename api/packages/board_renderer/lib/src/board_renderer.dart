@@ -25,12 +25,12 @@ extension on List<Word> {
           ? word.position.y + word.answer.length
           : word.position.y;
 
-      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
-      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
+      maxPositionX = math.max(maxPositionX, sizeX);
+      maxPositionY = math.max(maxPositionY, sizeY);
     }
 
-    final totalWidth = (maxPositionX + minPositionX.abs()) * cellSize;
-    final totalHeight = (maxPositionY + minPositionY.abs()) * cellSize;
+    final totalWidth = (minPositionX - maxPositionX).abs() * cellSize;
+    final totalHeight = (minPositionY - maxPositionY).abs() * cellSize;
 
     return (totalWidth, totalHeight);
   }
@@ -308,12 +308,11 @@ class BoardRenderer {
     final topLeft = indexes.first;
     final bottomRight = indexes.last;
 
-    final sectionAmount = bottomRight - topLeft + const Point(1, 1);
-    // TODO(erickzanardo) we need to take into account the border words
-    final totalWidth = sectionAmount.x * sections.first.size * _textureCellSize;
-    final totalHeight =
-        sectionAmount.y * sections.first.size * _textureCellSize;
+    final amountX = bottomRight.x - topLeft.x + 1;
+    final amountY = bottomRight.y - topLeft.y + 1;
 
+    final totalWidth = amountX * sections.first.size * _textureCellSize;
+    final totalHeight = amountY * sections.first.size * _textureCellSize;
 
     final image = _createImage(
       width: totalWidth,

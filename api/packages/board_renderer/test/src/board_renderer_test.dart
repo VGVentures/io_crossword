@@ -439,6 +439,437 @@ void main() {
       });
     });
 
+    group('groupSections', () {
+      late AssetResolver assetResolver;
+
+      setUp(() {
+        assetResolver = _MockAssetResolver();
+        when(assetResolver.resolveWordImage)
+            .thenAnswer((_) async => Uint8List(0));
+      });
+
+      final section1 = BoardSection(
+        id: '',
+        position: Point(1, 1),
+        size: 10,
+        words: [
+          Word(
+            position: Point(18, 12),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+          Word(
+            position: Point(10, 11),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ],
+        borderWords: const [],
+      );
+
+      final section2 = BoardSection(
+        id: '',
+        position: Point(2, 1),
+        size: 10,
+        words: [
+          Word(
+            position: Point(18, 12),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+          Word(
+            position: Point(10, 11),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ],
+        borderWords: const [],
+      );
+
+      final section3 = BoardSection(
+        id: '',
+        position: Point(1, 2),
+        size: 10,
+        words: [
+          Word(
+            position: Point(18, 22),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
+          ),
+          Word(
+            position: Point(10, 21),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ],
+        borderWords: const [],
+      );
+
+      final section4 = BoardSection(
+        id: '',
+        position: Point(2, 2),
+        size: 10,
+        words: [
+          Word(
+            position: Point(28, 12),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
+          ),
+          Word(
+            position: Point(20, 11),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ],
+        borderWords: const [],
+      );
+
+      final sectionWithNoNeighbor = BoardSection(
+        id: '',
+        position: Point(4, 9),
+        size: 10,
+        words: [
+          Word(
+            position: Point(28, 12),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
+          ),
+          Word(
+            position: Point(20, 11),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ],
+        borderWords: const [],
+      );
+
+      test('render the received sections and group them', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        var calls = 0;
+
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          drawRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num thickness = 0,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          compositeImage: (
+            img.Image dst,
+            img.Image src, {
+            int? dstX,
+            int? dstY,
+            int? dstW,
+            int? dstH,
+            int? srcX,
+            int? srcY,
+            int? srcW,
+            int? srcH,
+            img.BlendMode blend = img.BlendMode.direct,
+            bool linearBlend = false,
+            bool center = false,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            calls++;
+            return dst;
+          },
+          decodePng: (Uint8List data) => _MockImage(),
+          assetResolver: assetResolver,
+        );
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+        await renderer.groupSections(
+          [
+            section1,
+            section2,
+            section3,
+            section4,
+          ],
+        );
+
+        expect(calls, 21);
+      });
+
+      test('throws when trying to render sections without neighbors', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          drawRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num thickness = 0,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          compositeImage: (
+            img.Image dst,
+            img.Image src, {
+            int? dstX,
+            int? dstY,
+            int? dstW,
+            int? dstH,
+            int? srcX,
+            int? srcY,
+            int? srcW,
+            int? srcH,
+            img.BlendMode blend = img.BlendMode.direct,
+            bool linearBlend = false,
+            bool center = false,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          decodePng: (Uint8List data) => _MockImage(),
+          assetResolver: assetResolver,
+        );
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+        await expectLater(
+          () => renderer.groupSections(
+            [
+              section1,
+              section2,
+              section3,
+              section4,
+              sectionWithNoNeighbor,
+            ],
+          ),
+          throwsA(
+            isA<BoardRendererFailure>().having(
+              (e) => e.toString(),
+              'message',
+              '[BoardRendererFailure]: Section Point(4, 9) has no neighbor',
+            ),
+          ),
+        );
+      });
+
+      test('throws when decoding an image fails', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        var calls = 0;
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          drawRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num thickness = 0,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          compositeImage: (
+            img.Image dst,
+            img.Image src, {
+            int? dstX,
+            int? dstY,
+            int? dstW,
+            int? dstH,
+            int? srcX,
+            int? srcY,
+            int? srcW,
+            int? srcH,
+            img.BlendMode blend = img.BlendMode.direct,
+            bool linearBlend = false,
+            bool center = false,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          decodePng: (Uint8List data) => (calls++ == 0 ? _MockImage() : null),
+          assetResolver: assetResolver,
+        );
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+        await expectLater(
+          () => renderer.groupSections(
+            [
+              section1,
+              section2,
+              section3,
+              section4,
+            ],
+          ),
+          throwsA(
+            isA<BoardRendererFailure>().having(
+              (e) => e.toString(),
+              'message',
+              '[BoardRendererFailure]: Failed to decode the section image',
+            ),
+          ),
+        );
+      });
+
+      test('throws when the image generation fails', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        var calls = 0;
+
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          drawRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num thickness = 0,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          compositeImage: (
+            img.Image dst,
+            img.Image src, {
+            int? dstX,
+            int? dstY,
+            int? dstW,
+            int? dstH,
+            int? srcX,
+            int? srcY,
+            int? srcW,
+            int? srcH,
+            img.BlendMode blend = img.BlendMode.direct,
+            bool linearBlend = false,
+            bool center = false,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            return dst;
+          },
+          decodePng: (Uint8List data) => _MockImage(),
+          assetResolver: assetResolver,
+        );
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenAnswer((_) {
+          calls++;
+
+          if (calls == 5) {
+            return null;
+          } else {
+            return Uint8List(0);
+          }
+        });
+
+        await expectLater(
+          () => renderer.groupSections(
+            [
+              section1,
+              section2,
+              section3,
+              section4,
+            ],
+          ),
+          throwsA(
+            isA<BoardRendererFailure>().having(
+              (e) => e.toString(),
+              'message',
+              '[BoardRendererFailure]: Failed to render the section group',
+            ),
+          ),
+        );
+      });
+    });
+
     group('renderWords', () {
       late AssetResolver assetResolver;
 
@@ -455,7 +886,7 @@ void main() {
           answer: 'hello',
           clue: '',
           hints: const [],
-          solvedTimestamp: null,
+          solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
         ),
         Word(
           position: Point(10, 11),
