@@ -111,8 +111,8 @@ class CrosswordGame extends FlameGame with PanDetector {
     final lx = endSection.x - startSection.x;
     final ly = endSection.y - startSection.y;
 
-    for (var x = startSection.x; x < endSection.x; x++) {
-      for (var y = startSection.y; y < endSection.y; y++) {
+    for (var x = startSection.x; x <= endSection.x; x++) {
+      for (var y = startSection.y; y <= endSection.y; y++) {
         final dx = x - startSection.x;
         final dy = y - startSection.y;
 
