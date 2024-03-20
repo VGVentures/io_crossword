@@ -36,7 +36,6 @@ void main() async {
           refreshIdToken: authenticationRepository.refreshIdToken,
           // TODO(any): implement app check
           appCheckTokenStream: const Stream.empty(),
-          appCheckToken: 'pending',
         );
 
         return App(
