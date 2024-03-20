@@ -44,9 +44,7 @@ void main({
   final leafs = <Location>{};
   var placedWords = 0;
 
-  while (placedWords < 15) {
-    print(crossword.toPrettyString());
-
+  while (placedWords < 1000) {
     final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
     if (locations.isEmpty) {
       log('No more locations to place words');
