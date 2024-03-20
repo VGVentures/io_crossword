@@ -186,17 +186,39 @@ class Crossword {
   ///
   /// Adding "ALBUS" at (0, -2) would override "BUS" completely.
   ///
+  /// Partial overrides are also considered, for example, adding "WEBS"
+  /// at (-2, -2) would override "BUS" partially.
+  ///
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  W  E  B  S  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
+  ///
   /// See also:
   ///
   /// * [overlaps] for a more general check.
   bool overrides(WordEntry entry) {
     final spans = entry.start.to(entry.end);
-    final innerWordEntries = spans
+
+    for (var i = 0; i < spans.length; i++) {
+      final location = spans.elementAt(i);
+      final characterData = characterMap[location];
+      if (characterData != null && characterData.character != entry.word[i]) {
+        return true;
+      }
+    }
+
+    final innerWords = spans
         .map(wordsAt)
         .expand((e) => e)
         .where((word) => word.direction == entry.direction);
 
-    return innerWordEntries.any((e) {
+    return innerWords.any((e) {
       return spans.contains(e.start) && spans.contains(e.end);
     });
   }
