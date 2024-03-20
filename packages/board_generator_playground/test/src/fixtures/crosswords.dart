@@ -158,7 +158,7 @@ class Crossword4 extends Crossword {
   }
 }
 
-/// {@template crossword4}
+/// {@template crossword5}
 /// A pre-defined crossword for testing.
 ///
 /// ```
@@ -171,7 +171,7 @@ class Crossword4 extends Crossword {
 /// ```
 /// {@endtemplate}
 class Crossword5 extends Crossword {
-  /// {@macro crossword4}
+  /// {@macro crossword5}
   Crossword5() {
     add(
       WordEntry(

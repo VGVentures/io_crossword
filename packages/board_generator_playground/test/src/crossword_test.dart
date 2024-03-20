@@ -364,220 +364,216 @@ void main() {
     });
 
     group('overlaps', () {
-      test('returns true because overriding first word with direction down',
-          () {
-        final board = Crossword1();
+      group('isFalse', () {
+        group('when going down', () {
+          test(
+            'when it gracefully overrides horizontally its end',
+            () {
+              final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'candy',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+              final word = WordEntry(
+                word: 'cow',
+                start: Location(x: 2, y: 0),
+                direction: Direction.down,
+              );
 
-        expect(board.overlaps(word), isTrue);
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+        });
+
+        group('when going across', () {
+          test(
+            'when it gracefully overrides horizontally its end',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -2, y: 1),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+
+          test(
+            'when it gracefully overrides horizontally its start',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'add',
+                start: Location(x: 0, y: 1),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+        });
       });
 
-      test('returns true when overlaps horizontal with direction down', () {
-        final board = Crossword4();
+      group('isTrue', () {
+        group('when going down', () {
+          test('and partially overrides horizontally its start', () {
+            final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'sand',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final word = WordEntry(
+              word: 'candy',
+              start: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
 
-        expect(board.overlaps(word), isTrue);
+            expect(board.overlaps(word), isTrue);
+          });
+
+          test(
+            'and partially overriding horizontally its end',
+            () {
+              final board = Crossword2();
+
+              final word = WordEntry(
+                word: 'van',
+                start: Location(x: 2, y: 0),
+                direction: Direction.down,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test('and overlapping horizontally without overriding', () {
+            final board = Crossword4();
+
+            final word = WordEntry(
+              word: 'sand',
+              start: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+
+          test('and overlapping and overriding horizontally', () {
+            final board = Crossword3();
+
+            final word = WordEntry(
+              word: 'sandy',
+              start: Location(x: 2, y: -1),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+
+          test('and overlapping horizontally its prefix without overriding',
+              () {
+            final board = Crossword1();
+
+            final word = WordEntry(
+              word: 'sandy',
+              start: Location(x: 2, y: -1),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+        });
+
+        group('when going across', () {
+          test(
+            'and partially overriding horizontally its start',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'van',
+                start: Location(x: -2, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            'and partially overriding horizontally its end',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -2, y: 0),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping horizontally its suffix without overriding''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -5, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping horizontally its end and partially overriding horizontally gracefully''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -4, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            'and partially overlapping horizontally gracefully',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'sand',
+                start: Location(x: 2, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping vertically without overriding''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -1, y: 3),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+        });
       });
-
-      test(
-          'returns true when changes word across and last character '
-          'with direction down', () {
-        final board = Crossword3();
-
-        final word = WordEntry(
-          word: 'sandy',
-          start: Location(x: 2, y: -1),
-          direction: Direction.down,
-        );
-
-        expect(board.overlaps(word), isTrue);
-      });
-
-      test(
-        'returns true when matches first character '
-        'and does change word meaning with direction down',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'sandy',
-            start: Location(x: 2, y: -1),
-            direction: Direction.down,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns false when matches last character '
-        'and does not change word meaning with direction down',
-        () {
-          final board = Crossword2();
-
-          final word = WordEntry(
-            word: 'cow',
-            start: Location(x: 2, y: 0),
-            direction: Direction.down,
-          );
-
-          expect(board.overlaps(word), isFalse);
-        },
-      );
-
-      test(
-        'returns true when does not match last character '
-        'and changes the word with direction down',
-        () {
-          final board = Crossword2();
-
-          final word = WordEntry(
-            word: 'van',
-            start: Location(x: 2, y: 0),
-            direction: Direction.down,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when attaching to the right a word across '
-        'and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'usa',
-            start: Location(x: -5, y: -2),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when attaching to the left a word across '
-        'and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'van',
-            start: Location(x: -2, y: -2),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when attaching to the overriding a left a word across '
-        'and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'sand',
-            start: Location(x: 2, y: -2),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when attaching to the same character at the right a word '
-        'across and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'usa',
-            start: Location(x: -4, y: -2),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when attaching to character at the right a word '
-        'going down and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'usa',
-            start: Location(x: -2, y: 0),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns true when adding a word at the end of a word '
-        'going down and changes the word with direction across',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'usa',
-            start: Location(x: -1, y: 3),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isTrue);
-        },
-      );
-
-      test(
-        'returns false when attaching to character at the right a word is '
-        'the same going down and does not change the word with direction down',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'usa',
-            start: Location(x: -2, y: 1),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isFalse);
-        },
-      );
-
-      test(
-        'returns false when attaching to character at the left a word is '
-        'the same going down and does not change the word with direction down',
-        () {
-          final board = Crossword1();
-
-          final word = WordEntry(
-            word: 'add',
-            start: Location(x: 0, y: 1),
-            direction: Direction.across,
-          );
-
-          expect(board.overlaps(word), isFalse);
-        },
-      );
     });
 
     group('connections', () {
