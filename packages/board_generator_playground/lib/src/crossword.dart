@@ -178,18 +178,30 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
+    // FIXME: Tweak so all tests pass.
     if (overrides(entry)) return true;
 
-    final connections = this.connections(entry);
-    final connectedWords = connections.map(wordsAt).expand((e) => e);
+    final span = entry.start.to(entry.end);
+    final spannedWords = span.map(wordsAt).expand((e) => e);
+    if (spannedWords.any((e) => e.direction == entry.direction)) {
+      return true;
+    }
 
-    final connectedTips = {
-      ...connectedWords.map((e) => e.start).where(connections.contains),
-      ...connectedWords.map((e) => e.end).where(connections.contains),
-    }..removeWhere((e) => e == entry.start || e == entry.end);
-    if (connectedTips.isEmpty) return false;
+    for (var i = 0; i < entry.word.length; i++) {
+      final sideA = entry.direction == Direction.across
+          ? entry.start.shift(x: i, y: -1)
+          : entry.start.shift(x: -1, y: i);
+      final sideB = entry.direction == Direction.across
+          ? entry.start.shift(x: i, y: 1)
+          : entry.start.shift(x: 1, y: i);
 
-    return true;
+      final sideWords = wordsAt(sideA).union(wordsAt(sideB));
+      if (sideWords.any((e) => e.direction != entry.direction)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /// Whether the new [entry] overrides an existing word.
@@ -219,10 +231,6 @@ class Crossword {
   ///  1  -  -  A  -  -
   ///  2  -  -  N  -  -
   /// ```
-  ///
-  /// See also:
-  ///
-  /// * [overlaps] for a more general check.
   bool overrides(WordEntry entry) {
     final spans = entry.start.to(entry.end);
 
@@ -297,7 +305,7 @@ class Crossword {
   /// with the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will be return `null`. These
+  /// [ConstrainedWordCandidate], those cases will return `null`. Such
   /// scenarios are yet not properly considered, it is something we would like
   /// to contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
