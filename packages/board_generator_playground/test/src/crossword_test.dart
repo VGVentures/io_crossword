@@ -227,7 +227,7 @@ void main() {
     });
 
     group('overrides', () {
-      test('returns false when complete empty spot', () {
+      test('returns false when its added in a empty spot going across', () {
         final board = Crossword1();
 
         final word = WordEntry(
@@ -238,14 +238,133 @@ void main() {
 
         expect(board.overrides(word), isFalse);
       });
+
+      test('returns true when changes the word adding a letter across', () {
+        final board = Crossword2();
+
+        final word = WordEntry(
+          word: 'know',
+          start: Location(x: -1, y: 2),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test(
+          'returns true when changes a word '
+          'and adds a letter to the left across', () {
+        final board = Crossword2();
+
+        final word = WordEntry(
+          word: 'knew',
+          start: Location(x: -1, y: 2),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test('returns true when changes words two last words across', () {
+        final board = Crossword2();
+
+        final word = WordEntry(
+          word: 'new',
+          start: Location(x: 1, y: 2),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test('returns true when changes the same length word across', () {
+        final board = Crossword2();
+
+        final word = WordEntry(
+          word: 'new',
+          start: Location(x: 0, y: 2),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test('returns true when changes a word down going across', () {
+        final board = Crossword2();
+
+        final word = WordEntry(
+          word: 'bad',
+          start: Location(x: -1, y: 0),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test(
+          'returns false when cross a word going down with same character '
+          'going across', () {
+        final board = Crossword1();
+
+        final word = WordEntry(
+          word: 'cat',
+          start: Location(x: -1, y: 1),
+          direction: Direction.across,
+        );
+
+        expect(board.overrides(word), isFalse);
+      });
+
+      test(
+          'returns true when down a word going down with same character '
+          'going across', () {
+        final board = Crossword1();
+
+        final word = WordEntry(
+          word: 'buy',
+          start: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test(
+          'returns true when down a word a previous word is changed '
+          'following', () {
+        final board = Crossword1();
+
+        final word = WordEntry(
+          word: 'buy',
+          start: Location(x: 0, y: 2),
+          direction: Direction.down,
+        );
+
+        expect(board.overrides(word), isTrue);
+      });
+
+      test(
+          'returns false when word going down uses same character of a word '
+          'going across', () {
+        final board = Crossword1();
+
+        final word = WordEntry(
+          word: 'say',
+          start: Location(x: 2, y: -2),
+          direction: Direction.down,
+        );
+
+        expect(board.overrides(word), isFalse);
+      });
     });
 
     group('overlaps', () {
-      test('returns true when complete empty spot', () {
-        final board = Crossword3();
+      test('returns true because overriding first word with direction down',
+          () {
+        final board = Crossword1();
 
         final word = WordEntry(
-          word: 'sandy',
+          word: 'candy',
           start: Location(x: 2, y: -2),
           direction: Direction.down,
         );
@@ -253,7 +372,7 @@ void main() {
         expect(board.overlaps(word), isTrue);
       });
 
-      test('returns true when overlaps horizontal', () {
+      test('returns true when overlaps horizontal with direction down', () {
         final board = Crossword4();
 
         final word = WordEntry(
@@ -265,7 +384,9 @@ void main() {
         expect(board.overlaps(word), isTrue);
       });
 
-      test('returns true when complete empty spot', () {
+      test(
+          'returns true when changes word across and last character '
+          'with direction down', () {
         final board = Crossword3();
 
         final word = WordEntry(
@@ -276,6 +397,182 @@ void main() {
 
         expect(board.overlaps(word), isTrue);
       });
+
+      test(
+        'returns false when matches first character '
+        'and does not change word meaning with direction down',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'sandy',
+            start: Location(x: 2, y: -1),
+            direction: Direction.down,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns false when matches last character '
+        'and does not change word meaning with direction down',
+        () {
+          final board = Crossword2();
+
+          final word = WordEntry(
+            word: 'cow',
+            start: Location(x: 2, y: 0),
+            direction: Direction.down,
+          );
+
+          expect(board.overlaps(word), isFalse);
+        },
+      );
+
+      test(
+        'returns true when does not match last character '
+        'and changes the word with direction down',
+        () {
+          final board = Crossword2();
+
+          final word = WordEntry(
+            word: 'van',
+            start: Location(x: 2, y: 0),
+            direction: Direction.down,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when attaching to the right a word across '
+        'and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'usa',
+            start: Location(x: -5, y: -2),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when attaching to the left a word across '
+        'and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'van',
+            start: Location(x: -2, y: -2),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when attaching to the overriding a left a word across '
+        'and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'sand',
+            start: Location(x: 2, y: -2),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when attaching to the same character at the right a word '
+        'across and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'usa',
+            start: Location(x: -4, y: -2),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when attaching to character at the right a word '
+        'going down and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'usa',
+            start: Location(x: -2, y: 0),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns true when adding a word at the end of a word '
+        'going down and changes the word with direction across',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'usa',
+            start: Location(x: -1, y: 3),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isTrue);
+        },
+      );
+
+      test(
+        'returns false when attaching to character at the right a word is '
+        'the same going down and does not change the word with direction down',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'usa',
+            start: Location(x: -2, y: 1),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isFalse);
+        },
+      );
+
+      test(
+        'returns false when attaching to character at the left a word is '
+        'the same going down and does not change the word with direction down',
+        () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'add',
+            start: Location(x: 0, y: 1),
+            direction: Direction.across,
+          );
+
+          expect(board.overlaps(word), isFalse);
+        },
+      );
     });
 
     group('connections', () {
