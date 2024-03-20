@@ -104,8 +104,11 @@ String? _findWordForConstraints({
   required SortedWords sortedPool,
 }) {
   final constraints = constrainedWordCandidate.constraints;
+  final invalidLengths = constrainedWordCandidate.invalidLengths;
 
   for (var i = 18; i >= 3; i--) {
+    if (invalidLengths.contains(i)) continue;
+
     final firstConstrains = constraints.entries.first;
 
     final words =
