@@ -228,134 +228,138 @@ void main() {
     });
 
     group('overrides', () {
-      test('returns false when its added in a empty spot going across', () {
-        final board = Crossword1();
+      group('isFalse', () {
+        test('when it is disconnected', () {
+          final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'egg',
-          start: Location(x: 1, y: -1),
-          direction: Direction.across,
+          final word = WordEntry(
+            word: 'egg',
+            start: Location(x: 1, y: -1),
+            direction: Direction.across,
+          );
+
+          expect(board.overrides(word), isFalse);
+        });
+
+        test(
+          'when there is a partial graceful vertical override',
+          () {
+            final board = Crossword1();
+
+            final word = WordEntry(
+              word: 'cat',
+              start: Location(x: -1, y: 1),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isFalse);
+          },
         );
 
-        expect(board.overrides(word), isFalse);
+        test('when there is a partial graceful horizontal override', () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'say',
+            start: Location(x: 2, y: -2),
+            direction: Direction.down,
+          );
+
+          expect(board.overrides(word), isFalse);
+        });
       });
 
-      test('returns true when changes the word adding a letter across', () {
-        final board = Crossword2();
+      group('isTrue', () {
+        group('when going across', () {
+          test('and there is an total horizontal graceful override', () {
+            final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'know',
-          start: Location(x: -1, y: 2),
-          direction: Direction.across,
-        );
+            final word = WordEntry(
+              word: 'know',
+              start: Location(x: -1, y: 2),
+              direction: Direction.across,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
+            expect(board.overrides(word), isTrue);
+          });
 
-      test(
-          'returns true when changes a word '
-          'and adds a letter to the left across', () {
-        final board = Crossword2();
+          test('and there is an total horizontal ungraceful override', () {
+            final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'knew',
-          start: Location(x: -1, y: 2),
-          direction: Direction.across,
-        );
+            final word = WordEntry(
+              word: 'knew',
+              start: Location(x: -1, y: 2),
+              direction: Direction.across,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
+            expect(board.overrides(word), isTrue);
+          });
 
-      test('returns true when changes words two last words across', () {
-        final board = Crossword2();
+          test('and there is a partial horizontal ungraceful override', () {
+            final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'new',
-          start: Location(x: 1, y: 2),
-          direction: Direction.across,
-        );
+            final word = WordEntry(
+              word: 'new',
+              start: Location(x: 1, y: 2),
+              direction: Direction.across,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
+            expect(board.overrides(word), isTrue);
+          });
 
-      test('returns true when changes the same length word across', () {
-        final board = Crossword2();
+          test('and there is an exact horizontal ungraceful override', () {
+            final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'new',
-          start: Location(x: 0, y: 2),
-          direction: Direction.across,
-        );
+            final word = WordEntry(
+              word: 'new',
+              start: Location(x: 0, y: 2),
+              direction: Direction.across,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
+            expect(board.overrides(word), isTrue);
+          });
 
-      test('returns true when changes a word down going across', () {
-        final board = Crossword2();
+          test('and there is a partial vertical ungraceful override', () {
+            final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'bad',
-          start: Location(x: -1, y: 0),
-          direction: Direction.across,
-        );
+            final word = WordEntry(
+              word: 'bad',
+              start: Location(x: -1, y: 0),
+              direction: Direction.across,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
+            expect(board.overrides(word), isTrue);
+          });
+        });
 
-      test(
-          'returns false when cross a word going down with same character '
-          'going across', () {
-        final board = Crossword1();
+        group('when going down', () {
+          test(
+            '''and there is a partial horizontal ungraceful override''',
+            () {
+              final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'cat',
-          start: Location(x: -1, y: 1),
-          direction: Direction.across,
-        );
+              final word = WordEntry(
+                word: 'buy',
+                start: Location(x: 2, y: -2),
+                direction: Direction.down,
+              );
 
-        expect(board.overrides(word), isFalse);
-      });
+              expect(board.overrides(word), isTrue);
+            },
+          );
 
-      test(
-          'returns true when down a word going down with same character '
-          'going across', () {
-        final board = Crossword1();
+          test('and there is a partial vertical ungraceful override', () {
+            final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'buy',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final word = WordEntry(
+              word: 'buy',
+              start: Location(x: 0, y: 2),
+              direction: Direction.down,
+            );
 
-        expect(board.overrides(word), isTrue);
-      });
-
-      test(
-          'returns true when down a word a previous word is changed '
-          'following', () {
-        final board = Crossword1();
-
-        final word = WordEntry(
-          word: 'buy',
-          start: Location(x: 0, y: 2),
-          direction: Direction.down,
-        );
-
-        expect(board.overrides(word), isTrue);
-      });
-
-      test(
-          'returns false when word going down uses same character of a word '
-          'going across', () {
-        final board = Crossword1();
-
-        final word = WordEntry(
-          word: 'say',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
-
-        expect(board.overrides(word), isFalse);
+            expect(board.overrides(word), isTrue);
+          });
+        });
       });
     });
 
