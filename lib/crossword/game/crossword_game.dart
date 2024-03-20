@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
@@ -59,15 +60,22 @@ class CrosswordGame extends FlameGame with PanDetector {
     _updateVisibleSections();
 
     if (showDebugOverlay) {
-      await addAll(
-        [
-          FpsComponent(),
-          FpsTextComponent(),
-          ChildCounterComponent<SectionComponent>(
-            position: Vector2(0, 30),
-            target: world,
+      await add(
+        RectangleComponent(
+          size: Vector2(
+            200,
+            50,
           ),
-        ],
+          paint: Paint()..color = const Color(0xFF000000),
+          children: [
+            FpsComponent(),
+            FpsTextComponent(),
+            ChildCounterComponent<SectionComponent>(
+              position: Vector2(0, 30),
+              target: world,
+            ),
+          ],
+        ),
       );
     }
   }
