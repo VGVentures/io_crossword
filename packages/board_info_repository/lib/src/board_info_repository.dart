@@ -34,7 +34,7 @@ class BoardInfoRepository {
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
 
-  /// Return the total words count available in the crossword.
+  /// Returns the total words count available in the crossword.
   Future<int> getTotalWordsCount() async {
     try {
       final results = await boardInfoCollection
@@ -48,7 +48,7 @@ class BoardInfoRepository {
     }
   }
 
-  /// Return the solved words count in the crossword.
+  /// Returns the solved words count in the crossword.
   Future<int> getSolvedWordsCount() async {
     try {
       final results = await boardInfoCollection
@@ -57,6 +57,20 @@ class BoardInfoRepository {
 
       final data = results.docs.first.data();
       return data['value'] as int;
+    } catch (error, stackStrace) {
+      throw BoardInfoException(error, stackStrace);
+    }
+  }
+
+  /// Returns the limit at which the render mode should switch
+  Future<double> getRenderModeZoomLimit() async {
+    try {
+      final results = await boardInfoCollection
+          .where('type', isEqualTo: 'render_mode_limit')
+          .get();
+
+      final data = results.docs.first.data();
+      return data['value'] as double;
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
