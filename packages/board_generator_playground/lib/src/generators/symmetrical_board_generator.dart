@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
+import 'package:board_generator_playground/src/models/word_candidate.dart';
 import 'package:board_generator_playground/src/sort_words.dart';
 import 'package:csv/csv.dart';
 
@@ -71,4 +72,12 @@ void main({
     log('Constraints for ${location}: $constraints');
     break;
   }
+}
+
+String? _findWordForConstraints({
+  required ConstrainedWordCandidate constrainedWordCandidate,
+  required SortedWords sortedPool,
+}) {
+  // TODO(Ayad): Implement this function.
+  throw UnimplementedError();
 }
