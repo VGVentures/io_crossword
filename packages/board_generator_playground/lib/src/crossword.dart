@@ -105,7 +105,7 @@ class Crossword {
   ///  2  -  -  N  -  -
   /// ```
   ///
-  /// Adding the word "USA" at (1, -2) would have four connections:
+  /// Adding the word "USA" at (1, -2) would have five connections:
   ///
   /// ```
   ///    -2 -1  0  1  2
@@ -115,8 +115,24 @@ class Crossword {
   ///  1  -  -  A  -  -
   ///  2  -  -  N  -  -
   /// ```
+  ///
+  /// If we label the connections with a "*" we would have:
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  *  *  *
+  /// -1  -  -  *  S  -
+  ///  0  -  -  *  A  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
   Set<Location> connections(WordEntry entry) {
-    return entry.surroundings().where((location) {
+    final area = {
+      ...entry.start.to(entry.end),
+      ...entry.surroundings(),
+    };
+
+    return area.where((location) {
       return characterMap[location] != null;
     }).toSet();
   }
