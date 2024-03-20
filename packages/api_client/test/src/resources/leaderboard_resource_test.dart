@@ -215,7 +215,7 @@ void main() {
 
         verify(
           () => apiClient.post(
-            '/game/leaderboard/create_score',
+            '/game/create_score',
             body: jsonEncode({
               'initials': 'TST',
               'mascot': 'dino',
@@ -236,7 +236,7 @@ void main() {
               (e) => e.cause,
               'cause',
               equals(
-                'POST /game/leaderboard/create_score returned status 500 '
+                'POST /game/create_score returned status 500 '
                 'with the following response: "Oops"',
               ),
             ),

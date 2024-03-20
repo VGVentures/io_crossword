@@ -102,7 +102,7 @@ class LeaderboardResource {
     required Mascots mascot,
   }) async {
     final response = await _apiClient.post(
-      '/game/leaderboard/create_score',
+      '/game/create_score',
       body: jsonEncode({
         'initials': initials,
         'mascot': mascot.name,
@@ -111,7 +111,7 @@ class LeaderboardResource {
 
     if (response.statusCode != HttpStatus.created) {
       throw ApiClientError(
-        'POST /game/leaderboard/create_score returned status ${response.statusCode} '
+        'POST /game/create_score returned status ${response.statusCode} '
         'with the following response: "${response.body}"',
         StackTrace.current,
       );
