@@ -200,7 +200,8 @@ class Crossword {
           ? entry.start.shift(x: i, y: 1)
           : entry.start.shift(x: 1, y: i);
 
-      final sideWords = wordsAt(sideA).union(wordsAt(sideB));
+      final sideWords = wordsAt(sideA).union(wordsAt(sideB))
+        ..removeAll(spannedWords);
       if (sideWords.any((e) => e.direction != entry.direction)) {
         return true;
       }
