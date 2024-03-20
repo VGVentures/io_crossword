@@ -178,17 +178,18 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
+    if (overrides(entry)) return true;
+
     final connections = this.connections(entry);
     final connectedWords = connections.map(wordsAt).expand((e) => e);
 
-    final endsAtConnection = connectedWords.any(
-      (e) => connections.contains(e.end),
-    );
-    final startAtConnection = connectedWords.any(
-      (e) => connections.contains(e.start),
-    );
+    final connectedTips = {
+      ...connectedWords.map((e) => e.start).where(connections.contains),
+      ...connectedWords.map((e) => e.end).where(connections.contains),
+    }..removeWhere((e) => e == entry.start || e == entry.end);
+    if (connectedTips.isEmpty) return false;
 
-    return startAtConnection || endsAtConnection || overrides(entry);
+    return true;
   }
 
   /// Whether the new [entry] overrides an existing word.
