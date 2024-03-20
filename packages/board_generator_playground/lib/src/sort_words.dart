@@ -1,3 +1,5 @@
+typedef SortedWords = Map<int, Map<int, Map<String, Set<String>>>>;
+
 /// Generates the words organised by the length of the word + character
 /// position + the character.
 ///
@@ -53,7 +55,7 @@
 ///
 /// Looks like: Map<int(numberOfCharacters), Map<int(characterPosition,
 /// Map<String(letterCharacter), Set<String(Word)>>>>
-Map<int, Map<int, Map<String, Set<String>>>> sortWords(
+SortedWords sortWords(
   Iterable<String> wordList,
 ) {
   final map = <int, Map<int, Map<String, Set<String>>>>{};
