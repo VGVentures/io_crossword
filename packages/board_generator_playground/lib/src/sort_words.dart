@@ -9,6 +9,7 @@
 ///
 /// would be organized as
 ///
+/// ```dart
 /// final organizedWords = <int, Map<int, Map<String, Set<String>>>>{
 ///   4: {
 ///     0: {
@@ -31,6 +32,7 @@
 ///     },
 ///   },
 /// };
+/// ```
 ///
 /// We can perform the following to search for words that can be added
 /// in the crossword.

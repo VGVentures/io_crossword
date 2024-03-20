@@ -49,6 +49,9 @@ class ConstrainedWordCandidate extends WordCandidate {
   final Map<int, String> constraints;
 
   @override
+  bool? get stringify => true;
+
+  @override
   List<Object?> get props => [
         ...super.props,
         invalidLengths,
