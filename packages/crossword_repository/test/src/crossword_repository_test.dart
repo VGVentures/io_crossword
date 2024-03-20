@@ -3,13 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-
-class _MockHttpClient extends Mock {
-  Future<http.Response> get(Uri uri, {Map<String, String>? headers});
-}
 
 void main() {
   group('CrosswordRepository', () {
@@ -34,18 +29,15 @@ void main() {
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;
-    late _MockHttpClient httpClient;
 
     setUpAll(() {
       registerFallbackValue(Uri.parse('http://localhost'));
     });
 
     setUp(() async {
-      httpClient = _MockHttpClient();
       firebaseFirestore = FakeFirebaseFirestore();
       crosswordRepository = CrosswordRepository(
         db: firebaseFirestore,
-        getCall: httpClient.get,
       );
 
       await firebaseFirestore
@@ -99,22 +91,6 @@ void main() {
         expect(
           crosswordRepository.watchSectionFromPosition(2, 2),
           emits(null),
-        );
-      });
-    });
-
-    group('fetchSectionSnapshotBytes', () {
-      test('returns response as UInt8List', () async {
-        final response = http.Response('image', 200);
-        when(
-          () => httpClient.get(
-            any(),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => response);
-        expect(
-          await crosswordRepository.fetchSectionSnapshotBytes('url'),
-          equals(response.bodyBytes),
         );
       });
     });
