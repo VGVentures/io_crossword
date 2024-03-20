@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
@@ -227,59 +228,356 @@ void main() {
     });
 
     group('overrides', () {
-      test('returns false when complete empty spot', () {
-        final board = Crossword1();
+      group('isFalse', () {
+        test('when it is disconnected', () {
+          final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'egg',
-          start: Location(x: 1, y: -1),
-          direction: Direction.across,
+          final word = WordEntry(
+            word: 'egg',
+            start: Location(x: 1, y: -1),
+            direction: Direction.across,
+          );
+
+          expect(board.overrides(word), isFalse);
+        });
+
+        test(
+          'when there is a partial graceful vertical override',
+          () {
+            final board = Crossword1();
+
+            final word = WordEntry(
+              word: 'cat',
+              start: Location(x: -1, y: 1),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isFalse);
+          },
         );
 
-        expect(board.overrides(word), isFalse);
+        test('when there is a partial graceful horizontal override', () {
+          final board = Crossword1();
+
+          final word = WordEntry(
+            word: 'say',
+            start: Location(x: 2, y: -2),
+            direction: Direction.down,
+          );
+
+          expect(board.overrides(word), isFalse);
+        });
+      });
+
+      group('isTrue', () {
+        group('when going across', () {
+          test('and there is an total horizontal graceful override', () {
+            final board = Crossword2();
+
+            final word = WordEntry(
+              word: 'know',
+              start: Location(x: -1, y: 2),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+
+          test('and there is an total horizontal ungraceful override', () {
+            final board = Crossword2();
+
+            final word = WordEntry(
+              word: 'knew',
+              start: Location(x: -1, y: 2),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+
+          test('and there is a partial horizontal ungraceful override', () {
+            final board = Crossword2();
+
+            final word = WordEntry(
+              word: 'new',
+              start: Location(x: 1, y: 2),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+
+          test('and there is an exact horizontal ungraceful override', () {
+            final board = Crossword2();
+
+            final word = WordEntry(
+              word: 'new',
+              start: Location(x: 0, y: 2),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+
+          test('and there is a partial vertical ungraceful override', () {
+            final board = Crossword2();
+
+            final word = WordEntry(
+              word: 'bad',
+              start: Location(x: -1, y: 0),
+              direction: Direction.across,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+        });
+
+        group('when going down', () {
+          test(
+            '''and there is a partial horizontal ungraceful override''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'buy',
+                start: Location(x: 2, y: -2),
+                direction: Direction.down,
+              );
+
+              expect(board.overrides(word), isTrue);
+            },
+          );
+
+          test('and there is a partial vertical ungraceful override', () {
+            final board = Crossword1();
+
+            final word = WordEntry(
+              word: 'buy',
+              start: Location(x: 0, y: 2),
+              direction: Direction.down,
+            );
+
+            expect(board.overrides(word), isTrue);
+          });
+        });
       });
     });
 
     group('overlaps', () {
-      test('returns true when complete empty spot', () {
-        final board = Crossword3();
+      group('isFalse', () {
+        group('when going down', () {
+          test(
+            'when it gracefully overrides horizontally its end',
+            () {
+              final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'sandy',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+              final word = WordEntry(
+                word: 'cow',
+                start: Location(x: 2, y: 0),
+                direction: Direction.down,
+              );
 
-        expect(board.overlaps(word), isTrue);
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+        });
+
+        group('when going across', () {
+          test(
+            'when it gracefully overrides horizontally its end',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -2, y: 1),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+
+          test(
+            'when it gracefully overrides horizontally its start',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'add',
+                start: Location(x: 0, y: 1),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isFalse);
+            },
+          );
+        });
       });
 
-      test('returns true when overlaps horizontal', () {
-        final board = Crossword4();
+      group('isTrue', () {
+        group('when going down', () {
+          test('and partially overrides horizontally its start', () {
+            final board = Crossword1();
 
-        final word = WordEntry(
-          word: 'sand',
-          start: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final word = WordEntry(
+              word: 'candy',
+              start: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
 
-        expect(board.overlaps(word), isTrue);
-      });
+            expect(board.overlaps(word), isTrue);
+          });
 
-      test('returns true when complete empty spot', () {
-        final board = Crossword3();
+          test(
+            'and partially overriding horizontally its end',
+            () {
+              final board = Crossword2();
 
-        final word = WordEntry(
-          word: 'sandy',
-          start: Location(x: 2, y: -1),
-          direction: Direction.down,
-        );
+              final word = WordEntry(
+                word: 'van',
+                start: Location(x: 2, y: 0),
+                direction: Direction.down,
+              );
 
-        expect(board.overlaps(word), isTrue);
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test('and overlapping horizontally without overriding', () {
+            final board = Crossword4();
+
+            final word = WordEntry(
+              word: 'sand',
+              start: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+
+          test('and overlapping and overriding horizontally', () {
+            final board = Crossword3();
+
+            final word = WordEntry(
+              word: 'sandy',
+              start: Location(x: 2, y: -1),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+
+          test('and overlapping horizontally its prefix without overriding',
+              () {
+            final board = Crossword1();
+
+            final word = WordEntry(
+              word: 'sandy',
+              start: Location(x: 2, y: -1),
+              direction: Direction.down,
+            );
+
+            expect(board.overlaps(word), isTrue);
+          });
+        });
+
+        group('when going across', () {
+          test(
+            'and partially overriding horizontally its start',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'van',
+                start: Location(x: -2, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            'and partially overriding horizontally its end',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -2, y: 0),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping horizontally its suffix without overriding''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -5, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping horizontally its end and partially overriding horizontally gracefully''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -4, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            'and partially overlapping horizontally gracefully',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'sand',
+                start: Location(x: 2, y: -2),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+
+          test(
+            '''and overlapping vertically without overriding''',
+            () {
+              final board = Crossword1();
+
+              final word = WordEntry(
+                word: 'usa',
+                start: Location(x: -1, y: 3),
+                direction: Direction.across,
+              );
+
+              expect(board.overlaps(word), isTrue);
+            },
+          );
+        });
       });
     });
 
     group('connections', () {
-      test('gets 4 connections for usa down at (1, -2)', () {
+      test('gets 5 connections for usa down at (1, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -292,6 +590,7 @@ void main() {
           board.connections(usa),
           <Location>{
             Location(x: 2, y: -2),
+            Location(x: 1, y: -2),
             Location(x: 0, y: -2),
             Location(x: 0, y: -1),
             Location(x: 0, y: 0),
@@ -299,7 +598,7 @@ void main() {
         );
       });
 
-      test('gets 1 connections for usa down at (2, -2)', () {
+      test('gets 2 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -311,12 +610,13 @@ void main() {
         expect(
           board.connections(usa),
           <Location>{
+            Location(x: 2, y: -2),
             Location(x: 1, y: -2),
           },
         );
       });
 
-      test('gets 3 connections for usa down at (2, -2)', () {
+      test('gets 4 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -335,7 +635,7 @@ void main() {
         );
       });
 
-      test('gets 2 connections for across down at (-1, 1)', () {
+      test('gets 3 connections for across down at (-1, 1)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -349,11 +649,12 @@ void main() {
           <Location>{
             Location(x: 0, y: 0),
             Location(x: 0, y: 2),
+            Location(x: 0, y: 1),
           },
         );
       });
 
-      test('gets 1 connections for sand across at (2, -2)', () {
+      test('gets 2 connections for sand across at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -365,6 +666,7 @@ void main() {
         expect(
           board.connections(usa),
           <Location>{
+            Location(x: 2, y: -2),
             Location(x: 1, y: -2),
           },
         );
@@ -391,80 +693,176 @@ void main() {
     });
 
     group('constraints', () {
-      test('returns null if neighboring word has matching direction', () {
+      group('returns null', () {
+        test('when going down and neighboring word has matching direction', () {
+          final board = Crossword1();
+
+          final candidate = WordCandidate(
+            location: Location(x: 1, y: -2),
+            direction: Direction.down,
+          );
+
+          final constraints = board.constraints(candidate);
+          expect(constraints, isNull);
+        });
+
+        test('when going across neighboring word has matching direction', () {
+          final board = Crossword1();
+
+          final candidate = WordCandidate(
+            location: Location(x: 0, y: -1),
+            direction: Direction.across,
+          );
+
+          final constraints = board.constraints(candidate);
+          expect(constraints, isNull);
+        });
+      });
+
+      group('derives', () {
+        group('when going across', () {
+          test('a single constraint across with no invalid lengths', () {
+            final board = Crossword1();
+
+            final candidate = WordCandidate(
+              location: Location(x: 0, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'h'},
+                ),
+              ),
+            );
+          });
+
+          test('two constraints with multiple invalid lengths', () {
+            final board = Crossword5();
+
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: 2),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: {
+                    2,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                  },
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'e', 2: 'n'},
+                ),
+              ),
+            );
+          });
+        });
+
+        group('when going down', () {
+          test('a single constraint with a no invalid lengths', () {
+            final board = Crossword1();
+
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's'},
+                ),
+              ),
+            );
+          });
+
+          test('two constraints with a single invalid length', () {
+            final board = Crossword2();
+
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {4},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's', 4: 'w'},
+                ),
+              ),
+            );
+          });
+
+          test('two constraints with multiple invalid lengths', () {
+            final board = Crossword3();
+
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {3, 4},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's', 4: 'w'},
+                ),
+              ),
+            );
+          });
+        });
+      });
+    });
+
+    group('toPrettyString', () {
+      test('returns a pretty string for the crossword', () {
         final board = Crossword1();
 
-        final candidate = WordCandidate(
-          location: Location(x: 1, y: -2),
-          direction: Direction.down,
-        );
-
-        final constraints = board.constraints(candidate);
-        expect(constraints, isNull);
-      });
-
-      test('derives successfully a single constraint down', () {
-        final board = Crossword1();
-
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
-
-        final constraints = board.constraints(candidate);
+        final prettyString = board.toPrettyString();
         expect(
-          constraints,
+          prettyString,
           equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's'},
-            ),
-          ),
-        );
-      });
-
-      test('derives successfully two constraints down', () {
-        final board = Crossword2();
-
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
-
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {4},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's', 4: 'w'},
-            ),
-          ),
-        );
-      });
-
-      test('derives successfully two constraints down with capped length', () {
-        final board = Crossword3();
-
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
-
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {3, 4},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's', 4: 'w'},
-            ),
+            'ALBUS\n'
+            '--E--\n'
+            '--H--\n'
+            '--A--\n'
+            '--N--\n',
           ),
         );
       });

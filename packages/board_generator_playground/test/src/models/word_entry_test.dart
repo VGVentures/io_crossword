@@ -21,6 +21,50 @@ void main() {
       expect(entry.end, Location(x: 1, y: -2));
     });
 
+    group('prefix', () {
+      test('is correct when across', () {
+        final entry = WordEntry(
+          word: 'BUS',
+          start: Location(x: 0, y: 0),
+          direction: Direction.across,
+        );
+
+        expect(entry.prefix, Location(x: -1, y: 0));
+      });
+
+      test('is correct when down', () {
+        final entry = WordEntry(
+          word: 'BUS',
+          start: Location(x: 0, y: 0),
+          direction: Direction.down,
+        );
+
+        expect(entry.prefix, Location(x: 0, y: -1));
+      });
+    });
+
+    group('suffix', () {
+      test('is correct when across', () {
+        final entry = WordEntry(
+          word: 'BUS',
+          start: Location(x: 0, y: 0),
+          direction: Direction.across,
+        );
+
+        expect(entry.suffix, Location(x: 3, y: 0));
+      });
+
+      test('is correct when down', () {
+        final entry = WordEntry(
+          word: 'BUS',
+          start: Location(x: 0, y: 0),
+          direction: Direction.down,
+        );
+
+        expect(entry.suffix, Location(x: 0, y: 3));
+      });
+    });
+
     group('surroundings', () {
       test('returns as expected when across', () {
         // ```
