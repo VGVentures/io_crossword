@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
@@ -576,7 +577,7 @@ void main() {
     });
 
     group('connections', () {
-      test('gets 4 connections for usa down at (1, -2)', () {
+      test('gets 5 connections for usa down at (1, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -589,6 +590,7 @@ void main() {
           board.connections(usa),
           <Location>{
             Location(x: 2, y: -2),
+            Location(x: 1, y: -2),
             Location(x: 0, y: -2),
             Location(x: 0, y: -1),
             Location(x: 0, y: 0),
@@ -596,7 +598,7 @@ void main() {
         );
       });
 
-      test('gets 1 connections for usa down at (2, -2)', () {
+      test('gets 2 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -608,12 +610,13 @@ void main() {
         expect(
           board.connections(usa),
           <Location>{
+            Location(x: 2, y: -2),
             Location(x: 1, y: -2),
           },
         );
       });
 
-      test('gets 3 connections for usa down at (2, -2)', () {
+      test('gets 4 connections for usa down at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -632,7 +635,7 @@ void main() {
         );
       });
 
-      test('gets 2 connections for across down at (-1, 1)', () {
+      test('gets 3 connections for across down at (-1, 1)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -646,11 +649,12 @@ void main() {
           <Location>{
             Location(x: 0, y: 0),
             Location(x: 0, y: 2),
+            Location(x: 0, y: 1),
           },
         );
       });
 
-      test('gets 1 connections for sand across at (2, -2)', () {
+      test('gets 2 connections for sand across at (2, -2)', () {
         final board = Crossword1();
 
         final usa = WordEntry(
@@ -662,6 +666,7 @@ void main() {
         expect(
           board.connections(usa),
           <Location>{
+            Location(x: 2, y: -2),
             Location(x: 1, y: -2),
           },
         );
@@ -761,6 +766,105 @@ void main() {
               location: candidate.location,
               direction: candidate.direction,
               constraints: const {0: 's', 4: 'w'},
+            ),
+          ),
+        );
+      });
+
+      test('returns null if neighboring word has matching direction across',
+          () {
+        final board = Crossword1();
+
+        final candidate = WordCandidate(
+          location: Location(x: 0, y: -1),
+          direction: Direction.across,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(constraints, isNull);
+      });
+
+      test('derives successfully a single constraint across', () {
+        final board = Crossword1();
+
+        final candidate = WordCandidate(
+          location: Location(x: 0, y: 0),
+          direction: Direction.across,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              invalidLengths: const {},
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: const {0: 'h'},
+            ),
+          ),
+        );
+      });
+
+      test(
+          'derives successfully two constraints across with invalid '
+          'length at 2', () {
+        final board = Crossword5();
+
+        final candidate = WordCandidate(
+          location: Location(x: -2, y: 2),
+          direction: Direction.across,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              invalidLengths: {2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: const {0: 'e', 2: 'n'},
+            ),
+          ),
+        );
+      });
+
+      test('derives successfully two constraints across with capped length',
+          () {
+        final board = Crossword5();
+
+        final candidate = WordCandidate(
+          location: Location(x: -2, y: 1),
+          direction: Direction.across,
+        );
+
+        final constraints = board.constraints(candidate);
+        expect(
+          constraints,
+          equals(
+            ConstrainedWordCandidate(
+              invalidLengths: const {
+                2,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+              },
+              location: candidate.location,
+              direction: candidate.direction,
+              constraints: const {0: 'l', 2: 'a'},
             ),
           ),
         );

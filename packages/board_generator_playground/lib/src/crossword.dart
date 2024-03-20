@@ -321,7 +321,14 @@ class Crossword {
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      if (hasMatchingDirection) return null;
+      if (hasMatchingDirection && i < shortestWordLength - 1) {
+        return null;
+      } else if (hasMatchingDirection) {
+        for (var k = i; k <= largestWordLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
 
       if (words.any(overlaps)) {
         invalidLengths.add(i);

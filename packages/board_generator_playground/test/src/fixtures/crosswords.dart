@@ -157,3 +157,59 @@ class Crossword4 extends Crossword {
     );
   }
 }
+
+/// {@template crossword4}
+/// A pre-defined crossword for testing.
+///
+/// ```
+///    -2 -1  0  1  2  3  4  5  6  7
+/// -2  A  L  B  U  S  -  -  -  -  -
+/// -1  P  -  E  -  -  -  -  -  -  -
+///  0  P  -  H  A  T  -  -  -  -  -
+///  1  L  -  A  -  -  -  -  C  A  R
+///  2  E  -  N  -  -  -  -  -  -  -
+/// ```
+/// {@endtemplate}
+class Crossword5 extends Crossword {
+  /// {@macro crossword4}
+  Crossword5() {
+    add(
+      WordEntry(
+        word: 'behan',
+        start: const Location(x: 0, y: -2),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'albus',
+        start: const Location(x: -2, y: -2),
+        direction: Direction.across,
+      ),
+    );
+
+    add(
+      WordEntry(
+        word: 'apple',
+        start: const Location(x: -2, y: -2),
+        direction: Direction.down,
+      ),
+    );
+
+    add(
+      WordEntry(
+        word: 'hat',
+        start: Location.zero,
+        direction: Direction.across,
+      ),
+    );
+
+    add(
+      WordEntry(
+        word: 'car',
+        start: const Location(x: 5, y: 1),
+        direction: Direction.across,
+      ),
+    );
+  }
+}
