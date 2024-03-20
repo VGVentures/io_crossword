@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:board_generator_playground/src/models/models.dart';
 
 /// {@template character_map}
