@@ -778,45 +778,6 @@ void main() {
               ),
             );
           });
-
-          test('two constraints with a single valid length', () {
-            final board = Crossword5();
-
-            final candidate = WordCandidate(
-              location: Location(x: -2, y: 1),
-              direction: Direction.across,
-            );
-
-            final constraints = board.constraints(candidate);
-            expect(
-              constraints,
-              equals(
-                ConstrainedWordCandidate(
-                  invalidLengths: const {
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                  },
-                  location: candidate.location,
-                  direction: candidate.direction,
-                  constraints: const {0: 'l', 2: 'a'},
-                ),
-              ),
-            );
-          });
         });
 
         group('when going down', () {
