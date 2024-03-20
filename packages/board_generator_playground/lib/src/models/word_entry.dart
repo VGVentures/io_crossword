@@ -41,7 +41,7 @@ class WordEntry extends Equatable {
   ///  3  -  -  -  -
   /// ```
   ///
-  /// The surrounding locations of the word "BUSH" are:
+  /// The surrounding locations of the word "BEHAN" are:
   /// (0, -3), (-1, -2), (-1, -1), (-1, 0), (-1, 1), (-1, 2), (0, 3), (1, 2),
   /// (1, 1), (1, 0), (1, -1) and (1, -2).
   ///
