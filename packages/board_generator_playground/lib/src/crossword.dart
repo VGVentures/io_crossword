@@ -105,7 +105,7 @@ class Crossword {
   ///  2  -  -  N  -  -
   /// ```
   ///
-  /// Adding the word "USA" at (1, -2) would have four connections:
+  /// Adding the word "USA" at (1, -2) would have five connections:
   ///
   /// ```
   ///    -2 -1  0  1  2
@@ -115,8 +115,24 @@ class Crossword {
   ///  1  -  -  A  -  -
   ///  2  -  -  N  -  -
   /// ```
+  ///
+  /// If we label the connections with a "*" we would have:
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  *  *  *
+  /// -1  -  -  *  S  -
+  ///  0  -  -  *  A  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
   Set<Location> connections(WordEntry entry) {
-    return entry.surroundings().where((location) {
+    final area = {
+      ...entry.start.to(entry.end),
+      ...entry.surroundings(),
+    };
+
+    return area.where((location) {
       return characterMap[location] != null;
     }).toSet();
   }
@@ -162,13 +178,35 @@ class Crossword {
   /// Overlaps are not allowed since they would create invalid words or
   /// completely overwrite existing words.
   bool overlaps(WordEntry entry) {
-    final connections = this.connections(entry);
-    final connectedWords = connections.map(wordsAt).expand((e) => e);
-    final endsAtConnection = connectedWords.any(
-      (e) => connections.contains(e.end),
-    );
+    if (overrides(entry)) return true;
 
-    return endsAtConnection || overrides(entry);
+    final span = entry.start.to(entry.end);
+    final spannedWords = span.map(wordsAt).expand((e) => e);
+    if (spannedWords.any((e) => e.direction == entry.direction)) {
+      return true;
+    }
+
+    if (characterMap[entry.prefix] != null ||
+        characterMap[entry.suffix] != null) {
+      return true;
+    }
+
+    for (var i = 0; i < entry.word.length; i++) {
+      final sideA = entry.direction == Direction.across
+          ? entry.start.shift(x: i, y: -1)
+          : entry.start.shift(x: -1, y: i);
+      final sideB = entry.direction == Direction.across
+          ? entry.start.shift(x: i, y: 1)
+          : entry.start.shift(x: 1, y: i);
+
+      final sideWords = wordsAt(sideA).union(wordsAt(sideB))
+        ..removeAll(spannedWords);
+      if (sideWords.any((e) => e.direction != entry.direction)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /// Whether the new [entry] overrides an existing word.
@@ -186,17 +224,35 @@ class Crossword {
   ///
   /// Adding "ALBUS" at (0, -2) would override "BUS" completely.
   ///
-  /// See also:
+  /// Partial overrides are also considered, for example, adding "WEBS"
+  /// at (-2, -2) would override "BUS" partially.
   ///
-  /// * [overlaps] for a more general check.
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  W  E  B  S  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
   bool overrides(WordEntry entry) {
     final spans = entry.start.to(entry.end);
-    final innerWordEntries = spans
+
+    for (var i = 0; i < spans.length; i++) {
+      final location = spans.elementAt(i);
+      final characterData = characterMap[location];
+      if (characterData != null && characterData.character != entry.word[i]) {
+        return true;
+      }
+    }
+
+    final innerWords = spans
         .map(wordsAt)
         .expand((e) => e)
         .where((word) => word.direction == entry.direction);
 
-    return innerWordEntries.any((e) {
+    return innerWords.any((e) {
       return spans.contains(e.start) && spans.contains(e.end);
     });
   }
@@ -254,7 +310,7 @@ class Crossword {
   /// with the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will be return `null`. These
+  /// [ConstrainedWordCandidate], those cases will return `null`. Such
   /// scenarios are yet not properly considered, it is something we would like
   /// to contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
@@ -278,7 +334,15 @@ class Crossword {
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      if (hasMatchingDirection) return null;
+      final hasWordOfMinimumLength = i < shortestWordLength - 1;
+      if (hasMatchingDirection && hasWordOfMinimumLength) {
+        return null;
+      } else if (hasMatchingDirection) {
+        for (var k = i; k <= largestWordLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
 
       if (words.any(overlaps)) {
         invalidLengths.add(i);
