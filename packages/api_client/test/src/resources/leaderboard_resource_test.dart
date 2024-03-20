@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
-import 'package:api_client/src/resources/leaderboard_resource.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
@@ -194,6 +193,51 @@ void main() {
               'cause',
               equals(
                 'POST /leaderboard/initials returned status 500 with the following response: "Oops"',
+              ),
+            ),
+          ),
+        );
+      });
+    });
+
+    group('createScore', () {
+      setUp(() {
+        when(() => apiClient.post(any(), body: any(named: 'body')))
+            .thenAnswer((_) async => response);
+      });
+
+      test('makes the correct call', () async {
+        when(() => response.statusCode).thenReturn(HttpStatus.created);
+        await resource.createScore(
+          initials: 'TST',
+          mascot: Mascots.dino,
+        );
+
+        verify(
+          () => apiClient.post(
+            '/game/leaderboard/create_score',
+            body: jsonEncode({
+              'initials': 'TST',
+              'mascot': 'dino',
+            }),
+          ),
+        ).called(1);
+      });
+
+      test('throws ApiClientError when request fails', () async {
+        when(() => response.statusCode)
+            .thenReturn(HttpStatus.internalServerError);
+        when(() => response.body).thenReturn('Oops');
+
+        await expectLater(
+          () => resource.createScore(initials: 'TST', mascot: Mascots.dino),
+          throwsA(
+            isA<ApiClientError>().having(
+              (e) => e.cause,
+              'cause',
+              equals(
+                'POST /game/leaderboard/create_score returned status 500 '
+                'with the following response: "Oops"',
               ),
             ),
           ),
