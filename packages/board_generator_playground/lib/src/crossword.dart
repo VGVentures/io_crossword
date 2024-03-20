@@ -187,6 +187,11 @@ class Crossword {
       return true;
     }
 
+    if (characterMap[entry.prefix] != null ||
+        characterMap[entry.suffix] != null) {
+      return true;
+    }
+
     for (var i = 0; i < entry.word.length; i++) {
       final sideA = entry.direction == Direction.across
           ? entry.start.shift(x: i, y: -1)
