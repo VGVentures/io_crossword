@@ -849,5 +849,23 @@ void main() {
         });
       });
     });
+
+    group('toPrettyString', () {
+      test('returns a pretty string for the crossword', () {
+        final board = Crossword1();
+
+        final prettyString = board.toPrettyString();
+        expect(
+          prettyString,
+          equals(
+            'ALBUS\n'
+            '--E--\n'
+            '--H--\n'
+            '--A--\n'
+            '--N--\n',
+          ),
+        );
+      });
+    });
   });
 }

@@ -370,4 +370,42 @@ class Crossword {
       constraints: constraints,
     );
   }
+
+  /// A pretty string representation of the board.
+  ///
+  /// For example, a board with the words "ALBUS" and "BEHAN" would be:
+  ///
+  /// ```txt
+  /// ALBUS
+  /// --E--
+  /// --H--
+  /// --A--
+  /// --N--
+  /// ```
+  String toPrettyString() {
+    final stringBuffer = StringBuffer();
+
+    final minX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+    final minY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+
+    final width = maxX - minX + 1;
+
+    for (var row = minY; row <= maxY; row++) {
+      final characters = List.generate(width, (column) {
+        final location = Location(x: column + minX, y: row);
+        final character = characterMap[location]?.character ?? '-';
+        return character.toUpperCase();
+      });
+
+      stringBuffer.writeln(characters.join());
+    }
+
+    return stringBuffer.toString();
+  }
 }
