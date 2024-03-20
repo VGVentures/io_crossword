@@ -719,156 +719,173 @@ void main() {
         });
       });
 
-      test('derives successfully a single constraint down', () {
-        final board = Crossword1();
+      group('derives', () {
+        group('when going across', () {
+          test('a single constraint across with no invalid lengths', () {
+            final board = Crossword1();
 
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: 0, y: 0),
+              direction: Direction.across,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's'},
-            ),
-          ),
-        );
-      });
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'h'},
+                ),
+              ),
+            );
+          });
 
-      test('derives successfully two constraints down', () {
-        final board = Crossword2();
+          test('two constraints with multiple invalid lengths', () {
+            final board = Crossword5();
 
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: 2),
+              direction: Direction.across,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {4},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's', 4: 'w'},
-            ),
-          ),
-        );
-      });
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: {
+                    2,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                  },
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'e', 2: 'n'},
+                ),
+              ),
+            );
+          });
 
-      test('derives successfully two constraints down with capped length', () {
-        final board = Crossword3();
+          test('two constraints with a single valid length', () {
+            final board = Crossword5();
 
-        final candidate = WordCandidate(
-          location: Location(x: 2, y: -2),
-          direction: Direction.down,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: 1),
+              direction: Direction.across,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {3, 4},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 's', 4: 'w'},
-            ),
-          ),
-        );
-      });
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {
+                    2,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                  },
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'l', 2: 'a'},
+                ),
+              ),
+            );
+          });
+        });
 
-      test('derives successfully a single constraint across', () {
-        final board = Crossword1();
+        group('when going down', () {
+          test('a single constraint with a no invalid lengths', () {
+            final board = Crossword1();
 
-        final candidate = WordCandidate(
-          location: Location(x: 0, y: 0),
-          direction: Direction.across,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 'h'},
-            ),
-          ),
-        );
-      });
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's'},
+                ),
+              ),
+            );
+          });
 
-      test(
-          'derives successfully two constraints across with invalid '
-          'length at 2', () {
-        final board = Crossword5();
+          test('two constraints with a single invalid length', () {
+            final board = Crossword2();
 
-        final candidate = WordCandidate(
-          location: Location(x: -2, y: 2),
-          direction: Direction.across,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: {2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 'e', 2: 'n'},
-            ),
-          ),
-        );
-      });
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {4},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's', 4: 'w'},
+                ),
+              ),
+            );
+          });
 
-      test('derives successfully two constraints across with capped length',
-          () {
-        final board = Crossword5();
+          test('two constraints with multiple invalid lengths', () {
+            final board = Crossword3();
 
-        final candidate = WordCandidate(
-          location: Location(x: -2, y: 1),
-          direction: Direction.across,
-        );
+            final candidate = WordCandidate(
+              location: Location(x: 2, y: -2),
+              direction: Direction.down,
+            );
 
-        final constraints = board.constraints(candidate);
-        expect(
-          constraints,
-          equals(
-            ConstrainedWordCandidate(
-              invalidLengths: const {
-                2,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-              },
-              location: candidate.location,
-              direction: candidate.direction,
-              constraints: const {0: 'l', 2: 'a'},
-            ),
-          ),
-        );
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {3, 4},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 's', 4: 'w'},
+                ),
+              ),
+            );
+          });
+        });
       });
     });
   });
