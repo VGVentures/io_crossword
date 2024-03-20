@@ -44,7 +44,9 @@ void main({
   final leafs = <Location>{};
   var placedWords = 0;
 
-  while (placedWords < 50) {
+  while (placedWords < 15) {
+    print(crossword.toPrettyString());
+
     final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
     if (locations.isEmpty) {
       log('No more locations to place words');
@@ -60,17 +62,41 @@ void main({
     }
     final currentDirection = words.first.direction;
 
-    final constraints = crossword.constraints(
-      WordCandidate(
-        location: location,
-        direction: currentDirection == Direction.across
-            ? Direction.down
-            : Direction.across,
-      ),
+    final wordCandidate = WordCandidate(
+      location: location,
+      direction: currentDirection == Direction.across
+          ? Direction.down
+          : Direction.across,
     );
-    log('Constraints for ${location}: $constraints');
-    break;
+    final constrainedWordCandidate = crossword.constraints(wordCandidate);
+    if (constrainedWordCandidate == null) {
+      leafs.add(location);
+      continue;
+    }
+
+    final candidate = _findWordForConstraints(
+      constrainedWordCandidate: constrainedWordCandidate,
+      sortedPool: sortedPool,
+    );
+    if (candidate == null) {
+      leafs.add(location);
+      continue;
+    }
+
+    final wordEntry = WordEntry(
+      word: candidate,
+      start: location,
+      direction: wordCandidate.direction,
+    );
+    crossword.add(wordEntry);
+    sortedPool.removeWord(wordEntry.word);
+    placedWords++;
+    if (placedWords % 200 == 0) {
+      log('Placed $placedWords words');
+    }
   }
+
+  File('crossword.txt').writeAsStringSync(crossword.toPrettyString());
 }
 
 String? _findWordForConstraints({
@@ -91,4 +117,6 @@ String? _findWordForConstraints({
       return words.first;
     }
   }
+
+  return null;
 }
