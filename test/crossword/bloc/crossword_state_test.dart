@@ -114,58 +114,6 @@ void main() {
         expect(state.copyWith(), state);
       });
 
-      test('copyWith returns an instance with new width', () {
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-          sections: {
-            (0, 0): BoardSection(
-              id: '1',
-              position: Point(0, 0),
-              size: 40,
-              words: [
-                Word(
-                  axis: Axis.horizontal,
-                  position: Point(0, 0),
-                  answer: 'flutter',
-                  clue: 'flutter',
-                  hints: const ['dart', 'mobile', 'cross-platform'],
-                  solvedTimestamp: null,
-                ),
-              ],
-              borderWords: const [],
-            ),
-          },
-        );
-        final newState = state.copyWith(width: 80);
-        expect(newState.width, 80);
-      });
-
-      test('copyWith returns an instance with new height', () {
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-          sections: {
-            (0, 0): BoardSection(
-              id: '1',
-              position: Point(0, 0),
-              size: 40,
-              words: [
-                Word(
-                  axis: Axis.horizontal,
-                  position: Point(0, 0),
-                  answer: 'flutter',
-                  clue: 'flutter',
-                  hints: const ['dart', 'mobile', 'cross-platform'],
-                  solvedTimestamp: null,
-                ),
-              ],
-              borderWords: const [],
-            ),
-          },
-        );
-        final newState = state.copyWith(height: 80);
-        expect(newState.height, 80);
-      });
-
       test('copyWith returns an instance with new sectionSize', () {
         final state = CrosswordLoaded(
           sectionSize: 400,

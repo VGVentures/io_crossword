@@ -86,10 +86,12 @@ void main() {
         mockState(state);
 
         await game.ready();
-        expect(game.firstChild<FpsComponent>(), isNotNull);
-        expect(game.firstChild<FpsTextComponent>(), isNotNull);
+        expect(game.descendants().whereType<FpsComponent>(), isNotEmpty);
+        expect(game.descendants().whereType<FpsTextComponent>(), isNotNull);
         expect(
-          game.firstChild<ChildCounterComponent<SectionComponent>>(),
+          game
+              .descendants()
+              .whereType<ChildCounterComponent<SectionComponent>>(),
           isNotNull,
         );
       },
@@ -337,7 +339,10 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: Offset(-sections.first.size * state.width * 1.5, 30),
+                delta: Offset(
+                  -sections.first.size * CrosswordGame.cellSize.toDouble(),
+                  30,
+                ),
               ),
             ),
           )

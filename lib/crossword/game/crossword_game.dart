@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
@@ -23,7 +24,6 @@ class CrosswordGame extends FlameGame with PanDetector {
 
   final CrosswordBloc bloc;
 
-  late final Size totalArea;
   late final int sectionSize;
 
   late final Image lettersSprite;
@@ -49,25 +49,27 @@ class CrosswordGame extends FlameGame with PanDetector {
 
     sectionSize = state.sectionSize * cellSize;
 
-    totalArea = Size(
-      (state.width * cellSize).toDouble(),
-      (state.height * cellSize).toDouble(),
-    );
-
     camera.priority = 1;
 
     _updateVisibleSections();
 
     if (showDebugOverlay) {
-      await addAll(
-        [
-          FpsComponent(),
-          FpsTextComponent(),
-          ChildCounterComponent<SectionComponent>(
-            position: Vector2(0, 30),
-            target: world,
+      await add(
+        RectangleComponent(
+          size: Vector2(
+            200,
+            50,
           ),
-        ],
+          paint: Paint()..color = const Color(0xFF000000),
+          children: [
+            FpsComponent(),
+            FpsTextComponent(),
+            ChildCounterComponent<SectionComponent>(
+              position: Vector2(0, 30),
+              target: world,
+            ),
+          ],
+        ),
       );
     }
   }
@@ -103,8 +105,8 @@ class CrosswordGame extends FlameGame with PanDetector {
     final lx = endSection.x - startSection.x;
     final ly = endSection.y - startSection.y;
 
-    for (var x = startSection.x; x < endSection.x; x++) {
-      for (var y = startSection.y; y < endSection.y; y++) {
+    for (var x = startSection.x; x <= endSection.x; x++) {
+      for (var y = startSection.y; y <= endSection.y; y++) {
         final dx = x - startSection.x;
         final dy = y - startSection.y;
 
