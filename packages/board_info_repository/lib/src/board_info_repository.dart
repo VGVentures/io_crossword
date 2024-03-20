@@ -63,14 +63,13 @@ class BoardInfoRepository {
   }
 
   /// Returns the limit at which the render mode should switch
-  Future<double> getRenderModeZoomLimit() async {
+  Future<List<double>> getRenderModeZoomLimits() async {
     try {
       final results = await boardInfoCollection
           .where('type', isEqualTo: 'render_mode_limit')
           .get();
 
-      final data = results.docs.first.data();
-      return data['value'] as double;
+      return results.docs.map((e) => e.data()['value'] as double).toList();
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
