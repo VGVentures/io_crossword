@@ -335,7 +335,8 @@ class Crossword {
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      if (hasMatchingDirection && i < shortestWordLength - 1) {
+      final hasWordOfMinimumLength = i < shortestWordLength - 1;
+      if (hasMatchingDirection && hasWordOfMinimumLength) {
         return null;
       } else if (hasMatchingDirection) {
         for (var k = i; k <= largestWordLength; k++) {

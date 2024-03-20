@@ -693,16 +693,30 @@ void main() {
     });
 
     group('constraints', () {
-      test('returns null if neighboring word has matching direction', () {
-        final board = Crossword1();
+      group('returns null', () {
+        test('when going down and neighboring word has matching direction', () {
+          final board = Crossword1();
 
-        final candidate = WordCandidate(
-          location: Location(x: 1, y: -2),
-          direction: Direction.down,
-        );
+          final candidate = WordCandidate(
+            location: Location(x: 1, y: -2),
+            direction: Direction.down,
+          );
 
-        final constraints = board.constraints(candidate);
-        expect(constraints, isNull);
+          final constraints = board.constraints(candidate);
+          expect(constraints, isNull);
+        });
+
+        test('when going across neighboring word has matching direction', () {
+          final board = Crossword1();
+
+          final candidate = WordCandidate(
+            location: Location(x: 0, y: -1),
+            direction: Direction.across,
+          );
+
+          final constraints = board.constraints(candidate);
+          expect(constraints, isNull);
+        });
       });
 
       test('derives successfully a single constraint down', () {
@@ -769,19 +783,6 @@ void main() {
             ),
           ),
         );
-      });
-
-      test('returns null if neighboring word has matching direction across',
-          () {
-        final board = Crossword1();
-
-        final candidate = WordCandidate(
-          location: Location(x: 0, y: -1),
-          direction: Direction.across,
-        );
-
-        final constraints = board.constraints(candidate);
-        expect(constraints, isNull);
       });
 
       test('derives successfully a single constraint across', () {
