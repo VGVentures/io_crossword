@@ -305,7 +305,7 @@ class Crossword {
   /// with the word "NAN".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will be return `null`. These
+  /// [ConstrainedWordCandidate], those cases will return `null`. Such
   /// scenarios are yet not properly considered, it is something we would like
   /// to contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
