@@ -401,7 +401,7 @@ class Crossword {
     for (var row = minY; row <= maxY; row++) {
       final characters = List.generate(width, (column) {
         final location = Location(x: column + minX, y: row);
-        final character = (characterMap[location]?.character ?? '-').trim();
+        final character = characterMap[location]?.character ?? '-';
         return character.toUpperCase();
       });
 
