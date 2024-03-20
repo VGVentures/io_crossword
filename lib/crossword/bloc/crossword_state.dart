@@ -30,16 +30,11 @@ class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
     required this.sections,
-    // TODO(any): get configuration from db
-    this.width = 40,
-    this.height = 40,
     this.selectedWord,
     this.renderMode = RenderMode.game,
     this.mascot = Mascots.dash,
   });
 
-  final int width;
-  final int height;
   final int sectionSize;
   final RenderMode renderMode;
   final Map<(int, int), BoardSection> sections;
@@ -47,8 +42,6 @@ class CrosswordLoaded extends CrosswordState {
   final Mascots mascot;
 
   CrosswordLoaded copyWith({
-    int? width,
-    int? height,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
@@ -56,8 +49,6 @@ class CrosswordLoaded extends CrosswordState {
     Mascots? mascot,
   }) {
     return CrosswordLoaded(
-      width: width ?? this.width,
-      height: height ?? this.height,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
@@ -68,8 +59,6 @@ class CrosswordLoaded extends CrosswordState {
 
   @override
   List<Object?> get props => [
-        width,
-        height,
         sectionSize,
         sections,
         selectedWord,
