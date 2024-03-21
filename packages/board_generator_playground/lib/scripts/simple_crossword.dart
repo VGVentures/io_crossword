@@ -19,10 +19,12 @@ void main({
     for (final line in lines) line[0] as String,
   };
   final longestWord = pool.reduce(
-      (value, element) => value.length > element.length ? value : element);
+    (value, element) => value.length > element.length ? value : element,
+  );
   log('Longest word is $longestWord with ${longestWord.length} characters');
   final smallestWord = pool.reduce(
-      (value, element) => value.length < element.length ? value : element);
+    (value, element) => value.length < element.length ? value : element,
+  );
   log('Smallest word $smallestWord with ${smallestWord.length} characters');
 
   log('Sorting ${pool.length} words');
@@ -33,8 +35,18 @@ void main({
   );
   log('Sorted ${pool.length} words');
 
-  final initialWorld = wordPool.sortedWords[17]![0]!['a']!.first;
-  print('Initial word: $initialWorld');
+  final initialWorld = wordPool.firstMatch(
+    ConstrainedWordCandidate(
+      invalidLengths: {
+        for (int i = 2; i <= longestWord.length; i += 2) i,
+      },
+      location: Location.zero,
+      direction: Direction.down,
+      constraints: const {0: 'a'},
+    ),
+  )!;
+
+  log('Initial word: $initialWorld');
 
   final crossword = Crossword()
     ..add(
@@ -48,7 +60,7 @@ void main({
   final leafs = <Location>{};
   var placedWords = 0;
 
-  while (placedWords < 100) {
+  while (placedWords < 1000) {
     final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
     if (locations.isEmpty) {
       log('No more locations to place words');
