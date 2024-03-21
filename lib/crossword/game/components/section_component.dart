@@ -123,7 +123,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
       _boardSection = boardSection;
-      _loadBoardSection();
+      _loadWithCurrentRenderMode();
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
