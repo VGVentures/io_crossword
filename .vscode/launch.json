@@ -5,6 +5,28 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Web local",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_local.dart",
+      "args": [
+        "--target",
+        "lib/main_local.dart",
+        "--web-port",
+        "24514"
+      ]
+    },
+    {
+      "name": "Web development",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--target",
+        "lib/main_development.dart"
+      ]
+    },
+    {
       "name": "Launch development",
       "request": "launch",
       "type": "dart",
@@ -12,16 +34,6 @@
       "args": [
         "--flavor",
         "development",
-        "--target",
-        "lib/main_development.dart"
-      ]
-    },
-    {
-      "name": "web development",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main_development.dart",
-      "args": [
         "--target",
         "lib/main_development.dart"
       ]

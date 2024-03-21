@@ -9,6 +9,7 @@ environment:
 dependencies:
   csv: ^6.0.0
   equatable: ^2.0.5
+  meta: ^1.12.0
 
 dev_dependencies:
   mocktail: ^1.0.3
