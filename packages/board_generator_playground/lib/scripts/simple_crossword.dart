@@ -1,13 +1,10 @@
 import 'dart:collection';
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
 import 'package:board_generator_playground/src/word_pool.dart';
 import 'package:csv/csv.dart';
-
-final _random = math.Random(0);
 
 void main({
   void Function(String) log = print,
@@ -58,13 +55,11 @@ void main({
       ),
     );
 
-  final leafs = <Location>{};
   var placedWords = 0;
 
   final positions = Queue<Location>()..add(Location.zero);
 
   while (placedWords < 100000) {
-    // final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
     if (positions.isEmpty) {
       log('No more locations to place words');
       break;
@@ -87,7 +82,6 @@ void main({
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
     if (constrainedWordCandidate == null) {
-      // leafs.add(location);
       positions.removeFirst();
       continue;
     }
@@ -95,7 +89,6 @@ void main({
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
 
     if (candidate == null) {
-      // leafs.add(location);
       positions.removeFirst();
       continue;
     }
