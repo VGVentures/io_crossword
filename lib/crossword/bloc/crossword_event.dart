@@ -40,3 +40,12 @@ class MascotSelected extends CrosswordEvent {
   @override
   List<Object> get props => [mascot];
 }
+
+class InitialsSelected extends CrosswordEvent {
+  const InitialsSelected(this.initials);
+
+  final List<String> initials;
+
+  @override
+  List<Object> get props => [initials];
+}

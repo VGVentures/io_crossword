@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
@@ -77,13 +79,14 @@ void main() {
           Stream.value(
             GameIntroState(
               status: GameIntroStatus.initialsInput,
-              selectedMascot: Mascots.dash,
+              selectedMascot: Mascots.android,
             ),
           ),
           initialState: GameIntroState(status: GameIntroStatus.mascotSelection),
         );
         await tester.pumpApp(child);
-        verify(() => crosswordBloc.add(MascotSelected(Mascots.dash))).called(1);
+        verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
+            .called(1);
       },
     );
 
@@ -96,6 +99,30 @@ void main() {
         await tester.pumpApp(child);
 
         expect(find.byType(InitialsInputView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'saves the initials when the intro is completed',
+      (tester) async {
+        whenListen(
+          gameIntroBloc,
+          Stream.value(
+            GameIntroState(
+              status: GameIntroStatus.initialsInput,
+              isIntroCompleted: true,
+              initialsStatus: InitialsFormStatus.success,
+              initials: ['I', 'I', 'O'],
+            ),
+          ),
+          initialState: GameIntroState(
+            status: GameIntroStatus.initialsInput,
+          ),
+        );
+        await tester.pumpApp(child);
+
+        verify(() => crosswordBloc.add(InitialsSelected(['I', 'I', 'O'])))
+            .called(1);
       },
     );
 

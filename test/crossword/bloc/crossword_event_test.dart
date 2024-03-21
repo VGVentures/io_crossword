@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -84,6 +85,23 @@ void main() {
         expect(
           MascotSelected(Mascots.sparky),
           isNot(equals(MascotSelected(Mascots.dash))),
+        );
+      });
+    });
+
+    group('InitialsSelected', () {
+      test('can be instantiated', () {
+        expect(InitialsSelected(['W', 'O', 'W']), isA<InitialsSelected>());
+      });
+
+      test('supports value comparisons', () {
+        expect(
+          InitialsSelected(['W', 'O', 'W']),
+          equals(InitialsSelected(['W', 'O', 'W'])),
+        );
+        expect(
+          InitialsSelected(['W', 'O', 'W']),
+          isNot(equals(InitialsSelected(['G', 'G', 'G']))),
         );
       });
     });
