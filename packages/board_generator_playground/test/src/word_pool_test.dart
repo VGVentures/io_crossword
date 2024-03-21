@@ -285,6 +285,37 @@ void main() {
 
         expect(wordPool.firstMatch(constrains), equals('astrophotographers'));
       });
+
+      test('constrains bigger than actual word found', () {
+        final words = [
+          'add',
+          'are',
+          'red',
+          'aunt',
+          'addy',
+          'adds',
+          'away',
+          'good',
+          'glad',
+          'apple',
+          'green',
+          'astrophotographers',
+          'stockspeoplelookup',
+          'glass',
+        ];
+
+        final wordPool =
+            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          location: Location.zero,
+          constraints: {0: 'a', 2: 'e', 6: 'h', 10: 'g', 13: 'p', 15: 'e'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatch(constrains), equals('are'));
+      });
     });
 
     group('removeWord', () {
