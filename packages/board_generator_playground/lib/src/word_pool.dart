@@ -7,22 +7,29 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 class WordPool {
   /// {@macro word_pool}
-  WordPool({
-    required Iterable<String> words,
-    required int maxLengthWord,
-    required int minLengthWord,
-  }) {
+  WordPool({required Iterable<String> words}) {
     sortedWords = sortWords(words);
-    _maxLengthWord = maxLengthWord;
-    _minLengthWord = minLengthWord;
+
+    final longestWord = words.reduce(
+      (value, element) => value.length > element.length ? value : element,
+    );
+    longestWordLength = longestWord.length;
+
+    final smallestWord = words.reduce(
+      (value, element) => value.length < element.length ? value : element,
+    );
+    shortestWordLength = smallestWord.length;
   }
 
   /// The list of words sorted with [sortWords]
   @visibleForTesting
   late final SortedWords sortedWords;
 
-  late final int _maxLengthWord;
-  late final int _minLengthWord;
+  /// The length of the longest word in the pool.
+  late final int longestWordLength;
+
+  /// The length of the shortest word in the pool.
+  late final int shortestWordLength;
 
   /// Retrieves the first word that matches the given
   /// [constrainedWordCandidate].
@@ -35,7 +42,7 @@ class WordPool {
     final constraints = constrainedWordCandidate.constraints;
     final invalidLengths = constrainedWordCandidate.invalidLengths;
 
-    for (var i = _maxLengthWord; i >= _minLengthWord; i--) {
+    for (var i = longestWordLength; i >= shortestWordLength; i--) {
       if (invalidLengths.contains(i)) continue;
 
       // We remove the first constrain because we previously search

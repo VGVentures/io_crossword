@@ -7,12 +7,27 @@ import 'package:test/test.dart';
 
 void main() {
   group('WordPool', () {
+    test('shortestWordLength is determined correctly', () {
+      final words = ['add', 'red', 'aunt', 'addy', 'adds'];
+
+      final wordPool = WordPool(words: words);
+
+      expect(wordPool.shortestWordLength, equals(3));
+    });
+
+    test('longestWordLength is determined correctly', () {
+      final words = ['add', 'red', 'aunt', 'addy', 'adds', 'helloworld'];
+
+      final wordPool = WordPool(words: words);
+
+      expect(wordPool.longestWordLength, equals(10));
+    });
+
     group('firstMatch', () {
       test('returns null when cannot find word', () {
         final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -27,8 +42,7 @@ void main() {
       test('with no invalid length and one constrain', () {
         final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -43,8 +57,7 @@ void main() {
       test('with no invalid length and 2 constrains', () {
         final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -59,8 +72,7 @@ void main() {
       test('with no invalid length and 3 constrains', () {
         final words = ['aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -75,8 +87,7 @@ void main() {
       test('with invalid length and one constrain', () {
         final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -91,8 +102,7 @@ void main() {
       test('with invalid length and one constrain', () {
         final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -121,8 +131,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -151,8 +160,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -180,8 +188,7 @@ void main() {
           'grass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -210,8 +217,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -242,8 +248,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -273,8 +278,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -304,8 +308,7 @@ void main() {
           'glass',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
@@ -322,8 +325,7 @@ void main() {
       test('deletes of 4 characters first Addy and after Away', () {
         final words = ['Aunt', 'Addy', 'Adds', 'Away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final removedAddy = <int, Map<int, Map<String, Set<String>>>>{
           4: {
@@ -392,8 +394,7 @@ void main() {
           'Green',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final removedRed = <int, Map<int, Map<String, Set<String>>>>{
           3: {
@@ -529,8 +530,7 @@ void main() {
       test('deletes of 4 characters Addy and Away', () {
         final words = ['Aunt', 'Addy', 'Adds', 'Away'];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final removedAddyAndAway = <int, Map<int, Map<String, Set<String>>>>{
           4: {
@@ -575,8 +575,7 @@ void main() {
           'Green',
         ];
 
-        final wordPool =
-            WordPool(maxLengthWord: 18, minLengthWord: 3, words: words);
+        final wordPool = WordPool(words: words);
 
         final removedGreen = <int, Map<int, Map<String, Set<String>>>>{
           3: {
