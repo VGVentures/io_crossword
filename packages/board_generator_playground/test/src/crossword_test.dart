@@ -721,11 +721,11 @@ void main() {
 
       group('derives', () {
         group('when going across', () {
-          test('sfdsjfjsdjfds', () {
+          test('from an unconnected location', () {
             final board = Crossword1();
 
             final candidate = WordCandidate(
-              location: Location(x: -2, y: 0),
+              location: Location(x: -17, y: 0),
               direction: Direction.across,
             );
 
@@ -734,10 +734,10 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  invalidLengths: const {2},
+                  invalidLengths: const {17},
                   location: candidate.location,
                   direction: candidate.direction,
-                  constraints: const {2: 'h'},
+                  constraints: const {17: 'h'},
                 ),
               ),
             );

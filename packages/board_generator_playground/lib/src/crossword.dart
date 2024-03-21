@@ -316,7 +316,7 @@ class Crossword {
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
     var maximumLength = 1;
-    for (var i = 1; i < largestWordLength; i++) {
+    for (var i = 1; i <= largestWordLength; i++) {
       final words = {
         ...wordsAt(
           switch (candidate.direction) {
