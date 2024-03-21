@@ -246,6 +246,15 @@ void main() {
         expect(newState.mascot, equals(Mascots.dino));
       });
 
+      test('copyWith returns an instance with new initials', () {
+        final state = CrosswordLoaded(
+          sectionSize: 400,
+          sections: const {},
+        );
+        final newState = state.copyWith(initials: 'GIO');
+        expect(newState.initials, equals('GIO'));
+      });
+
       group('withSelectedWord returns a copy with selected word', () {
         final state = CrosswordLoaded(
           sectionSize: 400,
