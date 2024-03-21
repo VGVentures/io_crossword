@@ -95,4 +95,26 @@ class LeaderboardResource {
       );
     }
   }
+
+  /// Post /game/leaderboard/create_score
+  Future<void> createScore({
+    required String initials,
+    required Mascots mascot,
+  }) async {
+    final response = await _apiClient.post(
+      '/game/create_score',
+      body: jsonEncode({
+        'initials': initials,
+        'mascot': mascot.name,
+      }),
+    );
+
+    if (response.statusCode != HttpStatus.created) {
+      throw ApiClientError(
+        'POST /game/create_score returned status ${response.statusCode} '
+        'with the following response: "${response.body}"',
+        StackTrace.current,
+      );
+    }
+  }
 }
