@@ -748,11 +748,6 @@ void main() {
               .thenAnswer((_) => Future.value(20));
           when(boardInfoRepository.getRenderModeZoomLimits)
               .thenAnswer((_) => Future.value([0.8]));
-          when(
-            () => crosswordRepository.watchSectionFromPosition(0, 0),
-          ).thenAnswer(
-            (_) => Stream.value(originSection),
-          );
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
@@ -761,6 +756,44 @@ void main() {
             sectionSize: 20,
             renderLimits: [0.8],
           ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits CrosswordError state if getRenderModeZoomLimits fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(boardInfoRepository.getSectionSize)
+              .thenAnswer((_) => Future.value(20));
+          when(boardInfoRepository.getRenderModeZoomLimits)
+              .thenThrow(Exception('error'));
+        },
+        seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
+        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        expect: () => <CrosswordState>[
+          CrosswordError('Exception: error'),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits CrosswordError state if getSectionSize fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(boardInfoRepository.getSectionSize)
+              .thenThrow(Exception('error'));
+          when(boardInfoRepository.getRenderModeZoomLimits)
+              .thenAnswer((_) => Future.value([0.8]));
+        },
+        seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
+        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        expect: () => <CrosswordState>[
+          CrosswordError('Exception: error'),
         ],
       );
     });
