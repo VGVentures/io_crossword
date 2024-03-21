@@ -40,57 +40,46 @@ void main({
     );
 
   var placedWords = 0;
-  final positions = Queue<Location>()..add(Location.zero);
+  final area = Queue<Location>()..add(Location.zero);
 
   while (placedWords < 100000) {
-    if (positions.isEmpty) {
+    if (area.isEmpty) {
       log('No more locations to place words');
       break;
     }
 
-    final location = positions.first;
+    final location = area.removeFirst();
     final words = crossword.wordsAt(location);
     if (words.any((word) => word.direction == Direction.across) &&
         words.any((word) => word.direction == Direction.down)) {
-      positions.removeFirst();
       continue;
     }
-    final currentDirection = words.first.direction;
 
     final wordCandidate = WordCandidate(
       location: location,
-      direction: currentDirection == Direction.across
+      direction: words.first.direction == Direction.across
           ? Direction.down
           : Direction.across,
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
-    if (constrainedWordCandidate == null) {
-      positions.removeFirst();
-      continue;
-    }
-
+    if (constrainedWordCandidate == null) continue;
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
-
-    if (candidate == null) {
-      positions.removeFirst();
-      continue;
-    }
+    if (candidate == null) continue;
 
     final wordEntry = WordEntry(
       word: candidate,
       start: location,
       direction: wordCandidate.direction,
     );
+    if (crossword.overlaps(wordEntry)) {
+      // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+      continue;
+    }
+
     crossword.add(wordEntry);
     wordPool.remove(wordEntry.word);
 
-    for (var i = 0; i < wordEntry.word.length; i++) {
-      final position = wordEntry.direction == Direction.across
-          ? wordEntry.start.shift(x: i)
-          : wordEntry.start.shift(y: i);
-
-      positions.add(position);
-    }
+    area.addAll(wordEntry.start.to(wordEntry.end));
 
     placedWords++;
     if (placedWords % 200 == 0) {

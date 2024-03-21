@@ -94,6 +94,14 @@ void main({
       start: _horizontallySymmetricalLocation(newWordEntry),
       direction: wordCandidate.direction,
     );
+    // TODO(Ayad): Consider when both new words and symmetrical new words
+    // are not of the same length. They must be of the same lenght.
+
+    if (crossword.overlaps(newWordEntry) ||
+        crossword.overlaps(symmetricalNewWordEntry)) {
+      // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+      continue;
+    }
 
     crossword
       ..add(newWordEntry)
