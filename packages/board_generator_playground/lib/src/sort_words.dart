@@ -1,3 +1,7 @@
+///  Sorted words is organized with this data structure to improve the finding
+///  of words to be placed in the board.
+///
+///  Check [sortWords] for more information
 typedef SortedWords = Map<int, Map<int, Map<String, Set<String>>>>;
 
 /// Generates the words organised by the length of the word + character
