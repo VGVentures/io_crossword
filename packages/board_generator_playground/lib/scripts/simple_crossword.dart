@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -60,18 +61,20 @@ void main({
   final leafs = <Location>{};
   var placedWords = 0;
 
-  while (placedWords < 1000) {
-    final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
-    if (locations.isEmpty) {
+  final positions = Queue<Location>()..add(Location.zero);
+
+  while (placedWords < 100000) {
+    // final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
+    if (positions.isEmpty) {
       log('No more locations to place words');
       break;
     }
 
-    final location = locations.elementAt(_random.nextInt(locations.length));
+    final location = positions.first;
     final words = crossword.wordsAt(location);
     if (words.any((word) => word.direction == Direction.across) &&
         words.any((word) => word.direction == Direction.down)) {
-      leafs.add(location);
+      positions.removeFirst();
       continue;
     }
     final currentDirection = words.first.direction;
@@ -84,14 +87,16 @@ void main({
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
     if (constrainedWordCandidate == null) {
-      leafs.add(location);
+      // leafs.add(location);
+      positions.removeFirst();
       continue;
     }
 
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
 
     if (candidate == null) {
-      leafs.add(location);
+      // leafs.add(location);
+      positions.removeFirst();
       continue;
     }
 
@@ -102,6 +107,14 @@ void main({
     );
     crossword.add(wordEntry);
     wordPool.remove(wordEntry.word);
+
+    for (var i = 0; i < wordEntry.word.length; i++) {
+      final position = wordEntry.direction == Direction.across
+          ? wordEntry.start.shift(x: i)
+          : wordEntry.start.shift(y: i);
+
+      positions.add(position);
+    }
 
     placedWords++;
     if (placedWords % 200 == 0) {
