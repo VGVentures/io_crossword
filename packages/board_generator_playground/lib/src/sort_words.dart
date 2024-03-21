@@ -81,29 +81,3 @@ SortedWords sortWords(
 
   return map;
 }
-
-/// Extension on data structure of the sorted words.
-extension OrderedWords on Map<int, Map<int, Map<String, Set<String>>>> {
-  /// Delete word from the data structure.
-  ///
-  /// If the length of the word, the position of the character or
-  /// the initial of the character is not founded will throw exception.
-  void removeWord(String word) {
-    final wordLengthPosition = this[word.length]!;
-
-    for (var i = 0; i < word.length; i++) {
-      final character = word[i].toLowerCase();
-      wordLengthPosition[i]![character]!.remove(word);
-    }
-  }
-
-  /// Delete word from the data structure.
-  ///
-  /// If the length of the word, the position of the character or
-  /// the initial of the character is not founded will throw exception.
-  void removeWords(List<String> words) {
-    for (final word in words) {
-      removeWord(word);
-    }
-  }
-}
