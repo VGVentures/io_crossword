@@ -38,7 +38,14 @@ class WordPool {
     for (var i = _maxLengthWord; i >= _minLengthWord; i--) {
       if (invalidLengths.contains(i)) continue;
 
-      final firstConstrains = constraints.entries.first;
+      // We remove the first constrain because we previously search
+      // with the first constrains and we also need to remove constrains bigger
+      // than the characters available.
+      final updatedConstrains = <int, String>{
+        ...constraints,
+      }..removeWhere((key, value) => key > i);
+
+      final firstConstrains = updatedConstrains.entries.first;
 
       final words =
           sortedWords[i]?[firstConstrains.key]?[firstConstrains.value] ?? {};
@@ -49,14 +56,7 @@ class WordPool {
         return words.first;
       }
 
-      // We remove the first constrain because we previously search
-      // with the first constrains and we also need to remove constrains bigger
-      // than the characters available.
-      final updatedConstrains = <int, String>{
-        ...constraints,
-      }
-        ..remove(firstConstrains.key)
-        ..removeWhere((key, value) => key > i);
+      updatedConstrains.remove(firstConstrains.key);
 
       final word = words.firstWhere(
         (word) {

@@ -59,7 +59,7 @@ void main({
 
   final bottomPositions = Queue<Location>()
     ..add(
-      const Location(x: 0, y: 1),
+      const Location(x: 0, y: 2),
     );
 
   while (placedWords < 20) {
@@ -102,9 +102,35 @@ void main({
       direction: wordCandidate.direction,
     );
 
-    final symmetricalEndPosition = wordEntry.end;
+    final symmetricalEndPosition = getEndSymmetrical(wordEntry);
+
+    final wordCandidate2 = WordCandidate(
+      location: symmetricalEndPosition,
+      direction: currentDirection == Direction.across
+          ? Direction.down
+          : Direction.across,
+    );
+    final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
+    if (constrainedWordCandidate2 == null) {
+      bottomPositions.removeFirst();
+      continue;
+    }
+
+    final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
+
+    if (candidate2 == null) {
+      bottomPositions.removeFirst();
+      continue;
+    }
+
+    final wordEntry2 = WordEntry(
+      word: candidate,
+      start: location,
+      direction: wordCandidate.direction,
+    );
 
     crossword.add(wordEntry);
+    crossword.add(wordEntry2);
     wordPool.remove(wordEntry.word);
 
     for (var i = 0; i < wordEntry.word.length; i++) {
@@ -125,7 +151,7 @@ void main({
 }
 
 Location getEndSymmetrical(WordEntry wordEntry) {
-  return wordEntry.direction == Direction.across
-      ? wordEntry.end.shift(y: wordEntry.end.y * -1)
-      : wordEntry.end.shift(x: wordEntry.end.x * 1);
+  return wordEntry.end.copyWith(
+    y: wordEntry.end.y * -1,
+  );
 }
