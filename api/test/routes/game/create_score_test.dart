@@ -41,7 +41,7 @@ void main() {
       'score succeeds',
       () async {
         when(() => request.method).thenReturn(HttpMethod.post);
-        when(() => request.json())
+        when(request.json)
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
@@ -56,7 +56,7 @@ void main() {
       'or mascot parameters are missing',
       () async {
         when(() => request.method).thenReturn(HttpMethod.post);
-        when(() => request.json()).thenAnswer((_) async => {'key': 'value'});
+        when(request.json).thenAnswer((_) async => {'key': 'value'});
 
         final response = await route.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.badRequest));
@@ -67,7 +67,7 @@ void main() {
       'rethrows exception if creating the score fails',
       () async {
         when(() => request.method).thenReturn(HttpMethod.post);
-        when(() => request.json())
+        when(request.json)
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenThrow(Exception());
