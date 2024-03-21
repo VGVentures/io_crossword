@@ -1,5 +1,5 @@
-/// Sorted words is organized with this data structure to improve the finding
-/// of words to be placed in the board.
+/// Data structure used to map the number of characters in a word to a map
+/// that maps the location of the character in the word.
 ///
 /// See also:
 ///
@@ -39,7 +39,7 @@ typedef SortedWords = Map<int, Map<int, Map<String, Set<String>>>>;
 /// }
 /// ```
 ///
-/// In essence, it maps the number of characters in the word to a map that maps
+/// In essence, it maps the number of characters in a word to a map that maps
 /// the location of the character in the word.
 SortedWords sortWords(
   Iterable<String> wordList,
