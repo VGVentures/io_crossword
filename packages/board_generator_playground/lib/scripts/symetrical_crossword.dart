@@ -69,12 +69,12 @@ void main({
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
     if (constrainedWordCandidate == null) {
-      bottomPositions.removeFirst();
+      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
       continue;
     }
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
     if (candidate == null) {
-      bottomPositions.removeFirst();
+      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
       continue;
     }
     final wordEntry = WordEntry(
@@ -89,12 +89,12 @@ void main({
     );
     final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
     if (constrainedWordCandidate2 == null) {
-      bottomPositions.removeFirst();
+      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
       continue;
     }
     final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
     if (candidate2 == null) {
-      bottomPositions.removeFirst();
+      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
       continue;
     }
     final wordEntry2 = WordEntry(
@@ -106,7 +106,9 @@ void main({
     crossword
       ..add(wordEntry)
       ..add(wordEntry2);
-    wordPool.remove(wordEntry.word);
+    wordPool
+      ..remove(wordEntry.word)
+      ..remove(wordEntry2.word);
 
     for (var i = 0; i < wordEntry.word.length; i++) {
       final position = wordEntry.direction == Direction.across
