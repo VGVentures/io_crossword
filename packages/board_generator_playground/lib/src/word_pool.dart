@@ -50,10 +50,13 @@ class WordPool {
       }
 
       // We remove the first constrain because we previously search
-      // with the first constrains.
+      // with the first constrains and we also need to remove constrains bigger
+      // than the characters available.
       final updatedConstrains = <int, String>{
         ...constraints,
-      }..remove(firstConstrains.key);
+      }
+        ..remove(firstConstrains.key)
+        ..removeWhere((key, value) => key > i);
 
       final word = words.firstWhere(
         (word) {
