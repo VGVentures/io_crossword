@@ -42,6 +42,9 @@ void main() {
       when(
         () => collection.where('type', isEqualTo: 'render_mode_limit'),
       ).thenReturn(collection);
+      when(
+        () => collection.where('type', isEqualTo: 'section_size'),
+      ).thenReturn(collection);
 
       when(collection.get).thenAnswer((_) async => query);
       when(() => query.docs).thenReturn([doc]);
@@ -86,6 +89,24 @@ void main() {
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getSolvedWordsCount(),
+          throwsA(isA<BoardInfoException>()),
+        );
+      });
+    });
+
+    group('getSectionSize', () {
+      test('returns the section size value from firebase', () async {
+        mockQueryResult(20);
+        final result = await boardInfoRepository.getSectionSize();
+        expect(result, equals(20));
+      });
+
+      test('throws BoardInfoException when fetching the info fails', () {
+        when(
+          () => collection.where('type', isEqualTo: 'section_size'),
+        ).thenThrow(Exception('oops'));
+        expect(
+          () => boardInfoRepository.getSectionSize(),
           throwsA(isA<BoardInfoException>()),
         );
       });

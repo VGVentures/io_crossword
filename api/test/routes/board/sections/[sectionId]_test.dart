@@ -130,6 +130,157 @@ void main() {
         ).called(1);
       });
 
+      test('uploads the group image when post to id group', () async {
+        final section1 = BoardSection(
+          id: '1',
+          position: const Point(1, 1),
+          size: 100,
+          words: [
+            Word(
+              position: const Point(1, 1),
+              axis: Axis.vertical,
+              answer: 'flutter',
+              clue: '',
+              hints: const [],
+              solvedTimestamp: null,
+            ),
+          ],
+          borderWords: const [],
+        );
+
+        final section2 = BoardSection(
+          id: '2',
+          position: const Point(2, 1),
+          size: 100,
+          words: [
+            Word(
+              position: const Point(1, 1),
+              axis: Axis.vertical,
+              answer: 'flutter',
+              clue: '',
+              hints: const [],
+              solvedTimestamp: null,
+            ),
+          ],
+          borderWords: const [],
+        );
+
+        when(() => crosswordRepository.findSectionByPosition(1, 1)).thenAnswer(
+          (_) async => section1,
+        );
+
+        when(() => crosswordRepository.findSectionByPosition(2, 1)).thenAnswer(
+          (_) async => section2,
+        );
+
+        when(
+          () => boardRenderer.groupSections([section1, section2]),
+        ).thenAnswer((_) async {
+          return Uint8List(0);
+        });
+
+        when(
+          () => firebaseCloudStorage.uploadFile(
+            any(),
+            any(),
+          ),
+        ).thenAnswer((_) async {
+          return 'https://example.com/image.png';
+        });
+
+        when(request.json).thenAnswer(
+          (_) async => {
+            'sections': [
+              {'x': 1, 'y': 1},
+              {'x': 2, 'y': 1},
+            ],
+          },
+        );
+
+        final response = await route.onRequest(requestContext, 'group');
+
+        expect(response.statusCode, HttpStatus.ok);
+        expect(await response.json(), {'url': 'https://example.com/image.png'});
+      });
+
+      test(
+        'when posting to group, returns bad request when having an '
+        'invalid body',
+        () async {
+          final section1 = BoardSection(
+            id: '1',
+            position: const Point(1, 1),
+            size: 100,
+            words: [
+              Word(
+                position: const Point(1, 1),
+                axis: Axis.vertical,
+                answer: 'flutter',
+                clue: '',
+                hints: const [],
+                solvedTimestamp: null,
+              ),
+            ],
+            borderWords: const [],
+          );
+
+          final section2 = BoardSection(
+            id: '2',
+            position: const Point(2, 1),
+            size: 100,
+            words: [
+              Word(
+                position: const Point(1, 1),
+                axis: Axis.vertical,
+                answer: 'flutter',
+                clue: '',
+                hints: const [],
+                solvedTimestamp: null,
+              ),
+            ],
+            borderWords: const [],
+          );
+
+          when(() => crosswordRepository.findSectionByPosition(1, 1))
+              .thenAnswer(
+            (_) async => section1,
+          );
+
+          when(() => crosswordRepository.findSectionByPosition(2, 1))
+              .thenAnswer(
+            (_) async => section2,
+          );
+
+          when(
+            () => boardRenderer.groupSections([section1, section2]),
+          ).thenAnswer((_) async {
+            return Uint8List(0);
+          });
+
+          when(
+            () => firebaseCloudStorage.uploadFile(
+              any(),
+              any(),
+            ),
+          ).thenAnswer((_) async {
+            return 'https://example.com/image.png';
+          });
+
+          when(request.json).thenAnswer(
+            (_) async => {
+              'sections': [
+                {'x': 1, 'z': 1},
+                {'x': 2, 'A': 1},
+              ],
+            },
+          );
+
+          final response = await route.onRequest(requestContext, 'group');
+
+          expect(response.statusCode, HttpStatus.badRequest);
+        },
+      );
+
       test('returns 404 when the board is not found', () async {
         when(() => crosswordRepository.findSectionByPosition(0, 0)).thenAnswer(
           (_) async => null,
