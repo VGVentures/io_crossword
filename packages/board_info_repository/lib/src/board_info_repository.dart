@@ -61,4 +61,18 @@ class BoardInfoRepository {
       throw BoardInfoException(error, stackStrace);
     }
   }
+
+  /// Return the solved words count in the crossword.
+  Future<int> getSectionSize() async {
+    try {
+      final results = await boardInfoCollection
+          .where('type', isEqualTo: 'section_size')
+          .get();
+
+      final data = results.docs.first.data();
+      return data['value'] as int;
+    } catch (error, stackStrace) {
+      throw BoardInfoException(error, stackStrace);
+    }
+  }
 }

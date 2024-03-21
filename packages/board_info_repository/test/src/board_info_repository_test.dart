@@ -87,6 +87,24 @@ void main() {
         );
       });
     });
+
+    group('getSectionSize', () {
+      test('returns the section size value from firebase', () async {
+        mockQueryResult(66000);
+        final result = await boardInfoRepository.getSectionSize();
+        expect(result, equals(66000));
+      });
+
+      test('throws BoardInfoException when fetching the info fails', () {
+        when(
+          () => collection.where('type', isEqualTo: 'solved_words_count'),
+        ).thenThrow(Exception('oops'));
+        expect(
+          () => boardInfoRepository.getSectionSize(),
+          throwsA(isA<BoardInfoException>()),
+        );
+      });
+    });
   });
 
   group('BoardInfoException', () {
