@@ -62,6 +62,20 @@ class BoardInfoRepository {
     }
   }
 
+  /// Return the solved words count in the crossword.
+  Future<int> getSectionSize() async {
+    try {
+      final results = await boardInfoCollection
+          .where('type', isEqualTo: 'section_size')
+          .get();
+
+      final data = results.docs.first.data();
+      return data['value'] as int;
+    } catch (error, stackStrace) {
+      throw BoardInfoException(error, stackStrace);
+    }
+  }
+
   /// Returns the limit at which the render mode should switch
   Future<List<double>> getRenderModeZoomLimits() async {
     try {
