@@ -75,7 +75,6 @@ void main({
     }
 
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
-
     if (candidate == null) {
       bottomPositions.removeFirst();
       continue;
@@ -87,10 +86,8 @@ void main({
       direction: wordCandidate.direction,
     );
 
-    final symmetricalEndPosition = getEndSymmetrical(wordEntry);
-
     final wordCandidate2 = WordCandidate(
-      location: symmetricalEndPosition,
+      location: _horizontallySymmetricalLocation(wordEntry),
       direction: currentDirection == Direction.across
           ? Direction.down
           : Direction.across,
@@ -102,7 +99,6 @@ void main({
     }
 
     final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
-
     if (candidate2 == null) {
       bottomPositions.removeFirst();
       continue;
@@ -113,9 +109,9 @@ void main({
       start: location,
       direction: wordCandidate.direction,
     );
-
-    crossword.add(wordEntry);
-    crossword.add(wordEntry2);
+    crossword
+      ..add(wordEntry)
+      ..add(wordEntry2);
     wordPool.remove(wordEntry.word);
 
     for (var i = 0; i < wordEntry.word.length; i++) {
@@ -135,8 +131,11 @@ void main({
   File('crossword.txt').writeAsStringSync(crossword.toPrettyString());
 }
 
-Location getEndSymmetrical(WordEntry wordEntry) {
-  return wordEntry.end.copyWith(
-    y: wordEntry.end.y * -1,
-  );
+Location _horizontallySymmetricalLocation(WordEntry wordEntry) {
+  switch (wordEntry.direction) {
+    case Direction.across:
+      return wordEntry.start.copyWith(y: wordEntry.end.y * -1);
+    case Direction.down:
+      return wordEntry.end.copyWith(y: wordEntry.end.y * -1);
+  }
 }
