@@ -13,7 +13,7 @@ env:
   PROJECT_ID: io-crossword-dev
   SERVICE: io-crossword-dev-api
   REGION: us-central1
-  GAME_URL: https://e7b2896c65fabc0480edc6c0e.web.app
+  GAME_URL: "*"
   INITIALS_BLACKLIST_ID: T1ilfCwjDpLS7iaFzenA
   FB_STORAGE_BUCKET: io-crossword-dev.appspot.com
 
