@@ -42,7 +42,8 @@ void main({
 
   var placedWords = 0;
 
-  final bottomPositions = Queue<Location>()..add(const Location(x: 0, y: 1));
+  final bottomPositions = Queue<Location>()
+    ..add(const Location(x: 0, y: 1));
 
   while (placedWords < 2) {
     if (bottomPositions.isEmpty) {
@@ -66,53 +67,60 @@ void main({
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
     if (constrainedWordCandidate == null) {
-      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
+      bottomPositions.removeFirst();
       continue;
     }
-    final candidate = wordPool.firstMatch(constrainedWordCandidate);
-    if (candidate == null) {
-      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
-      continue;
+
+    WordEntry? bottomWordEntry;
+    WordEntry? topWordEntry;
+
+    while () {
+      final candidate = wordPool.firstMatch(constrainedWordCandidate);
+      if (candidate == null) {
+        bottomPositions.removeFirst();
+        continue;
+      }
+
+      final bottomWordEntry = WordEntry(
+        word: candidate,
+        start: location,
+        direction: wordCandidate.direction,
+      );
+
+      final wordCandidate2 = WordCandidate(
+        location: _horizontallySymmetricalLocation(bottomWordEntry),
+        direction: wordCandidate.direction,
+      );
+      final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
+      if (constrainedWordCandidate2 == null) {
+        bottomPositions.removeFirst();
+        continue;
+      }
+      final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
+      if (candidate2 == null) {
+        bottomPositions.removeFirst();
+        continue;
+      }
+      topWordEntry = WordEntry(
+        word: candidate2,
+        start: wordCandidate2.location,
+        direction: wordCandidate2.direction,
+      );
     }
-    final wordEntry = WordEntry(
-      word: candidate,
-      start: location,
-      direction: wordCandidate.direction,
-    );
 
-    final wordCandidate2 = WordCandidate(
-      location: _horizontallySymmetricalLocation(wordEntry),
-      direction: wordCandidate.direction,
-    );
-    final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
-    if (constrainedWordCandidate2 == null) {
-      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
-      continue;
-    }
-    final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
-    if (candidate2 == null) {
-      if (bottomPositions.isNotEmpty) bottomPositions.removeFirst();
-      continue;
-    }
-    final wordEntry2 = WordEntry(
-      word: candidate2,
-      start: wordCandidate2.location,
-      direction: wordCandidate2.direction,
-    );
+    if (bottomWordEntry != null && topWordEntry != null) {
+      crossword..add(bottomWordEntry)..add(topWordEntry);
+      wordPool..remove(bottomWordEntry.word)..remove(topWordEntry.word);
 
-    crossword
-      ..add(wordEntry)
-      ..add(wordEntry2);
-    wordPool
-      ..remove(wordEntry.word)
-      ..remove(wordEntry2.word);
 
-    for (var i = 0; i < wordEntry.word.length; i++) {
-      final position = wordEntry.direction == Direction.across
-          ? wordEntry.start.shift(x: i)
-          : wordEntry.start.shift(y: i);
-
-      bottomPositions.add(position);
+      for (var i = 0; i < bottomWordEntry.word.length; i++) {
+        final position = bottomWordEntry.direction == Direction.across
+            ? bottomWordEntry.start.shift(x: i)
+            : bottomWordEntry.start.shift(y: i);
+        bottomPositions.add(position);
+      }
+    } else {
+      bottomPositions.removeFirst();
     }
 
     placedWords++;
