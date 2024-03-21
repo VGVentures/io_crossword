@@ -30,98 +30,78 @@ void main({
   )!;
 
   log('Initial word: $initialWorld');
-
-  final crossword = Crossword()
-    ..add(
-      WordEntry(
-        word: initialWorld,
-        start: Location(x: 0, y: 0 - (initialWorld.length ~/ 2)),
-        direction: Direction.down,
-      ),
-    );
+  final initialWordEntry = WordEntry(
+    word: initialWorld,
+    start: Location(x: 0, y: 0 - (initialWorld.length ~/ 2)),
+    direction: Direction.down,
+  );
+  final crossword = Crossword()..add(initialWordEntry);
 
   var placedWords = 0;
 
-  final bottomPositions = Queue<Location>()
-    ..add(const Location(x: 0, y: 1));
+  /// The locations that are yet to be explored.
+  final area = Queue<Location>()
+    ..addAll(
+      const Location(x: 0, y: 1).to(initialWordEntry.end),
+    );
 
-  while (placedWords < 2) {
-    if (bottomPositions.isEmpty) {
+  while (placedWords < 5) {
+    if (area.isEmpty) {
       log('No more locations to place words');
       break;
     }
 
-    final location = bottomPositions.first;
+    final location = area.removeFirst();
+
+    // If a position already has two words, it can't have more.
     final words = crossword.wordsAt(location);
     if (words.any((word) => word.direction == Direction.across) &&
         words.any((word) => word.direction == Direction.down)) {
-      bottomPositions.removeFirst();
       continue;
     }
 
     final wordCandidate = WordCandidate(
       location: location,
+      // The new direction should be the opposite of the word that's
+      // already there.
       direction: words.first.direction == Direction.across
           ? Direction.down
           : Direction.across,
     );
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
-    if (constrainedWordCandidate == null) {
-      bottomPositions.removeFirst();
-      continue;
-    }
+    if (constrainedWordCandidate == null) continue;
+    final newWord = wordPool.firstMatch(constrainedWordCandidate);
+    if (newWord == null) continue;
 
-    WordEntry? bottomWordEntry;
-    WordEntry? topWordEntry;
+    final symmetricalWordCandidate = WordCandidate(
+      location: location,
+      direction: wordCandidate.direction,
+    );
+    final symmetricalConstrainedWordCandidate =
+        crossword.constraints(symmetricalWordCandidate);
+    if (symmetricalConstrainedWordCandidate == null) continue;
+    final symmetricalNewWord =
+        wordPool.firstMatch(symmetricalConstrainedWordCandidate);
+    if (symmetricalNewWord == null) continue;
 
-    while () {
-      final candidate = wordPool.firstMatch(constrainedWordCandidate);
-      if (candidate == null) {
-        bottomPositions.removeFirst();
-        continue;
-      }
+    final newWordEntry = WordEntry(
+      word: newWord,
+      start: location,
+      direction: wordCandidate.direction,
+    );
+    final symmetricalNewWordEntry = WordEntry(
+      word: symmetricalNewWord,
+      start: _horizontallySymmetricalLocation(newWordEntry),
+      direction: wordCandidate.direction,
+    );
 
-      final bottomWordEntry = WordEntry(
-        word: candidate,
-        start: location,
-        direction: wordCandidate.direction,
-      );
-
-      final wordCandidate2 = WordCandidate(
-        location: _horizontallySymmetricalLocation(bottomWordEntry),
-        direction: wordCandidate.direction,
-      );
-      final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
-      if (constrainedWordCandidate2 == null) {
-        bottomPositions.removeFirst();
-        continue;
-      }
-      final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
-      if (candidate2 == null) {
-        bottomPositions.removeFirst();
-        continue;
-      }
-      topWordEntry = WordEntry(
-        word: candidate2,
-        start: wordCandidate2.location,
-        direction: wordCandidate2.direction,
-      );
-    }
-
-    if (bottomWordEntry != null && topWordEntry != null) {
-      crossword..add(bottomWordEntry)..add(topWordEntry);
-      wordPool..remove(bottomWordEntry.word)..remove(topWordEntry.word);
-
-
-      for (var i = 0; i < bottomWordEntry.word.length; i++) {
-        final position = bottomWordEntry.direction == Direction.across
-            ? bottomWordEntry.start.shift(x: i)
-            : bottomWordEntry.start.shift(y: i);
-        bottomPositions.add(position);
-      }
-    } else {
-      bottomPositions.removeFirst();
-    }
+    crossword
+      ..add(newWordEntry)
+      ..add(symmetricalNewWordEntry);
+    wordPool
+      ..remove(newWord)
+      ..remove(symmetricalNewWord);
+    area.addAll(location.to(newWordEntry.end));
 
     placedWords++;
     if (placedWords % 200 == 0) {
