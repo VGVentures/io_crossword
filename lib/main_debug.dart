@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -29,7 +30,16 @@ void main() async {
 
         CrosswordGame.debugOverlay = true;
 
+        final apiClient = ApiClient(
+          baseUrl: 'https://io-crossword-dev-api-sea6y22h5q-uc.a.run.app',
+          idTokenStream: authenticationRepository.idToken,
+          refreshIdToken: authenticationRepository.refreshIdToken,
+          // TODO(any): implement app check
+          appCheckTokenStream: const Stream.empty(),
+        );
+
         return App(
+          apiClient: apiClient,
           crosswordRepository: CrosswordRepository(db: firestore),
           boardInfoRepository: BoardInfoRepository(firestore: firestore),
         );

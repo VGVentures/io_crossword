@@ -57,4 +57,25 @@ class LeaderboardRepository {
 
     return (blacklistData.data['blacklist'] as List).cast<String>();
   }
+
+  /// Creates a score entry with the provided initials and mascot. The score
+  /// related fields are initialized to 0.
+  Future<void> createScore(
+    String userId,
+    String initials,
+    String mascot,
+  ) async {
+    return _dbClient.set(
+      'score_cards',
+      DbEntityRecord(
+        id: userId,
+        data: {
+          'totalScore': 0,
+          'streak': 0,
+          'mascot': mascot,
+          'initials': initials,
+        },
+      ),
+    );
+  }
 }

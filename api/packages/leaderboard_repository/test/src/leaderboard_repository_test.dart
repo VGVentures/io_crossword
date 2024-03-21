@@ -137,5 +137,29 @@ void main() {
         expect(response, isEmpty);
       });
     });
+
+    group('createScore', () {
+      test('completes when writing in the db is successful', () async {
+        when(
+          () => dbClient.set(
+            'score_cards',
+            DbEntityRecord(
+              id: 'userId',
+              data: {
+                'totalScore': 0,
+                'streak': 0,
+                'mascot': 'dash',
+                'initials': 'ABC',
+              },
+            ),
+          ),
+        ).thenAnswer((_) async {});
+
+        expect(
+          leaderboardRepository.createScore('userId', 'ABC', 'dash'),
+          completes,
+        );
+      });
+    });
   });
 }
