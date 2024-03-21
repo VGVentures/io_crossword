@@ -44,10 +44,10 @@ void main({
 
   final bottomPositions = Queue<Location>()
     ..add(
-      const Location(x: 0, y: 2),
+      const Location(x: 0, y: 1),
     );
 
-  while (placedWords < 20) {
+  while (placedWords < 2) {
     if (bottomPositions.isEmpty) {
       log('No more locations to place words');
       break;

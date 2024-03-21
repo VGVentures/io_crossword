@@ -721,6 +721,28 @@ void main() {
 
       group('derives', () {
         group('when going across', () {
+          test('sfdsjfjsdjfds', () {
+            final board = Crossword1();
+
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {2},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {2: 'h'},
+                ),
+              ),
+            );
+          });
+
           test('a single constraint across with no invalid lengths', () {
             final board = Crossword1();
 
