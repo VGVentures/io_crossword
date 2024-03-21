@@ -26,6 +26,14 @@ class WordEntry extends Equatable {
   /// {@macro direction}
   final Direction direction;
 
+  /// The prefix of the word entry.
+  Location get prefix =>
+      direction == Direction.across ? start.left() : start.up();
+
+  /// The suffix of the word entry.
+  Location get suffix =>
+      direction == Direction.across ? end.right() : end.down();
+
   /// The surrounding locations of the word entry.
   ///
   /// For example, consider the following board:
@@ -59,9 +67,6 @@ class WordEntry extends Equatable {
   ///  3  -  *  -  -
   /// ```
   Set<Location> surroundings() {
-    final prefix = direction == Direction.across ? start.left() : start.up();
-    final suffix = direction == Direction.across ? end.right() : end.down();
-
     return {
       prefix,
       suffix,
