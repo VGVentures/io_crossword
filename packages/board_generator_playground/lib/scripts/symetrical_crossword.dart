@@ -60,11 +60,10 @@ void main({
       bottomPositions.removeFirst();
       continue;
     }
-    final currentDirection = words.first.direction;
 
     final wordCandidate = WordCandidate(
       location: location,
-      direction: currentDirection == Direction.across
+      direction: words.first.direction == Direction.across
           ? Direction.down
           : Direction.across,
     );
@@ -73,13 +72,11 @@ void main({
       bottomPositions.removeFirst();
       continue;
     }
-
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
     if (candidate == null) {
       bottomPositions.removeFirst();
       continue;
     }
-
     final wordEntry = WordEntry(
       word: candidate,
       start: location,
@@ -88,27 +85,24 @@ void main({
 
     final wordCandidate2 = WordCandidate(
       location: _horizontallySymmetricalLocation(wordEntry),
-      direction: currentDirection == Direction.across
-          ? Direction.down
-          : Direction.across,
+      direction: wordCandidate.direction,
     );
     final constrainedWordCandidate2 = crossword.constraints(wordCandidate2);
     if (constrainedWordCandidate2 == null) {
       bottomPositions.removeFirst();
       continue;
     }
-
     final candidate2 = wordPool.firstMatch(constrainedWordCandidate2);
     if (candidate2 == null) {
       bottomPositions.removeFirst();
       continue;
     }
-
     final wordEntry2 = WordEntry(
-      word: candidate,
-      start: location,
-      direction: wordCandidate.direction,
+      word: candidate2,
+      start: wordCandidate2.location,
+      direction: wordCandidate2.direction,
     );
+
     crossword
       ..add(wordEntry)
       ..add(wordEntry2);
