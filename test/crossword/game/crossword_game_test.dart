@@ -339,7 +339,10 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: Offset(-sections.first.size * state.width * 1.5, 30),
+                delta: Offset(
+                  -sections.first.size * CrosswordGame.cellSize.toDouble(),
+                  30,
+                ),
               ),
             ),
           )

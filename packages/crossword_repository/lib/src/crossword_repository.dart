@@ -1,14 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:http/http.dart' as http;
-
-/// Definition of a get call used by this client.
-typedef GetCall = Future<http.Response> Function(
-  Uri, {
-  Map<String, String>? headers,
-});
 
 /// {@template crossword_repository}
 /// Repository to manage the crossword.
@@ -17,12 +8,9 @@ class CrosswordRepository {
   /// {@macro crossword_repository}
   CrosswordRepository({
     required this.db,
-    GetCall getCall = http.get,
-  }) : _get = getCall {
+  }) {
     sectionCollection = db.collection('boardSections');
   }
-
-  final GetCall _get;
 
   /// The [FirebaseFirestore] instance.
   final FirebaseFirestore db;
@@ -67,11 +55,5 @@ class CrosswordRepository {
         return null;
       },
     );
-  }
-
-  /// Fetches the image snapshot of a section
-  Future<Uint8List> fetchSectionSnapshotBytes(String url) async {
-    final response = await _get(Uri.parse(url));
-    return response.bodyBytes;
   }
 }

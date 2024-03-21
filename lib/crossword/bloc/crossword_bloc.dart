@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:bloc/bloc.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -9,8 +7,6 @@ import 'package:game_domain/game_domain.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
-
-typedef ImageDecodeCall = Future<ui.Image> Function(Uint8List);
 
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
