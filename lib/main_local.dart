@@ -28,7 +28,7 @@ void main() async {
         await authenticationRepository.idToken.first;
 
         final apiClient = ApiClient(
-          baseUrl: 'https://io-crossword-staging-api-sea6y22h5q-uc.a.run.app',
+          baseUrl: 'http://localhost:8080',
           idTokenStream: authenticationRepository.idToken,
           refreshIdToken: authenticationRepository.refreshIdToken,
           // TODO(any): implement app check

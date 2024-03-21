@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
-import 'package:api_client/src/resources/leaderboard_resource.dart';
 import 'package:http/http.dart' as http;
 
 /// {@template api_client}

@@ -8,6 +8,8 @@ environment:
   flutter: ">=3.19.0"
 
 dependencies:
+  api_client:
+    path: packages/api_client
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^8.1.3
