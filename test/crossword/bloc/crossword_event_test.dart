@@ -87,5 +87,18 @@ void main() {
         );
       });
     });
+
+    group('BoardLoadingInfoFetched', () {
+      test('can be instantiated', () {
+        expect(BoardLoadingInfoFetched(), isA<BoardLoadingInfoFetched>());
+      });
+
+      test('supports value comparisons', () {
+        expect(
+          BoardLoadingInfoFetched(),
+          equals(BoardLoadingInfoFetched()),
+        );
+      });
+    });
   });
 }

@@ -29,14 +29,16 @@ enum RenderMode { game, snapshot }
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
-    required this.sections,
+    this.sections = const {},
     this.selectedWord,
     this.renderMode = RenderMode.game,
+    this.renderLimits = const [],
     this.mascot = Mascots.dash,
   });
 
   final int sectionSize;
   final RenderMode renderMode;
+  final List<double> renderLimits;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
   final Mascots mascot;
@@ -45,6 +47,7 @@ class CrosswordLoaded extends CrosswordState {
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
+    List<double>? renderLimits,
     RenderMode? renderMode,
     Mascots? mascot,
   }) {
@@ -54,6 +57,7 @@ class CrosswordLoaded extends CrosswordState {
       selectedWord: selectedWord ?? this.selectedWord,
       renderMode: renderMode ?? this.renderMode,
       mascot: mascot ?? this.mascot,
+      renderLimits: renderLimits ?? this.renderLimits,
     );
   }
 
@@ -63,6 +67,7 @@ class CrosswordLoaded extends CrosswordState {
         sections,
         selectedWord,
         renderMode,
+        renderLimits,
         mascot,
       ];
 }

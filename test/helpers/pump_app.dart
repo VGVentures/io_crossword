@@ -32,6 +32,10 @@ extension PumpApp on WidgetTester {
         .thenAnswer((_) => Future.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
         .thenAnswer((_) => Future.value(8900));
+    when(mockedBoardInfoRepository.getSectionSize)
+        .thenAnswer((_) => Future.value(20));
+    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
+        .thenAnswer((_) => Future.value([0.8]));
 
     return pumpWidget(
       MultiProvider(
@@ -84,6 +88,10 @@ extension PumpRoute on WidgetTester {
         .thenAnswer((_) => Future.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
         .thenAnswer((_) => Future.value(8900));
+    when(mockedBoardInfoRepository.getSectionSize)
+        .thenAnswer((_) => Future.value(20));
+    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
+        .thenAnswer((_) => Future.value([0.8]));
 
     await pumpWidget(
       MultiRepositoryProvider(

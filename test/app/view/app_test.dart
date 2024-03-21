@@ -32,6 +32,10 @@ void main() {
       when(
         () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));
+      when(boardInfoRepository.getSectionSize)
+          .thenAnswer((_) => Future.value(20));
+      when(boardInfoRepository.getRenderModeZoomLimits)
+          .thenAnswer((_) => Future.value([0.8]));
     });
 
     testWidgets('renders AppView', (tester) async {
