@@ -1,8 +1,8 @@
+import 'package:api_client/api_client.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -15,6 +15,7 @@ class GameIntroPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => GameIntroBloc(
         boardInfoRepository: context.read<BoardInfoRepository>(),
+        leaderboardResource: context.read<LeaderboardResource>(),
       )
         ..add(const BoardProgressRequested())
         ..add(const BlacklistRequested()),
@@ -35,9 +36,11 @@ class GameIntroView extends StatelessWidget {
         if (state.status == GameIntroStatus.initialsInput) {
           context
               .read<CrosswordBloc>()
-              .add(MascotSelected(state.selectedMascot ?? Mascots.dash));
+              .add(MascotSelected(state.selectedMascot));
         }
         if (state.isIntroCompleted) {
+          context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
+
           Navigator.of(context).pop();
         }
       },
