@@ -25,12 +25,12 @@ extension on List<Word> {
           ? word.position.y + word.answer.length
           : word.position.y;
 
-      maxPositionX = math.max(maxPositionX, word.position.x + sizeX);
-      maxPositionY = math.max(maxPositionY, word.position.y + sizeY);
+      maxPositionX = math.max(maxPositionX, sizeX);
+      maxPositionY = math.max(maxPositionY, sizeY);
     }
 
-    final totalWidth = (maxPositionX + minPositionX.abs()) * cellSize;
-    final totalHeight = (maxPositionY + minPositionY.abs()) * cellSize;
+    final totalWidth = (minPositionX - maxPositionX).abs() * cellSize;
+    final totalHeight = (minPositionY - maxPositionY).abs() * cellSize;
 
     return (totalWidth, totalHeight);
   }
@@ -123,6 +123,8 @@ class BoardRenderer {
   final DecodePng _decodePng;
   final AssetResolver _assetResolver;
 
+  static const _textureCellSize = 80;
+
   /// Renders the full frame of the board.
   Future<Uint8List> renderBoardWireframe(List<Word> words) async {
     /// The size of each cell in the board when rendering in full size.
@@ -194,9 +196,7 @@ class BoardRenderer {
 
   /// Renders a section of the board in an image.
   Future<Uint8List> renderWords(List<Word> words) async {
-    const cellSize = 80;
-
-    final totalSize = words.totalSize(cellSize);
+    final totalSize = words.totalSize(_textureCellSize);
 
     final totalWidth = totalSize.$1;
     final totalHeight = totalSize.$2;
@@ -229,27 +229,28 @@ class BoardRenderer {
 
         final (dstX, dstY) = (
           word.axis == Axis.horizontal
-              ? (position.$1 + c) * cellSize
-              : position.$1 * cellSize,
+              ? (position.$1 + c) * _textureCellSize
+              : position.$1 * _textureCellSize,
           word.axis == Axis.vertical
-              ? (position.$2 + c) * cellSize
-              : position.$2 * cellSize
+              ? (position.$2 + c) * _textureCellSize
+              : position.$2 * _textureCellSize
         );
         if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
-          final srcX =
-              word.solvedTimestamp == null ? 2080 : charIndex * cellSize;
+          final srcX = word.solvedTimestamp == null
+              ? 2080
+              : charIndex * _textureCellSize;
 
           _compositeImage(
             image,
             texture,
             dstX: dstX,
             dstY: dstY,
-            dstW: cellSize,
-            dstH: cellSize,
+            dstW: _textureCellSize,
+            dstH: _textureCellSize,
             srcX: srcX,
             srcY: 0,
-            srcW: cellSize,
-            srcH: cellSize,
+            srcW: _textureCellSize,
+            srcH: _textureCellSize,
           );
         }
       }
@@ -269,14 +270,94 @@ class BoardRenderer {
     return outputBytes;
   }
 
+  /// Groups the sections of the board into a single image.
+  Future<Uint8List> groupSections(List<BoardSection> sections) async {
+    // Map the sections by their index.
+    final sectionMap = {
+      for (final section in sections) section.position: section,
+    };
+
+    // Check if all sections have a neighbor
+    for (final section in sections) {
+      final possibleIndexes = [
+        section.position + const Point(-1, 0),
+        section.position + const Point(1, 0),
+        section.position + const Point(0, -1),
+        section.position + const Point(0, 1),
+      ];
+
+      final intersection =
+          sectionMap.keys.toSet().intersection(possibleIndexes.toSet());
+
+      if (intersection.isEmpty) {
+        throw BoardRendererFailure(
+          'Section ${section.position} has no neighbor',
+        );
+      }
+    }
+
+    final indexes = sectionMap.keys.toList()
+      // Sort by top to bottom, left to right
+      ..sort((a, b) {
+        if (a.y == b.y) {
+          return a.x.compareTo(b.x);
+        }
+        return a.y.compareTo(b.y);
+      });
+
+    final topLeft = indexes.first;
+    final bottomRight = indexes.last;
+
+    final amountX = bottomRight.x - topLeft.x + 1;
+    final amountY = bottomRight.y - topLeft.y + 1;
+
+    final totalWidth = amountX * sections.first.size * _textureCellSize;
+    final totalHeight = amountY * sections.first.size * _textureCellSize;
+
+    final image = _createImage(
+      width: totalWidth,
+      height: totalHeight,
+      numChannels: 4,
+      backgroundColor: img.ColorRgba8(0, 255, 255, 255),
+    );
+
+    for (final section in sections) {
+      final sectionImage = await renderSection(section);
+      final sectionImageDecoded = _decodePng(sectionImage);
+
+      if (sectionImageDecoded == null) {
+        throw BoardRendererFailure('Failed to decode the section image');
+      }
+
+      final sectionPosition = section.position - topLeft;
+
+      _compositeImage(
+        image,
+        sectionImageDecoded,
+        dstX: sectionPosition.x * section.size * _textureCellSize,
+        dstY: sectionPosition.y * section.size * _textureCellSize,
+      );
+    }
+    final createdCommand = _createCommand()
+      ..image(image)
+      ..encodePng();
+
+    await createdCommand.execute();
+
+    final outputBytes = createdCommand.outputBytes;
+    if (outputBytes == null) {
+      throw BoardRendererFailure('Failed to render the section group');
+    }
+
+    return outputBytes;
+  }
+
   /// Renders a section of the board in an image.
   Future<Uint8List> renderSection(BoardSection section) async {
     final words = [...section.words, ...section.borderWords];
 
-    const cellSize = 80;
-
-    final totalWidth = section.size * cellSize;
-    final totalHeight = section.size * cellSize;
+    final totalWidth = section.size * _textureCellSize;
+    final totalHeight = section.size * _textureCellSize;
 
     final image = _createImage(
       width: totalWidth,
@@ -306,27 +387,28 @@ class BoardRenderer {
 
         final (dstX, dstY) = (
           word.axis == Axis.horizontal
-              ? (position.$1 + c) * cellSize
-              : position.$1 * cellSize,
+              ? (position.$1 + c) * _textureCellSize
+              : position.$1 * _textureCellSize,
           word.axis == Axis.vertical
-              ? (position.$2 + c) * cellSize
-              : position.$2 * cellSize
+              ? (position.$2 + c) * _textureCellSize
+              : position.$2 * _textureCellSize
         );
         if (dstX < totalWidth && dstY < totalHeight && dstX >= 0 && dstY >= 0) {
-          final srcX =
-              word.solvedTimestamp == null ? 2080 : charIndex * cellSize;
+          final srcX = word.solvedTimestamp == null
+              ? 2080
+              : charIndex * _textureCellSize;
 
           _compositeImage(
             image,
             texture,
             dstX: dstX,
             dstY: dstY,
-            dstW: cellSize,
-            dstH: cellSize,
+            dstW: _textureCellSize,
+            dstH: _textureCellSize,
             srcX: srcX,
             srcY: 0,
-            srcW: cellSize,
-            srcH: cellSize,
+            srcW: _textureCellSize,
+            srcH: _textureCellSize,
           );
         }
       }
