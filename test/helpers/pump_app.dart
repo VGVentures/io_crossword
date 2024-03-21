@@ -67,6 +67,7 @@ extension PumpRoute on WidgetTester {
     Route<dynamic> route, {
     CrosswordRepository? crosswordRepository,
     BoardInfoRepository? boardInfoRepository,
+    LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -100,6 +101,9 @@ extension PumpRoute on WidgetTester {
           ),
           Provider.value(
             value: boardInfoRepository ?? mockedBoardInfoRepository,
+          ),
+          Provider.value(
+            value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
         child: MaterialApp(
