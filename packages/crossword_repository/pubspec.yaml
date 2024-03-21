@@ -10,7 +10,6 @@ dependencies:
   cloud_firestore: ^4.15.9
   game_domain:
     path: ../../api/packages/game_domain
-  http: ^1.2.1
 
 dev_dependencies:
   fake_cloud_firestore: ^2.4.8

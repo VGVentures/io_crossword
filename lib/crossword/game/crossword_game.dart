@@ -24,7 +24,6 @@ class CrosswordGame extends FlameGame with PanDetector {
 
   final CrosswordBloc bloc;
 
-  late final Size totalArea;
   late final int sectionSize;
 
   late final Image lettersSprite;
@@ -49,11 +48,6 @@ class CrosswordGame extends FlameGame with PanDetector {
     lettersSprite = await images.load('letters.png');
 
     sectionSize = state.sectionSize * cellSize;
-
-    totalArea = Size(
-      (state.width * cellSize).toDouble(),
-      (state.height * cellSize).toDouble(),
-    );
 
     camera.priority = 1;
 
