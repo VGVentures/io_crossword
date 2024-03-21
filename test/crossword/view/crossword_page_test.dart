@@ -105,7 +105,6 @@ void main() {
         when(() => bloc.state).thenReturn(
           CrosswordLoaded(
             sectionSize: 40,
-            sections: const {},
           ),
         );
 
@@ -132,7 +131,6 @@ void main() {
         when(() => bloc.state).thenReturn(
           CrosswordLoaded(
             sectionSize: 40,
-            sections: const {},
           ),
         );
 

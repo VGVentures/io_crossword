@@ -116,7 +116,6 @@ void main() {
         },
         seed: () => const CrosswordLoaded(
           sectionSize: sectionSize,
-          sections: {},
         ),
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
@@ -676,7 +675,6 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,
-            sections: {},
             renderMode: RenderMode.snapshot,
           ),
         ],
@@ -696,7 +694,6 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,
-            sections: {},
             mascot: Mascots.android,
           ),
         ],

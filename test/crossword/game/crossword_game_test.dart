@@ -41,7 +41,6 @@ void main() {
 
       final state = CrosswordLoaded(
         sectionSize: sectionSize,
-        sections: const {},
       );
       mockState(state);
     });
@@ -362,7 +361,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -378,7 +376,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -394,7 +391,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -415,7 +411,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
           renderMode: RenderMode.snapshot,
         );
         mockState(state);
@@ -434,7 +429,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 

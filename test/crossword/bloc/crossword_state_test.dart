@@ -240,7 +240,6 @@ void main() {
       test('copyWith returns an instance with new mascot', () {
         final state = CrosswordLoaded(
           sectionSize: 400,
-          sections: const {},
         );
         final newState = state.copyWith(mascot: Mascots.dino);
         expect(newState.mascot, equals(Mascots.dino));
