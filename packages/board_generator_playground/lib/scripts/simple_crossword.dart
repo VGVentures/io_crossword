@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:board_generator_playground/src/crossword.dart';
 import 'package:board_generator_playground/src/models/models.dart';
-import 'package:board_generator_playground/src/sort_words.dart';
+import 'package:board_generator_playground/src/word_pool.dart';
 import 'package:csv/csv.dart';
 
 final _random = math.Random(0);
@@ -26,10 +26,14 @@ void main({
   log('Smallest word $smallestWord with ${smallestWord.length} characters');
 
   log('Sorting ${pool.length} words');
-  final sortedPool = sortWords(pool);
+  final wordPool = WordPool(
+    words: pool,
+    maxLengthWord: longestWord.length,
+    minLengthWord: smallestWord.length,
+  );
   log('Sorted ${pool.length} words');
 
-  final initialWorld = sortedPool[17]![0]!['a']!.first;
+  final initialWorld = wordPool.sortedWords[17]![0]!['a']!.first;
   print('Initial word: $initialWorld');
 
   final crossword = Crossword()
@@ -44,7 +48,7 @@ void main({
   final leafs = <Location>{};
   var placedWords = 0;
 
-  while (placedWords < 1000) {
+  while (placedWords < 100) {
     final locations = crossword.characterMap.keys.toSet()..removeAll(leafs);
     if (locations.isEmpty) {
       log('No more locations to place words');
@@ -72,10 +76,8 @@ void main({
       continue;
     }
 
-    final candidate = _findWordForConstraints(
-      constrainedWordCandidate: constrainedWordCandidate,
-      sortedPool: sortedPool,
-    );
+    final candidate = wordPool.firstMatch(constrainedWordCandidate);
+
     if (candidate == null) {
       leafs.add(location);
       continue;
@@ -87,7 +89,8 @@ void main({
       direction: wordCandidate.direction,
     );
     crossword.add(wordEntry);
-    sortedPool.removeWord(wordEntry.word);
+    wordPool.remove(wordEntry.word);
+
     placedWords++;
     if (placedWords % 200 == 0) {
       log('Placed $placedWords words');
@@ -95,29 +98,4 @@ void main({
   }
 
   File('crossword.txt').writeAsStringSync(crossword.toPrettyString());
-}
-
-String? _findWordForConstraints({
-  required ConstrainedWordCandidate constrainedWordCandidate,
-  required SortedWords sortedPool,
-}) {
-  final constraints = constrainedWordCandidate.constraints;
-  final invalidLengths = constrainedWordCandidate.invalidLengths;
-
-  for (var i = 18; i >= 3; i--) {
-    if (invalidLengths.contains(i)) continue;
-
-    final firstConstrains = constraints.entries.first;
-
-    final words =
-        sortedPool[i]?[firstConstrains.key]?[firstConstrains.value] ?? {};
-
-    if (words.isEmpty) continue;
-
-    if (constraints.length == 1) {
-      return words.first;
-    }
-  }
-
-  return null;
 }
