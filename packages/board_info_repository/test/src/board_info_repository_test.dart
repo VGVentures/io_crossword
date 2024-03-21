@@ -121,7 +121,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => collection.where('type', isEqualTo: 'solved_words_count'),
+          () => collection.where('type', isEqualTo: 'render_mode_limit'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getRenderModeZoomLimits(),
