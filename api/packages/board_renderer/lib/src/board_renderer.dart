@@ -6,7 +6,12 @@ import 'package:game_domain/game_domain.dart';
 import 'package:image/image.dart' as img;
 
 extension on List<Word> {
-  (int, int) totalSize(int cellSize) {
+  // This will return a tuple with the following values:
+  // - The total width of the board
+  // - The total height of the board
+  // - The smallest X position of a word
+  // - The smallest Y position of a word
+  (int, int, int, int) totalSize(int cellSize) {
     var minPositionX = 0;
     var minPositionY = 0;
 
@@ -29,10 +34,10 @@ extension on List<Word> {
       maxPositionY = math.max(maxPositionY, sizeY);
     }
 
-    final totalWidth = (minPositionX - maxPositionX).abs() * cellSize;
-    final totalHeight = (minPositionY - maxPositionY).abs() * cellSize;
+    final totalWidth = ((maxPositionX - minPositionX).abs() + 1) * cellSize;
+    final totalHeight = ((maxPositionY - minPositionY).abs() + 1) * cellSize;
 
-    return (totalWidth, totalHeight);
+    return (totalWidth, totalHeight, minPositionX, minPositionY);
   }
 }
 
@@ -128,20 +133,23 @@ class BoardRenderer {
   /// Renders the full frame of the board.
   Future<Uint8List> renderBoardWireframe(List<Word> words) async {
     /// The size of each cell in the board when rendering in full size.
-    const cellSize = 4;
+    const cellSize = 1;
 
-    final color = img.ColorRgb8(255, 255, 255);
+    final color = img.ColorRgb8(0, 0, 0);
 
     final totalSize = words.totalSize(cellSize);
     final totalWidth = totalSize.$1;
     final totalHeight = totalSize.$2;
 
-    final centerX = (totalWidth / 2).round();
-    final centerY = (totalHeight / 2).round();
+    final centerX = (totalWidth / 2).floor();
+    final centerY = (totalHeight / 2).floor();
+
+    final paddingX = centerX - totalSize.$3.abs();
+    final paddingY = centerY - totalSize.$4.abs();
 
     final image = _createImage(
-      width: totalWidth + cellSize,
-      height: totalHeight + cellSize,
+      width: totalWidth,
+      height: totalHeight,
       numChannels: 4,
       backgroundColor: img.ColorRgba8(0, 255, 255, 255),
     );
@@ -161,19 +169,23 @@ class BoardRenderer {
           x1: (isHorizontal
                   ? wordPosition.$1 + i * cellSize
                   : wordPosition.$1) +
-              centerX,
+              centerX -
+              paddingX,
           y1: (isHorizontal
                   ? wordPosition.$2
                   : wordPosition.$2 + i * cellSize) +
-              centerY,
+              centerY -
+              paddingY,
           x2: (isHorizontal
                   ? wordPosition.$1 + i * cellSize + cellSize
                   : wordPosition.$1 + cellSize) +
-              centerX,
+              centerX -
+              paddingX,
           y2: (isHorizontal
                   ? wordPosition.$2 + cellSize
                   : wordPosition.$2 + i * cellSize + cellSize) +
-              centerY,
+              centerY -
+              paddingY,
           color: color,
         );
       }
