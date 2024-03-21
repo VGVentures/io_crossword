@@ -49,6 +49,16 @@ class CrosswordGame extends FlameGame
 
     _updateVisibleSections();
 
+    const miniMapPadding = 40.0;
+    await add(
+      MiniMap(
+        position: Vector2(
+          size.x - MiniMap.miniMapSize - miniMapPadding,
+          miniMapPadding,
+        ),
+      ),
+    );
+
     if (showDebugOverlay) {
       await add(
         RectangleComponent(
