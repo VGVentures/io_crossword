@@ -42,10 +42,7 @@ void main({
 
   var placedWords = 0;
 
-  final bottomPositions = Queue<Location>()
-    ..add(
-      const Location(x: 0, y: 1),
-    );
+  final bottomPositions = Queue<Location>()..add(const Location(x: 0, y: 1));
 
   while (placedWords < 2) {
     if (bottomPositions.isEmpty) {
