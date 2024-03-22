@@ -41,7 +41,6 @@ void main() {
 
       final state = CrosswordLoaded(
         sectionSize: sectionSize,
-        sections: const {},
       );
       mockState(state);
     });
@@ -191,7 +190,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -228,7 +227,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -268,7 +267,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord1.id,
+                word: targetWord1,
               ),
             ),
           );
@@ -285,7 +284,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord2.id,
+                word: targetWord2,
               ),
             ),
           );
@@ -362,7 +361,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -378,7 +376,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -394,7 +391,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -415,7 +411,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
           renderMode: RenderMode.snapshot,
         );
         mockState(state);
@@ -434,7 +429,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 

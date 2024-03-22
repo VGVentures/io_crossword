@@ -43,5 +43,17 @@
     "enter": "Enter",
     "@enter": {
         "description": "Enter label"
+    },
+    "submit": "Submit",
+    "@submit": {
+        "description": "Submit label"
+    },
+    "getHint": "Get Hint",
+    "@getHint": {
+        "description": "Get hint label"
+    },
+    "typeToAnswer": "Type to answer",
+    "@typeToAnswer": {
+        "description": "Type to answer label"
     }
 }
