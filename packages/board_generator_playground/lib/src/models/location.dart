@@ -58,5 +58,8 @@ final class Location extends Equatable {
   }
 
   @override
+  bool? get stringify => true;
+
+  @override
   List<Object?> get props => [x, y];
 }
