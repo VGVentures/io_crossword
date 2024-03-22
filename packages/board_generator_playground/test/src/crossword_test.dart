@@ -720,6 +720,64 @@ void main() {
       });
 
       group('derives', () {
+        group('when bounded', () {
+          test('down', () {
+            final board = Crossword1(
+              bounds: Bounds.fromTLBR(
+                topLeft: Location(x: -2, y: -2),
+                bottomRight: Location(x: 2, y: 2),
+              ),
+              largestWordLength: 8,
+            );
+
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: -2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {6, 7, 8},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'a'},
+                ),
+              ),
+            );
+          });
+
+          test('across', () {
+            final board = Crossword1(
+              bounds: Bounds.fromTLBR(
+                topLeft: Location(x: -2, y: -2),
+                bottomRight: Location(x: 2, y: 2),
+              ),
+              largestWordLength: 8,
+            );
+
+            final candidate = WordCandidate(
+              location: Location(x: -2, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: const {2, 6, 7, 8},
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {2: 'h'},
+                ),
+              ),
+            );
+          });
+        });
+
         group('when going across', () {
           test('a word in the same height', () {
             final board = Crossword7();

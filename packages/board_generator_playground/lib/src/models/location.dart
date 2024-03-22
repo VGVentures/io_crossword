@@ -3,8 +3,6 @@ import 'package:equatable/equatable.dart';
 ///{@template location}
 /// A location in the crossword puzzle.
 /// {@endtemplate}
-// TODO(alestiago): Consider using `Point` (from dart:math) and extension
-// methods instead.
 final class Location extends Equatable {
   ///{@macro location}
   const Location({
