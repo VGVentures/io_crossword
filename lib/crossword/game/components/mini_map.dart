@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -6,7 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:io_crossword/crossword/game/game.dart';
 
-class MiniMap extends PositionComponent
+class MiniMap extends RectangleComponent
     with HasGameRef<CrosswordGame>, TapCallbacks {
   MiniMap({
     super.position,
@@ -15,8 +16,11 @@ class MiniMap extends PositionComponent
   static const miniMapSize = 200.0;
 
   late final RectangleComponent reticle;
+  late final SpriteComponent map;
   late final Image mapImage;
+  bool expanded = false;
 
+  late Vector2 _mapImageSize;
   late Vector2 _reticleSize;
   late Vector2 _reticlePosition;
 
@@ -28,8 +32,8 @@ class MiniMap extends PositionComponent
     final yRate = gameSize.y / mapImage.height;
 
     _reticleSize = Vector2(
-      xRate * miniMapSize,
-      yRate * miniMapSize,
+      xRate * size.x,
+      yRate * size.x,
     );
 
     final cameraX = gameRef.camera.viewfinder.position.x /
@@ -38,10 +42,10 @@ class MiniMap extends PositionComponent
         (mapImage.height * CrosswordGame.cellSize);
 
     _reticlePosition = Vector2(
-          cameraX * miniMapSize,
-          cameraY * miniMapSize,
+          cameraX * size.x,
+          cameraY * size.x,
         ) +
-        (Vector2.all(miniMapSize) - _reticleSize) / 2.0;
+        (Vector2.all(size.x) - _reticleSize) / 2.0;
   }
 
   void _updateRecticle() {
@@ -55,8 +59,8 @@ class MiniMap extends PositionComponent
   void onTapUp(TapUpEvent event) {
     super.onTapUp(event);
 
-    final x = event.localPosition.x / miniMapSize;
-    final y = event.localPosition.y / miniMapSize;
+    final x = event.localPosition.x / size.x;
+    final y = event.localPosition.y / size.y;
 
     final totalWidth = mapImage.width * CrosswordGame.cellSize;
     final totalHeight = mapImage.height * CrosswordGame.cellSize;
@@ -97,34 +101,109 @@ class MiniMap extends PositionComponent
     }
   }
 
+  //void _zoom(double zoom) {
+  //  _mapImageSize += Vector2.all(zoom * miniMapSize);
+  //  map.size = _mapImageSize;
+  //}
+
+  void _expand() {
+    if (expanded) {
+      position = Vector2(
+        gameRef.size.x - miniMapSize - 40,
+        40,
+      );
+      size = Vector2.all(miniMapSize);
+      map.size = _mapImageSize;
+      firstChild<ClipComponent>()?.size = size;
+      expanded = false;
+
+      firstChild<MiniMapZoomButton>()?.position =
+          Vector2(miniMapSize - 40, miniMapSize - 40);
+
+      _updateRecticle();
+    } else {
+      final newTentativeSize = gameRef.size - Vector2.all(40);
+      final newSize = Vector2.all(
+        math.min(newTentativeSize.x, newTentativeSize.y),
+      );
+
+      final newPosition = Vector2(
+        gameRef.size.x / 2 - newSize.x / 2,
+        gameRef.size.y / 2 - newSize.y / 2,
+      );
+
+      position = newPosition;
+      size = newSize;
+      firstChild<ClipComponent>()?.size = newSize;
+      map.size = newSize;
+      expanded = true;
+
+      firstChild<MiniMapZoomButton>()?.position =
+          Vector2(newSize.x - 40, newSize.y - 40);
+
+      _updateRecticle();
+    }
+  }
+
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
+    paint = Paint()..color = const Color(0x88000000);
 
     // TODO(any): Load from the server and update from time to time.
     mapImage = await gameRef.images.load('full_render.png');
+    _mapImageSize = Vector2.all(miniMapSize);
 
     calculateReticleSize();
+    size = Vector2.all(miniMapSize);
 
-    await add(
-      RectangleComponent(
-        paint: Paint()..color = const Color(0x88000000),
-        size: Vector2.all(miniMapSize),
+    await addAll([
+      ClipComponent.rectangle(
+        size: size,
         children: [
-          SpriteComponent.fromImage(
+          map = SpriteComponent.fromImage(
             mapImage,
-            size: Vector2.all(miniMapSize),
-          ),
-          reticle = RectangleComponent(
-            position: _reticlePosition,
-            paint: Paint()
-              ..color = const Color(0xFFFFFF00)
-              ..strokeWidth = 1
-              ..style = PaintingStyle.stroke,
-            size: _reticleSize,
+            size: _mapImageSize,
           ),
         ],
       ),
-    );
+      reticle = RectangleComponent(
+        position: _reticlePosition,
+        paint: Paint()
+          ..color = const Color(0xFFFFFF00)
+          ..strokeWidth = 1
+          ..style = PaintingStyle.stroke,
+        size: _reticleSize,
+      ),
+      //MiniMapZoomButton(
+      //  position: Vector2(miniMapSize - 40, miniMapSize - 40),
+      //  paint: Paint()..color = const Color(0xFFFF0000),
+      //  onTap: () {
+      //    _zoom(0.01);
+      //  },
+      //),
+      MiniMapZoomButton(
+        position: Vector2(miniMapSize - 40, miniMapSize - 40),
+        paint: Paint()..color = const Color(0xFF0000FF),
+        onTap: _expand,
+      ),
+    ]);
+  }
+}
+
+class MiniMapZoomButton extends RectangleComponent
+    with ParentIsA<MiniMap>, TapCallbacks {
+  MiniMapZoomButton({
+    required this.onTap,
+    super.position,
+    super.paint,
+  }) : super(size: Vector2.all(40));
+
+  final void Function() onTap;
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    super.onTapUp(event);
+    onTap();
   }
 }
