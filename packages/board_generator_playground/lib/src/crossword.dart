@@ -328,28 +328,18 @@ class Crossword {
   /// Adding a word down at (2, -2) would have a single
   /// [ConstrainedWordCandidate], with two constraints one at position 0 for the
   /// character 'S' and another at position 4 for the character 'W' with a
-  /// maximum length of [largestWordLength].
-  ///
-  /// If we consider this other board:
-  ///
-  /// ```
-  ///    -2 -1  0  1  2
-  /// -2  A  L  B  U  S
-  /// -1  -  -  E  -  -
-  ///  0  -  -  H  -  -
-  ///  1  -  N  A  N  -
-  ///  2  -  -  N  O  W
-  /// ```
-  ///
-  /// Adding a word down at (2, -2) would have a single
-  /// [ConstrainedWordCandidate], with one constraint at position 0 for the
-  /// character 'S' and an invalid length of 4, since it would otherwise overlap
-  /// with the word "NAN".
+  /// maximum length of [largestWordLength] but an invalid length of 4, since it
+  /// would otherwise suffix "W".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will return `null`. Such
-  /// scenarios are yet not properly considered, it is something we would like
-  /// to contemplate in the future and improve to achieve denser boards.
+  /// [ConstrainedWordCandidate]. In other words, more than a single word would
+  /// have to be placed at the same time to satisfy the constraints. In this
+  /// those cases we return `null`. Such scenarios are yet not properly
+  /// considered, it is something we would like to contemplate in the future and
+  /// improve to achieve denser boards.
+  ///
+  /// If the constraints cannot be satisfied (for example, when all the lengths
+  /// are invalid) we return `null`.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = _lengthConstraints(candidate);
     if (invalidLengths == null) return null;
