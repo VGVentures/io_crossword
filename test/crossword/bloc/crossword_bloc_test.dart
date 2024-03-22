@@ -652,7 +652,7 @@ void main() {
 
     group('WordUnselected', () {
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits state with word selected as null when WordUnselected is added',
+        'emits state with word selected as null',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
