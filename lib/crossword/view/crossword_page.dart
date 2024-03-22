@@ -1,3 +1,4 @@
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
@@ -18,8 +19,11 @@ class CrosswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => CrosswordBloc(
+        boardInfoRepository: context.read<BoardInfoRepository>(),
         crosswordRepository: context.read<CrosswordRepository>(),
-      )..add(const BoardSectionRequested((0, 0))),
+      )
+        ..add(const BoardSectionRequested((0, 0)))
+        ..add(const BoardLoadingInfoFetched()),
       child: const CrosswordView(),
     );
   }
