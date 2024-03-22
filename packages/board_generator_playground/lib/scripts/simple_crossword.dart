@@ -69,9 +69,9 @@ void main({
     if (candidate == null) continue;
 
     if (!constrainedWordCandidate.satisfies(candidate)) {
-      print(constrainedWordCandidate);
-      print('firstMatch: $candidate');
-      print('Does not satisfy constraints');
+      log(constrainedWordCandidate.toString());
+      log('firstMatch: $candidate');
+      log('Does not satisfy constraints');
       continue;
     }
 
