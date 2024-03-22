@@ -390,6 +390,8 @@ class Crossword {
 
     final bounds = this.bounds;
     if (bounds != null) {
+      // Invalidate those lengths that would make the candidate go out of
+      // bounds:
       for (var i = 0; i < largestLength; i++) {
         final location = span[i];
         if (!bounds.contains(location)) {
@@ -398,23 +400,25 @@ class Crossword {
       }
     }
 
-    for (var i = 1; i <= largestLength; i++) {
+    for (var length = 1; length <= largestLength; length++) {
+      if (invalidLengths.contains(length)) continue;
+
       final end = switch (candidate.direction) {
-        Direction.across => candidate.start.shift(x: i),
-        Direction.down => candidate.start.shift(y: i),
+        Direction.across => candidate.start.shift(x: length),
+        Direction.down => candidate.start.shift(y: length),
       };
 
       final words = {
         ...wordsAt(
           switch (candidate.direction) {
-            Direction.across => candidate.start.shift(x: i, y: 1),
-            Direction.down => candidate.start.shift(x: 1, y: i),
+            Direction.across => candidate.start.shift(x: length, y: 1),
+            Direction.down => candidate.start.shift(x: 1, y: length),
           },
         ),
         ...wordsAt(
           switch (candidate.direction) {
-            Direction.across => candidate.start.shift(x: i, y: -1),
-            Direction.down => candidate.start.shift(x: -1, y: i),
+            Direction.across => candidate.start.shift(x: length, y: -1),
+            Direction.down => candidate.start.shift(x: -1, y: length),
           },
         ),
         ...wordsAt(end),
@@ -422,11 +426,11 @@ class Crossword {
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      final hasWordOfMinimumLength = i < shortestWordLength;
+      final hasWordOfMinimumLength = length < shortestWordLength;
       if (hasMatchingDirection && hasWordOfMinimumLength) {
         return null;
       } else if (hasMatchingDirection) {
-        for (var k = i; k <= largestLength; k++) {
+        for (var k = length; k <= largestLength; k++) {
           invalidLengths.add(k);
         }
         break;
@@ -434,18 +438,18 @@ class Crossword {
 
       if (words.any(overlaps)) {
         final location = switch (candidate.direction) {
-          Direction.across => candidate.start.shift(x: i),
-          Direction.down => candidate.start.shift(y: i),
+          Direction.across => candidate.start.shift(x: length),
+          Direction.down => candidate.start.shift(y: length),
         };
 
         if (characterMap[location] == null) {
-          for (var k = i; k <= largestLength; k++) {
+          for (var k = length; k <= largestLength; k++) {
             invalidLengths.add(k);
           }
           break;
         }
 
-        invalidLengths.add(i);
+        invalidLengths.add(length);
         continue;
       }
     }
