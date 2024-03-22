@@ -290,6 +290,28 @@ class Crossword {
     return characterMap[location]?.wordEntry ?? {};
   }
 
+  /// Whether a [location] crosses with another word.
+  ///
+  /// For example, consider the following board:
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
+  ///
+  /// The location (0, -2) crosses with the word "ALBUS" and "BEHAN". However,
+  /// the location (0, 0) does not cross with any word.
+  bool crossesAt(Location location) {
+    final characterData = characterMap[location];
+    if (characterData == null) return false;
+
+    return characterData.wordEntry.length > 1;
+  }
+
   /// The constraints for a given [candidate].
   ///
   /// For example, consider the following board:

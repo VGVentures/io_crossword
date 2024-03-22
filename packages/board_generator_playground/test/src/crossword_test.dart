@@ -90,102 +90,55 @@ void main() {
             {
               Location(x: 0, y: -2): CharacterData(
                 character: 'b',
-                wordEntry: {
-                  WordEntry(
-                    word: 'behan',
-                    start: Location(x: 0, y: -2),
-                    direction: Direction.down,
-                  ),
-                  WordEntry(
-                    word: 'albus',
-                    start: Location(x: -2, y: -2),
-                    direction: Direction.across,
-                  ),
-                },
+                wordEntry: {behan, albus},
               ),
               Location(x: 0, y: -1): CharacterData(
                 character: 'e',
-                wordEntry: {
-                  WordEntry(
-                    word: 'behan',
-                    start: Location(x: 0, y: -2),
-                    direction: Direction.down,
-                  ),
-                },
+                wordEntry: {behan},
               ),
               Location(x: 0, y: 0): CharacterData(
                 character: 'h',
-                wordEntry: {
-                  WordEntry(
-                    word: 'behan',
-                    start: Location(x: 0, y: -2),
-                    direction: Direction.down,
-                  ),
-                },
+                wordEntry: {behan},
               ),
               Location(x: 0, y: 1): CharacterData(
                 character: 'a',
-                wordEntry: {
-                  WordEntry(
-                    word: 'behan',
-                    start: Location(x: 0, y: -2),
-                    direction: Direction.down,
-                  ),
-                },
+                wordEntry: {behan},
               ),
               Location(x: 0, y: 2): CharacterData(
                 character: 'n',
-                wordEntry: {
-                  WordEntry(
-                    word: 'behan',
-                    start: Location(x: 0, y: -2),
-                    direction: Direction.down,
-                  ),
-                },
+                wordEntry: {behan},
               ),
               Location(x: -2, y: -2): CharacterData(
                 character: 'a',
-                wordEntry: {
-                  WordEntry(
-                    word: 'albus',
-                    start: Location(x: -2, y: -2),
-                    direction: Direction.across,
-                  ),
-                },
+                wordEntry: {albus},
               ),
               Location(x: -1, y: -2): CharacterData(
                 character: 'l',
-                wordEntry: {
-                  WordEntry(
-                    word: 'albus',
-                    start: Location(x: -2, y: -2),
-                    direction: Direction.across,
-                  ),
-                },
+                wordEntry: {albus},
               ),
               Location(x: 1, y: -2): CharacterData(
                 character: 'u',
-                wordEntry: {
-                  WordEntry(
-                    word: 'albus',
-                    start: Location(x: -2, y: -2),
-                    direction: Direction.across,
-                  ),
-                },
+                wordEntry: {albus},
               ),
               Location(x: 2, y: -2): CharacterData(
                 character: 's',
-                wordEntry: {
-                  WordEntry(
-                    word: 'albus',
-                    start: Location(x: -2, y: -2),
-                    direction: Direction.across,
-                  ),
-                },
+                wordEntry: {albus},
               ),
             },
           ),
         );
+      });
+    });
+
+    group('crossesAt', () {
+      test('returns true on a cross', () {
+        final board = Crossword1();
+        expect(board.crossesAt(Location(x: 0, y: -2)), isTrue);
+      });
+
+      test('returns false on a non-cross', () {
+        final board = Crossword1();
+        expect(board.crossesAt(Location(x: 0, y: -1)), isFalse);
       });
     });
 
