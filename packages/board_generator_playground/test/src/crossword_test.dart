@@ -721,6 +721,18 @@ void main() {
 
       group('derives', () {
         group('when going across', () {
+          test('a word in the same height', () {
+            final board = Crossword7();
+
+            final candidate = WordCandidate(
+              location: Location(x: -1, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
           test('from an unconnected location', () {
             final board = Crossword1();
 
@@ -803,6 +815,29 @@ void main() {
         });
 
         group('when going down', () {
+          test('overlay of a word changing meaning after the 4 character', () {
+            final board = Crossword6();
+
+            final candidate = WordCandidate(
+              location: Location(x: 8, y: -2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths:
+                      List.generate(15, (index) => 4 + index).toSet(),
+                  location: candidate.location,
+                  direction: candidate.direction,
+                  constraints: const {0: 'k'},
+                ),
+              ),
+            );
+          });
+
           test('a single constraint with a no invalid lengths', () {
             final board = Crossword1();
 
@@ -860,10 +895,11 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  invalidLengths: const {3, 4},
+                  invalidLengths:
+                      List.generate(16, (index) => 3 + index).toSet(),
                   location: candidate.location,
                   direction: candidate.direction,
-                  constraints: const {0: 's', 4: 'w'},
+                  constraints: const {0: 's'},
                 ),
               ),
             );

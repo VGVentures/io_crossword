@@ -330,11 +330,17 @@ class Crossword {
             Direction.down => candidate.location.shift(x: -1, y: i),
           },
         ),
+        ...wordsAt(
+          switch (candidate.direction) {
+            Direction.across => candidate.location.shift(x: i),
+            Direction.down => candidate.location.shift(y: i),
+          },
+        ),
       };
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      final hasWordOfMinimumLength = i < shortestWordLength - 1;
+      final hasWordOfMinimumLength = i < shortestWordLength;
       if (hasMatchingDirection && hasWordOfMinimumLength) {
         return null;
       } else if (hasMatchingDirection) {
@@ -345,7 +351,19 @@ class Crossword {
       }
 
       if (words.any(overlaps)) {
-        invalidLengths.add(i);
+        final location = switch (candidate.direction) {
+          Direction.across => candidate.location.shift(x: i),
+          Direction.down => candidate.location.shift(y: i),
+        };
+
+        if (characterMap[location] == null) {
+          for (var k = i; k <= largestWordLength; k++) {
+            invalidLengths.add(k);
+          }
+          break;
+        } else {
+          invalidLengths.add(i);
+        }
       } else if (i > maximumLength) {
         maximumLength = i;
       }

@@ -13,7 +13,9 @@ void main({
   final lines = const CsvToListConverter(eol: '\n').convert(fileString)
     ..removeAt(0);
 
-  final pool = <String>{for (final line in lines) line[0] as String};
+  final pool = <String>{
+    for (final line in lines) (line[0] as String).toLowerCase(),
+  };
   log('Sorting ${pool.length} words');
   final wordPool = WordPool(words: pool);
   log('Sorted ${pool.length} words');
@@ -42,7 +44,7 @@ void main({
   var placedWords = 0;
   final area = Queue<Location>()..add(Location.zero);
 
-  while (placedWords < 100000) {
+  while (true) {
     if (area.isEmpty) {
       log('No more locations to place words');
       break;
@@ -78,27 +80,6 @@ void main({
       start: location,
       direction: wordCandidate.direction,
     );
-    if (crossword.overlaps(wordEntry)) {
-      // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
-
-      final topLeft = Location(
-        x: wordEntry.start.x - 15,
-        y: wordEntry.start.y - 15,
-      );
-      final bottomRight = Location(
-        x: wordEntry.end.x + 15,
-        y: wordEntry.end.y + 15,
-      );
-      crossword.characterMap[wordEntry.start] = CharacterData(
-        character: '*',
-        wordEntry: crossword.characterMap[wordEntry.start]!.wordEntry,
-      );
-      print(
-        crossword.toPrettyString(topLeft: topLeft, bottomRight: bottomRight),
-      );
-      print(constrainedWordCandidate);
-      continue;
-    }
 
     crossword.add(wordEntry);
     wordPool.remove(wordEntry.word);
