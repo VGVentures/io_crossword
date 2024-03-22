@@ -2,8 +2,6 @@ import 'package:board_generator_playground/src/models/models.dart';
 import 'package:equatable/equatable.dart';
 
 /// A set of bounds that define a rectangular region in the crossword puzzle.
-// TODO(alestiago): Consider using `Rectangle` (from dart:math) and extension
-// methods instead.
 class Bounds extends Equatable {
   /// Creates a new [Bounds] with the provided [topLeft] and [bottomRight]
   const Bounds.fromTLBR({
