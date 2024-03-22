@@ -66,6 +66,13 @@ void main({
     final candidate = wordPool.firstMatch(constrainedWordCandidate);
     if (candidate == null) continue;
 
+    if (!constrainedWordCandidate.satisfies(candidate)) {
+      print(constrainedWordCandidate);
+      print('firstMatch: $candidate');
+      print('Does not satisfy constraints');
+      continue;
+    }
+
     final wordEntry = WordEntry(
       word: candidate,
       start: location,
@@ -73,6 +80,23 @@ void main({
     );
     if (crossword.overlaps(wordEntry)) {
       // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+
+      final topLeft = Location(
+        x: wordEntry.start.x - 15,
+        y: wordEntry.start.y - 15,
+      );
+      final bottomRight = Location(
+        x: wordEntry.end.x + 15,
+        y: wordEntry.end.y + 15,
+      );
+      crossword.characterMap[wordEntry.start] = CharacterData(
+        character: '*',
+        wordEntry: crossword.characterMap[wordEntry.start]!.wordEntry,
+      );
+      print(
+        crossword.toPrettyString(topLeft: topLeft, bottomRight: bottomRight),
+      );
+      print(constrainedWordCandidate);
       continue;
     }
 

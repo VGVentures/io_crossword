@@ -382,17 +382,24 @@ class Crossword {
   /// --A--
   /// --N--
   /// ```
-  String toPrettyString() {
+  String toPrettyString({
+    Location? topLeft,
+    Location? bottomRight,
+  }) {
     final stringBuffer = StringBuffer();
 
-    final minX =
-        characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
-    final maxX =
-        characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
-    final minY =
-        characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
-    final maxY =
-        characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX = topLeft != null
+        ? topLeft.x
+        : characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX = bottomRight != null
+        ? bottomRight.x
+        : characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+    final minY = topLeft != null
+        ? topLeft.y
+        : characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY = bottomRight != null
+        ? bottomRight.y
+        : characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
 
     final width = maxX - minX + 1;
 
