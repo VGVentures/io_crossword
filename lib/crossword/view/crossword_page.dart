@@ -4,6 +4,7 @@ import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 
 class CrosswordPage extends StatelessWidget {
@@ -102,6 +103,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
+        const WordFocusedView(),
         _ZoomControls(game: game),
       ],
     );

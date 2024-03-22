@@ -7,12 +7,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _FakeBoardSection extends Fake implements BoardSection {
+  @override
+  List<Word> get words => [];
+}
 
 extension on WidgetTester {
   Future<void> pumpCrosswordView(CrosswordBloc bloc) {
@@ -75,28 +81,27 @@ void main() {
         CrosswordLoaded(
           sectionSize: 40,
           sections: {
-            (0, 0): BoardSection(
-              id: '1',
-              position: Point(0, 0),
-              size: 40,
-              words: [
-                Word(
-                  axis: Axis.horizontal,
-                  position: Point(0, 0),
-                  answer: 'flutter',
-                  clue: 'flutter',
-                  hints: const ['dart', 'mobile', 'cross-platform'],
-                  solvedTimestamp: null,
-                ),
-              ],
-              borderWords: const [],
-            ),
+            (0, 0): _FakeBoardSection(),
           },
         ),
       );
 
       await tester.pumpCrosswordView(bloc);
       expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
+    });
+
+    testWidgets('renders WordFocusedView when is loaded', (tester) async {
+      when(() => bloc.state).thenReturn(
+        CrosswordLoaded(
+          sectionSize: 40,
+          sections: {
+            (0, 0): _FakeBoardSection(),
+          },
+        ),
+      );
+      await tester.pumpCrosswordView(bloc);
+
+      expect(find.byType(WordFocusedView), findsOneWidget);
     });
 
     testWidgets(
