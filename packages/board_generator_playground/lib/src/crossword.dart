@@ -377,14 +377,21 @@ class Crossword {
   }
 
   Set<int>? _lengthConstraints(WordCandidate candidate) {
-    final invalidLengths = <int>{};
+    if (wordsAt(candidate.start)
+        .any((word) => word.direction == candidate.direction)) {
+      // The candidate is trying to start at a location where there is already
+      // a word going in the same direction.
+      return null;
+    }
 
+    final invalidLengths = <int>{};
     var largestLength = largestWordLength;
     final validLengths = <int>{
-      for (var i = 1; i <= largestLength; i++) i,
+      for (var i = shortestWordLength; i <= largestLength; i++) i,
     };
     void updateLengths() {
       validLengths.removeAll(invalidLengths);
+      if (validLengths.isEmpty) return;
       largestLength = validLengths.reduce((a, b) => a > b ? a : b);
     }
 
@@ -407,14 +414,96 @@ class Crossword {
         }
       }
       updateLengths();
+      if (validLengths.isEmpty) return null;
     }
 
     for (var i = 0; i < largestLength; i++) {
-      /// Invalidate those lengths that would make the candidate cross over
-      /// an already crossed location. Crosses act as barriers for the
-      /// candidate, they can't be gone through.
+      // Invalidate those lengths that would make the candidate cross over
+      // an already crossed location. Crosses act as barriers for the
+      // candidate, they can't be gone through.
       final end = span[i];
       if (crossesAt(end)) {
+        for (var k = i; k <= largestLength; k++) {
+          invalidLengths.add(k + 1);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would reach another word going in the
+      // same direction. If such gap is not left, the candidate would overlap
+      // with such word.
+      final end = span[i];
+      final words = wordsAt(end);
+      if (words.any((word) => word.direction == candidate.direction)) {
+        for (var k = i + 1; k <= largestLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would reach another word going in the
+      // same direction in its surroundings. Such cases would require more than
+      // one word to be placed at the same time.
+      final end = span[i];
+      final sides = {
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: 1),
+          Direction.down => end.shift(x: 1),
+        },
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: -1),
+          Direction.down => end.shift(x: -1),
+        },
+      };
+      final sideWords = sides.map(wordsAt).expand((e) => e);
+      if (sideWords.any((word) => word.direction == candidate.direction)) {
+        for (var k = i; k <= largestLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 1; i < largestLength; i++) {
+      // Invalidate those lengths that would cause the word to stop at a
+      // location where the next character is not part of the word.
+      final end = span[i];
+      final words = wordsAt(end);
+      if (words.any((word) => word.direction != candidate.direction)) {
+        invalidLengths.add(i);
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 1; i < largestLength; i++) {
+      // Invalidate those lengths that pass through a neighboring word, but
+      // don't cross it, since they would overlap with such word.
+      final end = span[i];
+      final sides = {
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: 1),
+          Direction.down => end.shift(x: 1),
+        },
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: -1),
+          Direction.down => end.shift(x: -1),
+        },
+      };
+
+      final endWords = wordsAt(end);
+      final sideWords = sides.map(wordsAt).expand((e) => e);
+      if (!endWords.containsAll(sideWords)) {
         for (var k = i; k < largestLength; k++) {
           invalidLengths.add(k + 1);
         }
@@ -422,62 +511,10 @@ class Crossword {
       }
     }
     updateLengths();
+    if (validLengths.isEmpty) return null;
 
-    for (var length = 1; length <= largestLength; length++) {
-      if (invalidLengths.contains(length)) continue;
-
-      final end = switch (candidate.direction) {
-        Direction.across => candidate.start.shift(x: length),
-        Direction.down => candidate.start.shift(y: length),
-      };
-
-      final words = {
-        ...wordsAt(
-          switch (candidate.direction) {
-            Direction.across => candidate.start.shift(x: length, y: 1),
-            Direction.down => candidate.start.shift(x: 1, y: length),
-          },
-        ),
-        ...wordsAt(
-          switch (candidate.direction) {
-            Direction.across => candidate.start.shift(x: length, y: -1),
-            Direction.down => candidate.start.shift(x: -1, y: length),
-          },
-        ),
-        ...wordsAt(end),
-      };
-
-      final hasMatchingDirection =
-          words.any((word) => word.direction == candidate.direction);
-      final hasWordOfMinimumLength = length < shortestWordLength;
-      if (hasMatchingDirection && hasWordOfMinimumLength) {
-        return null;
-      } else if (hasMatchingDirection) {
-        for (var k = length; k <= largestLength; k++) {
-          invalidLengths.add(k);
-        }
-        break;
-      }
-
-      if (words.any(overlaps)) {
-        final location = switch (candidate.direction) {
-          Direction.across => candidate.start.shift(x: length),
-          Direction.down => candidate.start.shift(y: length),
-        };
-
-        if (characterMap[location] == null) {
-          for (var k = length; k <= largestLength; k++) {
-            invalidLengths.add(k);
-          }
-          break;
-        }
-
-        invalidLengths.add(length);
-        continue;
-      }
-    }
-
-    return invalidLengths;
+    return invalidLengths
+      ..removeAll(List.generate(shortestWordLength, (i) => i));
   }
 
   Map<int, String> _characterConstraints(

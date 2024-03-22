@@ -721,7 +721,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  invalidLengths: const {2, 6, 7, 8},
+                  invalidLengths: const {6, 7, 8},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {2: 'h'},
@@ -801,21 +801,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  invalidLengths: {
-                    2,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                  },
+                  invalidLengths: {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'e', 2: 'n'},
@@ -840,7 +826,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths:
-                      List.generate(15, (index) => 4 + index).toSet(),
+                      List.generate(14, (index) => 5 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'k'},
@@ -907,7 +893,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths:
-                      List.generate(16, (index) => 3 + index).toSet(),
+                      List.generate(15, (index) => 4 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
