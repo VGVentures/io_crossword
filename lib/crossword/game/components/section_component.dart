@@ -9,7 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
 class SectionTapController extends PositionComponent
-    with ParentIsA<SectionComponent>, TapCallbacks {
+    with ParentIsA<SectionComponent>, TapCallbacks, HasGameRef<CrosswordGame> {
   SectionTapController({
     super.position,
     super.size,
@@ -43,6 +43,15 @@ class SectionTapController extends PositionComponent
         );
 
         if (wordRect.contains(localPosition.toOffset())) {
+          gameRef.camera.viewfinder.position = Vector2(
+            wordRect.left + wordRect.width / 2,
+            wordRect.top + wordRect.height / 2,
+          );
+
+          while (!gameRef.camera.visibleWorldRect.contains(wordRect.topLeft) ||
+              !gameRef.camera.visibleWorldRect.contains(wordRect.bottomRight)) {
+            gameRef.camera.viewfinder.zoom -= 0.05;
+          }
           parent.gameRef.bloc.add(
             WordSelected(parent.index, word),
           );

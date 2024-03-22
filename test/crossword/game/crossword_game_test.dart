@@ -7,7 +7,6 @@ import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -97,7 +96,7 @@ void main() {
     );
 
     testWithGame(
-      'can tap words',
+      'can tap words and adapts camera position and zoom',
       createGame,
       (game) async {
         final state = CrosswordLoaded(
@@ -127,6 +126,27 @@ void main() {
                     CrosswordGame.cellSize *
                     sectionSize);
 
+        final wordWidth = targetWord.axis == Axis.horizontal
+            ? targetWord.answer.characters.length * CrosswordGame.cellSize
+            : CrosswordGame.cellSize;
+
+        final wordHeight = targetWord.axis == Axis.vertical
+            ? targetWord.answer.characters.length * CrosswordGame.cellSize
+            : CrosswordGame.cellSize;
+
+        final targetCenter = Vector2(
+          targetWord.position.x * CrosswordGame.cellSize.toDouble() +
+              wordWidth / 2,
+          targetWord.position.y * CrosswordGame.cellSize.toDouble() +
+              wordHeight / 2,
+        );
+        final wordRect = Rect.fromLTWH(
+          (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
+          (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
+          wordWidth.toDouble(),
+          wordHeight.toDouble(),
+        );
+
         final event = _MockTapUpEvent();
         when(() => event.localPosition).thenReturn(
           Vector2(
@@ -139,6 +159,18 @@ void main() {
               event,
             );
 
+        expect(
+          game.camera.viewfinder.position,
+          equals(targetCenter),
+        );
+        expect(
+          game.camera.visibleWorldRect.contains(wordRect.topLeft),
+          isTrue,
+        );
+        expect(
+          game.camera.visibleWorldRect.contains(wordRect.bottomRight),
+          isTrue,
+        );
         verify(
           () => bloc.add(
             WordSelected(
