@@ -423,14 +423,14 @@ class Crossword {
     required int largestLength,
   }) {
     final constraints = <int, String>{};
-    for (var i = 0; i < largestLength; i++) {
+    for (var length = 0; length < largestLength; length++) {
       final location = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i),
-        Direction.down => candidate.location.shift(y: i),
+        Direction.across => candidate.location.shift(x: length),
+        Direction.down => candidate.location.shift(y: length),
       };
       final characterData = characterMap[location];
       if (characterData != null) {
-        constraints[i] = characterData.character;
+        constraints[length] = characterData.character;
       }
     }
 
