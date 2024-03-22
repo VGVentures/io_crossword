@@ -48,6 +48,21 @@ class ConstrainedWordCandidate extends WordCandidate {
   /// a 'b'.
   final Map<int, String> constraints;
 
+  /// Whether the word satisfies the constraints.
+  bool satisfies(String word) {
+    if (invalidLengths.contains(word.length)) {
+      return false;
+    }
+
+    for (var i = 0; i < word.length; i++) {
+      if (constraints.containsKey(i) && word[i] != constraints[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   @override
   bool? get stringify => true;
 
