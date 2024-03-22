@@ -698,7 +698,7 @@ void main() {
           final board = Crossword1();
 
           final candidate = WordCandidate(
-            location: Location(x: 1, y: -2),
+            start: Location(x: 1, y: -2),
             direction: Direction.down,
           );
 
@@ -710,7 +710,7 @@ void main() {
           final board = Crossword1();
 
           final candidate = WordCandidate(
-            location: Location(x: 0, y: -1),
+            start: Location(x: 0, y: -1),
             direction: Direction.across,
           );
 
@@ -731,7 +731,7 @@ void main() {
             );
 
             final candidate = WordCandidate(
-              location: Location(x: -2, y: -2),
+              start: Location(x: -2, y: -2),
               direction: Direction.down,
             );
 
@@ -741,7 +741,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {6, 7, 8},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'a'},
                 ),
@@ -759,7 +759,7 @@ void main() {
             );
 
             final candidate = WordCandidate(
-              location: Location(x: -2, y: 0),
+              start: Location(x: -2, y: 0),
               direction: Direction.across,
             );
 
@@ -769,7 +769,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {2, 6, 7, 8},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {2: 'h'},
                 ),
@@ -783,7 +783,7 @@ void main() {
             final board = Crossword7();
 
             final candidate = WordCandidate(
-              location: Location(x: -1, y: 0),
+              start: Location(x: -1, y: 0),
               direction: Direction.across,
             );
 
@@ -795,7 +795,7 @@ void main() {
             final board = Crossword1();
 
             final candidate = WordCandidate(
-              location: Location(x: -17, y: 0),
+              start: Location(x: -17, y: 0),
               direction: Direction.across,
             );
 
@@ -805,7 +805,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {17},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {17: 'h'},
                 ),
@@ -817,7 +817,7 @@ void main() {
             final board = Crossword1();
 
             final candidate = WordCandidate(
-              location: Location(x: 0, y: 0),
+              start: Location(x: 0, y: 0),
               direction: Direction.across,
             );
 
@@ -827,7 +827,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'h'},
                 ),
@@ -839,7 +839,7 @@ void main() {
             final board = Crossword5();
 
             final candidate = WordCandidate(
-              location: Location(x: -2, y: 2),
+              start: Location(x: -2, y: 2),
               direction: Direction.across,
             );
 
@@ -863,7 +863,7 @@ void main() {
                     17,
                     18,
                   },
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'e', 2: 'n'},
                 ),
@@ -877,7 +877,7 @@ void main() {
             final board = Crossword6();
 
             final candidate = WordCandidate(
-              location: Location(x: 8, y: -2),
+              start: Location(x: 8, y: -2),
               direction: Direction.down,
             );
 
@@ -888,7 +888,7 @@ void main() {
                 ConstrainedWordCandidate(
                   invalidLengths:
                       List.generate(15, (index) => 4 + index).toSet(),
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'k'},
                 ),
@@ -900,7 +900,7 @@ void main() {
             final board = Crossword1();
 
             final candidate = WordCandidate(
-              location: Location(x: 2, y: -2),
+              start: Location(x: 2, y: -2),
               direction: Direction.down,
             );
 
@@ -910,7 +910,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
                 ),
@@ -922,7 +922,7 @@ void main() {
             final board = Crossword2();
 
             final candidate = WordCandidate(
-              location: Location(x: 2, y: -2),
+              start: Location(x: 2, y: -2),
               direction: Direction.down,
             );
 
@@ -932,7 +932,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   invalidLengths: const {4},
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's', 4: 'w'},
                 ),
@@ -944,7 +944,7 @@ void main() {
             final board = Crossword3();
 
             final candidate = WordCandidate(
-              location: Location(x: 2, y: -2),
+              start: Location(x: 2, y: -2),
               direction: Direction.down,
             );
 
@@ -955,7 +955,7 @@ void main() {
                 ConstrainedWordCandidate(
                   invalidLengths:
                       List.generate(16, (index) => 3 + index).toSet(),
-                  location: candidate.location,
+                  start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
                 ),

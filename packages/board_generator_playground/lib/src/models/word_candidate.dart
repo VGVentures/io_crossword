@@ -7,18 +7,18 @@ import 'package:equatable/equatable.dart';
 class WordCandidate extends Equatable {
   /// {@macro word_candidate}
   const WordCandidate({
-    required this.location,
+    required this.start,
     required this.direction,
   });
 
   /// The location of the start of the word on the board.
-  final Location location;
+  final Location start;
 
   /// The direction of the word.
   final Direction direction;
 
   @override
-  List<Object?> get props => [location, direction];
+  List<Object?> get props => [start, direction];
 }
 
 /// {@template constrained_word_candidate}
@@ -28,7 +28,7 @@ class ConstrainedWordCandidate extends WordCandidate {
   /// {@macro constrained_word_candidate}
   const ConstrainedWordCandidate({
     required this.invalidLengths,
-    required super.location,
+    required super.start,
     required super.direction,
     required this.constraints,
   });

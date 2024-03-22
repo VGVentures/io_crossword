@@ -348,7 +348,7 @@ class Crossword {
 
     return ConstrainedWordCandidate(
       invalidLengths: invalidLengths,
-      location: candidate.location,
+      start: candidate.start,
       direction: candidate.direction,
       constraints: characterConstraints,
     );
@@ -359,8 +359,8 @@ class Crossword {
 
     for (var i = 1; i <= largestWordLength; i++) {
       final end = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i),
-        Direction.down => candidate.location.shift(y: i),
+        Direction.across => candidate.start.shift(x: i),
+        Direction.down => candidate.start.shift(y: i),
       };
       if (bounds != null && !bounds!.contains(end)) {
         for (var k = i + 1; k <= largestWordLength; k++) {
@@ -372,14 +372,14 @@ class Crossword {
       final words = {
         ...wordsAt(
           switch (candidate.direction) {
-            Direction.across => candidate.location.shift(x: i, y: 1),
-            Direction.down => candidate.location.shift(x: 1, y: i),
+            Direction.across => candidate.start.shift(x: i, y: 1),
+            Direction.down => candidate.start.shift(x: 1, y: i),
           },
         ),
         ...wordsAt(
           switch (candidate.direction) {
-            Direction.across => candidate.location.shift(x: i, y: -1),
-            Direction.down => candidate.location.shift(x: -1, y: i),
+            Direction.across => candidate.start.shift(x: i, y: -1),
+            Direction.down => candidate.start.shift(x: -1, y: i),
           },
         ),
         ...wordsAt(end),
@@ -399,8 +399,8 @@ class Crossword {
 
       if (words.any(overlaps)) {
         final location = switch (candidate.direction) {
-          Direction.across => candidate.location.shift(x: i),
-          Direction.down => candidate.location.shift(y: i),
+          Direction.across => candidate.start.shift(x: i),
+          Direction.down => candidate.start.shift(y: i),
         };
 
         if (characterMap[location] == null) {
@@ -425,8 +425,8 @@ class Crossword {
     final constraints = <int, String>{};
     for (var length = 0; length < largestLength; length++) {
       final location = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: length),
-        Direction.down => candidate.location.shift(y: length),
+        Direction.across => candidate.start.shift(x: length),
+        Direction.down => candidate.start.shift(y: length),
       };
       final characterData = characterMap[location];
       if (characterData != null) {
