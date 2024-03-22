@@ -356,18 +356,31 @@ class Crossword {
 
   Set<int>? _lengthConstraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
+    final largestLength = largestWordLength;
 
-    for (var i = 1; i <= largestWordLength; i++) {
+    final span = [
+      for (var i = 0; i < largestLength; i++)
+        switch (candidate.direction) {
+          Direction.across => candidate.start.shift(x: i),
+          Direction.down => candidate.start.shift(y: i),
+        },
+    ];
+
+    final bounds = this.bounds;
+    if (bounds != null) {
+      for (var i = 0; i < largestLength; i++) {
+        final location = span[i];
+        if (!bounds.contains(location)) {
+          invalidLengths.add(i + 1);
+        }
+      }
+    }
+
+    for (var i = 1; i <= largestLength; i++) {
       final end = switch (candidate.direction) {
         Direction.across => candidate.start.shift(x: i),
         Direction.down => candidate.start.shift(y: i),
       };
-      if (bounds != null && !bounds!.contains(end)) {
-        for (var k = i + 1; k <= largestWordLength; k++) {
-          invalidLengths.add(k);
-        }
-        break;
-      }
 
       final words = {
         ...wordsAt(
@@ -391,7 +404,7 @@ class Crossword {
       if (hasMatchingDirection && hasWordOfMinimumLength) {
         return null;
       } else if (hasMatchingDirection) {
-        for (var k = i; k <= largestWordLength; k++) {
+        for (var k = i; k <= largestLength; k++) {
           invalidLengths.add(k);
         }
         break;
@@ -404,7 +417,7 @@ class Crossword {
         };
 
         if (characterMap[location] == null) {
-          for (var k = i; k <= largestWordLength; k++) {
+          for (var k = i; k <= largestLength; k++) {
             invalidLengths.add(k);
           }
           break;
