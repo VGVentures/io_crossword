@@ -47,7 +47,7 @@ class CrosswordGame extends FlameGame
 
     camera.priority = 1;
 
-    _updateVisibleSections();
+    updateVisibleSections();
 
     const miniMapPadding = 40.0;
     await add(
@@ -80,7 +80,7 @@ class CrosswordGame extends FlameGame
     }
   }
 
-  void _updateVisibleSections() {
+  void updateVisibleSections() {
     final visibleViewport = camera.visibleWorldRect;
 
     final horizontalSectionsVisibleInViewport =
@@ -178,7 +178,7 @@ class CrosswordGame extends FlameGame
 
     if (_distanceMoved >= 280) {
       _distanceMoved = 0;
-      _updateVisibleSections();
+      updateVisibleSections();
     }
   }
 
@@ -191,7 +191,7 @@ class CrosswordGame extends FlameGame
     camera.viewfinder.zoom -= 0.05;
 
     // TODO(any): limit zoom from boardInfo in firestore
-    _updateVisibleSections();
+    updateVisibleSections();
   }
 
   void zoomIn() {
@@ -200,7 +200,7 @@ class CrosswordGame extends FlameGame
     camera.viewfinder.zoom += 0.05;
 
     // TODO(any): limit zoom from boardInfo in firestore
-    _updateVisibleSections();
+    updateVisibleSections();
   }
 
   @override

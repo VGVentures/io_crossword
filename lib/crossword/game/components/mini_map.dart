@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:flutter/widgets.dart' hide Image;
 import 'package:io_crossword/crossword/game/game.dart';
 
-class MiniMap extends PositionComponent with HasGameRef<CrosswordGame> {
+class MiniMap extends PositionComponent
+    with HasGameRef<CrosswordGame>, TapCallbacks {
   MiniMap({
     super.position,
   }) : super(priority: 100, size: Vector2.all(200));
@@ -29,14 +32,14 @@ class MiniMap extends PositionComponent with HasGameRef<CrosswordGame> {
       yRate * miniMapSize,
     );
 
-    print(xRate);
-    print(gameRef.camera.viewfinder.position.x);
-    print(gameRef.camera.viewfinder.position.x * xRate);
-    print('-----------------');
+    final cameraX = gameRef.camera.viewfinder.position.x /
+        (mapImage.width * CrosswordGame.cellSize);
+    final cameraY = gameRef.camera.viewfinder.position.y /
+        (mapImage.height * CrosswordGame.cellSize);
 
     _reticlePosition = Vector2(
-          gameRef.camera.viewfinder.position.x * xRate,
-          gameRef.camera.viewfinder.position.y * yRate,
+          cameraX * miniMapSize,
+          cameraY * miniMapSize,
         ) +
         (Vector2.all(miniMapSize) - _reticleSize) / 2.0;
   }
@@ -46,6 +49,34 @@ class MiniMap extends PositionComponent with HasGameRef<CrosswordGame> {
     reticle
       ..size = _reticleSize
       ..position = _reticlePosition;
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    super.onTapUp(event);
+
+    final x = event.localPosition.x / miniMapSize;
+    final y = event.localPosition.y / miniMapSize;
+
+    final totalWidth = mapImage.width * CrosswordGame.cellSize;
+    final totalHeight = mapImage.height * CrosswordGame.cellSize;
+
+    final xTween = Tween(
+      begin: -totalWidth / 2,
+      end: totalWidth / 2,
+    );
+
+    final yTween = Tween(
+      begin: -totalHeight / 2,
+      end: totalHeight / 2,
+    );
+
+    final cameraX = xTween.transform(x);
+    final cameraY = yTween.transform(y);
+
+    gameRef.camera.viewfinder.position = Vector2(cameraX, cameraY);
+
+    gameRef.updateVisibleSections();
   }
 
   Vector2? _lastCameraPosition;
