@@ -32,8 +32,9 @@ void main({
   )!;
   log('Initial word: $initialWorld');
 
-  final crossword = Crossword()
-    ..add(
+  final crossword = Crossword(
+    bounds: Bounds.square(size: 100),
+  )..add(
       WordEntry(
         word: initialWorld,
         start: Location(x: 0, y: 0 - (initialWorld.length ~/ 2)),
@@ -44,12 +45,7 @@ void main({
   var placedWords = 0;
   final area = Queue<Location>()..add(Location.zero);
 
-  while (true) {
-    if (area.isEmpty) {
-      log('No more locations to place words');
-      break;
-    }
-
+  while (area.isNotEmpty && placedWords < 1000) {
     final location = area.removeFirst();
     final words = crossword.wordsAt(location);
     if (words.any((word) => word.direction == Direction.across) &&
