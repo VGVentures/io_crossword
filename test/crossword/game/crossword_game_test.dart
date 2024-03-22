@@ -190,7 +190,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -227,7 +227,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -267,7 +267,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord1.id,
+                word: targetWord1,
               ),
             ),
           );
@@ -284,7 +284,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord2.id,
+                word: targetWord2,
               ),
             ),
           );
