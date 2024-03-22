@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +62,11 @@ void main() {
         await tester.pumpApp(child);
 
         final dashMascotItem = find.byWidgetPredicate(
-          (widget) => widget is MascotItem && widget.mascot == Mascots.dash,
+          (widget) => widget is MascotItem && widget.mascot == Mascots.sparky,
         );
         await tester.tap(dashMascotItem);
 
-        verify(() => bloc.add(MascotUpdated(Mascots.dash))).called(1);
+        verify(() => bloc.add(MascotUpdated(Mascots.sparky))).called(1);
       },
     );
   });

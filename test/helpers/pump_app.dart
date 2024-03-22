@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:api_client/api_client.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,14 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
+class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     CrosswordRepository? crosswordRepository,
     BoardInfoRepository? boardInfoRepository,
+    LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordRepository = _MockCrosswordRepository();
@@ -32,6 +36,10 @@ extension PumpApp on WidgetTester {
         .thenAnswer((_) => Future.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
         .thenAnswer((_) => Future.value(8900));
+    when(mockedBoardInfoRepository.getSectionSize)
+        .thenAnswer((_) => Future.value(20));
+    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
+        .thenAnswer((_) => Future.value([0.8]));
 
     return pumpWidget(
       MultiProvider(
@@ -41,6 +49,9 @@ extension PumpApp on WidgetTester {
           ),
           Provider.value(
             value: boardInfoRepository ?? mockedBoardInfoRepository,
+          ),
+          Provider.value(
+            value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
         child: MaterialApp(
@@ -60,6 +71,7 @@ extension PumpRoute on WidgetTester {
     Route<dynamic> route, {
     CrosswordRepository? crosswordRepository,
     BoardInfoRepository? boardInfoRepository,
+    LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -84,6 +96,10 @@ extension PumpRoute on WidgetTester {
         .thenAnswer((_) => Future.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
         .thenAnswer((_) => Future.value(8900));
+    when(mockedBoardInfoRepository.getSectionSize)
+        .thenAnswer((_) => Future.value(20));
+    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
+        .thenAnswer((_) => Future.value([0.8]));
 
     await pumpWidget(
       MultiRepositoryProvider(
@@ -93,6 +109,9 @@ extension PumpRoute on WidgetTester {
           ),
           Provider.value(
             value: boardInfoRepository ?? mockedBoardInfoRepository,
+          ),
+          Provider.value(
+            value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
         child: MaterialApp(

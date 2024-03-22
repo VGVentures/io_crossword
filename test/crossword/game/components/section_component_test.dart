@@ -42,7 +42,6 @@ void main() {
 
       const state = CrosswordLoaded(
         sectionSize: 400,
-        sections: {},
       );
       mockState(state);
 
@@ -196,7 +195,6 @@ void main() {
         when(() => bloc.state).thenReturn(
           const CrosswordLoaded(
             sectionSize: 400,
-            sections: {},
           ),
         );
         final component = SectionComponent(index: (100, 100));
@@ -259,7 +257,6 @@ void main() {
         when(() => bloc.state).thenReturn(
           const CrosswordLoaded(
             sectionSize: 400,
-            sections: {},
           ),
         );
         final component = SectionComponent(index: (100, 100));
