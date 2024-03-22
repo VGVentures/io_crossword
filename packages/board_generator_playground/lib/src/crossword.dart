@@ -378,7 +378,15 @@ class Crossword {
 
   Set<int>? _lengthConstraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
-    final largestLength = largestWordLength;
+
+    var largestLength = largestWordLength;
+    final validLengths = <int>{
+      for (var i = 1; i <= largestLength; i++) i,
+    };
+    void updateLengths() {
+      validLengths.removeAll(invalidLengths);
+      largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+    }
 
     final span = [
       for (var i = 0; i < largestLength; i++)
@@ -391,14 +399,29 @@ class Crossword {
     final bounds = this.bounds;
     if (bounds != null) {
       // Invalidate those lengths that would make the candidate go out of
-      // bounds:
+      // bounds.
       for (var i = 0; i < largestLength; i++) {
         final location = span[i];
         if (!bounds.contains(location)) {
           invalidLengths.add(i + 1);
         }
       }
+      updateLengths();
     }
+
+    for (var i = 0; i < largestLength; i++) {
+      /// Invalidate those lengths that would make the candidate cross over
+      /// an already crossed location. Crosses act as barriers for the
+      /// candidate, they can't be gone through.
+      final end = span[i];
+      if (crossesAt(end)) {
+        for (var k = i; k < largestLength; k++) {
+          invalidLengths.add(k + 1);
+        }
+        break;
+      }
+    }
+    updateLengths();
 
     for (var length = 1; length <= largestLength; length++) {
       if (invalidLengths.contains(length)) continue;
