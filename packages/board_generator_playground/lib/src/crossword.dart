@@ -5,8 +5,13 @@ import 'package:board_generator_playground/src/models/models.dart';
 /// {@endtemplate}
 typedef CharacterMap = Map<Location, CharacterData>;
 
+/// {@template crossword}
 /// The board for the crossword puzzle.
+/// {@endtemplate}
 class Crossword {
+  /// {@macro crossword}
+  Crossword({this.bounds});
+
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
@@ -15,6 +20,12 @@ class Crossword {
 
   /// The shortest word length that can be added to the board.
   static const shortestWordLength = 3;
+
+  /// The bounds of the board.
+  ///
+  /// If `null`, the board has no bounds. Meaning it can grow indefinitely in
+  /// horizontally and vertically.
+  final Bounds? bounds;
 
   /// The origin of the coordinate system.
   ///
