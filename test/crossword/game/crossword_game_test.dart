@@ -11,6 +11,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/extensions.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -126,25 +127,17 @@ void main() {
                     CrosswordGame.cellSize *
                     sectionSize);
 
-        final wordWidth = targetWord.axis == Axis.horizontal
-            ? targetWord.answer.characters.length * CrosswordGame.cellSize
-            : CrosswordGame.cellSize;
-
-        final wordHeight = targetWord.axis == Axis.vertical
-            ? targetWord.answer.characters.length * CrosswordGame.cellSize
-            : CrosswordGame.cellSize;
-
         final targetCenter = Vector2(
           targetWord.position.x * CrosswordGame.cellSize.toDouble() +
-              wordWidth / 2,
+              targetWord.width / 2,
           targetWord.position.y * CrosswordGame.cellSize.toDouble() +
-              wordHeight / 2,
+              targetWord.height / 2,
         );
         final wordRect = Rect.fromLTWH(
           (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
           (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
-          wordWidth.toDouble(),
-          wordHeight.toDouble(),
+          targetWord.width.toDouble(),
+          targetWord.height.toDouble(),
         );
 
         final event = _MockTapUpEvent();

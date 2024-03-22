@@ -7,6 +7,7 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/extensions.dart';
 
 class SectionTapController extends PositionComponent
     with ParentIsA<SectionComponent>, TapCallbacks, HasGameRef<CrosswordGame> {
@@ -29,17 +30,11 @@ class SectionTapController extends PositionComponent
           );
 
       for (final word in [...boardSection.words, ...boardSection.borderWords]) {
-        final wordLength = word.answer.length * CrosswordGame.cellSize;
-        final width =
-            word.axis == Axis.horizontal ? wordLength : CrosswordGame.cellSize;
-        final height =
-            word.axis == Axis.vertical ? wordLength : CrosswordGame.cellSize;
-
         final wordRect = Rect.fromLTWH(
           (word.position.x * CrosswordGame.cellSize).toDouble(),
           (word.position.y * CrosswordGame.cellSize).toDouble(),
-          width.toDouble(),
-          height.toDouble(),
+          word.width.toDouble(),
+          word.height.toDouble(),
         );
 
         if (wordRect.contains(localPosition.toOffset())) {
