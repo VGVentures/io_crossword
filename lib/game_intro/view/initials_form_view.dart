@@ -29,6 +29,9 @@ class _InitialsFormViewState extends State<InitialsFormView> {
         }
       },
       builder: (context, state) {
+        if (state.initialsStatus == InitialsFormStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return Column(
           children: [
             Row(

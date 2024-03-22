@@ -45,6 +45,19 @@ void main() {
     });
 
     testWidgets(
+      'renders loading indicator when the initials status is loading',
+      (tester) async {
+        when(() => bloc.state).thenReturn(
+          GameIntroState(initialsStatus: InitialsFormStatus.loading),
+        );
+
+        await tester.pumpApp(child);
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'renders blacklisted error text when initials are blacklisted',
       (tester) async {
         when(() => bloc.state).thenReturn(

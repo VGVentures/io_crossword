@@ -1,3 +1,4 @@
+import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +10,9 @@ part 'game_intro_state.dart';
 class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   GameIntroBloc({
     required BoardInfoRepository boardInfoRepository,
+    required LeaderboardResource leaderboardResource,
   })  : _boardInfoRepository = boardInfoRepository,
+        _leaderboardResource = leaderboardResource,
         super(const GameIntroState()) {
     on<BlacklistRequested>(_onBlacklistRequested);
     on<BoardProgressRequested>(_onBoardProgressRequested);
@@ -21,6 +24,7 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   }
 
   final BoardInfoRepository _boardInfoRepository;
+  final LeaderboardResource _leaderboardResource;
   final initialsRegex = RegExp('[A-Z]{3}');
 
   Future<void> _onBlacklistRequested(
@@ -100,14 +104,22 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     } else {
       emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
 
-      // TODO(jaime): create a leaderboard entry for user
+      try {
+        await _leaderboardResource.createScore(
+          initials: state.initials.join(),
+          mascot: state.selectedMascot,
+        );
 
-      emit(
-        state.copyWith(
-          initialsStatus: InitialsFormStatus.success,
-          isIntroCompleted: true,
-        ),
-      );
+        emit(
+          state.copyWith(
+            initialsStatus: InitialsFormStatus.success,
+            isIntroCompleted: true,
+          ),
+        );
+      } catch (e, s) {
+        addError(e, s);
+        emit(state.copyWith(initialsStatus: InitialsFormStatus.failure));
+      }
     }
   }
 

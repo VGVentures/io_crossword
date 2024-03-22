@@ -22,11 +22,9 @@ class MascotSelectionView extends StatelessWidget {
     );
 
     return CardScrollableContentWithButton(
-      onPressed: selectedMascot != null
-          ? () {
-              context.read<GameIntroBloc>().add(const MascotSubmitted());
-            }
-          : null,
+      onPressed: () {
+        context.read<GameIntroBloc>().add(const MascotSubmitted());
+      },
       buttonLabel: l10n.continueLabel,
       child: Column(
         children: [
