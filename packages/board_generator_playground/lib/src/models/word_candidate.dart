@@ -64,9 +64,6 @@ class ConstrainedWordCandidate extends WordCandidate {
   }
 
   @override
-  bool? get stringify => true;
-
-  @override
   List<Object?> get props => [
         ...super.props,
         invalidLengths,

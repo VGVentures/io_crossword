@@ -1,8 +1,23 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:board_generator_playground/src/models/models.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('$Bounds', () {
+    test('supports value equality', () {
+      final bounds1 = Bounds.fromTLBR(
+        topLeft: Location(x: -5, y: -5),
+        bottomRight: Location(x: 5, y: 5),
+      );
+      final bounds2 = Bounds.fromTLBR(
+        topLeft: Location(x: -5, y: -5),
+        bottomRight: Location(x: 5, y: 5),
+      );
+
+      expect(bounds1, bounds2);
+    });
+
     group('.square', () {
       test('derives correctly when size is even', () {
         final bounds = Bounds.square(size: 10);
