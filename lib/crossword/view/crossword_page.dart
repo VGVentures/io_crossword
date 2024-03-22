@@ -4,6 +4,7 @@ import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 
 class CrosswordPage extends StatelessWidget {
@@ -102,30 +103,40 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
-        Positioned(
-          right: 16,
-          bottom: 16,
-          child: Column(
-            children: [
-              ElevatedButton(
-                key: LoadedBoardView.zoomInKey,
-                onPressed: () {
-                  game.zoomIn();
-                },
-                child: const Icon(Icons.zoom_in),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                key: LoadedBoardView.zoomOutKey,
-                onPressed: () {
-                  game.zoomOut();
-                },
-                child: const Icon(Icons.zoom_out),
-              ),
-            ],
-          ),
-        ),
+        const WordFocusedView(),
+        _ZoomControls(game: game),
       ],
+    );
+  }
+}
+
+class _ZoomControls extends StatelessWidget {
+  const _ZoomControls({
+    required this.game,
+  });
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 16,
+      bottom: 16,
+      child: Column(
+        children: [
+          ElevatedButton(
+            key: LoadedBoardView.zoomInKey,
+            onPressed: game.zoomIn,
+            child: const Icon(Icons.zoom_in),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            key: LoadedBoardView.zoomOutKey,
+            onPressed: game.zoomOut,
+            child: const Icon(Icons.zoom_out),
+          ),
+        ],
+      ),
     );
   }
 }

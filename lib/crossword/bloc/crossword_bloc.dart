@@ -18,6 +18,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
+    on<WordUnselected>(_onWordUnselected);
     on<RenderModeSwitched>(_onRenderModeSwitched);
     on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
@@ -107,9 +108,20 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         currentState.copyWith(
           selectedWord: WordSelection(
             section: section,
-            wordId: event.word.id,
+            word: event.word,
           ),
         ),
+      );
+    }
+  }
+
+  Future<void> _onWordUnselected(
+    WordUnselected event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).removeSelectedWord(),
       );
     }
   }

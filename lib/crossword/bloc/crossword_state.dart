@@ -14,14 +14,14 @@ class CrosswordInitial extends CrosswordState {
 class WordSelection extends Equatable {
   const WordSelection({
     required this.section,
-    required this.wordId,
+    required this.word,
   });
 
   final (int, int) section;
-  final String wordId;
+  final Word word;
 
   @override
-  List<Object> get props => [section, wordId];
+  List<Object> get props => [section, word];
 }
 
 enum RenderMode { game, snapshot }
@@ -38,10 +38,10 @@ class CrosswordLoaded extends CrosswordState {
   });
 
   final int sectionSize;
-  final RenderMode renderMode;
-  final List<double> renderLimits;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
+  final RenderMode renderMode;
+  final List<double> renderLimits;
   final Mascots mascot;
   final String initials;
 
@@ -49,8 +49,8 @@ class CrosswordLoaded extends CrosswordState {
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
-    List<double>? renderLimits,
     RenderMode? renderMode,
+    List<double>? renderLimits,
     Mascots? mascot,
     String? initials,
   }) {
@@ -59,9 +59,20 @@ class CrosswordLoaded extends CrosswordState {
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
       renderMode: renderMode ?? this.renderMode,
-      mascot: mascot ?? this.mascot,
       renderLimits: renderLimits ?? this.renderLimits,
+      mascot: mascot ?? this.mascot,
       initials: initials ?? this.initials,
+    );
+  }
+
+  CrosswordLoaded removeSelectedWord() {
+    return CrosswordLoaded(
+      sectionSize: sectionSize,
+      sections: sections,
+      renderMode: renderMode,
+      renderLimits: renderLimits,
+      mascot: mascot,
+      initials: initials,
     );
   }
 
