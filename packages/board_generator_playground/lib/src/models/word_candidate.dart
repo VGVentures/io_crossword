@@ -54,8 +54,8 @@ class ConstrainedWordCandidate extends WordCandidate {
       return false;
     }
 
-    for (var i = 0; i < word.length; i++) {
-      if (constraints.containsKey(i) && word[i] != constraints[i]) {
+    for (final i in constraints.keys.where((index) => index < word.length)) {
+      if (word[i].toLowerCase() != constraints[i]!.toLowerCase()) {
         return false;
       }
     }

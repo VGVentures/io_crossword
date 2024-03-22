@@ -38,6 +38,20 @@ void main() {
           expect(candidate.satisfies('abc'), isTrue);
         });
 
+        test(
+          'when it satisfies the character constraints with wrong casing',
+          () {
+            const candidate = ConstrainedWordCandidate(
+              invalidLengths: {},
+              location: Location.zero,
+              direction: Direction.across,
+              constraints: {0: 'A', 1: 'b', 3: 'C', 4: 'd', 5: 'E'},
+            );
+
+            expect(candidate.satisfies('aBc'), isTrue);
+          },
+        );
+
         test('when it satisfies all constraints', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {1, 2, 4, 5, 6, 7},
