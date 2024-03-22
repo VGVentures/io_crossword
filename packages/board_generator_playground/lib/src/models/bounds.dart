@@ -11,6 +11,17 @@ class Bounds extends Equatable {
     required this.bottomRight,
   });
 
+  /// Creates a new [Bounds] with the provided [size].
+  ///
+  /// The center is [Location.zero].
+  ///
+  /// If the [size] is odd, it will be rounded down.
+  Bounds.square({required int size})
+      : this.fromTLBR(
+          topLeft: Location(x: -size ~/ 2, y: -size ~/ 2),
+          bottomRight: Location(x: size ~/ 2, y: size ~/ 2),
+        );
+
   /// The top-left corner of the bounds.
   final Location topLeft;
 

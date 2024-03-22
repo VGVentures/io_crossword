@@ -3,6 +3,22 @@ import 'package:test/test.dart';
 
 void main() {
   group('$Bounds', () {
+    group('.square', () {
+      test('derives correctly when size is even', () {
+        final bounds = Bounds.square(size: 10);
+
+        expect(bounds.topLeft, const Location(x: -5, y: -5));
+        expect(bounds.bottomRight, const Location(x: 5, y: 5));
+      });
+
+      test('derives correctly when size is odd', () {
+        final bounds = Bounds.square(size: 11);
+
+        expect(bounds.topLeft, const Location(x: -5, y: -5));
+        expect(bounds.bottomRight, const Location(x: 5, y: 5));
+      });
+    });
+
     test('width is correct', () {
       const bounds = Bounds.fromTLBR(
         topLeft: Location(x: -5, y: 0),
