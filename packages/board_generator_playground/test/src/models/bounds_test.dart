@@ -1,0 +1,58 @@
+import 'package:board_generator_playground/src/models/models.dart';
+import 'package:test/test.dart';
+
+void main() {
+  group('$Bounds', () {
+    test('width is correct', () {
+      const bounds = Bounds.fromTLBR(
+        topLeft: Location(x: -5, y: 0),
+        bottomRight: Location(x: 5, y: 0),
+      );
+
+      expect(bounds.width, 10);
+    });
+
+    test('height is correct', () {
+      const bounds = Bounds.fromTLBR(
+        topLeft: Location(x: 0, y: -5),
+        bottomRight: Location(x: 0, y: 5),
+      );
+
+      expect(bounds.height, 10);
+    });
+
+    group('contains', () {
+      group('returns true', () {
+        test('when location is inside bounds', () {
+          const bounds = Bounds.fromTLBR(
+            topLeft: Location(x: -5, y: -5),
+            bottomRight: Location(x: 5, y: 5),
+          );
+
+          expect(bounds.contains(const Location(x: 3, y: 3)), isTrue);
+        });
+
+        test('when location is at bounds border', () {
+          const bounds = Bounds.fromTLBR(
+            topLeft: Location(x: -5, y: -5),
+            bottomRight: Location(x: 5, y: 5),
+          );
+
+          expect(bounds.contains(const Location(x: -5, y: -5)), isTrue);
+          expect(bounds.contains(const Location(x: 5, y: 5)), isTrue);
+        });
+      });
+
+      group('returns false', () {
+        test('when location is outside bounds', () {
+          const bounds = Bounds.fromTLBR(
+            topLeft: Location(x: -5, y: -5),
+            bottomRight: Location(x: 5, y: 5),
+          );
+
+          expect(bounds.contains(const Location(x: 6, y: 6)), isFalse);
+        });
+      });
+    });
+  });
+}
