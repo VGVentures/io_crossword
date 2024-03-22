@@ -21,6 +21,9 @@ class AssetResolutionFailure implements Exception {
 mixin AssetResolver {
   /// Resolves the image for the given word.
   Future<Uint8List> resolveWordImage();
+
+  /// Resolves the font file.
+  Future<Uint8List> resolveFont() ;
 }
 
 /// A function that makes a GET request.
@@ -40,6 +43,12 @@ class HttpAssetResolver implements AssetResolver {
   @override
   Future<Uint8List> resolveWordImage() {
     const url = 'http://127.0.0.1:8080/assets/letters.png';
+    return _getFile(Uri.parse(url));
+  }
+
+  @override
+  Future<Uint8List> resolveFont() {
+    const url = 'http://127.0.0.1:8080/assets/GoogleSans-14.ttf.zip';
     return _getFile(Uri.parse(url));
   }
 

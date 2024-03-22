@@ -17,10 +17,15 @@ Future<Response> _onGet(RequestContext request) async {
   final boardrenderer = request.read<BoardRenderer>();
 
   final sections = await crosswordRepository.listAllSections();
+  //final sections = [(await crosswordRepository.findSectionByPosition(0, 0))!];
 
   final words = sections.expand((section) => section.words);
 
-  final image = await boardrenderer.renderBoardWireframe(words.toList());
+  final image = await boardrenderer.renderBoardWireframe(
+    words.toList(),
+    cellSize: 11,
+    addLetters: true,
+  );
 
   return Response.bytes(
     body: image,

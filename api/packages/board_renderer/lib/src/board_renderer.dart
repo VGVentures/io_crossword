@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:board_renderer/board_renderer.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:image/image.dart' as img;
+import 'package:image/image.dart' hide Point;
 
 extension on List<Word> {
   // This will return a tuple with the following values:
@@ -88,6 +89,10 @@ typedef CompositeImage = img.Image Function(
 /// A function that decodes a PNG image.
 typedef DecodePng = img.Image? Function(Uint8List data);
 
+/// Function definition to parse a [BitmapFont] from a [Uint8List] used by
+/// [BoardRenderer].
+typedef ParseFont = BitmapFont Function(Uint8List);
+
 /// {@template board_renderer_failure}
 /// Exception thrown when a board rendering fails.
 /// {@endtemplate}
@@ -113,12 +118,14 @@ class BoardRenderer {
     DrawRect drawRect = img.drawRect,
     CompositeImage compositeImage = img.compositeImage,
     DecodePng decodePng = img.decodePng,
+    ParseFont parseFont = BitmapFont.fromZip,
     AssetResolver assetResolver = const HttpAssetResolver(),
   })  : _createCommand = createCommand,
         _createImage = createImage,
         _drawRect = drawRect,
         _compositeImage = compositeImage,
         _decodePng = decodePng,
+        _parseFont = parseFont,
         _assetResolver = assetResolver;
 
   final CreateCommand _createCommand;
@@ -126,15 +133,17 @@ class BoardRenderer {
   final DrawRect _drawRect;
   final CompositeImage _compositeImage;
   final DecodePng _decodePng;
+  final ParseFont _parseFont;
   final AssetResolver _assetResolver;
 
   static const _textureCellSize = 80;
 
   /// Renders the full frame of the board.
-  Future<Uint8List> renderBoardWireframe(List<Word> words) async {
-    /// The size of each cell in the board when rendering in full size.
-    const cellSize = 1;
-
+  Future<Uint8List> renderBoardWireframe(
+    List<Word> words, {
+    int cellSize = 1,
+    bool addLetters = false,
+  }) async {
     final color = img.ColorRgb8(0, 0, 0);
 
     final totalSize = words.totalSize(cellSize);
@@ -144,8 +153,8 @@ class BoardRenderer {
     final centerX = (totalWidth / 2).floor();
     final centerY = (totalHeight / 2).floor();
 
-    final paddingX = centerX - totalSize.$3.abs();
-    final paddingY = centerY - totalSize.$4.abs();
+    final paddingX = centerX - (totalSize.$3.abs() * cellSize);
+    final paddingY = centerY - (totalSize.$4.abs() * cellSize);
 
     final image = _createImage(
       width: totalWidth,
@@ -153,6 +162,10 @@ class BoardRenderer {
       numChannels: 4,
       backgroundColor: img.ColorRgba8(0, 255, 255, 255),
     );
+
+    final font = addLetters
+        ? (_parseFont(await _assetResolver.resolveFont())..size = cellSize - 2)
+        : null;
 
     for (final word in words) {
       final wordPosition = (
@@ -164,18 +177,18 @@ class BoardRenderer {
       final wordCharacters = word.answer.split('');
 
       for (var i = 0; i < wordCharacters.length; i++) {
+        final x1 =
+            (isHorizontal ? wordPosition.$1 + i * cellSize : wordPosition.$1) +
+                centerX -
+                paddingX;
+        final y1 =
+            (isHorizontal ? wordPosition.$2 : wordPosition.$2 + i * cellSize) +
+                centerY -
+                paddingY;
         _drawRect(
           image,
-          x1: (isHorizontal
-                  ? wordPosition.$1 + i * cellSize
-                  : wordPosition.$1) +
-              centerX -
-              paddingX,
-          y1: (isHorizontal
-                  ? wordPosition.$2
-                  : wordPosition.$2 + i * cellSize) +
-              centerY -
-              paddingY,
+          x1: x1,
+          y1: y1,
           x2: (isHorizontal
                   ? wordPosition.$1 + i * cellSize + cellSize
                   : wordPosition.$1 + cellSize) +
@@ -188,6 +201,19 @@ class BoardRenderer {
               paddingY,
           color: color,
         );
+
+        if (font != null) {
+          final char = wordCharacters.elementAt(i);
+          final s = String.fromCharCodes(char.codeUnits);
+
+          img.drawChar(
+            image,
+            s,
+            font: font,
+            x: x1 + 2,
+            y: y1 + 2,
+          );
+        }
       }
     }
 
