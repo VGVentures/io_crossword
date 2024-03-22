@@ -5,16 +5,31 @@ import 'package:board_generator_playground/src/models/models.dart';
 /// {@endtemplate}
 typedef CharacterMap = Map<Location, CharacterData>;
 
+/// {@template crossword}
 /// The board for the crossword puzzle.
+/// {@endtemplate}
 class Crossword {
+  /// {@macro crossword}
+  Crossword({
+    this.bounds,
+    this.largestWordLength = 18,
+    this.shortestWordLength = 3,
+  });
+
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
   /// The largest word length that can be added to the board.
-  static const largestWordLength = 18;
+  final int largestWordLength;
 
   /// The shortest word length that can be added to the board.
-  static const shortestWordLength = 3;
+  final int shortestWordLength;
+
+  /// The bounds of the board.
+  ///
+  /// If `null`, the board has no bounds. Meaning it can grow indefinitely in
+  /// horizontally and vertically.
+  final Bounds? bounds;
 
   /// The origin of the coordinate system.
   ///
@@ -316,7 +331,19 @@ class Crossword {
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
     var maximumLength = 1;
-    for (var i = 1; i < largestWordLength; i++) {
+
+    for (var i = 1; i <= largestWordLength; i++) {
+      final end = switch (candidate.direction) {
+        Direction.across => candidate.location.shift(x: i),
+        Direction.down => candidate.location.shift(y: i),
+      };
+      if (bounds != null && !bounds!.contains(end)) {
+        for (var k = i + 1; k <= largestWordLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+
       final words = {
         ...wordsAt(
           switch (candidate.direction) {
@@ -330,11 +357,12 @@ class Crossword {
             Direction.down => candidate.location.shift(x: -1, y: i),
           },
         ),
+        ...wordsAt(end),
       };
 
       final hasMatchingDirection =
           words.any((word) => word.direction == candidate.direction);
-      final hasWordOfMinimumLength = i < shortestWordLength - 1;
+      final hasWordOfMinimumLength = i < shortestWordLength;
       if (hasMatchingDirection && hasWordOfMinimumLength) {
         return null;
       } else if (hasMatchingDirection) {
@@ -345,8 +373,23 @@ class Crossword {
       }
 
       if (words.any(overlaps)) {
+        final location = switch (candidate.direction) {
+          Direction.across => candidate.location.shift(x: i),
+          Direction.down => candidate.location.shift(y: i),
+        };
+
+        if (characterMap[location] == null) {
+          for (var k = i; k <= largestWordLength; k++) {
+            invalidLengths.add(k);
+          }
+          break;
+        }
+
         invalidLengths.add(i);
-      } else if (i > maximumLength) {
+        continue;
+      }
+
+      if (i > maximumLength) {
         maximumLength = i;
       }
     }
@@ -382,17 +425,24 @@ class Crossword {
   /// --A--
   /// --N--
   /// ```
-  String toPrettyString() {
+  String toPrettyString({
+    Location? topLeft,
+    Location? bottomRight,
+  }) {
     final stringBuffer = StringBuffer();
 
-    final minX =
-        characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
-    final maxX =
-        characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
-    final minY =
-        characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
-    final maxY =
-        characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX = topLeft != null
+        ? topLeft.x
+        : characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX = bottomRight != null
+        ? bottomRight.x
+        : characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+    final minY = topLeft != null
+        ? topLeft.y
+        : characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY = bottomRight != null
+        ? bottomRight.y
+        : characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
 
     final width = maxX - minX + 1;
 

@@ -48,6 +48,21 @@ class ConstrainedWordCandidate extends WordCandidate {
   /// a 'b'.
   final Map<int, String> constraints;
 
+  /// Whether the word satisfies the constraints.
+  bool satisfies(String word) {
+    if (invalidLengths.contains(word.length)) {
+      return false;
+    }
+
+    for (final i in constraints.keys.where((index) => index < word.length)) {
+      if (word[i].toLowerCase() != constraints[i]!.toLowerCase()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   @override
   List<Object?> get props => [
         ...super.props,
