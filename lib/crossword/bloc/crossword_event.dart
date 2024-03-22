@@ -47,3 +47,12 @@ class BoardLoadingInfoFetched extends CrosswordEvent {
   @override
   List<Object?> get props => [];
 }
+
+class InitialsSelected extends CrosswordEvent {
+  const InitialsSelected(this.initials);
+
+  final List<String> initials;
+
+  @override
+  List<Object> get props => [initials];
+}

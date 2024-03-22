@@ -21,7 +21,7 @@ class GameIntroState extends Equatable {
     this.isIntroCompleted = false,
     this.solvedWords = 0,
     this.totalWords = 0,
-    this.selectedMascot,
+    this.selectedMascot = Mascots.dash,
     this.initials = const ['', '', ''],
     this.initialsBlacklist = const [],
     this.initialsStatus = InitialsFormStatus.initial,
@@ -31,7 +31,7 @@ class GameIntroState extends Equatable {
   final bool isIntroCompleted;
   final int solvedWords;
   final int totalWords;
-  final Mascots? selectedMascot;
+  final Mascots selectedMascot;
   final List<String> initials;
   final List<String> initialsBlacklist;
   final InitialsFormStatus initialsStatus;

@@ -797,5 +797,24 @@ void main() {
         ],
       );
     });
+    group('InitialsSelected', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits crossword loaded state with the initials entered '
+        'when InitialsSelected is added',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
+        act: (bloc) => bloc.add(InitialsSelected(['A', 'B', 'C'])),
+        expect: () => <CrosswordState>[
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {},
+            initials: 'ABC',
+          ),
+        ],
+      );
+    });
   });
 }

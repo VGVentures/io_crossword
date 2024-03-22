@@ -21,6 +21,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<RenderModeSwitched>(_onRenderModeSwitched);
     on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
+    on<InitialsSelected>(_onInitialsSelected);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -165,6 +166,17 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       }
     } catch (e) {
       emit(CrosswordError(e.toString()));
+    }
+  }
+
+  Future<void> _onInitialsSelected(
+    InitialsSelected event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).copyWith(initials: event.initials.join()),
+      );
     }
   }
 }
