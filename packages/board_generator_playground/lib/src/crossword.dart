@@ -329,8 +329,33 @@ class Crossword {
   /// scenarios are yet not properly considered, it is something we would like
   /// to contemplate in the future and improve to achieve denser boards.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
+    final invalidLengths = _lengthConstraints(candidate);
+    if (invalidLengths == null) return null;
+
+    final validLengths = {
+      for (var i = 1; i <= largestWordLength; i++)
+        if (!invalidLengths.contains(i)) i,
+    };
+
+    // If there are no valid lengths, the constraint cannot be satisfied.
+    if (validLengths.isEmpty) return null;
+
+    final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+    final characterConstraints = _characterConstraints(
+      candidate,
+      largestLength: largestLength,
+    );
+
+    return ConstrainedWordCandidate(
+      invalidLengths: invalidLengths,
+      location: candidate.location,
+      direction: candidate.direction,
+      constraints: characterConstraints,
+    );
+  }
+
+  Set<int>? _lengthConstraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
-    var maximumLength = 1;
 
     for (var i = 1; i <= largestWordLength; i++) {
       final end = switch (candidate.direction) {
@@ -388,14 +413,17 @@ class Crossword {
         invalidLengths.add(i);
         continue;
       }
-
-      if (i > maximumLength) {
-        maximumLength = i;
-      }
     }
 
+    return invalidLengths;
+  }
+
+  Map<int, String> _characterConstraints(
+    WordCandidate candidate, {
+    required int largestLength,
+  }) {
     final constraints = <int, String>{};
-    for (var i = 0; i < maximumLength; i++) {
+    for (var i = 0; i < largestLength; i++) {
       final location = switch (candidate.direction) {
         Direction.across => candidate.location.shift(x: i),
         Direction.down => candidate.location.shift(y: i),
@@ -406,12 +434,7 @@ class Crossword {
       }
     }
 
-    return ConstrainedWordCandidate(
-      invalidLengths: invalidLengths,
-      location: candidate.location,
-      direction: candidate.direction,
-      constraints: constraints,
-    );
+    return constraints;
   }
 
   /// A pretty string representation of the board.
