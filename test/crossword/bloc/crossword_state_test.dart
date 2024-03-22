@@ -248,7 +248,6 @@ void main() {
       test('copyWith returns an instance with new initials', () {
         final state = CrosswordLoaded(
           sectionSize: 400,
-          sections: const {},
         );
         final newState = state.copyWith(initials: 'GIO');
         expect(newState.initials, equals('GIO'));
