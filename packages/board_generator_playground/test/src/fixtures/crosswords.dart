@@ -12,19 +12,13 @@ import 'package:board_generator_playground/src/models/models.dart';
 ///  1  -  -  A  -  -
 ///  2  -  -  N  -  -
 /// ```
-///
-/// ```
-///    -18 -17 -16 -15 -14 -13 -12 -11 -10 -9 -8 -7 -6 -5 -4 -3 -2 -1  0  1  2
-/// -2  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  A  L  B  U  S
-/// -1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  E  -  -
-///  0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  H  -  -
-///  1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  A  -  -
-///  2  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  N  -  -
-/// ```
 /// {@endtemplate}
 class Crossword1 extends Crossword {
   /// {@macro crossword1}
-  Crossword1() {
+  Crossword1({
+    super.bounds,
+    super.largestWordLength,
+  }) {
     add(
       WordEntry(
         word: 'behan',

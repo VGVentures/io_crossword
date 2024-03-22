@@ -10,16 +10,20 @@ typedef CharacterMap = Map<Location, CharacterData>;
 /// {@endtemplate}
 class Crossword {
   /// {@macro crossword}
-  Crossword({this.bounds});
+  Crossword({
+    this.bounds,
+    this.largestWordLength = 18,
+    this.shortestWordLength = 3,
+  });
 
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
   /// The largest word length that can be added to the board.
-  static const largestWordLength = 18;
+  final int largestWordLength;
 
   /// The shortest word length that can be added to the board.
-  static const shortestWordLength = 3;
+  final int shortestWordLength;
 
   /// The bounds of the board.
   ///
@@ -327,7 +331,19 @@ class Crossword {
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final invalidLengths = <int>{};
     var maximumLength = 1;
+
     for (var i = 1; i <= largestWordLength; i++) {
+      final end = switch (candidate.direction) {
+        Direction.across => candidate.location.shift(x: i),
+        Direction.down => candidate.location.shift(y: i),
+      };
+      if (bounds != null && !bounds!.contains(end)) {
+        for (var k = i + 1; k <= largestWordLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+
       final words = {
         ...wordsAt(
           switch (candidate.direction) {
@@ -341,12 +357,7 @@ class Crossword {
             Direction.down => candidate.location.shift(x: -1, y: i),
           },
         ),
-        ...wordsAt(
-          switch (candidate.direction) {
-            Direction.across => candidate.location.shift(x: i),
-            Direction.down => candidate.location.shift(y: i),
-          },
-        ),
+        ...wordsAt(end),
       };
 
       final hasMatchingDirection =
@@ -372,10 +383,13 @@ class Crossword {
             invalidLengths.add(k);
           }
           break;
-        } else {
-          invalidLengths.add(i);
         }
-      } else if (i > maximumLength) {
+
+        invalidLengths.add(i);
+        continue;
+      }
+
+      if (i > maximumLength) {
         maximumLength = i;
       }
     }
