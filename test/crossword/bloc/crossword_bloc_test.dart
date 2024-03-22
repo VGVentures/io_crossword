@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:bloc_test/bloc_test.dart';
@@ -138,9 +138,6 @@ void main() {
 
       blocTest<CrosswordBloc, CrosswordState>(
         'selects a word in the current section',
-        setUp: () {
-          when(() => word.id).thenReturn('word-id');
-        },
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -163,7 +160,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, 0): BoardSection(
@@ -181,7 +178,6 @@ void main() {
       blocTest<CrosswordBloc, CrosswordState>(
         'selects a word from the border section in the horizontal axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
         build: () => CrosswordBloc(
@@ -213,7 +209,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, 0): BoardSection(
@@ -238,7 +234,6 @@ void main() {
       blocTest<CrosswordBloc, CrosswordState>(
         'selects a word from the border section in the vertical axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
         build: () => CrosswordBloc(
@@ -270,7 +265,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, 0): BoardSection(
@@ -296,7 +291,6 @@ void main() {
         'selects a word starting two sections from current '
         'in the horizontal axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
         build: () => CrosswordBloc(
@@ -335,7 +329,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, 0): BoardSection(
@@ -368,7 +362,6 @@ void main() {
         'selects a word starting two sections from current '
         'in the vertical axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
         build: () => CrosswordBloc(
@@ -407,7 +400,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, 0): BoardSection(
@@ -440,7 +433,6 @@ void main() {
         'selects a word from the previous section '
         'in the negative horizontal axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
         build: () => CrosswordBloc(
@@ -472,7 +464,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (-1, 0),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (-1, 0): BoardSection(
@@ -498,7 +490,6 @@ void main() {
         'selects a word from the previous section '
         'in the negative vertical axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
         build: () => CrosswordBloc(
@@ -530,7 +521,7 @@ void main() {
             sectionSize: sectionSize,
             selectedWord: WordSelection(
               section: (0, -1),
-              wordId: 'word-id',
+              word: word,
             ),
             sections: {
               (0, -1): BoardSection(
@@ -556,7 +547,6 @@ void main() {
         'throws exception when does not find the selected word from more than '
         'or equal to three previous section in the horizontal axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
         build: () => CrosswordBloc(
@@ -610,7 +600,6 @@ void main() {
         'throws exception when does not find the selected word from more than '
         'or equal to three previous section in the vertical axis',
         setUp: () {
-          when(() => word.id).thenReturn('word-id');
           when(() => word.axis).thenReturn(Axis.vertical);
         },
         build: () => CrosswordBloc(
@@ -656,6 +645,30 @@ void main() {
             (error) => error.toString(),
             'description',
             'Exception: Word not found in crossword',
+          ),
+        ],
+      );
+    });
+
+    group('WordUnselected', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits state with word selected as null when WordUnselected is added',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        seed: () => CrosswordLoaded(
+          sectionSize: sectionSize,
+          selectedWord: WordSelection(
+            section: (0, 0),
+            word: _MockWord(),
+          ),
+        ),
+        act: (bloc) => bloc.add(WordUnselected()),
+        expect: () => <CrosswordState>[
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            selectedWord: null,
           ),
         ],
       );

@@ -3,6 +3,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -26,6 +27,7 @@ void main() {
         );
       });
     });
+
     group('WordSelected', () {
       test('can be instantiated', () {
         expect(WordSelected((0, 0), _MockWord()), isA<WordSelected>());
@@ -51,6 +53,16 @@ void main() {
             WordSelected((0, 1), firstWord),
           ),
         );
+      });
+    });
+
+    group('WordUnselected', () {
+      test('can be instantiated', () {
+        expect(WordUnselected(), isA<WordUnselected>());
+      });
+
+      test('supports value comparisons', () {
+        expect(WordUnselected(), equals(WordUnselected()));
       });
     });
 
