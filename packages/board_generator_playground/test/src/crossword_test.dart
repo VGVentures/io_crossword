@@ -982,6 +982,59 @@ void main() {
           ),
         );
       });
+
+      test('returns a pretty string for the crossword', () {
+        final board = Crossword1();
+
+        final prettyString = board.toPrettyString(
+          topLeft: Location(x: -2, y: -1),
+        );
+
+        expect(
+          prettyString,
+          equals(
+            '--E--\n'
+            '--H--\n'
+            '--A--\n'
+            '--N--\n',
+          ),
+        );
+      });
+
+      test('returns a pretty string for the crossword', () {
+        final board = Crossword1();
+
+        final prettyString = board.toPrettyString(
+          topLeft: Location(x: -1, y: -1),
+          bottomRight: Location(x: 1, y: 1),
+        );
+
+        expect(
+          prettyString,
+          equals(
+            '-E-\n'
+            '-H-\n'
+            '-A-\n',
+          ),
+        );
+      });
+
+      test('returns a pretty string for the crossword', () {
+        final board = Crossword1();
+
+        final prettyString = board.toPrettyString(
+          bottomRight: Location(x: 1, y: 1),
+        );
+        expect(
+          prettyString,
+          equals(
+            'ALBU\n'
+            '--E-\n'
+            '--H-\n'
+            '--A-\n',
+          ),
+        );
+      });
     });
   });
 }
