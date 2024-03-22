@@ -30,8 +30,8 @@ void main() {
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
 
-      widget = MaterialApp(
-        home: BlocProvider.value(
+      widget = Scaffold(
+        body: BlocProvider.value(
           value: crosswordBloc,
           child: WordFocusedView(),
         ),
@@ -79,8 +79,8 @@ void main() {
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
 
-      widget = MaterialApp(
-        home: BlocProvider.value(
+      widget = Scaffold(
+        body: BlocProvider.value(
           value: crosswordBloc,
           child: WordFocusedDesktopView(
             WordSelection(section: (0, 0), word: _FakeWord()),

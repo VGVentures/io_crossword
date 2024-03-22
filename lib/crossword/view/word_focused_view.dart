@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WordFocusedView extends StatelessWidget {
@@ -27,6 +28,8 @@ class WordFocusedDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
@@ -65,7 +68,7 @@ class WordFocusedDesktopView extends StatelessWidget {
             const SizedBox(height: 8),
             const Spacer(),
             Text(
-              'Type to answer',
+              l10n.typeToAnswer,
               style: IoCrosswordTextStyles.bodyLG.copyWith(
                 color: IoCrosswordColors.accessibleGrey,
               ),
@@ -79,7 +82,7 @@ class WordFocusedDesktopView extends StatelessWidget {
                   child: PrimaryButton(
                     // TODO(any): Get hint
                     onPressed: () {}, // coverage:ignore-line
-                    label: 'Get Hint',
+                    label: l10n.getHint,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -87,7 +90,7 @@ class WordFocusedDesktopView extends StatelessWidget {
                   child: PrimaryButton(
                     // TODO(any): Submit answer
                     onPressed: () {}, // coverage:ignore-line
-                    label: 'Submit',
+                    label: l10n.submit,
                   ),
                 ),
               ],
