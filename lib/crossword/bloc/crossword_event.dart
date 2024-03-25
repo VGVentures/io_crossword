@@ -63,12 +63,3 @@ class InitialsSelected extends CrosswordEvent {
   @override
   List<Object> get props => [initials];
 }
-
-class AnswerFieldUpdated extends CrosswordEvent {
-  const AnswerFieldUpdated(this.value);
-
-  final String value;
-
-  @override
-  List<Object> get props => [value];
-}

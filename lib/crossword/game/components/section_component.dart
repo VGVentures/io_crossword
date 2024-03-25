@@ -63,26 +63,27 @@ class SectionKeyboardListener extends PositionComponent
         KeyboardHandler,
         HasGameRef<CrosswordGame>,
         ParentIsA<SectionComponent> {
-  var word = '';
+  SectionKeyboardListener(
+    this.index, {
+    super.position,
+  });
+
+  final (String, Color, (int, int)) index;
+  String word = '';
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
     if (event.character != null) {
-      print('event: ${event.character}');
       word += event.character!;
     }
 
     if (event.logicalKey.keyId == 0x100000008) {
-      print('event: backSpace');
       word = word.substring(0, word.length - 1);
     }
-    print(word);
 
     final wordCharacters = word.toUpperCase().characters;
-    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
 
-    final wordIndexStart = spriteBatch.length;
     for (var c = 0; c < wordCharacters.length; c++) {
       late Rect rect;
       // A bug in coverage is preventing this block from being covered
@@ -97,14 +98,11 @@ class SectionKeyboardListener extends PositionComponent
       );
       // coverage:ignore-end
 
-      final offset = Vector2(
-        x * CrosswordGame.cellSize.toDouble(),
-        y * CrosswordGame.cellSize.toDouble(),
+      parent.spriteBatchComponent?.spriteBatch?.replace(
+        index.$3.$1 + c,
+        source: rect,
       );
-
-      parent.spriteBatchComponent?.spriteBatch?.replace(c, source: rect);
     }
-
     return false;
   }
 }
@@ -374,21 +372,19 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       );
     }
 
+    children.whereType<SectionKeyboardListener>().forEach(
+          (e) => e.removeFromParent(),
+        );
     if (newSection == index &&
         newWord != null &&
         _wordIndex.containsKey(newWord)) {
-      add(SectionKeyboardListener());
-      indexes.add(
-        (
-          newWord,
-          Colors.white,
-          _wordIndex[newWord]!,
-        ),
+      final newIndex = (
+        newWord,
+        Colors.white,
+        _wordIndex[newWord]!,
       );
-    } else {
-      children.whereType<SectionKeyboardListener>().forEach(
-            (e) => e.removeFromParent(),
-          );
+      add(SectionKeyboardListener(newIndex));
+      indexes.add(newIndex);
     }
 
     for (final index in indexes) {
