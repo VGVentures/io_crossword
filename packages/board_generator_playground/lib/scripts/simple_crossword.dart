@@ -54,7 +54,7 @@ void main({
             direction: initialWordEntry.direction == Direction.across
                 ? Direction.down
                 : Direction.across,
-          )
+          ),
       },
     );
 
