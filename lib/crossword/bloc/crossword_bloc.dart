@@ -23,6 +23,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
     on<InitialsSelected>(_onInitialsSelected);
+    on<AnswerFieldUpdated>(_onAnswerFieldUpdated);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -191,4 +192,9 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       );
     }
   }
+
+  void _onAnswerFieldUpdated(
+    AnswerFieldUpdated event,
+    Emitter<CrosswordState> emit,
+  ) {}
 }

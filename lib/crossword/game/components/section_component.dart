@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Axis, Image;
+import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
@@ -50,6 +51,57 @@ class SectionTapController extends PositionComponent
         }
       }
     }
+  }
+}
+
+class SectionKeyboardListener extends PositionComponent
+    with
+        KeyboardHandler,
+        HasGameRef<CrosswordGame>,
+        ParentIsA<SectionComponent> {
+  var word = '';
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
+    if (event.character != null) {
+      print('event: ${event.character}');
+      word += event.character!;
+    }
+
+    if (event.logicalKey.keyId == 0x100000008) {
+      print('event: backSpace');
+      word = word.substring(0, word.length - 1);
+    }
+    print(word);
+
+    final wordCharacters = word.toUpperCase().characters;
+    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
+
+    final wordIndexStart = spriteBatch.length;
+    for (var c = 0; c < wordCharacters.length; c++) {
+      late Rect rect;
+      // A bug in coverage is preventing this block from being covered
+      // coverage:ignore-start
+      final char = wordCharacters.elementAt(c);
+      final charIndex = char.codeUnitAt(0) - 65;
+      rect = Rect.fromLTWH(
+        (charIndex * CrosswordGame.cellSize).toDouble(),
+        0,
+        CrosswordGame.cellSize.toDouble(),
+        CrosswordGame.cellSize.toDouble(),
+      );
+      // coverage:ignore-end
+
+      final offset = Vector2(
+        x * CrosswordGame.cellSize.toDouble(),
+        y * CrosswordGame.cellSize.toDouble(),
+      );
+
+      parent.spriteBatchComponent?.spriteBatch?.replace(c, source: rect);
+    }
+
+    return false;
   }
 }
 
@@ -321,6 +373,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     if (newSection == index &&
         newWord != null &&
         _wordIndex.containsKey(newWord)) {
+      add(SectionKeyboardListener());
       indexes.add(
         (
           newWord,
@@ -328,6 +381,10 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
           _wordIndex[newWord]!,
         ),
       );
+    } else {
+      children.whereType<SectionKeyboardListener>().forEach(
+            (e) => e.removeFromParent(),
+          );
     }
 
     for (final index in indexes) {
