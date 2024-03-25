@@ -349,12 +349,63 @@ void main() {
             ),
           );
 
-          await Future.microtask(() {});
           await game.ready();
           final listeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(listeners.length, equals(1));
           expect(listeners.first.index.$1, targetWord.id);
+        },
+      );
+
+      testWithGame(
+        'adds KeyboardListener component and keeps only one listener when'
+        ' changing selected word',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await game.ready();
+
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+          expect(listeners.length, equals(1));
+          expect(listeners.first.index.$1, targetWord.id);
+
+          final targetWord2 = boardSection.words.elementAt(1);
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord2,
+              ),
+            ),
+          );
+
+          await game.ready();
+
+          final newListeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+          expect(newListeners.length, equals(1));
+          expect(newListeners.first.index.$1, targetWord2.id);
         },
       );
     });
