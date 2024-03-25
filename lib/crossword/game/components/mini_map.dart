@@ -21,10 +21,16 @@ class MiniMap extends RectangleComponent
   bool expanded = false;
 
   late Vector2 _mapImageSize;
-  late Vector2 _reticleSize;
-  late Vector2 _reticlePosition;
+  Vector2 _reticleSize = Vector2.zero();
+  Vector2 _reticlePosition = Vector2.zero();
 
-  void calculateReticleSize() {
+  void calculatePositioning() {
+    if (expanded) {
+      _expandedPosition();
+    } else {
+      _pinnedPosition();
+    }
+
     final gameSize = gameRef.size /
         (CrosswordGame.cellSize.toDouble() * gameRef.camera.viewfinder.zoom);
 
@@ -49,7 +55,7 @@ class MiniMap extends RectangleComponent
   }
 
   void _updateRecticle() {
-    calculateReticleSize();
+    calculatePositioning();
     reticle
       ..size = _reticleSize
       ..position = _reticlePosition;
@@ -86,6 +92,14 @@ class MiniMap extends RectangleComponent
   Vector2? _lastCameraPosition;
   Vector2? _lastGameSize;
   double? _lastZoom;
+  bool _lastExpanded = false;
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+
+    _updateRecticle();
+  }
 
   @override
   void update(double dt) {
@@ -93,56 +107,51 @@ class MiniMap extends RectangleComponent
 
     if (_lastCameraPosition != gameRef.camera.viewfinder.position ||
         _lastGameSize != gameRef.size ||
-        _lastZoom != gameRef.camera.viewfinder.zoom) {
+        _lastZoom != gameRef.camera.viewfinder.zoom ||
+        _lastExpanded != expanded) {
       _updateRecticle();
       _lastCameraPosition = gameRef.camera.viewfinder.position;
       _lastGameSize = gameRef.size;
       _lastZoom = gameRef.camera.viewfinder.zoom;
+      _lastExpanded = expanded;
     }
   }
 
-  //void _zoom(double zoom) {
-  //  _mapImageSize += Vector2.all(zoom * miniMapSize);
-  //  map.size = _mapImageSize;
-  //}
+  void _pinnedPosition() {
+    position = Vector2(
+      gameRef.size.x - miniMapSize - 40,
+      40,
+    );
+    size = Vector2.all(miniMapSize);
+    map.size = _mapImageSize;
+    firstChild<ClipComponent>()?.size = size;
+
+    firstChild<MiniMapButton>()?.position =
+        Vector2(miniMapSize - 40, miniMapSize - 40);
+  }
+
+  void _expandedPosition() {
+    final newTentativeSize = gameRef.size - Vector2.all(40);
+    final newSize = Vector2.all(
+      math.min(newTentativeSize.x, newTentativeSize.y),
+    );
+
+    final newPosition = Vector2(
+      gameRef.size.x / 2 - newSize.x / 2,
+      gameRef.size.y / 2 - newSize.y / 2,
+    );
+
+    position = newPosition;
+    size = newSize;
+    firstChild<ClipComponent>()?.size = newSize;
+    map.size = newSize;
+
+    firstChild<MiniMapButton>()?.position =
+        Vector2(newSize.x - 40, newSize.y - 40);
+  }
 
   void _expand() {
-    if (expanded) {
-      position = Vector2(
-        gameRef.size.x - miniMapSize - 40,
-        40,
-      );
-      size = Vector2.all(miniMapSize);
-      map.size = _mapImageSize;
-      firstChild<ClipComponent>()?.size = size;
-      expanded = false;
-
-      firstChild<MiniMapZoomButton>()?.position =
-          Vector2(miniMapSize - 40, miniMapSize - 40);
-
-      _updateRecticle();
-    } else {
-      final newTentativeSize = gameRef.size - Vector2.all(40);
-      final newSize = Vector2.all(
-        math.min(newTentativeSize.x, newTentativeSize.y),
-      );
-
-      final newPosition = Vector2(
-        gameRef.size.x / 2 - newSize.x / 2,
-        gameRef.size.y / 2 - newSize.y / 2,
-      );
-
-      position = newPosition;
-      size = newSize;
-      firstChild<ClipComponent>()?.size = newSize;
-      map.size = newSize;
-      expanded = true;
-
-      firstChild<MiniMapZoomButton>()?.position =
-          Vector2(newSize.x - 40, newSize.y - 40);
-
-      _updateRecticle();
-    }
+    expanded = !expanded;
   }
 
   @override
@@ -154,7 +163,6 @@ class MiniMap extends RectangleComponent
     mapImage = await gameRef.images.load('full_render.png');
     _mapImageSize = Vector2.all(miniMapSize);
 
-    calculateReticleSize();
     size = Vector2.all(miniMapSize);
 
     await addAll([
@@ -175,25 +183,20 @@ class MiniMap extends RectangleComponent
           ..style = PaintingStyle.stroke,
         size: _reticleSize,
       ),
-      //MiniMapZoomButton(
-      //  position: Vector2(miniMapSize - 40, miniMapSize - 40),
-      //  paint: Paint()..color = const Color(0xFFFF0000),
-      //  onTap: () {
-      //    _zoom(0.01);
-      //  },
-      //),
-      MiniMapZoomButton(
+      MiniMapButton(
         position: Vector2(miniMapSize - 40, miniMapSize - 40),
         paint: Paint()..color = const Color(0xFF0000FF),
         onTap: _expand,
       ),
     ]);
+
+    calculatePositioning();
   }
 }
 
-class MiniMapZoomButton extends RectangleComponent
+class MiniMapButton extends RectangleComponent
     with ParentIsA<MiniMap>, TapCallbacks {
-  MiniMapZoomButton({
+  MiniMapButton({
     required this.onTap,
     super.position,
     super.paint,
