@@ -444,8 +444,8 @@ class Crossword {
       // the candidate and the crossed location.
       final end = span[i];
       if (crossesAt(end)) {
-        for (var k = i - 1; k <= largestLength; k++) {
-          invalidLengths.add(k + 1);
+        for (var k = i; k < largestLength; k++) {
+          invalidLengths.add(k);
         }
         break;
       }

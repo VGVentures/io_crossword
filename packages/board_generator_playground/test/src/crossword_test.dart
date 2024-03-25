@@ -755,21 +755,6 @@ void main() {
             final constraints = board.constraints(candidate);
             expect(constraints, isNull);
           });
-
-          test('and there is no possible length', () {
-            final board = Crossword9();
-
-            final candidate = WordCandidate(
-              start: Location(x: -6, y: 0),
-              direction: Direction.across,
-            );
-
-            final constraints = board.constraints(candidate);
-            expect(
-              constraints,
-              equals(null),
-            );
-          });
         });
 
         test('when disconnected', () {
@@ -941,6 +926,29 @@ void main() {
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'e', 2: 'n'},
+                ),
+              ),
+            );
+          });
+
+          test('before it overrides', () {
+            final board = Crossword9();
+
+            final candidate = WordCandidate(
+              start: Location(x: -6, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths:
+                      List.generate(15, (index) => 4 + index).toSet(),
+                  start: candidate.start,
+                  direction: candidate.direction,
+                  constraints: {0: 'n', 2: 'd'},
                 ),
               ),
             );
