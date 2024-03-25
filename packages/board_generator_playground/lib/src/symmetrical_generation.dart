@@ -45,7 +45,7 @@ void main({
       const Location(x: 0, y: 1).to(initialWordEntry.end),
     );
 
-  while (placedWords < 500) {
+  while (placedWords < 100000) {
     if (area.isEmpty) {
       log('No more locations to place words');
       break;
@@ -71,14 +71,22 @@ void main({
     final constrainedWordCandidate = crossword.constraints(wordCandidate);
     if (constrainedWordCandidate == null) continue;
 
-    // TODO(Ayad): Don't let add the same name in bottom and top
+    // TODO(Ayad): constrainedWordCandidate.invalidLengths will be changed to
+    //  valid lengths so this can be removed
+    final validLengths = <int>[];
 
-    // TODO(Ayad): This will be change to valid length and we just need to check
-    // for when its empty because we gone through all the valid checks
-    while (constrainedWordCandidate.invalidLengths.length < 15) {
+    for (var i = wordPool.shortestWordLength;
+        i < wordPool.longestWordLength;
+        i++) {
+      if (!constrainedWordCandidate.invalidLengths.contains(i)) {
+        validLengths.add(i);
+      }
+    }
+
+    while (validLengths.isNotEmpty) {
       final newWord = wordPool.firstMatch(constrainedWordCandidate);
 
-      if (newWord == null) continue;
+      if (newWord == null) break;
 
       final newWordEntry = WordEntry(
         word: newWord,
@@ -98,15 +106,17 @@ void main({
       if (symmetricalConstrainedWordCandidate == null) {
         final length = newWord.length;
         constrainedWordCandidate.invalidLengths.add(length);
+        validLengths.removeWhere((value) => value == newWord.length);
         continue;
       }
-      final symmetricalNewWord = wordPool.firstMatchByPosition(
+      final symmetricalNewWord = wordPool.firstMatchByWordLength(
         symmetricalConstrainedWordCandidate,
         newWord.length,
         newWord,
       );
       if (symmetricalNewWord == null) {
         constrainedWordCandidate.invalidLengths.add(newWord.length);
+        validLengths.removeWhere((value) => value == newWord.length);
         continue;
       }
 
@@ -120,6 +130,7 @@ void main({
         // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
         print('pass 2');
         constrainedWordCandidate.invalidLengths.add(newWord.length);
+        validLengths.removeWhere((value) => value == newWord.length);
         continue;
       }
 
@@ -127,6 +138,7 @@ void main({
         // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
 
         constrainedWordCandidate.invalidLengths.add(newWord.length);
+        validLengths.removeWhere((value) => value == newWord.length);
 
         print('pass');
         print(symmetricalNewWord);
@@ -140,8 +152,6 @@ void main({
         ..remove(newWord)
         ..remove(symmetricalNewWord);
       area.addAll(location.to(newWordEntry.end));
-
-      print(placedWords);
 
       placedWords += 2;
       if (placedWords % 200 == 0) {
