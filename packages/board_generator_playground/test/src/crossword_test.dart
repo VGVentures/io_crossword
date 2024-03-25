@@ -688,6 +688,18 @@ void main() {
             final constraints = board.constraints(candidate);
             expect(constraints, isNull);
           });
+
+          test('and sides are used', () {
+            final board = Crossword5();
+
+            final candidate = WordCandidate(
+              start: Location(x: -1, y: 2),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
         });
 
         group('when going across', () {
@@ -725,6 +737,18 @@ void main() {
 
             final candidate = WordCandidate(
               start: Location(x: 1, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
+          test('and sides are used', () {
+            final board = Crossword5();
+
+            final candidate = WordCandidate(
+              start: Location(x: 2, y: -1),
               direction: Direction.across,
             );
 
