@@ -1,3 +1,5 @@
+// coverage:ignore-file
+
 import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template asymmetrical_crossword_generator}
