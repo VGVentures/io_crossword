@@ -72,7 +72,7 @@ void main({
     if (constrainedWordCandidate == null) continue;
 
     // TODO(Ayad): constrainedWordCandidate.invalidLengths will be changed to
-    //  valid lengths so this can be removed
+    //  valid lengths so this can be removed once that is ready
     final validLengths = <int>[];
     for (var i = wordPool.shortestWordLength;
         i < wordPool.longestWordLength;
