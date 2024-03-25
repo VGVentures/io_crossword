@@ -400,7 +400,7 @@ class Crossword {
       for (var i = 0; i < largestLength; i++) {
         final location = span[i];
         if (!bounds.contains(location)) {
-          for (var k = i; k <= largestLength; k++) {
+          for (var k = i; k < largestLength; k++) {
             invalidLengths.add(k + 1);
           }
         }
