@@ -18,12 +18,15 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockBoardRenderer extends Mock implements BoardRenderer {}
 
+class _MockUri extends Mock implements Uri {}
+
 void main() {
   group('GET /board/full_render', () {
     late RequestContext requestContext;
     late Request request;
     late CrosswordRepository crosswordRepository;
     late BoardRenderer boardRenderer;
+    late Uri uri;
 
     setUp(() {
       requestContext = _MockRequestContext();
@@ -32,6 +35,10 @@ void main() {
       boardRenderer = _MockBoardRenderer();
 
       when(() => request.method).thenReturn(HttpMethod.get);
+
+      uri = _MockUri();
+      when(() => request.uri).thenReturn(uri);
+      when(() => uri.queryParameters).thenReturn({});
       when(() => requestContext.read<BoardRenderer>())
           .thenReturn(boardRenderer);
       when(() => requestContext.request).thenReturn(request);
@@ -39,40 +46,79 @@ void main() {
           .thenReturn(crosswordRepository);
     });
 
+    final board1 = BoardSection(
+      id: '1',
+      position: const Point(1, 1),
+      size: 100,
+      words: [
+        Word(
+          position: const Point(1, 1),
+          axis: Axis.vertical,
+          answer: 'flutter',
+          clue: '',
+          hints: const [],
+          solvedTimestamp: null,
+        ),
+      ],
+      borderWords: const [],
+    );
+
+    final board2 = BoardSection(
+      id: '2',
+      position: const Point(2, 1),
+      size: 100,
+      words: [
+        Word(
+          position: const Point(2, 1),
+          axis: Axis.vertical,
+          answer: 'firebase',
+          clue: '',
+          hints: const [],
+          solvedTimestamp: null,
+        ),
+      ],
+      borderWords: const [],
+    );
+
     test('returns the image of the rendered board', () async {
-      final board1 = BoardSection(
-        id: '1',
-        position: const Point(1, 1),
-        size: 100,
-        words: [
-          Word(
-            position: const Point(1, 1),
-            axis: Axis.vertical,
-            answer: 'flutter',
-            clue: '',
-            hints: const [],
-            solvedTimestamp: null,
-          ),
-        ],
-        borderWords: const [],
+      when(crosswordRepository.listAllSections).thenAnswer(
+        (_) async => [board1, board2],
       );
 
-      final board2 = BoardSection(
-        id: '2',
-        position: const Point(2, 1),
-        size: 100,
-        words: [
-          Word(
-            position: const Point(2, 1),
-            axis: Axis.vertical,
-            answer: 'firebase',
-            clue: '',
-            hints: const [],
-            solvedTimestamp: null,
-          ),
-        ],
-        borderWords: const [],
-      );
+      when(
+        () => boardRenderer.renderBoardWireframe(
+          [
+            board1.words.first,
+            board2.words.first,
+          ],
+        ),
+      ).thenAnswer((_) async {
+        return Uint8List(0);
+      });
+
+      final response = await route.onRequest(requestContext);
+
+      expect(response.statusCode, HttpStatus.ok);
+    });
+
+    test('allow cell size and add letters parameters to be passed', () async {
+      when(() => uri.queryParameters).thenReturn({
+        'cellSize': '8',
+        'addLetters': 'true',
+      });
+
+      when(
+        () => boardRenderer.renderBoardWireframe(
+          [
+            board1.words.first,
+            board2.words.first,
+          ],
+          cellSize: 8,
+          addLetters: true,
+        ),
+      ).thenAnswer((_) async {
+        return Uint8List(0);
+      });
 
       when(crosswordRepository.listAllSections).thenAnswer(
         (_) async => [board1, board2],

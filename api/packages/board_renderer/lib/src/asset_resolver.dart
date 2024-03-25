@@ -23,7 +23,7 @@ mixin AssetResolver {
   Future<Uint8List> resolveWordImage();
 
   /// Resolves the font file.
-  Future<Uint8List> resolveFont() ;
+  Future<Uint8List> resolveFont();
 }
 
 /// A function that makes a GET request.

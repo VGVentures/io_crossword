@@ -93,6 +93,15 @@ typedef DecodePng = img.Image? Function(Uint8List data);
 /// [BoardRenderer].
 typedef ParseFont = BitmapFont Function(Uint8List);
 
+/// A function that renders a character in an image.
+typedef DrawChar = img.Image Function(
+  img.Image image,
+  String char, {
+  required img.BitmapFont font,
+  required int x,
+  required int y,
+});
+
 /// {@template board_renderer_failure}
 /// Exception thrown when a board rendering fails.
 /// {@endtemplate}
@@ -116,6 +125,7 @@ class BoardRenderer {
     CreateCommand createCommand = img.Command.new,
     CreateImage createImage = img.Image.new,
     DrawRect drawRect = img.drawRect,
+    DrawChar drawChar = img.drawChar,
     CompositeImage compositeImage = img.compositeImage,
     DecodePng decodePng = img.decodePng,
     ParseFont parseFont = BitmapFont.fromZip,
@@ -123,6 +133,7 @@ class BoardRenderer {
   })  : _createCommand = createCommand,
         _createImage = createImage,
         _drawRect = drawRect,
+        _drawChar = drawChar,
         _compositeImage = compositeImage,
         _decodePng = decodePng,
         _parseFont = parseFont,
@@ -131,6 +142,7 @@ class BoardRenderer {
   final CreateCommand _createCommand;
   final CreateImage _createImage;
   final DrawRect _drawRect;
+  final DrawChar _drawChar;
   final CompositeImage _compositeImage;
   final DecodePng _decodePng;
   final ParseFont _parseFont;
@@ -206,7 +218,7 @@ class BoardRenderer {
           final char = wordCharacters.elementAt(i);
           final s = String.fromCharCodes(char.codeUnits);
 
-          img.drawChar(
+          _drawChar(
             image,
             s,
             font: font,
