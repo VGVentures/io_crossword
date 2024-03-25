@@ -412,10 +412,11 @@ class Crossword {
     for (var i = 0; i < largestLength; i++) {
       // Invalidate those lengths that would make the candidate cross over
       // an already crossed location. Crosses act as barriers for the
-      // candidate, they can't be gone through.
+      // candidate, they can't be gone through. A gap must be left between
+      // the candidate and the crossed location.
       final end = span[i];
       if (crossesAt(end)) {
-        for (var k = i; k <= largestLength; k++) {
+        for (var k = i - 1; k <= largestLength; k++) {
           invalidLengths.add(k + 1);
         }
         break;
