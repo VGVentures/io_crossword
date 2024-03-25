@@ -379,29 +379,6 @@ class Crossword {
       return null;
     }
 
-    final surroundings = {
-      candidate.start.up(),
-      candidate.start.left(),
-      if (candidate.direction == Direction.across)
-        candidate.start.down()
-      else
-        candidate.start.right(),
-    };
-    if (surroundings
-        .map(wordsAt)
-        .expand((e) => e)
-        .where(
-          (word) =>
-              surroundings.contains(word.end) ||
-              surroundings.contains(word.start),
-        )
-        .isNotEmpty) {
-      // The candidate is trying to start but a word around it is ending or
-      // starting. Hence, the candidate would overlap with them, invalidating
-      // all its lengths.
-      return null;
-    }
-
     final invalidLengths = <int>{};
     var largestLength = largestWordLength;
     final validLengths = <int>{
@@ -440,11 +417,12 @@ class Crossword {
     for (var i = 0; i < largestLength; i++) {
       // Invalidate those lengths that would make the candidate cross over
       // an already crossed location. Crosses act as barriers for the
-      // candidate, they can't be gone through.
+      // candidate, they can't be gone through. A gap must be left between
+      // the candidate and the crossed location.
       final end = span[i];
       if (crossesAt(end)) {
         for (var k = i; k <= largestLength; k++) {
-          invalidLengths.add(k + 1);
+          invalidLengths.add(k);
         }
         break;
       }
