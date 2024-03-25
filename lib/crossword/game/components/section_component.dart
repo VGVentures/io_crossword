@@ -5,8 +5,10 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Axis, Image;
+import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
 
 class SectionTapController extends PositionComponent
@@ -54,6 +56,44 @@ class SectionTapController extends PositionComponent
         }
       }
     }
+  }
+}
+
+class SectionKeyboardHandler extends PositionComponent
+    with
+        KeyboardHandler,
+        HasGameRef<CrosswordGame>,
+        ParentIsA<SectionComponent> {
+  SectionKeyboardHandler(
+    this.index, {
+    super.position,
+  });
+
+  final (String, Color, (int, int)) index;
+  String word = '';
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
+    if (event.character != null) {
+      word += event.character!;
+    }
+
+    if (event.logicalKey == LogicalKeyboardKey.backspace) {
+      word = word.substring(0, word.length - 1);
+    }
+
+    final wordCharacters = word.toUpperCase().characters;
+
+    for (var c = 0; c < wordCharacters.length; c++) {
+      final rect = wordCharacters.getCharacterRectangle(c);
+
+      parent.spriteBatchComponent?.spriteBatch?.replace(
+        index.$3.$1 + c,
+        source: rect,
+      );
+    }
+    return false;
   }
 }
 
@@ -256,14 +296,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         if (word.solvedTimestamp != null) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
-          final char = wordCharacters.elementAt(c);
-          final charIndex = char.codeUnitAt(0) - 65;
-          rect = Rect.fromLTWH(
-            (charIndex * CrosswordGame.cellSize).toDouble(),
-            0,
-            CrosswordGame.cellSize.toDouble(),
-            CrosswordGame.cellSize.toDouble(),
-          );
+          rect = wordCharacters.getCharacterRectangle(c);
           // coverage:ignore-end
         } else {
           rect = Rect.fromLTWH(
@@ -322,16 +355,19 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       );
     }
 
+    children.whereType<SectionKeyboardHandler>().forEach(
+          (e) => e.removeFromParent(),
+        );
     if (newSection == index &&
         newWord != null &&
         _wordIndex.containsKey(newWord)) {
-      indexes.add(
-        (
-          newWord,
-          Colors.white,
-          _wordIndex[newWord]!,
-        ),
+      final newIndex = (
+        newWord,
+        Colors.white,
+        _wordIndex[newWord]!,
       );
+      add(SectionKeyboardHandler(newIndex));
+      indexes.add(newIndex);
     }
 
     for (final index in indexes) {
