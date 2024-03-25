@@ -396,7 +396,7 @@ class Crossword7 extends Crossword {
 /// -1   O  -  -  -  -  -  -  E  -
 ///  0   S  -  -  -  -  M  O  M  -
 ///  1   -  -  -  -  -  -  -  O  -
-///  2   -  -  -  -  -  -  -  -  -
+///  2   -  -  -  -  -  -  -  S  -
 /// ```
 /// {@endtemplate}
 class Crossword8 extends Crossword {
@@ -418,7 +418,7 @@ class Crossword8 extends Crossword {
     );
     add(
       WordEntry(
-        word: 'nemo',
+        word: 'nemos',
         start: const Location(x: 1, y: -2),
         direction: Direction.down,
       ),
