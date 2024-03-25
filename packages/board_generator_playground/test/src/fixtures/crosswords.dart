@@ -386,3 +386,49 @@ class Crossword7 extends Crossword {
     );
   }
 }
+
+/// {@template crossword8}
+/// A pre-defined crossword for testing.
+///
+/// ```
+///     -6 -5 -4 -3 -2 -1  0  1  2
+/// -2   S  U  P  E  R  M  A  N  -
+/// -1   O  -  -  -  -  -  -  E  -
+///  0   S  -  -  -  -  M  O  M  -
+///  1   -  -  -  -  -  -  -  O  -
+///  2   -  -  -  -  -  -  -  -  -
+/// ```
+/// {@endtemplate}
+class Crossword8 extends Crossword {
+  /// {@macro crossword8}
+  Crossword8() {
+    add(
+      WordEntry(
+        word: 'superman',
+        start: const Location(x: -6, y: -2),
+        direction: Direction.across,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'sos',
+        start: const Location(x: -6, y: -2),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'nemo',
+        start: const Location(x: 1, y: -2),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'mom',
+        start: const Location(x: -1, y: 0),
+        direction: Direction.across,
+      ),
+    );
+  }
+}

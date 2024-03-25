@@ -31,7 +31,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 2: 'y'},
           invalidLengths: {},
         );
@@ -46,7 +46,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a'},
           invalidLengths: {},
         );
@@ -61,7 +61,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 2: 'a'},
           invalidLengths: {},
         );
@@ -76,7 +76,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 1: 'd', 3: 's'},
           invalidLengths: {},
         );
@@ -91,7 +91,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a'},
           invalidLengths: {4},
         );
@@ -106,7 +106,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a'},
           invalidLengths: {4},
         );
@@ -135,7 +135,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'g', 2: 'a'},
           invalidLengths: {5},
         );
@@ -164,7 +164,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'g', 2: 'a'},
           invalidLengths: {5},
         );
@@ -192,7 +192,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'g', 2: 'a', 3: 's'},
           invalidLengths: {4},
         );
@@ -221,7 +221,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a'},
           invalidLengths: {5, 4},
         );
@@ -252,7 +252,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 1: 'r', 2: 'e'},
           invalidLengths: {},
         );
@@ -282,7 +282,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 3: 'r', 6: 'h', 10: 'g', 13: 'p', 15: 'e'},
           invalidLengths: {},
         );
@@ -312,7 +312,7 @@ void main() {
 
         final constrains = ConstrainedWordCandidate(
           direction: Direction.down,
-          location: Location.zero,
+          start: Location.zero,
           constraints: {0: 'a', 2: 'e', 6: 'h', 10: 'g', 13: 'p', 15: 'e'},
           invalidLengths: {},
         );

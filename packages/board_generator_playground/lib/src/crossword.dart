@@ -290,6 +290,28 @@ class Crossword {
     return characterMap[location]?.wordEntry ?? {};
   }
 
+  /// Whether a [location] crosses with another word.
+  ///
+  /// For example, consider the following board:
+  ///
+  /// ```
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
+  /// ```
+  ///
+  /// The location (0, -2) crosses with the word "ALBUS" and "BEHAN". However,
+  /// the location (0, 0) does not cross with any word.
+  bool crossesAt(Location location) {
+    final characterData = characterMap[location];
+    if (characterData == null) return false;
+
+    return characterData.wordEntry.length > 1;
+  }
+
   /// The constraints for a given [candidate].
   ///
   /// For example, consider the following board:
@@ -306,112 +328,204 @@ class Crossword {
   /// Adding a word down at (2, -2) would have a single
   /// [ConstrainedWordCandidate], with two constraints one at position 0 for the
   /// character 'S' and another at position 4 for the character 'W' with a
-  /// maximum length of [largestWordLength].
-  ///
-  /// If we consider this other board:
-  ///
-  /// ```
-  ///    -2 -1  0  1  2
-  /// -2  A  L  B  U  S
-  /// -1  -  -  E  -  -
-  ///  0  -  -  H  -  -
-  ///  1  -  N  A  N  -
-  ///  2  -  -  N  O  W
-  /// ```
-  ///
-  /// Adding a word down at (2, -2) would have a single
-  /// [ConstrainedWordCandidate], with one constraint at position 0 for the
-  /// character 'S' and an invalid length of 4, since it would otherwise overlap
-  /// with the word "NAN".
+  /// maximum length of [largestWordLength] but an invalid length of 4, since it
+  /// would otherwise suffix "W".
   ///
   /// Adding a word down at (-1, -2) would have more than one
-  /// [ConstrainedWordCandidate], those cases will return `null`. Such
-  /// scenarios are yet not properly considered, it is something we would like
-  /// to contemplate in the future and improve to achieve denser boards.
+  /// [ConstrainedWordCandidate]. In other words, more than a single word would
+  /// have to be placed at the same time to satisfy the constraints. In this
+  /// those cases we return `null`. Such scenarios are yet not properly
+  /// considered, it is something we would like to contemplate in the future and
+  /// improve to achieve denser boards.
+  ///
+  /// If the constraints cannot be satisfied (for example, when all the lengths
+  /// are invalid) we return `null`.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    final invalidLengths = <int>{};
-    var maximumLength = 1;
+    final invalidLengths = _lengthConstraints(candidate);
+    if (invalidLengths == null) return null;
 
-    for (var i = 1; i <= largestWordLength; i++) {
-      final end = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i),
-        Direction.down => candidate.location.shift(y: i),
-      };
-      if (bounds != null && !bounds!.contains(end)) {
-        for (var k = i + 1; k <= largestWordLength; k++) {
-          invalidLengths.add(k);
-        }
-        break;
-      }
+    final validLengths = {
+      for (var i = 1; i <= largestWordLength; i++)
+        if (!invalidLengths.contains(i)) i,
+    };
 
-      final words = {
-        ...wordsAt(
-          switch (candidate.direction) {
-            Direction.across => candidate.location.shift(x: i, y: 1),
-            Direction.down => candidate.location.shift(x: 1, y: i),
-          },
-        ),
-        ...wordsAt(
-          switch (candidate.direction) {
-            Direction.across => candidate.location.shift(x: i, y: -1),
-            Direction.down => candidate.location.shift(x: -1, y: i),
-          },
-        ),
-        ...wordsAt(end),
-      };
+    // If there are no valid lengths, the constraint cannot be satisfied.
+    if (validLengths.isEmpty) return null;
 
-      final hasMatchingDirection =
-          words.any((word) => word.direction == candidate.direction);
-      final hasWordOfMinimumLength = i < shortestWordLength;
-      if (hasMatchingDirection && hasWordOfMinimumLength) {
-        return null;
-      } else if (hasMatchingDirection) {
-        for (var k = i; k <= largestWordLength; k++) {
-          invalidLengths.add(k);
-        }
-        break;
-      }
-
-      if (words.any(overlaps)) {
-        final location = switch (candidate.direction) {
-          Direction.across => candidate.location.shift(x: i),
-          Direction.down => candidate.location.shift(y: i),
-        };
-
-        if (characterMap[location] == null) {
-          for (var k = i; k <= largestWordLength; k++) {
-            invalidLengths.add(k);
-          }
-          break;
-        }
-
-        invalidLengths.add(i);
-        continue;
-      }
-
-      if (i > maximumLength) {
-        maximumLength = i;
-      }
-    }
-
-    final constraints = <int, String>{};
-    for (var i = 0; i < maximumLength; i++) {
-      final location = switch (candidate.direction) {
-        Direction.across => candidate.location.shift(x: i),
-        Direction.down => candidate.location.shift(y: i),
-      };
-      final characterData = characterMap[location];
-      if (characterData != null) {
-        constraints[i] = characterData.character;
-      }
-    }
+    final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+    final characterConstraints = _characterConstraints(
+      candidate,
+      largestLength: largestLength,
+    );
 
     return ConstrainedWordCandidate(
       invalidLengths: invalidLengths,
-      location: candidate.location,
+      start: candidate.start,
       direction: candidate.direction,
-      constraints: constraints,
+      constraints: characterConstraints,
     );
+  }
+
+  Set<int>? _lengthConstraints(WordCandidate candidate) {
+    if (wordsAt(candidate.start)
+        .any((word) => word.direction == candidate.direction)) {
+      // The candidate is trying to start at a location where there is already
+      // a word going in the same direction.
+      return null;
+    }
+
+    final invalidLengths = <int>{};
+    var largestLength = largestWordLength;
+    final validLengths = <int>{
+      for (var i = shortestWordLength; i <= largestLength; i++) i,
+    };
+    void updateLengths() {
+      validLengths.removeAll(invalidLengths);
+      if (validLengths.isEmpty) return;
+      largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+    }
+
+    final span = [
+      for (var i = 0; i < largestLength; i++)
+        switch (candidate.direction) {
+          Direction.across => candidate.start.shift(x: i),
+          Direction.down => candidate.start.shift(y: i),
+        },
+    ];
+
+    final bounds = this.bounds;
+    if (bounds != null) {
+      // Invalidate those lengths that would make the candidate go out of
+      // bounds.
+      for (var i = 0; i < largestLength; i++) {
+        final location = span[i];
+        if (!bounds.contains(location)) {
+          invalidLengths.add(i + 1);
+        }
+      }
+      updateLengths();
+      if (validLengths.isEmpty) return null;
+    }
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would make the candidate cross over
+      // an already crossed location. Crosses act as barriers for the
+      // candidate, they can't be gone through.
+      final end = span[i];
+      if (crossesAt(end)) {
+        for (var k = i; k <= largestLength; k++) {
+          invalidLengths.add(k + 1);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would reach another word going in the
+      // same direction. If such gap is not left, the candidate would overlap
+      // with such word.
+      final end = span[i];
+      final words = wordsAt(end);
+      if (words.any((word) => word.direction == candidate.direction)) {
+        for (var k = i; k <= largestLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would reach another word going in the
+      // same direction in its surroundings. Such cases would require more than
+      // one word to be placed at the same time.
+      final end = span[i];
+      final sides = {
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: 1),
+          Direction.down => end.shift(x: 1),
+        },
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: -1),
+          Direction.down => end.shift(x: -1),
+        },
+      };
+      final sideWords = sides.map(wordsAt).expand((e) => e);
+      if (sideWords.any((word) => word.direction == candidate.direction)) {
+        for (var k = i; k <= largestLength; k++) {
+          invalidLengths.add(k);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 1; i < largestLength; i++) {
+      // Invalidate those lengths that would cause the word to stop at a
+      // location where the next character is not part of the word.
+      final end = span[i];
+      final words = wordsAt(end);
+      if (words.any((word) => word.direction != candidate.direction)) {
+        invalidLengths.add(i);
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 1; i < largestLength; i++) {
+      // Invalidate those lengths that pass through a neighboring word, but
+      // don't cross it, since they would overlap with such word.
+      final end = span[i];
+      final sides = {
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: 1),
+          Direction.down => end.shift(x: 1),
+        },
+        switch (candidate.direction) {
+          Direction.across => end.shift(y: -1),
+          Direction.down => end.shift(x: -1),
+        },
+      };
+
+      final endWords = wordsAt(end);
+      final sideWords = sides.map(wordsAt).expand((e) => e);
+      if (!endWords.containsAll(sideWords)) {
+        for (var k = i; k < largestLength; k++) {
+          invalidLengths.add(k + 1);
+        }
+        break;
+      }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    return invalidLengths
+      ..removeWhere(
+        (length) => length > largestWordLength || length < shortestWordLength,
+      );
+  }
+
+  Map<int, String> _characterConstraints(
+    WordCandidate candidate, {
+    required int largestLength,
+  }) {
+    final constraints = <int, String>{};
+    for (var length = 0; length < largestLength; length++) {
+      final location = switch (candidate.direction) {
+        Direction.across => candidate.start.shift(x: length),
+        Direction.down => candidate.start.shift(y: length),
+      };
+      final characterData = characterMap[location];
+      if (characterData != null) {
+        constraints[length] = characterData.character;
+      }
+    }
+
+    return constraints;
   }
 
   /// A pretty string representation of the board.
