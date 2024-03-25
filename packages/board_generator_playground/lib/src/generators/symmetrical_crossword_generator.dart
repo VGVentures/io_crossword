@@ -113,8 +113,12 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
       if (crossword.overlaps(wordEntry) ||
           crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): This check can be removed.
-        throw Exception('This should never happen');
+        // TODO(Ayad): Investigate, this should not be reached.
+        //  Investigate constraints and selection.
+
+        constraints.invalidLengths.add(word.length);
+        validLengths.removeWhere((value) => value == word.length);
+        continue;
       }
 
       return {
