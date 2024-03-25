@@ -341,11 +341,6 @@ class Crossword {
   /// If the constraints cannot be satisfied (for example, when all the lengths
   /// are invalid) we return `null`.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
-    if (bounds != null && !bounds!.contains(candidate.start)) {
-      // The candidate is trying to start outside the bounds of the board.
-      return null;
-    }
-
     final invalidLengths = _lengthConstraints(candidate);
     if (invalidLengths == null) return null;
 
@@ -397,7 +392,8 @@ class Crossword {
         )
         .isNotEmpty) {
       // The candidate is trying to start but a word around it is ending or
-      // starting. Hence, the candidate would overlap with such words.
+      // starting. Hence, the candidate would overlap with them, invalidating
+      // all its lengths.
       return null;
     }
 
