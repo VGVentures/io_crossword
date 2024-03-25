@@ -351,8 +351,8 @@ class Crossword {
 
     // If there are no valid lengths, the constraint cannot be satisfied.
     if (validLengths.isEmpty) return null;
-
     final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+
     final characterConstraints = _characterConstraints(
       candidate,
       largestLength: largestLength,
@@ -499,6 +499,15 @@ class Crossword {
         }
         break;
       }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would be disconnected.
+      final end = span[i];
+      if (characterMap[end] != null) break;
+      invalidLengths.add(i + 1);
     }
     updateLengths();
     if (validLengths.isEmpty) return null;
