@@ -379,29 +379,6 @@ class Crossword {
       return null;
     }
 
-    final surroundings = {
-      candidate.start.up(),
-      candidate.start.left(),
-      if (candidate.direction == Direction.across)
-        candidate.start.down()
-      else
-        candidate.start.right(),
-    };
-    if (surroundings
-        .map(wordsAt)
-        .expand((e) => e)
-        .where(
-          (word) =>
-              surroundings.contains(word.end) ||
-              surroundings.contains(word.start),
-        )
-        .isNotEmpty) {
-      // The candidate is trying to start but a word around it is ending or
-      // starting. Hence, the candidate would overlap with them, invalidating
-      // all its lengths.
-      return null;
-    }
-
     final invalidLengths = <int>{};
     var largestLength = largestWordLength;
     final validLengths = <int>{
