@@ -341,6 +341,11 @@ class Crossword {
   /// If the constraints cannot be satisfied (for example, when all the lengths
   /// are invalid) we return `null`.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
+    if (bounds != null && !bounds!.contains(candidate.start)) {
+      // The candidate is trying to start outside the bounds of the board.
+      return null;
+    }
+
     final invalidLengths = _lengthConstraints(candidate);
     if (invalidLengths == null) return null;
 
@@ -371,6 +376,28 @@ class Crossword {
         .any((word) => word.direction == candidate.direction)) {
       // The candidate is trying to start at a location where there is already
       // a word going in the same direction.
+      return null;
+    }
+
+    final surroundings = {
+      candidate.start.up(),
+      candidate.start.left(),
+      if (candidate.direction == Direction.across)
+        candidate.start.down()
+      else
+        candidate.start.right(),
+    };
+    if (surroundings
+        .map(wordsAt)
+        .expand((e) => e)
+        .where(
+          (word) =>
+              surroundings.contains(word.end) ||
+              surroundings.contains(word.start),
+        )
+        .isNotEmpty) {
+      // The candidate is trying to start but a word around it is ending or
+      // starting. Hence, the candidate would overlap with such words.
       return null;
     }
 
