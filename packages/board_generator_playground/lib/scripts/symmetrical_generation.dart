@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:board_generator_playground/src/crossword.dart';
-import 'package:board_generator_playground/src/generators/symmetrical_crossword_generator.dart';
-import 'package:board_generator_playground/src/models/models.dart';
-import 'package:board_generator_playground/src/word_pool.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 import 'package:csv/csv.dart';
 
 void main({
