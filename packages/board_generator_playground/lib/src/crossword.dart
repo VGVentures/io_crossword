@@ -429,7 +429,7 @@ class Crossword {
       final end = span[i];
       final words = wordsAt(end);
       if (words.any((word) => word.direction == candidate.direction)) {
-        for (var k = i + 1; k <= largestLength; k++) {
+        for (var k = i; k <= largestLength; k++) {
           invalidLengths.add(k);
         }
         break;
@@ -504,7 +504,9 @@ class Crossword {
     if (validLengths.isEmpty) return null;
 
     return invalidLengths
-      ..removeAll(List.generate(shortestWordLength, (i) => i));
+      ..removeWhere(
+        (length) => length > largestWordLength || length < shortestWordLength,
+      );
   }
 
   Map<int, String> _characterConstraints(

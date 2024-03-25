@@ -788,6 +788,29 @@ void main() {
             );
           });
 
+          test('a single constraint across with invalid lengths', () {
+            final board = Crossword8();
+
+            final candidate = WordCandidate(
+              start: Location(x: -6, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths:
+                      List.generate(14, (index) => 5 + index).toSet(),
+                  start: candidate.start,
+                  direction: candidate.direction,
+                  constraints: {0: 's'},
+                ),
+              ),
+            );
+          });
+
           test('two constraints with multiple invalid lengths', () {
             final board = Crossword5();
 
