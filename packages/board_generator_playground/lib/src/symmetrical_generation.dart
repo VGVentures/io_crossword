@@ -23,7 +23,7 @@ void main({
       invalidLengths: {
         for (int i = 2; i <= wordPool.longestWordLength; i += 2) i,
       },
-      location: Location.zero,
+      start: Location.zero,
       direction: Direction.down,
       constraints: const {0: 'a'},
     ),
@@ -45,7 +45,7 @@ void main({
       const Location(x: 0, y: 1).to(initialWordEntry.end),
     );
 
-  while (placedWords < 200) {
+  while (placedWords < 500) {
     if (area.isEmpty) {
       log('No more locations to place words');
       break;
@@ -61,7 +61,7 @@ void main({
     }
 
     final wordCandidate = WordCandidate(
-      location: location,
+      start: location,
       // The new direction should be the opposite of the word that's
       // already there.
       direction: words.first.direction == Direction.across
@@ -73,73 +73,83 @@ void main({
 
     // TODO(Ayad): Don't let add the same name in bottom and top
 
-    // while (constrainedWordCandidate.constraints.isNotEmpty) {
-    final newWord = wordPool.firstMatch(constrainedWordCandidate);
-    // if (newWord == null) break;
-    if (newWord == null) continue;
+    // TODO(Ayad): This will be change to valid length and we just need to check
+    // for when its empty because we gone through all the valid checks
+    while (constrainedWordCandidate.invalidLengths.length < 15) {
+      final newWord = wordPool.firstMatch(constrainedWordCandidate);
 
-    final newWordEntry = WordEntry(
-      word: newWord,
-      start: location,
-      direction: wordCandidate.direction,
-    );
+      if (newWord == null) continue;
 
-    final symmetricalLocation = _horizontallySymmetricalLocation(newWordEntry);
+      final newWordEntry = WordEntry(
+        word: newWord,
+        start: location,
+        direction: wordCandidate.direction,
+      );
 
-    final symmetricalWordCandidate = WordCandidate(
-      location: symmetricalLocation,
-      direction: wordCandidate.direction,
-    );
-    final symmetricalConstrainedWordCandidate =
-        crossword.constraints(symmetricalWordCandidate);
-    if (symmetricalConstrainedWordCandidate == null) {
-      final length = newWord.length;
-      constrainedWordCandidate.invalidLengths.add(length);
-      continue;
+      final symmetricalLocation =
+          _horizontallySymmetricalLocation(newWordEntry);
+
+      final symmetricalWordCandidate = WordCandidate(
+        start: symmetricalLocation,
+        direction: wordCandidate.direction,
+      );
+      final symmetricalConstrainedWordCandidate =
+          crossword.constraints(symmetricalWordCandidate);
+      if (symmetricalConstrainedWordCandidate == null) {
+        final length = newWord.length;
+        constrainedWordCandidate.invalidLengths.add(length);
+        continue;
+      }
+      final symmetricalNewWord = wordPool.firstMatchByPosition(
+        symmetricalConstrainedWordCandidate,
+        newWord.length,
+        newWord,
+      );
+      if (symmetricalNewWord == null) {
+        constrainedWordCandidate.invalidLengths.add(newWord.length);
+        continue;
+      }
+
+      final symmetricalNewWordEntry = WordEntry(
+        word: symmetricalNewWord,
+        start: _horizontallySymmetricalLocation(newWordEntry),
+        direction: wordCandidate.direction,
+      );
+
+      if (crossword.overlaps(newWordEntry)) {
+        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+        print('pass 2');
+        constrainedWordCandidate.invalidLengths.add(newWord.length);
+        continue;
+      }
+
+      if (crossword.overlaps(symmetricalNewWordEntry)) {
+        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+
+        constrainedWordCandidate.invalidLengths.add(newWord.length);
+
+        print('pass');
+        print(symmetricalNewWord);
+        continue;
+      }
+
+      crossword
+        ..add(newWordEntry)
+        ..add(symmetricalNewWordEntry);
+      wordPool
+        ..remove(newWord)
+        ..remove(symmetricalNewWord);
+      area.addAll(location.to(newWordEntry.end));
+
+      print(placedWords);
+
+      placedWords += 2;
+      if (placedWords % 200 == 0) {
+        log('Placed $placedWords words');
+      }
+
+      break;
     }
-    final symmetricalNewWord =
-        wordPool.firstMatch(symmetricalConstrainedWordCandidate);
-    if (symmetricalNewWord == null) {
-      final length = newWord.length;
-      constrainedWordCandidate.invalidLengths.add(length);
-      continue;
-    }
-
-    final symmetricalNewWordEntry = WordEntry(
-      word: symmetricalNewWord,
-      start: _horizontallySymmetricalLocation(newWordEntry),
-      direction: wordCandidate.direction,
-    );
-
-    if (crossword.overlaps(newWordEntry)) {
-      // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
-      print('pass 2');
-      continue;
-    }
-
-    if (crossword.overlaps(symmetricalNewWordEntry)) {
-      // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
-      print('pass');
-      continue;
-    }
-
-    crossword
-      ..add(newWordEntry)
-      ..add(symmetricalNewWordEntry);
-    wordPool
-      ..remove(newWord)
-      ..remove(symmetricalNewWord);
-    area.addAll(location.to(newWordEntry.end));
-
-    print(placedWords);
-
-    placedWords += 2;
-    if (placedWords % 200 == 0) {
-      log('Placed $placedWords words');
-    }
-
-    //   break;
-    // }
   }
 
   File('symmetrical_crossword.txt')
