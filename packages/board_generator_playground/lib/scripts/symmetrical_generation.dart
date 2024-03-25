@@ -33,12 +33,3 @@ void main({
 
   log('Finished');
 }
-
-Location _horizontallySymmetricalLocation(WordEntry wordEntry) {
-  switch (wordEntry.direction) {
-    case Direction.across:
-      return wordEntry.start.copyWith(y: wordEntry.end.y * -1);
-    case Direction.down:
-      return wordEntry.end.copyWith(y: wordEntry.end.y * -1);
-  }
-}
