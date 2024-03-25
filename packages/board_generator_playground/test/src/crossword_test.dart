@@ -818,6 +818,29 @@ void main() {
             expect(constraints, isNull);
           });
 
+          test('3432', () {
+            final board = Crossword9();
+
+            final candidate = WordCandidate(
+              start: Location(x: -6, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths:
+                      List.generate(15, (index) => 4 + index).toSet(),
+                  start: candidate.start,
+                  direction: candidate.direction,
+                  constraints: const {0: 'n', 2: 'd'},
+                ),
+              ),
+            );
+          });
+
           test('from an unconnected location', () {
             final board = Crossword8();
 
