@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -20,6 +20,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   String get clue => 'clue';
+
+  @override
+  Axis get axis => Axis.horizontal;
 }
 
 void main() {

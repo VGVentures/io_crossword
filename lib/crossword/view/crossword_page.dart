@@ -103,7 +103,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
-        const Center(child: WordFocusedView()),
+        const WordFocusedView(),
         _ZoomControls(game: game),
       ],
     );
