@@ -647,28 +647,56 @@ void main() {
 
     group('constraints', () {
       group('returns null', () {
-        test('when going down and neighboring word has matching direction', () {
-          final board = Crossword1();
+        group('when going down', () {
+          test('neighboring word has matching direction', () {
+            final board = Crossword1();
 
-          final candidate = WordCandidate(
-            start: Location(x: 1, y: -2),
-            direction: Direction.down,
-          );
+            final candidate = WordCandidate(
+              start: Location(x: 1, y: -2),
+              direction: Direction.down,
+            );
 
-          final constraints = board.constraints(candidate);
-          expect(constraints, isNull);
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
+          test('and prefix is used', () {
+            final board = Crossword1();
+
+            final candidate = WordCandidate(
+              start: Location(x: -2, y: -1),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
         });
 
-        test('when going across neighboring word has matching direction', () {
-          final board = Crossword1();
+        group('when going across', () {
+          test('neighboring word has matching direction', () {
+            final board = Crossword1();
 
-          final candidate = WordCandidate(
-            start: Location(x: 0, y: -1),
-            direction: Direction.across,
-          );
+            final candidate = WordCandidate(
+              start: Location(x: 0, y: -1),
+              direction: Direction.across,
+            );
 
-          final constraints = board.constraints(candidate);
-          expect(constraints, isNull);
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
+          test('and prefix is used', () {
+            final board = Crossword1();
+
+            final candidate = WordCandidate(
+              start: Location(x: 1, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
         });
 
         test('when disconnected', () {
