@@ -1,4 +1,4 @@
-import 'package:board_generator_playground/src/models/models.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template character_map}
 /// Maps a [Location] to a [CharacterData].
