@@ -648,6 +648,23 @@ void main() {
     group('constraints', () {
       group('returns null', () {
         group('when going down', () {
+          test('and starting out of bounds', () {
+            final board = Crossword1(
+              bounds: Bounds.fromTLBR(
+                topLeft: Location(x: -2, y: -2),
+                bottomRight: Location(x: 2, y: 2),
+              ),
+            );
+
+            final candidate = WordCandidate(
+              start: Location(x: 0, y: -3),
+              direction: Direction.down,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
           test('neighboring word has matching direction', () {
             final board = Crossword1();
 
@@ -686,6 +703,23 @@ void main() {
         });
 
         group('when going across', () {
+          test('and starting out of bounds', () {
+            final board = Crossword1(
+              bounds: Bounds.fromTLBR(
+                topLeft: Location(x: -2, y: -2),
+                bottomRight: Location(x: 2, y: 2),
+              ),
+            );
+
+            final candidate = WordCandidate(
+              start: Location(x: -3, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(constraints, isNull);
+          });
+
           test('neighboring word has matching direction', () {
             final board = Crossword1();
 
