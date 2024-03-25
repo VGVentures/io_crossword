@@ -351,8 +351,22 @@ class Crossword {
 
     // If there are no valid lengths, the constraint cannot be satisfied.
     if (validLengths.isEmpty) return null;
-
     final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+
+    // Ensure the valid lengths are connected.
+    var isConnected = false;
+    for (var i = 0; i < largestLength; i++) {
+      final end = switch (candidate.direction) {
+        Direction.across => candidate.start.shift(x: i),
+        Direction.down => candidate.start.shift(y: i),
+      };
+      if (characterMap[end] != null) {
+        isConnected = true;
+        break;
+      }
+    }
+    if (!isConnected) return null;
+
     final characterConstraints = _characterConstraints(
       candidate,
       largestLength: largestLength,

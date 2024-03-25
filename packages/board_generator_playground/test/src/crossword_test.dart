@@ -670,6 +670,18 @@ void main() {
           final constraints = board.constraints(candidate);
           expect(constraints, isNull);
         });
+
+        test('when disconnected', () {
+          final board = Crossword1();
+
+          final candidate = WordCandidate(
+            start: Location(x: 1, y: 10),
+            direction: Direction.across,
+          );
+
+          final constraints = board.constraints(candidate);
+          expect(constraints, isNull);
+        });
       });
 
       group('derives', () {
