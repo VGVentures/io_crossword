@@ -20,3 +20,4 @@ jobs:
       working_directory: packages/board_generator_playground
       coverage_excludes: "**/*.g.dart"
       min_coverage: 100
+      check_ignore: true
