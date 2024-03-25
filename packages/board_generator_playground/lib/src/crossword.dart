@@ -353,20 +353,6 @@ class Crossword {
     if (validLengths.isEmpty) return null;
     final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
 
-    // Ensure the valid lengths are connected.
-    var isConnected = false;
-    for (var i = 0; i < largestLength; i++) {
-      final end = switch (candidate.direction) {
-        Direction.across => candidate.start.shift(x: i),
-        Direction.down => candidate.start.shift(y: i),
-      };
-      if (characterMap[end] != null) {
-        isConnected = true;
-        break;
-      }
-    }
-    if (!isConnected) return null;
-
     final characterConstraints = _characterConstraints(
       candidate,
       largestLength: largestLength,
@@ -513,6 +499,15 @@ class Crossword {
         }
         break;
       }
+    }
+    updateLengths();
+    if (validLengths.isEmpty) return null;
+
+    for (var i = 0; i < largestLength; i++) {
+      // Invalidate those lengths that would be disconnected.
+      final end = span[i];
+      if (characterMap[end] != null) break;
+      invalidLengths.add(i + 1);
     }
     updateLengths();
     if (validLengths.isEmpty) return null;

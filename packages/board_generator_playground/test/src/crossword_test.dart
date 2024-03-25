@@ -757,10 +757,10 @@ void main() {
           });
 
           test('from an unconnected location', () {
-            final board = Crossword1();
+            final board = Crossword8();
 
             final candidate = WordCandidate(
-              start: Location(x: -17, y: 0),
+              start: Location(x: -4, y: 2),
               direction: Direction.across,
             );
 
@@ -769,10 +769,10 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  invalidLengths: const {17},
+                  invalidLengths: {3, 4, 5},
                   start: candidate.start,
                   direction: candidate.direction,
-                  constraints: const {17: 'h'},
+                  constraints: const {5: 's'},
                 ),
               ),
             );
