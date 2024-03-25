@@ -1,23 +1,22 @@
-///  Sorted words is organized with this data structure to improve the finding
-///  of words to be placed in the board.
+/// Data structure used to map the number of characters in a word to a map
+/// that maps the location of the character in the word.
 ///
-///  Check [sortWords] for more information
+/// See also:
+///
+/// * [sortWords] function that sorts words into a [SortedWords].
 typedef SortedWords = Map<int, Map<int, Map<String, Set<String>>>>;
 
-/// Generates the words organised by the length of the word + character
-/// position + the character.
+/// Organizes the words into a data structure that can be used to find words
+/// that can be placed in the crossword.
 ///
-/// This way the searches to find a word for the available space is performed
-/// with good performance.
+/// For example:
 ///
-/// Example:
-/// The list of words ['Aunt', 'Addy', 'Adds', 'Away']
-///
-/// would be organized as
+/// Given the list of words 'Aunt', 'Addy', 'Adds' and 'Away'. Sorting them
+/// using the [sortWords] function will sort them as:
 ///
 /// ```dart
-/// final organizedWords = <int, Map<int, Map<String, Set<String>>>>{
-///   4: {
+/// {
+///    4: {
 ///     0: {
 ///       'a': {'Adds', 'Addy', 'Aunt', 'Away'},
 ///     },
@@ -37,45 +36,26 @@ typedef SortedWords = Map<int, Map<int, Map<String, Set<String>>>>;
 ///       's': {'Adds'},
 ///     },
 ///   },
-/// };
+/// }
 /// ```
 ///
-/// We can perform the following to search for words that can be added
-/// in the crossword.
-///
-/// final fourCharacters = organizedWords[4];
-///
-///  If the only requirement is to have the character starting with a
-///  we can just get the first
-/// organizedWords[4][0]['a'].first; // Aunt
-///
-/// organizedWords[4][0]['a']; // Aunt, Addy, Adds, Away
-/// organizedWords[4][1]['d']; // 'Addy' 'Adds'
-/// organizedWords[4][1]['u']; // Aunt
-///
-/// If we need a word starts with a and in the second position also with a
-/// organizedWords[4][0]['a'].firstWhere((word) => word.startsWith('a', 2)); // Away
-///
-/// If we need a word starts with a, the second position with d and ends with s
-/// organizedWords[4][0]['a'].firstWhere((word) => word.startsWith('d', 2) && word.endsWith('s')); // Adds
-///
-/// Looks like: Map<int(numberOfCharacters), Map<int(characterPosition,
-/// Map<String(letterCharacter), Set<String(Word)>>>>
+/// In essence, it maps the number of characters in a word to a map that maps
+/// the location of the character in the word.
 SortedWords sortWords(
   Iterable<String> wordList,
 ) {
-  final map = <int, Map<int, Map<String, Set<String>>>>{};
+  final sortedWords = SortedWords();
 
   for (final word in wordList) {
-    if (!map.containsKey(word.length)) {
-      map[word.length] = <int, Map<String, Set<String>>>{
+    if (!sortedWords.containsKey(word.length)) {
+      sortedWords[word.length] = <int, Map<String, Set<String>>>{
         for (var i = 0; i < word.length; i++) i: <String, Set<String>>{},
       };
     }
 
     for (var i = 0; i < word.length; i++) {
       final character = word[i].toLowerCase();
-      final mapCharacterPosition = map[word.length]![i]!;
+      final mapCharacterPosition = sortedWords[word.length]![i]!;
 
       if (!mapCharacterPosition.containsKey(character)) {
         mapCharacterPosition[character] = <String>{};
@@ -85,5 +65,5 @@ SortedWords sortWords(
     }
   }
 
-  return map;
+  return sortedWords;
 }

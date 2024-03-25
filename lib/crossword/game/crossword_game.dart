@@ -169,7 +169,7 @@ class CrosswordGame extends FlameGame
     super.onPanUpdate(info);
 
     _distanceMoved += info.delta.global.length;
-    camera.viewfinder.position -= info.delta.global;
+    camera.viewfinder.position -= info.delta.global / camera.viewfinder.zoom;
 
     if (_distanceMoved >= 280) {
       _distanceMoved = 0;

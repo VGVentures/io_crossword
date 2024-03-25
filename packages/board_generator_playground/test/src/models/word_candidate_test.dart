@@ -8,7 +8,7 @@ void main() {
         test('when there is no constraint', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {},
           );
@@ -19,7 +19,7 @@ void main() {
         test('when it satisfies the invalid length constraint', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {1, 2, 4, 5, 6, 7},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {},
           );
@@ -30,7 +30,7 @@ void main() {
         test('when it satisfies the character constraints', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {0: 'a', 1: 'b', 3: 'c', 4: 'd', 5: 'e'},
           );
@@ -43,7 +43,7 @@ void main() {
           () {
             const candidate = ConstrainedWordCandidate(
               invalidLengths: {},
-              location: Location.zero,
+              start: Location.zero,
               direction: Direction.across,
               constraints: {0: 'A', 1: 'b', 3: 'C', 4: 'd', 5: 'E'},
             );
@@ -55,7 +55,7 @@ void main() {
         test('when it satisfies all constraints', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {1, 2, 4, 5, 6, 7},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {0: 'a', 1: 'b', 3: 'c', 4: 'd', 5: 'e'},
           );
@@ -68,7 +68,7 @@ void main() {
         test('when the word has an invalid length', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {3},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {},
           );
@@ -79,7 +79,7 @@ void main() {
         test('when the word has an invalid first character constraint', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {0: 'd'},
           );
@@ -90,7 +90,7 @@ void main() {
         test('when the word has an invalid last character constraint', () {
           const candidate = ConstrainedWordCandidate(
             invalidLengths: {},
-            location: Location.zero,
+            start: Location.zero,
             direction: Direction.across,
             constraints: {2: 'd'},
           );
