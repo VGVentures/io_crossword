@@ -128,6 +128,13 @@ void main({
 
       if (crossword.overlaps(newWordEntry)) {
         // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+
+        crossword.characterMap[location] = CharacterData(
+          character: '*',
+          wordEntry: crossword.characterMap[location]!.wordEntry,
+        );
+        print(crossword.toPrettyString());
+
         print('pass 2');
         constrainedWordCandidate.invalidLengths.add(newWord.length);
         validLengths.removeWhere((value) => value == newWord.length);
