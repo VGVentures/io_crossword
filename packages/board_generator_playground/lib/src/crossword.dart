@@ -19,6 +19,9 @@ class Crossword {
   /// {@macro character_map}
   final CharacterMap characterMap = {};
 
+  /// The words on the board.
+  final Set<WordEntry> words = {};
+
   /// The largest word length that can be added to the board.
   final int largestWordLength;
 
@@ -42,6 +45,8 @@ class Crossword {
     final location = entry.start;
     final word = entry.word;
     final direction = entry.direction;
+
+    words.add(entry);
 
     for (var i = 0; i < word.length; i++) {
       final character = word[i];
