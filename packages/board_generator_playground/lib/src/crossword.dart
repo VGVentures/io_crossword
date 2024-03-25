@@ -1,4 +1,4 @@
-import 'package:board_generator_playground/src/models/models.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template character_map}
 /// Maps a [Location] to a [CharacterData].
@@ -376,6 +376,29 @@ class Crossword {
         .any((word) => word.direction == candidate.direction)) {
       // The candidate is trying to start at a location where there is already
       // a word going in the same direction.
+      return null;
+    }
+
+    final surroundings = {
+      candidate.start.up(),
+      candidate.start.left(),
+      if (candidate.direction == Direction.across)
+        candidate.start.down()
+      else
+        candidate.start.right(),
+    };
+    if (surroundings
+        .map(wordsAt)
+        .expand((e) => e)
+        .where(
+          (word) =>
+              surroundings.contains(word.end) ||
+              surroundings.contains(word.start),
+        )
+        .isNotEmpty) {
+      // The candidate is trying to start but a word around it is ending or
+      // starting. Hence, the candidate would overlap with them, invalidating
+      // all its lengths.
       return null;
     }
 

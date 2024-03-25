@@ -1,5 +1,4 @@
-import 'package:board_generator_playground/src/models/word_candidate.dart';
-import 'package:board_generator_playground/src/sort_words.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 import 'package:meta/meta.dart';
 
 /// {@template word_pool}

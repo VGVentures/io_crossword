@@ -1,4 +1,4 @@
-import 'package:board_generator_playground/src/models/models.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 import 'package:equatable/equatable.dart';
 
 /// A set of bounds that define a rectangular region in the crossword puzzle.
