@@ -432,3 +432,55 @@ class Crossword8 extends Crossword {
     );
   }
 }
+
+/// {@template crossword9}
+/// A pre-defined crossword for testing.
+///
+/// ```
+///     -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9  10  11  12  13  14  15
+/// -2   -  -  E  -  I  N  T  E  R  C  H  A  N  G  E  A  B   I   L   I   T   Y
+/// -1   I  -  N  -  O  -  -  -  -  -  -  -  -  -  -  -  -   -   -   -   -   -
+///  0   N  -  D  -  N  E  U  R  O  D  E  V  E  L  O  P  M   E   N   T   A   L
+///  1   -  -  -  -  -  -  -  -  -
+/// ```
+/// {@endtemplate}
+class Crossword9 extends Crossword {
+  /// {@macro crossword9}
+  Crossword9() {
+    add(
+      WordEntry(
+        word: 'interchangeability',
+        start: const Location(x: -2, y: -2),
+        direction: Direction.across,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'neurodevelopmental',
+        start: const Location(x: -2, y: 0),
+        direction: Direction.across,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'in',
+        start: const Location(x: -6, y: -1),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'end',
+        start: const Location(x: -4, y: -2),
+        direction: Direction.down,
+      ),
+    );
+    add(
+      WordEntry(
+        word: 'ion',
+        start: const Location(x: -2, y: -2),
+        direction: Direction.down,
+      ),
+    );
+  }
+}
