@@ -45,7 +45,7 @@ void main({
       const Location(x: 0, y: 1).to(initialWordEntry.end),
     );
 
-  while (placedWords < 100000) {
+  while (placedWords < 150000) {
     if (area.isEmpty) {
       log('No more locations to place words');
       break;
@@ -74,7 +74,6 @@ void main({
     // TODO(Ayad): constrainedWordCandidate.invalidLengths will be changed to
     //  valid lengths so this can be removed
     final validLengths = <int>[];
-
     for (var i = wordPool.shortestWordLength;
         i < wordPool.longestWordLength;
         i++) {
@@ -126,29 +125,13 @@ void main({
         direction: wordCandidate.direction,
       );
 
-      if (crossword.overlaps(newWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
-
-        crossword.characterMap[location] = CharacterData(
-          character: '*',
-          wordEntry: crossword.characterMap[location]!.wordEntry,
-        );
-        print(crossword.toPrettyString());
-
-        print('pass 2');
-        constrainedWordCandidate.invalidLengths.add(newWord.length);
-        validLengths.removeWhere((value) => value == newWord.length);
-        continue;
-      }
-
-      if (crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
+      if (crossword.overlaps(newWordEntry) ||
+          crossword.overlaps(symmetricalNewWordEntry)) {
+        // TODO(Ayad): Investigate, this should not be reached.
+        //  Investigate constraints and selection.
 
         constrainedWordCandidate.invalidLengths.add(newWord.length);
         validLengths.removeWhere((value) => value == newWord.length);
-
-        print('pass');
-        print(symmetricalNewWord);
         continue;
       }
 
