@@ -321,6 +321,168 @@ void main() {
       });
     });
 
+    group('firstMatchByWordLength', () {
+      test(
+          'returns null when cannot find word with one constrains '
+          'of length of 3 with the indicated constrains', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {1: 'w'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
+      });
+
+      test(
+          'returns null when cannot find word with one constrains '
+          'because the only word found needs to be ignored', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {2: 'a'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 4, 'away'), isNull);
+      });
+
+      test(
+          'returns null when cannot find word with multiple constrains '
+          'of length of 3 with the indicated constrains', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a', 2: 'y', 10: 'r'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
+      });
+
+      test(
+          'returns null when cannot find word with multiple constrains '
+          'because the only word found needs to be ignored', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a', 2: 's', 10: 'r'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 4, 'away'), isNull);
+      });
+
+      test('with no invalid length and one constrain', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 4), equals('aunt'));
+      });
+
+      test('with no invalid length and 2 constrains', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a', 2: 'a'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 4), equals('away'));
+      });
+
+      test('with no invalid length and 3 constrains', () {
+        final words = ['aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a', 1: 'd', 3: 's'},
+          invalidLengths: {},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 4), equals('adds'));
+      });
+
+      test(
+          'returns null with invalid length and '
+          'the wordLength is the same length', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a'},
+          invalidLengths: {3},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
+      });
+
+      test('with invalid length and one constrain', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a'},
+          invalidLengths: {4},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 3), equals('add'));
+      });
+
+      test('with invalid length and one constrain', () {
+        final words = ['add', 'red', 'aunt', 'addy', 'adds', 'away'];
+
+        final wordPool = WordPool(words: words);
+
+        final constrains = ConstrainedWordCandidate(
+          direction: Direction.down,
+          start: Location.zero,
+          constraints: {0: 'a'},
+          invalidLengths: {4},
+        );
+
+        expect(wordPool.firstMatchByWordLength(constrains, 3), equals('add'));
+      });
+    });
+
     group('removeWord', () {
       test('deletes of 4 characters first Addy and after Away', () {
         final words = ['Aunt', 'Addy', 'Adds', 'Away'];
