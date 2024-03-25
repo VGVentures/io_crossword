@@ -1,7 +1,5 @@
 // coverage:ignore-file
 
-import 'dart:developer';
-
 import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template symmetrical_crossword_generator}
@@ -17,7 +15,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
   @override
   WordCandidate? get nextCandidate {
-    if (crossword.words.length > 10000) return null;
+    if (crossword.words.length > 100000) return null;
     return super.nextCandidate;
   }
 
@@ -38,7 +36,20 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       direction: constraints.direction,
     );
     add(entry);
-    candidates.addAll(expand(entry));
+
+    final firstWordLocation = const Location(x: 0, y: 1).to(entry.end);
+
+    final newDirection =
+        entry.direction == Direction.down ? Direction.across : Direction.down;
+
+    candidates.addAll(
+      firstWordLocation.map(
+        (location) => WordCandidate(
+          start: location,
+          direction: newDirection,
+        ),
+      ),
+    );
   }
 
   @override
@@ -102,13 +113,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
       if (crossword.overlaps(wordEntry) ||
           crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached.
-        //  Investigate constraints and selection.
-
-        log('Overlaps');
-        constraints.invalidLengths.add(word.length);
-        validLengths.removeWhere((value) => value == word.length);
-        continue;
+        // TODO(Ayad): This check can be removed.
+        throw Exception('This should never happen');
       }
 
       return {
@@ -122,6 +128,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
   @override
   Set<WordCandidate> expand(WordEntry entry) {
+    if (entry.start.y < 0) return {};
+
     final span = entry.start.to(entry.end);
     final newDirection =
         entry.direction == Direction.down ? Direction.across : Direction.down;

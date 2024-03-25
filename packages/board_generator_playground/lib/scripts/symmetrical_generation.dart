@@ -23,7 +23,7 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 10000)),
+    crossword: Crossword(bounds: Bounds.square(size: 1000)),
   );
 
   final crossword = generator.populate();
@@ -32,13 +32,4 @@ void main({
       .writeAsStringSync(crossword.toPrettyString());
 
   log('Finished');
-}
-
-Location _horizontallySymmetricalLocation(WordEntry wordEntry) {
-  switch (wordEntry.direction) {
-    case Direction.across:
-      return wordEntry.start.copyWith(y: wordEntry.end.y * -1);
-    case Direction.down:
-      return wordEntry.end.copyWith(y: wordEntry.end.y * -1);
-  }
 }
