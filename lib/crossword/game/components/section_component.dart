@@ -8,6 +8,7 @@ import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
 
 class SectionTapController extends PositionComponent
@@ -58,12 +59,12 @@ class SectionTapController extends PositionComponent
   }
 }
 
-class SectionKeyboardListener extends PositionComponent
+class SectionKeyboardHandler extends PositionComponent
     with
         KeyboardHandler,
         HasGameRef<CrosswordGame>,
         ParentIsA<SectionComponent> {
-  SectionKeyboardListener(
+  SectionKeyboardHandler(
     this.index, {
     super.position,
   });
@@ -78,25 +79,14 @@ class SectionKeyboardListener extends PositionComponent
       word += event.character!;
     }
 
-    if (event.logicalKey.keyId == 0x100000008) {
+    if (event.logicalKey == LogicalKeyboardKey.backspace) {
       word = word.substring(0, word.length - 1);
     }
 
     final wordCharacters = word.toUpperCase().characters;
 
     for (var c = 0; c < wordCharacters.length; c++) {
-      late Rect rect;
-      // A bug in coverage is preventing this block from being covered
-      // coverage:ignore-start
-      final char = wordCharacters.elementAt(c);
-      final charIndex = char.codeUnitAt(0) - 65;
-      rect = Rect.fromLTWH(
-        (charIndex * CrosswordGame.cellSize).toDouble(),
-        0,
-        CrosswordGame.cellSize.toDouble(),
-        CrosswordGame.cellSize.toDouble(),
-      );
-      // coverage:ignore-end
+      final rect = wordCharacters.getCharacterRectangle(c);
 
       parent.spriteBatchComponent?.spriteBatch?.replace(
         index.$3.$1 + c,
@@ -306,14 +296,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         if (word.solvedTimestamp != null) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
-          final char = wordCharacters.elementAt(c);
-          final charIndex = char.codeUnitAt(0) - 65;
-          rect = Rect.fromLTWH(
-            (charIndex * CrosswordGame.cellSize).toDouble(),
-            0,
-            CrosswordGame.cellSize.toDouble(),
-            CrosswordGame.cellSize.toDouble(),
-          );
+          rect = wordCharacters.getCharacterRectangle(c);
           // coverage:ignore-end
         } else {
           rect = Rect.fromLTWH(
@@ -372,7 +355,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       );
     }
 
-    children.whereType<SectionKeyboardListener>().forEach(
+    children.whereType<SectionKeyboardHandler>().forEach(
           (e) => e.removeFromParent(),
         );
     if (newSection == index &&
@@ -383,7 +366,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         Colors.white,
         _wordIndex[newWord]!,
       );
-      add(SectionKeyboardListener(newIndex));
+      add(SectionKeyboardHandler(newIndex));
       indexes.add(newIndex);
     }
 
