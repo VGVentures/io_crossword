@@ -56,6 +56,12 @@ class FirebaseCloudStorage {
   /// The name of the bucket.
   final String bucketName;
 
+  /// Returns the URL of a file in Firebase Cloud Storage.
+  String fileUrl(String filename) {
+    final urlFilename = Uri.encodeComponent(filename);
+    return 'https://firebasestorage.googleapis.com/v0/b/$bucketName/o/$urlFilename?alt=media';
+  }
+
   /// Uploads a file to Firebase Cloud Storage.
   Future<String> uploadFile(Uint8List data, String filename) async {
     final url =
@@ -80,7 +86,7 @@ class FirebaseCloudStorage {
     }
 
     final urlFilename = Uri.encodeComponent(filename);
-    return 'https://firebasestorage.googleapis.com/v0/b/$bucketName/o/$urlFilename?alt=media';
+    return fileUrl(urlFilename);
   }
 
   Future<Map<String, String>> _authenticate(String uri) async {
