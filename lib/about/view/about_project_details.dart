@@ -4,29 +4,6 @@ class AboutProjectDetails extends StatelessWidget {
   @visibleForTesting
   const AboutProjectDetails({super.key});
 
-  Future<void> _launchUrl(String link, BuildContext context) async {
-    final url = Uri.parse(link);
-
-    if (!await canLaunchUrl(url)) {
-      if (context.mounted) {
-        final l10n = context.l10n;
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(l10n.couldNotOpenUrl),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-      }
-
-      throw Exception('Could not launch $url');
-    }
-
-    await launchUrl(url);
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -72,7 +49,7 @@ class AboutProjectDetails extends StatelessWidget {
                       ..onTap = () {
                         const link =
                             'https://github.com/VGVentures/io_crossword';
-                        _launchUrl(link, context);
+                        context.launchUrl(link);
                       },
                   ),
                   const TextSpan(
@@ -98,7 +75,7 @@ class AboutProjectDetails extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     const link = 'https://io.google/2024';
-                    _launchUrl(link, context);
+                    context.launchUrl(link);
                   },
               ),
             ),
@@ -112,7 +89,7 @@ class AboutProjectDetails extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     const link = 'https://policies.google.com/privacy';
-                    _launchUrl(link, context);
+                    context.launchUrl(link);
                   },
               ),
             ),
@@ -126,7 +103,7 @@ class AboutProjectDetails extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     const link = 'https://policies.google.com/terms';
-                    _launchUrl(link, context);
+                    context.launchUrl(link);
                   },
               ),
             ),
@@ -140,7 +117,7 @@ class AboutProjectDetails extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     const link = 'https://flutter.dev/crossword';
-                    _launchUrl(link, context);
+                    context.launchUrl(link);
                   },
               ),
             ),
