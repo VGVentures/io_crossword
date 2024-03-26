@@ -17,7 +17,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   void add(WordEntry entry) {
     super.add(entry);
 
-    if (crossword.words.length % 10000 == 0) {
+    if (crossword.words.length % 1000 == 0) {
+      // ignore: avoid_print
       print('Placed ${crossword.words.length} words');
     }
   }

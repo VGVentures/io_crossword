@@ -13,8 +13,6 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
     required super.crossword,
   });
 
-  final Location center = Location.zero;
-
   @override
   WordCandidate? get nextCandidate {
     if (crossword.words.length > 50000) return null;
@@ -26,6 +24,7 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
     super.add(entry);
 
     if (crossword.words.length % 1000 == 0) {
+      // ignore: avoid_print
       print(crossword.words.length);
     }
   }
@@ -43,11 +42,10 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
     final word = pool.firstMatch(constraints)!;
     final entry = WordEntry(
       word: word,
-      start: Location(x: center.x, y: center.y - (word.length ~/ 2)),
+      start: Location(x: 0, y: 0 - (word.length ~/ 2)),
       direction: constraints.direction,
     );
     add(entry);
-    candidates.addAll(expand(entry));
   }
 
   @override
@@ -107,64 +105,4 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
 
     return candidates;
   }
-}
-
-void main() {
-  final word = WordEntry(
-      word: 'alejandro', start: Location.zero, direction: Direction.across);
-  final crossword = Crossword()..add(word);
-
-  Set<WordCandidate> expand(WordEntry entry) {
-    final span = entry.start.to(entry.end);
-
-    final expansion = <Location>{};
-    for (var i = 0; i < 3; i++) {
-      for (final location in span) {
-        entry.direction == Direction.across
-            ? expansion.add(location.shift(y: -i))
-            : expansion.add(location.shift(x: -i));
-        entry.direction == Direction.across
-            ? expansion.add(location.shift(y: i))
-            : expansion.add(location.shift(x: i));
-      }
-    }
-    expansion.removeWhere(crossword.crossesAt);
-
-    final bounds = crossword.bounds;
-    if (bounds != null) {
-      expansion.removeWhere((location) => !bounds.contains(location));
-    }
-
-    final candidates = <WordCandidate>{};
-    for (final location in expansion) {
-      final words = crossword.wordsAt(location);
-      if (!words.any((word) => word.direction == Direction.across)) {
-        candidates
-            .add(WordCandidate(start: location, direction: Direction.across));
-      }
-      if (!words.any((word) => word.direction == Direction.down)) {
-        candidates
-            .add(WordCandidate(start: location, direction: Direction.down));
-      }
-    }
-
-    return candidates;
-  }
-
-  final candidates = expand(word);
-
-  for (final candidate in candidates) {
-    final words = crossword.wordsAt(candidate.start);
-    if (words.isNotEmpty) continue;
-
-    crossword.add(
-      WordEntry(
-        word: '*',
-        start: candidate.start,
-        direction: Direction.across,
-      ),
-    );
-  }
-
-  print(crossword.toPrettyString());
 }
