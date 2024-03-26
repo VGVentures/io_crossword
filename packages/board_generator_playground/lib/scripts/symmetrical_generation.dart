@@ -20,16 +20,21 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 2000)),
+    crossword: Crossword(bounds: Bounds.square(size: 100)),
   );
 
+  final stopwatch = Stopwatch()..start();
   final crossword = generator.populate();
+  stopwatch.stop();
+
+  log('Elapsed time: ${stopwatch.elapsed.inSeconds} seconds');
+  log('Generated a crossword with: ${crossword.words.length}');
 
   // Creates file to see the crossword
   File('symmetrical_crossword.txt')
       .writeAsStringSync(crossword.toPrettyString());
 
-  // Creates CSV file to be uploaded to Firestore
+  // Creates CSV file representing the crossword.
   final buffer = StringBuffer();
   for (final word in crossword.words) {
     final axis = word.direction == Direction.across ? 'horizontal' : 'vertical';
@@ -40,6 +45,4 @@ void main({
   }
 
   File('board.txt').writeAsStringSync(buffer.toString());
-
-  log('Generated a crossword with: ${crossword.words.length}');
 }

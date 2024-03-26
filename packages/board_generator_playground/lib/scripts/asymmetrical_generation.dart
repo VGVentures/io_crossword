@@ -19,5 +19,6 @@ void main({void Function(String) log = print}) {
   );
 
   final crossword = generator.populate();
-  File('crossword.txt').writeAsStringSync(crossword.toPrettyString());
+  File('asymmetrical_crossword.txt')
+      .writeAsStringSync(crossword.toPrettyString());
 }
