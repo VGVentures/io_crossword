@@ -9,9 +9,11 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
+import '../../helpers/set_display_size.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 
@@ -91,6 +93,7 @@ void main() {
     });
 
     testWidgets('renders WordFocusedView when is loaded', (tester) async {
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
           sectionSize: 40,
@@ -99,6 +102,7 @@ void main() {
           },
         ),
       );
+
       await tester.pumpCrosswordView(bloc);
 
       expect(find.byType(WordFocusedView), findsOneWidget);

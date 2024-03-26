@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
@@ -100,15 +101,57 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GameWidget(game: game),
-        const WordFocusedView(),
-        _ZoomControls(game: game),
-      ],
+    return ResponsiveLayoutBuilder(
+      large: (context, widget) {
+        return Stack(
+          children: [
+            GameWidget(game: game),
+            const WordFocusedView(),
+            _ZoomControls(game: game),
+          ],
+        );
+      },
+      small: (context, widget) {
+        return BlocListener<CrosswordBloc, CrosswordState>(
+          listener: (context, state) {
+            if (state is CrosswordLoaded) {
+              if (state.selectedWord != null) {
+                showModalBottomSheet<WordFocusedViewMobile>(
+                  context: context,
+                  builder: (context) {
+                    return WordFocusedViewMobile(state.selectedWord!);
+                  },
+                ).then(
+                  (_) =>
+                      context.read<CrosswordBloc>().add(const WordUnselected()),
+                );
+              }
+            }
+          },
+          child: Stack(
+            children: [
+              GameWidget(game: game),
+              _ZoomControls(game: game),
+            ],
+          ),
+        );
+      },
     );
   }
 }
+
+/*
+if (state is CrosswordLoaded) {
+            if (state.selectedWord != null) {
+              showModalBottomSheet<WordFocusedDesktopView>(
+                context: context,
+                builder: (context) {
+                  return WordFocusedViewMobile(state.selectedWord!);
+                },
+              );
+            }
+          }
+*/
 
 class _ZoomControls extends StatelessWidget {
   const _ZoomControls({
