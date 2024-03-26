@@ -58,8 +58,7 @@ class FirebaseCloudStorage {
 
   /// Returns the URL of a file in Firebase Cloud Storage.
   String fileUrl(String filename) {
-    final urlFilename = Uri.encodeComponent(filename);
-    return 'https://firebasestorage.googleapis.com/v0/b/$bucketName/o/$urlFilename?alt=media';
+    return 'https://firebasestorage.googleapis.com/v0/b/$bucketName/o/$filename?alt=media';
   }
 
   /// Uploads a file to Firebase Cloud Storage.
