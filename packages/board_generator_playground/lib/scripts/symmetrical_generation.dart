@@ -28,5 +28,5 @@ void main({
   File('symmetrical_crossword.txt')
       .writeAsStringSync(crossword.toPrettyString());
 
-  log('Finished');
+  log('Finished with ${crossword.words.length} words.');
 }
