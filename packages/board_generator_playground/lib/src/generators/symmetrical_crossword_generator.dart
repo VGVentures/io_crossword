@@ -15,7 +15,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
   @override
   WordCandidate? get nextCandidate {
-    if (crossword.words.length > 100000) return null;
+    if (crossword.words.length > 150000) return null;
     return super.nextCandidate;
   }
 
