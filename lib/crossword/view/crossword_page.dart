@@ -116,10 +116,10 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
           listener: (context, state) {
             if (state is CrosswordLoaded) {
               if (state.selectedWord != null) {
-                showModalBottomSheet<WordFocusedViewMobile>(
+                showModalBottomSheet<WordFocusedMobileView>(
                   context: context,
                   builder: (context) {
-                    return WordFocusedViewMobile(state.selectedWord!);
+                    return WordFocusedMobileView(state.selectedWord!);
                   },
                 ).then(
                   (_) =>
@@ -146,7 +146,7 @@ if (state is CrosswordLoaded) {
               showModalBottomSheet<WordFocusedDesktopView>(
                 context: context,
                 builder: (context) {
-                  return WordFocusedViewMobile(state.selectedWord!);
+                  return WordFocusedMobileView(state.selectedWord!);
                 },
               );
             }

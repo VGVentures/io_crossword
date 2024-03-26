@@ -108,8 +108,8 @@ class WordFocusedDesktopView extends StatelessWidget {
   }
 }
 
-class WordFocusedViewMobile extends StatelessWidget {
-  const WordFocusedViewMobile(this.selectedWord, {super.key});
+class WordFocusedMobileView extends StatelessWidget {
+  const WordFocusedMobileView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
