@@ -140,19 +140,6 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   }
 }
 
-/*
-if (state is CrosswordLoaded) {
-            if (state.selectedWord != null) {
-              showModalBottomSheet<WordFocusedDesktopView>(
-                context: context,
-                builder: (context) {
-                  return WordFocusedMobileView(state.selectedWord!);
-                },
-              );
-            }
-          }
-*/
-
 class _ZoomControls extends StatelessWidget {
   const _ZoomControls({
     required this.game,
