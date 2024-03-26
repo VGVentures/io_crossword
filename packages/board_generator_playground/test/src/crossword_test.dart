@@ -842,7 +842,7 @@ void main() {
             expect(constraints, isNull);
           });
 
-          test(' and last position is an invalid length', () {
+          test('and last position is an invalid length', () {
             final board = Crossword10();
 
             final candidate = WordCandidate(
@@ -864,7 +864,7 @@ void main() {
             );
           });
 
-          test('reaches last position with the constrains', () {
+          test('and before last position is an invalid length', () {
             final board = Crossword10();
 
             final candidate = WordCandidate(
