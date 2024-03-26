@@ -1,17 +1,22 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
-class CrosswordGame extends FlameGame with PanDetector {
+class CrosswordGame extends FlameGame
+    with PanDetector, HasKeyboardHandlerComponents {
   CrosswordGame(
     this.bloc, {
     bool? showDebugOverlay,
-  }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
+    FlameNetworkImages? networkImages,
+  })  : showDebugOverlay = showDebugOverlay ?? debugOverlay,
+        networkImages = networkImages ?? FlameNetworkImages();
 
   static const cellSize = 80;
 
@@ -20,12 +25,13 @@ class CrosswordGame extends FlameGame with PanDetector {
 
   final CrosswordBloc bloc;
 
-  late final Size totalArea;
   late final int sectionSize;
 
   late final Image lettersSprite;
 
   var _visibleSections = <(double, double)>[];
+
+  final FlameNetworkImages networkImages;
 
   CrosswordLoaded get state {
     final state = bloc.state;
@@ -44,25 +50,27 @@ class CrosswordGame extends FlameGame with PanDetector {
 
     sectionSize = state.sectionSize * cellSize;
 
-    totalArea = Size(
-      (state.width * cellSize).toDouble(),
-      (state.height * cellSize).toDouble(),
-    );
-
     camera.priority = 1;
 
     _updateVisibleSections();
 
     if (showDebugOverlay) {
-      await addAll(
-        [
-          FpsComponent(),
-          FpsTextComponent(),
-          ChildCounterComponent<SectionComponent>(
-            position: Vector2(0, 30),
-            target: world,
+      await add(
+        RectangleComponent(
+          size: Vector2(
+            200,
+            50,
           ),
-        ],
+          paint: Paint()..color = const Color(0xFF000000),
+          children: [
+            FpsComponent(),
+            FpsTextComponent(),
+            ChildCounterComponent<SectionComponent>(
+              position: Vector2(0, 30),
+              target: world,
+            ),
+          ],
+        ),
       );
     }
   }
@@ -98,8 +106,8 @@ class CrosswordGame extends FlameGame with PanDetector {
     final lx = endSection.x - startSection.x;
     final ly = endSection.y - startSection.y;
 
-    for (var x = startSection.x; x < endSection.x; x++) {
-      for (var y = startSection.y; y < endSection.y; y++) {
+    for (var x = startSection.x; x <= endSection.x; x++) {
+      for (var y = startSection.y; y <= endSection.y; y++) {
         final dx = x - startSection.x;
         final dy = y - startSection.y;
 
@@ -161,7 +169,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     super.onPanUpdate(info);
 
     _distanceMoved += info.delta.global.length;
-    camera.viewfinder.position -= info.delta.global;
+    camera.viewfinder.position -= info.delta.global / camera.viewfinder.zoom;
 
     if (_distanceMoved >= 280) {
       _distanceMoved = 0;
@@ -174,15 +182,24 @@ class CrosswordGame extends FlameGame with PanDetector {
       return;
     }
     camera.viewport.position /= 1.05;
-    camera.viewfinder.zoom = camera.viewfinder.zoom - 0.05;
 
+    camera.viewfinder.zoom -= 0.05;
+
+    if (camera.viewfinder.zoom <= 0.80 &&
+        state.renderMode != RenderMode.snapshot) {
+      bloc.add(const RenderModeSwitched(RenderMode.snapshot));
+    }
     _updateVisibleSections();
   }
 
   void zoomIn() {
     camera.viewport.position *= 1.05;
+
     camera.viewfinder.zoom += 0.05;
 
+    if (camera.viewfinder.zoom >= 0.80 && state.renderMode != RenderMode.game) {
+      bloc.add(const RenderModeSwitched(RenderMode.game));
+    }
     _updateVisibleSections();
   }
 

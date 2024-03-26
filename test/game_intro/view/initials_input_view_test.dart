@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,19 +23,29 @@ void main() {
 
       child = BlocProvider.value(
         value: bloc,
-        child: const InitialsInputView(),
+        child: Material(child: InitialsInputView()),
       );
     });
 
     testWidgets(
+      'renders InitialsFormView',
+      (tester) async {
+        when(() => bloc.state).thenReturn(GameIntroState());
+        await tester.pumpApp(child);
+
+        expect(find.byType(InitialsFormView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'adds InitialsSubmitted event when tapping button',
       (tester) async {
-        when(() => bloc.state).thenReturn(const GameIntroState());
+        when(() => bloc.state).thenReturn(GameIntroState());
         await tester.pumpApp(child);
 
         await tester.tap(find.byType(PrimaryButton));
 
-        verify(() => bloc.add(const InitialsSubmitted())).called(1);
+        verify(() => bloc.add(InitialsSubmitted())).called(1);
       },
     );
   });

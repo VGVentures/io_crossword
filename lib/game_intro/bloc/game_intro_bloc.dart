@@ -1,3 +1,4 @@
+import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -9,16 +10,31 @@ part 'game_intro_state.dart';
 class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   GameIntroBloc({
     required BoardInfoRepository boardInfoRepository,
+    required LeaderboardResource leaderboardResource,
   })  : _boardInfoRepository = boardInfoRepository,
+        _leaderboardResource = leaderboardResource,
         super(const GameIntroState()) {
+    on<BlacklistRequested>(_onBlacklistRequested);
     on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
     on<MascotSubmitted>(_onMascotSubmitted);
+    on<InitialsUpdated>(_onInitialsUpdated);
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
   final BoardInfoRepository _boardInfoRepository;
+  final LeaderboardResource _leaderboardResource;
+  final initialsRegex = RegExp('[A-Z]{3}');
+
+  Future<void> _onBlacklistRequested(
+    BlacklistRequested event,
+    Emitter<GameIntroState> emit,
+  ) async {
+    // TODO(jaime): fetch blacklist from server
+    final blacklist = ['TST'];
+    emit(state.copyWith(initialsBlacklist: blacklist));
+  }
 
   Future<void> _onBoardProgressRequested(
     BoardProgressRequested event,
@@ -64,12 +80,55 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     );
   }
 
-  void _onInitialsSubmitted(
-    InitialsSubmitted event,
+  void _onInitialsUpdated(
+    InitialsUpdated event,
     Emitter<GameIntroState> emit,
   ) {
-    emit(
-      state.copyWith(isIntroCompleted: true),
-    );
+    final initials = [...state.initials];
+    initials[event.index] = event.character;
+    final initialsStatus =
+        (state.initialsStatus == InitialsFormStatus.blacklisted)
+            ? InitialsFormStatus.initial
+            : state.initialsStatus;
+    emit(state.copyWith(initials: initials, initialsStatus: initialsStatus));
+  }
+
+  Future<void> _onInitialsSubmitted(
+    InitialsSubmitted event,
+    Emitter<GameIntroState> emit,
+  ) async {
+    if (!_hasValidPattern()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.invalid));
+    } else if (_isBlacklisted()) {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.blacklisted));
+    } else {
+      emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
+
+      try {
+        await _leaderboardResource.createScore(
+          initials: state.initials.join(),
+          mascot: state.selectedMascot,
+        );
+
+        emit(
+          state.copyWith(
+            initialsStatus: InitialsFormStatus.success,
+            isIntroCompleted: true,
+          ),
+        );
+      } catch (e, s) {
+        addError(e, s);
+        emit(state.copyWith(initialsStatus: InitialsFormStatus.failure));
+      }
+    }
+  }
+
+  bool _hasValidPattern() {
+    final value = state.initials;
+    return value.isNotEmpty && initialsRegex.hasMatch(value.join());
+  }
+
+  bool _isBlacklisted() {
+    return state.initialsBlacklist.contains(state.initials.join());
   }
 }

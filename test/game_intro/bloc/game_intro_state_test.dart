@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -46,6 +47,27 @@ void main() {
         expect(
           GameIntroState().copyWith(selectedMascot: Mascots.android),
           equals(GameIntroState(selectedMascot: Mascots.android)),
+        );
+      });
+
+      test('updates initials', () {
+        expect(
+          GameIntroState().copyWith(initials: ['W', 'O', 'W']),
+          equals(GameIntroState(initials: ['W', 'O', 'W'])),
+        );
+      });
+
+      test('updates initialsBlacklist', () {
+        expect(
+          GameIntroState().copyWith(initialsBlacklist: ['WOW']),
+          equals(GameIntroState(initialsBlacklist: ['WOW'])),
+        );
+      });
+
+      test('updates initialsStatus', () {
+        expect(
+          GameIntroState().copyWith(initialsStatus: InitialsFormStatus.success),
+          equals(GameIntroState(initialsStatus: InitialsFormStatus.success)),
         );
       });
     });

@@ -14,14 +14,14 @@ class CrosswordInitial extends CrosswordState {
 class WordSelection extends Equatable {
   const WordSelection({
     required this.section,
-    required this.wordId,
+    required this.word,
   });
 
   final (int, int) section;
-  final String wordId;
+  final Word word;
 
   @override
-  List<Object> get props => [section, wordId];
+  List<Object> get props => [section, word];
 }
 
 enum RenderMode { game, snapshot }
@@ -29,57 +29,62 @@ enum RenderMode { game, snapshot }
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
-    required this.sections,
-    // TODO(any): get configuration from db
-    this.width = 40,
-    this.height = 40,
+    this.sections = const {},
     this.selectedWord,
     this.renderMode = RenderMode.game,
-    this.sectionsSnapshots = const {},
+    this.renderLimits = const [],
     this.mascot = Mascots.dash,
+    this.initials = '',
   });
 
-  final int width;
-  final int height;
   final int sectionSize;
-  final RenderMode renderMode;
   final Map<(int, int), BoardSection> sections;
-  final Map<(int, int), ui.Image> sectionsSnapshots;
   final WordSelection? selectedWord;
+  final RenderMode renderMode;
+  final List<double> renderLimits;
   final Mascots mascot;
+  final String initials;
 
   CrosswordLoaded copyWith({
-    int? width,
-    int? height,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
-    Map<(int, int), ui.Image>? sectionsSnapshots,
     WordSelection? selectedWord,
     RenderMode? renderMode,
+    List<double>? renderLimits,
     Mascots? mascot,
+    String? initials,
   }) {
     return CrosswordLoaded(
-      width: width ?? this.width,
-      height: height ?? this.height,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
-      sectionsSnapshots: sectionsSnapshots ?? this.sectionsSnapshots,
       selectedWord: selectedWord ?? this.selectedWord,
       renderMode: renderMode ?? this.renderMode,
+      renderLimits: renderLimits ?? this.renderLimits,
       mascot: mascot ?? this.mascot,
+      initials: initials ?? this.initials,
+    );
+  }
+
+  CrosswordLoaded removeSelectedWord() {
+    return CrosswordLoaded(
+      sectionSize: sectionSize,
+      sections: sections,
+      renderMode: renderMode,
+      renderLimits: renderLimits,
+      mascot: mascot,
+      initials: initials,
     );
   }
 
   @override
   List<Object?> get props => [
-        width,
-        height,
         sectionSize,
         sections,
-        sectionsSnapshots,
         selectedWord,
         renderMode,
+        renderLimits,
         mascot,
+        initials,
       ];
 }
 

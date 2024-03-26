@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -5,11 +7,12 @@ import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/extensions.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -39,7 +42,6 @@ void main() {
 
       final state = CrosswordLoaded(
         sectionSize: sectionSize,
-        sections: const {},
       );
       mockState(state);
     });
@@ -84,17 +86,19 @@ void main() {
         mockState(state);
 
         await game.ready();
-        expect(game.firstChild<FpsComponent>(), isNotNull);
-        expect(game.firstChild<FpsTextComponent>(), isNotNull);
+        expect(game.descendants().whereType<FpsComponent>(), isNotEmpty);
+        expect(game.descendants().whereType<FpsTextComponent>(), isNotNull);
         expect(
-          game.firstChild<ChildCounterComponent<SectionComponent>>(),
+          game
+              .descendants()
+              .whereType<ChildCounterComponent<SectionComponent>>(),
           isNotNull,
         );
       },
     );
 
     testWithGame(
-      'can tap words',
+      'can tap words and adapts camera position and zoom',
       createGame,
       (game) async {
         final state = CrosswordLoaded(
@@ -124,6 +128,19 @@ void main() {
                     CrosswordGame.cellSize *
                     sectionSize);
 
+        final targetCenter = Vector2(
+          targetWord.position.x * CrosswordGame.cellSize.toDouble() +
+              targetWord.width / 2,
+          targetWord.position.y * CrosswordGame.cellSize.toDouble() +
+              targetWord.height / 2,
+        );
+        final wordRect = Rect.fromLTWH(
+          (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
+          (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
+          targetWord.width.toDouble(),
+          targetWord.height.toDouble(),
+        );
+
         final event = _MockTapUpEvent();
         when(() => event.localPosition).thenReturn(
           Vector2(
@@ -136,6 +153,18 @@ void main() {
               event,
             );
 
+        expect(
+          game.camera.viewfinder.position,
+          equals(targetCenter),
+        );
+        expect(
+          game.camera.visibleWorldRect.contains(wordRect.topLeft),
+          isTrue,
+        );
+        expect(
+          game.camera.visibleWorldRect.contains(wordRect.bottomRight),
+          isTrue,
+        );
         verify(
           () => bloc.add(
             WordSelected(
@@ -187,7 +216,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -224,7 +253,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord.id,
+                word: targetWord,
               ),
             ),
           );
@@ -264,7 +293,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord1.id,
+                word: targetWord1,
               ),
             ),
           );
@@ -281,7 +310,7 @@ void main() {
             state.copyWith(
               selectedWord: WordSelection(
                 section: targetSection.index,
-                wordId: targetWord2.id,
+                word: targetWord2,
               ),
             ),
           );
@@ -293,6 +322,207 @@ void main() {
             targetSection.lastSelectedSection,
             equals(targetSection.index),
           );
+        },
+      );
+
+      testWithGame(
+        'adds KeyboardListener component',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await game.ready();
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+          expect(listeners.length, equals(1));
+          expect(listeners.first.index.$1, targetWord.id);
+        },
+      );
+
+      testWithGame(
+        'adds KeyboardListener component and keeps only one listener when'
+        ' changing selected word',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await game.ready();
+
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+          expect(listeners.length, equals(1));
+          expect(listeners.first.index.$1, targetWord.id);
+
+          final targetWord2 = boardSection.words.elementAt(1);
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord2,
+              ),
+            ),
+          );
+
+          await game.ready();
+
+          final newListeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+          expect(newListeners.length, equals(1));
+          expect(newListeners.first.index.$1, targetWord2.id);
+        },
+      );
+    });
+
+    group('SectionKeyboardHandler', () {
+      late StreamController<CrosswordState> stateController;
+      final state = CrosswordLoaded(
+        sectionSize: sectionSize,
+        sections: {
+          for (final section in sections)
+            (section.position.x, section.position.y): section,
+        },
+      );
+
+      setUp(() {
+        stateController = StreamController<CrosswordState>.broadcast();
+        whenListen(
+          bloc,
+          stateController.stream,
+          initialState: state,
+        );
+      });
+
+      testWithGame(
+        'can enter characters',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+          await game.ready();
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+
+          listeners.first.onKeyEvent(
+            KeyDownEvent(
+              logicalKey: LogicalKeyboardKey.keyF,
+              physicalKey: PhysicalKeyboardKey.keyF,
+              timeStamp: DateTime.now().timeZoneOffset,
+              character: 'f',
+            ),
+            {LogicalKeyboardKey.keyF},
+          );
+          await game.ready();
+          expect(listeners.first.word, equals('f'));
+        },
+      );
+
+      testWithGame(
+        'can remove characters',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+          await game.ready();
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+
+          listeners.first.onKeyEvent(
+            KeyDownEvent(
+              logicalKey: LogicalKeyboardKey.keyF,
+              physicalKey: PhysicalKeyboardKey.keyF,
+              timeStamp: DateTime.now().timeZoneOffset,
+              character: 'f',
+            ),
+            {LogicalKeyboardKey.keyF},
+          );
+          await game.ready();
+          expect(listeners.first.word, equals('f'));
+
+          listeners.first.onKeyEvent(
+            KeyDownEvent(
+              logicalKey: LogicalKeyboardKey.backspace,
+              physicalKey: PhysicalKeyboardKey.backspace,
+              timeStamp: DateTime.now().timeZoneOffset,
+            ),
+            {LogicalKeyboardKey.backspace},
+          );
+          await game.ready();
+          expect(listeners.first.word, equals(''));
         },
       );
     });
@@ -335,7 +565,10 @@ void main() {
               DragUpdateDetails(
                 globalPosition: Offset.zero,
                 localPosition: Offset.zero,
-                delta: Offset(-sections.first.size * state.width * 1.5, 30),
+                delta: Offset(
+                  -sections.first.size * CrosswordGame.cellSize.toDouble(),
+                  30,
+                ),
               ),
             ),
           )
@@ -355,7 +588,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -371,7 +603,6 @@ void main() {
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 
@@ -382,12 +613,49 @@ void main() {
     );
 
     testWithGame(
+      'zoom out adds RenderModeSwitched with snapshot mode when less than 0.8',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          sectionSize: 400,
+        );
+        mockState(state);
+
+        await game.ready();
+        for (var i = 0; i < 4; i++) {
+          game.zoomOut();
+        }
+
+        verify(
+          () => bloc.add(RenderModeSwitched(RenderMode.snapshot)),
+        ).called(1);
+      },
+    );
+
+    testWithGame(
+      'zoom in adds SwitchRenderMode with game mode when more than 0.8',
+      createGame,
+      (game) async {
+        const state = CrosswordLoaded(
+          sectionSize: 400,
+          renderMode: RenderMode.snapshot,
+        );
+        mockState(state);
+
+        await game.ready();
+
+        game.zoomIn();
+
+        verify(() => bloc.add(RenderModeSwitched(RenderMode.game))).called(1);
+      },
+    );
+
+    testWithGame(
       'cannot zoom out more than 0.05',
       createGame,
       (game) async {
         const state = CrosswordLoaded(
           sectionSize: 400,
-          sections: {},
         );
         mockState(state);
 

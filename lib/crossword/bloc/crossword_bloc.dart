@@ -1,33 +1,32 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:bloc/bloc.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart' hide Axis;
 import 'package:game_domain/game_domain.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
 
-typedef ImageDecodeCall = Future<ui.Image> Function(Uint8List);
-
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
-    ImageDecodeCall? imageDecodeCall,
+    required BoardInfoRepository boardInfoRepository,
   })  : _crosswordRepository = crosswordRepository,
-        _imageDecodeCall = imageDecodeCall ?? decodeImageFromList,
+        _boardInfoRepository = boardInfoRepository,
         super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
+    on<WordUnselected>(_onWordUnselected);
     on<RenderModeSwitched>(_onRenderModeSwitched);
     on<MascotSelected>(_onMascotSelected);
+    on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
+    on<InitialsSelected>(_onInitialsSelected);
   }
 
   final CrosswordRepository _crosswordRepository;
-  final ImageDecodeCall _imageDecodeCall;
+  final BoardInfoRepository _boardInfoRepository;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
@@ -44,14 +43,19 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           (section.position.x, section.position.y): section,
         };
 
+        if (state is CrosswordLoaded) {
+          final loadedState = state as CrosswordLoaded;
+          return loadedState.copyWith(
+            sections: {
+              ...loadedState.sections,
+              ...newSection,
+            },
+          );
+        }
+
         return CrosswordLoaded(
           sectionSize: section.size,
-          sections: state is CrosswordLoaded
-              ? {
-                  ...(state as CrosswordLoaded).sections,
-                  ...newSection,
-                }
-              : {...newSection},
+          sections: newSection,
         );
       },
     );
@@ -104,9 +108,20 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         currentState.copyWith(
           selectedWord: WordSelection(
             section: section,
-            wordId: event.word.id,
+            word: event.word,
           ),
         ),
+      );
+    }
+  }
+
+  Future<void> _onWordUnselected(
+    WordUnselected event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).removeSelectedWord(),
       );
     }
   }
@@ -116,26 +131,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     Emitter<CrosswordState> emit,
   ) async {
     if (state is CrosswordLoaded) {
-      var loadedState = state as CrosswordLoaded;
-
-      if (event.renderMode == RenderMode.snapshot) {
-        final sectionsWithSnapshot = loadedState.sections.values
-            .where((section) => section.snapshotUrl != null);
-
-        for (final section in sectionsWithSnapshot) {
-          final bytes = await _crosswordRepository.fetchSectionSnapshotBytes(
-            section.snapshotUrl!,
-          );
-          final image = await _imageDecodeCall(bytes);
-
-          loadedState = loadedState.copyWith(
-            sectionsSnapshots: {
-              ...loadedState.sectionsSnapshots,
-              (section.position.x, section.position.y): image,
-            },
-          );
-        }
-      }
+      final loadedState = state as CrosswordLoaded;
 
       emit(
         loadedState.copyWith(
@@ -152,6 +148,46 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     if (state is CrosswordLoaded) {
       emit(
         (state as CrosswordLoaded).copyWith(mascot: event.mascot),
+      );
+    }
+  }
+
+  FutureOr<void> _onBoardLoadingInfoFetched(
+    BoardLoadingInfoFetched event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    try {
+      final limits = await _boardInfoRepository.getRenderModeZoomLimits();
+      final sectionSize = await _boardInfoRepository.getSectionSize();
+
+      if (state is CrosswordLoaded) {
+        emit(
+          (state as CrosswordLoaded).copyWith(
+            renderLimits: limits,
+            sectionSize: sectionSize,
+          ),
+        );
+      } else {
+        emit(
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            renderLimits: limits,
+          ),
+        );
+        add(const BoardSectionRequested((0, 0)));
+      }
+    } catch (e) {
+      emit(CrosswordError(e.toString()));
+    }
+  }
+
+  Future<void> _onInitialsSelected(
+    InitialsSelected event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).copyWith(initials: event.initials.join()),
       );
     }
   }

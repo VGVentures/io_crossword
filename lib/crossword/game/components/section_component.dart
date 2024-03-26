@@ -2,13 +2,17 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart' hide Axis, Image;
+import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
+import 'package:io_crossword/crossword/extensions/extensions.dart';
 
 class SectionTapController extends PositionComponent
-    with ParentIsA<SectionComponent>, TapCallbacks {
+    with ParentIsA<SectionComponent>, TapCallbacks, HasGameRef<CrosswordGame> {
   SectionTapController({
     super.position,
     super.size,
@@ -28,20 +32,23 @@ class SectionTapController extends PositionComponent
           );
 
       for (final word in [...boardSection.words, ...boardSection.borderWords]) {
-        final wordLength = word.answer.length * CrosswordGame.cellSize;
-        final width =
-            word.axis == Axis.horizontal ? wordLength : CrosswordGame.cellSize;
-        final height =
-            word.axis == Axis.vertical ? wordLength : CrosswordGame.cellSize;
-
         final wordRect = Rect.fromLTWH(
           (word.position.x * CrosswordGame.cellSize).toDouble(),
           (word.position.y * CrosswordGame.cellSize).toDouble(),
-          width.toDouble(),
-          height.toDouble(),
+          word.width.toDouble(),
+          word.height.toDouble(),
         );
 
         if (wordRect.contains(localPosition.toOffset())) {
+          gameRef.camera.viewfinder.position = Vector2(
+            wordRect.left + wordRect.width / 2,
+            wordRect.top + wordRect.height / 2,
+          );
+
+          while (!gameRef.camera.visibleWorldRect.contains(wordRect.topLeft) ||
+              !gameRef.camera.visibleWorldRect.contains(wordRect.bottomRight)) {
+            gameRef.camera.viewfinder.zoom -= 0.05;
+          }
           parent.gameRef.bloc.add(
             WordSelected(parent.index, word),
           );
@@ -49,6 +56,44 @@ class SectionTapController extends PositionComponent
         }
       }
     }
+  }
+}
+
+class SectionKeyboardHandler extends PositionComponent
+    with
+        KeyboardHandler,
+        HasGameRef<CrosswordGame>,
+        ParentIsA<SectionComponent> {
+  SectionKeyboardHandler(
+    this.index, {
+    super.position,
+  });
+
+  final (String, Color, (int, int)) index;
+  String word = '';
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
+    if (event.character != null) {
+      word += event.character!;
+    }
+
+    if (event.logicalKey == LogicalKeyboardKey.backspace) {
+      word = word.substring(0, word.length - 1);
+    }
+
+    final wordCharacters = word.toUpperCase().characters;
+
+    for (var c = 0; c < wordCharacters.length; c++) {
+      final rect = wordCharacters.getCharacterRectangle(c);
+
+      parent.spriteBatchComponent?.spriteBatch?.replace(
+        index.$3.$1 + c,
+        source: rect,
+      );
+    }
+    return false;
   }
 }
 
@@ -94,6 +139,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   });
 
   final (int, int) index;
+  late RenderMode _renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
@@ -110,15 +156,18 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
+    final state = gameRef.state;
+
     _subscription = gameRef.bloc.stream.listen(_onNewState);
 
-    lastSelectedWord = gameRef.state.selectedWord?.wordId;
-    lastSelectedSection = gameRef.state.selectedWord?.section;
+    lastSelectedWord = state.selectedWord?.word.id;
+    lastSelectedSection = state.selectedWord?.section;
+    _renderMode = state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
       _boardSection = boardSection;
-      _loadBoardSection(boardSection);
+      _loadWithCurrentRenderMode();
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
@@ -155,16 +204,29 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     _subscription.cancel();
   }
 
+  void _loadWithCurrentRenderMode() {
+    if (_renderMode == RenderMode.snapshot) {
+      _loadSnapshot();
+    } else {
+      _loadBoardSection();
+    }
+  }
+
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
         final boardSection = state.sections[index];
+        _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
-          _loadBoardSection(boardSection);
+          _loadWithCurrentRenderMode();
         }
       } else {
-        final selectedWord = state.selectedWord?.wordId;
+        if (_renderMode != state.renderMode) {
+          _renderMode = state.renderMode;
+          _loadWithCurrentRenderMode();
+        }
+        final selectedWord = state.selectedWord?.word.id;
         final selectedSection = state.selectedWord?.section;
         if (selectedWord != lastSelectedWord ||
             selectedSection != lastSelectedSection) {
@@ -181,54 +243,30 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     }
   }
 
-  void _updateSelection({
-    String? previousWord,
-    String? newWord,
-    (int, int)? previousSection,
-    (int, int)? newSection,
-  }) {
-    final indexes = <(String, Color, (int, int))>[];
-    if (previousSection == index &&
-        previousWord != null &&
-        _wordIndex.containsKey(previousWord)) {
-      indexes.add(
-        (
-          previousWord,
-          Colors.white.withOpacity(.2),
-          _wordIndex[previousWord]!,
-        ),
+  Vector2 get sectionPosition => Vector2(
+        index.$1 * gameRef.sectionSize.toDouble(),
+        index.$2 * gameRef.sectionSize.toDouble(),
       );
-    }
 
-    if (newSection == index &&
-        newWord != null &&
-        _wordIndex.containsKey(newWord)) {
-      indexes.add(
-        (
-          newWord,
-          Colors.white,
-          _wordIndex[newWord]!,
-        ),
-      );
-    }
+  Future<void> _loadSnapshot() async {
+    final snapshot = await gameRef.networkImages.load(
+      _boardSection!.snapshotUrl!,
+    );
 
-    for (final index in indexes) {
-      for (var i = index.$3.$1; i < index.$3.$2; i++) {
-        spriteBatchComponent?.spriteBatch?.replace(
-          i,
-          color: index.$2,
-        );
-      }
-    }
+    spriteBatchComponent?.removeFromParent();
+    add(
+      SpriteComponent.fromImage(
+        position: sectionPosition,
+        snapshot,
+      ),
+    );
   }
 
-  void _loadBoardSection(BoardSection section) {
-    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
-
-    final sectionPosition = Vector2(
-      (index.$1 * gameRef.sectionSize).toDouble(),
-      (index.$2 * gameRef.sectionSize).toDouble(),
-    );
+  void _loadBoardSection() {
+    final section = _boardSection;
+    if (section == null) {
+      return;
+    }
 
     add(
       SectionTapController(
@@ -240,11 +278,15 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       ),
     );
 
+    firstChild<SpriteComponent>()?.removeFromParent();
+
+    final spriteBatch = SpriteBatch(gameRef.lettersSprite);
+
     _wordIndex = {};
 
     final color = Colors.white.withOpacity(.2);
-    for (var i = 0; i < section.words.length; i++) {
-      final word = section.words[i];
+    for (var i = 0; i < _boardSection!.words.length; i++) {
+      final word = _boardSection!.words[i];
 
       final wordCharacters = word.answer.toUpperCase().characters;
 
@@ -254,14 +296,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         if (word.solvedTimestamp != null) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
-          final char = wordCharacters.elementAt(c);
-          final charIndex = char.codeUnitAt(0) - 65;
-          rect = Rect.fromLTWH(
-            (charIndex * CrosswordGame.cellSize).toDouble(),
-            0,
-            CrosswordGame.cellSize.toDouble(),
-            CrosswordGame.cellSize.toDouble(),
-          );
+          rect = wordCharacters.getCharacterRectangle(c);
           // coverage:ignore-end
         } else {
           rect = Rect.fromLTWH(
@@ -299,5 +334,49 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         blendMode: BlendMode.srcATop,
       ),
     );
+  }
+
+  void _updateSelection({
+    String? previousWord,
+    String? newWord,
+    (int, int)? previousSection,
+    (int, int)? newSection,
+  }) {
+    final indexes = <(String, Color, (int, int))>[];
+    if (previousSection == index &&
+        previousWord != null &&
+        _wordIndex.containsKey(previousWord)) {
+      indexes.add(
+        (
+          previousWord,
+          Colors.white.withOpacity(.2),
+          _wordIndex[previousWord]!,
+        ),
+      );
+    }
+
+    children.whereType<SectionKeyboardHandler>().forEach(
+          (e) => e.removeFromParent(),
+        );
+    if (newSection == index &&
+        newWord != null &&
+        _wordIndex.containsKey(newWord)) {
+      final newIndex = (
+        newWord,
+        Colors.white,
+        _wordIndex[newWord]!,
+      );
+      add(SectionKeyboardHandler(newIndex));
+      indexes.add(newIndex);
+    }
+
+    for (final index in indexes) {
+      for (var i = index.$3.$1; i < index.$3.$2; i++) {
+        spriteBatchComponent?.spriteBatch?.replace(
+          i,
+          color: index.$2,
+        );
+      }
+    }
   }
 }

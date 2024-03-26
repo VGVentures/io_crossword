@@ -25,6 +25,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.4.1"
+  api_client:
+    dependency: "direct main"
+    description:
+      path: "packages/api_client"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   args:
     dependency: transitive
     description:
@@ -33,6 +40,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: c9c85fedbe2188b95133cbe960e16f5f448860f7133330e272edbbca5893ddc6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
   async:
     dependency: transitive
     description:
@@ -108,18 +123,18 @@ packages:
     dependency: "direct main"
     description:
       name: bloc
-      sha256: f53a110e3b48dcd78136c10daa5d51512443cea5e1348c9d80a320095fa2db9e
+      sha256: "106842ad6569f0b60297619e9e0b1885c2fb9bf84812935490e6c5275777804e"
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.3"
+    version: "8.1.4"
   bloc_test:
     dependency: "direct dev"
     description:
       name: bloc_test
-      sha256: "55a48f69e0d480717067c5377c8485a3fcd41f1701a820deef72fa0f4ee7215f"
+      sha256: "165a6ec950d9252ebe36dc5335f2e6eb13055f33d56db0eeb7642768849b43d2"
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.6"
+    version: "9.1.7"
   board_info_repository:
     dependency: "direct main"
     description:
@@ -214,6 +229,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dev:
+    dependency: transitive
+    description:
+      name: dev
+      sha256: e7e806af20d53e293a7878212d2246d3e9fccd2b49d597600f9898ed83501cb4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   diff_match_patch:
     dependency: transitive
     description:
@@ -222,6 +245,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.1"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.3"
   equatable:
     dependency: "direct main"
     description:
@@ -315,7 +346,7 @@ packages:
     description:
       path: "packages/flame"
       ref: main
-      resolved-ref: bf3c282dd669e9a32a550b86770dba7fb8472afa
+      resolved-ref: e3e755c6dec35f36b4a42893afeea5f64ff025b7
       url: "https://github.com/flame-engine/flame.git"
     source: git
     version: "1.16.0"
@@ -343,6 +374,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  flame_network_assets:
+    dependency: "direct main"
+    description:
+      path: "packages/flame_network_assets"
+      ref: main
+      resolved-ref: e3e755c6dec35f36b4a42893afeea5f64ff025b7
+      url: "https://github.com/flame-engine/flame.git"
+    source: git
+    version: "0.3.0"
   flame_test:
     dependency: "direct main"
     description:
@@ -368,10 +408,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_bloc
-      sha256: "87325da1ac757fcc4813e6b34ed5dd61169973871fdf181d6c2109dd6935ece1"
+      sha256: f0ecf6e6eb955193ca60af2d5ca39565a86b8a142452c5b24d96fb477428f4d2
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.4"
+    version: "8.1.5"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -402,6 +442,14 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  gestures:
+    dependency: transitive
+    description:
+      name: gestures
+      sha256: "6e75e4ba1ad033a8be9a682974dfe6a2be96ab07b4aa8335ed37bbecb75b7770"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   glob:
     dependency: transitive
     description:
@@ -411,7 +459,7 @@ packages:
     source: hosted
     version: "2.1.2"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
@@ -657,6 +705,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      sha256: "43ac87de6e10afabc85c445745a7b799e04de84cebaa4fd7bf55a5e1e9604d29"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.4"
   pool:
     dependency: transitive
     description:
