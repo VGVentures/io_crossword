@@ -20,7 +20,17 @@ Future<Response> _onGet(RequestContext request) async {
 
   final words = sections.expand((section) => section.words);
 
-  final image = await boardrenderer.renderBoardWireframe(words.toList());
+  final cellSize =
+      int.tryParse(request.request.uri.queryParameters['cellSize'] ?? '') ?? 1;
+
+  final addLetters =
+      request.request.uri.queryParameters['addLetters'] == 'true';
+
+  final image = await boardrenderer.renderBoardWireframe(
+    words.toList(),
+    cellSize: cellSize,
+    addLetters: addLetters,
+  );
 
   return Response.bytes(
     body: image,

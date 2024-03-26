@@ -380,7 +380,7 @@ class Crossword {
     }
 
     final invalidLengths = <int>{};
-    var largestLength = largestWordLength;
+    var largestLength = largestWordLength + 1;
     final validLengths = <int>{
       for (var i = shortestWordLength; i <= largestLength; i++) i,
     };
