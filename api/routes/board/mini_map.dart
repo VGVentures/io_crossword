@@ -28,6 +28,7 @@ Future<Response> _onPost(RequestContext request) async {
   final image = await boardrenderer.renderBoardWireframe(
     words.toList(),
     cellSize: 4,
+    fill: true,
   );
 
   final firebaseCloudStorage = request.read<FirebaseCloudStorage>();

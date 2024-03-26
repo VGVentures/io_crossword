@@ -134,6 +134,7 @@ void main() {
             board2.words.first,
           ],
           cellSize: 4,
+          fill: true,
         ),
       ).thenAnswer((_) async {
         return Uint8List(0);
