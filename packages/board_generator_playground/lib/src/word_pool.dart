@@ -1,5 +1,4 @@
-import 'package:board_generator_playground/src/models/word_candidate.dart';
-import 'package:board_generator_playground/src/sort_words.dart';
+import 'package:board_generator_playground/board_generator_playground.dart';
 import 'package:meta/meta.dart';
 
 /// {@template word_pool}
@@ -39,42 +38,63 @@ class WordPool {
   /// The first longest word that respects the [constrainedWordCandidate] is
   /// returned.
   String? firstMatch(ConstrainedWordCandidate constrainedWordCandidate) {
-    final constraints = constrainedWordCandidate.constraints;
+    for (var i = longestWordLength; i >= shortestWordLength; i--) {
+      final word = firstMatchByWordLength(constrainedWordCandidate, i);
+
+      if (word != null) return word;
+    }
+
+    return null;
+  }
+
+  /// Retrieves the first word that matches the given
+  /// [constrainedWordCandidate] with the indicated length [wordLength] and
+  /// a word not equal to [ignoreWord].
+  ///
+  /// If no word within the pool matches the constraints, `null` is returned.
+  ///
+  /// The first longest word that respects the [constrainedWordCandidate] is
+  /// returned.
+  String? firstMatchByWordLength(
+    ConstrainedWordCandidate constrainedWordCandidate,
+    int wordLength, [
+    String? ignoreWord,
+  ]) {
     final invalidLengths = constrainedWordCandidate.invalidLengths;
 
-    for (var i = longestWordLength; i >= shortestWordLength; i--) {
-      if (invalidLengths.contains(i)) continue;
+    if (invalidLengths.contains(wordLength)) return null;
 
-      // We remove the first constrain because we previously search
-      // with the first constrains and we also need to remove constrains bigger
-      // than the characters available.
-      final updatedConstrains = <int, String>{
-        ...constraints,
-      }..removeWhere((key, value) => key > i);
+    final constraints = constrainedWordCandidate.constraints;
 
-      final firstConstrains = updatedConstrains.entries.first;
+    // We need to remove constrains bigger than the characters available.
+    final updatedConstrains = <int, String>{
+      ...constraints,
+    }..removeWhere((key, value) => key > wordLength);
 
-      final words =
-          sortedWords[i]?[firstConstrains.key]?[firstConstrains.value] ?? {};
+    final firstConstrains = updatedConstrains.entries.first;
 
-      if (words.isEmpty) continue;
+    final words = sortedWords[wordLength]?[firstConstrains.key]
+            ?[firstConstrains.value] ??
+        {};
 
-      if (constraints.length == 1) {
-        return words.first;
+    if (words.isEmpty) return null;
+
+    if (constraints.length == 1) {
+      for (final word in words) {
+        if (word != ignoreWord) return word;
       }
 
-      updatedConstrains.remove(firstConstrains.key);
+      return null;
+    }
 
-      final word = words.firstWhere(
-        (word) {
-          return !updatedConstrains.entries.any(
-            (constrain) => !word.startsWith(constrain.value, constrain.key),
-          );
-        },
-        orElse: () => '',
-      );
+    // We remove the first constrain because we previously searched
+    // with the first constrain
+    updatedConstrains.remove(firstConstrains.key);
 
-      if (word.isNotEmpty) {
+    for (final word in words) {
+      if (!updatedConstrains.entries.any(
+        (constrain) => !word.startsWith(constrain.value, constrain.key),
+      )) {
         return word;
       }
     }

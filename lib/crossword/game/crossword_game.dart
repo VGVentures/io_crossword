@@ -9,7 +9,8 @@ import 'package:flame/game.dart';
 import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
-class CrosswordGame extends FlameGame with PanDetector {
+class CrosswordGame extends FlameGame
+    with PanDetector, HasKeyboardHandlerComponents {
   CrosswordGame(
     this.bloc, {
     bool? showDebugOverlay,
@@ -168,7 +169,7 @@ class CrosswordGame extends FlameGame with PanDetector {
     super.onPanUpdate(info);
 
     _distanceMoved += info.delta.global.length;
-    camera.viewfinder.position -= info.delta.global;
+    camera.viewfinder.position -= info.delta.global / camera.viewfinder.zoom;
 
     if (_distanceMoved >= 280) {
       _distanceMoved = 0;
