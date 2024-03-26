@@ -1,23 +1,8 @@
 import 'dart:io';
 
+import 'package:api/extensions/path_param_to_position.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
-
-(int, int)? _parseSectionId(String sectionId) {
-  final coordsRaw = sectionId.split(',');
-  if (coordsRaw.length != 2) {
-    return null;
-  }
-
-  final x = int.tryParse(coordsRaw[0]);
-  final y = int.tryParse(coordsRaw[1]);
-
-  if (x == null || y == null) {
-    return null;
-  }
-
-  return (x, y);
-}
 
 Future<Response> onRequest(
   RequestContext context,
@@ -38,7 +23,7 @@ Future<Response> _onPost(
 ) async {
   final crosswordRepository = context.read<CrosswordRepository>();
 
-  final posSection = _parseSectionId(sectionId);
+  final posSection = sectionId.parseToPosition();
   final sectionX = posSection?.$1;
   final sectionY = posSection?.$2;
 
@@ -46,7 +31,7 @@ Future<Response> _onPost(
     return Response(statusCode: HttpStatus.badRequest);
   }
 
-  final posWord = _parseSectionId(wordPosition);
+  final posWord = wordPosition.parseToPosition();
   final wordX = posWord?.$1;
   final wordY = posWord?.$2;
 
