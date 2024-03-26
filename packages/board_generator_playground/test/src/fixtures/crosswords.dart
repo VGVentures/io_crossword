@@ -484,3 +484,44 @@ class Crossword9 extends Crossword {
     );
   }
 }
+
+/// {@template crossword8}
+/// A pre-defined crossword for testing.
+///
+/// ```
+///      1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  19
+/// -2   S  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   -   C
+/// -1   O  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   -   A
+///  0   S  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   V   -
+///  1   -  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   A   -
+///  2   -  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   N   -
+/// ```
+/// {@endtemplate}
+class Crossword10 extends Crossword {
+  /// {@macro crossword8}
+  Crossword10() {
+    add(
+      WordEntry(
+        word: 'sos',
+        start: const Location(x: 1, y: -2),
+        direction: Direction.down,
+      ),
+    );
+
+    add(
+      WordEntry(
+        word: 'ca',
+        start: const Location(x: 19, y: -2),
+        direction: Direction.down,
+      ),
+    );
+
+    add(
+      WordEntry(
+        word: 'van',
+        start: const Location(x: 18, y: 0),
+        direction: Direction.down,
+      ),
+    );
+  }
+}
