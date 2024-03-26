@@ -21,6 +21,9 @@ class MiniMap extends RectangleComponent
   bool expanded = false;
 
   late Vector2 _mapImageSize;
+  late Vector2 _mapImageUnitySize;
+  static const _mapImageCellSize = 4;
+
   Vector2 _reticleSize = Vector2.zero();
   Vector2 _reticlePosition = Vector2.zero();
 
@@ -34,8 +37,8 @@ class MiniMap extends RectangleComponent
     final gameSize = gameRef.size /
         (CrosswordGame.cellSize.toDouble() * gameRef.camera.viewfinder.zoom);
 
-    final xRate = gameSize.x / mapImage.width;
-    final yRate = gameSize.y / mapImage.height;
+    final xRate = gameSize.x / _mapImageUnitySize.x;
+    final yRate = gameSize.y / _mapImageUnitySize.y;
 
     _reticleSize = Vector2(
       xRate * size.x,
@@ -43,9 +46,9 @@ class MiniMap extends RectangleComponent
     );
 
     final cameraX = gameRef.camera.viewfinder.position.x /
-        (mapImage.width * CrosswordGame.cellSize);
+        (_mapImageUnitySize.x * CrosswordGame.cellSize);
     final cameraY = gameRef.camera.viewfinder.position.y /
-        (mapImage.height * CrosswordGame.cellSize);
+        (_mapImageUnitySize.y * CrosswordGame.cellSize);
 
     _reticlePosition = Vector2(
           cameraX * size.x,
@@ -68,8 +71,8 @@ class MiniMap extends RectangleComponent
     final x = event.localPosition.x / size.x;
     final y = event.localPosition.y / size.y;
 
-    final totalWidth = mapImage.width * CrosswordGame.cellSize;
-    final totalHeight = mapImage.height * CrosswordGame.cellSize;
+    final totalWidth = _mapImageUnitySize.x * CrosswordGame.cellSize;
+    final totalHeight = _mapImageUnitySize.y * CrosswordGame.cellSize;
 
     final xTween = Tween(
       begin: -totalWidth / 2,
@@ -160,8 +163,13 @@ class MiniMap extends RectangleComponent
     paint = Paint()..color = const Color(0x88000000);
 
     // TODO(any): Load from the server and update from time to time.
-    mapImage = await gameRef.images.load('full_render.png');
+    mapImage = await gameRef.images.load('mini_map.png');
     _mapImageSize = Vector2.all(miniMapSize);
+
+    _mapImageUnitySize = Vector2(
+      mapImage.width / _mapImageCellSize,
+      mapImage.height / _mapImageCellSize,
+    );
 
     size = Vector2.all(miniMapSize);
 
