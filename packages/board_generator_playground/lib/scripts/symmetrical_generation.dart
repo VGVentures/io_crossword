@@ -20,13 +20,26 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 1000)),
+    crossword: Crossword(bounds: Bounds.square(size: 2000)),
   );
 
   final crossword = generator.populate();
 
+  log('Generated a crossword with: ${crossword.words.length}');
+
+  // Creates file to see the crossword
   File('symmetrical_crossword.txt')
       .writeAsStringSync(crossword.toPrettyString());
 
-  log('Finished with ${crossword.words.length} words.');
+  // Creates CSV file representing the crossword.
+  final buffer = StringBuffer();
+  for (final word in crossword.words) {
+    final axis = word.direction == Direction.across ? 'horizontal' : 'vertical';
+
+    buffer.writeln(
+      '${word.start.x},${word.start.y},${word.word},$axis',
+    );
+  }
+
+  File('board.txt').writeAsStringSync(buffer.toString());
 }
