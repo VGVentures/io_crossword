@@ -39,7 +39,7 @@ void main({
     );
   }
 
-  File('board.txt').writeAsStringSync(buffer.toString(), mode: FileMode.append);
+  File('board.txt').writeAsStringSync(buffer.toString());
 
   log('Generated a crossword with: ${crossword.words.length}');
 }
