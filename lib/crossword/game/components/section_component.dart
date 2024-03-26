@@ -75,12 +75,14 @@ class SectionKeyboardHandler extends PositionComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
-    if (event.character != null) {
+    if (event.character != null && word.length < index.$3.$2) {
       word += event.character!;
     }
 
-    if (event.logicalKey == LogicalKeyboardKey.backspace) {
+    var backspacePressed = false;
+    if (event.logicalKey == LogicalKeyboardKey.backspace && word.isNotEmpty) {
       word = word.substring(0, word.length - 1);
+      backspacePressed = true;
     }
 
     final wordCharacters = word.toUpperCase().characters;
@@ -88,12 +90,42 @@ class SectionKeyboardHandler extends PositionComponent
     for (var c = 0; c < wordCharacters.length; c++) {
       final rect = wordCharacters.getCharacterRectangle(c);
 
+      if (rect !=
+          parent.spriteBatchComponent?.spriteBatch?.sources
+              .elementAt(index.$3.$1 + c)) {
+        parent.spriteBatchComponent?.spriteBatch?.replace(
+          index.$3.$1 + c,
+          source: rect,
+        );
+      }
+    }
+    if (backspacePressed) {
       parent.spriteBatchComponent?.spriteBatch?.replace(
-        index.$3.$1 + c,
-        source: rect,
+        index.$3.$1 + wordCharacters.length,
+        source: Rect.fromLTWH(
+          2080,
+          0,
+          CrosswordGame.cellSize.toDouble(),
+          CrosswordGame.cellSize.toDouble(),
+        ),
       );
     }
     return false;
+  }
+
+  void resetAndRemove() {
+    for (var c = index.$3.$1; c < index.$3.$2; c++) {
+      parent.spriteBatchComponent?.spriteBatch?.replace(
+        c,
+        source: Rect.fromLTWH(
+          2080,
+          0,
+          CrosswordGame.cellSize.toDouble(),
+          CrosswordGame.cellSize.toDouble(),
+        ),
+      );
+    }
+    removeFromParent();
   }
 }
 
@@ -356,7 +388,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     }
 
     children.whereType<SectionKeyboardHandler>().forEach(
-          (e) => e.removeFromParent(),
+          (e) => e.resetAndRemove(),
         );
     if (newSection == index &&
         newWord != null &&
