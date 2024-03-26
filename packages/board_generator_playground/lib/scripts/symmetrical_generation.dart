@@ -20,7 +20,7 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 1000)),
+    crossword: Crossword(bounds: Bounds.square(size: 100)),
   );
 
   final stopwatch = Stopwatch()..start();
