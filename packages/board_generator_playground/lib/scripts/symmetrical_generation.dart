@@ -20,11 +20,14 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 2000)),
+    crossword: Crossword(bounds: Bounds.square(size: 1000)),
   );
 
+  final stopwatch = Stopwatch()..start();
   final crossword = generator.populate();
+  stopwatch.stop();
 
+  log('Elapsed time: ${stopwatch.elapsed.inSeconds} seconds');
   log('Generated a crossword with: ${crossword.words.length}');
 
   // Creates file to see the crossword

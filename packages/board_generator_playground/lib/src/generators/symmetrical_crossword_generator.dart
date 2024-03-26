@@ -14,16 +14,11 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   });
 
   @override
-  WordCandidate? get nextCandidate {
-    return super.nextCandidate;
-  }
-
-  @override
   void add(WordEntry entry) {
     super.add(entry);
 
-    if (crossword.words.length % 1000 == 0) {
-      print(crossword.words.length);
+    if (crossword.words.length % 10000 == 0) {
+      print('Placed ${crossword.words.length} words');
     }
   }
 
