@@ -63,13 +63,13 @@ void main() {
         ),
       );
 
-      expect(find.byKey(largeKey), findsNothing);
-      expect(find.byKey(smallKey), findsOneWidget);
+      expect(find.byKey(largeKey), findsOneWidget);
+      expect(find.byKey(smallKey), findsNothing);
       expect(find.byKey(childKey), findsOneWidget);
     });
 
     testWidgets('displays child when available (small)', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.small, 800));
 
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
@@ -83,8 +83,8 @@ void main() {
         ),
       );
 
-      expect(find.byKey(largeKey), findsOneWidget);
-      expect(find.byKey(smallKey), findsNothing);
+      expect(find.byKey(largeKey), findsNothing);
+      expect(find.byKey(smallKey), findsOneWidget);
       expect(find.byKey(childKey), findsOneWidget);
 
       addTearDown(tester.view.resetPhysicalSize);
