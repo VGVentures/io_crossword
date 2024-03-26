@@ -75,7 +75,7 @@ class SectionKeyboardHandler extends PositionComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
-    if (event.character != null && word.length < index.$3.$2) {
+    if (event.character != null && word.length < index.$3.$2 - index.$3.$1) {
       word += event.character!;
     }
 
