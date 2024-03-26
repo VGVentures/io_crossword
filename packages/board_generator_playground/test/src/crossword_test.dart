@@ -842,6 +842,52 @@ void main() {
             expect(constraints, isNull);
           });
 
+          test(
+              'reaches last position with invalid length '
+              'because would change the next word', () {
+            final board = Crossword10();
+
+            final candidate = WordCandidate(
+              start: Location(x: 1, y: -2),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: {18},
+                  start: candidate.start,
+                  direction: candidate.direction,
+                  constraints: const {0: 's'},
+                ),
+              ),
+            );
+          });
+
+          test('reaches last position with the constrains', () {
+            final board = Crossword10();
+
+            final candidate = WordCandidate(
+              start: Location(x: 1, y: 0),
+              direction: Direction.across,
+            );
+
+            final constraints = board.constraints(candidate);
+            expect(
+              constraints,
+              equals(
+                ConstrainedWordCandidate(
+                  invalidLengths: {17},
+                  start: candidate.start,
+                  direction: candidate.direction,
+                  constraints: const {0: 's', 17: 'v'},
+                ),
+              ),
+            );
+          });
+
           test('from an unconnected location', () {
             final board = Crossword8();
 
