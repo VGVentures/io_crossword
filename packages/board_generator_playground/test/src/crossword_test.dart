@@ -778,7 +778,7 @@ void main() {
                 topLeft: Location(x: -2, y: -2),
                 bottomRight: Location(x: 2, y: 2),
               ),
-              largestWordLength: 8,
+              longestWordLength: 8,
             );
 
             final candidate = WordCandidate(
@@ -792,7 +792,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll({6, 7, 8}),
@@ -810,7 +810,7 @@ void main() {
                 topLeft: Location(x: -2, y: -2),
                 bottomRight: Location(x: 2, y: 2),
               ),
-              largestWordLength: 8,
+              longestWordLength: 8,
             );
 
             final candidate = WordCandidate(
@@ -824,7 +824,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll({6, 7, 8}),
@@ -864,7 +864,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..remove(18),
@@ -892,7 +892,7 @@ void main() {
                 equals(
                   ConstrainedWordCandidate(
                     validLengths: List.generate(
-                      (board.largestWordLength - board.shortestWordLength) + 1,
+                      (board.longestWordLength - board.shortestWordLength) + 1,
                       (index) => index + board.shortestWordLength,
                     ).toSet()
                       ..remove(17),
@@ -919,7 +919,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll({3, 4, 5}),
@@ -945,7 +945,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet(),
                   start: candidate.start,
@@ -970,7 +970,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll(List.generate(14, (index) => 5 + index)),
@@ -996,7 +996,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll({7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}),
@@ -1022,7 +1022,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll(List.generate(15, (index) => 4 + index)),
@@ -1050,7 +1050,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll(List.generate(14, (index) => 5 + index)),
@@ -1076,7 +1076,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet(),
                   start: candidate.start,
@@ -1101,7 +1101,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..remove(4),
@@ -1127,7 +1127,7 @@ void main() {
               equals(
                 ConstrainedWordCandidate(
                   validLengths: List.generate(
-                    (board.largestWordLength - board.shortestWordLength) + 1,
+                    (board.longestWordLength - board.shortestWordLength) + 1,
                     (index) => index + board.shortestWordLength,
                   ).toSet()
                     ..removeAll(List.generate(15, (index) => 4 + index)),
