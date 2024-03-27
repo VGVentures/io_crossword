@@ -348,12 +348,11 @@ class Crossword {
   /// are invalid) we return `null`.
   ConstrainedWordCandidate? constraints(WordCandidate candidate) {
     final validLengths = _lengthConstraints(candidate);
-    if (validLengths == null || validLengths.isEmpty) return null;
 
-    // If there are no valid lengths, the constraint cannot be satisfied.
+    // If there are no valid lengths, the constraint is unsatisfiable.
     if (validLengths.isEmpty) return null;
-    final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
 
+    final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
     final characterConstraints = _characterConstraints(
       candidate,
       largestLength: largestLength,
@@ -374,7 +373,8 @@ class Crossword {
     );
   }
 
-  Set<int>? _lengthConstraints(WordCandidate candidate) {
+  /// The valid lengths for a given [candidate].
+  Set<int> _lengthConstraints(WordCandidate candidate) {
     final candidates = {
       for (var length = shortestWordLength;
           length <= largestWordLength;
@@ -404,9 +404,7 @@ class Crossword {
       });
     }
 
-    final validLengths = candidates.map((e) => e.length).toSet();
-    if (validLengths.isEmpty) return null;
-    return validLengths;
+    return candidates.map((e) => e.length).toSet();
   }
 
   Map<int, String> _characterConstraints(
