@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:api/extensions/path_param_to_position.dart';
-import 'package:api/extensions/solve_word.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 
@@ -40,29 +39,16 @@ Future<Response> _onPost(
     return Response(statusCode: HttpStatus.badRequest);
   }
 
-  final section = await crosswordRepository.findSectionByPosition(
-    sectionX,
-    sectionY,
-  );
-
-  if (section == null) {
-    return Response(statusCode: HttpStatus.notFound);
-  }
-
-  final word = section.words.firstWhere(
-    (element) => element.position.x == wordX && element.position.y == wordY,
-  );
   final json = await context.request.json() as Map<String, dynamic>;
   final answer = json['answer'] as String;
 
-  if (answer == word.answer) {
-    final solvedWord = word.resolve();
-    final newSection = section.copyWith(
-      words: [...section.words..remove(word), solvedWord],
-    );
-    await crosswordRepository.updateSection(newSection);
-    return Response.json(body: {'valid': true});
-  }
+  final valid = await crosswordRepository.answerWord(
+    sectionX,
+    sectionY,
+    wordX,
+    wordY,
+    answer,
+  );
 
-  return Response.json(body: {'valid': false});
+  return Response.json(body: {'valid': valid});
 }
