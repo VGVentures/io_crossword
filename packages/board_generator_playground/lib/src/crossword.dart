@@ -354,8 +354,7 @@ class Crossword {
 
     final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
     final characterConstraints = _characterConstraints(
-      candidate,
-      largestLength: largestLength,
+      candidate.fixTo(largestLength),
     );
 
     final invalidLengths = {
@@ -407,12 +406,9 @@ class Crossword {
     return candidates.map((e) => e.length).toSet();
   }
 
-  Map<int, String> _characterConstraints(
-    WordCandidate candidate, {
-    required int largestLength,
-  }) {
+  Map<int, String> _characterConstraints(FixedLengthWordCandidate candidate) {
     final constraints = <int, String>{};
-    for (var length = 0; length < largestLength; length++) {
+    for (var length = 0; length < candidate.length; length++) {
       final location = switch (candidate.direction) {
         Direction.across => candidate.start.shift(x: length),
         Direction.down => candidate.start.shift(y: length),
