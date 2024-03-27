@@ -27,14 +27,14 @@ class WordCandidate extends Equatable {
 class ConstrainedWordCandidate extends WordCandidate {
   /// {@macro constrained_word_candidate}
   const ConstrainedWordCandidate({
-    required this.invalidLengths,
+    required this.validLengths,
     required super.start,
     required super.direction,
     required this.constraints,
   });
 
-  /// The lengths that the word cannot be.
-  final Set<int> invalidLengths;
+  /// The lengths that the word can be.
+  final Set<int> validLengths;
 
   /// The constraints for this word.
   ///
@@ -50,7 +50,7 @@ class ConstrainedWordCandidate extends WordCandidate {
 
   /// Whether the word satisfies the constraints.
   bool satisfies(String word) {
-    if (invalidLengths.contains(word.length)) {
+    if (!validLengths.contains(word.length)) {
       return false;
     }
 
@@ -66,7 +66,7 @@ class ConstrainedWordCandidate extends WordCandidate {
   @override
   List<Object?> get props => [
         ...super.props,
-        invalidLengths,
+        validLengths,
         constraints,
       ];
 }
