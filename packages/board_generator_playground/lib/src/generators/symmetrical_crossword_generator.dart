@@ -30,8 +30,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final bounds = crossword.bounds!;
 
     final constraints = ConstrainedWordCandidate(
-      validLengths: {
-        for (int i = 1; i <= pool.longestWordLength; i += 2) i,
+      invalidLengths: {
+        for (int i = 2; i <= pool.longestWordLength; i += 2) i,
       },
       start: Location.zero,
       direction: Direction.down,
@@ -54,17 +54,29 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final constraints = crossword.constraints(candidate);
     if (constraints == null) return null;
 
+    final validLengths = <int>[];
+    for (var i = pool.shortestWordLength; i < pool.longestWordLength; i++) {
+      if (!constraints.invalidLengths.contains(i)) {
+        validLengths.add(i);
+      }
+    }
+
+    void invalidate(int length) {
+      validLengths.remove(length);
+      constraints.invalidLengths.add(length);
+    }
+
     // Invalidate those lengths that cross over the line of symmetry.
     if (candidate.direction == Direction.down) {
       for (var i = 0; i <= pool.longestWordLength; i++) {
         final verticalPosition = candidate.start.y - i;
         if (_symmetry.isAbove(verticalPosition)) {
-          constraints.validLengths.remove(i);
+          invalidate(i);
         }
       }
     }
 
-    while (constraints.validLengths.isNotEmpty) {
+    while (validLengths.isNotEmpty) {
       final word = pool.firstMatch(constraints);
       if (word == null) return null;
 
@@ -82,7 +94,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       final symmetricalConstraints =
           crossword.constraints(symmetricalWordCandidate);
       if (symmetricalConstraints == null) {
-        constraints.validLengths.remove(word.length);
+        invalidate(word.length);
         continue;
       }
 
@@ -92,7 +104,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
         word,
       );
       if (symmetricalWord == null) {
-        constraints.validLengths.remove(word.length);
+        invalidate(word.length);
         continue;
       }
 
@@ -106,7 +118,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
           crossword.overlaps(symmetricalWordEntry)) {
         // FIXME(Ayad): Investigate, this should not be reached, look into
         // constraints and selection.
-        constraints.validLengths.remove(word.length);
+        invalidate(word.length);
         continue;
       }
 

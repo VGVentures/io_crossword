@@ -38,8 +38,14 @@ final class Location extends Equatable {
   /// Finds all the locations between `this` and [target], inclusive.
   Set<Location> to(Location target) {
     final locations = <Location>{};
-    for (var i = x; i <= target.x; i++) {
-      for (var j = y; j <= target.y; j++) {
+
+    final fromX = x > target.x ? x : target.x;
+    final toX = x < target.x ? x : target.x;
+    final fromY = y > target.y ? y : target.y;
+    final toY = y < target.y ? y : target.y;
+
+    for (var i = toX; i <= fromX; i++) {
+      for (var j = toY; j <= fromY; j++) {
         locations.add(Location(x: i, y: j));
       }
     }

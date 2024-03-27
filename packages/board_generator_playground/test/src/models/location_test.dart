@@ -76,6 +76,16 @@ void main() {
         });
       });
 
+      test('returns a set of locations between the two reversed locations', () {
+        final location = Location(x: 1, y: 1);
+        expect(location.to(Location(x: 0, y: 0)), {
+          Location(x: 0, y: 0),
+          Location(x: 0, y: 1),
+          Location(x: 1, y: 0),
+          Location(x: 1, y: 1),
+        });
+      });
+
       test(
         'returns a set of locations between the two horizontal locations',
         () {
