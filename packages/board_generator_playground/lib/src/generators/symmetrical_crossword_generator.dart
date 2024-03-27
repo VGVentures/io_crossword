@@ -3,8 +3,8 @@
 import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template symmetrical_crossword_generator}
-/// A simple crossword generator that populates a crossword without
-/// any line of symmetry.
+/// A simple crossword generator that populates a crossword with an
+/// horizontal line of symmetry.
 /// {@endtemplate}
 class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   /// {@macro symmetrical_crossword_generator}
@@ -12,6 +12,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     required super.pool,
     required super.crossword,
   });
+
+  final _lineOfSymmetry = _HorizontalLineOfSymmetry();
 
   @override
   void add(WordEntry entry) {
@@ -38,7 +40,10 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final word = pool.firstMatch(constraints)!;
     final entry = WordEntry(
       word: word,
-      start: Location(x: bounds.topLeft.x, y: 0 - (word.length ~/ 2)),
+      start: Location(
+        x: bounds.topLeft.x,
+        y: _lineOfSymmetry.yIntercept - (word.length ~/ 2),
+      ),
       direction: constraints.direction,
     );
     add(entry);
@@ -56,13 +61,17 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       }
     }
 
+    void invalidate(int length) {
+      validLengths.remove(length);
+      constraints.invalidLengths.add(length);
+    }
+
     // Invalidate those lengths that cross over the line of symmetry.
     if (candidate.direction == Direction.down) {
       for (var i = 0; i <= pool.longestWordLength; i++) {
         final verticalPosition = candidate.start.y - i;
-        if (verticalPosition < 0) {
-          validLengths.remove(i);
-          constraints.invalidLengths.add(i);
+        if (_lineOfSymmetry.isAbove(verticalPosition)) {
+          invalidate(i);
         }
       }
     }
@@ -77,19 +86,15 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
         direction: candidate.direction,
       );
 
-      final symmetricalLocation = _horizontallySymmetricalLocation(wordEntry);
-
       final symmetricalWordCandidate = WordCandidate(
-        start: symmetricalLocation,
+        start: _lineOfSymmetry.mirror(wordEntry),
         direction: constraints.direction,
       );
 
       final symmetricalConstrainedWordCandidate =
           crossword.constraints(symmetricalWordCandidate);
       if (symmetricalConstrainedWordCandidate == null) {
-        final length = word.length;
-        constraints.invalidLengths.add(length);
-        validLengths.removeWhere((value) => value == length);
+        invalidate(word.length);
         continue;
       }
 
@@ -99,22 +104,21 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
         word,
       );
       if (symmetricalNewWord == null) {
-        constraints.invalidLengths.add(word.length);
-        validLengths.removeWhere((value) => value == word.length);
+        invalidate(word.length);
         continue;
       }
 
       final symmetricalNewWordEntry = WordEntry(
         word: symmetricalNewWord,
-        start: _horizontallySymmetricalLocation(wordEntry),
+        start: symmetricalWordCandidate.start,
         direction: constraints.direction,
       );
 
       if (crossword.overlaps(wordEntry) ||
           crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
-        constraints.invalidLengths.add(word.length);
-        validLengths.removeWhere((value) => value == word.length);
+        // FIXME(Ayad): Investigate, this should not be reached, look into
+        // constraints and selection.
+        invalidate(word.length);
         continue;
       }
 
@@ -130,7 +134,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   @override
   Set<WordCandidate> expand(WordEntry entry) {
     final span = entry.start.to(entry.end)
-      ..removeWhere((location) => location.y < 0);
+      ..removeWhere((location) => _lineOfSymmetry.isAbove(location.y));
 
     final expansion = <Location>{};
     for (var i = 0; i < pool.longestWordLength; i++) {
@@ -145,7 +149,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     }
     expansion
       ..removeWhere(crossword.crossesAt)
-      ..removeWhere((location) => location.y < 0);
+      ..removeWhere((location) => _lineOfSymmetry.isAbove(location.y));
 
     final bounds = crossword.bounds;
     if (bounds != null) {
@@ -168,13 +172,31 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
     return candidates;
   }
+}
 
-  Location _horizontallySymmetricalLocation(WordEntry wordEntry) {
-    switch (wordEntry.direction) {
+/// An horizontal line of symmetry.
+class _HorizontalLineOfSymmetry {
+  /// Where the line of symmetry crosses the y-axis.
+  final int yIntercept = 0;
+
+  /// Wether the location is on the line of symmetry.
+  bool isOn(int y) => y == yIntercept;
+
+  /// Wether the location is above the line of symmetry.
+  bool isAbove(int y) => y < yIntercept;
+
+  /// Wether the location is below the line of symmetry.
+  bool isBelow(int y) => y > yIntercept;
+
+  /// Reflects the [entry] over the line of symmetry.
+  ///
+  /// Assumes the [yIntercept] is at zero.
+  Location mirror(WordEntry entry) {
+    switch (entry.direction) {
       case Direction.across:
-        return wordEntry.start.copyWith(y: wordEntry.end.y * -1);
+        return entry.start.copyWith(y: entry.end.y * -1);
       case Direction.down:
-        return wordEntry.end.copyWith(y: wordEntry.end.y * -1);
+        return entry.end.copyWith(y: entry.end.y * -1);
     }
   }
 }
