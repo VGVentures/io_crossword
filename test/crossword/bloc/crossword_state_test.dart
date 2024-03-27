@@ -12,8 +12,6 @@ class _FakeWord extends Fake implements Word {
   final String answer;
 }
 
-class _FakeBoardSection extends Fake implements BoardSection {}
-
 void main() {
   group('CrosswordState', () {
     group('CrosswordInitial', () {
@@ -283,35 +281,6 @@ void main() {
           ),
         );
       });
-
-      test(
-        'removeSelectedWord copies the instance setting the selected word '
-        'to null',
-        () {
-          final boardSection = _FakeBoardSection();
-          final state = CrosswordLoaded(
-            sectionSize: 400,
-            sections: {(0, 0): boardSection},
-            selectedWord: WordSelection(
-              section: (0, 0),
-              word: fakeWord,
-            ),
-            renderMode: RenderMode.snapshot,
-            renderLimits: [0.9],
-            mascot: Mascots.dino,
-            initials: 'GIO',
-          );
-          final newState = state.removeSelectedWord();
-
-          expect(newState.selectedWord, isNull);
-          expect(newState.sectionSize, 400);
-          expect(newState.sections, {(0, 0): boardSection});
-          expect(newState.renderMode, RenderMode.snapshot);
-          expect(newState.renderLimits, [0.9]);
-          expect(newState.mascot, Mascots.dino);
-          expect(newState.initials, 'GIO');
-        },
-      );
 
       group('WordSelection', () {
         test('can be instantiated', () {

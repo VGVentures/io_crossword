@@ -16,6 +16,31 @@ Install via `dart pub add`:
 dart pub add board_renderer
 ```
 
+## Generating board rendering test images
+
+This packages comes with a simple dart program that allow users to generate board images based on
+a text file that contains a list of words.
+
+The text file have the following format:
+
+```
+x,y,word,axis
+```
+
+So a board with two words would look like this:
+
+```
+-10,10,flutter,horizontal
+20,-10,dash,vertical
+```
+
+To generate a board image based on that file, run the following command in the root of this
+repository:
+
+```
+$ dart bin/board_render.dart my_board.txt my_rendered_board.png
+```
+
 ---
 
 ## Continuous Integration 🤖
