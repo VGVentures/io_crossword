@@ -4,7 +4,7 @@ import 'package:game_domain/game_domain.dart';
 /// Extension on Word to copy instance with solved timestamp to now
 extension SolveWord on Word {
   /// Copies instance with solved timestamp to now
-  Word solveWord() {
+  Word resolve() {
     return Word(
       position: position,
       axis: axis,

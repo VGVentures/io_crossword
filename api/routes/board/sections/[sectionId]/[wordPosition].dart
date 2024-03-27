@@ -56,7 +56,7 @@ Future<Response> _onPost(
   final answer = json['answer'] as String;
 
   if (answer == word.answer) {
-    final solvedWord = word.solveWord();
+    final solvedWord = word.resolve();
     final newSection = section.copyWith(
       words: [...section.words..remove(word), solvedWord],
     );
