@@ -350,7 +350,7 @@ class Crossword {
     if (invalidLengths == null) return null;
 
     final validLengths = {
-      for (var i = 1; i <= largestWordLength; i++)
+      for (var i = shortestWordLength; i <= largestWordLength; i++)
         if (!invalidLengths.contains(i)) i,
     };
 
@@ -364,7 +364,7 @@ class Crossword {
     );
 
     return ConstrainedWordCandidate(
-      invalidLengths: invalidLengths,
+      validLengths: validLengths,
       start: candidate.start,
       direction: candidate.direction,
       constraints: characterConstraints,
