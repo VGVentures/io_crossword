@@ -49,10 +49,6 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final constraints = crossword.constraints(candidate);
     if (constraints == null) return null;
 
-    // TODO(Ayad): constrainedWordCandidate.invalidLengths will be changed to
-    // valid lengths so this can be removed once that is ready.
-    // Once changes we need to update constraints.invalidLengths.add(length);
-    // to remove.
     final validLengths = <int>[];
     for (var i = pool.shortestWordLength; i < pool.longestWordLength; i++) {
       if (!constraints.invalidLengths.contains(i)) {
@@ -116,9 +112,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
       if (crossword.overlaps(wordEntry) ||
           crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached.
-        //  Investigate constraints and selection.
-
+        // TODO(Ayad): Investigate, this should not be reached. Investigate constraints and selection.
         constraints.invalidLengths.add(word.length);
         validLengths.removeWhere((value) => value == word.length);
         continue;
