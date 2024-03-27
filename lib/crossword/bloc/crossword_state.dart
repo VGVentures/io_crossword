@@ -24,14 +24,11 @@ class WordSelection extends Equatable {
   List<Object> get props => [section, word];
 }
 
-enum RenderMode { game, snapshot }
-
 class CrosswordLoaded extends CrosswordState {
   const CrosswordLoaded({
     required this.sectionSize,
     this.sections = const {},
     this.selectedWord,
-    this.renderMode = RenderMode.game,
     this.renderLimits = const [],
     this.mascot = Mascots.dash,
     this.initials = '',
@@ -40,7 +37,6 @@ class CrosswordLoaded extends CrosswordState {
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
-  final RenderMode renderMode;
   final List<double> renderLimits;
   final Mascots mascot;
   final String initials;
@@ -49,7 +45,6 @@ class CrosswordLoaded extends CrosswordState {
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
-    RenderMode? renderMode,
     List<double>? renderLimits,
     Mascots? mascot,
     String? initials,
@@ -58,7 +53,6 @@ class CrosswordLoaded extends CrosswordState {
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
-      renderMode: renderMode ?? this.renderMode,
       renderLimits: renderLimits ?? this.renderLimits,
       mascot: mascot ?? this.mascot,
       initials: initials ?? this.initials,
@@ -69,7 +63,6 @@ class CrosswordLoaded extends CrosswordState {
     return CrosswordLoaded(
       sectionSize: sectionSize,
       sections: sections,
-      renderMode: renderMode,
       renderLimits: renderLimits,
       mascot: mascot,
       initials: initials,
@@ -81,7 +74,6 @@ class CrosswordLoaded extends CrosswordState {
         sectionSize,
         sections,
         selectedWord,
-        renderMode,
         renderLimits,
         mascot,
         initials,
