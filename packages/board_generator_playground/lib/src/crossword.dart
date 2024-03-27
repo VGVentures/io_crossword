@@ -361,7 +361,7 @@ class Crossword {
       for (var length = shortestWordLength;
           length <= largestWordLength;
           length++)
-        if (!validLengths.contains(length)) length
+        if (!validLengths.contains(length)) length,
     };
 
     return ConstrainedWordCandidate(
