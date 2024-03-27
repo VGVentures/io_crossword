@@ -6,7 +6,6 @@ import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
 class CrosswordGame extends FlameGame
@@ -14,9 +13,7 @@ class CrosswordGame extends FlameGame
   CrosswordGame(
     this.bloc, {
     bool? showDebugOverlay,
-    FlameNetworkImages? networkImages,
-  })  : showDebugOverlay = showDebugOverlay ?? debugOverlay,
-        networkImages = networkImages ?? FlameNetworkImages();
+  }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
 
   static const cellSize = 80;
 
@@ -30,8 +27,6 @@ class CrosswordGame extends FlameGame
   late final Image lettersSprite;
 
   var _visibleSections = <(double, double)>[];
-
-  final FlameNetworkImages networkImages;
 
   CrosswordLoaded get state {
     final state = bloc.state;

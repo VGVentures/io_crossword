@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/components.dart';
-import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -11,8 +10,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
-
-class _MockFlameNetworkImages extends Mock implements FlameNetworkImages {}
 
 class FakeImage extends Fake implements ui.Image {
   @override
@@ -25,7 +22,6 @@ class FakeImage extends Fake implements ui.Image {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('SectionComponent', () {
-    late FlameNetworkImages flameNetworkImages;
     late CrosswordBloc bloc;
 
     void mockState(CrosswordState state) {
@@ -37,23 +33,17 @@ void main() {
     }
 
     setUp(() {
-      flameNetworkImages = _MockFlameNetworkImages();
       bloc = _MockCrosswordBloc();
 
       const state = CrosswordLoaded(
         sectionSize: 400,
       );
       mockState(state);
-
-      when(
-        () => flameNetworkImages.load(any()),
-      ).thenAnswer((_) async => FakeImage());
     });
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
           bloc,
           showDebugOverlay: showDebugOverlay,
-          networkImages: flameNetworkImages,
         );
 
     testWithGame(

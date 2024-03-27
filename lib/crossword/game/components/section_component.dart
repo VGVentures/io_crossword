@@ -265,20 +265,6 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         index.$2 * gameRef.sectionSize.toDouble(),
       );
 
-  Future<void> _loadSnapshot() async {
-    final snapshot = await gameRef.networkImages.load(
-      _boardSection!.snapshotUrl!,
-    );
-
-    spriteBatchComponent?.removeFromParent();
-    add(
-      SpriteComponent.fromImage(
-        position: sectionPosition,
-        snapshot,
-      ),
-    );
-  }
-
   void _loadBoardSection() {
     final section = _boardSection;
     if (section == null) {
