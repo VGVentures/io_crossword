@@ -33,7 +33,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 'y'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), isNull);
@@ -48,7 +51,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('aunt'));
@@ -63,7 +69,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 'a'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('away'));
@@ -78,7 +87,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 1: 'd', 3: 's'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('adds'));
@@ -93,7 +105,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(4),
         );
 
         expect(wordPool.firstMatch(constrains), equals('add'));
@@ -108,7 +124,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(4),
         );
 
         expect(wordPool.firstMatch(constrains), equals('add'));
@@ -137,7 +157,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'g', 2: 'a'},
-          invalidLengths: {5},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(5),
         );
 
         expect(wordPool.firstMatch(constrains), equals('glad'));
@@ -166,7 +190,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'g', 2: 'a'},
-          invalidLengths: {5},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(5),
         );
 
         expect(wordPool.firstMatch(constrains), equals('glad'));
@@ -194,7 +222,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'g', 2: 'a', 3: 's'},
-          invalidLengths: {4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(4),
         );
 
         expect(wordPool.firstMatch(constrains), equals('grass'));
@@ -223,7 +255,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {5, 4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..removeAll({5, 4}),
         );
 
         expect(wordPool.firstMatch(constrains), equals('add'));
@@ -254,7 +290,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 1: 'r', 2: 'e'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('are'));
@@ -284,7 +323,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 3: 'r', 6: 'h', 10: 'g', 13: 'p', 15: 'e'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('astrophotographers'));
@@ -314,7 +356,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 'e', 6: 'h', 10: 'g', 13: 'p', 15: 'e'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatch(constrains), equals('are'));
@@ -333,7 +378,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {1: 'w'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
@@ -350,7 +398,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {2: 'a'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 4, 'away'), isNull);
@@ -367,7 +418,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 'y', 10: 'r'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
@@ -384,7 +438,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 's', 10: 'r'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 4, 'away'), isNull);
@@ -399,7 +456,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 4), equals('aunt'));
@@ -414,7 +474,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 2: 'a'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 4), equals('away'));
@@ -429,7 +492,10 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a', 1: 'd', 3: 's'},
-          invalidLengths: {},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet(),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 4), equals('adds'));
@@ -446,7 +512,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {3},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(3),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 3), isNull);
@@ -461,7 +531,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(4),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 3), equals('add'));
@@ -476,7 +550,11 @@ void main() {
           direction: Direction.down,
           start: Location.zero,
           constraints: {0: 'a'},
-          invalidLengths: {4},
+          validLengths: List.generate(
+            (wordPool.longestWordLength - wordPool.shortestWordLength) + 1,
+            (index) => index + wordPool.shortestWordLength,
+          ).toSet()
+            ..remove(4),
         );
 
         expect(wordPool.firstMatchByWordLength(constrains, 3), equals('add'));

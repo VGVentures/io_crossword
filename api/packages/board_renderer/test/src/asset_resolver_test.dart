@@ -16,6 +16,16 @@ void main() {
       expect(resolver.resolveWordImage(), completion(isA<Uint8List>()));
     });
 
+    test('returns the font from the response', () {
+      final resolver = HttpAssetResolver(
+        get: (uri) async {
+          return http.Response.bytes(Uint8List(0), 200);
+        },
+      );
+
+      expect(resolver.resolveFont(), completion(isA<Uint8List>()));
+    });
+
     test('throws an AssetResolutionFailure when the response is not 200', () {
       final resolver = HttpAssetResolver(
         get: (uri) async {
