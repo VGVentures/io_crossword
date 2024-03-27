@@ -17,7 +17,7 @@ class Crossword1 extends Crossword {
   /// {@macro crossword1}
   Crossword1({
     super.bounds,
-    super.largestWordLength,
+    super.longestWordLength,
   }) {
     add(
       WordEntry(

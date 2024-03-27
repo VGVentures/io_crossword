@@ -32,8 +32,8 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
   @override
   void seed() {
     final constraints = ConstrainedWordCandidate(
-      invalidLengths: {
-        for (int i = 2; i <= pool.longestWordLength; i += 2) i,
+      validLengths: {
+        for (int i = 1; i <= pool.longestWordLength; i += 2) i,
       },
       start: Location.zero,
       direction: Direction.down,
@@ -80,9 +80,7 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
             : expansion.add(location.shift(x: i));
       }
     }
-    expansion
-      ..removeWhere(crossword.crossesAt)
-      ..removeWhere(closed.contains);
+    expansion.removeWhere(crossword.crossesAt);
 
     final bounds = crossword.bounds;
     if (bounds != null) {

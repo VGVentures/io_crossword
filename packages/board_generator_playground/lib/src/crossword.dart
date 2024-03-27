@@ -12,7 +12,7 @@ class Crossword {
   /// {@macro crossword}
   Crossword({
     this.bounds,
-    this.largestWordLength = 18,
+    this.longestWordLength = 18,
     this.shortestWordLength = 3,
   });
 
@@ -22,8 +22,8 @@ class Crossword {
   /// The words on the board.
   final Set<WordEntry> words = {};
 
-  /// The largest word length that can be added to the board.
-  final int largestWordLength;
+  /// The longest word length that can be added to the board.
+  final int longestWordLength;
 
   /// The shortest word length that can be added to the board.
   final int shortestWordLength;
@@ -333,7 +333,7 @@ class Crossword {
   /// Adding a word down at (2, -2) would have a single
   /// [ConstrainedWordCandidate], with two constraints one at position 0 for the
   /// character 'S' and another at position 4 for the character 'W' with a
-  /// maximum length of [largestWordLength] but an invalid length of 4, since it
+  /// maximum length of [longestWordLength] but an invalid length of 4, since it
   /// would otherwise suffix "W".
   ///
   /// Adding a word down at (-1, -2) would have more than one
@@ -350,7 +350,7 @@ class Crossword {
     if (invalidLengths == null) return null;
 
     final validLengths = {
-      for (var i = 1; i <= largestWordLength; i++)
+      for (var i = shortestWordLength; i <= longestWordLength; i++)
         if (!invalidLengths.contains(i)) i,
     };
 
@@ -364,7 +364,7 @@ class Crossword {
     );
 
     return ConstrainedWordCandidate(
-      invalidLengths: invalidLengths,
+      validLengths: validLengths,
       start: candidate.start,
       direction: candidate.direction,
       constraints: characterConstraints,
@@ -380,7 +380,7 @@ class Crossword {
     }
 
     final invalidLengths = <int>{};
-    var largestLength = largestWordLength + 1;
+    var largestLength = longestWordLength + 1;
     final validLengths = <int>{
       for (var i = shortestWordLength; i <= largestLength; i++) i,
     };
@@ -522,7 +522,7 @@ class Crossword {
 
     return invalidLengths
       ..removeWhere(
-        (length) => length > largestWordLength || length < shortestWordLength,
+        (length) => length > longestWordLength || length < shortestWordLength,
       );
   }
 
@@ -550,38 +550,43 @@ class Crossword {
   /// For example, a board with the words "ALBUS" and "BEHAN" would be:
   ///
   /// ```txt
-  /// ALBUS
-  /// --E--
-  /// --H--
-  /// --A--
-  /// --N--
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
-  String toPrettyString({
-    Location? topLeft,
-    Location? bottomRight,
-  }) {
+  String toPrettyString() {
     final stringBuffer = StringBuffer();
 
-    final minX = topLeft != null
-        ? topLeft.x
-        : characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
-    final maxX = bottomRight != null
-        ? bottomRight.x
-        : characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
-    final minY = topLeft != null
-        ? topLeft.y
-        : characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
-    final maxY = bottomRight != null
-        ? bottomRight.y
-        : characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+    final minY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+
+    final minXLength = minX.toString().length;
+    final maxXLength = maxX.toString().length;
+    final columnWidth = (minXLength > maxXLength ? minXLength : maxXLength) + 1;
 
     final width = maxX - minX + 1;
 
+    stringBuffer.write(''.padLeft(columnWidth));
+    for (var column = minX; column <= maxX; column++) {
+      stringBuffer.write(column.toString().padLeft(columnWidth));
+    }
+    stringBuffer.writeln();
+
     for (var row = minY; row <= maxY; row++) {
+      stringBuffer.write(row.toString().padLeft(columnWidth));
       final characters = List.generate(width, (column) {
         final location = Location(x: column + minX, y: row);
         final character = characterMap[location]?.character ?? '-';
-        return character.toUpperCase();
+        return character.toUpperCase().padLeft(columnWidth);
       });
 
       stringBuffer.writeln(characters.join());
