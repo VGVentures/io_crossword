@@ -13,7 +13,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     required super.crossword,
   });
 
-  final _lineOfSymmetry = _HorizontalLineOfSymmetry();
+  static const _lineOfSymmetry = HorizontalLineOfSymmetry();
 
   @override
   void add(WordEntry entry) {
@@ -42,7 +42,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       word: word,
       start: Location(
         x: bounds.topLeft.x,
-        y: _lineOfSymmetry.yIntercept - (word.length ~/ 2),
+        y: HorizontalLineOfSymmetry.yIntercept - (word.length ~/ 2),
       ),
       direction: constraints.direction,
     );
@@ -171,32 +171,5 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     candidates.removeWhere(closed.contains);
 
     return candidates;
-  }
-}
-
-/// An horizontal line of symmetry.
-class _HorizontalLineOfSymmetry {
-  /// Where the line of symmetry crosses the y-axis.
-  final int yIntercept = 0;
-
-  /// Wether the location is on the line of symmetry.
-  bool isOn(int y) => y == yIntercept;
-
-  /// Wether the location is above the line of symmetry.
-  bool isAbove(int y) => y < yIntercept;
-
-  /// Wether the location is below the line of symmetry.
-  bool isBelow(int y) => y > yIntercept;
-
-  /// Reflects the [entry] over the line of symmetry.
-  ///
-  /// Assumes the [yIntercept] is at zero.
-  Location mirror(WordEntry entry) {
-    switch (entry.direction) {
-      case Direction.across:
-        return entry.start.copyWith(y: entry.end.y * -1);
-      case Direction.down:
-        return entry.end.copyWith(y: entry.end.y * -1);
-    }
   }
 }
