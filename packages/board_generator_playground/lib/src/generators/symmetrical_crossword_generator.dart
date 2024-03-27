@@ -145,7 +145,6 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     }
     expansion
       ..removeWhere(crossword.crossesAt)
-      ..removeWhere(closed.contains)
       ..removeWhere((location) => location.y < 0);
 
     final bounds = crossword.bounds;
