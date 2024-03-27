@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:api/extensions/path_param_to_position.dart';
+import 'package:api/extensions/solve_word.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 
@@ -55,8 +56,13 @@ Future<Response> _onPost(
   final answer = json['answer'] as String;
 
   if (answer == word.answer) {
-    return Response();
+    final solvedWord = word.solveWord();
+    final newSection = section.copyWith(
+      words: [...section.words..remove(word), solvedWord],
+    );
+    await crosswordRepository.updateSection(newSection);
+    return Response.json(body: {'valid': true});
   }
 
-  return Response(statusCode: HttpStatus.badRequest);
+  return Response.json(body: {'valid': false});
 }
