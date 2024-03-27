@@ -74,7 +74,7 @@ class Word extends Equatable {
       answer: answer ?? this.answer,
       clue: clue ?? this.clue,
       hints: hints ?? this.hints,
-      solvedTimestamp: solvedTimestamp,
+      solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
     );
   }
 
