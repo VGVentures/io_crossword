@@ -12,7 +12,7 @@ class Crossword {
   /// {@macro crossword}
   Crossword({
     this.bounds,
-    this.longestWordLength = 18,
+    this.largestWordLength = 18,
     this.shortestWordLength = 3,
   });
 
@@ -22,8 +22,8 @@ class Crossword {
   /// The words on the board.
   final Set<WordEntry> words = {};
 
-  /// The longest word length that can be added to the board.
-  final int longestWordLength;
+  /// The largest word length that can be added to the board.
+  final int largestWordLength;
 
   /// The shortest word length that can be added to the board.
   final int shortestWordLength;
@@ -333,7 +333,7 @@ class Crossword {
   /// Adding a word down at (2, -2) would have a single
   /// [ConstrainedWordCandidate], with two constraints one at position 0 for the
   /// character 'S' and another at position 4 for the character 'W' with a
-  /// maximum length of [longestWordLength] but an invalid length of 4, since it
+  /// maximum length of [largestWordLength] but an invalid length of 4, since it
   /// would otherwise suffix "W".
   ///
   /// Adding a word down at (-1, -2) would have more than one
@@ -350,7 +350,7 @@ class Crossword {
     if (invalidLengths == null) return null;
 
     final validLengths = {
-      for (var i = shortestWordLength; i <= longestWordLength; i++)
+      for (var i = 1; i <= largestWordLength; i++)
         if (!invalidLengths.contains(i)) i,
     };
 
@@ -364,7 +364,7 @@ class Crossword {
     );
 
     return ConstrainedWordCandidate(
-      validLengths: validLengths,
+      invalidLengths: invalidLengths,
       start: candidate.start,
       direction: candidate.direction,
       constraints: characterConstraints,
@@ -380,7 +380,7 @@ class Crossword {
     }
 
     final invalidLengths = <int>{};
-    var largestLength = longestWordLength + 1;
+    var largestLength = largestWordLength + 1;
     final validLengths = <int>{
       for (var i = shortestWordLength; i <= largestLength; i++) i,
     };
@@ -522,7 +522,7 @@ class Crossword {
 
     return invalidLengths
       ..removeWhere(
-        (length) => length > longestWordLength || length < shortestWordLength,
+        (length) => length > largestWordLength || length < shortestWordLength,
       );
   }
 

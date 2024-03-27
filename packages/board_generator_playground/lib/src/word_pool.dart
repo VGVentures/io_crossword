@@ -60,9 +60,9 @@ class WordPool {
     int wordLength, [
     String? ignoreWord,
   ]) {
-    if (!constrainedWordCandidate.validLengths.contains(wordLength)) {
-      return null;
-    }
+    final invalidLengths = constrainedWordCandidate.invalidLengths;
+
+    if (invalidLengths.contains(wordLength)) return null;
 
     final constraints = constrainedWordCandidate.constraints;
 

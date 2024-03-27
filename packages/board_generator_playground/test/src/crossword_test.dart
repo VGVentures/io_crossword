@@ -778,7 +778,7 @@ void main() {
                 topLeft: Location(x: -2, y: -2),
                 bottomRight: Location(x: 2, y: 2),
               ),
-              longestWordLength: 8,
+              largestWordLength: 8,
             );
 
             final candidate = WordCandidate(
@@ -791,11 +791,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll({6, 7, 8}),
+                  invalidLengths: const {6, 7, 8},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'a'},
@@ -810,7 +806,7 @@ void main() {
                 topLeft: Location(x: -2, y: -2),
                 bottomRight: Location(x: 2, y: 2),
               ),
-              longestWordLength: 8,
+              largestWordLength: 8,
             );
 
             final candidate = WordCandidate(
@@ -823,11 +819,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll({6, 7, 8}),
+                  invalidLengths: const {6, 7, 8},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {2: 'h'},
@@ -863,11 +855,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..remove(18),
+                  invalidLengths: {18},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
@@ -891,11 +879,7 @@ void main() {
                 constraints,
                 equals(
                   ConstrainedWordCandidate(
-                    validLengths: List.generate(
-                      (board.longestWordLength - board.shortestWordLength) + 1,
-                      (index) => index + board.shortestWordLength,
-                    ).toSet()
-                      ..remove(17),
+                    invalidLengths: {17},
                     start: candidate.start,
                     direction: candidate.direction,
                     constraints: const {0: 's', 17: 'v'},
@@ -918,11 +902,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll({3, 4, 5}),
+                  invalidLengths: {3, 4, 5},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {5: 's'},
@@ -944,10 +924,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet(),
+                  invalidLengths: const {},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'h'},
@@ -969,11 +946,8 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll(List.generate(14, (index) => 5 + index)),
+                  invalidLengths:
+                      List.generate(14, (index) => 5 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: {0: 's'},
@@ -995,11 +969,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll({7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18}),
+                  invalidLengths: {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'e', 2: 'n'},
@@ -1021,11 +991,8 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll(List.generate(15, (index) => 4 + index)),
+                  invalidLengths:
+                      List.generate(15, (index) => 4 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: {0: 'n', 2: 'd'},
@@ -1049,11 +1016,8 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll(List.generate(14, (index) => 5 + index)),
+                  invalidLengths:
+                      List.generate(14, (index) => 5 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 'k'},
@@ -1075,10 +1039,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet(),
+                  invalidLengths: const {},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
@@ -1100,11 +1061,7 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..remove(4),
+                  invalidLengths: const {4},
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's', 4: 'w'},
@@ -1126,11 +1083,8 @@ void main() {
               constraints,
               equals(
                 ConstrainedWordCandidate(
-                  validLengths: List.generate(
-                    (board.longestWordLength - board.shortestWordLength) + 1,
-                    (index) => index + board.shortestWordLength,
-                  ).toSet()
-                    ..removeAll(List.generate(15, (index) => 4 + index)),
+                  invalidLengths:
+                      List.generate(15, (index) => 4 + index).toSet(),
                   start: candidate.start,
                   direction: candidate.direction,
                   constraints: const {0: 's'},
