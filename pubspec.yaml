@@ -20,7 +20,7 @@ dependencies:
     path: packages/crossword_repository
   equatable: ^2.0.5
   firebase_auth: ^4.17.9
-  firebase_core: ^2.27.1
+  firebase_core: ^2.27.2
   flame: ^1.16.0
   flame_audio: ^2.1.3
   flame_behaviors: ^1.0.0
