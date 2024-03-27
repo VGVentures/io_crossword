@@ -13,7 +13,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     required super.crossword,
   });
 
-  static const _lineOfSymmetry = HorizontalLineOfSymmetry();
+  static const _symmetry = HorizontalLineOfSymmetry();
 
   @override
   void add(WordEntry entry) {
@@ -70,7 +70,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     if (candidate.direction == Direction.down) {
       for (var i = 0; i <= pool.longestWordLength; i++) {
         final verticalPosition = candidate.start.y - i;
-        if (_lineOfSymmetry.isAbove(verticalPosition)) {
+        if (_symmetry.isAbove(verticalPosition)) {
           invalidate(i);
         }
       }
@@ -87,7 +87,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       );
 
       final symmetricalWordCandidate = WordCandidate(
-        start: _lineOfSymmetry.mirror(wordEntry),
+        start: _symmetry.mirror(wordEntry),
         direction: constraints.direction,
       );
 
@@ -131,7 +131,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   @override
   Set<WordCandidate> expand(WordEntry entry) {
     final span = entry.start.to(entry.end)
-      ..removeWhere((location) => _lineOfSymmetry.isAbove(location.y));
+      ..removeWhere((location) => _symmetry.isAbove(location.y));
 
     final expansion = <Location>{};
     for (var i = 0; i < pool.longestWordLength; i++) {
@@ -146,7 +146,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     }
     expansion
       ..removeWhere(crossword.crossesAt)
-      ..removeWhere((location) => _lineOfSymmetry.isAbove(location.y));
+      ..removeWhere((location) => _symmetry.isAbove(location.y));
 
     final bounds = crossword.bounds;
     if (bounds != null) {
