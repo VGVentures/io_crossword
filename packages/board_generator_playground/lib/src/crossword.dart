@@ -550,11 +550,12 @@ class Crossword {
   /// For example, a board with the words "ALBUS" and "BEHAN" would be:
   ///
   /// ```txt
-  /// ALBUS
-  /// --E--
-  /// --H--
-  /// --A--
-  /// --N--
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
   String toPrettyString() {
     final stringBuffer = StringBuffer();
