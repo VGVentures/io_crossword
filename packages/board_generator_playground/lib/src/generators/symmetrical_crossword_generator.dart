@@ -91,41 +91,38 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
         direction: constraints.direction,
       );
 
-      final symmetricalConstrainedWordCandidate =
+      final symmetricalConstraints =
           crossword.constraints(symmetricalWordCandidate);
-      if (symmetricalConstrainedWordCandidate == null) {
+      if (symmetricalConstraints == null) {
         invalidate(word.length);
         continue;
       }
 
-      final symmetricalNewWord = pool.firstMatchByWordLength(
-        symmetricalConstrainedWordCandidate,
+      final symmetricalWord = pool.firstMatchByWordLength(
+        symmetricalConstraints,
         word.length,
         word,
       );
-      if (symmetricalNewWord == null) {
+      if (symmetricalWord == null) {
         invalidate(word.length);
         continue;
       }
 
-      final symmetricalNewWordEntry = WordEntry(
-        word: symmetricalNewWord,
+      final symmetricalWordEntry = WordEntry(
+        word: symmetricalWord,
         start: symmetricalWordCandidate.start,
         direction: constraints.direction,
       );
 
       if (crossword.overlaps(wordEntry) ||
-          crossword.overlaps(symmetricalNewWordEntry)) {
+          crossword.overlaps(symmetricalWordEntry)) {
         // FIXME(Ayad): Investigate, this should not be reached, look into
         // constraints and selection.
         invalidate(word.length);
         continue;
       }
 
-      return {
-        wordEntry,
-        symmetricalNewWordEntry,
-      };
+      return {wordEntry, symmetricalWordEntry};
     }
 
     return null;
