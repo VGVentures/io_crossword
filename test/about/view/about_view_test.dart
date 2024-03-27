@@ -16,6 +16,13 @@ void main() {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
     });
 
+    testWidgets('renders AboutView', (tester) async {
+      await tester.pumpRoute(AboutView.route());
+      await tester.pump();
+
+      expect(find.byType(AboutView), findsOneWidget);
+    });
+
     testWidgets(
       'renders IoCrosswordCard',
       (tester) async {

@@ -32,6 +32,7 @@ class CrosswordPage extends StatelessWidget {
 }
 
 class CrosswordView extends StatefulWidget {
+  @visibleForTesting
   const CrosswordView({super.key});
 
   @override
@@ -77,6 +78,7 @@ class _CrosswordViewState extends State<CrosswordView> {
 }
 
 class LoadedBoardView extends StatefulWidget {
+  @visibleForTesting
   const LoadedBoardView({super.key});
 
   @visibleForTesting
@@ -104,24 +106,34 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
-        Positioned(
+        const Positioned(
           top: 12,
           right: 16,
-          child: ElevatedButton(
-            child: const Icon(Icons.question_mark_rounded),
-            onPressed: () {
-              showDialog<void>(
-                context: context,
-                builder: (context) {
-                  return const AboutView();
-                },
-              );
-            },
-          ),
+          child: AboutButton(),
         ),
         const WordFocusedView(),
         _ZoomControls(game: game),
       ],
+    );
+  }
+}
+
+class AboutButton extends StatelessWidget {
+  @visibleForTesting
+  const AboutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: const Icon(Icons.question_mark_rounded),
+      onPressed: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return const AboutView();
+          },
+        );
+      },
     );
   }
 }
