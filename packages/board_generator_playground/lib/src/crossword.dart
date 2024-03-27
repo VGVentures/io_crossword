@@ -352,9 +352,9 @@ class Crossword {
     // If there are no valid lengths, the constraint is unsatisfiable.
     if (validLengths.isEmpty) return null;
 
-    final largestLength = validLengths.reduce((a, b) => a > b ? a : b);
+    final longestValidLength = validLengths.reduce((a, b) => a > b ? a : b);
     final characterConstraints = _characterConstraints(
-      candidate.fixTo(largestLength),
+      candidate.fixTo(longestValidLength),
     );
 
     final invalidLengths = {
