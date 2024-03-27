@@ -398,8 +398,6 @@ class Crossword {
     if (bounds != null) {
       candidates.removeWhere((candidate) {
         final span = candidate.start.to(candidate.end);
-        final shouldRemove = span.any((location) => !bounds.contains(location));
-        if (shouldRemove) {}
         return span.any((location) => !bounds.contains(location));
       });
     }
