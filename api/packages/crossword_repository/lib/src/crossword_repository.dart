@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -53,5 +54,41 @@ class CrosswordRepository {
         data: section.toJson()..remove('id'),
       ),
     );
+  }
+
+  /// Tries solving a word.
+  /// Returns true if succeeds and updates the word's solvedTimestamp
+  /// attribute.
+  Future<bool> answerWord(
+    int sectionX,
+    int sectionY,
+    int wordX,
+    int wordY,
+    String answer,
+  ) async {
+    final section = await findSectionByPosition(
+      sectionX,
+      sectionY,
+    );
+
+    if (section == null) {
+      return false;
+    }
+
+    final word = section.words.firstWhere(
+      (element) => element.position.x == wordX && element.position.y == wordY,
+    );
+
+    if (answer == word.answer) {
+      final solvedWord = word.copyWith(
+        solvedTimestamp: clock.now().millisecondsSinceEpoch,
+      );
+      final newSection = section.copyWith(
+        words: [...section.words..remove(word), solvedWord],
+      );
+      await updateSection(newSection);
+      return true;
+    }
+    return false;
   }
 }

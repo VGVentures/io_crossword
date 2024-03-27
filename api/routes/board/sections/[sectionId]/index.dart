@@ -1,26 +1,11 @@
 import 'dart:io';
 
+import 'package:api/extensions/path_param_to_position.dart';
 import 'package:board_renderer/board_renderer.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
 import 'package:game_domain/game_domain.dart';
-
-(int, int)? _parseSectionId(String sectionId) {
-  final coordsRaw = sectionId.split(',');
-  if (coordsRaw.length != 2) {
-    return null;
-  }
-
-  final x = int.tryParse(coordsRaw[0]);
-  final y = int.tryParse(coordsRaw[1]);
-
-  if (x == null || y == null) {
-    return null;
-  }
-
-  return (x, y);
-}
 
 Future<Response> onRequest(RequestContext request, String sectionId) async {
   if (request.request.method == HttpMethod.get) {
@@ -39,7 +24,7 @@ Future<Response> _onPost(RequestContext request, String sectionId) async {
   final crosswordRepository = request.read<CrosswordRepository>();
   final boardrenderer = request.read<BoardRenderer>();
 
-  final pos = _parseSectionId(sectionId);
+  final pos = sectionId.parseToPosition();
   final x = pos?.$1;
   final y = pos?.$2;
 
@@ -120,7 +105,7 @@ Future<Response> _onGroupPost(RequestContext request) async {
 Future<Response> _onGet(RequestContext request, String sectionId) async {
   final crosswordRepository = request.read<CrosswordRepository>();
 
-  final pos = _parseSectionId(sectionId);
+  final pos = sectionId.parseToPosition();
   final x = pos?.$1;
   final y = pos?.$2;
 
