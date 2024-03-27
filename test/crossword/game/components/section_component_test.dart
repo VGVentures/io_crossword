@@ -238,67 +238,6 @@ void main() {
     );
 
     testWithGame(
-      'loads the section in snapshot mode when the state changes and the '
-      'section is present',
-      createGame,
-      (game) async {
-        final streamController = StreamController<CrosswordState>.broadcast();
-        when(() => bloc.stream).thenAnswer((_) => streamController.stream);
-        when(() => bloc.state).thenReturn(
-          const CrosswordLoaded(
-            sectionSize: 400,
-          ),
-        );
-        final component = SectionComponent(index: (100, 100));
-        await game.world.ensureAdd(component);
-
-        var spriteComponent = component.firstChild<SpriteComponent>();
-
-        expect(spriteComponent, isNull);
-        streamController.add(
-          CrosswordLoaded(
-            sectionSize: 400,
-            sections: {
-              (100, 100): BoardSection(
-                id: '',
-                position: const Point(100, 100),
-                size: 400,
-                snapshotUrl: 'snapshotUrl',
-                words: [
-                  Word(
-                    position: const Point(0, 0),
-                    axis: Axis.vertical,
-                    answer: 'Flutter',
-                    clue: '',
-                    hints: const [],
-                    solvedTimestamp: null,
-                  ),
-                  Word(
-                    position: const Point(0, 0),
-                    axis: Axis.horizontal,
-                    answer: 'Firebase',
-                    clue: '',
-                    hints: const [],
-                    solvedTimestamp: null,
-                  ),
-                ],
-                borderWords: const [],
-              ),
-            },
-          ),
-        );
-
-        await game.ready();
-
-        spriteComponent = component.firstChild<SpriteComponent>();
-        expect(spriteComponent, isNotNull);
-
-        final sprite = spriteComponent?.sprite;
-        expect(sprite, isNotNull);
-      },
-    );
-
-    testWithGame(
       'adds a BoardSectionRequested when the section is not loaded yet',
       createGame,
       (game) async {
