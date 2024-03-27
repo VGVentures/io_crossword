@@ -550,38 +550,43 @@ class Crossword {
   /// For example, a board with the words "ALBUS" and "BEHAN" would be:
   ///
   /// ```txt
-  /// ALBUS
-  /// --E--
-  /// --H--
-  /// --A--
-  /// --N--
+  ///    -2 -1  0  1  2
+  /// -2  A  L  B  U  S
+  /// -1  -  -  E  -  -
+  ///  0  -  -  H  -  -
+  ///  1  -  -  A  -  -
+  ///  2  -  -  N  -  -
   /// ```
-  String toPrettyString({
-    Location? topLeft,
-    Location? bottomRight,
-  }) {
+  String toPrettyString() {
     final stringBuffer = StringBuffer();
 
-    final minX = topLeft != null
-        ? topLeft.x
-        : characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
-    final maxX = bottomRight != null
-        ? bottomRight.x
-        : characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
-    final minY = topLeft != null
-        ? topLeft.y
-        : characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
-    final maxY = bottomRight != null
-        ? bottomRight.y
-        : characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX =
+        characterMap.keys.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+    final minY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY =
+        characterMap.keys.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+
+    final minXLength = minX.toString().length;
+    final maxXLength = maxX.toString().length;
+    final columnWidth = (minXLength > maxXLength ? minXLength : maxXLength) + 1;
 
     final width = maxX - minX + 1;
 
+    stringBuffer.write(''.padLeft(columnWidth));
+    for (var column = minX; column <= maxX; column++) {
+      stringBuffer.write(column.toString().padLeft(columnWidth));
+    }
+    stringBuffer.writeln();
+
     for (var row = minY; row <= maxY; row++) {
+      stringBuffer.write(row.toString().padLeft(columnWidth));
       final characters = List.generate(width, (column) {
         final location = Location(x: column + minX, y: row);
         final character = characterMap[location]?.character ?? '-';
-        return character.toUpperCase();
+        return character.toUpperCase().padLeft(columnWidth);
       });
 
       stringBuffer.writeln(characters.join());

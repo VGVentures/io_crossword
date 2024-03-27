@@ -83,6 +83,65 @@ void main() {
         expect(calls, 10);
       });
 
+      test('render with fillRect when fill = true', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        var calls = 0;
+
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          fillRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            calls++;
+            return dst;
+          },
+          parseFont: (Uint8List data) => _MockBitmapFont(),
+        );
+
+        final words = [
+          Word(
+            position: Point(1, 1),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+          Word(
+            position: Point(2, 7),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ];
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+        await renderer.renderBoardWireframe(words, fill: true);
+
+        expect(calls, 10);
+      });
+
       test(
         'throws BoardRendererFailure when the command returns '
         'null bytes',
