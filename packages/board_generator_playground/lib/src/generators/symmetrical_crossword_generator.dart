@@ -46,7 +46,20 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       ),
       direction: constraints.direction,
     );
-    add(entry);
+
+    crossword.add(entry);
+
+    pool.remove(entry.word);
+    final expansion = entry.end
+        .to(entry.start)
+        .map(
+          (location) =>
+              WordCandidate(start: location, direction: Direction.across),
+        )
+        .toList()
+        .reversed
+        .toSet();
+    candidates.addAll(expansion);
   }
 
   @override
