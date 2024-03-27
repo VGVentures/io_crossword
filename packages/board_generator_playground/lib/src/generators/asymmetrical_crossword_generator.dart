@@ -80,9 +80,7 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
             : expansion.add(location.shift(x: i));
       }
     }
-    expansion
-      ..removeWhere(crossword.crossesAt)
-      ..removeWhere(closed.contains);
+    expansion.removeWhere(crossword.crossesAt);
 
     final bounds = crossword.bounds;
     if (bounds != null) {
