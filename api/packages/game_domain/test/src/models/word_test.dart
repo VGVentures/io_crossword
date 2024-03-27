@@ -74,5 +74,17 @@ void main() {
 
       expect(firstWord, equals(secondWord));
     });
+
+    test('supports copy', () {
+      final firstWord = Word(
+        position: Point(1, 2),
+        axis: Axis.horizontal,
+        answer: 'test',
+        clue: 'clue',
+        hints: const ['hint'],
+        solvedTimestamp: 0,
+      );
+      expect(firstWord, equals(firstWord.copyWith()));
+    });
   });
 }
