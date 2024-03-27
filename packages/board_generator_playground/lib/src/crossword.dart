@@ -378,11 +378,7 @@ class Crossword {
       for (var length = shortestWordLength;
           length <= largestWordLength;
           length++)
-        FixedLengthWordCandidate(
-          start: candidate.start,
-          direction: candidate.direction,
-          length: length,
-        ),
+        candidate.fixTo(length),
     }
       ..removeWhere((candidate) => !isConnected(candidate))
       ..removeWhere(overlaps)
