@@ -3,8 +3,8 @@
 import 'package:board_generator_playground/board_generator_playground.dart';
 
 /// {@template symmetrical_crossword_generator}
-/// A simple crossword generator that populates a crossword without
-/// any line of symmetry.
+/// A simple crossword generator that populates a crossword with an
+/// horizontal line of symmetry.
 /// {@endtemplate}
 class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   /// {@macro symmetrical_crossword_generator}
@@ -12,6 +12,8 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     required super.pool,
     required super.crossword,
   });
+
+  static const _symmetry = HorizontalLineOfSymmetry();
 
   @override
   void add(WordEntry entry) {
@@ -38,7 +40,10 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final word = pool.firstMatch(constraints)!;
     final entry = WordEntry(
       word: word,
-      start: Location(x: bounds.topLeft.x, y: 0 - (word.length ~/ 2)),
+      start: Location(
+        x: bounds.topLeft.x,
+        y: HorizontalLineOfSymmetry.yIntercept - (word.length ~/ 2),
+      ),
       direction: constraints.direction,
     );
     add(entry);
@@ -49,10 +54,6 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     final constraints = crossword.constraints(candidate);
     if (constraints == null) return null;
 
-    // TODO(Ayad): constrainedWordCandidate.invalidLengths will be changed to
-    // valid lengths so this can be removed once that is ready.
-    // Once changes we need to update constraints.invalidLengths.add(length);
-    // to remove.
     final validLengths = <int>[];
     for (var i = pool.shortestWordLength; i < pool.longestWordLength; i++) {
       if (!constraints.invalidLengths.contains(i)) {
@@ -60,13 +61,17 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       }
     }
 
+    void invalidate(int length) {
+      validLengths.remove(length);
+      constraints.invalidLengths.add(length);
+    }
+
     // Invalidate those lengths that cross over the line of symmetry.
     if (candidate.direction == Direction.down) {
       for (var i = 0; i <= pool.longestWordLength; i++) {
         final verticalPosition = candidate.start.y - i;
-        if (verticalPosition < 0) {
-          validLengths.remove(i);
-          constraints.invalidLengths.add(i);
+        if (_symmetry.isAbove(verticalPosition)) {
+          invalidate(i);
         }
       }
     }
@@ -81,53 +86,43 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
         direction: candidate.direction,
       );
 
-      final symmetricalLocation = _horizontallySymmetricalLocation(wordEntry);
-
       final symmetricalWordCandidate = WordCandidate(
-        start: symmetricalLocation,
+        start: _symmetry.mirror(wordEntry),
         direction: constraints.direction,
       );
 
-      final symmetricalConstrainedWordCandidate =
+      final symmetricalConstraints =
           crossword.constraints(symmetricalWordCandidate);
-      if (symmetricalConstrainedWordCandidate == null) {
-        final length = word.length;
-        constraints.invalidLengths.add(length);
-        validLengths.removeWhere((value) => value == length);
+      if (symmetricalConstraints == null) {
+        invalidate(word.length);
         continue;
       }
 
-      final symmetricalNewWord = pool.firstMatchByWordLength(
-        symmetricalConstrainedWordCandidate,
+      final symmetricalWord = pool.firstMatchByWordLength(
+        symmetricalConstraints,
         word.length,
         word,
       );
-      if (symmetricalNewWord == null) {
-        constraints.invalidLengths.add(word.length);
-        validLengths.removeWhere((value) => value == word.length);
+      if (symmetricalWord == null) {
+        invalidate(word.length);
         continue;
       }
 
-      final symmetricalNewWordEntry = WordEntry(
-        word: symmetricalNewWord,
-        start: _horizontallySymmetricalLocation(wordEntry),
+      final symmetricalWordEntry = WordEntry(
+        word: symmetricalWord,
+        start: symmetricalWordCandidate.start,
         direction: constraints.direction,
       );
 
       if (crossword.overlaps(wordEntry) ||
-          crossword.overlaps(symmetricalNewWordEntry)) {
-        // TODO(Ayad): Investigate, this should not be reached.
-        //  Investigate constraints and selection.
-
-        constraints.invalidLengths.add(word.length);
-        validLengths.removeWhere((value) => value == word.length);
+          crossword.overlaps(symmetricalWordEntry)) {
+        // FIXME(Ayad): Investigate, this should not be reached, look into
+        // constraints and selection.
+        invalidate(word.length);
         continue;
       }
 
-      return {
-        wordEntry,
-        symmetricalNewWordEntry,
-      };
+      return {wordEntry, symmetricalWordEntry};
     }
 
     return null;
@@ -136,7 +131,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
   @override
   Set<WordCandidate> expand(WordEntry entry) {
     final span = entry.start.to(entry.end)
-      ..removeWhere((location) => location.y < 0);
+      ..removeWhere((location) => _symmetry.isAbove(location.y));
 
     final expansion = <Location>{};
     for (var i = 0; i < pool.longestWordLength; i++) {
@@ -151,8 +146,7 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     }
     expansion
       ..removeWhere(crossword.crossesAt)
-      ..removeWhere(closed.contains)
-      ..removeWhere((location) => location.y < 0);
+      ..removeWhere((location) => _symmetry.isAbove(location.y));
 
     final bounds = crossword.bounds;
     if (bounds != null) {
@@ -174,14 +168,5 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
     candidates.removeWhere(closed.contains);
 
     return candidates;
-  }
-
-  Location _horizontallySymmetricalLocation(WordEntry wordEntry) {
-    switch (wordEntry.direction) {
-      case Direction.across:
-        return wordEntry.start.copyWith(y: wordEntry.end.y * -1);
-      case Direction.down:
-        return wordEntry.end.copyWith(y: wordEntry.end.y * -1);
-    }
   }
 }
