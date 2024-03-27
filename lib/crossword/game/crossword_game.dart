@@ -185,10 +185,7 @@ class CrosswordGame extends FlameGame
 
     camera.viewfinder.zoom -= 0.05;
 
-    if (camera.viewfinder.zoom <= 0.80 &&
-        state.renderMode != RenderMode.snapshot) {
-      bloc.add(const RenderModeSwitched(RenderMode.snapshot));
-    }
+    // TODO(any): limit zoom from boardInfo in firestore
     _updateVisibleSections();
   }
 
@@ -197,9 +194,7 @@ class CrosswordGame extends FlameGame
 
     camera.viewfinder.zoom += 0.05;
 
-    if (camera.viewfinder.zoom >= 0.80 && state.renderMode != RenderMode.game) {
-      bloc.add(const RenderModeSwitched(RenderMode.game));
-    }
+    // TODO(any): limit zoom from boardInfo in firestore
     _updateVisibleSections();
   }
 

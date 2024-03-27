@@ -171,7 +171,6 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   });
 
   final (int, int) index;
-  late RenderMode _renderMode;
 
   SpriteBatchComponent? spriteBatchComponent;
   late Map<String, (int, int)> _wordIndex;
@@ -194,12 +193,11 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     lastSelectedWord = state.selectedWord?.word.id;
     lastSelectedSection = state.selectedWord?.section;
-    _renderMode = state.renderMode;
 
     final boardSection = gameRef.state.sections[index];
     if (boardSection != null) {
       _boardSection = boardSection;
-      _loadWithCurrentRenderMode();
+      _loadBoardSection();
     } else {
       gameRef.bloc.add(
         BoardSectionRequested(index),
@@ -236,28 +234,15 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     _subscription.cancel();
   }
 
-  void _loadWithCurrentRenderMode() {
-    if (_renderMode == RenderMode.snapshot) {
-      _loadSnapshot();
-    } else {
-      _loadBoardSection();
-    }
-  }
-
   void _onNewState(CrosswordState state) {
     if (state is CrosswordLoaded) {
       if (_boardSection == null) {
         final boardSection = state.sections[index];
-        _renderMode = state.renderMode;
         if (boardSection != null) {
           _boardSection = boardSection;
-          _loadWithCurrentRenderMode();
+          _loadBoardSection();
         }
       } else {
-        if (_renderMode != state.renderMode) {
-          _renderMode = state.renderMode;
-          _loadWithCurrentRenderMode();
-        }
         final selectedWord = state.selectedWord?.word.id;
         final selectedSection = state.selectedWord?.section;
         if (selectedWord != lastSelectedWord ||

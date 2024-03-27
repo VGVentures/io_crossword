@@ -268,7 +268,6 @@ void main() {
         streamController.add(
           CrosswordLoaded(
             sectionSize: 400,
-            renderMode: RenderMode.snapshot,
             sections: {
               (100, 100): BoardSection(
                 id: '',
@@ -320,131 +319,6 @@ void main() {
             const BoardSectionRequested((100, 100)),
           ),
         ).called(1);
-      },
-    );
-
-    testWithGame(
-      'switches rendering from game to snapshot',
-      createGame,
-      (game) async {
-        final streamController = StreamController<CrosswordState>.broadcast();
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-          sections: {
-            (0, 0): BoardSection(
-              id: '',
-              position: const Point(0, 0),
-              size: 400,
-              words: [
-                Word(
-                  position: const Point(1, 0),
-                  axis: Axis.vertical,
-                  answer: 'Flutter',
-                  clue: '',
-                  hints: const [],
-                  solvedTimestamp: null,
-                ),
-                Word(
-                  position: const Point(0, 0),
-                  axis: Axis.horizontal,
-                  answer: 'Firebase',
-                  clue: '',
-                  hints: const [],
-                  solvedTimestamp: null,
-                ),
-              ],
-              snapshotUrl: 'snapshotUrl',
-              borderWords: const [],
-            ),
-          },
-        );
-        when(() => bloc.state).thenReturn(state);
-        whenListen(bloc, streamController.stream, initialState: state);
-        await game.ready();
-
-        streamController.add(
-          state.copyWith(
-            renderMode: RenderMode.snapshot,
-          ),
-        );
-
-        await game.ready();
-
-        verify(() => flameNetworkImages.load(any())).called(1);
-
-        final sectionComponent = game.world.children
-            .whereType<SectionComponent>()
-            .firstWhere((element) => element.index == (0, 0));
-        expect(sectionComponent, isNotNull);
-
-        final spriteBatchComponent =
-            sectionComponent.firstChild<SpriteBatchComponent>();
-        expect(spriteBatchComponent, isNull);
-
-        final spriteComponent = sectionComponent.firstChild<SpriteComponent>();
-        expect(spriteComponent, isNotNull);
-      },
-    );
-
-    testWithGame(
-      'switches rendering from snapshot to game',
-      createGame,
-      (game) async {
-        final streamController = StreamController<CrosswordState>.broadcast();
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-          renderMode: RenderMode.snapshot,
-          sections: {
-            (0, 0): BoardSection(
-              id: '',
-              position: const Point(0, 0),
-              size: 400,
-              words: [
-                Word(
-                  position: const Point(1, 0),
-                  axis: Axis.vertical,
-                  answer: 'Flutter',
-                  clue: '',
-                  hints: const [],
-                  solvedTimestamp: null,
-                ),
-                Word(
-                  position: const Point(0, 0),
-                  axis: Axis.horizontal,
-                  answer: 'Firebase',
-                  clue: '',
-                  hints: const [],
-                  solvedTimestamp: null,
-                ),
-              ],
-              snapshotUrl: 'snapshotUrl',
-              borderWords: const [],
-            ),
-          },
-        );
-        when(() => bloc.state).thenReturn(state);
-        whenListen(bloc, streamController.stream, initialState: state);
-        await game.ready();
-
-        streamController.add(
-          state.copyWith(
-            renderMode: RenderMode.game,
-          ),
-        );
-
-        await game.ready();
-
-        final sectionComponent = game.world.children
-            .whereType<SectionComponent>()
-            .firstWhere((element) => element.index == (0, 0));
-        expect(sectionComponent, isNotNull);
-
-        final spriteBatchComponent =
-            sectionComponent.firstChild<SpriteBatchComponent>();
-        expect(spriteBatchComponent, isNotNull);
-
-        final spriteComponent = sectionComponent.firstChild<SpriteComponent>();
-        expect(spriteComponent, isNull);
       },
     );
   });
