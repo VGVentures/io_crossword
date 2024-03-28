@@ -705,8 +705,8 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
           when(
             () => crosswordRepository.watchSectionFromPosition(0, 0),
           ).thenAnswer(
@@ -717,11 +717,11 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
           ),
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
             sections: {
               (0, 0): originSection,
             },
@@ -739,15 +739,15 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
           ),
         ],
       );
@@ -761,8 +761,7 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenThrow(Exception('error'));
+          when(boardInfoRepository.getZoomLimit).thenThrow(Exception('error'));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
@@ -780,8 +779,8 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenThrow(Exception('error'));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
