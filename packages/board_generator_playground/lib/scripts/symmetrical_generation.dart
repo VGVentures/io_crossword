@@ -11,7 +11,7 @@ void main({
     ..removeAt(0);
 
   final pool = <String>{
-    for (final line in lines) (line[0] as String).toLowerCase(),
+    for (final line in lines) (line[0] as String).toLowerCase().trim(),
   };
 
   log('Sorting ${pool.length} words');
@@ -20,7 +20,11 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 100)),
+    crossword: Crossword(
+      bounds: Bounds.square(size: 1500),
+      largestWordLength: wordPool.longestWordLength,
+      shortestWordLength: wordPool.shortestWordLength,
+    ),
   );
 
   final stopwatch = Stopwatch()..start();

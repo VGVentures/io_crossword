@@ -24,6 +24,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: apiClient.crosswordResource),
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
       ],

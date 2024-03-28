@@ -9,7 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../../../../routes/board/sections/[sectionId].dart' as route;
+import '../../../../../routes/board/sections/[sectionId]/index.dart' as route;
 
 class _MockRequestContext extends Mock implements RequestContext {}
 

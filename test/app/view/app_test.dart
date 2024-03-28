@@ -15,6 +15,8 @@ class _MockApiClient extends Mock implements ApiClient {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
+class _MockCrosswordResource extends Mock implements CrosswordResource {}
+
 void main() {
   group('App', () {
     late ApiClient apiClient;
@@ -28,7 +30,8 @@ void main() {
 
       when(() => apiClient.leaderboardResource)
           .thenReturn(_MockLeaderboardResource());
-
+      when(() => apiClient.crosswordResource)
+          .thenReturn(_MockCrosswordResource());
       when(
         () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));

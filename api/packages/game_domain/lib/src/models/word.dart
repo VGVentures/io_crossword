@@ -57,6 +57,27 @@ class Word extends Equatable {
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$WordToJson(this);
 
+  /// Returns a copy of this instance with the given fields replaced with the
+  /// new values.
+  Word copyWith({
+    String? id,
+    Point<int>? position,
+    Axis? axis,
+    String? answer,
+    String? clue,
+    List<String>? hints,
+    int? solvedTimestamp,
+  }) {
+    return Word(
+      position: position ?? this.position,
+      axis: axis ?? this.axis,
+      answer: answer ?? this.answer,
+      clue: clue ?? this.clue,
+      hints: hints ?? this.hints,
+      solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

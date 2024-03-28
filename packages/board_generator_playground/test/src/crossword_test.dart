@@ -1097,71 +1097,19 @@ void main() {
     });
 
     group('toPrettyString', () {
-      test('returns a pretty string for the crossword', () {
+      test('returns a pretty string for a crossword', () {
         final board = Crossword1();
 
         final prettyString = board.toPrettyString();
         expect(
           prettyString,
           equals(
-            'ALBUS\n'
-            '--E--\n'
-            '--H--\n'
-            '--A--\n'
-            '--N--\n',
-          ),
-        );
-      });
-
-      test('returns a pretty string for the crossword', () {
-        final board = Crossword1();
-
-        final prettyString = board.toPrettyString(
-          topLeft: Location(x: -2, y: -1),
-        );
-
-        expect(
-          prettyString,
-          equals(
-            '--E--\n'
-            '--H--\n'
-            '--A--\n'
-            '--N--\n',
-          ),
-        );
-      });
-
-      test('returns a pretty string for the crossword', () {
-        final board = Crossword1();
-
-        final prettyString = board.toPrettyString(
-          topLeft: Location(x: -1, y: -1),
-          bottomRight: Location(x: 1, y: 1),
-        );
-
-        expect(
-          prettyString,
-          equals(
-            '-E-\n'
-            '-H-\n'
-            '-A-\n',
-          ),
-        );
-      });
-
-      test('returns a pretty string for the crossword', () {
-        final board = Crossword1();
-
-        final prettyString = board.toPrettyString(
-          bottomRight: Location(x: 1, y: 1),
-        );
-        expect(
-          prettyString,
-          equals(
-            'ALBU\n'
-            '--E-\n'
-            '--H-\n'
-            '--A-\n',
+            '    -2 -1  0  1  2\n'
+            ' -2  A  L  B  U  S\n'
+            ' -1  -  -  E  -  -\n'
+            '  0  -  -  H  -  -\n'
+            '  1  -  -  A  -  -\n'
+            '  2  -  -  N  -  -\n',
           ),
         );
       });

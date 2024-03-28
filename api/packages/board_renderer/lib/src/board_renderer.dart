@@ -61,11 +61,13 @@ typedef DrawRect = img.Image Function(
   required int x2,
   required int y2,
   required img.Color color,
-  num thickness,
   num radius,
   img.Image? mask,
   img.Channel maskChannel,
 });
+
+/// Similar to [DrawRect] but fills the rectangle.
+typedef FillRect = DrawRect;
 
 /// A function that composites an image.
 typedef CompositeImage = img.Image Function(
@@ -125,6 +127,7 @@ class BoardRenderer {
     CreateCommand createCommand = img.Command.new,
     CreateImage createImage = img.Image.new,
     DrawRect drawRect = img.drawRect,
+    FillRect fillRect = img.fillRect,
     DrawChar drawChar = img.drawChar,
     CompositeImage compositeImage = img.compositeImage,
     DecodePng decodePng = img.decodePng,
@@ -133,6 +136,7 @@ class BoardRenderer {
   })  : _createCommand = createCommand,
         _createImage = createImage,
         _drawRect = drawRect,
+        _fillRect = fillRect,
         _drawChar = drawChar,
         _compositeImage = compositeImage,
         _decodePng = decodePng,
@@ -142,6 +146,7 @@ class BoardRenderer {
   final CreateCommand _createCommand;
   final CreateImage _createImage;
   final DrawRect _drawRect;
+  final DrawRect _fillRect;
   final DrawChar _drawChar;
   final CompositeImage _compositeImage;
   final DecodePng _decodePng;
@@ -155,6 +160,7 @@ class BoardRenderer {
     List<Word> words, {
     int cellSize = 1,
     bool addLetters = false,
+    bool fill = false,
   }) async {
     final color = img.ColorRgb8(0, 0, 0);
 
@@ -197,7 +203,10 @@ class BoardRenderer {
             (isHorizontal ? wordPosition.$2 : wordPosition.$2 + i * cellSize) +
                 centerY -
                 paddingY;
-        _drawRect(
+
+        final fn = fill ? _fillRect : _drawRect;
+
+        fn(
           image,
           x1: x1,
           y1: y1,
