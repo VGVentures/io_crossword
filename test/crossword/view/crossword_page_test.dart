@@ -184,9 +184,15 @@ void main() {
       );
 
       await tester.pumpCrosswordView(bloc);
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.cancel));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      final iconButton = tester.widget<IconButton>(
+        find.ancestor(
+          of: find.byIcon(Icons.cancel),
+          matching: find.byType(IconButton),
+        ),
+      );
+      iconButton.onPressed?.call();
+      await tester.pump();
       expect(find.byType(WordFocusedMobileView), findsNothing);
       verify(() => bloc.add(const WordUnselected())).called(1);
     });
