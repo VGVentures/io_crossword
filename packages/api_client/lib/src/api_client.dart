@@ -55,6 +55,10 @@ class ApiClient {
   late final LeaderboardResource leaderboardResource =
       LeaderboardResource(apiClient: this);
 
+  /// {@macro crossword_resource}
+  late final CrosswordResource crosswordResource =
+      CrosswordResource(apiClient: this);
+
   Future<http.Response> _handleUnauthorized(
     Future<http.Response> Function() sendRequest,
   ) async {
