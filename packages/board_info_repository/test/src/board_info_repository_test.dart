@@ -112,7 +112,7 @@ void main() {
       });
     });
 
-    group('getRenderModeZoomLimit', () {
+    group('getZoomLimit', () {
       test('returns render mode limit from firebase', () async {
         mockQueryResult(0.6);
         final result = await boardInfoRepository.getZoomLimit();
@@ -121,7 +121,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => collection.where('type', isEqualTo: 'render_mode_limit'),
+          () => collection.where('type', isEqualTo: 'zoom_limit'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getZoomLimit(),
