@@ -153,6 +153,8 @@ void main() {
               event,
             );
 
+        game.update(2);
+
         expect(
           game.camera.viewfinder.position,
           equals(targetCenter),
