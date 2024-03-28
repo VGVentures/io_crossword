@@ -40,7 +40,7 @@ void main() {
         () => collection.where('type', isEqualTo: 'solved_words_count'),
       ).thenReturn(collection);
       when(
-        () => collection.where('type', isEqualTo: 'render_mode_limit'),
+        () => collection.where('type', isEqualTo: 'zoom_limit'),
       ).thenReturn(collection);
       when(
         () => collection.where('type', isEqualTo: 'section_size'),
