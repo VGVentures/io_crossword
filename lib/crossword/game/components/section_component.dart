@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
@@ -40,18 +41,30 @@ class SectionTapController extends PositionComponent
         );
 
         if (wordRect.contains(localPosition.toOffset())) {
-          gameRef.camera.viewfinder.position = Vector2(
+          final newCameraPosition = Vector2(
             wordRect.left + wordRect.width / 2,
             wordRect.top + wordRect.height / 2,
+          );
+
+          gameRef.camera.viewfinder.add(
+            MoveEffect.to(
+              newCameraPosition,
+              CurvedEffectController(
+                .8,
+                Curves.easeInOut,
+              ),
+              onComplete: () {
+                parent.gameRef.bloc.add(
+                  WordSelected(parent.index, word),
+                );
+              },
+            ),
           );
 
           while (!gameRef.camera.visibleWorldRect.contains(wordRect.topLeft) ||
               !gameRef.camera.visibleWorldRect.contains(wordRect.bottomRight)) {
             gameRef.camera.viewfinder.zoom -= 0.05;
           }
-          parent.gameRef.bloc.add(
-            WordSelected(parent.index, word),
-          );
           break;
         }
       }
