@@ -30,15 +30,6 @@ class WordUnselected extends CrosswordEvent {
   List<Object> get props => [];
 }
 
-class RenderModeSwitched extends CrosswordEvent {
-  const RenderModeSwitched(this.renderMode);
-
-  final RenderMode renderMode;
-
-  @override
-  List<Object?> get props => [renderMode];
-}
-
 class MascotSelected extends CrosswordEvent {
   const MascotSelected(this.mascot);
 
