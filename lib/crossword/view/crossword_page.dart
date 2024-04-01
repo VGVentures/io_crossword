@@ -127,12 +127,7 @@ class AboutButton extends StatelessWidget {
     return ElevatedButton(
       child: const Icon(Icons.question_mark_rounded),
       onPressed: () {
-        showDialog<void>(
-          context: context,
-          builder: (context) {
-            return const AboutView();
-          },
-        );
+        AboutView.showModal(context);
       },
     );
   }

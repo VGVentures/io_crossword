@@ -43,12 +43,7 @@ class GameIntroView extends StatelessWidget {
           context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
 
           Navigator.of(context).pop();
-          showDialog<void>(
-            context: context,
-            builder: (context) {
-              return const AboutView();
-            },
-          );
+          AboutView.showModal(context);
         }
       },
       child: Center(

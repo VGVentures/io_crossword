@@ -11,9 +11,12 @@ part 'about_project_details.dart';
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const AboutView(),
+  static Future<void> showModal(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const AboutView();
+      },
     );
   }
 
