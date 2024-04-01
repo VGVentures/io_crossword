@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -55,14 +56,15 @@ void main() {
 
       test('returns Response with valid to true if answer is correct',
           () async {
-        when(() => crosswordRepository.answerWord(1, 1, 1, 1, 'flutter'))
-            .thenAnswer((_) async => true);
+        when(
+          () => crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+        ).thenAnswer((_) async => true);
         when(() => request.json()).thenAnswer(
           (_) async => {
             'sectionId': '1,1',
             'wordPosition': '1,1',
             'mascot': 'dash',
-            'answer': 'flutter',
+            'answer': 'sun',
           },
         );
 
@@ -74,14 +76,15 @@ void main() {
 
       test('returns Response with valid to false if answer is incorrect',
           () async {
-        when(() => crosswordRepository.answerWord(1, 1, 1, 1, 'android'))
-            .thenAnswer((_) async => false);
+        when(
+          () => crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+        ).thenAnswer((_) async => false);
         when(() => request.json()).thenAnswer(
           (_) async => {
             'sectionId': '1,1',
             'wordPosition': '1,1',
             'mascot': 'dash',
-            'answer': 'android',
+            'answer': 'sun',
           },
         );
 

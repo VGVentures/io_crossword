@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:api/extensions/path_param_to_position.dart';
+import 'package:collection/collection.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:game_domain/game_domain.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   if (context.request.method == HttpMethod.post) {
@@ -18,8 +20,10 @@ Future<Response> _onPost(RequestContext context) async {
   final json = await context.request.json() as Map<String, dynamic>;
   final sectionId = json['sectionId'] as String?;
   final wordPosition = json['wordPosition'] as String?;
-  final mascot = json['mascot'] as String?;
+  final mascotName = json['mascot'] as String?;
   final answer = json['answer'] as String?;
+
+  final mascot = Mascots.values.firstWhereOrNull((e) => e.name == mascotName);
 
   if (sectionId == null ||
       wordPosition == null ||
@@ -49,6 +53,7 @@ Future<Response> _onPost(RequestContext context) async {
     sectionY,
     wordX,
     wordY,
+    mascot,
     answer,
   );
 

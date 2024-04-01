@@ -149,6 +149,7 @@ void main() {
         hints: const [],
         solvedTimestamp: null,
       );
+
       setUp(() {
         final record = _MockDbEntityRecord();
         when(() => record.id).thenReturn('id');
@@ -184,7 +185,8 @@ void main() {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
-          final valid = await repository.answerWord(1, 1, 1, 1, 'flutter');
+          final valid =
+              await repository.answerWord(1, 1, 1, 1, Mascots.dino, 'flutter');
           expect(valid, isTrue);
           final captured = verify(
             () => dbClient.update(
@@ -201,7 +203,10 @@ void main() {
               'size': 300,
               'words': [
                 word
-                    .copyWith(solvedTimestamp: time.millisecondsSinceEpoch)
+                    .copyWith(
+                      solvedTimestamp: time.millisecondsSinceEpoch,
+                      mascot: Mascots.dino,
+                    )
                     .toJson(),
               ],
               'borderWords': <String>[],
@@ -212,7 +217,8 @@ void main() {
       });
 
       test('answerWord returns false if answer is incorrect', () async {
-        final valid = await repository.answerWord(1, 1, 1, 1, 'android');
+        final valid =
+            await repository.answerWord(1, 1, 1, 1, Mascots.dino, 'android');
         expect(valid, isFalse);
       });
 
@@ -227,7 +233,14 @@ void main() {
           ),
         ).thenAnswer((_) async => []);
 
-        final valid = await repository.answerWord(0, 0, 1, 1, 'flutter');
+        final valid =
+            await repository.answerWord(0, 0, 1, 1, Mascots.dino, 'flutter');
+        expect(valid, isFalse);
+      });
+
+      test('answerWord returns false if word is not in section', () async {
+        final valid =
+            await repository.answerWord(1, 1, -1, -1, Mascots.dino, 'flutter');
         expect(valid, isFalse);
       });
     });
