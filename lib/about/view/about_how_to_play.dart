@@ -8,31 +8,52 @@ class AboutHowToPlayContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              children: [
-                HowToPlaySteps(title: l10n.aboutHowToPlayFirstInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlaySecondInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayThirdInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayFourthInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayFifthInstructions),
-              ],
+    return DefaultTabController(
+      length: 5,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                children: [
+                  HowToPlaySteps(title: l10n.aboutHowToPlayFirstInstructions),
+                  HowToPlaySteps(title: l10n.aboutHowToPlaySecondInstructions),
+                  HowToPlaySteps(title: l10n.aboutHowToPlayThirdInstructions),
+                  HowToPlaySteps(title: l10n.aboutHowToPlayFourthInstructions),
+                  HowToPlaySteps(title: l10n.aboutHowToPlayFifthInstructions),
+                ],
+              ),
             ),
-          ),
-          // TODO(Ayad): If the new design can't use the theme we need to remove
-          FilledButton.icon(
-            icon: const Icon(Icons.play_circle, size: 18),
-            label: Text(l10n.playNow),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+
+            // TODO(Ayad): If the new design can't use the theme we need to remove
+            FilledButton.icon(
+              icon: const Icon(Icons.play_circle, size: 18),
+              label: Text(l10n.playNow),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class TabSelector extends StatelessWidget {
+  const TabSelector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.keyboard_arrow_left),
+        ),
+        TabPageSelector(),
+      ],
     );
   }
 }
