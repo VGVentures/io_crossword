@@ -17,7 +17,7 @@ class AboutHowToPlayContent extends StatelessWidget {
     ];
 
     return DefaultTabController(
-      length: 5,
+      length: instructions.length,
       child: Padding(
         padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
         child: Column(
@@ -31,7 +31,7 @@ class AboutHowToPlayContent extends StatelessWidget {
             ),
             Builder(
               builder: (context) {
-                return TabSelector(
+                return _TabSelector(
                   tabController: DefaultTabController.of(context),
                 );
               },
@@ -52,19 +52,18 @@ class AboutHowToPlayContent extends StatelessWidget {
   }
 }
 
-class TabSelector extends StatefulWidget {
-  const TabSelector({
+class _TabSelector extends StatefulWidget {
+  const _TabSelector({
     required this.tabController,
-    super.key,
   });
 
   final TabController tabController;
 
   @override
-  State<TabSelector> createState() => _TabSelectorState();
+  State<_TabSelector> createState() => _TabSelectorState();
 }
 
-class _TabSelectorState extends State<TabSelector> {
+class _TabSelectorState extends State<_TabSelector> {
   int index = 0;
 
   @override
