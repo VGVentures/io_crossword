@@ -64,8 +64,6 @@ class _TabSelector extends StatefulWidget {
 }
 
 class _TabSelectorState extends State<_TabSelector> {
-  int index = 0;
-
   @override
   void initState() {
     super.initState();
@@ -79,13 +77,13 @@ class _TabSelectorState extends State<_TabSelector> {
   }
 
   void _tabListener() {
-    setState(() {
-      index = widget.tabController.index;
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final index = widget.tabController.index;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
