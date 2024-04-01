@@ -17,8 +17,6 @@ extension ContextExt on BuildContext {
             ),
           );
       }
-
-      throw Exception('Could not launch $url');
     }
 
     await url_launcher.launchUrl(url);

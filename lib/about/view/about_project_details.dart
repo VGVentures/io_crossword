@@ -34,10 +34,8 @@ class AboutProjectDetails extends StatelessWidget {
                     style: textTheme.titleMedium?.copyWith(
                       color: linkColor,
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        // TODO(Ayad): add link
-                      },
+                    // TODO(Ayad): add link
+                    // recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
                   TextSpan(text: ' ${l10n.and} '),
                   TextSpan(
