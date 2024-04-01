@@ -9,7 +9,7 @@ class AboutProjectDetails extends StatelessWidget {
     final l10n = context.l10n;
 
     final textTheme = Theme.of(context).textTheme;
-    const linkColor = Color(0xFF1A73E8);
+    const linkColor = IoCrosswordColors.linkBlue;
 
     return SingleChildScrollView(
       child: Padding(
