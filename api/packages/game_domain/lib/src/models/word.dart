@@ -15,7 +15,6 @@ class Word extends Equatable {
     required this.axis,
     required this.answer,
     required this.clue,
-    required this.hints,
     required this.solvedTimestamp,
   }) : id = '$position-$axis';
 
@@ -45,10 +44,6 @@ class Word extends Equatable {
   @JsonKey()
   final String clue;
 
-  /// The hints to show users when asked for more hints.
-  @JsonKey()
-  final List<String> hints;
-
   /// The timestamp when the word was solved. In milliseconds since epoch.
   /// If the word is not solved, this value is null.
   @JsonKey()
@@ -65,7 +60,6 @@ class Word extends Equatable {
     Axis? axis,
     String? answer,
     String? clue,
-    List<String>? hints,
     int? solvedTimestamp,
   }) {
     return Word(
@@ -73,7 +67,6 @@ class Word extends Equatable {
       axis: axis ?? this.axis,
       answer: answer ?? this.answer,
       clue: clue ?? this.clue,
-      hints: hints ?? this.hints,
       solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
     );
   }
@@ -85,7 +78,6 @@ class Word extends Equatable {
         axis,
         answer,
         clue,
-        hints,
         solvedTimestamp,
       ];
 }

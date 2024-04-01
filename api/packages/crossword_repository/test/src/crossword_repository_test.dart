@@ -146,7 +146,6 @@ void main() {
         axis: Axis.vertical,
         answer: 'flutter',
         clue: '',
-        hints: const [],
         solvedTimestamp: null,
       );
       setUp(() {
