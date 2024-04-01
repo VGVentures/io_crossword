@@ -8,6 +8,14 @@ class AboutHowToPlayContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final instructions = [
+      l10n.aboutHowToPlayFirstInstructions,
+      l10n.aboutHowToPlaySecondInstructions,
+      l10n.aboutHowToPlayThirdInstructions,
+      l10n.aboutHowToPlayFourthInstructions,
+      l10n.aboutHowToPlayFifthInstructions,
+    ];
+
     return DefaultTabController(
       length: 5,
       child: Padding(
@@ -15,17 +23,20 @@ class AboutHowToPlayContent extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: PageView(
-                children: [
-                  HowToPlaySteps(title: l10n.aboutHowToPlayFirstInstructions),
-                  HowToPlaySteps(title: l10n.aboutHowToPlaySecondInstructions),
-                  HowToPlaySteps(title: l10n.aboutHowToPlayThirdInstructions),
-                  HowToPlaySteps(title: l10n.aboutHowToPlayFourthInstructions),
-                  HowToPlaySteps(title: l10n.aboutHowToPlayFifthInstructions),
-                ],
+              child: TabBarView(
+                children: instructions
+                    .map((instruction) => HowToPlaySteps(title: instruction))
+                    .toList(),
               ),
             ),
-
+            Builder(
+              builder: (context) {
+                return TabSelector(
+                  tabController: DefaultTabController.of(context),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
             // TODO(Ayad): If the new design can't use the theme we need to remove
             FilledButton.icon(
               icon: const Icon(Icons.play_circle, size: 18),
@@ -41,18 +52,61 @@ class AboutHowToPlayContent extends StatelessWidget {
   }
 }
 
-class TabSelector extends StatelessWidget {
-  const TabSelector({super.key});
+class TabSelector extends StatefulWidget {
+  const TabSelector({
+    required this.tabController,
+    super.key,
+  });
+
+  final TabController tabController;
+
+  @override
+  State<TabSelector> createState() => _TabSelectorState();
+}
+
+class _TabSelectorState extends State<TabSelector> {
+  int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.tabController.addListener(_tabListener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.tabController.removeListener(_tabListener);
+  }
+
+  void _tabListener() {
+    setState(() {
+      index = widget.tabController.index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: index > 0
+              ? () {
+                  widget.tabController.animateTo(index - 1);
+                }
+              : null,
           icon: const Icon(Icons.keyboard_arrow_left),
         ),
-        TabPageSelector(),
+        const TabPageSelector(),
+        IconButton(
+          onPressed: index < widget.tabController.length - 1
+              ? () {
+                  widget.tabController.animateTo(index + 1);
+                }
+              : null,
+          icon: const Icon(Icons.keyboard_arrow_right),
+        ),
       ],
     );
   }
