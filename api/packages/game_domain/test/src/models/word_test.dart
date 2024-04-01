@@ -13,6 +13,7 @@ void main() {
         clue: 'clue',
         hints: const ['hint'],
         solvedTimestamp: 0,
+        mascot: Mascots.sparky,
       );
       final json = word.toJson();
 
@@ -25,6 +26,7 @@ void main() {
           'clue': 'clue',
           'hints': ['hint'],
           'solvedTimestamp': 0,
+          'mascot': 'sparky',
         }),
       );
     });
@@ -34,6 +36,7 @@ void main() {
         'id': 'id',
         'position': {'x': 1, 'y': 2},
         'axis': 'horizontal',
+        'mascot': 'sparky',
         'answer': 'test',
         'clue': 'clue',
         'hints': ['hint'],
@@ -49,6 +52,7 @@ void main() {
             clue: 'clue',
             hints: const ['hint'],
             solvedTimestamp: null,
+            mascot: Mascots.sparky,
           ),
         ),
       );
