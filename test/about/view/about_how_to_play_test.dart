@@ -36,6 +36,146 @@ void main() {
     );
 
     testWidgets(
+      'renders initial aboutHowToPlayFirstInstructions',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        expect(find.text(l10n.aboutHowToPlayFirstInstructions), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders second tab view aboutHowToPlaySecondInstructions '
+      'when next icon is pressed',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        expect(find.text(l10n.aboutHowToPlayFirstInstructions), findsNothing);
+
+        expect(
+          find.text(l10n.aboutHowToPlaySecondInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'renders third tab view aboutHowToPlayThirdInstructions '
+      'when next icon is pressed twice',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(l10n.aboutHowToPlayThirdInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'renders fourth tab view aboutHowToPlayFourthInstructions '
+      'when next icon is pressed three times',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(l10n.aboutHowToPlayFourthInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'renders fifth tab view aboutHowToPlayFifthInstructions '
+      'when next icon is pressed four times',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(l10n.aboutHowToPlayFifthInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'renders fifth tab view aboutHowToPlayFifthInstructions '
+      'when next is pressed more than the actual tab pages',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(l10n.aboutHowToPlayFifthInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'renders first tab view aboutHowToPlayFirstInstructions when next is '
+      'pressed twice and previous is pressed more than passing '
+      'through initial value',
+      (tester) async {
+        await tester.pumpApp(AboutHowToPlayContent());
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(l10n.aboutHowToPlayFirstInstructions),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
       'calls pop when button is pressed',
       (tester) async {
         final mockNavigator = MockNavigator();
