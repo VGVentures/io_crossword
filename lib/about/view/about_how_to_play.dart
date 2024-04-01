@@ -37,7 +37,7 @@ class AboutHowToPlayContent extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
-            // TODO(Ayad): If the new design can't use the theme we need to remove
+            // TODO(Ayad): If the new design can't use the theme change
             FilledButton.icon(
               icon: const Icon(Icons.play_circle, size: 18),
               label: Text(l10n.playNow),
