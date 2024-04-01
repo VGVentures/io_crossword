@@ -3,7 +3,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/view/about_view.dart';
+import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -127,12 +127,7 @@ class AboutButton extends StatelessWidget {
     return ElevatedButton(
       child: const Icon(Icons.question_mark_rounded),
       onPressed: () {
-        showDialog<void>(
-          context: context,
-          builder: (context) {
-            return const AboutView();
-          },
-        );
+        AboutView.showModal(context);
       },
     );
   }

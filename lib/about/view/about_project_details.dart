@@ -9,7 +9,7 @@ class AboutProjectDetails extends StatelessWidget {
     final l10n = context.l10n;
 
     final textTheme = Theme.of(context).textTheme;
-    const linkColor = Color(0xFF1A73E8);
+    const linkColor = IoCrosswordColors.linkBlue;
 
     return SingleChildScrollView(
       child: Padding(
@@ -45,9 +45,7 @@ class AboutProjectDetails extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        const link =
-                            'https://github.com/VGVentures/io_crossword';
-                        context.launchUrl(link);
+                        context.launchUrl(AboutLinks.github);
                       },
                   ),
                   const TextSpan(
@@ -72,8 +70,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    const link = 'https://io.google/2024';
-                    context.launchUrl(link);
+                    context.launchUrl(AboutLinks.googleIO);
                   },
               ),
             ),
@@ -86,8 +83,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    const link = 'https://policies.google.com/privacy';
-                    context.launchUrl(link);
+                    context.launchUrl(AboutLinks.privacyPolicy);
                   },
               ),
             ),
@@ -100,8 +96,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    const link = 'https://policies.google.com/terms';
-                    context.launchUrl(link);
+                    context.launchUrl(AboutLinks.termsOfService);
                   },
               ),
             ),
@@ -114,8 +109,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    const link = 'https://flutter.dev/crossword';
-                    context.launchUrl(link);
+                    context.launchUrl(AboutLinks.faqs);
                   },
               ),
             ),

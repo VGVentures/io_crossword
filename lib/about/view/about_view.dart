@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:io_crossword/about/link/about_links.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -10,9 +11,12 @@ part 'about_project_details.dart';
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const AboutView(),
+  static Future<void> showModal(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const AboutView();
+      },
     );
   }
 
