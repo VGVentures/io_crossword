@@ -71,6 +71,7 @@ class WordPool {
       ...constraints,
     }..removeWhere((key, value) => key > wordLength);
 
+    if (updatedConstrains.isEmpty) return null;
     final firstConstrains = updatedConstrains.entries.first;
 
     final words = sortedWords[wordLength]?[firstConstrains.key]
