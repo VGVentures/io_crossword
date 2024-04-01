@@ -70,8 +70,9 @@ void main() {
         await tester.pumpApp(AboutHowToPlayContent());
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
 
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
         await tester.pumpAndSettle();
 
         expect(
@@ -88,9 +89,12 @@ void main() {
         await tester.pumpApp(AboutHowToPlayContent());
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
 
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
         await tester.pumpAndSettle();
 
         expect(
@@ -107,10 +111,15 @@ void main() {
         await tester.pumpApp(AboutHowToPlayContent());
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
 
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
         await tester.pumpAndSettle();
 
         expect(
@@ -127,16 +136,24 @@ void main() {
         await tester.pumpApp(AboutHowToPlayContent());
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-
         await tester.pumpAndSettle();
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
 
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
         await tester.pumpAndSettle();
 
         expect(
@@ -154,18 +171,21 @@ void main() {
         await tester.pumpApp(AboutHowToPlayContent());
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
+        await tester.pumpAndSettle();
+
         await tester.tap(find.byIcon(Icons.keyboard_arrow_right));
-
         await tester.pumpAndSettle();
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
-
         await tester.pumpAndSettle();
 
         await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
-        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+        await tester.pumpAndSettle();
 
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.keyboard_arrow_left));
         await tester.pumpAndSettle();
 
         expect(
