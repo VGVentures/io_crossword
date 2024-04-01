@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+// TODO(Ayad): If the new design can use the theme we need to remove this widget
+
 /// {@template primary_button}
 /// A primary button.
 /// {@endtemplate}

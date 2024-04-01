@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -105,6 +106,21 @@ void main() {
     });
 
     testWidgets(
+      'displays AboutButton when status is CrosswordLoaded',
+      (tester) async {
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+          ),
+        );
+
+        await tester.pumpCrosswordView(bloc);
+
+        expect(find.byType(AboutButton), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'can zoom in',
       (tester) async {
         when(() => bloc.state).thenReturn(
@@ -154,5 +170,50 @@ void main() {
       },
       timeout: const Timeout(Duration(seconds: 30)),
     );
+
+    group('AboutButton', () {
+      late Widget widget;
+
+      setUp(() {
+        widget = BlocProvider.value(
+          value: bloc,
+          child: AboutButton(),
+        );
+      });
+
+      testWidgets(
+        'displays question_mark_rounded icon',
+        (tester) async {
+          when(() => bloc.state).thenReturn(
+            CrosswordLoaded(
+              sectionSize: 40,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.byIcon(Icons.question_mark_rounded), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays AboutView when button is pressed',
+        (tester) async {
+          when(() => bloc.state).thenReturn(
+            CrosswordLoaded(
+              sectionSize: 40,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          await tester.tap(find.byIcon(Icons.question_mark_rounded));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(AboutView), findsOneWidget);
+        },
+      );
+    });
   });
 }
