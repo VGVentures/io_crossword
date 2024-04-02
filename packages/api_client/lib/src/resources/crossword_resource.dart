@@ -22,15 +22,21 @@ class CrosswordResource {
     required BoardSection section,
     required Word word,
     required String answer,
+    required Mascots mascot,
   }) async {
     final response = await _apiClient.post(
-      '/game/board/sections/${section.position.x},${section.position.y}/${word.position.x},${word.position.y}',
-      body: jsonEncode({'answer': answer}),
+      '/game/answer',
+      body: jsonEncode({
+        'sectionId': '${section.position.x},${section.position.y}',
+        'wordPosition': '${word.position.x},${word.position.y}',
+        'answer': answer,
+        'mascot': mascot.toString(),
+      }),
     );
 
     if (response.statusCode != HttpStatus.ok) {
       throw ApiClientError(
-        'POST /game/board/sections/{sectionId}/{wordPosition}'
+        'POST /game/answer'
         ' returned status ${response.statusCode} '
         'with the following response: "${response.body}"',
         StackTrace.current,
@@ -43,7 +49,7 @@ class CrosswordResource {
       return isValidAnswer;
     } catch (error, stackTrace) {
       throw ApiClientError(
-        'POST /game/board/sections/{sectionId}/{wordPosition}'
+        'POST /game/answer'
         ' returned invalid response: "${response.body}"',
         stackTrace,
       );
