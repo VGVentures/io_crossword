@@ -98,14 +98,13 @@ class IoCrosswordTheme {
       closeButtonIconBuilder: (context) {
         return Container(
           decoration: const BoxDecoration(
-            color: Color(0xFF838998),
+            color: Colors.transparent,
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(2),
           child: const Icon(
             Icons.close,
             color: Colors.white,
-            size: 20,
           ),
         );
       },
