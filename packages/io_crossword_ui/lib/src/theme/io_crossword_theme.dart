@@ -78,9 +78,6 @@ class IoCrosswordTheme {
         backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent),
       ),
       filled: ButtonStyle(
-        shape: MaterialStatePropertyAll<OutlinedBorder>(
-          CircleBorder(),
-        ),
         iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
         backgroundColor:
             MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
