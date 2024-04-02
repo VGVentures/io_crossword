@@ -39,7 +39,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: IoCrosswordTheme.themeData,
+      theme: IoCrosswordTheme().themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const CrosswordPage(),

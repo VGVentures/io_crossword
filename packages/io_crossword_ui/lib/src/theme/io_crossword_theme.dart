@@ -1,20 +1,64 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:meta/meta.dart';
 
 /// {@template io_crossword_theme}
 /// IO Crossword theme.
 /// {@endtemplate}
-abstract class IoCrosswordTheme {
+class IoCrosswordTheme {
+  /// {@macro io_crossword_theme}
+  IoCrosswordTheme();
+
   /// [ThemeData] for IO Crossword.
-  static ThemeData get themeData {
+  ThemeData get themeData {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: _colorScheme,
+      colorScheme: colorScheme,
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
+      extensions: {
+        IoThemeExtension(playerAliasTheme: _playerAliasTheme),
+      },
+    );
+  }
+
+  IoPlayerAliasTheme get _playerAliasTheme {
+    final colorScheme = this.colorScheme;
+
+    // TODO(alestiago): Update text styles from new Design System when
+    // available:
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6371389285
+    return IoPlayerAliasTheme(
+      small: IoPlayerAliasStyle(
+        backgroundColor: colorScheme.primary,
+        borderRadius: BorderRadius.circular(0.31),
+        textStyle: const TextStyle(
+          fontFamily: 'Google Sans',
+          fontSize: 10.34,
+          fontWeight: FontWeight.w700,
+          height: 1,
+          package: IoCrosswordTextStyles.package,
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 0.5),
+        boxSize: const Size.square(20.16),
+      ),
+      big: IoPlayerAliasStyle(
+        backgroundColor: colorScheme.primary,
+        borderRadius: BorderRadius.circular(0.61),
+        textStyle: const TextStyle(
+          fontFamily: 'Google Sans',
+          fontSize: 14.61,
+          fontWeight: FontWeight.w700,
+          height: 1,
+          package: IoCrosswordTextStyles.package,
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 1.2),
+        boxSize: const Size.square(40.12),
+      ),
     );
   }
 
@@ -61,12 +105,61 @@ abstract class IoCrosswordTheme {
     );
   }
 
-  static ColorScheme get _colorScheme {
+  @internal
+  // ignore: public_member_api_docs
+  ColorScheme get colorScheme {
     return ColorScheme.fromSeed(
       seedColor: IoCrosswordColors.seedBlue,
       background: IoCrosswordColors.seedBlack,
       surface: IoCrosswordColors.seedWhite,
       surfaceTint: IoCrosswordColors.seedWhite,
+    );
+  }
+
+  /// Gemini input decoration theme.
+  static InputDecorationTheme get geminiInputDecorationTheme {
+    const borderRadius = BorderRadius.all(Radius.circular(40));
+    const borderSide = BorderSide(
+      width: 2,
+    );
+
+    return InputDecorationTheme(
+      outlineBorder: borderSide,
+      hintStyle: _textTheme.bodyLarge?.copyWith(
+        color: const Color(0xFF80858B),
+        fontWeight: FontWeight.w400,
+      ),
+      border: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+      ),
+      disabledBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: borderSide,
+      ),
+      enabledBorder: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+      ),
+      focusedBorder: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+        borderSide: borderSide,
+      ),
+      errorBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(
+          width: 1.5,
+          color: IoCrosswordColors.redError,
+        ),
+      ),
+      focusedErrorBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(
+          width: 2,
+          color: IoCrosswordColors.redError,
+        ),
+      ),
     );
   }
 
@@ -77,5 +170,61 @@ abstract class IoCrosswordTheme {
     return isMobile
         ? IoCrosswordTextStyles.mobile.textTheme
         : IoCrosswordTextStyles.desktop.textTheme;
+  }
+}
+
+/// {@template io_theme_extension}
+/// Extension for the IO theme.
+/// {@endtemplate}
+@immutable
+class IoThemeExtension extends Equatable
+    implements ThemeExtension<IoThemeExtension> {
+  /// {@macro io_theme_extension}
+  const IoThemeExtension({
+    required this.playerAliasTheme,
+  });
+
+  /// {@macro io_player_alias_theme}
+  final IoPlayerAliasTheme playerAliasTheme;
+
+  @override
+  Object get type => IoThemeExtension;
+
+  @override
+  ThemeExtension<IoThemeExtension> copyWith({
+    IoPlayerAliasTheme? playerAliasTheme,
+  }) {
+    return IoThemeExtension(
+      playerAliasTheme: playerAliasTheme ?? this.playerAliasTheme,
+    );
+  }
+
+  @override
+  ThemeExtension<IoThemeExtension> lerp(
+    covariant ThemeExtension<IoThemeExtension>? other,
+    double t,
+  ) {
+    if (other is! IoThemeExtension) {
+      return this;
+    }
+
+    return IoThemeExtension(
+      playerAliasTheme: playerAliasTheme.lerp(other.playerAliasTheme, t),
+    );
+  }
+
+  @override
+  List<Object?> get props => [playerAliasTheme];
+}
+
+/// {@template extended_theme_data}
+/// Get the [IoThemeExtension] from the [ThemeData].
+/// {@endtemplate}
+extension ExtendedThemeData on ThemeData {
+  /// {@macro extended_theme_data}
+  IoThemeExtension get io {
+    final extension = this.extension<IoThemeExtension>();
+    assert(extension != null, '$IoThemeExtension not found in $ThemeData');
+    return extension!;
   }
 }

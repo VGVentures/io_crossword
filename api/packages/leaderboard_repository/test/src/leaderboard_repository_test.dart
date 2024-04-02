@@ -114,7 +114,7 @@ void main() {
       const blacklist = ['AAA', 'BBB', 'CCC'];
 
       test('returns the blacklist', () async {
-        when(() => dbClient.getById('initials_blacklist', blacklistDocumentId))
+        when(() => dbClient.getById('initialsBlacklist', blacklistDocumentId))
             .thenAnswer(
           (_) async => DbEntityRecord(
             id: blacklistDocumentId,
@@ -129,7 +129,7 @@ void main() {
       });
 
       test('returns empty list if not found', () async {
-        when(() => dbClient.getById('initials_blacklist', any())).thenAnswer(
+        when(() => dbClient.getById('initialsBlacklist', any())).thenAnswer(
           (_) async => null,
         );
 
@@ -142,7 +142,7 @@ void main() {
       test('completes when writing in the db is successful', () async {
         when(
           () => dbClient.set(
-            'score_cards',
+            'scoreCards',
             DbEntityRecord(
               id: 'userId',
               data: {
