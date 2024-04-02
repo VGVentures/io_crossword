@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_tag.dart';
+
+class _MockIoPlayerAliasStyle extends Mock implements IoPlayerAliasStyle {}
 
 void main() {
   group('$IoPlayerAlias', () {
@@ -256,6 +259,52 @@ void main() {
           },
         );
       });
+    });
+  });
+
+  group('$IoPlayerAliasStyle', () {
+    test('lerps', () {
+      const from = IoPlayerAliasStyle(
+        backgroundColor: Color(0xff00ff00),
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        textStyle: TextStyle(),
+        margin: EdgeInsets.all(4),
+        boxSize: Size.square(30),
+      );
+      const to = IoPlayerAliasStyle(
+        backgroundColor: Color(0xff0000ff),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        textStyle: TextStyle(),
+        margin: EdgeInsets.all(8),
+        boxSize: Size.square(60),
+      );
+
+      final actual = from.lerp(to, 0.5);
+
+      expect(actual.backgroundColor, equals(const Color(0xff007f7f)));
+      expect(actual.borderRadius, equals(BorderRadius.circular(6)));
+      expect(actual.margin, equals(const EdgeInsets.all(6)));
+      expect(actual.boxSize, equals(const Size.square(45)));
+    });
+  });
+
+  group('$IoPlayerAliasTheme', () {
+    test('lerps', () {
+      final small = _MockIoPlayerAliasStyle();
+      final big = _MockIoPlayerAliasStyle();
+
+      final theme = IoPlayerAliasTheme(
+        small: small,
+        big: big,
+      );
+
+      when(() => small.lerp(small, 0.5)).thenReturn(small);
+      when(() => big.lerp(big, 0.5)).thenReturn(big);
+
+      final actual = theme.lerp(theme, 0.5);
+
+      expect(actual.small, equals(small));
+      expect(actual.big, equals(big));
     });
   });
 }

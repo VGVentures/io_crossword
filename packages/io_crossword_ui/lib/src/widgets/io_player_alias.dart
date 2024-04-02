@@ -24,15 +24,18 @@ class IoPlayerAlias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final char in alias.split(''))
-          Padding(
-            padding: style.margin,
-            child: _CharacterBox(char, style: style),
-          ),
-      ],
+    return Semantics(
+      label: alias,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final char in alias.split(''))
+            Padding(
+              padding: style.margin,
+              child: _CharacterBox(char, style: style),
+            ),
+        ],
+      ),
     );
   }
 }
