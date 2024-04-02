@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -6,6 +8,32 @@ import 'package:mocktail/mocktail.dart';
 import '../../test_tag.dart';
 
 class _MockIoPlayerAliasStyle extends Mock implements IoPlayerAliasStyle {}
+
+class _GoldenFileComparator extends LocalFileComparator {
+  _GoldenFileComparator()
+      : super(
+          Uri.parse('test/src/widgets/io_player_alias_test.dart'),
+        );
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+      imageBytes,
+      await getGoldenBytes(golden),
+    );
+
+    // Sufficient toleration to accommodate font rendering differences.
+    final passed = result.diffPercent <= 0.15;
+    if (passed) {
+      result.dispose();
+      return true;
+    }
+
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
 
 void main() {
   group('$IoPlayerAlias', () {
@@ -42,7 +70,16 @@ void main() {
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>
-          Uri.parse('goldens/io_player_alias__$name.png');
+          Uri.parse('goldens/io_player_alias/io_player_alias__$name.png');
+
+      setUpAll(() async {
+        final previousComparator = goldenFileComparator;
+        final comparator = _GoldenFileComparator();
+        goldenFileComparator = comparator;
+        addTearDown(() {
+          goldenFileComparator = previousComparator;
+        });
+      });
 
       group('with Android theme', () {
         late ThemeData themeData;
@@ -62,7 +99,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big.toAhem(),
+                  style: themeData.io.playerAliasTheme.big,
                 ),
               ),
             );
@@ -85,7 +122,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small.toAhem(),
+                  style: themeData.io.playerAliasTheme.small,
                 ),
               ),
             );
@@ -116,7 +153,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big.toAhem(),
+                  style: themeData.io.playerAliasTheme.big,
                 ),
               ),
             );
@@ -139,7 +176,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small.toAhem(),
+                  style: themeData.io.playerAliasTheme.small,
                 ),
               ),
             );
@@ -170,7 +207,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big.toAhem(),
+                  style: themeData.io.playerAliasTheme.big,
                 ),
               ),
             );
@@ -193,7 +230,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small.toAhem(),
+                  style: themeData.io.playerAliasTheme.small,
                 ),
               ),
             );
@@ -224,7 +261,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big..toAhem(),
+                  style: themeData.io.playerAliasTheme.big,
                 ),
               ),
             );
@@ -247,7 +284,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small.toAhem(),
+                  style: themeData.io.playerAliasTheme.small,
                 ),
               ),
             );
@@ -371,14 +408,6 @@ class _GoldenSubject extends StatelessWidget {
         color: themeData.colorScheme.background,
         child: Center(child: child),
       ),
-    );
-  }
-}
-
-extension on IoPlayerAliasStyle {
-  IoPlayerAliasStyle toAhem() {
-    return copyWith(
-      textStyle: textStyle.copyWith(fontFamily: ''),
     );
   }
 }
