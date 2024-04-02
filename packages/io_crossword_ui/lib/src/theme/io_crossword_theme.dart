@@ -35,14 +35,26 @@ class IoCrosswordTheme {
       small: IoPlayerAliasStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.31),
-        textStyle: IoCrosswordTextStyles.displaySM,
+        textStyle: const TextStyle(
+          fontFamily: 'Google Sans',
+          fontSize: 10.34,
+          fontWeight: FontWeight.w700,
+          height: 1,
+          package: IoCrosswordTextStyles.package,
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 0.5),
         boxSize: const Size.square(20.16),
       ),
       big: IoPlayerAliasStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
-        textStyle: IoCrosswordTextStyles.displayMD,
+        textStyle: const TextStyle(
+          fontFamily: 'Google Sans',
+          fontSize: 14.61,
+          fontWeight: FontWeight.w700,
+          height: 1,
+          package: IoCrosswordTextStyles.package,
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 1.2),
         boxSize: const Size.square(40.12),
       ),
