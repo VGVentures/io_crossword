@@ -25,6 +25,10 @@ void main() {
 
   blocTest<GameIntroBloc, GameIntroState>(
     'sets blacklist when BlacklistRequested is added',
+    setUp: () {
+      when(() => leaderboardResource.getInitialsBlacklist())
+          .thenAnswer((_) => Future.value(['TST']));
+    },
     build: () => GameIntroBloc(
       boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
