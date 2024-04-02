@@ -62,7 +62,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.playerAliasTheme.big.toAhem(),
                 ),
               ),
             );
@@ -85,7 +85,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.playerAliasTheme.small.toAhem(),
                 ),
               ),
             );
@@ -116,7 +116,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.playerAliasTheme.big.toAhem(),
                 ),
               ),
             );
@@ -139,7 +139,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.playerAliasTheme.small.toAhem(),
                 ),
               ),
             );
@@ -170,7 +170,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.playerAliasTheme.big.toAhem(),
                 ),
               ),
             );
@@ -193,7 +193,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.playerAliasTheme.small.toAhem(),
                 ),
               ),
             );
@@ -224,7 +224,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.playerAliasTheme.big..toAhem(),
                 ),
               ),
             );
@@ -247,7 +247,7 @@ void main() {
                 themeData: themeData,
                 child: IoPlayerAlias(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.playerAliasTheme.small.toAhem(),
                 ),
               ),
             );
@@ -263,6 +263,50 @@ void main() {
   });
 
   group('$IoPlayerAliasStyle', () {
+    group('copyWith', () {
+      test('remains the same when no arguments are give', () {
+        const style = IoPlayerAliasStyle(
+          backgroundColor: Color(0xff00ff00),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          textStyle: TextStyle(),
+          margin: EdgeInsets.all(4),
+          boxSize: Size.square(30),
+        );
+
+        final copy = style.copyWith();
+
+        expect(copy, equals(style));
+      });
+
+      test('changes when arguments are give', () {
+        const style = IoPlayerAliasStyle(
+          backgroundColor: Color(0xff00ff00),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          textStyle: TextStyle(),
+          margin: EdgeInsets.all(4),
+          boxSize: Size.square(30),
+        );
+
+        const newStyle = IoPlayerAliasStyle(
+          backgroundColor: Color(0xff0000ff),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          textStyle: TextStyle(),
+          margin: EdgeInsets.all(8),
+          boxSize: Size.square(60),
+        );
+
+        final copy = style.copyWith(
+          backgroundColor: newStyle.backgroundColor,
+          borderRadius: newStyle.borderRadius,
+          textStyle: newStyle.textStyle,
+          margin: newStyle.margin,
+          boxSize: newStyle.boxSize,
+        );
+
+        expect(copy, equals(newStyle));
+      });
+    });
+
     test('lerps', () {
       const from = IoPlayerAliasStyle(
         backgroundColor: Color(0xff00ff00),
@@ -327,6 +371,14 @@ class _GoldenSubject extends StatelessWidget {
         color: themeData.colorScheme.background,
         child: Center(child: child),
       ),
+    );
+  }
+}
+
+extension on IoPlayerAliasStyle {
+  IoPlayerAliasStyle toAhem() {
+    return copyWith(
+      textStyle: textStyle.copyWith(fontFamily: ''),
     );
   }
 }

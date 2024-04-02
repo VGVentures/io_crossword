@@ -111,6 +111,24 @@ class IoPlayerAliasStyle extends Equatable {
     );
   }
 
+  /// Creates a copy of this [IoPlayerAliasStyle] but with the given fields
+  /// replaced with the new values.
+  IoPlayerAliasStyle copyWith({
+    Color? backgroundColor,
+    BorderRadius? borderRadius,
+    TextStyle? textStyle,
+    EdgeInsets? margin,
+    Size? boxSize,
+  }) {
+    return IoPlayerAliasStyle(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      borderRadius: borderRadius ?? this.borderRadius,
+      textStyle: textStyle ?? this.textStyle,
+      margin: margin ?? this.margin,
+      boxSize: boxSize ?? this.boxSize,
+    );
+  }
+
   @override
   List<Object?> get props => [
         backgroundColor,
