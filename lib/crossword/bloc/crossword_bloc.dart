@@ -141,13 +141,13 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     Emitter<CrosswordState> emit,
   ) async {
     try {
-      final limits = await _boardInfoRepository.getRenderModeZoomLimits();
+      final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();
 
       if (state is CrosswordLoaded) {
         emit(
           (state as CrosswordLoaded).copyWith(
-            renderLimits: limits,
+            zoomLimit: zoomLimit,
             sectionSize: sectionSize,
           ),
         );
@@ -155,7 +155,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         emit(
           CrosswordLoaded(
             sectionSize: sectionSize,
-            renderLimits: limits,
+            zoomLimit: zoomLimit,
           ),
         );
         add(const BoardSectionRequested((0, 0)));

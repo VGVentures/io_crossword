@@ -12,8 +12,8 @@ Word _$WordFromJson(Map<String, dynamic> json) => Word(
       axis: $enumDecode(_$AxisEnumMap, json['axis']),
       answer: json['answer'] as String,
       clue: json['clue'] as String,
-      hints: (json['hints'] as List<dynamic>).map((e) => e as String).toList(),
       solvedTimestamp: json['solvedTimestamp'] as int?,
+      mascot: $enumDecodeNullable(_$MascotsEnumMap, json['mascot']),
     );
 
 Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
@@ -21,11 +21,18 @@ Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
       'axis': _$AxisEnumMap[instance.axis]!,
       'answer': instance.answer,
       'clue': instance.clue,
-      'hints': instance.hints,
       'solvedTimestamp': instance.solvedTimestamp,
+      'mascot': _$MascotsEnumMap[instance.mascot],
     };
 
 const _$AxisEnumMap = {
   Axis.horizontal: 'horizontal',
   Axis.vertical: 'vertical',
+};
+
+const _$MascotsEnumMap = {
+  Mascots.dash: 'dash',
+  Mascots.sparky: 'sparky',
+  Mascots.dino: 'dino',
+  Mascots.android: 'android',
 };
