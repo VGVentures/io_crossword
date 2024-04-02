@@ -5,7 +5,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import '../helpers/helpers.dart';
 
 void main() {
-  group('GradientInputBorder', () {
+  group('$GradientInputBorder', () {
     const gradient = LinearGradient(colors: [Colors.red, Colors.blue]);
 
     test('transitions from an OutlineInputBorder', () {
