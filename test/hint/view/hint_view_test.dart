@@ -9,7 +9,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import '../../helpers/helpers.dart';
 
 void main() {
-  group('GeminiTextField', () {
+  group('$GeminiTextField', () {
     late AppLocalizations l10n;
 
     setUpAll(() async {
