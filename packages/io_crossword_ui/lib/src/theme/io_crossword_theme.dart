@@ -157,10 +157,6 @@ class IoThemeExtension extends Equatable
     covariant ThemeExtension<IoThemeExtension>? other,
     double t,
   ) {
-    if (other == null) {
-      return this;
-    }
-
     if (other is! IoThemeExtension) {
       return this;
     }
@@ -181,7 +177,7 @@ extension ExtendedThemeData on ThemeData {
   /// {@macro extended_theme_data}
   IoThemeExtension get io {
     final extension = this.extension<IoThemeExtension>();
-    assert(extension != null, 'IoThemeExtension not found in ThemeData');
+    assert(extension != null, '$IoThemeExtension not found in $ThemeData');
     return extension!;
   }
 }

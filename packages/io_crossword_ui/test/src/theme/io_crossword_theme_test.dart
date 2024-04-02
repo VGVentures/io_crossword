@@ -8,8 +8,6 @@ class _MockBuildContext extends Mock implements BuildContext {}
 
 class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
 
-class _MockIoThemeExtension extends Mock implements IoThemeExtension {}
-
 void main() {
   group('$IoCrosswordTheme', () {
     group('themeData', () {
@@ -132,16 +130,6 @@ void main() {
         expect(newTheme, equals(theme));
       });
 
-      test('returns itself when other is not an $IoThemeExtension', () {
-        final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
-        );
-
-        final newTheme = theme.lerp(_MockIoThemeExtension(), 0.5);
-
-        expect(newTheme, equals(theme));
-      });
-
       test('returns a lerp of the two themes', () {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
@@ -154,6 +142,35 @@ void main() {
         final newTheme = theme.lerp(theme, 0.5);
 
         expect(newTheme, isNot(equals(theme)));
+      });
+    });
+  });
+
+  group('ExtendedThemeData', () {
+    group('io', () {
+      test('throws an $AssertionError when not found', () {
+        final themeData = ThemeData();
+
+        expect(
+          () => themeData.io,
+          throwsA(
+            isA<AssertionError>().having(
+              (error) => error.message,
+              'message',
+              equals('$IoThemeExtension not found in $ThemeData'),
+            ),
+          ),
+        );
+      });
+
+      test('returns the $IoThemeExtension', () {
+        final themeData = ThemeData(
+          extensions: [
+            IoThemeExtension(playerAliasTheme: _MockIoPlayerAliasTheme()),
+          ],
+        );
+
+        expect(themeData.io, isA<IoThemeExtension>());
       });
     });
   });
