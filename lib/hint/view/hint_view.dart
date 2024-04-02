@@ -19,24 +19,18 @@ class GeminiTextField extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           hintText: l10n.type,
-          prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12),
-            child: ShaderMask(
-              blendMode: BlendMode.srcIn,
-              shaderCallback: (Rect bounds) =>
-                  IoCrosswordColors.geminiGradient.createShader(bounds),
-              child: const Icon(IoIcons.gemini),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            child: GeminiGradient(
+              child: Icon(IoIcons.gemini),
             ),
           ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ShaderMask(
-              blendMode: BlendMode.srcIn,
-              shaderCallback: (Rect bounds) =>
-                  IoCrosswordColors.geminiGradient.createShader(bounds),
+          suffixIcon: const Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: GeminiGradient(
               // TODO(Ayad): Add IconButton to ask for a hint
               // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6372181970
-              child: const Icon(Icons.send),
+              child: Icon(Icons.send),
             ),
           ),
         ),
