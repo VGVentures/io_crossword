@@ -30,7 +30,7 @@ class CrosswordResource {
         'sectionId': '${section.position.x},${section.position.y}',
         'wordPosition': '${word.position.x},${word.position.y}',
         'answer': answer,
-        'mascot': mascot.toString(),
+        'mascot': mascot.name,
       }),
     );
 
