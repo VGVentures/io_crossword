@@ -8,8 +8,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class IoCrosswordTheme {
   /// [ThemeData] for IO Crossword.
   static ThemeData get themeData {
-    return ThemeData(
-      useMaterial3: true,
+    return ThemeData.dark().copyWith(
       colorScheme: _colorScheme,
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
@@ -57,6 +56,53 @@ class IoCrosswordTheme {
 
           return const Color(0xFF45484F);
         },
+      ),
+    );
+  }
+
+  /// Gemini input decoration theme.
+  static InputDecorationTheme get geminiInputDecorationTheme {
+    const borderRadius = BorderRadius.all(Radius.circular(40));
+    const borderSide = BorderSide(
+      width: 2,
+    );
+
+    return InputDecorationTheme(
+      outlineBorder: borderSide,
+      hintStyle: _textTheme.bodyLarge?.copyWith(
+        color: const Color(0xFF80858B),
+        fontWeight: FontWeight.w400,
+      ),
+      border: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+      ),
+      disabledBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: borderSide,
+      ),
+      enabledBorder: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+      ),
+      focusedBorder: const GradientInputBorder(
+        gradient: IoCrosswordColors.geminiGradient,
+        borderRadius: borderRadius,
+        borderSide: borderSide,
+      ),
+      errorBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(
+          width: 1.5,
+          color: IoCrosswordColors.redError,
+        ),
+      ),
+      focusedErrorBorder: const OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(
+          width: 2,
+          color: IoCrosswordColors.redError,
+        ),
       ),
     );
   }

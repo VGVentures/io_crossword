@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 /// Colors used in the I/O Crossword UI.
@@ -360,4 +358,22 @@ abstract class IoCrosswordColors {
 
   /// color for the links
   static const linkBlue = Color(0xFF1A73E8);
+
+  /// light blue gradient
+  static const lightGradientBlue = Color(0xFFB1CEFF);
+
+  /// light blue gradient
+  static const darkGradientBlue = Color(0xFF337BFA);
+
+  /// error red color
+  static const redError = Color(0xFFEA4335);
+
+  /// Light theme gradient
+  static const LinearGradient geminiGradient = LinearGradient(
+    colors: [
+      IoCrosswordColors.lightGradientBlue,
+      IoCrosswordColors.darkGradientBlue,
+    ],
+    stops: [0.0, 1.0],
+  );
 }
