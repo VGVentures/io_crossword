@@ -47,7 +47,7 @@ class LeaderboardRepository {
   /// Retrieves the blacklist for player initials.
   Future<List<String>> getInitialsBlacklist() async {
     final blacklistData = await _dbClient.getById(
-      'initials_blacklist',
+      'initialsBlacklist',
       _blacklistDocumentId,
     );
 
@@ -66,7 +66,7 @@ class LeaderboardRepository {
     String mascot,
   ) async {
     return _dbClient.set(
-      'score_cards',
+      'scoreCards',
       DbEntityRecord(
         id: userId,
         data: {
