@@ -22,11 +22,7 @@ void main() {
           expect(
             actionIconTheme.closeButtonIconBuilder!(context),
             equals(
-              isA<Container>().having(
-                (widget) => (widget.child! as Icon).icon,
-                'Close icon',
-                Icons.close,
-              ),
+              isA<Icon>().having((widget) => widget.icon, 'icon', Icons.close),
             ),
           );
         });
