@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword_ui/src/theme/theme.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockBuildContext extends Mock implements BuildContext {}
 
+class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
+
+class _MockIoThemeExtension extends Mock implements IoThemeExtension {}
+
 void main() {
-  group('IoCrosswordTheme', () {
+  group('$IoCrosswordTheme', () {
     group('themeData', () {
       test('uses material 3', () {
         expect(IoCrosswordTheme().themeData.useMaterial3, isTrue);
@@ -88,6 +92,68 @@ void main() {
           ),
         );
         debugDefaultTargetPlatformOverride = null;
+      });
+    });
+  });
+
+  group('$IoThemeExtension', () {
+    group('copyWith', () {
+      test('remains the same when no arguments are give', () {
+        final theme = IoThemeExtension(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        final newTheme = theme.copyWith();
+
+        expect(newTheme, equals(theme));
+      });
+
+      test('changes when arguments are give', () {
+        final theme = IoThemeExtension(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        final newTheme = theme.copyWith(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        expect(newTheme, isNot(equals(theme)));
+      });
+    });
+
+    group('lerp', () {
+      test('returns itself when other is null', () {
+        final theme = IoThemeExtension(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        final newTheme = theme.lerp(null, 0.5);
+
+        expect(newTheme, equals(theme));
+      });
+
+      test('returns itself when other is not an $IoThemeExtension', () {
+        final theme = IoThemeExtension(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        final newTheme = theme.lerp(_MockIoThemeExtension(), 0.5);
+
+        expect(newTheme, equals(theme));
+      });
+
+      test('returns a lerp of the two themes', () {
+        final theme = IoThemeExtension(
+          playerAliasTheme: _MockIoPlayerAliasTheme(),
+        );
+
+        when(
+          () => theme.playerAliasTheme.lerp(theme.playerAliasTheme, 0.5),
+        ).thenReturn(_MockIoPlayerAliasTheme());
+
+        final newTheme = theme.lerp(theme, 0.5);
+
+        expect(newTheme, isNot(equals(theme)));
       });
     });
   });
