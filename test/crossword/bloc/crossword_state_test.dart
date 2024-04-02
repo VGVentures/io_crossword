@@ -286,6 +286,33 @@ void main() {
           );
         });
 
+        test('copyWith returns same object', () {
+          final wordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          );
+          expect(
+            wordSelection.copyWith(),
+            equals(wordSelection),
+          );
+        });
+
+        test('copyWith updates solvedStatus', () {
+          final wordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          );
+          final solvedWordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+            solvedStatus: SolvedStatus.solved,
+          );
+          expect(
+            wordSelection.copyWith(solvedStatus: SolvedStatus.solved),
+            equals(solvedWordSelection),
+          );
+        });
+
         test('supports value comparisons', () {
           expect(
             WordSelection(
