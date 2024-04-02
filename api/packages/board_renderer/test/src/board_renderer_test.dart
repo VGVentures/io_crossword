@@ -12,6 +12,8 @@ class _MockCommand extends Mock implements img.Command {}
 
 class _MockImage extends Mock implements img.Image {}
 
+class _MockBitmapFont extends Mock implements img.BitmapFont {}
+
 class _MockAssetResolver extends Mock implements AssetResolver {}
 
 void main() {
@@ -51,6 +53,7 @@ void main() {
             calls++;
             return dst;
           },
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         final words = [
@@ -76,6 +79,65 @@ void main() {
         when(() => command.outputBytes).thenReturn(Uint8List(0));
 
         await renderer.renderBoardWireframe(words);
+
+        expect(calls, 10);
+      });
+
+      test('render with fillRect when fill = true', () async {
+        final command = _MockCommand();
+        final image = _MockImage();
+
+        var calls = 0;
+
+        final renderer = BoardRenderer(
+          createCommand: () => command,
+          createImage: ({
+            required width,
+            required height,
+            int numChannels = 4,
+            img.Color? backgroundColor,
+          }) =>
+              image,
+          fillRect: (
+            img.Image dst, {
+            required int x1,
+            required int y1,
+            required int x2,
+            required int y2,
+            required img.Color color,
+            num radius = 0,
+            img.Image? mask,
+            img.Channel maskChannel = img.Channel.luminance,
+          }) {
+            calls++;
+            return dst;
+          },
+          parseFont: (Uint8List data) => _MockBitmapFont(),
+        );
+
+        final words = [
+          Word(
+            position: Point(1, 1),
+            axis: Axis.horizontal,
+            answer: 'hello',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+          Word(
+            position: Point(2, 7),
+            axis: Axis.vertical,
+            answer: 'there',
+            clue: '',
+            hints: const [],
+            solvedTimestamp: null,
+          ),
+        ];
+
+        when(command.execute).thenAnswer((_) async => command);
+        when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+        await renderer.renderBoardWireframe(words, fill: true);
 
         expect(calls, 10);
       });
@@ -110,6 +172,7 @@ void main() {
             }) {
               return dst;
             },
+            parseFont: (Uint8List data) => _MockBitmapFont(),
           );
 
           final words = [
@@ -138,6 +201,86 @@ void main() {
           );
         },
       );
+
+      group('when rendering the letters', () {
+        test('render the received words with the word letters', () async {
+          final assetResolver = _MockAssetResolver();
+          when(assetResolver.resolveFont).thenAnswer((_) async => Uint8List(0));
+          final command = _MockCommand();
+          final image = _MockImage();
+
+          var calls = 0;
+          var charCalls = 0;
+
+          final renderer = BoardRenderer(
+            createCommand: () => command,
+            createImage: ({
+              required width,
+              required height,
+              int numChannels = 4,
+              img.Color? backgroundColor,
+            }) =>
+                image,
+            drawRect: (
+              img.Image dst, {
+              required int x1,
+              required int y1,
+              required int x2,
+              required int y2,
+              required img.Color color,
+              num thickness = 0,
+              num radius = 0,
+              img.Image? mask,
+              img.Channel maskChannel = img.Channel.luminance,
+            }) {
+              calls++;
+              return dst;
+            },
+            drawChar: (
+              img.Image image,
+              String char, {
+              required img.BitmapFont font,
+              required int x,
+              required int y,
+            }) {
+              charCalls++;
+              return image;
+            },
+            parseFont: (Uint8List data) => _MockBitmapFont(),
+            assetResolver: assetResolver,
+          );
+
+          final words = [
+            Word(
+              position: Point(1, 1),
+              axis: Axis.horizontal,
+              answer: 'hello',
+              clue: '',
+              hints: const [],
+              solvedTimestamp: null,
+            ),
+            Word(
+              position: Point(2, 7),
+              axis: Axis.vertical,
+              answer: 'there',
+              clue: '',
+              hints: const [],
+              solvedTimestamp: null,
+            ),
+          ];
+
+          when(command.execute).thenAnswer((_) async => command);
+          when(() => command.outputBytes).thenReturn(Uint8List(0));
+
+          await renderer.renderBoardWireframe(
+            words,
+            addLetters: true,
+          );
+
+          expect(calls, 10);
+          expect(charCalls, 10);
+        });
+      });
     });
 
     group('renderSection', () {
@@ -227,6 +370,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -285,6 +429,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(() => assetResolver.resolveWordImage())
@@ -356,6 +501,7 @@ void main() {
           },
           decodePng: (Uint8List data) => null,
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -421,6 +567,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -624,6 +771,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -689,6 +837,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -763,6 +912,7 @@ void main() {
           },
           decodePng: (Uint8List data) => (calls++ == 0 ? _MockImage() : null),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -837,6 +987,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -949,6 +1100,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -1007,6 +1159,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(() => assetResolver.resolveWordImage())
@@ -1078,6 +1231,7 @@ void main() {
           },
           decodePng: (Uint8List data) => null,
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);
@@ -1143,6 +1297,7 @@ void main() {
           },
           decodePng: (Uint8List data) => _MockImage(),
           assetResolver: assetResolver,
+          parseFont: (Uint8List data) => _MockBitmapFont(),
         );
 
         when(command.execute).thenAnswer((_) async => command);

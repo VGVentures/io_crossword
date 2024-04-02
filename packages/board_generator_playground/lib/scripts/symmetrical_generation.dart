@@ -11,7 +11,7 @@ void main({
     ..removeAt(0);
 
   final pool = <String>{
-    for (final line in lines) (line[0] as String).toLowerCase(),
+    for (final line in lines) (line[0] as String).toLowerCase().trim(),
   };
 
   log('Sorting ${pool.length} words');
@@ -20,13 +20,33 @@ void main({
 
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 1000)),
+    crossword: Crossword(
+      bounds: Bounds.square(size: 100),
+      largestWordLength: wordPool.longestWordLength,
+      shortestWordLength: wordPool.shortestWordLength,
+    ),
   );
 
+  final stopwatch = Stopwatch()..start();
   final crossword = generator.populate();
+  stopwatch.stop();
 
+  log('Elapsed time: ${stopwatch.elapsed.inSeconds} seconds');
+  log('Generated a crossword with: ${crossword.words.length}');
+
+  // Creates file to see the crossword
   File('symmetrical_crossword.txt')
       .writeAsStringSync(crossword.toPrettyString());
 
-  log('Finished');
+  // Creates CSV file representing the crossword.
+  final buffer = StringBuffer();
+  for (final word in crossword.words) {
+    final axis = word.direction == Direction.across ? 'horizontal' : 'vertical';
+
+    buffer.writeln(
+      '${word.start.x},${word.start.y},${word.word},$axis',
+    );
+  }
+
+  File('board.txt').writeAsStringSync(buffer.toString());
 }

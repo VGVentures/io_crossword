@@ -3,6 +3,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -32,6 +33,7 @@ class CrosswordPage extends StatelessWidget {
 }
 
 class CrosswordView extends StatefulWidget {
+  @visibleForTesting
   const CrosswordView({super.key});
 
   @override
@@ -77,6 +79,7 @@ class _CrosswordViewState extends State<CrosswordView> {
 }
 
 class LoadedBoardView extends StatefulWidget {
+  @visibleForTesting
   const LoadedBoardView({super.key});
 
   @visibleForTesting
@@ -106,6 +109,11 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
         return Stack(
           children: [
             GameWidget(game: game),
+            const Positioned(
+              top: 12,
+              right: 16,
+              child: AboutButton(),
+            ),
             const WordFocusedView(),
             _ZoomControls(game: game),
           ],
@@ -131,10 +139,30 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
           child: Stack(
             children: [
               GameWidget(game: game),
+              const Positioned(
+                top: 12,
+                right: 16,
+                child: AboutButton(),
+              ),
               _ZoomControls(game: game),
             ],
           ),
         );
+      },
+    );
+  }
+}
+
+class AboutButton extends StatelessWidget {
+  @visibleForTesting
+  const AboutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: const Icon(Icons.question_mark_rounded),
+      onPressed: () {
+        AboutView.showModal(context);
       },
     );
   }

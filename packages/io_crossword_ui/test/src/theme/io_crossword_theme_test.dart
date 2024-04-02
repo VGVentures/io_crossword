@@ -1,12 +1,35 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/src/theme/theme.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   group('IoCrosswordTheme', () {
     group('themeData', () {
       test('uses material 3', () {
         expect(IoCrosswordTheme.themeData.useMaterial3, isTrue);
+      });
+
+      group('ActionIconThemeData', () {
+        final actionIconTheme = IoCrosswordTheme.themeData.actionIconTheme!;
+
+        test('displays close icon when using closeButtonIconBuilder', () {
+          final context = _MockBuildContext();
+
+          expect(
+            actionIconTheme.closeButtonIconBuilder!(context),
+            equals(
+              isA<Container>().having(
+                (widget) => (widget.child! as Icon).icon,
+                'Close icon',
+                Icons.close,
+              ),
+            ),
+          );
+        });
       });
 
       test('background color is IoCrosswordColors.seedBlack', () {

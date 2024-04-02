@@ -674,26 +674,6 @@ void main() {
       );
     });
 
-    group('RenderModeSwitched', () {
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits state with new render mode',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        seed: () => const CrosswordLoaded(
-          sectionSize: sectionSize,
-        ),
-        act: (bloc) => bloc.add(const RenderModeSwitched(RenderMode.snapshot)),
-        expect: () => <CrosswordState>[
-          CrosswordLoaded(
-            sectionSize: sectionSize,
-            renderMode: RenderMode.snapshot,
-          ),
-        ],
-      );
-    });
-
     group('MascotSelected', () {
       blocTest<CrosswordBloc, CrosswordState>(
         'emits crossword loaded state with the selected mascot '

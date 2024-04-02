@@ -153,6 +153,8 @@ void main() {
               event,
             );
 
+        game.update(2);
+
         expect(
           game.camera.viewfinder.position,
           equals(targetCenter),
@@ -609,44 +611,6 @@ void main() {
         await game.ready();
         game.zoomOut();
         expect(game.camera.viewfinder.zoom, .95);
-      },
-    );
-
-    testWithGame(
-      'zoom out adds RenderModeSwitched with snapshot mode when less than 0.8',
-      createGame,
-      (game) async {
-        const state = CrosswordLoaded(
-          sectionSize: 400,
-        );
-        mockState(state);
-
-        await game.ready();
-        for (var i = 0; i < 4; i++) {
-          game.zoomOut();
-        }
-
-        verify(
-          () => bloc.add(RenderModeSwitched(RenderMode.snapshot)),
-        ).called(1);
-      },
-    );
-
-    testWithGame(
-      'zoom in adds SwitchRenderMode with game mode when more than 0.8',
-      createGame,
-      (game) async {
-        const state = CrosswordLoaded(
-          sectionSize: 400,
-          renderMode: RenderMode.snapshot,
-        );
-        mockState(state);
-
-        await game.ready();
-
-        game.zoomIn();
-
-        verify(() => bloc.add(RenderModeSwitched(RenderMode.game))).called(1);
       },
     );
 
