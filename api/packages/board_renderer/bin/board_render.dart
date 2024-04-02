@@ -48,7 +48,6 @@ void main(List<String> args) async {
         axis: axis,
         answer: answer,
         clue: '',
-        hints: const [],
         solvedTimestamp: null,
       );
 

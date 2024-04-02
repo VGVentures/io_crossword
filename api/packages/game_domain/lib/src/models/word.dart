@@ -15,8 +15,8 @@ class Word extends Equatable {
     required this.axis,
     required this.answer,
     required this.clue,
-    required this.hints,
     required this.solvedTimestamp,
+    this.mascot,
   }) : id = '$position-$axis';
 
   /// {@macro word}
@@ -45,14 +45,15 @@ class Word extends Equatable {
   @JsonKey()
   final String clue;
 
-  /// The hints to show users when asked for more hints.
-  @JsonKey()
-  final List<String> hints;
-
   /// The timestamp when the word was solved. In milliseconds since epoch.
   /// If the word is not solved, this value is null.
   @JsonKey()
   final int? solvedTimestamp;
+
+  /// The mascot of the user that first solved the word.
+  /// If the word is not solved, this value is null.
+  @JsonKey()
+  final Mascots? mascot;
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$WordToJson(this);
@@ -65,16 +66,16 @@ class Word extends Equatable {
     Axis? axis,
     String? answer,
     String? clue,
-    List<String>? hints,
     int? solvedTimestamp,
+    Mascots? mascot,
   }) {
     return Word(
       position: position ?? this.position,
       axis: axis ?? this.axis,
       answer: answer ?? this.answer,
       clue: clue ?? this.clue,
-      hints: hints ?? this.hints,
       solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
+      mascot: mascot ?? this.mascot,
     );
   }
 
@@ -85,8 +86,8 @@ class Word extends Equatable {
         axis,
         answer,
         clue,
-        hints,
         solvedTimestamp,
+        mascot,
       ];
 }
 
