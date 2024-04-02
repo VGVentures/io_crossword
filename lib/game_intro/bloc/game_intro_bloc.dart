@@ -31,9 +31,12 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     BlacklistRequested event,
     Emitter<GameIntroState> emit,
   ) async {
-    // TODO(jaime): fetch blacklist from server
-    final blacklist = ['TST'];
-    emit(state.copyWith(initialsBlacklist: blacklist));
+    try {
+      final blacklist = await _leaderboardResource.getInitialsBlacklist();
+      emit(state.copyWith(initialsBlacklist: blacklist));
+    } catch (e, s) {
+      addError(e, s);
+    }
   }
 
   Future<void> _onBoardProgressRequested(
