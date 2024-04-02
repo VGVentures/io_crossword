@@ -108,6 +108,10 @@
   "@faqs": {
     "description": "FAQs label"
   },
+  "type": "Type",
+  "@type": {
+    "description": "Type word."
+  },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {
     "description": "The first step instruction on how to play"
