@@ -8,7 +8,8 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class IoCrosswordTheme {
   /// [ThemeData] for IO Crossword.
   static ThemeData get themeData {
-    return ThemeData.dark().copyWith(
+    return ThemeData(
+      useMaterial3: true,
       colorScheme: _colorScheme,
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
