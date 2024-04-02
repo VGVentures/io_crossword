@@ -4,9 +4,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// The Chrome team theme for IO Crossword.
 class IoChromeTheme extends IoCrosswordTheme {
   @override
-  ThemeData get themeData {
-    return super.themeData.copyWith(
-          primaryColor: IoCrosswordColors.seedGrey30,
-        );
-  }
+  ColorScheme get colorScheme => super.colorScheme.copyWith(
+        primary: IoCrosswordColors.seedGrey30,
+      );
 }

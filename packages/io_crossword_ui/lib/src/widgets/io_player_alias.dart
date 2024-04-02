@@ -51,17 +51,18 @@ class _CharacterBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = style.textStyle;
-
     return DecoratedBox(
       decoration: BoxDecoration(
         color: style.backgroundColor,
         borderRadius: style.borderRadius,
       ),
       child: SizedBox.square(
-        dimension: textStyle.fontSize! * 1.5,
+        dimension: style.boxSize.width,
         child: Center(
-          child: Text(data),
+          child: Text(
+            data,
+            style: style.textStyle,
+          ),
         ),
       ),
     );
@@ -78,6 +79,7 @@ class IoPlayerAliasStyle extends Equatable {
     required this.borderRadius,
     required this.textStyle,
     required this.margin,
+    required this.boxSize,
   });
 
   /// The background color of each box that encloses a character.
@@ -92,6 +94,9 @@ class IoPlayerAliasStyle extends Equatable {
   /// The margin of each character.
   final EdgeInsets margin;
 
+  /// The size of the box that encloses a character.
+  final Size boxSize;
+
   /// Linearly interpolate between two [IoPlayerAliasStyle]s.
   IoPlayerAliasStyle lerp(IoPlayerAliasStyle other, double t) {
     return IoPlayerAliasStyle(
@@ -99,6 +104,7 @@ class IoPlayerAliasStyle extends Equatable {
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
       margin: EdgeInsets.lerp(margin, other.margin, t)!,
+      boxSize: Size.lerp(boxSize, other.boxSize, t)!,
     );
   }
 
@@ -108,6 +114,7 @@ class IoPlayerAliasStyle extends Equatable {
         borderRadius,
         textStyle,
         margin,
+        boxSize,
       ];
 }
 

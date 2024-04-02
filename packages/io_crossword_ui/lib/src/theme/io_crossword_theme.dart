@@ -37,12 +37,14 @@ class IoCrosswordTheme {
         borderRadius: BorderRadius.circular(0.31),
         textStyle: IoCrosswordTextStyles.displaySM,
         margin: const EdgeInsets.symmetric(horizontal: 0.5),
+        boxSize: const Size.square(20.16),
       ),
       big: IoPlayerAliasStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
         textStyle: IoCrosswordTextStyles.displayMD,
         margin: const EdgeInsets.symmetric(horizontal: 1.2),
+        boxSize: const Size.square(40.12),
       ),
     );
   }
@@ -122,14 +124,6 @@ class IoThemeExtension extends Equatable
     required this.playerAliasTheme,
   });
 
-  /// The closest [IoThemeExtension] instance given the [context].
-  static IoThemeExtension of(BuildContext context) {
-    final theme = Theme.of(context);
-    final extension = theme.extension<IoThemeExtension>();
-    assert(extension != null, 'No IoThemeExtension found in the theme');
-    return extension!;
-  }
-
   /// {@macro io_player_alias_theme}
   final IoPlayerAliasTheme playerAliasTheme;
 
@@ -165,4 +159,16 @@ class IoThemeExtension extends Equatable
 
   @override
   List<Object?> get props => [playerAliasTheme];
+}
+
+/// {@template extended_theme_data}
+/// Get the [IoThemeExtension] from the [ThemeData].
+/// {@endtemplate}
+extension ExtendedThemeData on ThemeData {
+  /// {@macro extended_theme_data}
+  IoThemeExtension get io {
+    final extension = this.extension<IoThemeExtension>();
+    assert(extension != null, 'IoThemeExtension not found in ThemeData');
+    return extension!;
+  }
 }
