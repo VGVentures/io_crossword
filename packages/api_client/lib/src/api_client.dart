@@ -93,7 +93,7 @@ class ApiClient {
         headers: _headers..addContentTypeJson(),
       );
 
-      return response.decrypted;
+      return response;
     });
   }
 
@@ -113,7 +113,7 @@ class ApiClient {
         headers: _headers..addContentTypeJson(),
       );
 
-      return response.decrypted;
+      return response;
     });
   }
 
@@ -129,7 +129,7 @@ class ApiClient {
         headers: _headers..addContentTypeJson(),
       );
 
-      return response.decrypted;
+      return response;
     });
   }
 
@@ -147,7 +147,7 @@ class ApiClient {
         headers: _headers,
       );
 
-      return response.decrypted;
+      return response;
     });
   }
 

@@ -4,7 +4,7 @@ import 'package:io_crossword_ui/src/theme/teams/teams.dart';
 void main() {
   group('$IoAndroidTheme', () {
     test('themeData returns normally', () {
-      expect(() => IoAndroidTheme.themeData, returnsNormally);
+      expect(() => IoAndroidTheme().themeData, returnsNormally);
     });
   });
 }
