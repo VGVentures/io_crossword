@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 /// {@template gradient_input_border}
-/// A gradient border for the CMS input field
+/// A gradient border for the IO input field.
 /// {@endtemplate}
 class GradientInputBorder extends OutlineInputBorder {
   /// {@macro gradient_input_border}
