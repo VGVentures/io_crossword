@@ -29,7 +29,7 @@ class CrosswordLoaded extends CrosswordState {
     required this.sectionSize,
     this.sections = const {},
     this.selectedWord,
-    this.zoomLimit = 0.4,
+    this.zoomLimit = 0.35,
     this.mascot = Mascots.dash,
     this.initials = '',
   });
