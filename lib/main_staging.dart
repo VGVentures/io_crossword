@@ -19,7 +19,7 @@ void main() async {
 
   unawaited(
     bootstrap(
-      (firestore, firebaseAuth) async {
+      (firestore, firebaseAuth, appCheck) async {
         final authenticationRepository = AuthenticationRepository(
           firebaseAuth: firebaseAuth,
         );
@@ -31,8 +31,8 @@ void main() async {
           baseUrl: 'https://io-crossword-staging-api-sea6y22h5q-uc.a.run.app',
           idTokenStream: authenticationRepository.idToken,
           refreshIdToken: authenticationRepository.refreshIdToken,
-          // TODO(any): implement app check
-          appCheckTokenStream: const Stream.empty(),
+          appCheckTokenStream: appCheck.onTokenChange,
+          appCheckToken: await appCheck.getToken(),
         );
 
         return App(
