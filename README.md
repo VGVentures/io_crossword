@@ -19,7 +19,7 @@ This project has different entry points.
 - `main_local.dart` that targets a local api that should be run first (see how to do it [here][api_readme]).
 
 ```sh
-$ flutter run -d chrome --target lib/main_local.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
+$ flutter run -d chrome --target lib/main_local.dart --web-port 24514 --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
 ```
 
 - `main_development.dart` that targets the dev api.
