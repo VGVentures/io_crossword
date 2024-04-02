@@ -26,7 +26,7 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
-  group('WordFocusedView', () {
+  group('WordFocusedDesktopView', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
@@ -36,7 +36,7 @@ void main() {
       widget = Scaffold(
         body: BlocProvider.value(
           value: crosswordBloc,
-          child: WordFocusedView(),
+          child: WordFocusedDesktopView(),
         ),
       );
     });
@@ -75,7 +75,7 @@ void main() {
     );
   });
 
-  group('WordFocusedDesktopView', () {
+  group('WordFocusedDesktopBody', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
@@ -85,7 +85,7 @@ void main() {
       widget = Scaffold(
         body: BlocProvider.value(
           value: crosswordBloc,
-          child: WordFocusedDesktopView(
+          child: WordFocusedDesktopBody(
             WordSelection(section: (0, 0), word: _FakeWord()),
           ),
         ),
