@@ -21,7 +21,7 @@ void main({
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
     crossword: Crossword(
-      bounds: Bounds.square(size: 1500),
+      bounds: Bounds.square(size: 100),
       largestWordLength: wordPool.longestWordLength,
       shortestWordLength: wordPool.shortestWordLength,
     ),

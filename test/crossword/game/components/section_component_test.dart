@@ -90,7 +90,6 @@ void main() {
                     axis: Axis.vertical,
                     answer: 'Flutter',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: null,
                   ),
                   Word(
@@ -98,7 +97,6 @@ void main() {
                     axis: Axis.horizontal,
                     answer: 'Firebase',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: null,
                   ),
                 ],
@@ -140,7 +138,6 @@ void main() {
                     axis: Axis.vertical,
                     answer: 'Flutter',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: 1,
                   ),
                   Word(
@@ -148,7 +145,6 @@ void main() {
                     axis: Axis.horizontal,
                     answer: 'Firebase',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: null,
                   ),
                 ],
@@ -207,7 +203,6 @@ void main() {
                     axis: Axis.vertical,
                     answer: 'Flutter',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: null,
                   ),
                   Word(
@@ -215,7 +210,6 @@ void main() {
                     axis: Axis.horizontal,
                     answer: 'Firebase',
                     clue: '',
-                    hints: const [],
                     solvedTimestamp: null,
                   ),
                 ],

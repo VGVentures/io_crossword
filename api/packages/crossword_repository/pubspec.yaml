@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   clock: ^1.1.1
+  collection: ^1.18.0
   db_client:
     path: ../db_client
   game_domain:

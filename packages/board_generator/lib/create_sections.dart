@@ -32,7 +32,6 @@ void main(List<String> args) async {
       position: Point(row[0] as int, row[1] as int),
       answer: row[2] as String,
       clue: 'The answer is: ${row[2]}',
-      hints: const [],
       axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
       solvedTimestamp: null,
     );

@@ -38,8 +38,12 @@ extension PumpApp on WidgetTester {
         .thenAnswer((_) => Future.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
-    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
-        .thenAnswer((_) => Future.value([0.8]));
+    when(mockedBoardInfoRepository.getZoomLimit)
+        .thenAnswer((_) => Future.value(0.8));
+
+    final scaffold = Scaffold(
+      body: widget,
+    );
 
     return pumpWidget(
       MultiProvider(
@@ -58,8 +62,8 @@ extension PumpApp on WidgetTester {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
+              : scaffold,
         ),
       ),
     );
@@ -98,8 +102,8 @@ extension PumpRoute on WidgetTester {
         .thenAnswer((_) => Future.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
-    when(mockedBoardInfoRepository.getRenderModeZoomLimits)
-        .thenAnswer((_) => Future.value([0.8]));
+    when(mockedBoardInfoRepository.getZoomLimit)
+        .thenAnswer((_) => Future.value(0.8));
 
     await pumpWidget(
       MultiRepositoryProvider(

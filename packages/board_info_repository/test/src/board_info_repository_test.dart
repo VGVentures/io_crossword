@@ -40,7 +40,7 @@ void main() {
         () => collection.where('type', isEqualTo: 'solved_words_count'),
       ).thenReturn(collection);
       when(
-        () => collection.where('type', isEqualTo: 'render_mode_limit'),
+        () => collection.where('type', isEqualTo: 'zoom_limit'),
       ).thenReturn(collection);
       when(
         () => collection.where('type', isEqualTo: 'section_size'),
@@ -112,19 +112,19 @@ void main() {
       });
     });
 
-    group('getRenderModeZoomLimit', () {
+    group('getZoomLimit', () {
       test('returns render mode limit from firebase', () async {
         mockQueryResult(0.6);
-        final result = await boardInfoRepository.getRenderModeZoomLimits();
-        expect(result, equals([0.6]));
+        final result = await boardInfoRepository.getZoomLimit();
+        expect(result, equals(0.6));
       });
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => collection.where('type', isEqualTo: 'render_mode_limit'),
+          () => collection.where('type', isEqualTo: 'zoom_limit'),
         ).thenThrow(Exception('oops'));
         expect(
-          () => boardInfoRepository.getRenderModeZoomLimits(),
+          () => boardInfoRepository.getZoomLimit(),
           throwsA(isA<BoardInfoException>()),
         );
       });

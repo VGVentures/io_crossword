@@ -29,7 +29,7 @@ class CrosswordLoaded extends CrosswordState {
     required this.sectionSize,
     this.sections = const {},
     this.selectedWord,
-    this.renderLimits = const [],
+    this.zoomLimit = 0.35,
     this.mascot = Mascots.dash,
     this.initials = '',
     this.answer = '',
@@ -38,7 +38,7 @@ class CrosswordLoaded extends CrosswordState {
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
-  final List<double> renderLimits;
+  final double zoomLimit;
   final Mascots mascot;
   final String initials;
   final String answer;
@@ -47,7 +47,7 @@ class CrosswordLoaded extends CrosswordState {
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
-    List<double>? renderLimits,
+    double? zoomLimit,
     Mascots? mascot,
     String? initials,
     String? answer,
@@ -56,7 +56,7 @@ class CrosswordLoaded extends CrosswordState {
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
-      renderLimits: renderLimits ?? this.renderLimits,
+      zoomLimit: zoomLimit ?? this.zoomLimit,
       mascot: mascot ?? this.mascot,
       initials: initials ?? this.initials,
       answer: answer ?? this.answer,
@@ -67,7 +67,7 @@ class CrosswordLoaded extends CrosswordState {
     return CrosswordLoaded(
       sectionSize: sectionSize,
       sections: sections,
-      renderLimits: renderLimits,
+      zoomLimit: zoomLimit,
       mascot: mascot,
       initials: initials,
     );
@@ -78,7 +78,7 @@ class CrosswordLoaded extends CrosswordState {
         sectionSize,
         sections,
         selectedWord,
-        renderLimits,
+        zoomLimit,
         mascot,
         initials,
         answer,
