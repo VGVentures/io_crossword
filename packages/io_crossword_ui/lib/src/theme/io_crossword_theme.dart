@@ -96,16 +96,9 @@ class IoCrosswordTheme {
   static ActionIconThemeData get _actionIconThemeData {
     return ActionIconThemeData(
       closeButtonIconBuilder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-            shape: BoxShape.circle,
-          ),
-          padding: const EdgeInsets.all(2),
-          child: const Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
+        return const Icon(
+          Icons.close,
+          color: Colors.white,
         );
       },
     );
