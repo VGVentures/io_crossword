@@ -173,23 +173,26 @@ class CrosswordGame extends FlameGame
   }
 
   void zoomOut() {
-    if (camera.viewfinder.zoom <= 0.05) {
+    if (camera.viewfinder.zoom <= 0.05 ||
+        camera.viewfinder.zoom <= state.zoomLimit) {
       return;
     }
     camera.viewport.position /= 1.05;
 
     camera.viewfinder.zoom -= 0.05;
 
-    // TODO(any): limit zoom from boardInfo in firestore
     _updateVisibleSections();
   }
 
   void zoomIn() {
+    if (camera.viewfinder.zoom >= 1.1) {
+      return;
+    }
+
     camera.viewport.position *= 1.05;
 
     camera.viewfinder.zoom += 0.05;
 
-    // TODO(any): limit zoom from boardInfo in firestore
     _updateVisibleSections();
   }
 
