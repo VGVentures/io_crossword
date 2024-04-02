@@ -2,23 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-extension _IoCrosswordWidgetTester on WidgetTester {
-  void setDisplaySize(Size size) {
-    view
-      ..physicalSize = size
-      ..devicePixelRatio = 1.0;
-    addTearDown(() {
-      view
-        ..resetPhysicalSize()
-        ..resetDevicePixelRatio();
-    });
-  }
-}
-
 void main() {
   group('ResponsiveLayout', () {
     testWidgets('displays a large layout', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
+      await tester.binding.setSurfaceSize(
+        const Size(IoCrosswordBreakpoints.medium, 800),
+      );
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
 
@@ -34,7 +23,9 @@ void main() {
     });
 
     testWidgets('displays a small layout', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 1200));
+      await tester.binding.setSurfaceSize(
+        const Size(IoCrosswordBreakpoints.medium, 1200),
+      );
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
 
@@ -50,7 +41,9 @@ void main() {
     });
 
     testWidgets('displays child when available (large)', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
+      await tester.binding.setSurfaceSize(
+        const Size(IoCrosswordBreakpoints.medium, 800),
+      );
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
       const childKey = Key('__child__');
@@ -69,11 +62,14 @@ void main() {
     });
 
     testWidgets('displays child when available (small)', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
+      await tester.binding.setSurfaceSize(
+        const Size(IoCrosswordBreakpoints.medium - 1, 800),
+      );
 
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
       const childKey = Key('__child__');
+      await Future.microtask(() {});
 
       await tester.pumpWidget(
         ResponsiveLayoutBuilder(
@@ -82,6 +78,7 @@ void main() {
           child: const SizedBox(key: childKey),
         ),
       );
+      await tester.pumpAndSettle();
 
       expect(find.byKey(largeKey), findsNothing);
       expect(find.byKey(smallKey), findsOneWidget);
