@@ -44,44 +44,7 @@ class AppView extends StatelessWidget {
       theme: themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: ColoredBox(
-        color: themeData.colorScheme.background,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Theme(
-                data: themeData.copyWith(
-                    cardTheme: themeData.io.cardTheme.highlight),
-                child: Card(
-                  child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: const Center(
-                      child: Text('Highlighted Card'),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Theme(
-                data:
-                    themeData.copyWith(cardTheme: themeData.io.cardTheme.plain),
-                child: Card(
-                  child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: const Center(
-                      child: Text('Plain Card'),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: const CrosswordPage(),
     );
   }
 }
