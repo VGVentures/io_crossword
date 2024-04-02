@@ -10,6 +10,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   final String answer;
+
+  @override
+  int? get solvedTimestamp => 1;
 }
 
 void main() {
