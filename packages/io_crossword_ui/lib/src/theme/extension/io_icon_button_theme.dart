@@ -21,7 +21,7 @@ class IoIconButtonTheme extends Equatable {
 
   /// The style for filled [IconButton].
   ///
-  /// Usually used on modals.
+  /// Usually used on cards and modals.
   final ButtonStyle filled;
 
   /// Linearly interpolate between two [IoIconButtonTheme] themes.
