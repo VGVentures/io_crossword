@@ -30,11 +30,6 @@ void main() {
   group('WordFocusedView', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;
-    late AppLocalizations l10n;
-
-    setUpAll(() async {
-      l10n = await AppLocalizations.delegate.load(Locale('en'));
-    });
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
