@@ -30,14 +30,14 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
-  group('WordFocused', () {
+  group('WordFocusedView', () {
     late AppLocalizations l10n;
 
     setUpAll(() async {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
     });
 
-    group('WordFocusedView', () {
+    group('WordFocusedDesktopView', () {
       late CrosswordBloc crosswordBloc;
       late Widget widget;
 
@@ -47,7 +47,7 @@ void main() {
         widget = Scaffold(
           body: BlocProvider.value(
             value: crosswordBloc,
-            child: WordFocusedView(),
+            child: WordFocusedDesktopView(),
           ),
         );
       });
@@ -86,7 +86,7 @@ void main() {
       );
     });
 
-    group('WordFocusedDesktopView', () {
+    group('WordFocusedDesktopBody', () {
       late CrosswordBloc crosswordBloc;
       late Widget widget;
 
@@ -96,7 +96,7 @@ void main() {
         widget = Scaffold(
           body: BlocProvider.value(
             value: crosswordBloc,
-            child: WordFocusedDesktopView(
+            child: WordFocusedDesktopBody(
               WordSelection(section: (0, 0), word: _FakeWord()),
             ),
           ),
@@ -130,8 +130,38 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
 
-          final closeButton = find.text(l10n.submit);
-          await tester.tap(closeButton);
+          final submitButton = find.text(l10n.submit);
+          await tester.tap(submitButton);
+
+          verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+        },
+      );
+    });
+
+    group('WordFocusedMobileView', () {
+      late CrosswordBloc crosswordBloc;
+      late Widget widget;
+
+      setUp(() {
+        crosswordBloc = _MockCrosswordBloc();
+
+        widget = Scaffold(
+          body: BlocProvider.value(
+            value: crosswordBloc,
+            child: WordFocusedMobileView(
+              WordSelection(section: (0, 0), word: _FakeWord()),
+            ),
+          ),
+        );
+      });
+
+      testWidgets(
+        'tapping the submit button sends AnswerSubmitted event',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          final submitButton = find.text(l10n.submit);
+          await tester.tap(submitButton);
 
           verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
         },
