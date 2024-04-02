@@ -10,11 +10,11 @@ void main() {
   group('IoCrosswordTheme', () {
     group('themeData', () {
       test('uses material 3', () {
-        expect(IoCrosswordTheme.themeData.useMaterial3, isTrue);
+        expect(IoCrosswordTheme().themeData.useMaterial3, isTrue);
       });
 
       group('ActionIconThemeData', () {
-        final actionIconTheme = IoCrosswordTheme.themeData.actionIconTheme!;
+        final actionIconTheme = IoCrosswordTheme().themeData.actionIconTheme!;
 
         test('displays close icon when using closeButtonIconBuilder', () {
           final context = _MockBuildContext();
@@ -34,7 +34,7 @@ void main() {
 
       test('background color is IoCrosswordColors.seedBlack', () {
         expect(
-          IoCrosswordTheme.themeData.colorScheme.background,
+          IoCrosswordTheme().themeData.colorScheme.background,
           IoCrosswordColors.seedBlack,
         );
       });
@@ -42,7 +42,7 @@ void main() {
       test('uses mobile text theme on android', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         expect(
-          IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
+          IoCrosswordTheme().themeData.textTheme.displayLarge?.fontSize,
           equals(IoCrosswordTextStyles.mobile.textTheme.displayLarge?.fontSize),
         );
         debugDefaultTargetPlatformOverride = null;
@@ -51,7 +51,7 @@ void main() {
       test('uses mobile text theme on ios', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         expect(
-          IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
+          IoCrosswordTheme().themeData.textTheme.displayLarge?.fontSize,
           equals(IoCrosswordTextStyles.mobile.textTheme.displayLarge?.fontSize),
         );
         debugDefaultTargetPlatformOverride = null;
@@ -60,7 +60,7 @@ void main() {
       test('uses desktop text theme on macOS', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
         expect(
-          IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
+          IoCrosswordTheme().themeData.textTheme.displayLarge?.fontSize,
           equals(
             IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
           ),
@@ -71,7 +71,7 @@ void main() {
       test('uses desktop text theme on windows', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.windows;
         expect(
-          IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
+          IoCrosswordTheme().themeData.textTheme.displayLarge?.fontSize,
           equals(
             IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
           ),
@@ -82,7 +82,7 @@ void main() {
       test('uses desktop text theme on linux', () {
         debugDefaultTargetPlatformOverride = TargetPlatform.linux;
         expect(
-          IoCrosswordTheme.themeData.textTheme.displayLarge?.fontSize,
+          IoCrosswordTheme().themeData.textTheme.displayLarge?.fontSize,
           equals(
             IoCrosswordTextStyles.desktop.textTheme.displayLarge?.fontSize,
           ),

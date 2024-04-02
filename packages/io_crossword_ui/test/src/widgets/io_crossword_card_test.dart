@@ -67,9 +67,9 @@ class _GoldenSubject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = IoCrosswordTheme.themeData;
+    final themeData = IoCrosswordTheme().themeData;
     return Theme(
-      data: IoCrosswordTheme.themeData,
+      data: themeData,
       child: ColoredBox(
         color: themeData.colorScheme.background,
         child: Center(child: child),
