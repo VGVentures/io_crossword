@@ -1,1 +1,1 @@
-export 'io_icons_icons.dart';
+export 'io_icons_icons.g.dart';
