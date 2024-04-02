@@ -196,23 +196,37 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) async {
     if (state is CrosswordLoaded) {
       final loadedState = state as CrosswordLoaded;
-      if (loadedState.selectedWord == null ||
-          loadedState.answer != loadedState.selectedWord!.word.answer) {
-        // TODO(hugo): emit invalid answer state
-        print('INVALID - not sent');
+      if (loadedState.selectedWord == null) return;
+
+      final selectedWord = loadedState.selectedWord!;
+      if (loadedState.answer != loadedState.selectedWord!.word.answer) {
+        emit(
+          loadedState.copyWith(
+            selectedWord:
+                selectedWord.copyWith(solvedStatus: SolvedStatus.invalid),
+          ),
+        );
+        return;
       }
 
       try {
         final isValidAnswer = await _crosswordResource.answerWord(
-          section: loadedState.sections[loadedState.selectedWord!.section]!,
-          word: loadedState.selectedWord!.word,
+          section: loadedState.sections[selectedWord.section]!,
+          word: selectedWord.word,
           answer: loadedState.answer,
           mascot: loadedState.mascot,
         );
-        print('valid answer');
+
+        emit(
+          loadedState.copyWith(
+            selectedWord: selectedWord.copyWith(
+              solvedStatus:
+                  isValidAnswer ? SolvedStatus.solved : SolvedStatus.invalid,
+            ),
+          ),
+        );
       } catch (error) {
-        // TODO(hugo): emit invalid answer state
-        print('INVALID - sent');
+        emit(CrosswordError(error.toString()));
       }
     }
   }

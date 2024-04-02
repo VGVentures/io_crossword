@@ -527,6 +527,53 @@ void main() {
           expect(listeners.first.word, equals(''));
         },
       );
+
+      testWithGame(
+        'add AnswerUpdated event when user enters all the letters',
+        createGame,
+        (game) async {
+          await game.ready();
+
+          final targetSection =
+              game.world.children.whereType<SectionComponent>().first;
+          final boardSection = sections.firstWhere(
+            (element) =>
+                element.position.x == targetSection.index.$1 &&
+                element.position.y == targetSection.index.$2,
+          );
+          final targetWord = boardSection.words.first;
+
+          stateController.add(
+            state.copyWith(
+              selectedWord: WordSelection(
+                section: targetSection.index,
+                word: targetWord,
+              ),
+            ),
+          );
+
+          await Future.microtask(() {});
+          await game.ready();
+          final listeners =
+              targetSection.children.whereType<SectionKeyboardHandler>();
+
+          final buffer = StringBuffer();
+          for (var i = 0; i < targetWord.answer.length; i++) {
+            listeners.first.onKeyEvent(
+              KeyDownEvent(
+                logicalKey: LogicalKeyboardKey.keyF,
+                physicalKey: PhysicalKeyboardKey.keyF,
+                timeStamp: DateTime.now().timeZoneOffset,
+                character: 'f',
+              ),
+              {LogicalKeyboardKey.keyF},
+            );
+            buffer.write('f');
+          }
+          await game.ready();
+          verify(() => bloc.add(AnswerUpdated(buffer.toString()))).called(1);
+        },
+      );
     });
 
     test(

@@ -11,17 +11,36 @@ class CrosswordInitial extends CrosswordState {
   List<Object> get props => [];
 }
 
+enum SolvedStatus {
+  solved,
+  pending,
+  invalid,
+}
+
 class WordSelection extends Equatable {
-  const WordSelection({
+  WordSelection({
     required this.section,
     required this.word,
-  });
+    SolvedStatus? solvedStatus,
+  }) : solvedStatus = solvedStatus ??
+            (word.solvedTimestamp != null
+                ? SolvedStatus.solved
+                : SolvedStatus.pending);
 
   final (int, int) section;
   final Word word;
+  final SolvedStatus solvedStatus;
+
+  WordSelection copyWith({SolvedStatus? solvedStatus}) {
+    return WordSelection(
+      section: section,
+      word: word,
+      solvedStatus: solvedStatus ?? this.solvedStatus,
+    );
+  }
 
   @override
-  List<Object> get props => [section, word];
+  List<Object> get props => [section, word, solvedStatus];
 }
 
 class CrosswordLoaded extends CrosswordState {

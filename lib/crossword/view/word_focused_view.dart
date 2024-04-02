@@ -92,8 +92,11 @@ class WordFocusedDesktopView extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: PrimaryButton(
-                      // TODO(any): Submit answer
-                      onPressed: () {}, // coverage:ignore-line
+                      onPressed: () {
+                        context.read<CrosswordBloc>().add(
+                              const AnswerSubmitted(),
+                            );
+                      }, // coverage:ignore-line
                       label: l10n.submit,
                     ),
                   ),

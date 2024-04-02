@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -29,6 +30,11 @@ void main() {
   group('WordFocusedView', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
@@ -78,6 +84,11 @@ void main() {
   group('WordFocusedDesktopView', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
@@ -111,6 +122,18 @@ void main() {
         await tester.tap(closeButton);
 
         verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+      },
+    );
+
+    testWidgets(
+      'tapping the submit button sends AnswerSubmitted event',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        final closeButton = find.text(l10n.submit);
+        await tester.tap(closeButton);
+
+        verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
       },
     );
   });
