@@ -15,6 +15,7 @@ class IoCrosswordTheme {
     final ioExtension = IoThemeExtension(
       playerAliasTheme: _playerAliasTheme,
       iconButtonTheme: _iconButtonTheme,
+      cardTheme: _cardTheme,
     );
 
     return ThemeData(
@@ -22,12 +23,37 @@ class IoCrosswordTheme {
       colorScheme: colorScheme,
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
+      cardColor: _cardTheme.plain.color,
+      cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  IoCardTheme get _cardTheme {
+    final colorScheme = this.colorScheme;
+
+    return IoCardTheme(
+      plain: CardTheme(
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(color: IoCrosswordColors.black),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        elevation: 0,
+        color: colorScheme.surface,
+      ),
+      highlight: const CardTheme(
+        shape: GradientInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          gradient: IoCrosswordColors.googleGradient,
+        ),
+        elevation: 0,
+        color: IoCrosswordColors.black,
+      ),
     );
   }
 
@@ -123,9 +149,10 @@ class IoCrosswordTheme {
   // ignore: public_member_api_docs
   ColorScheme get colorScheme {
     return ColorScheme.fromSeed(
+      brightness: Brightness.dark,
       seedColor: IoCrosswordColors.seedBlue,
       background: IoCrosswordColors.seedBlack,
-      surface: IoCrosswordColors.seedWhite,
+      surface: IoCrosswordColors.darkGray,
       surfaceTint: IoCrosswordColors.seedWhite,
     );
   }
