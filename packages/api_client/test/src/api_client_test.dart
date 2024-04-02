@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -40,18 +39,10 @@ void main() {
     const mockNewIdToken = 'mockNewIdToken';
     const mockAppCheckToken = 'mockAppCheckToken';
 
-    // Since the key and iv are set from the environment variables, we can
-    // reference the default values here.
-    final key = Key.fromUtf8('encryption_key_not_set_123456789');
-    final iv = IV.fromUtf8('iv_not_set_12345');
-    final encrypter = Encrypter(AES(key));
-
     final testJson = {'data': 'test'};
 
-    final encrypted = encrypter.encrypt(jsonEncode(testJson), iv: iv).base64;
-
-    final encryptedResponse = http.Response(encrypted, 200);
-    final expectedResponse = http.Response(testJson.toString(), 200);
+    final defaultResponse = http.Response(jsonEncode(testJson), 200);
+    final expectedResponse = http.Response(jsonEncode(testJson), 200);
 
     late ApiClient subject;
     late _MockHttpClient httpClient;
@@ -68,7 +59,7 @@ void main() {
           any(),
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => encryptedResponse);
+      ).thenAnswer((_) async => defaultResponse);
 
       when(
         () => httpClient.post(
@@ -76,7 +67,7 @@ void main() {
           body: any(named: 'body'),
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => encryptedResponse);
+      ).thenAnswer((_) async => defaultResponse);
 
       when(
         () => httpClient.patch(
@@ -84,7 +75,7 @@ void main() {
           body: any(named: 'body'),
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => encryptedResponse);
+      ).thenAnswer((_) async => defaultResponse);
 
       when(
         () => httpClient.put(
@@ -92,7 +83,7 @@ void main() {
           body: any(named: 'body'),
           headers: any(named: 'headers'),
         ),
-      ).thenAnswer((_) async => encryptedResponse);
+      ).thenAnswer((_) async => defaultResponse);
 
       idTokenStreamController = StreamController.broadcast();
       appCheckTokenStreamController = StreamController.broadcast();
