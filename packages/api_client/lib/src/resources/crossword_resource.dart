@@ -15,7 +15,7 @@ class CrosswordResource {
 
   final ApiClient _apiClient;
 
-  /// Post /game/board/sections/{sectionId}/{wordPosition}
+  /// Post /game/answer
   ///
   /// Returns a [bool].
   Future<bool> answerWord({
