@@ -5,8 +5,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordFocusedView extends StatelessWidget {
-  const WordFocusedView({super.key});
+class WordFocusedDesktopView extends StatelessWidget {
+  const WordFocusedDesktopView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +17,13 @@ class WordFocusedView extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return WordFocusedDesktopView(selectedWord);
+    return WordFocusedDesktopBody(selectedWord);
   }
 }
 
-class WordFocusedDesktopView extends StatelessWidget {
+class WordFocusedDesktopBody extends StatelessWidget {
   @visibleForTesting
-  const WordFocusedDesktopView(this.selectedWord, {super.key});
+  const WordFocusedDesktopBody(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 

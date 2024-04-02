@@ -114,7 +114,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
               right: 16,
               child: AboutButton(),
             ),
-            const WordFocusedView(),
+            const WordFocusedDesktopView(),
             _ZoomControls(game: game),
           ],
         );

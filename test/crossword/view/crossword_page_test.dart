@@ -105,7 +105,7 @@ void main() {
     });
 
     testWidgets(
-        'renders WordFocusedView when'
+        'renders WordFocusedDesktopView when'
         ' is loaded with desktop size', (tester) async {
       tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
       when(() => bloc.state).thenReturn(
@@ -119,13 +119,13 @@ void main() {
 
       await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(WordFocusedView), findsOneWidget);
+      expect(find.byType(WordFocusedDesktopView), findsOneWidget);
     });
 
     testWidgets(
-        'does not render WordFocusedView when'
+        'does not render WordFocusedDesktopView when'
         ' is loaded with mobile size', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.small, 800));
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
       when(() => bloc.state).thenReturn(
         CrosswordLoaded(
           sectionSize: 40,
@@ -137,13 +137,13 @@ void main() {
 
       await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(WordFocusedView), findsNothing);
+      expect(find.byType(WordFocusedDesktopView), findsNothing);
     });
 
     testWidgets(
         'renders WordFocusedMobileView when selects a word in mobile size',
         (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.small, 800));
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
       final initialState = CrosswordLoaded(
         sectionSize: 40,
         sections: {
@@ -167,7 +167,7 @@ void main() {
 
     testWidgets('renders WordFocusedMobileView and pops when tapping cancel',
         (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.small, 800));
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
       final initialState = CrosswordLoaded(
         sectionSize: 40,
         sections: {

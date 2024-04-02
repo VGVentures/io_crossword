@@ -69,7 +69,7 @@ void main() {
     });
 
     testWidgets('displays child when available (small)', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.small, 800));
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
 
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
