@@ -5,7 +5,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// {@template io_crossword_theme}
 /// IO Crossword theme.
 /// {@endtemplate}
-class IoCrosswordTheme {
+abstract class IoCrosswordTheme {
   /// [ThemeData] for IO Crossword.
   static ThemeData get themeData {
     return ThemeData(

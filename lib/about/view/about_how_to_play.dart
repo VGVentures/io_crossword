@@ -8,31 +8,103 @@ class AboutHowToPlayContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              children: [
-                HowToPlaySteps(title: l10n.aboutHowToPlayFirstInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlaySecondInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayThirdInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayFourthInstructions),
-                HowToPlaySteps(title: l10n.aboutHowToPlayFifthInstructions),
-              ],
+    final instructions = [
+      l10n.aboutHowToPlayFirstInstructions,
+      l10n.aboutHowToPlaySecondInstructions,
+      l10n.aboutHowToPlayThirdInstructions,
+      l10n.aboutHowToPlayFourthInstructions,
+      l10n.aboutHowToPlayFifthInstructions,
+    ];
+
+    return DefaultTabController(
+      length: instructions.length,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
+        child: Column(
+          children: [
+            Expanded(
+              child: TabBarView(
+                children: instructions
+                    .map((instruction) => HowToPlaySteps(title: instruction))
+                    .toList(),
+              ),
             ),
-          ),
-          // TODO(Ayad): If the new design can't use the theme we need to remove
-          FilledButton.icon(
-            icon: const Icon(Icons.play_circle, size: 18),
-            label: Text(l10n.playNow),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+            Builder(
+              builder: (context) {
+                return _TabSelector(
+                  tabController: DefaultTabController.of(context),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            // TODO(Ayad): If the new design can't use the theme change
+            FilledButton.icon(
+              icon: const Icon(Icons.play_circle, size: 18),
+              label: Text(l10n.playNow),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _TabSelector extends StatefulWidget {
+  const _TabSelector({
+    required this.tabController,
+  });
+
+  final TabController tabController;
+
+  @override
+  State<_TabSelector> createState() => _TabSelectorState();
+}
+
+class _TabSelectorState extends State<_TabSelector> {
+  @override
+  void initState() {
+    super.initState();
+    widget.tabController.addListener(_tabListener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.tabController.removeListener(_tabListener);
+  }
+
+  void _tabListener() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final index = widget.tabController.index;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: index > 0
+              ? () {
+                  widget.tabController.animateTo(index - 1);
+                }
+              : null,
+          icon: const Icon(Icons.keyboard_arrow_left),
+        ),
+        const TabPageSelector(),
+        IconButton(
+          onPressed: index < widget.tabController.length - 1
+              ? () {
+                  widget.tabController.animateTo(index + 1);
+                }
+              : null,
+          icon: const Icon(Icons.keyboard_arrow_right),
+        ),
+      ],
     );
   }
 }
