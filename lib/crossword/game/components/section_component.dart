@@ -110,6 +110,10 @@ class SectionKeyboardHandler extends PositionComponent
         ),
       );
     }
+    if (word.length == index.$3.$2 - index.$3.$1) {
+      // add bloc event update response
+      gameRef.bloc.add(AnswerUpdated(word));
+    }
     return false;
   }
 

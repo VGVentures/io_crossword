@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -13,8 +14,10 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
     required BoardInfoRepository boardInfoRepository,
+    required CrosswordResource crosswordResource,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
+        _crosswordResource = crosswordResource,
         super(const CrosswordInitial()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
@@ -22,10 +25,13 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
     on<InitialsSelected>(_onInitialsSelected);
+    on<AnswerUpdated>(_onAnswerUpdated);
+    on<AnswerSubmitted>(_onAnswerSubmitted);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
+  final CrosswordResource _crosswordResource;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
@@ -173,6 +179,40 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       emit(
         (state as CrosswordLoaded).copyWith(initials: event.initials.join()),
       );
+    }
+  }
+
+  void _onAnswerUpdated(AnswerUpdated event, Emitter<CrosswordState> emit) {
+    if (state is CrosswordLoaded) {
+      emit(
+        (state as CrosswordLoaded).copyWith(answer: event.answer),
+      );
+    }
+  }
+
+  Future<void> _onAnswerSubmitted(
+    AnswerSubmitted event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    if (state is CrosswordLoaded) {
+      final loadedState = state as CrosswordLoaded;
+      if (loadedState.selectedWord == null ||
+          loadedState.answer != loadedState.selectedWord!.word.answer) {
+        // TODO(hugo): emit invalid answer state
+        print('INVALID - not sent');
+      }
+
+      try {
+        final isValidAnswer = await _crosswordResource.answerWord(
+          section: loadedState.sections[loadedState.selectedWord!.section]!,
+          word: loadedState.selectedWord!.word,
+          answer: loadedState.answer,
+        );
+        print('valid answer');
+      } catch (error) {
+        // TODO(hugo): emit invalid answer state
+        print('INVALID - sent');
+      }
     }
   }
 }
