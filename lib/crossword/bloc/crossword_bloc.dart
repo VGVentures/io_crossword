@@ -207,6 +207,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           section: loadedState.sections[loadedState.selectedWord!.section]!,
           word: loadedState.selectedWord!.word,
           answer: loadedState.answer,
+          mascot: loadedState.mascot,
         );
         print('valid answer');
       } catch (error) {
