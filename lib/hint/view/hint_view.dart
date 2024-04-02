@@ -34,7 +34,8 @@ class GeminiTextField extends StatelessWidget {
               blendMode: BlendMode.srcIn,
               shaderCallback: (Rect bounds) =>
                   IoCrosswordColors.geminiGradient.createShader(bounds),
-              // Add IconButton
+              // TODO(Ayad): Add IconButton to ask for a hint
+              // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6372181970
               child: const Icon(Icons.send),
             ),
           ),
