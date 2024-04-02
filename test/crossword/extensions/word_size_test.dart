@@ -12,7 +12,6 @@ void main() {
       axis: Axis.vertical,
       answer: 'hello',
       clue: '',
-      hints: const [],
       solvedTimestamp: null,
     );
     final horizontalWord = Word(
@@ -20,7 +19,6 @@ void main() {
       axis: Axis.horizontal,
       answer: 'exactly',
       clue: '',
-      hints: const [],
       solvedTimestamp: null,
     );
 
