@@ -11,7 +11,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
-        hints: const ['hint'],
         solvedTimestamp: 0,
         mascot: Mascots.sparky,
       );
@@ -24,7 +23,6 @@ void main() {
           'axis': 'horizontal',
           'answer': 'test',
           'clue': 'clue',
-          'hints': ['hint'],
           'solvedTimestamp': 0,
           'mascot': 'sparky',
         }),
@@ -39,7 +37,6 @@ void main() {
         'mascot': 'sparky',
         'answer': 'test',
         'clue': 'clue',
-        'hints': ['hint'],
       };
       final word = Word.fromJson(json);
       expect(
@@ -50,7 +47,6 @@ void main() {
             axis: Axis.horizontal,
             answer: 'test',
             clue: 'clue',
-            hints: const ['hint'],
             solvedTimestamp: null,
             mascot: Mascots.sparky,
           ),
@@ -64,7 +60,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
-        hints: const ['hint'],
         solvedTimestamp: 0,
       );
       final secondWord = Word(
@@ -72,7 +67,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
-        hints: const ['hint'],
         solvedTimestamp: 0,
       );
 
@@ -85,7 +79,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'test',
         clue: 'clue',
-        hints: const ['hint'],
         solvedTimestamp: 0,
       );
       expect(firstWord, equals(firstWord.copyWith()));
