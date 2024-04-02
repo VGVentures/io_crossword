@@ -92,6 +92,80 @@ void main() {
         debugDefaultTargetPlatformOverride = null;
       });
     });
+
+    group('geminiInputDecorationTheme', () {
+      late InputDecorationTheme geminiInput;
+
+      setUp(() {
+        geminiInput = IoCrosswordTheme.geminiInputDecorationTheme;
+      });
+
+      test('displays GradientInputBorder on border', () {
+        expect(
+          geminiInput.border,
+          equals(
+            isA<GradientInputBorder>().having(
+              (decoration) => decoration.gradient,
+              'gradient',
+              IoCrosswordColors.geminiGradient,
+            ),
+          ),
+        );
+      });
+
+      test('displays GradientInputBorder on enabledBorder', () {
+        expect(
+          geminiInput.enabledBorder,
+          equals(
+            isA<GradientInputBorder>().having(
+              (decoration) => decoration.gradient,
+              'gradient',
+              IoCrosswordColors.geminiGradient,
+            ),
+          ),
+        );
+      });
+
+      test('displays GradientInputBorder on focusedBorder', () {
+        expect(
+          geminiInput.focusedBorder,
+          equals(
+            isA<GradientInputBorder>().having(
+              (decoration) => decoration.gradient,
+              'gradient',
+              IoCrosswordColors.geminiGradient,
+            ),
+          ),
+        );
+      });
+
+      test('displays OutlineInputBorder on disabledBorder', () {
+        expect(
+          geminiInput.disabledBorder,
+          equals(
+            isA<OutlineInputBorder>(),
+          ),
+        );
+      });
+
+      test('displays OutlineInputBorder on errorBorder', () {
+        expect(
+          geminiInput.errorBorder,
+          equals(
+            isA<OutlineInputBorder>(),
+          ),
+        );
+      });
+
+      test('displays OutlineInputBorder on focusedErrorBorder', () {
+        expect(
+          geminiInput.errorBorder,
+          equals(
+            isA<OutlineInputBorder>(),
+          ),
+        );
+      });
+    });
   });
 
   group('$IoThemeExtension', () {

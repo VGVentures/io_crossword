@@ -31,3 +31,6 @@ flutter:
           weight: 700
         - asset: assets/fonts/GoogleSans-Italic.ttf
           style: italic
+    - family: IoIcons
+      fonts:
+        - asset: assets/icons/IoIcons.ttf
