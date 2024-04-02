@@ -13,6 +13,11 @@ class IoCrosswordTheme {
 
   /// [ThemeData] for IO Crossword.
   ThemeData get themeData {
+    final ioExtension = IoThemeExtension(
+      playerAliasTheme: _playerAliasTheme,
+      iconButtonTheme: _iconButtonTheme,
+    );
+
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
@@ -20,9 +25,10 @@ class IoCrosswordTheme {
       tabBarTheme: _tabBarTheme,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
-      extensions: {
-        IoThemeExtension(playerAliasTheme: _playerAliasTheme),
-      },
+      iconButtonTheme: IconButtonThemeData(
+        style: ioExtension.iconButtonTheme.outlined,
+      ),
+      extensions: {ioExtension},
     );
   }
 
@@ -58,6 +64,26 @@ class IoCrosswordTheme {
         ),
         margin: const EdgeInsets.symmetric(horizontal: 1.2),
         boxSize: const Size.square(40.12),
+      ),
+    );
+  }
+
+  IoIconButtonTheme get _iconButtonTheme {
+    return const IoIconButtonTheme(
+      outlined: ButtonStyle(
+        shape: MaterialStatePropertyAll<OutlinedBorder>(
+          CircleBorder(side: BorderSide(color: IoCrosswordColors.mediumGray)),
+        ),
+        iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
+        backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent),
+      ),
+      filled: ButtonStyle(
+        shape: MaterialStatePropertyAll<OutlinedBorder>(
+          CircleBorder(),
+        ),
+        iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
+        backgroundColor:
+            MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
       ),
     );
   }
@@ -182,10 +208,14 @@ class IoThemeExtension extends Equatable
   /// {@macro io_theme_extension}
   const IoThemeExtension({
     required this.playerAliasTheme,
+    required this.iconButtonTheme,
   });
 
   /// {@macro io_player_alias_theme}
   final IoPlayerAliasTheme playerAliasTheme;
+
+  /// {@macro io_icon_button_theme}
+  final IoIconButtonTheme iconButtonTheme;
 
   @override
   Object get type => IoThemeExtension;
@@ -193,9 +223,11 @@ class IoThemeExtension extends Equatable
   @override
   ThemeExtension<IoThemeExtension> copyWith({
     IoPlayerAliasTheme? playerAliasTheme,
+    IoIconButtonTheme? iconButtonTheme,
   }) {
     return IoThemeExtension(
       playerAliasTheme: playerAliasTheme ?? this.playerAliasTheme,
+      iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
     );
   }
 
@@ -210,11 +242,12 @@ class IoThemeExtension extends Equatable
 
     return IoThemeExtension(
       playerAliasTheme: playerAliasTheme.lerp(other.playerAliasTheme, t),
+      iconButtonTheme: iconButtonTheme.lerp(other.iconButtonTheme, t),
     );
   }
 
   @override
-  List<Object?> get props => [playerAliasTheme];
+  List<Object?> get props => [playerAliasTheme, iconButtonTheme];
 }
 
 /// {@template extended_theme_data}

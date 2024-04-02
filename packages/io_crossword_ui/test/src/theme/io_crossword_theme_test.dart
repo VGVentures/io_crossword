@@ -8,6 +8,8 @@ class _MockBuildContext extends Mock implements BuildContext {}
 
 class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
 
+class _MockIoIconButtonTheme extends Mock implements IoIconButtonTheme {}
+
 void main() {
   group('$IoCrosswordTheme', () {
     group('themeData', () {
@@ -173,6 +175,7 @@ void main() {
       test('remains the same when no arguments are give', () {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
+          iconButtonTheme: _MockIoIconButtonTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -183,6 +186,7 @@ void main() {
       test('changes when arguments are give', () {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
+          iconButtonTheme: _MockIoIconButtonTheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -197,6 +201,7 @@ void main() {
       test('returns itself when other is null', () {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
+          iconButtonTheme: _MockIoIconButtonTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -207,11 +212,15 @@ void main() {
       test('returns a lerp of the two themes', () {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
+          iconButtonTheme: _MockIoIconButtonTheme(),
         );
 
         when(
           () => theme.playerAliasTheme.lerp(theme.playerAliasTheme, 0.5),
         ).thenReturn(_MockIoPlayerAliasTheme());
+        when(
+          () => theme.iconButtonTheme.lerp(theme.iconButtonTheme, 0.5),
+        ).thenReturn(_MockIoIconButtonTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -240,7 +249,10 @@ void main() {
       test('returns the $IoThemeExtension', () {
         final themeData = ThemeData(
           extensions: [
-            IoThemeExtension(playerAliasTheme: _MockIoPlayerAliasTheme()),
+            IoThemeExtension(
+              playerAliasTheme: _MockIoPlayerAliasTheme(),
+              iconButtonTheme: _MockIoIconButtonTheme(),
+            ),
           ],
         );
 
