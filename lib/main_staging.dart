@@ -1,16 +1,25 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:async';
+import 'dart:js' as js;
 
 import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/bootstrap.dart';
 import 'package:io_crossword/firebase_options_development.dart';
 
 void main() async {
+  if (kDebugMode) {
+    js.context['FIREBASE_APPCHECK_DEBUG_TOKEN'] =
+        const String.fromEnvironment('APPCHECK_DEBUG_TOKEN');
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -19,7 +28,7 @@ void main() async {
 
   unawaited(
     bootstrap(
-      (firestore, firebaseAuth) async {
+      (firestore, firebaseAuth, appCheck) async {
         final authenticationRepository = AuthenticationRepository(
           firebaseAuth: firebaseAuth,
         );
@@ -31,8 +40,8 @@ void main() async {
           baseUrl: 'https://io-crossword-staging-api-sea6y22h5q-uc.a.run.app',
           idTokenStream: authenticationRepository.idToken,
           refreshIdToken: authenticationRepository.refreshIdToken,
-          // TODO(any): implement app check
-          appCheckTokenStream: const Stream.empty(),
+          appCheckTokenStream: appCheck.onTokenChange,
+          appCheckToken: await appCheck.getToken(),
         );
 
         return App(

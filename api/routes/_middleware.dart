@@ -6,7 +6,7 @@ import 'package:google_cloud/google_cloud.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
 
-import '../headers/cors_headers.dart';
+import '../headers/headers.dart';
 import '../main.dart';
 
 Handler middleware(Handler handler) {
@@ -18,5 +18,6 @@ Handler middleware(Handler handler) {
       .use(provider<LeaderboardRepository>((_) => leaderboardRepository))
       .use(provider<FirebaseCloudStorage>((_) => firebaseCloudStorage))
       .use(corsHeaders())
+      .use(allowHeaders())
       .use(fromShelfMiddleware(cloudLoggingMiddleware(projectId)));
 }
