@@ -23,7 +23,6 @@ void main() {
         position: const Point(0, 0),
         answer: 'flutter',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -31,7 +30,6 @@ void main() {
         position: const Point(4, 1),
         answer: 'android',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -39,7 +37,6 @@ void main() {
         position: const Point(8, 3),
         answer: 'dino',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -47,7 +44,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'sparky',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
     ];
@@ -705,8 +701,8 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
           when(
             () => crosswordRepository.watchSectionFromPosition(0, 0),
           ).thenAnswer(
@@ -717,11 +713,11 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
           ),
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
             sections: {
               (0, 0): originSection,
             },
@@ -739,15 +735,15 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
-            renderLimits: [0.8],
+            zoomLimit: 0.8,
           ),
         ],
       );
@@ -761,8 +757,7 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenAnswer((_) => Future.value(20));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenThrow(Exception('error'));
+          when(boardInfoRepository.getZoomLimit).thenThrow(Exception('error'));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
@@ -780,8 +775,8 @@ void main() {
         setUp: () {
           when(boardInfoRepository.getSectionSize)
               .thenThrow(Exception('error'));
-          when(boardInfoRepository.getRenderModeZoomLimits)
-              .thenAnswer((_) => Future.value([0.8]));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInfoFetched()),

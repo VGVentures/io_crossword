@@ -43,6 +43,32 @@ void main() {
         ).thenAnswer((_) async => response);
       });
 
+      test('calls correct api endpoint', () async {
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        when(() => response.body).thenReturn(
+          jsonEncode({'valid': true}),
+        );
+
+        await resource.answerWord(
+          section: _FakeBoardSection(),
+          word: _FakeWord(),
+          answer: 'correctAnswer',
+          mascot: Mascots.android,
+        );
+
+        verify(
+          () => apiClient.post(
+            '/game/answer',
+            body: jsonEncode({
+              'sectionId': '0,0',
+              'wordPosition': '0,0',
+              'answer': 'correctAnswer',
+              'mascot': 'android',
+            }),
+          ),
+        ).called(1);
+      });
+
       test('returns true when succeeds with correct answer', () async {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(
@@ -53,6 +79,7 @@ void main() {
           section: _FakeBoardSection(),
           word: _FakeWord(),
           answer: 'correctAnswer',
+          mascot: Mascots.android,
         );
         expect(result, isTrue);
       });
@@ -67,6 +94,7 @@ void main() {
           section: _FakeBoardSection(),
           word: _FakeWord(),
           answer: 'incorrectAnswer',
+          mascot: Mascots.android,
         );
         expect(result, isFalse);
       });
@@ -81,13 +109,14 @@ void main() {
             section: _FakeBoardSection(),
             word: _FakeWord(),
             answer: 'incorrectAnswer',
+            mascot: Mascots.android,
           ),
           throwsA(
             isA<ApiClientError>().having(
               (e) => e.cause,
               'cause',
               equals(
-                'POST /game/board/sections/{sectionId}/{wordPosition} returned status 500 with the following response: "Oops"',
+                'POST /game/answer returned status 500 with the following response: "Oops"',
               ),
             ),
           ),
@@ -102,13 +131,14 @@ void main() {
             section: _FakeBoardSection(),
             word: _FakeWord(),
             answer: 'incorrectAnswer',
+            mascot: Mascots.android,
           ),
           throwsA(
             isA<ApiClientError>().having(
               (e) => e.cause,
               'cause',
               equals(
-                'POST /game/board/sections/{sectionId}/{wordPosition} returned invalid response: "Oops"',
+                'POST /game/answer returned invalid response: "Oops"',
               ),
             ),
           ),
