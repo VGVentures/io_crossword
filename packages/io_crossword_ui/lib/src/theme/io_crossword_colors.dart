@@ -357,4 +357,7 @@ abstract class IoCrosswordColors {
 
   /// accessibleBrandGreen
   static const Color accessibleBrandGreen = Color(0xff236a34);
+
+  /// color for the links
+  static const linkBlue = Color(0xFF1A73E8);
 }

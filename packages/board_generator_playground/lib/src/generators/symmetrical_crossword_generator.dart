@@ -79,12 +79,39 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
       constraints.invalidLengths.add(length);
     }
 
-    // Invalidate those lengths that cross over the line of symmetry.
     if (candidate.direction == Direction.down) {
-      for (var i = 0; i <= pool.longestWordLength; i++) {
-        final verticalPosition = candidate.start.y - i;
-        if (_symmetry.isAbove(verticalPosition)) {
-          invalidate(i);
+      final symmetricalLength = (candidate.start.y * 2) - 1;
+
+      if (symmetricalLength.isOdd) {
+        final symmetryCrossingCandidate = WordCandidate(
+          start: candidate.start.shift(y: -symmetricalLength),
+          direction: constraints.direction,
+        );
+        final symmetricalConstraints =
+            crossword.constraints(symmetryCrossingCandidate);
+
+        if (symmetricalConstraints != null) {
+          final word = pool.firstMatchByWordLength(
+            symmetricalConstraints,
+            symmetricalLength,
+          );
+          if (word != null) {
+            return {
+              WordEntry(
+                word: word,
+                start: symmetryCrossingCandidate.start,
+                direction: symmetryCrossingCandidate.direction,
+              ),
+            };
+          }
+        }
+      }
+
+      for (var length = pool.shortestWordLength;
+          length <= pool.longestWordLength;
+          length++) {
+        if (length >= symmetricalLength) {
+          invalidate(length);
         }
       }
     }

@@ -41,6 +41,10 @@ extension PumpApp on WidgetTester {
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
+    final scaffold = Scaffold(
+      body: widget,
+    );
+
     return pumpWidget(
       MultiProvider(
         providers: [
@@ -58,8 +62,8 @@ extension PumpApp on WidgetTester {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
+              : scaffold,
         ),
       ),
     );
