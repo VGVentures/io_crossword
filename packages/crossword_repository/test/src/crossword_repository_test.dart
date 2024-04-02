@@ -13,7 +13,6 @@ void main() {
       axis: Axis.horizontal,
       answer: 'answer',
       clue: 'clue',
-      hints: const ['hint'],
       solvedTimestamp: null,
     );
     final boardSection1 = BoardSection(

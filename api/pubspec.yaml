@@ -10,6 +10,7 @@ dependencies:
   board_renderer:
     path: packages/board_renderer
   clock: ^1.1.1
+  collection: ^1.18.0
   crossword_repository:
     path: packages/crossword_repository
   dart_frog: ^1.1.0

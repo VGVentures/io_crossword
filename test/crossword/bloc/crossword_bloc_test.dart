@@ -23,7 +23,6 @@ void main() {
         position: const Point(0, 0),
         answer: 'flutter',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -31,7 +30,6 @@ void main() {
         position: const Point(4, 1),
         answer: 'android',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -39,7 +37,6 @@ void main() {
         position: const Point(8, 3),
         answer: 'dino',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
       Word(
@@ -47,7 +44,6 @@ void main() {
         axis: Axis.horizontal,
         answer: 'sparky',
         clue: 'flutter',
-        hints: const ['dart', 'mobile', 'cross-platform'],
         solvedTimestamp: null,
       ),
     ];
