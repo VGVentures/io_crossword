@@ -10,14 +10,17 @@ void main() {
       final theme1 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
+        elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final theme2 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
+        elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final theme3 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff0000ff)),
+        elevated: CardTheme(color: Color(0xff00ff00)),
       );
 
       expect(theme1, equals(theme2));
@@ -29,10 +32,12 @@ void main() {
       final from = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
+        elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final to = IoCardTheme(
         plain: CardTheme(color: Color(0xff0000ff)),
         highlight: CardTheme(color: Color(0xff0000ff)),
+        elevated: CardTheme(color: Color(0xff0000ff)),
       );
 
       final lerp = from.lerp(to, 0.5);
