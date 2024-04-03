@@ -402,10 +402,10 @@ packages:
     dependency: "direct main"
     description:
       name: flow_builder
-      sha256: e5f7c0fbff5ac9c4c65728939e00d96c288e2a482ec740d2d57562d7e918e5f2
+      sha256: "9e66aa7209e9a31c347bb316abf191d2300db41cd6b7254f89abd4e76d9b3f8d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.10"
+    version: "0.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
