@@ -33,17 +33,16 @@ class GradientOutlinedBorder extends StadiumBorder {
   @override
   ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
     if (a is GradientOutlinedBorder) {
-      final outline = a;
       return GradientOutlinedBorder(
         gradient: Gradient.lerp(
           LinearGradient(
             // Fake a gradient with a single color to make a smooth transition
-            colors: [outline.side.color, outline.side.color],
+            colors: [a.side.color, a.side.color],
           ),
           gradient,
           t,
         )!,
-        side: BorderSide.lerp(side, outline.side, t),
+        side: BorderSide.lerp(side, a.side, t),
       );
     }
     return super.lerpFrom(a, t);
