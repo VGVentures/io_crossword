@@ -425,7 +425,7 @@ abstract class IoCrosswordColors {
       Color(0xFFFFC700),
       Color(0xFF00A947),
     ],
-    stops: [0.5, 1.0],
+    stops: [0.0, 1.0],
   );
 
   /// Sparky theme gradient
@@ -437,7 +437,7 @@ abstract class IoCrosswordColors {
       Color(0xFFFF5C10),
       Color(0xFFFD2B25),
     ],
-    stops: [0, 0.5, 1.0],
+    stops: [0.33, 0.66, 1.0],
   );
 
   /// Dino theme gradient
