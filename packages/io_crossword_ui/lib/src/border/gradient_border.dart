@@ -25,7 +25,7 @@ class GradientOutlinedBorder extends StadiumBorder {
     final borderRect = RRect.fromRectAndRadius(rect, radius);
     final paint = Paint()
       ..strokeWidth = side.toPaint().strokeWidth
-      ..style = PaintingStyle.fill
+      ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(rect);
     canvas.drawRRect(borderRect.inflate(side.strokeOffset / 2), paint);
   }
