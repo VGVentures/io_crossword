@@ -12,6 +12,7 @@ class IoThemeExtension extends Equatable
   const IoThemeExtension({
     required this.playerAliasTheme,
     required this.iconButtonTheme,
+    required this.cardTheme,
   });
 
   /// {@macro io_player_alias_theme}
@@ -20,6 +21,9 @@ class IoThemeExtension extends Equatable
   /// {@macro io_icon_button_theme}
   final IoIconButtonTheme iconButtonTheme;
 
+  /// {@macro io_card_theme}
+  final IoCardTheme cardTheme;
+
   @override
   Object get type => IoThemeExtension;
 
@@ -27,10 +31,12 @@ class IoThemeExtension extends Equatable
   ThemeExtension<IoThemeExtension> copyWith({
     IoPlayerAliasTheme? playerAliasTheme,
     IoIconButtonTheme? iconButtonTheme,
+    IoCardTheme? cardTheme,
   }) {
     return IoThemeExtension(
       playerAliasTheme: playerAliasTheme ?? this.playerAliasTheme,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
+      cardTheme: cardTheme ?? this.cardTheme,
     );
   }
 
@@ -46,6 +52,7 @@ class IoThemeExtension extends Equatable
     return IoThemeExtension(
       playerAliasTheme: playerAliasTheme.lerp(other.playerAliasTheme, t),
       iconButtonTheme: iconButtonTheme.lerp(other.iconButtonTheme, t),
+      cardTheme: cardTheme.lerp(other.cardTheme, t),
     );
   }
 

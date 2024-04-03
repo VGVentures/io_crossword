@@ -371,6 +371,18 @@ abstract class IoCrosswordColors {
   /// light blue gradient
   static const darkGradientBlue = Color(0xFF337BFA);
 
+  /// googleBlue
+  static const googleBlue = Color(0xFF3D96FF);
+
+  /// androidGreen
+  static const androidGreen = Color(0xFF6AC76E);
+
+  /// sparkyYellow
+  static const sparkyYellow = Color(0xFFFECD3C);
+
+  /// black
+  static const black = Color(0xFF010101);
+
   /// error red color
   static const redError = Color(0xFFEA4335);
 
@@ -381,5 +393,16 @@ abstract class IoCrosswordColors {
       IoCrosswordColors.darkGradientBlue,
     ],
     stops: [0.0, 1.0],
+  );
+
+  /// Light theme gradient
+  static const LinearGradient googleGradient = LinearGradient(
+    colors: [
+      IoCrosswordColors.googleBlue,
+      IoCrosswordColors.androidGreen,
+      IoCrosswordColors.sparkyYellow,
+      IoCrosswordColors.redError,
+    ],
+    stops: [0.0, 0.33, 0.66, 1.0],
   );
 }

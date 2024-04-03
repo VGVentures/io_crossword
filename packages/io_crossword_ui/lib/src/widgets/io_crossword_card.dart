@@ -50,9 +50,7 @@ class IoCrosswordCard extends StatelessWidget {
           maxWidth: maxWidth ?? defaultMaxWidth,
           maxHeight: maxHeight ?? defaultMaxHeight,
         ),
-        child: Material(
-          type: MaterialType.card,
-          borderRadius: BorderRadius.circular(24),
+        child: Card(
           child: SizedBox.expand(child: child),
         ),
       ),
