@@ -142,16 +142,15 @@ void main() {
     });
 
     group('WordFocusedMobileView', () {
+      final state = CrosswordLoaded(
+        sectionSize: 20,
+        selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
+      );
       late CrosswordBloc crosswordBloc;
       late Widget widget;
 
       setUp(() {
         crosswordBloc = _MockCrosswordBloc();
-        final state = CrosswordLoaded(
-          sectionSize: 20,
-          selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
-        );
-        when(() => crosswordBloc.state).thenReturn(state);
 
         widget = Scaffold(
           body: BlocProvider.value(
@@ -166,6 +165,7 @@ void main() {
       testWidgets(
         'add AnswerUpdated event when user enters all the letters',
         (tester) async {
+          when(() => crosswordBloc.state).thenReturn(state);
           await tester.pumpApp(widget);
 
           final answerField = find.byType(TextField);
@@ -180,11 +180,37 @@ void main() {
       testWidgets(
         'tap the submit button sends AnswerSubmitted event',
         (tester) async {
+          when(() => crosswordBloc.state).thenReturn(state);
           await tester.pumpApp(widget);
 
           final submitButton = find.text(l10n.submit);
           await tester.tap(submitButton);
           verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+        },
+      );
+
+      testWidgets(
+        'pops if state changes with solved selected word',
+        (tester) async {
+          final navigator = MockNavigator();
+          when(navigator.canPop).thenReturn(true);
+          whenListen(
+            crosswordBloc,
+            Stream.value(
+              CrosswordLoaded(
+                sectionSize: 20,
+                selectedWord: WordSelection(
+                  section: (0, 0),
+                  word: _FakeWord(),
+                  solvedStatus: SolvedStatus.solved,
+                ),
+              ),
+            ),
+            initialState: state,
+          );
+          await tester.pumpApp(widget, navigator: navigator);
+
+          verify(navigator.canPop).called(1);
         },
       );
     });
