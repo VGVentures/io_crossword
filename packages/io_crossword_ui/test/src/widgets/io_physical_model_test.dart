@@ -11,8 +11,9 @@ void main() {
         Theme(
           data: IoCrosswordTheme().themeData,
           child: const Directionality(
-              textDirection: TextDirection.ltr,
-              child: IoPhysicalModel(child: SizedBox())),
+            textDirection: TextDirection.ltr,
+            child: IoPhysicalModel(child: SizedBox()),
+          ),
         ),
       );
       expect(find.byType(IoPhysicalModel), findsOneWidget);
