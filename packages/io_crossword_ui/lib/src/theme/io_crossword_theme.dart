@@ -25,7 +25,7 @@ class IoCrosswordTheme {
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
       cardColor: _cardTheme.plain.color,
-      cardTheme: _cardTheme.elevated,
+      cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
