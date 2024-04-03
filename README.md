@@ -12,26 +12,41 @@ Google I/O Crossword game
 
 ## Getting Started 🚀
 
-This project contains 3 flavors:
+This project has different entry points.
 
-- development
-- staging
-- production
+>Note: The environment variables are available in the project vault.
 
-To run the desired flavor either use the launch configuration in VSCode/Android Studio or use the following commands:
+- `main_local.dart` that targets a local api that should be run first (see how to do it [here][api_readme]).
 
 ```sh
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
+$ flutter run -d chrome --target lib/main_local.dart --web-port 24514 --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
 ```
 
-_\*Io Crossword works on iOS, Android, Web, and Windows._
+- `main_development.dart` that targets the dev api.
+
+```sh
+$ flutter run -d chrome --target lib/main_development.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
+```
+
+- `main_debug.dart` that targets the dev api and adds a visual layer to debug the crossword sections, their position, fps and other items.
+
+```sh
+$ flutter run -d chrome --target lib/main_debug.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
+```
+
+- `main_staging.dart` that targets the staging api.
+
+```sh
+$ flutter run -d chrome --target lib/main_staging.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY>
+```
+
+- `main_production.dart` that targets the production api.
+
+```sh
+$ flutter run -d chrome --target lib/main_production.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY>
+```
+
+_\*Io Crossword works on Web._
 
 ---
 
@@ -174,3 +189,4 @@ Alternatively, run `flutter run` and code generation will take place automatical
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_cli_link]: https://github.com/VeryGoodOpenSource/very_good_cli
+[api_readme]: api/README.md
