@@ -414,7 +414,7 @@ abstract class IoCrosswordColors {
       Color(0xFF1F85FA),
       Color(0xFF00A947),
     ],
-    stops: [0.5, 1.0],
+    stops: [0.0, 1.0],
   );
 
   /// Android theme gradient

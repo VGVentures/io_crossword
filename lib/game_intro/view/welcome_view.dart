@@ -33,7 +33,7 @@ class WelcomeView extends StatelessWidget {
           const SizedBox(height: IoCrosswordSpacing.sm),
           const SizedBox(height: IoCrosswordSpacing.sm),
           SizedBox(
-            width: double.infinity,
+            // width: double.infinity,
             child: OutlinedButton(
               onPressed: () {},
               child: Text('Button'),
