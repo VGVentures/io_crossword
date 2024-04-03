@@ -1,33 +1,18 @@
 import 'package:flutter/material.dart';
 
-class GradientOutlinedBorder extends RoundedRectangleBorder {
-  GradientOutlinedBorder({
-    required this.gradient,
-    super.borderRadius,
-  });
+class GradientOutlinedBorder extends StadiumBorder {
+  GradientOutlinedBorder({required this.gradient});
 
   final Gradient gradient;
 
   @override
-  RoundedRectangleBorder copyWith({
+  GradientOutlinedBorder copyWith({
     BorderSide? side,
-    BorderRadiusGeometry? borderRadius,
     Gradient? gradient,
   }) {
     return GradientOutlinedBorder(
       gradient: gradient ?? this.gradient,
-      borderRadius: borderRadius ?? this.borderRadius,
     );
-  }
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    return super.getInnerPath(rect);
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    return super.getOuterPath(rect);
   }
 
   @override
@@ -38,12 +23,6 @@ class GradientOutlinedBorder extends RoundedRectangleBorder {
       ..shader = gradient.createShader(rect);
     final path = getOuterPath(rect, textDirection: textDirection);
     canvas.drawPath(path, paint);
-  }
-
-  @override
-  ShapeBorder scale(double t) {
-    // TODO: implement scale
-    throw UnimplementedError();
   }
 }
 
