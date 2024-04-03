@@ -198,6 +198,6 @@ class CrosswordGame extends FlameGame
 
   @override
   Color backgroundColor() {
-    return const Color(0xFFFFFFFF);
+    return const Color(0xFF212123);
   }
 }

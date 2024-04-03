@@ -106,7 +106,8 @@ class SectionKeyboardHandler extends PositionComponent
     final wordCharacters = word.toUpperCase().characters;
 
     for (var c = 0; c < wordCharacters.length; c++) {
-      final rect = wordCharacters.getCharacterRectangle(c);
+      final mascot = gameRef.state.mascot;
+      final rect = wordCharacters.getCharacterRectangle(c, mascot);
 
       if (rect !=
           parent.spriteBatchComponent?.spriteBatch?.sources
@@ -326,7 +327,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         if (word.solvedTimestamp != null) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
-          rect = wordCharacters.getCharacterRectangle(c);
+          rect = wordCharacters.getCharacterRectangle(c, word.mascot);
           // coverage:ignore-end
         } else {
           rect = Rect.fromLTWH(
