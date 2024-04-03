@@ -31,16 +31,6 @@ class WelcomeView extends StatelessWidget {
             style: IoCrosswordTextStyles.bodyLG,
           ),
           const SizedBox(height: IoCrosswordSpacing.sm),
-          const SizedBox(height: IoCrosswordSpacing.sm),
-          SizedBox(
-            // width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () {},
-              child: Text('Button'),
-            ),
-          ),
-          const SizedBox(height: IoCrosswordSpacing.sm),
-          const SizedBox(height: IoCrosswordSpacing.sm),
           Text(
             l10n.welcomeSubtitle,
             style: IoCrosswordTextStyles.bodyLG,
