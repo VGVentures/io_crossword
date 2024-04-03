@@ -28,7 +28,7 @@ class IoCrosswordTheme {
       cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
-      outlinedButtonTheme: _outlinedButtonThemeData,
+      outlinedButtonTheme: outlinedButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
@@ -59,27 +59,19 @@ class IoCrosswordTheme {
     );
   }
 
-  OutlinedButtonThemeData get _outlinedButtonThemeData {
+  @internal
+  // ignore: public_member_api_docs
+  OutlinedButtonThemeData get outlinedButtonThemeData {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(
           vertical: 17,
           horizontal: 18,
         ),
-        side: const GradientBorder(
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            colors: [
-              Color(0xFF1F85FA),
-              Color(0xFF00A947),
-            ],
-            stops: [
-              0.5,
-              1.0,
-            ],
-          ),
-        ),
+        shape: GradientOutlinedBorder(),
+        // side: const GradientBorder(
+        //   gradient: IoCrosswordColors.googleGradient,
+        // ),
       ),
     );
   }
