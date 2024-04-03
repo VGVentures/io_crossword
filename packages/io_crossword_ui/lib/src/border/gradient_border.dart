@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class GradientOutlinedBorder extends StadiumBorder {
-  GradientOutlinedBorder({required this.gradient});
+  GradientOutlinedBorder({
+    required this.gradient,
+    super.side,
+  });
 
   final Gradient gradient;
 
@@ -12,17 +15,19 @@ class GradientOutlinedBorder extends StadiumBorder {
   }) {
     return GradientOutlinedBorder(
       gradient: gradient ?? this.gradient,
+      side: side ?? this.side,
     );
   }
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    final radius = Radius.circular(rect.shortestSide / 2);
+    final borderRect = RRect.fromRectAndRadius(rect, radius);
     final paint = Paint()
-      ..strokeWidth = 2
+      ..strokeWidth = side.toPaint().strokeWidth
       ..style = PaintingStyle.fill
       ..shader = gradient.createShader(rect);
-    final path = getOuterPath(rect, textDirection: textDirection);
-    canvas.drawPath(path, paint);
+    canvas.drawRRect(borderRect.inflate(side.strokeOffset / 2), paint);
   }
 }
 
