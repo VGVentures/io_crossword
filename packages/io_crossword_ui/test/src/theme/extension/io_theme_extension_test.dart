@@ -9,6 +9,8 @@ class _MockIoIconButtonTheme extends Mock implements IoIconButtonTheme {}
 
 class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
+class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
@@ -17,6 +19,7 @@ void main() {
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
+          physicalModel: _MockIoPhysicalModelStyle(),
         );
 
         final newTheme = theme.copyWith();
@@ -29,6 +32,7 @@ void main() {
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
+          physicalModel: _MockIoPhysicalModelStyle(),
         );
 
         final newTheme = theme.copyWith(
@@ -45,6 +49,7 @@ void main() {
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
+          physicalModel: _MockIoPhysicalModelStyle(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -57,6 +62,7 @@ void main() {
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
+          physicalModel: _MockIoPhysicalModelStyle(),
         );
 
         when(
@@ -68,6 +74,9 @@ void main() {
         when(
           () => theme.cardTheme.lerp(theme.cardTheme, 0.5),
         ).thenReturn(_MockIoCardTheme());
+        when(
+          () => theme.physicalModel.lerp(theme.physicalModel, 0.5),
+        ).thenReturn(_MockIoPhysicalModelStyle());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -100,6 +109,7 @@ void main() {
               playerAliasTheme: _MockIoPlayerAliasTheme(),
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
+              physicalModel: _MockIoPhysicalModelStyle(),
             ),
           ],
         );

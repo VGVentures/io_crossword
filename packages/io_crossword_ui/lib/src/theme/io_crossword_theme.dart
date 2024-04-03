@@ -16,6 +16,7 @@ class IoCrosswordTheme {
       playerAliasTheme: _playerAliasTheme,
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
+      physicalModel: _physicalModel,
     );
 
     return ThemeData(
@@ -24,7 +25,7 @@ class IoCrosswordTheme {
       textTheme: _textTheme,
       tabBarTheme: _tabBarTheme,
       cardColor: _cardTheme.plain.color,
-      cardTheme: _cardTheme.plain,
+      cardTheme: _cardTheme.elevated,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
@@ -34,11 +35,21 @@ class IoCrosswordTheme {
     );
   }
 
+  IoPhysicalModelStyle get _physicalModel {
+    return IoPhysicalModelStyle(
+      gradient: IoCrosswordColors.googleGradient,
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      border: Border.all(color: IoCrosswordColors.black),
+      elevation: 4,
+    );
+  }
+
   IoCardTheme get _cardTheme {
     final colorScheme = this.colorScheme;
 
     return IoCardTheme(
       plain: CardTheme(
+        margin: EdgeInsets.zero,
         shape: const RoundedRectangleBorder(
           side: BorderSide(color: IoCrosswordColors.black),
           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -47,12 +58,22 @@ class IoCrosswordTheme {
         color: colorScheme.surface,
       ),
       highlight: const CardTheme(
+        margin: EdgeInsets.zero,
         shape: GradientInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           gradient: IoCrosswordColors.googleGradient,
         ),
         elevation: 0,
         color: IoCrosswordColors.black,
+      ),
+      elevated: CardTheme(
+        margin: EdgeInsets.zero,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(color: IoCrosswordColors.black),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        elevation: 0,
+        color: colorScheme.surface,
       ),
     );
   }
