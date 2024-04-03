@@ -1,7 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+/// {@template io_text_input}
+/// An IO styled text input that accepts a fixed number of characters.
+/// {@endtemplate}
 class IoTextInput extends StatefulWidget {
+  /// {@macro io_text_input}
   const IoTextInput({
     required this.length,
     super.key,
@@ -69,11 +74,13 @@ class _IoTextInputState extends State<IoTextInput> {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).io.textInput;
+
     return Row(
       children: [
         for (var i = 0; i < widget.length; i++)
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: style.padding,
             child: _CharacterInputField(
               focusNode: _focusNodes[i],
               controller: _controllers[i],
@@ -119,7 +126,7 @@ class _CharacterInputFieldState extends State<_CharacterInputField> {
 
     final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(input);
     if (!isAlphabetic) {
-      widget.controller.text = '';
+      widget.controller.text = '_';
       return;
     }
 
@@ -132,12 +139,19 @@ class _CharacterInputFieldState extends State<_CharacterInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).io.textInput;
+
     return SizedBox.square(
       dimension: 50,
-      child: ColoredBox(
-        color: widget.focusNode.hasFocus
-            ? IoCrosswordColors.seedGreen
-            : IoCrosswordColors.seedBlue,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+          border: Border.all(
+            width: 1.8,
+            color: IoCrosswordColors.seedWhite,
+          ),
+          color: IoCrosswordColors.darkGray,
+        ),
         child: Center(
           child: EditableText(
             keyboardType: TextInputType.text,
@@ -153,4 +167,100 @@ class _CharacterInputFieldState extends State<_CharacterInputField> {
       ),
     );
   }
+}
+
+/// {@template io_text_input_style}
+/// The style of the [IoTextInput].
+/// {@endtemplate}
+class IoTextInputStyle extends Equatable {
+  /// {@macro io_text_input_style}
+  const IoTextInputStyle({
+    required this.padding,
+    required this.empty,
+    required this.filled,
+    required this.focused,
+    required this.disabled,
+  });
+
+  /// The margin between the character fields.
+  final EdgeInsets padding;
+
+  /// The style of an empty character field.
+  final IoTextInputCharacterFieldStyle empty;
+
+  /// The style of the filled character field.
+  ///
+  /// A filled character field is the one that has a value.
+  final IoTextInputCharacterFieldStyle filled;
+
+  /// The style of the focused character field.
+  ///
+  /// A focused character field is the one that is currently being inputted.
+  final IoTextInputCharacterFieldStyle focused;
+
+  /// The style of the disabled character field.
+  ///
+  /// A disabled character field is the one that is not available for input.
+  final IoTextInputCharacterFieldStyle disabled;
+
+  /// Linearly interpolate between two [IoTextInputStyle].
+  IoTextInputStyle lerp(IoTextInputStyle other, double t) {
+    return IoTextInputStyle(
+      padding: EdgeInsets.lerp(padding, other.padding, t)!,
+      empty: empty.lerp(other.empty, t),
+      filled: filled.lerp(other.filled, t),
+      focused: focused.lerp(other.focused, t),
+      disabled: disabled.lerp(other.disabled, t),
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        padding,
+        empty,
+        filled,
+        focused,
+        disabled,
+      ];
+}
+
+/// {@template io_text_input_character_field_style}
+/// The style of a character field in the [IoTextInput].
+/// {@endtemplate}
+class IoTextInputCharacterFieldStyle extends Equatable {
+  /// {@macro io_text_input_character_field_style}
+  const IoTextInputCharacterFieldStyle({
+    required this.backgroundColor,
+    required this.border,
+    required this.borderRadius,
+    required this.textStyle,
+  });
+
+  /// The background color of the character field.
+  final Color backgroundColor;
+
+  /// The border of the character field.
+  final Border border;
+
+  /// The border radius of the character field.
+  final BorderRadius borderRadius;
+
+  /// The text style of the character field.
+  final TextStyle textStyle;
+
+  /// Linearly interpolate between two [IoTextInputCharacterFieldStyle].
+  IoTextInputCharacterFieldStyle lerp(
+    IoTextInputCharacterFieldStyle other,
+    double t,
+  ) {
+    return IoTextInputCharacterFieldStyle(
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+      border: Border.lerp(border, other.border, t)!,
+      borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
+    );
+  }
+
+  @override
+  List<Object?> get props => [backgroundColor, border, borderRadius, textStyle];
 }
