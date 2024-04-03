@@ -34,7 +34,7 @@ void main() {
 
     test('lerps', () {
       final from = GradientStadiumBorder(
-        side: BorderSide(width: 1),
+        side: BorderSide(),
         gradient: const LinearGradient(
           colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
         ),
