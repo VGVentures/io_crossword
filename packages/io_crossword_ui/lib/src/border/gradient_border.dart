@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
 
-class GradientOutlinedBorder extends OutlinedBorder {
+class GradientOutlinedBorder extends RoundedRectangleBorder {
+  GradientOutlinedBorder({
+    required this.gradient,
+    super.borderRadius,
+  });
+
+  final Gradient gradient;
+
   @override
-  OutlinedBorder copyWith({BorderSide? side}) {
-    // TODO: implement copyWith
-    throw UnimplementedError();
+  RoundedRectangleBorder copyWith({
+    BorderSide? side,
+    BorderRadiusGeometry? borderRadius,
+    Gradient? gradient,
+  }) {
+    return GradientOutlinedBorder(
+      gradient: gradient ?? this.gradient,
+      borderRadius: borderRadius ?? this.borderRadius,
+    );
   }
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    // TODO: implement getInnerPath
-    throw UnimplementedError();
+    return super.getInnerPath(rect);
   }
 
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    // TODO: implement getOuterPath
-    throw UnimplementedError();
+    return super.getOuterPath(rect);
   }
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    switch (style) {
-      case BorderStyle.solid:
-        final paint = Paint()
-          ..strokeWidth = width
-          ..style = PaintingStyle.fill
-          ..shader = gradient.createShader(rect)
-          // .createShader(Rect.fromCircle(center: Offset(50, 0), radius: 30))
-          ..color = color;
-
-        canvas.drawPaint(paint);
-      case BorderStyle.none:
-        return Paint()
-          ..color = const Color(0x00000000)
-          ..strokeWidth = 0.0
-          ..style = PaintingStyle.stroke;
-    }
+    final paint = Paint()
+      ..strokeWidth = 2
+      ..style = PaintingStyle.fill
+      ..shader = gradient.createShader(rect);
+    final path = getOuterPath(rect, textDirection: textDirection);
+    canvas.drawPath(path, paint);
   }
 
   @override
