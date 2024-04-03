@@ -51,23 +51,7 @@ class GeminiHintButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return OutlinedButton.icon(
-      style: Theme.of(context).outlinedButtonTheme.style?.copyWith(
-        shape: MaterialStateProperty.resolveWith(
-          (states) {
-            if (states.contains(MaterialState.disabled)) {
-              return const StadiumBorder(
-                side: BorderSide(
-                  width: 2,
-                ),
-              );
-            }
-
-            return const GradientOutlinedBorder(
-              gradient: IoCrosswordColors.geminiGradient,
-            );
-          },
-        ),
-      ),
+      style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
       onPressed: null,
       icon: const GeminiGradient(
         child: Icon(

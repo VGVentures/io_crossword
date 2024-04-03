@@ -111,6 +111,35 @@ class IoCrosswordTheme {
     );
   }
 
+  /// Gemini outlined button theme data
+  static OutlinedButtonThemeData get geminiOutlinedButtonThemeData {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientOutlinedBorder(
+              gradient: IoCrosswordColors.geminiGradient,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   IoPlayerAliasTheme get _playerAliasTheme {
     final colorScheme = this.colorScheme;
 

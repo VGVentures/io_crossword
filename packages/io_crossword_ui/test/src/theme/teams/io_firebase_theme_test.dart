@@ -15,7 +15,13 @@ void main() {
       test('displays StadiumBorder with ${MaterialState.disabled}', () {
         expect(
           outlinedBorder.resolve({MaterialState.disabled}),
-          equals(isA<StadiumBorder>()),
+          equals(
+            isA<GradientOutlinedBorder>().having(
+              (border) => border.gradient,
+              'Sparky gradient',
+              IoCrosswordColors.sparkyGradient,
+            ),
+          ),
         );
       });
 

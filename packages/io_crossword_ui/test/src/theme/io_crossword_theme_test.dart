@@ -22,7 +22,13 @@ void main() {
         test('displays StadiumBorder with ${MaterialState.disabled}', () {
           expect(
             outlinedBorder.resolve({MaterialState.disabled}),
-            equals(isA<StadiumBorder>()),
+            equals(
+              isA<GradientOutlinedBorder>().having(
+                (border) => border.gradient,
+                'Google gradient',
+                IoCrosswordColors.googleGradient,
+              ),
+            ),
           );
         });
 
@@ -43,6 +49,47 @@ void main() {
                   (border) => border.gradient,
                   'Google gradient',
                   IoCrosswordColors.googleGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
+      group('geminiOutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme.geminiOutlinedButtonThemeData.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<GradientOutlinedBorder>().having(
+                (border) => border.gradient,
+                'Gemini gradient',
+                IoCrosswordColors.geminiGradient,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientOutlinedBorder>().having(
+                  (border) => border.gradient,
+                  'Gemini gradient',
+                  IoCrosswordColors.geminiGradient,
                 ),
               ),
             );
