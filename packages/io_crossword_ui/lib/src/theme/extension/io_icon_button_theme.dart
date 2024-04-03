@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template io_icon_button_theme}
-/// Styles for [IconButton].
+/// IO styles for [IconButton].
 ///
 /// See also:
 ///

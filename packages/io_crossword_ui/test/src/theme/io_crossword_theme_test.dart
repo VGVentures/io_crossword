@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../test_tag.dart';
+
 class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
@@ -157,6 +159,63 @@ void main() {
           equals(
             isA<OutlineInputBorder>(),
           ),
+        );
+      });
+    });
+
+    group('IoCardTheme', () {
+      group('styles', () {
+        Uri goldenKey(String name) => Uri.parse('goldens/card/card__$name.png');
+
+        testWidgets(
+          'plain by default',
+          tags: TestTag.golden,
+          (tester) async {
+            await tester.binding.setSurfaceSize(const Size.square(200));
+
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: IoCrosswordTheme().themeData,
+                home: const Center(
+                  child: Card(
+                    child: SizedBox.square(dimension: 150),
+                  ),
+                ),
+              ),
+            );
+
+            await expectLater(
+              find.byType(Card),
+              matchesGoldenFile(goldenKey('plain')),
+            );
+          },
+        );
+
+        testWidgets(
+          'highlight when specified',
+          tags: TestTag.golden,
+          (tester) async {
+            await tester.binding.setSurfaceSize(const Size.square(200));
+
+            final themeData = IoCrosswordTheme().themeData;
+            final cardTheme = themeData.io.cardTheme.highlight;
+
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: themeData.copyWith(cardTheme: cardTheme),
+                home: const Center(
+                  child: Card(
+                    child: SizedBox.square(dimension: 150),
+                  ),
+                ),
+              ),
+            );
+
+            await expectLater(
+              find.byType(Card),
+              matchesGoldenFile(goldenKey('highlight')),
+            );
+          },
         );
       });
     });

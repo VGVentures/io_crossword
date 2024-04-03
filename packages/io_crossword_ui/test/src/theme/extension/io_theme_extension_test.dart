@@ -7,6 +7,8 @@ class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
 
 class _MockIoIconButtonTheme extends Mock implements IoIconButtonTheme {}
 
+class _MockIoCardTheme extends Mock implements IoCardTheme {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
@@ -14,6 +16,7 @@ void main() {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
+          cardTheme: _MockIoCardTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -25,6 +28,7 @@ void main() {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
+          cardTheme: _MockIoCardTheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -40,6 +44,7 @@ void main() {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
+          cardTheme: _MockIoCardTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -51,6 +56,7 @@ void main() {
         final theme = IoThemeExtension(
           playerAliasTheme: _MockIoPlayerAliasTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
+          cardTheme: _MockIoCardTheme(),
         );
 
         when(
@@ -59,6 +65,9 @@ void main() {
         when(
           () => theme.iconButtonTheme.lerp(theme.iconButtonTheme, 0.5),
         ).thenReturn(_MockIoIconButtonTheme());
+        when(
+          () => theme.cardTheme.lerp(theme.cardTheme, 0.5),
+        ).thenReturn(_MockIoCardTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -90,6 +99,7 @@ void main() {
             IoThemeExtension(
               playerAliasTheme: _MockIoPlayerAliasTheme(),
               iconButtonTheme: _MockIoIconButtonTheme(),
+              cardTheme: _MockIoCardTheme(),
             ),
           ],
         );
