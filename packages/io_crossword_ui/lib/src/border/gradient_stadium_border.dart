@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 /// {@template gradient_outlined_border}
 /// A gradient outlined border for the [OutlinedButton].
 /// {@endtemplate}
-class GradientOutlinedBorder extends StadiumBorder {
+class GradientStadiumBorder extends StadiumBorder {
   /// {@macro gradient_outlined_border}
-  const GradientOutlinedBorder({
+  const GradientStadiumBorder({
     required this.gradient,
     super.side,
   });
@@ -14,11 +14,11 @@ class GradientOutlinedBorder extends StadiumBorder {
   final Gradient gradient;
 
   @override
-  GradientOutlinedBorder copyWith({
+  GradientStadiumBorder copyWith({
     BorderSide? side,
     Gradient? gradient,
   }) {
-    return GradientOutlinedBorder(
+    return GradientStadiumBorder(
       gradient: gradient ?? this.gradient,
       side: side ?? this.side,
     );
@@ -38,8 +38,8 @@ class GradientOutlinedBorder extends StadiumBorder {
 
   @override
   ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
-    if (a is GradientOutlinedBorder) {
-      return GradientOutlinedBorder(
+    if (a is GradientStadiumBorder) {
+      return GradientStadiumBorder(
         gradient: Gradient.lerp(
           LinearGradient(
             // Fake a gradient with a single color to make a smooth transition

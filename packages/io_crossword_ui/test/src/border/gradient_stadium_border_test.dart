@@ -7,7 +7,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import '../helpers/helpers.dart';
 
 void main() {
-  group('$GradientOutlinedBorder', () {
+  group('$GradientStadiumBorder', () {
     group('renders as expected', () {
       Uri goldenKey(String name) =>
           Uri.parse('goldens/gradient_outlined_border_$name.png');

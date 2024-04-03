@@ -30,7 +30,7 @@ void main() {
           expect(
             outlinedBorder.resolve({}),
             equals(
-              isA<GradientOutlinedBorder>().having(
+              isA<GradientStadiumBorder>().having(
                 (border) => border.gradient,
                 'Google gradient',
                 IoCrosswordColors.googleGradient,
@@ -45,7 +45,7 @@ void main() {
             expect(
               outlinedBorder.resolve({state}),
               equals(
-                isA<GradientOutlinedBorder>().having(
+                isA<GradientStadiumBorder>().having(
                   (border) => border.gradient,
                   'Google gradient',
                   IoCrosswordColors.googleGradient,
@@ -71,7 +71,7 @@ void main() {
           expect(
             outlinedBorder.resolve({}),
             equals(
-              isA<GradientOutlinedBorder>().having(
+              isA<GradientStadiumBorder>().having(
                 (border) => border.gradient,
                 'Gemini gradient',
                 IoCrosswordColors.geminiGradient,
@@ -86,7 +86,7 @@ void main() {
             expect(
               outlinedBorder.resolve({state}),
               equals(
-                isA<GradientOutlinedBorder>().having(
+                isA<GradientStadiumBorder>().having(
                   (border) => border.gradient,
                   'Gemini gradient',
                   IoCrosswordColors.geminiGradient,

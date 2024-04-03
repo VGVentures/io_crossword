@@ -22,7 +22,7 @@ class IoFlutterTheme extends IoCrosswordTheme {
                 );
               }
 
-              return const GradientOutlinedBorder(
+              return const GradientStadiumBorder(
                 gradient: IoCrosswordColors.dashGradient,
               );
             },

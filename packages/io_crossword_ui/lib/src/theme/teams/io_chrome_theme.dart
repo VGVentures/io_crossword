@@ -22,7 +22,7 @@ class IoChromeTheme extends IoCrosswordTheme {
                 );
               }
 
-              return const GradientOutlinedBorder(
+              return const GradientStadiumBorder(
                 gradient: IoCrosswordColors.dinoGradient,
               );
             },

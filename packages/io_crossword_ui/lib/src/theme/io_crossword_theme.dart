@@ -102,7 +102,7 @@ class IoCrosswordTheme {
               );
             }
 
-            return const GradientOutlinedBorder(
+            return const GradientStadiumBorder(
               gradient: IoCrosswordColors.googleGradient,
             );
           },
@@ -131,7 +131,7 @@ class IoCrosswordTheme {
               );
             }
 
-            return const GradientOutlinedBorder(
+            return const GradientStadiumBorder(
               gradient: IoCrosswordColors.geminiGradient,
             );
           },

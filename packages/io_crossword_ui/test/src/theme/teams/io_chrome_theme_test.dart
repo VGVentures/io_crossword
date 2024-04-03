@@ -23,7 +23,7 @@ void main() {
         expect(
           outlinedBorder.resolve({}),
           equals(
-            isA<GradientOutlinedBorder>().having(
+            isA<GradientStadiumBorder>().having(
               (border) => border.gradient,
               'Dino gradient',
               IoCrosswordColors.dinoGradient,
@@ -38,7 +38,7 @@ void main() {
           expect(
             outlinedBorder.resolve({state}),
             equals(
-              isA<GradientOutlinedBorder>().having(
+              isA<GradientStadiumBorder>().having(
                 (border) => border.gradient,
                 'Dino gradient',
                 IoCrosswordColors.dinoGradient,
