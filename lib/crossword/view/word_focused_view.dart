@@ -96,7 +96,7 @@ class WordFocusedDesktopBody extends StatelessWidget {
                       label: l10n.submit,
                       onPressed: () => context.read<CrosswordBloc>().add(
                             const AnswerSubmitted(),
-                          ), // coverage:ignore-line
+                          ),
                     ),
                   ),
                 ],
@@ -174,7 +174,7 @@ class WordFocusedMobileView extends StatelessWidget {
                   label: l10n.submit,
                   onPressed: () => context.read<CrosswordBloc>().add(
                         const AnswerSubmitted(),
-                      ), // coverage:ignore-line
+                      ),
                 ),
               ),
             ],

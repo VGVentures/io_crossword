@@ -88,7 +88,12 @@ class SectionKeyboardHandler extends PositionComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
-    if (event.character != null && word.length < index.$3.$2 - index.$3.$1) {
+
+    final spriteBatchIndex = index.$3;
+    final hasMaxLength =
+        word.length == spriteBatchIndex.$2 - spriteBatchIndex.$1;
+
+    if (event.character != null && !hasMaxLength) {
       word += event.character!;
     }
 
@@ -105,16 +110,16 @@ class SectionKeyboardHandler extends PositionComponent
 
       if (rect !=
           parent.spriteBatchComponent?.spriteBatch?.sources
-              .elementAt(index.$3.$1 + c)) {
+              .elementAt(spriteBatchIndex.$1 + c)) {
         parent.spriteBatchComponent?.spriteBatch?.replace(
-          index.$3.$1 + c,
+          spriteBatchIndex.$1 + c,
           source: rect,
         );
       }
     }
     if (backspacePressed) {
       parent.spriteBatchComponent?.spriteBatch?.replace(
-        index.$3.$1 + wordCharacters.length,
+        spriteBatchIndex.$1 + wordCharacters.length,
         source: Rect.fromLTWH(
           2080,
           0,
@@ -123,7 +128,7 @@ class SectionKeyboardHandler extends PositionComponent
         ),
       );
     }
-    if (word.length == index.$3.$2 - index.$3.$1) {
+    if (hasMaxLength) {
       gameRef.bloc.add(AnswerUpdated(word));
     }
     return false;

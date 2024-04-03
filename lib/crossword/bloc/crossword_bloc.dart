@@ -115,6 +115,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
             section: section,
             word: event.word,
           ),
+          answer: '',
         ),
       );
     }
@@ -196,10 +197,10 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) async {
     if (state is CrosswordLoaded) {
       final loadedState = state as CrosswordLoaded;
-      if (loadedState.selectedWord == null) return;
+      final selectedWord = loadedState.selectedWord;
+      if (selectedWord == null) return;
 
-      final selectedWord = loadedState.selectedWord!;
-      if (loadedState.answer != loadedState.selectedWord!.word.answer) {
+      if (loadedState.answer != selectedWord.word.answer) {
         emit(
           loadedState.copyWith(
             selectedWord:
@@ -225,7 +226,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
             ),
           ),
         );
-      } catch (error) {
+      } catch (error, stackTrace) {
+        addError(error, stackTrace);
         emit(CrosswordError(error.toString()));
       }
     }
