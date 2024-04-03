@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:io_crossword_ui/src/border/gradient_border.dart';
 import 'package:meta/meta.dart';
 
 /// {@template io_crossword_theme}
@@ -20,9 +21,35 @@ class IoCrosswordTheme {
       tabBarTheme: _tabBarTheme,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
+      outlinedButtonTheme: _outlinedButtonThemeData,
       extensions: {
         IoThemeExtension(playerAliasTheme: _playerAliasTheme),
       },
+    );
+  }
+
+  OutlinedButtonThemeData get _outlinedButtonThemeData {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+        side: const GradientBorder(
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [
+              Color(0xFF1F85FA),
+              Color(0xFF00A947),
+            ],
+            stops: [
+              0.5,
+              1.0,
+            ],
+          ),
+        ),
+      ),
     );
   }
 
