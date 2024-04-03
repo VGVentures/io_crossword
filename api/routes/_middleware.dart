@@ -17,6 +17,7 @@ Handler middleware(Handler handler) {
       .use(provider<BoardRenderer>((_) => boardRenderer))
       .use(provider<LeaderboardRepository>((_) => leaderboardRepository))
       .use(provider<FirebaseCloudStorage>((_) => firebaseCloudStorage))
+      .use(jwtMiddleware.middleware)
       .use(corsHeaders())
       .use(allowHeaders())
       .use(fromShelfMiddleware(cloudLoggingMiddleware(projectId)));

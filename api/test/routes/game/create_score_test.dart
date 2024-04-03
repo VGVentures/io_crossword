@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -33,6 +36,8 @@ void main() {
     when(() => context.read<LeaderboardRepository>())
         .thenReturn(leaderboardRepository);
     when(() => context.read<Logger>()).thenReturn(logger);
+    when(() => context.read<AuthenticatedUser>())
+        .thenReturn(AuthenticatedUser('id'));
   });
 
   group('POST', () {
