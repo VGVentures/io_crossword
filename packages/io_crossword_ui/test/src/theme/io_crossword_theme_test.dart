@@ -4,9 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockBuildContext extends Mock implements BuildContext {}
+import '../../test_tag.dart';
 
-class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
+class _MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   group('$IoCrosswordTheme', () {
@@ -24,11 +24,7 @@ void main() {
           expect(
             actionIconTheme.closeButtonIconBuilder!(context),
             equals(
-              isA<Container>().having(
-                (widget) => (widget.child! as Icon).icon,
-                'Close icon',
-                Icons.close,
-              ),
+              isA<Icon>().having((widget) => widget.icon, 'icon', Icons.close),
             ),
           );
         });
@@ -166,85 +162,61 @@ void main() {
         );
       });
     });
-  });
 
-  group('$IoThemeExtension', () {
-    group('copyWith', () {
-      test('remains the same when no arguments are give', () {
-        final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+    group('IoCardTheme', () {
+      group('styles', () {
+        Uri goldenKey(String name) => Uri.parse('goldens/card/card__$name.png');
+
+        testWidgets(
+          'plain by default',
+          tags: TestTag.golden,
+          (tester) async {
+            await tester.binding.setSurfaceSize(const Size.square(200));
+
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: IoCrosswordTheme().themeData,
+                home: const Center(
+                  child: Card(
+                    child: SizedBox.square(dimension: 150),
+                  ),
+                ),
+              ),
+            );
+
+            await expectLater(
+              find.byType(Card),
+              matchesGoldenFile(goldenKey('plain')),
+            );
+          },
         );
 
-        final newTheme = theme.copyWith();
+        testWidgets(
+          'highlight when specified',
+          tags: TestTag.golden,
+          (tester) async {
+            await tester.binding.setSurfaceSize(const Size.square(200));
 
-        expect(newTheme, equals(theme));
-      });
+            final themeData = IoCrosswordTheme().themeData;
+            final cardTheme = themeData.io.cardTheme.highlight;
 
-      test('changes when arguments are give', () {
-        final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: themeData.copyWith(cardTheme: cardTheme),
+                home: const Center(
+                  child: Card(
+                    child: SizedBox.square(dimension: 150),
+                  ),
+                ),
+              ),
+            );
+
+            await expectLater(
+              find.byType(Card),
+              matchesGoldenFile(goldenKey('highlight')),
+            );
+          },
         );
-
-        final newTheme = theme.copyWith(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
-        );
-
-        expect(newTheme, isNot(equals(theme)));
-      });
-    });
-
-    group('lerp', () {
-      test('returns itself when other is null', () {
-        final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
-        );
-
-        final newTheme = theme.lerp(null, 0.5);
-
-        expect(newTheme, equals(theme));
-      });
-
-      test('returns a lerp of the two themes', () {
-        final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
-        );
-
-        when(
-          () => theme.playerAliasTheme.lerp(theme.playerAliasTheme, 0.5),
-        ).thenReturn(_MockIoPlayerAliasTheme());
-
-        final newTheme = theme.lerp(theme, 0.5);
-
-        expect(newTheme, isNot(equals(theme)));
-      });
-    });
-  });
-
-  group('ExtendedThemeData', () {
-    group('io', () {
-      test('throws an $AssertionError when not found', () {
-        final themeData = ThemeData();
-
-        expect(
-          () => themeData.io,
-          throwsA(
-            isA<AssertionError>().having(
-              (error) => error.message,
-              'message',
-              equals('$IoThemeExtension not found in $ThemeData'),
-            ),
-          ),
-        );
-      });
-
-      test('returns the $IoThemeExtension', () {
-        final themeData = ThemeData(
-          extensions: [
-            IoThemeExtension(playerAliasTheme: _MockIoPlayerAliasTheme()),
-          ],
-        );
-
-        expect(themeData.io, isA<IoThemeExtension>());
       });
     });
   });

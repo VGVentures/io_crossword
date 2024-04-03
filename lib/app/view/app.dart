@@ -38,8 +38,10 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = IoCrosswordTheme().themeData;
+
     return MaterialApp(
-      theme: IoCrosswordTheme().themeData,
+      theme: themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const CrosswordPage(),

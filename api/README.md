@@ -15,6 +15,7 @@ To run the API the following arguments needs to be passed:
 FB_APP_ID=APP_ID \
 INITIALS_BLACKLIST_ID=ID \
 FB_STORAGE_BUCKET=FIREBASE_BUCKET_NAME \
+GAME_URL=http://localhost:24514 \
 dart_frog dev
 ```
 
