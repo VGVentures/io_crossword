@@ -210,7 +210,8 @@ void main() {
           );
           await tester.pumpApp(widget, navigator: navigator);
 
-          verify(navigator.canPop).called(1);
+          await tester.pump();
+          verify(navigator.pop).called(1);
         },
       );
     });
