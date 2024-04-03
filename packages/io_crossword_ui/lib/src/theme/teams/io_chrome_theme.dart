@@ -13,11 +13,21 @@ class IoChromeTheme extends IoCrosswordTheme {
   OutlinedButtonThemeData get outlinedButtonThemeData =>
       OutlinedButtonThemeData(
         style: super.outlinedButtonThemeData.style!.copyWith(
-              shape: const MaterialStatePropertyAll(
-                GradientOutlinedBorder(
-                  gradient: IoCrosswordColors.dinoGradient,
-                ),
-              ),
-            ),
+          shape: MaterialStateProperty.resolveWith(
+            (states) {
+              if (states.contains(MaterialState.disabled)) {
+                return const StadiumBorder(
+                  side: BorderSide(
+                    width: 2,
+                  ),
+                );
+              }
+
+              return const GradientOutlinedBorder(
+                gradient: IoCrosswordColors.dinoGradient,
+              );
+            },
+          ),
+        ),
       );
 }

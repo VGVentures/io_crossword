@@ -87,13 +87,26 @@ class IoCrosswordTheme {
   OutlinedButtonThemeData get outlinedButtonThemeData {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(
           vertical: 17,
           horizontal: 18,
         ),
-        foregroundColor: IoCrosswordColors.seedWhite,
-        shape: const GradientOutlinedBorder(
-          gradient: IoCrosswordColors.googleGradient,
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientOutlinedBorder(
+              gradient: IoCrosswordColors.googleGradient,
+            );
+          },
         ),
       ),
     );
