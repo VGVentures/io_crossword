@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:io_crossword_ui/src/border/gradient_border.dart';
 
 /// The Flutter team theme for IO Crossword.
 class IoFlutterTheme extends IoCrosswordTheme {

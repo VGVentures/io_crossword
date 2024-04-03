@@ -20,9 +20,12 @@ class GeminiTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: l10n.type,
           prefixIcon: const Padding(
-            padding: EdgeInsets.only(left: 12, right: 12),
+            padding: EdgeInsets.only(left: 12, right: 6),
             child: GeminiGradient(
-              child: Icon(IoIcons.gemini),
+              child: Icon(
+                IoIcons.gemini,
+                size: 12,
+              ),
             ),
           ),
           suffixIcon: const Padding(
@@ -34,6 +37,46 @@ class GeminiTextField extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class GeminiHintButton extends StatelessWidget {
+  @visibleForTesting
+  const GeminiHintButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return OutlinedButton.icon(
+      style: Theme.of(context).outlinedButtonTheme.style?.copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientOutlinedBorder(
+              gradient: IoCrosswordColors.geminiGradient,
+            );
+          },
+        ),
+      ),
+      onPressed: null,
+      icon: const GeminiGradient(
+        child: Icon(
+          IoIcons.gemini,
+          size: 12,
+        ),
+      ),
+      label: GeminiGradient(
+        child: Text(l10n.hint),
       ),
     );
   }
