@@ -130,7 +130,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
             }
             return false;
           },
-          listener: (ctx, state) {
+          listener: (context, state) {
             if (state is CrosswordLoaded) {
               if (state.selectedWord != null) {
                 final bloc = context.read<CrosswordBloc>();
