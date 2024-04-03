@@ -68,7 +68,8 @@ class IoCrosswordTheme {
           vertical: 17,
           horizontal: 18,
         ),
-        shape: GradientOutlinedBorder(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        shape: const GradientOutlinedBorder(
           gradient: IoCrosswordColors.googleGradient,
         ),
       ),

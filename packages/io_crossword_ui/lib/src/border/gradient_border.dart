@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
+/// {@template gradient_outlined_border}
+/// A gradient outlined border for the [OutlinedButton].
+/// {@endtemplate}
 class GradientOutlinedBorder extends StadiumBorder {
-  GradientOutlinedBorder({
+  /// {@macro gradient_outlined_border}
+  const GradientOutlinedBorder({
     required this.gradient,
     super.side,
   });
 
+  /// The gradient border.
   final Gradient gradient;
 
   @override
@@ -23,8 +28,9 @@ class GradientOutlinedBorder extends StadiumBorder {
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
     final radius = Radius.circular(rect.shortestSide / 2);
     final borderRect = RRect.fromRectAndRadius(rect, radius);
+
     final paint = Paint()
-      ..strokeWidth = side.toPaint().strokeWidth
+      ..strokeWidth = side.width < 2 ? 2 : side.width
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(rect);
     canvas.drawRRect(borderRect.inflate(side.strokeOffset / 2), paint);
@@ -42,42 +48,9 @@ class GradientOutlinedBorder extends StadiumBorder {
           gradient,
           t,
         )!,
-        side: BorderSide.lerp(side, a.side, t),
+        side: BorderSide.lerp(a.side, side, t),
       );
     }
     return super.lerpFrom(a, t);
-  }
-}
-
-/// {@template gradient_border}
-/// A gradient border for the [OutlinedButton].
-/// {@endtemplate}
-class GradientBorder extends BorderSide {
-  /// {@macro gradient_border}
-  const GradientBorder({
-    required this.gradient,
-    super.width = 2,
-    super.style,
-  });
-
-  /// The gradient to use for the border.
-  final Gradient gradient;
-
-  @override
-  Paint toPaint() {
-    switch (style) {
-      case BorderStyle.solid:
-        return Paint()
-          ..strokeWidth = width
-          ..style = PaintingStyle.fill
-          ..shader = gradient.createShader(Rect.fromLTRB(0, 0, 80, 0))
-          // .createShader(Rect.fromCircle(center: Offset(50, 0), radius: 30))
-          ..color = color;
-      case BorderStyle.none:
-        return Paint()
-          ..color = const Color(0x00000000)
-          ..strokeWidth = 0.0
-          ..style = PaintingStyle.stroke;
-    }
   }
 }

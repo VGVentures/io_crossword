@@ -13,8 +13,8 @@ class IoChromeTheme extends IoCrosswordTheme {
   OutlinedButtonThemeData get outlinedButtonThemeData =>
       OutlinedButtonThemeData(
         style: super.outlinedButtonThemeData.style!.copyWith(
-              side: const MaterialStatePropertyAll(
-                GradientBorder(
+              shape: const MaterialStatePropertyAll(
+                GradientOutlinedBorder(
                   gradient: IoCrosswordColors.dinoGradient,
                 ),
               ),
