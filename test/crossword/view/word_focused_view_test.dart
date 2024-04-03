@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -23,95 +24,148 @@ class _FakeWord extends Fake implements Word {
 
   @override
   Axis get axis => Axis.horizontal;
+
+  @override
+  int? get solvedTimestamp => 1;
 }
 
 void main() {
-  group('WordFocusedDesktopView', () {
-    late CrosswordBloc crosswordBloc;
-    late Widget widget;
+  group('WordFocusedView', () {
+    late AppLocalizations l10n;
 
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
-      widget = Scaffold(
-        body: BlocProvider.value(
-          value: crosswordBloc,
-          child: WordFocusedDesktopView(),
-        ),
+    group('WordFocusedDesktopView', () {
+      late CrosswordBloc crosswordBloc;
+      late Widget widget;
+
+      setUp(() {
+        crosswordBloc = _MockCrosswordBloc();
+
+        widget = Scaffold(
+          body: BlocProvider.value(
+            value: crosswordBloc,
+            child: WordFocusedDesktopView(),
+          ),
+        );
+      });
+
+      testWidgets(
+        'renders an empty SizedBox when the selected word is null',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            CrosswordLoaded(
+              sectionSize: 20,
+              selectedWord: null,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+
+          expect(find.byType(SizedBox), findsOneWidget);
+          expect(sizedBox.child, isNull);
+        },
+      );
+
+      testWidgets(
+        'renders a WordFocusedDesktopView when the selected word is not null',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            CrosswordLoaded(
+              sectionSize: 20,
+              selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(WordFocusedDesktopView), findsOneWidget);
+        },
       );
     });
 
-    testWidgets(
-      'renders an empty SizedBox when the selected word is null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 20,
-            selectedWord: null,
+    group('WordFocusedDesktopBody', () {
+      late CrosswordBloc crosswordBloc;
+      late Widget widget;
+
+      setUp(() {
+        crosswordBloc = _MockCrosswordBloc();
+
+        widget = Scaffold(
+          body: BlocProvider.value(
+            value: crosswordBloc,
+            child: WordFocusedDesktopBody(
+              WordSelection(section: (0, 0), word: _FakeWord()),
+            ),
           ),
         );
-        await tester.pumpApp(widget);
+      });
 
-        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+      testWidgets(
+        'renders the clue text',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-        expect(find.byType(SizedBox), findsOneWidget);
-        expect(sizedBox.child, isNull);
-      },
-    );
+          final clueText = _FakeWord().clue;
+          expect(find.text(clueText), findsOneWidget);
+        },
+      );
 
-    testWidgets(
-      'renders a WordFocusedDesktopView when the selected word is not null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 20,
-            selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
-          ),
-        );
-        await tester.pumpApp(widget);
+      testWidgets(
+        'tapping the close button sends WordUnselected event',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-        expect(find.byType(WordFocusedDesktopView), findsOneWidget);
-      },
-    );
-  });
+          final closeButton = find.byIcon(Icons.cancel);
+          await tester.tap(closeButton);
 
-  group('WordFocusedDesktopBody', () {
-    late CrosswordBloc crosswordBloc;
-    late Widget widget;
+          verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+        },
+      );
 
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
+      testWidgets(
+        'tapping the submit button sends AnswerSubmitted event',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-      widget = Scaffold(
-        body: BlocProvider.value(
-          value: crosswordBloc,
-          child: WordFocusedDesktopBody(
-            WordSelection(section: (0, 0), word: _FakeWord()),
-          ),
-        ),
+          final submitButton = find.text(l10n.submit);
+          await tester.tap(submitButton);
+
+          verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+        },
       );
     });
 
-    testWidgets(
-      'renders the clue text',
-      (tester) async {
-        await tester.pumpApp(widget);
+    group('WordFocusedMobileView', () {
+      late CrosswordBloc crosswordBloc;
+      late Widget widget;
 
-        final clueText = _FakeWord().clue;
-        expect(find.text(clueText), findsOneWidget);
-      },
-    );
+      setUp(() {
+        crosswordBloc = _MockCrosswordBloc();
 
-    testWidgets(
-      'tapping the close button sends WordUnselected event',
-      (tester) async {
-        await tester.pumpApp(widget);
+        widget = Scaffold(
+          body: BlocProvider.value(
+            value: crosswordBloc,
+            child: WordFocusedMobileView(
+              WordSelection(section: (0, 0), word: _FakeWord()),
+            ),
+          ),
+        );
+      });
 
-        final closeButton = find.byIcon(Icons.cancel);
-        await tester.tap(closeButton);
+      testWidgets(
+        'tapping the submit button sends AnswerSubmitted event',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-      },
-    );
+          final submitButton = find.text(l10n.submit);
+          await tester.tap(submitButton);
+
+          verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+        },
+      );
+    });
   });
 }

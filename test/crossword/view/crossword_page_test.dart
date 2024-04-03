@@ -43,6 +43,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   Axis get axis => Axis.horizontal;
+
+  @override
+  int? get solvedTimestamp => 1;
 }
 
 void main() {

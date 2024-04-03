@@ -16,16 +16,20 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
+class _MockCrosswordResource extends Mock implements CrosswordResource {}
+
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     CrosswordRepository? crosswordRepository,
+    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) {
+    final mockedCrosswordResource = _MockCrosswordResource();
     final mockedCrosswordRepository = _MockCrosswordRepository();
     registerFallbackValue(Point(0, 0));
     when(
@@ -48,6 +52,9 @@ extension PumpApp on WidgetTester {
     return pumpWidget(
       MultiProvider(
         providers: [
+          Provider.value(
+            value: crosswordResource ?? mockedCrosswordResource,
+          ),
           Provider.value(
             value: crosswordRepository ?? mockedCrosswordRepository,
           ),
@@ -74,6 +81,7 @@ extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
     CrosswordRepository? crosswordRepository,
+    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
@@ -94,6 +102,7 @@ extension PumpRoute on WidgetTester {
     when(
       () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
+    final mockedCrosswordResource = _MockCrosswordResource();
 
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
@@ -110,6 +119,9 @@ extension PumpRoute on WidgetTester {
         providers: [
           RepositoryProvider.value(
             value: crosswordRepository ?? mockedCrosswordRepository,
+          ),
+          Provider.value(
+            value: crosswordResource ?? mockedCrosswordResource,
           ),
           Provider.value(
             value: boardInfoRepository ?? mockedBoardInfoRepository,

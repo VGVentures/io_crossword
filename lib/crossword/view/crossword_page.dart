@@ -1,3 +1,4 @@
+import 'package:api_client/api_client.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
@@ -24,6 +25,7 @@ class CrosswordPage extends StatelessWidget {
       create: (BuildContext context) => CrosswordBloc(
         boardInfoRepository: context.read<BoardInfoRepository>(),
         crosswordRepository: context.read<CrosswordRepository>(),
+        crosswordResource: context.read<CrosswordResource>(),
       )
         ..add(const BoardSectionRequested((0, 0)))
         ..add(const BoardLoadingInfoFetched()),
