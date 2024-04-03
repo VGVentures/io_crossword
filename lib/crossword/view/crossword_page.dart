@@ -123,13 +123,24 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
       },
       small: (context, widget) {
         return BlocListener<CrosswordBloc, CrosswordState>(
-          listener: (context, state) {
+          listenWhen: (previous, current) {
+            if (previous is CrosswordLoaded && current is CrosswordLoaded) {
+              return previous.selectedWord == null &&
+                  current.selectedWord != null;
+            }
+            return false;
+          },
+          listener: (ctx, state) {
             if (state is CrosswordLoaded) {
               if (state.selectedWord != null) {
-                showModalBottomSheet<WordFocusedMobileView>(
+                final bloc = context.read<CrosswordBloc>();
+                showModalBottomSheet<void>(
                   context: context,
                   builder: (context) {
-                    return WordFocusedMobileView(state.selectedWord!);
+                    return BlocProvider.value(
+                      value: bloc,
+                      child: WordFocusedMobileView(state.selectedWord!),
+                    );
                   },
                 ).then(
                   (_) =>

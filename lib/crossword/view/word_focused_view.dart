@@ -117,6 +117,13 @@ class WordFocusedMobileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final status = context.select(
+      (CrosswordBloc bloc) =>
+          (bloc.state as CrosswordLoaded).selectedWord?.solvedStatus,
+    );
+    if (status == SolvedStatus.solved) {
+      Navigator.pop(context);
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       color: IoCrosswordColors.seedWhite,
@@ -150,11 +157,13 @@ class WordFocusedMobileView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Spacer(),
-          Text(
-            l10n.typeToAnswer,
-            style: IoCrosswordTextStyles.bodyLG.copyWith(
-              color: IoCrosswordColors.accessibleGrey,
-            ),
+          TextField(
+            maxLength: selectedWord.word.answer.length,
+            onChanged: (value) {
+              if (value.length == selectedWord.word.answer.length) {
+                context.read<CrosswordBloc>().add(AnswerUpdated(value));
+              }
+            },
           ),
           const Spacer(),
           const SizedBox(height: 8),

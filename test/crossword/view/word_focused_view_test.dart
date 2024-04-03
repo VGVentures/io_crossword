@@ -8,7 +8,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -26,7 +26,10 @@ class _FakeWord extends Fake implements Word {
   Axis get axis => Axis.horizontal;
 
   @override
-  int? get solvedTimestamp => 1;
+  int? get solvedTimestamp => null;
+
+  @override
+  String get answer => 'answer';
 }
 
 void main() {
@@ -144,6 +147,11 @@ void main() {
 
       setUp(() {
         crosswordBloc = _MockCrosswordBloc();
+        final state = CrosswordLoaded(
+          sectionSize: 20,
+          selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
+        );
+        when(() => crosswordBloc.state).thenReturn(state);
 
         widget = Scaffold(
           body: BlocProvider.value(
@@ -156,13 +164,26 @@ void main() {
       });
 
       testWidgets(
-        'tapping the submit button sends AnswerSubmitted event',
+        'add AnswerUpdated event when user enters all the letters',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          final answerField = find.byType(TextField);
+
+          await tester.enterText(answerField, 'answer');
+          verify(
+            () => crosswordBloc.add(const AnswerUpdated('answer')),
+          ).called(1);
+        },
+      );
+
+      testWidgets(
+        'tap the submit button sends AnswerSubmitted event',
         (tester) async {
           await tester.pumpApp(widget);
 
           final submitButton = find.text(l10n.submit);
           await tester.tap(submitButton);
-
           verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
         },
       );
