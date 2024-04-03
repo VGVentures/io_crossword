@@ -51,6 +51,7 @@ class GradientStadiumBorder extends StadiumBorder {
         side: BorderSide.lerp(a.side, side, t),
       );
     }
+
     return super.lerpFrom(a, t);
   }
 }

@@ -36,30 +36,79 @@ void main() {
       );
     });
 
-    test('lerps', () {
-      final from = GradientStadiumBorder(
-        side: BorderSide(),
-        gradient: const LinearGradient(
+    group('copyWith', () {
+      test('updates side', () {
+        const gradient = LinearGradient(
           colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
-        ),
-      );
-      final to = GradientStadiumBorder(
-        side: BorderSide(width: 2),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0000FF), Color(0xFF0000FF)],
-        ),
-      );
+        );
 
-      final lerp = from.lerpFrom(to, 0.5)! as GradientStadiumBorder;
+        final from = GradientStadiumBorder(
+          gradient: gradient,
+        ).copyWith(side: BorderSide(width: 4));
 
-      expect(lerp.side.width, 1.5);
+        expect(from.side.width, equals(4));
+        expect(from.gradient, equals(gradient));
+      });
 
-      expect(lerp.side, isNot(from.side));
-      expect(lerp.side, isNot(to.side));
+      test('updates gradient', () {
+        const gradient = LinearGradient(
+          colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
+        );
 
-      expect(lerp.gradient, isNot(from.gradient));
-      expect(lerp.gradient, isNot(to.gradient));
-      expect(lerp.gradient.colors.first, const Color(0xff007f00));
+        final from = GradientStadiumBorder(
+          gradient: const LinearGradient(colors: []),
+        ).copyWith(side: BorderSide(width: 4), gradient: gradient);
+
+        expect(from.side.width, equals(4));
+        expect(from.gradient, equals(gradient));
+      });
+    });
+
+    group('lerpFrom', () {
+      test('two GradientStadiumBorder', () {
+        final from = GradientStadiumBorder(
+          side: BorderSide(),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
+          ),
+        );
+        final to = GradientStadiumBorder(
+          side: BorderSide(width: 2),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF0000FF), Color(0xFF0000FF)],
+          ),
+        );
+
+        final lerp = from.lerpFrom(to, 0.5)! as GradientStadiumBorder;
+
+        expect(lerp.side.width, 1.5);
+
+        expect(lerp.side, isNot(from.side));
+        expect(lerp.side, isNot(to.side));
+
+        expect(lerp.gradient, isNot(from.gradient));
+        expect(lerp.gradient, isNot(to.gradient));
+        expect(lerp.gradient.colors.first, const Color(0xff007f00));
+      });
+
+      test('one GradientStadiumBorder and StadiumBorder', () {
+        final from = GradientStadiumBorder(
+          side: BorderSide(),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
+          ),
+        );
+        final to = StadiumBorder(
+          side: BorderSide(width: 2),
+        );
+
+        final lerp = from.lerpFrom(to, 0.5)! as StadiumBorder;
+
+        expect(lerp.side.width, 1.5);
+
+        expect(lerp.side, isNot(from.side));
+        expect(lerp.side, isNot(to.side));
+      });
     });
   });
 }
