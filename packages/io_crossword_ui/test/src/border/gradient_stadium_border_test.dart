@@ -31,6 +31,32 @@ void main() {
         },
       );
     });
+
+    test('lerps', () {
+      final from = GradientStadiumBorder(
+        side: BorderSide(width: 1),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
+        ),
+      );
+      final to = GradientStadiumBorder(
+        side: BorderSide(width: 2),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0000FF), Color(0xFF0000FF)],
+        ),
+      );
+
+      final lerp = from.lerpFrom(to, 0.5)! as GradientStadiumBorder;
+
+      expect(lerp.side.width, 1.5);
+
+      expect(lerp.side, isNot(from.side));
+      expect(lerp.side, isNot(to.side));
+
+      expect(lerp.gradient, isNot(from.gradient));
+      expect(lerp.gradient, isNot(to.gradient));
+      expect(lerp.gradient.colors.first, const Color(0xff007f00));
+    });
   });
 }
 
