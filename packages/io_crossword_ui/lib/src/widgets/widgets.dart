@@ -3,5 +3,6 @@ export 'gemini_gradient.dart';
 export 'io_crossword_card.dart';
 export 'io_physical_model.dart';
 export 'io_player_alias.dart';
+export 'io_text_input.dart';
 export 'primary_button.dart';
 export 'responsive_layout.dart';
