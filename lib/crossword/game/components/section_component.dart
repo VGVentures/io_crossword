@@ -265,6 +265,12 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
           _loadBoardSection();
         }
       } else {
+        if (state.sections[index] != null &&
+            state.sections[index] != _boardSection) {
+          _boardSection = state.sections[index];
+          _loadBoardSection();
+        }
+
         final selectedWord = state.selectedWord?.word.id;
         final selectedSection = state.selectedWord?.section;
         if (selectedWord != lastSelectedWord ||
@@ -303,7 +309,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       ),
     );
 
-    firstChild<SpriteComponent>()?.removeFromParent();
+    firstChild<SpriteBatchComponent>()?.removeFromParent();
 
     final spriteBatch = SpriteBatch(gameRef.lettersSprite);
 

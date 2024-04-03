@@ -45,7 +45,10 @@ class _FakeWord extends Fake implements Word {
   Axis get axis => Axis.horizontal;
 
   @override
-  int? get solvedTimestamp => 1;
+  String get answer => 'answer';
+
+  @override
+  int? get solvedTimestamp => null;
 }
 
 void main() {
@@ -189,6 +192,41 @@ void main() {
 
       await tester.pumpCrosswordView(bloc);
       await tester.pump();
+      final iconButton = tester.widget<IconButton>(
+        find.ancestor(
+          of: find.byIcon(Icons.cancel),
+          matching: find.byType(IconButton),
+        ),
+      );
+      iconButton.onPressed?.call();
+      await tester.pump();
+      expect(find.byType(WordFocusedMobileView), findsNothing);
+      verify(() => bloc.add(const WordUnselected())).called(1);
+    });
+
+    testWidgets('renders WordFocusedMobileView and pops when answer is correct',
+        (tester) async {
+      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
+      final initialState = CrosswordLoaded(
+        sectionSize: 40,
+        sections: {
+          (0, 0): _FakeBoardSection(),
+        },
+      );
+      whenListen(
+        bloc,
+        Stream.value(
+          initialState.copyWith(
+            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
+          ),
+        ),
+        initialState: initialState,
+      );
+
+      await tester.pumpCrosswordView(bloc);
+      await tester.pump();
+
+      await tester.enterText(find.byType(TextField), 'answer');
       final iconButton = tester.widget<IconButton>(
         find.ancestor(
           of: find.byIcon(Icons.cancel),
