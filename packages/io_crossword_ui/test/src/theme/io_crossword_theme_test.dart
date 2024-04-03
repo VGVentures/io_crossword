@@ -15,6 +15,41 @@ void main() {
         expect(IoCrosswordTheme().themeData.useMaterial3, isTrue);
       });
 
+      group('OutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme().outlinedButtonThemeData.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(isA<GradientOutlinedBorder>()),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientOutlinedBorder>().having(
+                  (border) => border.gradient,
+                  'Google gradient',
+                  IoCrosswordColors.googleGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
       group('ActionIconThemeData', () {
         final actionIconTheme = IoCrosswordTheme().themeData.actionIconTheme!;
 
