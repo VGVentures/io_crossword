@@ -42,12 +42,12 @@ void main() {
           colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
         );
 
-        final from = GradientStadiumBorder(
+        final gradientBorder = GradientStadiumBorder(
           gradient: gradient,
         ).copyWith(side: BorderSide(width: 4));
 
-        expect(from.side.width, equals(4));
-        expect(from.gradient, equals(gradient));
+        expect(gradientBorder.side.width, equals(4));
+        expect(gradientBorder.gradient, equals(gradient));
       });
 
       test('updates gradient', () {
@@ -55,12 +55,13 @@ void main() {
           colors: [Color(0xFF00FF00), Color(0xFF00FF00)],
         );
 
-        final from = GradientStadiumBorder(
+        final gradientBorder = GradientStadiumBorder(
           gradient: const LinearGradient(colors: []),
-        ).copyWith(side: BorderSide(width: 4), gradient: gradient);
+          side: BorderSide(width: 4),
+        ).copyWith(gradient: gradient);
 
-        expect(from.side.width, equals(4));
-        expect(from.gradient, equals(gradient));
+        expect(gradientBorder.side.width, equals(4));
+        expect(gradientBorder.gradient, equals(gradient));
       });
     });
 
