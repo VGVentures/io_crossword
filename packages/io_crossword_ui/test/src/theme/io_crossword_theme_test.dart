@@ -22,6 +22,13 @@ void main() {
         test('displays StadiumBorder with ${MaterialState.disabled}', () {
           expect(
             outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
             equals(
               isA<GradientOutlinedBorder>().having(
                 (border) => border.gradient,
@@ -29,13 +36,6 @@ void main() {
                 IoCrosswordColors.googleGradient,
               ),
             ),
-          );
-        });
-
-        test('displays GradientOutlinedBorder when there are no states', () {
-          expect(
-            outlinedBorder.resolve({}),
-            equals(isA<GradientOutlinedBorder>()),
           );
         });
 
