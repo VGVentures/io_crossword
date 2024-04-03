@@ -16,9 +16,7 @@ FutureOr<Response> onRequest(RequestContext context) async {
 Future<Response> _onPost(RequestContext context) async {
   final leaderboardRepository = context.read<LeaderboardRepository>();
 
-  // TODO(jaime): get the user from the session once implemented
-  const user = AuthenticatedUser('id');
-  // final user = context.read<AuthenticatedUser>();
+  final user = context.read<AuthenticatedUser>();
 
   final json = await context.request.json() as Map<String, dynamic>;
   final initials = json['initials'] as String?;
