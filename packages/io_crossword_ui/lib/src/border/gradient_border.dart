@@ -29,6 +29,25 @@ class GradientOutlinedBorder extends StadiumBorder {
       ..shader = gradient.createShader(rect);
     canvas.drawRRect(borderRect.inflate(side.strokeOffset / 2), paint);
   }
+
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
+    if (a is GradientOutlinedBorder) {
+      final outline = a;
+      return GradientOutlinedBorder(
+        gradient: Gradient.lerp(
+          LinearGradient(
+            // Fake a gradient with a single color to make a smooth transition
+            colors: [outline.side.color, outline.side.color],
+          ),
+          gradient,
+          t,
+        )!,
+        side: BorderSide.lerp(side, outline.side, t),
+      );
+    }
+    return super.lerpFrom(a, t);
+  }
 }
 
 /// {@template gradient_border}
