@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+import '../../test_tag.dart';
 import '../helpers/helpers.dart';
 
 void main() {
@@ -14,7 +15,10 @@ void main() {
 
       testWidgets(
         'OutlinedButton',
+        tags: TestTag.golden,
         (tester) async {
+          await tester.binding.setSurfaceSize(const Size.square(200));
+
           await tester.pumpApp(
             _GoldenSubject(
               child: OutlinedButton(
