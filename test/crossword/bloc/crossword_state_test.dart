@@ -10,6 +10,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   final String answer;
+
+  @override
+  int? get solvedTimestamp => 1;
 }
 
 void main() {
@@ -280,6 +283,33 @@ void main() {
               word: fakeWord,
             ),
             isA<WordSelection>(),
+          );
+        });
+
+        test('copyWith returns same object', () {
+          final wordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          );
+          expect(
+            wordSelection.copyWith(),
+            equals(wordSelection),
+          );
+        });
+
+        test('copyWith updates solvedStatus', () {
+          final wordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          );
+          final solvedWordSelection = WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+            solvedStatus: SolvedStatus.solved,
+          );
+          expect(
+            wordSelection.copyWith(solvedStatus: SolvedStatus.solved),
+            equals(solvedWordSelection),
           );
         });
 

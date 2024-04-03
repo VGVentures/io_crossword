@@ -14,6 +14,7 @@ class IoCardTheme extends Equatable {
   const IoCardTheme({
     required this.plain,
     required this.highlight,
+    required this.elevated,
   });
 
   /// The style for plain [Card].
@@ -24,14 +25,21 @@ class IoCardTheme extends Equatable {
   /// This is usually used for cards of higher importance.
   final CardTheme highlight;
 
+  /// The style for an elevated [Card].
+  ///
+  /// Elevated [Card]s are usually wrapped with the [IoPhysicalModel] widget,
+  /// to give a sense of elevation.
+  final CardTheme elevated;
+
   /// Linearly interpolate between two [IoCardTheme] themes.
   IoCardTheme lerp(IoCardTheme other, double t) {
     return IoCardTheme(
       plain: CardTheme.lerp(plain, other.plain, t),
       highlight: CardTheme.lerp(highlight, other.highlight, t),
+      elevated: CardTheme.lerp(elevated, other.elevated, t),
     );
   }
 
   @override
-  List<Object?> get props => [plain, highlight];
+  List<Object?> get props => [plain, highlight, elevated];
 }

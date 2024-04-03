@@ -11,17 +11,36 @@ class CrosswordInitial extends CrosswordState {
   List<Object> get props => [];
 }
 
+enum SolvedStatus {
+  solved,
+  pending,
+  invalid,
+}
+
 class WordSelection extends Equatable {
-  const WordSelection({
+  WordSelection({
     required this.section,
     required this.word,
-  });
+    SolvedStatus? solvedStatus,
+  }) : solvedStatus = solvedStatus ??
+            (word.solvedTimestamp != null
+                ? SolvedStatus.solved
+                : SolvedStatus.pending);
 
   final (int, int) section;
   final Word word;
+  final SolvedStatus solvedStatus;
+
+  WordSelection copyWith({SolvedStatus? solvedStatus}) {
+    return WordSelection(
+      section: section,
+      word: word,
+      solvedStatus: solvedStatus ?? this.solvedStatus,
+    );
+  }
 
   @override
-  List<Object> get props => [section, word];
+  List<Object> get props => [section, word, solvedStatus];
 }
 
 class CrosswordLoaded extends CrosswordState {
@@ -32,6 +51,7 @@ class CrosswordLoaded extends CrosswordState {
     this.zoomLimit = 0.35,
     this.mascot = Mascots.dash,
     this.initials = '',
+    this.answer = '',
   });
 
   final int sectionSize;
@@ -40,6 +60,7 @@ class CrosswordLoaded extends CrosswordState {
   final double zoomLimit;
   final Mascots mascot;
   final String initials;
+  final String answer;
 
   CrosswordLoaded copyWith({
     int? sectionSize,
@@ -48,6 +69,7 @@ class CrosswordLoaded extends CrosswordState {
     double? zoomLimit,
     Mascots? mascot,
     String? initials,
+    String? answer,
   }) {
     return CrosswordLoaded(
       sectionSize: sectionSize ?? this.sectionSize,
@@ -56,6 +78,7 @@ class CrosswordLoaded extends CrosswordState {
       zoomLimit: zoomLimit ?? this.zoomLimit,
       mascot: mascot ?? this.mascot,
       initials: initials ?? this.initials,
+      answer: answer ?? this.answer,
     );
   }
 
@@ -77,6 +100,7 @@ class CrosswordLoaded extends CrosswordState {
         zoomLimit,
         mascot,
         initials,
+        answer,
       ];
 }
 

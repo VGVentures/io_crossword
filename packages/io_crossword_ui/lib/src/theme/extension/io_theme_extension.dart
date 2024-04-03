@@ -13,6 +13,7 @@ class IoThemeExtension extends Equatable
     required this.playerAliasTheme,
     required this.iconButtonTheme,
     required this.cardTheme,
+    required this.physicalModel,
   });
 
   /// {@macro io_player_alias_theme}
@@ -24,6 +25,9 @@ class IoThemeExtension extends Equatable
   /// {@macro io_card_theme}
   final IoCardTheme cardTheme;
 
+  /// {@macro io_physical_model_style}
+  final IoPhysicalModelStyle physicalModel;
+
   @override
   Object get type => IoThemeExtension;
 
@@ -32,11 +36,13 @@ class IoThemeExtension extends Equatable
     IoPlayerAliasTheme? playerAliasTheme,
     IoIconButtonTheme? iconButtonTheme,
     IoCardTheme? cardTheme,
+    IoPhysicalModelStyle? physicalModel,
   }) {
     return IoThemeExtension(
       playerAliasTheme: playerAliasTheme ?? this.playerAliasTheme,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
       cardTheme: cardTheme ?? this.cardTheme,
+      physicalModel: physicalModel ?? this.physicalModel,
     );
   }
 
@@ -53,11 +59,17 @@ class IoThemeExtension extends Equatable
       playerAliasTheme: playerAliasTheme.lerp(other.playerAliasTheme, t),
       iconButtonTheme: iconButtonTheme.lerp(other.iconButtonTheme, t),
       cardTheme: cardTheme.lerp(other.cardTheme, t),
+      physicalModel: physicalModel.lerp(other.physicalModel, t),
     );
   }
 
   @override
-  List<Object?> get props => [playerAliasTheme, iconButtonTheme];
+  List<Object?> get props => [
+        playerAliasTheme,
+        iconButtonTheme,
+        cardTheme,
+        physicalModel,
+      ];
 }
 
 /// {@template extended_theme_data}
