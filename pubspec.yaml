@@ -15,19 +15,19 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.15.10
+  cloud_firestore: ^4.16.0
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
-  firebase_app_check: ^0.2.1+18
+  firebase_app_check: ^0.2.2
   firebase_auth: ^4.19.0
-  firebase_core: ^2.27.1
+  firebase_core: ^2.28.0
   flame: ^1.16.0
   flame_audio: ^2.10.1
   flame_behaviors: ^1.0.0
   flame_bloc: ^1.11.1
   flame_test: ^1.16.1
-  flow_builder: ^0.0.10
+  flow_builder: ^0.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
