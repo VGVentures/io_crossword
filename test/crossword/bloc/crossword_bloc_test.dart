@@ -1003,7 +1003,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits state with invalid selected word if api returns false',
+        'emits error state if api call fails',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
