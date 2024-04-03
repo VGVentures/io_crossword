@@ -128,7 +128,7 @@ class SectionKeyboardHandler extends PositionComponent
         ),
       );
     }
-    if (hasMaxLength) {
+    if (word.length == spriteBatchIndex.$2 - spriteBatchIndex.$1) {
       gameRef.bloc.add(AnswerUpdated(word));
     }
     return false;
