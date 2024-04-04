@@ -91,7 +91,8 @@ void main() {
         expect(
           tester
               .widget<IoLinearProgressIndicator>(
-                  find.byType(IoLinearProgressIndicator))
+                find.byType(IoLinearProgressIndicator),
+              )
               .value,
           equals(0),
         );
@@ -114,7 +115,8 @@ void main() {
         expect(
           tester
               .widget<IoLinearProgressIndicator>(
-                  find.byType(IoLinearProgressIndicator))
+                find.byType(IoLinearProgressIndicator),
+              )
               .value,
           equals(0.5),
         );

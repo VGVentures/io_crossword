@@ -28,7 +28,8 @@ void main() {
 
     group('renders as expected', () {
       Uri goldenKey(String name) => Uri.parse(
-          'goldens/io_linear_progress_indicator/io_indicator_$name.png');
+            'goldens/io_linear_progress_indicator/io_indicator_$name.png',
+          );
 
       testWidgets(
         'with half progress',
