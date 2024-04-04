@@ -31,10 +31,25 @@ class IoCrosswordTheme {
       progressIndicatorTheme: _progressIndicatorTheme,
       filledButtonTheme: _filledButtonThemeData,
       outlinedButtonTheme: _outlinedButtonThemeData,
+      segmentedButtonTheme: _segmentedButtonTheme,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  SegmentedButtonThemeData get _segmentedButtonTheme {
+    return SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        side: const BorderSide(
+          color: IoCrosswordColors.mediumGray,
+        ),
+      ).copyWith(
+        iconColor: MaterialStatePropertyAll(
+          colorScheme.primary,
+        ),
+      ),
     );
   }
 
@@ -247,6 +262,7 @@ class IoCrosswordTheme {
       background: IoCrosswordColors.seedBlack,
       surface: IoCrosswordColors.darkGray,
       surfaceTint: IoCrosswordColors.seedWhite,
+      primary: IoCrosswordColors.googleBlue,
     );
   }
 
