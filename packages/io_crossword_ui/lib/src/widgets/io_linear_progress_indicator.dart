@@ -3,7 +3,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template io_linear_progress_indicator}
 /// Linear progress indicator using the [IoColorScheme.primaryGradient].
-///
 /// {@endtemplate}
 class IoLinearProgressIndicator extends StatelessWidget {
   /// {@macro io_linear_progress_indicator}
