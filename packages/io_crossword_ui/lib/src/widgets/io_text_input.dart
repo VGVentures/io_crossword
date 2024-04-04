@@ -86,7 +86,7 @@ class _IoTextInputState extends State<IoTextInput> {
       _submit();
       return;
     }
-    _activate(nextCharacter);
+    _changeCurrentIndex(nextCharacter);
   }
 
   void _previous() {
@@ -94,11 +94,12 @@ class _IoTextInputState extends State<IoTextInput> {
     if (previousCharacter == -1) {
       return;
     }
-    _activate(previousCharacter);
+    _changeCurrentIndex(previousCharacter);
   }
 
-  void _activate(int index) {
-    if (index < 0 || index >= widget.length) {
+  void _changeCurrentIndex(int index) {
+    if ((index < 0 || index >= widget.length) ||
+        index == _currentCharacterIndex) {
       return;
     }
 
@@ -118,7 +119,7 @@ class _IoTextInputState extends State<IoTextInput> {
   @override
   void initState() {
     super.initState();
-    _activate(_currentCharacterIndex);
+    _changeCurrentIndex(_currentCharacterIndex);
     for (final focus in _focusNodes) {
       focus.addListener(() {
         if (focus.hasFocus) _focus();
