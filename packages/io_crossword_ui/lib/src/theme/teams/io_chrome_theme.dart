@@ -5,7 +5,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class IoChromeTheme extends IoCrosswordTheme {
   @override
   ColorScheme get colorScheme => super.colorScheme.copyWith(
-        primary: IoCrosswordColors.seedGrey30,
+        primary: IoCrosswordColors.chromeRed,
       );
 
   @override
