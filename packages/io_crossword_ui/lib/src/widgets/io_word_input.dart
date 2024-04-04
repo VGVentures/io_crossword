@@ -40,11 +40,13 @@ class IoWordInput extends StatefulWidget {
   IoWordInput.alphabetic({
     required int length,
     Map<int, String>? characters,
+    ValueChanged<String>? onWord,
     Key? key,
   }) : this._(
           length: length,
           key: key,
           characters: characters,
+          onWord: onWord,
           characterValidator: (character) =>
               RegExp('[a-zA-Z]').hasMatch(character),
         );
@@ -75,6 +77,22 @@ class IoWordInput extends StatefulWidget {
   final CharacterValidator characterValidator;
 
   /// Callback for when the word has been completed.
+  ///
+  /// If you wish to remove the focus from the input once a word has been
+  /// completed, you can parent the [IoWordInput] with a [Focus] widget and
+  /// call [FocusNode.removeFocus()] in this callback. For example:
+  ///
+  /// ```dart
+  /// Focus(
+  ///     focusNode: _focusNode,
+  ///     child: IoWordInput.alphabetic(
+  ///       length: 5,
+  ///       onWord: (value) {
+  ///         _focusNode.unfocus();
+  ///       },
+  ///     ),
+  ///   );
+  /// ),
   final ValueChanged<String>? onWord;
 
   /// The character that represents an empty character field.
@@ -122,10 +140,7 @@ class _IoWordInputState extends State<IoWordInput> {
     if (newValue.isEmpty) {
       _activeController?.text = IoWordInput._emptyCharacter;
       _previous();
-
-      setState(() {
-        // Update the styles.
-      });
+      setState(() {});
       return;
     }
 
@@ -134,10 +149,7 @@ class _IoWordInputState extends State<IoWordInput> {
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
     _next();
-
-    setState(() {
-      // Update the styles.
-    });
+    setState(() {});
   }
 
   /// Changes the current character field that is being inputted, to the
@@ -218,22 +230,28 @@ class _IoWordInputState extends State<IoWordInput> {
       }
     }
 
-    for (final focus in _focusNodes.values) {
-      focus.addListener(() {
-        if (focus.hasFocus) _focus();
-        setState(() {
-          // Update the styles.
-        });
-      });
+    for (final focusNode in _focusNodes.values) {
+      focusNode.addListener(() => _onFocusChanged(focusNode));
     }
 
     _next();
   }
 
+  void _onFocusChanged(FocusNode focusNode) {
+    if (focusNode.hasFocus) _focus();
+    focusNode.parent;
+    setState(() {
+      // Styling depends on focus, update it.
+    });
+  }
+
   @override
   void didUpdateWidget(covariant IoWordInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // TODO(alestiago): Handle this.
+    // TODO(alestiago): Updating the widget does nothing yet, since the current
+    // implementation is the first iteration. This will be updated in the
+    // future, as soon as the following is resolved:
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
   }
 
   @override
