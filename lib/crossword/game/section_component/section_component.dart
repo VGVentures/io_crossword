@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -12,178 +13,23 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
 
-class SectionTapController extends PositionComponent
-    with ParentIsA<SectionComponent>, TapCallbacks, HasGameRef<CrosswordGame> {
-  SectionTapController({
-    super.position,
-    super.size,
-  });
+part 'section_debug.dart';
+part 'section_keyboard_handler.dart';
+part 'section_tap_controller.dart';
+
+class WordBatchPosition extends Equatable {
+  const WordBatchPosition(this.startIndex, this.endIndex);
+
+  // Index of the sprite of the first letter of a word
+  final int startIndex;
+
+  // Index of the sprite of the last letter of a word
+  final int endIndex;
+
+  int get length => endIndex - startIndex;
 
   @override
-  void onTapUp(TapUpEvent event) {
-    final boardSection = parent._boardSection;
-
-    if (boardSection != null) {
-      final absolutePosition =
-          boardSection.position * CrosswordGame.cellSize * boardSection.size;
-      final localPosition = event.localPosition +
-          Vector2(
-            absolutePosition.x.toDouble(),
-            absolutePosition.y.toDouble(),
-          );
-
-      for (final word in [...boardSection.words, ...boardSection.borderWords]) {
-        final wordRect = Rect.fromLTWH(
-          (word.position.x * CrosswordGame.cellSize).toDouble(),
-          (word.position.y * CrosswordGame.cellSize).toDouble(),
-          word.width.toDouble(),
-          word.height.toDouble(),
-        );
-
-        if (wordRect.contains(localPosition.toOffset())) {
-          final newCameraPosition = Vector2(
-            wordRect.left + wordRect.width / 2,
-            wordRect.top + wordRect.height / 2,
-          );
-
-          gameRef.camera.viewfinder.add(
-            MoveEffect.to(
-              newCameraPosition,
-              CurvedEffectController(
-                .8,
-                Curves.easeInOut,
-              ),
-              onComplete: () {
-                parent.gameRef.bloc.add(
-                  WordSelected(parent.index, word),
-                );
-              },
-            ),
-          );
-
-          while (!gameRef.camera.visibleWorldRect.contains(wordRect.topLeft) ||
-              !gameRef.camera.visibleWorldRect.contains(wordRect.bottomRight)) {
-            gameRef.camera.viewfinder.zoom -= 0.05;
-          }
-          break;
-        }
-      }
-    }
-  }
-}
-
-class SectionKeyboardHandler extends PositionComponent
-    with
-        KeyboardHandler,
-        HasGameRef<CrosswordGame>,
-        ParentIsA<SectionComponent> {
-  SectionKeyboardHandler(
-    this.index, {
-    super.position,
-  });
-
-  final (String, Color, (int, int)) index;
-  String word = '';
-
-  @override
-  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
-
-    final spriteBatchIndex = index.$3;
-    final hasMaxLength =
-        word.length == spriteBatchIndex.$2 - spriteBatchIndex.$1;
-
-    if (event.character != null && !hasMaxLength) {
-      word += event.character!;
-    }
-
-    var backspacePressed = false;
-    if (event.logicalKey == LogicalKeyboardKey.backspace && word.isNotEmpty) {
-      word = word.substring(0, word.length - 1);
-      backspacePressed = true;
-    }
-
-    final wordCharacters = word.toUpperCase().characters;
-
-    for (var c = 0; c < wordCharacters.length; c++) {
-      final mascot = gameRef.state.mascot;
-      final rect = wordCharacters.getCharacterRectangle(c, mascot);
-
-      if (rect !=
-          parent.spriteBatchComponent?.spriteBatch?.sources
-              .elementAt(spriteBatchIndex.$1 + c)) {
-        parent.spriteBatchComponent?.spriteBatch?.replace(
-          spriteBatchIndex.$1 + c,
-          source: rect,
-        );
-      }
-    }
-    if (backspacePressed) {
-      parent.spriteBatchComponent?.spriteBatch?.replace(
-        spriteBatchIndex.$1 + wordCharacters.length,
-        source: Rect.fromLTWH(
-          2080,
-          0,
-          CrosswordGame.cellSize.toDouble(),
-          CrosswordGame.cellSize.toDouble(),
-        ),
-      );
-    }
-    if (word.length == spriteBatchIndex.$2 - spriteBatchIndex.$1) {
-      gameRef.bloc.add(AnswerUpdated(word));
-    }
-    return false;
-  }
-
-  void resetAndRemove() {
-    for (var c = index.$3.$1; c < index.$3.$2; c++) {
-      parent.spriteBatchComponent?.spriteBatch?.replace(
-        c,
-        source: Rect.fromLTWH(
-          2080,
-          0,
-          CrosswordGame.cellSize.toDouble(),
-          CrosswordGame.cellSize.toDouble(),
-        ),
-      );
-    }
-    removeFromParent();
-  }
-}
-
-class SectionDebugOutline extends RectangleComponent
-    with ParentIsA<SectionComponent> {
-  SectionDebugOutline({
-    required Vector2 position,
-    required Vector2 size,
-    super.priority,
-  }) : super(
-          position: position,
-          size: size,
-          paint: Paint()
-            ..color = Colors.pink
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 2,
-        );
-}
-
-class SectionDebugIndex extends TextComponent
-    with ParentIsA<SectionComponent>, HasGameRef<CrosswordGame> {
-  SectionDebugIndex({
-    required Vector2 position,
-    required (int, int) index,
-    super.priority,
-  }) : super(
-          position: position,
-          text: '(${index.$1}, ${index.$2})',
-          textRenderer: TextPaint(
-            style: const TextStyle(
-              color: Colors.pink,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
+  List<Object?> get props => [startIndex, endIndex];
 }
 
 class SectionComponent extends Component with HasGameRef<CrosswordGame> {
@@ -195,7 +41,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   final (int, int) index;
 
   SpriteBatchComponent? spriteBatchComponent;
-  late Map<String, (int, int)> _wordIndex;
+  late Map<String, WordBatchPosition> _wordIndex;
   late final StreamSubscription<CrosswordState> _subscription;
 
   BoardSection? _boardSection;
@@ -356,7 +202,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         );
       }
       final wordIndexEnd = spriteBatch.length;
-      _wordIndex[word.id] = (wordIndexStart, wordIndexEnd);
+      _wordIndex[word.id] = WordBatchPosition(wordIndexStart, wordIndexEnd);
     }
 
     add(
@@ -373,7 +219,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     (int, int)? previousSection,
     (int, int)? newSection,
   }) {
-    final indexes = <(String, Color, (int, int))>[];
+    final indexes = <(String, Color, WordBatchPosition)>[];
     if (previousSection == index &&
         previousWord != null &&
         _wordIndex.containsKey(previousWord)) {
@@ -402,7 +248,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     }
 
     for (final index in indexes) {
-      for (var i = index.$3.$1; i < index.$3.$2; i++) {
+      for (var i = index.$3.startIndex; i < index.$3.endIndex; i++) {
         spriteBatchComponent?.spriteBatch?.replace(
           i,
           color: index.$2,

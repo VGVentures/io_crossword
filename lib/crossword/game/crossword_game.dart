@@ -133,18 +133,18 @@ class CrosswordGame extends FlameGame
 
     if (sectionsToRemove.isNotEmpty) {
       for (final sectionIndex in sectionsToRemove) {
-        findByKeyName('section-$sectionIndex')?.removeFromParent();
+        findByKeyName('section_component-$sectionIndex')?.removeFromParent();
       }
     }
 
     if (sectionsToAdd.isNotEmpty) {
       for (final sectionIndex in sectionsToAdd) {
-        if (findByKeyName('section-$sectionIndex') != null) {
+        if (findByKeyName('section_component-$sectionIndex') != null) {
           continue;
         }
         world.add(
           SectionComponent(
-            key: ComponentKey.named('section-$sectionIndex'),
+            key: ComponentKey.named('section_component-$sectionIndex'),
             index: (
               sectionIndex.$1.toInt(),
               sectionIndex.$2.toInt(),
