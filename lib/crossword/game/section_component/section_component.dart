@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -17,7 +16,7 @@ part 'section_debug.dart';
 part 'section_keyboard_handler.dart';
 part 'section_tap_controller.dart';
 
-class WordBatchPosition extends Equatable {
+class WordBatchPosition {
   const WordBatchPosition(this.startIndex, this.endIndex);
 
   // Index of the sprite of the first letter of a word
@@ -27,9 +26,6 @@ class WordBatchPosition extends Equatable {
   final int endIndex;
 
   int get length => endIndex - startIndex;
-
-  @override
-  List<Object?> get props => [startIndex, endIndex];
 }
 
 class SectionComponent extends Component with HasGameRef<CrosswordGame> {

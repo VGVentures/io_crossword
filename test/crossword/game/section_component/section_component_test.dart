@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'dart:ui' as ui;
 
@@ -21,25 +23,36 @@ class FakeImage extends Fake implements ui.Image {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  const sectionSize = 400;
+
   group('SectionComponent', () {
     late CrosswordBloc bloc;
-
-    void mockState(CrosswordState state) {
-      whenListen(
-        bloc,
-        Stream.value(state),
-        initialState: state,
-      );
-    }
+    late StreamController<CrosswordState> stateStreamController;
+    final defaultState = CrosswordLoaded(
+      sectionSize: sectionSize,
+    );
 
     setUp(() {
       bloc = _MockCrosswordBloc();
-
-      const state = CrosswordLoaded(
-        sectionSize: 400,
+      stateStreamController = StreamController<CrosswordState>.broadcast();
+      whenListen(
+        bloc,
+        stateStreamController.stream,
+        initialState: defaultState,
       );
-      mockState(state);
     });
+
+    void setUpStreamController({CrosswordState? state}) {
+      whenListen(
+        bloc,
+        stateStreamController.stream,
+        initialState: state ?? defaultState,
+      );
+    }
+
+    void setUpInitialState(CrosswordState state) {
+      when(() => bloc.state).thenReturn(state);
+    }
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
           bloc,
@@ -61,6 +74,68 @@ void main() {
     );
 
     testWithGame(
+      'reloads if section in state is different',
+      createGame,
+      (game) async {
+        final word = Word(
+          position: const Point(0, 0),
+          axis: Axis.vertical,
+          answer: 'Flutter',
+          clue: '',
+          solvedTimestamp: null,
+        );
+        setUpStreamController(
+          state: CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {
+              (100, 100): BoardSection(
+                id: '',
+                position: const Point(100, 100),
+                size: sectionSize,
+                words: [word],
+                borderWords: const [],
+              ),
+            },
+          ),
+        );
+        final section = SectionComponent(index: (100, 100));
+        await game.world.ensureAdd(section);
+
+        final initialSection =
+            game.world.children.whereType<SectionComponent>().where(
+                  (element) => element.index == (100, 100),
+                );
+        expect(initialSection, hasLength(1));
+        final initialSprites = initialSection.first.spriteBatchComponent;
+
+        stateStreamController.add(
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {
+              (100, 100): BoardSection(
+                id: '',
+                position: const Point(100, 100),
+                size: sectionSize,
+                words: [word.copyWith(solvedTimestamp: 1)],
+                borderWords: const [],
+              ),
+            },
+          ),
+        );
+
+        await game.ready();
+        final finalSection =
+            game.world.children.whereType<SectionComponent>().where(
+                  (element) => element.index == (100, 100),
+                );
+        expect(
+          initialSprites,
+          isNot(finalSection.first.spriteBatchComponent),
+        );
+      },
+    );
+
+    testWithGame(
       'adds debug components when the game is showing debug overlay',
       () => createGame(showDebugOverlay: true),
       (game) async {
@@ -76,14 +151,14 @@ void main() {
       'automatically build the words when the section is already loaded',
       createGame,
       (game) async {
-        mockState(
+        setUpInitialState(
           CrosswordLoaded(
-            sectionSize: 400,
+            sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
                 id: '',
                 position: const Point(100, 100),
-                size: 400,
+                size: sectionSize,
                 words: [
                   Word(
                     position: const Point(0, 0),
@@ -105,6 +180,7 @@ void main() {
             },
           ),
         );
+
         final component = SectionComponent(index: (100, 100));
         await game.world.ensureAdd(component);
 
@@ -124,14 +200,14 @@ void main() {
       ' contains word with resolveTimestamp not null',
       createGame,
       (game) async {
-        mockState(
+        setUpInitialState(
           CrosswordLoaded(
-            sectionSize: 400,
+            sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
                 id: '',
                 position: const Point(100, 100),
-                size: 400,
+                size: sectionSize,
                 words: [
                   Word(
                     position: const Point(0, 0),
@@ -176,27 +252,21 @@ void main() {
       'section is present',
       createGame,
       (game) async {
-        final streamController = StreamController<CrosswordState>.broadcast();
-        when(() => bloc.stream).thenAnswer((_) => streamController.stream);
-        when(() => bloc.state).thenReturn(
-          const CrosswordLoaded(
-            sectionSize: 400,
-          ),
-        );
+        setUpStreamController();
         final component = SectionComponent(index: (100, 100));
         await game.world.ensureAdd(component);
 
         var spriteBatchComponent = component.firstChild<SpriteBatchComponent>();
 
         expect(spriteBatchComponent, isNull);
-        streamController.add(
+        stateStreamController.add(
           CrosswordLoaded(
-            sectionSize: 400,
+            sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
                 id: '',
                 position: const Point(100, 100),
-                size: 400,
+                size: sectionSize,
                 words: [
                   Word(
                     position: const Point(0, 0),

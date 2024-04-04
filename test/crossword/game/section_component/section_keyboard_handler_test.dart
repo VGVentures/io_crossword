@@ -27,24 +27,8 @@ void main() {
       },
     );
 
-    void mockState(CrosswordState state) {
-      whenListen(
-        bloc,
-        Stream.value(state),
-        initialState: state,
-      );
-    }
-
     setUp(() {
       bloc = _MockCrosswordBloc();
-
-      final state = CrosswordLoaded(
-        sectionSize: sectionSize,
-      );
-      mockState(state);
-    });
-
-    setUp(() {
       stateController = StreamController<CrosswordState>.broadcast();
       whenListen(
         bloc,
@@ -82,7 +66,6 @@ void main() {
           ),
         );
 
-        await Future.microtask(() {});
         await game.ready();
         final listeners =
             targetSection.children.whereType<SectionKeyboardHandler>();
@@ -125,7 +108,6 @@ void main() {
           ),
         );
 
-        await Future.microtask(() {});
         await game.ready();
         final listeners =
             targetSection.children.whereType<SectionKeyboardHandler>();
@@ -179,7 +161,6 @@ void main() {
           ),
         );
 
-        await Future.microtask(() {});
         await game.ready();
         final listeners =
             targetSection.children.whereType<SectionKeyboardHandler>();
