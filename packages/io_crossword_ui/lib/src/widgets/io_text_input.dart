@@ -49,6 +49,8 @@ class IoTextInput extends StatefulWidget {
 class _IoTextInputState extends State<IoTextInput> {
   var _currentCharacterIndex = 0;
 
+  final _focusNode = FocusNode();
+
   late final _focusNodes = List.generate(widget.length, (_) => FocusNode());
 
   late final _controllers = List.generate(
@@ -101,13 +103,14 @@ class _IoTextInputState extends State<IoTextInput> {
     }
 
     _currentCharacterIndex = index;
+    _focus();
+  }
 
-    final focusNode = _focusNodes[index]
-      ..canRequestFocus = true
-      ..requestFocus();
-    _focusNodes
-        .where((f) => f != focusNode)
-        .forEach((f) => f.canRequestFocus = false);
+  void _focus() {
+    final focusNode = _focusNodes[_currentCharacterIndex];
+    if (!focusNode.hasFocus) {
+      focusNode.requestFocus();
+    }
   }
 
   void _submit() {}
@@ -116,10 +119,16 @@ class _IoTextInputState extends State<IoTextInput> {
   void initState() {
     super.initState();
     _activate(_currentCharacterIndex);
+    for (final focus in _focusNodes) {
+      focus.addListener(() {
+        if (focus.hasFocus) _focus();
+      });
+    }
   }
 
   @override
   void dispose() {
+    _focusNode.dispose();
     for (final controller in _controllers) {
       controller.dispose();
     }
