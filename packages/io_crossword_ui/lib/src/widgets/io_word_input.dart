@@ -344,7 +344,7 @@ class _CharacterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(
-      dimension: 50,
+      dimension: 48.61,
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: style.borderRadius,
