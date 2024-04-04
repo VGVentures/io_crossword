@@ -11,6 +11,8 @@ class _MockIoWordInputCharacterFieldStyle extends Mock
 void main() {
   group('$IoWordInput', () {
     testWidgets('renders successfully', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 150));
+
       await tester.pumpWidget(
         _Subject(child: IoWordInput.alphabetic(length: 5)),
       );
@@ -21,6 +23,8 @@ void main() {
       'onWord gets called as words are filled',
       tags: TestTag.golden,
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(500, 150));
+
         final words = <String>[];
         await tester.pumpWidget(
           _Subject(
