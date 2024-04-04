@@ -74,8 +74,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   }) {
     final sections = state.sections;
 
-    // TODO(Ayad): If it fails because the section_component is not loaded we
-    // should fetch the section_component
+    // TODO(Ayad): If it fails because the section is not loaded we
+    // should fetch the section
     if (sections[section]!.words.contains(word)) {
       return section;
     }

@@ -141,7 +141,7 @@ void main() {
       });
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word in the current section_component',
+        'selects a word in the current section',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -181,7 +181,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the border section_component in the horizontal axis',
+        'selects a word from the border section in the horizontal axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
@@ -238,7 +238,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the border section_component in the vertical axis',
+        'selects a word from the border section in the vertical axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.vertical);
         },
@@ -439,7 +439,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the previous section_component '
+        'selects a word from the previous section '
         'in the negative horizontal axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.horizontal);
@@ -497,7 +497,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'selects a word from the previous section_component '
+        'selects a word from the previous section '
         'in the negative vertical axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.vertical);
@@ -556,7 +556,7 @@ void main() {
 
       blocTest<CrosswordBloc, CrosswordState>(
         'throws exception when does not find the selected word from more than '
-        'or equal to three previous section_component in the horizontal axis',
+        'or equal to three previous section in the horizontal axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.horizontal);
         },
@@ -610,7 +610,7 @@ void main() {
 
       blocTest<CrosswordBloc, CrosswordState>(
         'throws exception when does not find the selected word from more than '
-        'or equal to three previous section_component in the vertical axis',
+        'or equal to three previous section in the vertical axis',
         setUp: () {
           when(() => word.axis).thenReturn(Axis.vertical);
         },
@@ -712,7 +712,7 @@ void main() {
       final originSection = section.copyWith(position: Point(0, 0));
       blocTest<CrosswordBloc, CrosswordState>(
         'emits crossword loaded state with the size and render limits info when'
-        ' state is not CrosswordLoaded and requests section_component (0, 0)',
+        ' state is not CrosswordLoaded and requests section (0, 0)',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
