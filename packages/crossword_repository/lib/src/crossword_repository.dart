@@ -51,7 +51,7 @@ class CrosswordRepository {
 
     const batchSize = 20;
 
-    // Get batches of 20 random sections until finding one with empty word
+    // Get batches of 20 random sections until finding one with unsolved word
     for (var index = 0; index < positions.length; index += batchSize) {
       var endIndex = index + batchSize;
       if (endIndex > positions.length) {
