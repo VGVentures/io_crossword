@@ -119,6 +119,8 @@ class _IoTextInputState extends State<IoTextInput> {
       return;
     }
 
+    // The new characters will always be at the end, since the selection is
+    // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
     _next();
