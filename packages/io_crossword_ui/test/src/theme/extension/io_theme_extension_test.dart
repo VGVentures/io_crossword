@@ -11,7 +11,7 @@ class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
 class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
 
-class _MockIoTextInputStyle extends Mock implements IoTextInputStyle {}
+class _MockIoWordInputStyle extends Mock implements IoWordInputStyle {}
 
 void main() {
   group('$IoThemeExtension', () {
@@ -22,7 +22,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          textInput: _MockIoTextInputStyle(),
+          wordInput: _MockIoWordInputStyle(),
         );
 
         final newTheme = theme.copyWith();
@@ -36,7 +36,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          textInput: _MockIoTextInputStyle(),
+          wordInput: _MockIoWordInputStyle(),
         );
 
         final newTheme = theme.copyWith(
@@ -54,7 +54,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          textInput: _MockIoTextInputStyle(),
+          wordInput: _MockIoWordInputStyle(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -68,7 +68,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          textInput: _MockIoTextInputStyle(),
+          wordInput: _MockIoWordInputStyle(),
         );
 
         when(
@@ -84,8 +84,8 @@ void main() {
           () => theme.physicalModel.lerp(theme.physicalModel, 0.5),
         ).thenReturn(_MockIoPhysicalModelStyle());
         when(
-          () => theme.textInput.lerp(theme.textInput, 0.5),
-        ).thenReturn(_MockIoTextInputStyle());
+          () => theme.wordInput.lerp(theme.wordInput, 0.5),
+        ).thenReturn(_MockIoWordInputStyle());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -119,7 +119,7 @@ void main() {
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
               physicalModel: _MockIoPhysicalModelStyle(),
-              textInput: _MockIoTextInputStyle(),
+              wordInput: _MockIoWordInputStyle(),
             ),
           ],
         );

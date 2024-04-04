@@ -15,15 +15,15 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// {@endtemplate}
 typedef CharacterValidator = bool Function(String character);
 
-/// {@template io_text_input}
+/// {@template io_word_input}
 /// An IO styled text input that accepts a fixed number of characters.
 ///
 /// The input can be configured to only accept certain characters, and some
 /// characters can be fixed and not editable.
 /// {@endtemplate}
-class IoTextInput extends StatefulWidget {
-  /// {@macro io_text_input}
-  IoTextInput._({
+class IoWordInput extends StatefulWidget {
+  /// {@macro io_word_input}
+  IoWordInput._({
     required this.length,
     required this.characterValidator,
     this.onWord,
@@ -36,8 +36,8 @@ class IoTextInput extends StatefulWidget {
               )
             : null;
 
-  /// Creates an [IoTextInput] that only accepts alphabetic characters.
-  IoTextInput.alphabetic({
+  /// Creates an [IoWordInput] that only accepts alphabetic characters.
+  IoWordInput.alphabetic({
     required int length,
     Map<int, String>? characters,
     Key? key,
@@ -81,15 +81,15 @@ class IoTextInput extends StatefulWidget {
   static const _emptyCharacter = '_';
 
   @override
-  State<IoTextInput> createState() => _IoTextInputState();
+  State<IoWordInput> createState() => _IoWordInputState();
 }
 
-class _IoTextInputState extends State<IoTextInput> {
+class _IoWordInputState extends State<IoWordInput> {
   /// The current character that is being inputted.
   ///
   /// Will be `null` if there is no available character field to input. This
-  /// happens when [IoTextInput.characters] is has the same length as
-  /// [IoTextInput.length]. In other words, when there is no available character
+  /// happens when [IoWordInput.characters] is has the same length as
+  /// [IoWordInput.length]. In other words, when there is no available character
   /// field to input since they are all fixed.
   int? _currentCharacterIndex;
 
@@ -109,7 +109,7 @@ class _IoTextInputState extends State<IoTextInput> {
   String get _word {
     final characters = _controllers.entries
         .map((e) => e.value.text)
-        .where((c) => c != IoTextInput._emptyCharacter);
+        .where((c) => c != IoWordInput._emptyCharacter);
     return characters.join();
   }
 
@@ -120,7 +120,7 @@ class _IoTextInputState extends State<IoTextInput> {
         .join();
 
     if (newValue.isEmpty) {
-      _activeController?.text = IoTextInput._emptyCharacter;
+      _activeController?.text = IoWordInput._emptyCharacter;
       _previous();
 
       setState(() {
@@ -180,7 +180,7 @@ class _IoTextInputState extends State<IoTextInput> {
   /// Additionally, if the [index] is invalid, then the current character field
   /// will not be updated. An invalid [index] is one that is not within the
   /// range of the input length or one that is fixed by
-  /// [IoTextInput.characters].
+  /// [IoWordInput.characters].
   void _updateCurrentIndex(int index) {
     final isWithinRange = index < 0 || index >= widget.length;
     final isFixed =
@@ -210,7 +210,7 @@ class _IoTextInputState extends State<IoTextInput> {
       if (widget.characters == null || !widget.characters!.containsKey(i)) {
         _focusNodes[i] = FocusNode();
         _controllers[i] =
-            TextEditingController(text: IoTextInput._emptyCharacter);
+            TextEditingController(text: IoWordInput._emptyCharacter);
       }
     }
 
@@ -227,7 +227,7 @@ class _IoTextInputState extends State<IoTextInput> {
   }
 
   @override
-  void didUpdateWidget(covariant IoTextInput oldWidget) {
+  void didUpdateWidget(covariant IoWordInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     // TODO(alestiago): Handle this.
   }
@@ -245,7 +245,7 @@ class _IoTextInputState extends State<IoTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    final textInputStyle = Theme.of(context).io.textInput;
+    final textInputStyle = Theme.of(context).io.wordInput;
 
     final characters = <Widget>[];
     for (var i = 0; i < widget.length; i++) {
@@ -253,12 +253,12 @@ class _IoTextInputState extends State<IoTextInput> {
       final controller = _controllers[i];
       final readOnly = !(focusNode != null && controller != null);
 
-      late final IoTextInputCharacterFieldStyle style;
+      late final IoWordInputCharacterFieldStyle style;
       if (readOnly) {
         style = textInputStyle.disabled;
       } else if (focusNode.hasFocus) {
         style = textInputStyle.focused;
-      } else if (controller.text == IoTextInput._emptyCharacter) {
+      } else if (controller.text == IoWordInput._emptyCharacter) {
         style = textInputStyle.empty;
       } else {
         style = textInputStyle.filled;
@@ -311,8 +311,8 @@ class _CharacterField extends StatelessWidget {
     required this.child,
   });
 
-  /// {@macro io_text_input_character_field_style}
-  final IoTextInputCharacterFieldStyle style;
+  /// {@macro io_word_input_character_field_style}
+  final IoWordInputCharacterFieldStyle style;
 
   /// The child widget.
   ///
@@ -335,12 +335,12 @@ class _CharacterField extends StatelessWidget {
   }
 }
 
-/// {@template io_text_input_style}
-/// The style of the [IoTextInput].
+/// {@template io_word_input_style}
+/// The style of the [IoWordInput].
 /// {@endtemplate}
-class IoTextInputStyle extends Equatable {
-  /// {@macro io_text_input_style}
-  const IoTextInputStyle({
+class IoWordInputStyle extends Equatable {
+  /// {@macro io_word_input_style}
+  const IoWordInputStyle({
     required this.padding,
     required this.empty,
     required this.filled,
@@ -352,26 +352,26 @@ class IoTextInputStyle extends Equatable {
   final EdgeInsets padding;
 
   /// The style of an empty character field.
-  final IoTextInputCharacterFieldStyle empty;
+  final IoWordInputCharacterFieldStyle empty;
 
   /// The style of the filled character field.
   ///
   /// A filled character field is the one that has a value.
-  final IoTextInputCharacterFieldStyle filled;
+  final IoWordInputCharacterFieldStyle filled;
 
   /// The style of the focused character field.
   ///
   /// A focused character field is the one that is currently being inputted.
-  final IoTextInputCharacterFieldStyle focused;
+  final IoWordInputCharacterFieldStyle focused;
 
   /// The style of the disabled character field.
   ///
   /// A disabled character field is the one that is not available for input.
-  final IoTextInputCharacterFieldStyle disabled;
+  final IoWordInputCharacterFieldStyle disabled;
 
-  /// Linearly interpolate between two [IoTextInputStyle].
-  IoTextInputStyle lerp(IoTextInputStyle other, double t) {
-    return IoTextInputStyle(
+  /// Linearly interpolate between two [IoWordInputStyle].
+  IoWordInputStyle lerp(IoWordInputStyle other, double t) {
+    return IoWordInputStyle(
       padding: EdgeInsets.lerp(padding, other.padding, t)!,
       empty: empty.lerp(other.empty, t),
       filled: filled.lerp(other.filled, t),
@@ -390,12 +390,12 @@ class IoTextInputStyle extends Equatable {
       ];
 }
 
-/// {@template io_text_input_character_field_style}
-/// The style of a character field in the [IoTextInput].
+/// {@template io_word_input_character_field_style}
+/// The style of a character field in the [IoWordInput].
 /// {@endtemplate}
-class IoTextInputCharacterFieldStyle extends Equatable {
-  /// {@macro io_text_input_character_field_style}
-  const IoTextInputCharacterFieldStyle({
+class IoWordInputCharacterFieldStyle extends Equatable {
+  /// {@macro io_word_input_character_field_style}
+  const IoWordInputCharacterFieldStyle({
     required this.backgroundColor,
     required this.border,
     required this.borderRadius,
@@ -414,12 +414,12 @@ class IoTextInputCharacterFieldStyle extends Equatable {
   /// The text style of the character field.
   final TextStyle textStyle;
 
-  /// Linearly interpolate between two [IoTextInputCharacterFieldStyle].
-  IoTextInputCharacterFieldStyle lerp(
-    IoTextInputCharacterFieldStyle other,
+  /// Linearly interpolate between two [IoWordInputCharacterFieldStyle].
+  IoWordInputCharacterFieldStyle lerp(
+    IoWordInputCharacterFieldStyle other,
     double t,
   ) {
-    return IoTextInputCharacterFieldStyle(
+    return IoWordInputCharacterFieldStyle(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
       border: Border.lerp(border, other.border, t)!,
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,

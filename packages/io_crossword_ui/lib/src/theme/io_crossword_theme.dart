@@ -17,7 +17,7 @@ class IoCrosswordTheme {
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
-      textInput: _textInput,
+      wordInput: _textInput,
     );
 
     return ThemeData(
@@ -36,7 +36,7 @@ class IoCrosswordTheme {
     );
   }
 
-  IoTextInputStyle get _textInput {
+  IoWordInputStyle get _textInput {
     final colorScheme = this.colorScheme;
 
     const textStyle = TextStyle(
@@ -47,9 +47,9 @@ class IoCrosswordTheme {
       package: IoCrosswordTextStyles.package,
     );
 
-    return IoTextInputStyle(
+    return IoWordInputStyle(
       padding: const EdgeInsets.symmetric(horizontal: 1.8),
-      empty: IoTextInputCharacterFieldStyle(
+      empty: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
         border: Border.all(
           width: 1.8,
@@ -58,7 +58,7 @@ class IoCrosswordTheme {
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
       ),
-      filled: IoTextInputCharacterFieldStyle(
+      filled: IoWordInputCharacterFieldStyle(
         backgroundColor: IoCrosswordColors.seedWhite,
         border: Border.all(
           width: 1.8,
@@ -69,7 +69,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.black,
         ),
       ),
-      focused: IoTextInputCharacterFieldStyle(
+      focused: IoWordInputCharacterFieldStyle(
         backgroundColor: IoCrosswordColors.redError,
         border: Border.all(
           width: 1.8,
@@ -78,7 +78,7 @@ class IoCrosswordTheme {
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
       ),
-      disabled: IoTextInputCharacterFieldStyle(
+      disabled: IoWordInputCharacterFieldStyle(
         backgroundColor: IoCrosswordColors.seedWhite,
         border: Border.all(width: 0),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
