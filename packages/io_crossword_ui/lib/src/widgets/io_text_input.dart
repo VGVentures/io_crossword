@@ -103,6 +103,8 @@ class _IoTextInputState extends State<IoTextInput> {
 
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
+    // FIXME(alestiago): Be cautious with the selection, since if focused
+    // before the first character, then the selection will be at the start.
     final newValue = (value.split('')
           ..removeWhere((c) => !widget.characterValidator(c)))
         .join();
