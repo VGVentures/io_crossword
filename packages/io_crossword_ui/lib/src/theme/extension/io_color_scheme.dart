@@ -11,7 +11,7 @@ class IoColorScheme extends Equatable {
   /// The main gradient of the color scheme.
   final Gradient primaryGradient;
 
-  /// Linearly interpolate between two color schemes.
+  /// Linearly interpolate between two [IoColorScheme]s.
   IoColorScheme lerp(IoColorScheme other, double t) {
     return IoColorScheme(
       primaryGradient:
