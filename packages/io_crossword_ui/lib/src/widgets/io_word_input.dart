@@ -150,7 +150,11 @@ class _IoWordInputState extends State<IoWordInput> {
         .where((e) => e.key > (_currentCharacterIndex ?? -1))
         .map((e) => e.key);
 
-    if (nextFields.isEmpty) return;
+    if (nextFields.isEmpty) {
+      widget.onWord?.call(_word);
+      return;
+    }
+
     _updateCurrentIndex(nextFields.first);
   }
 
