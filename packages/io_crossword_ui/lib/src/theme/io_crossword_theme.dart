@@ -46,10 +46,10 @@ class IoCrosswordTheme {
   }
 
   IoPhysicalModelStyle get _physicalModel {
-    // TODO(alestiago): Update gradient from new design system when available:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6365241057
+    final ioColorScheme = this.ioColorScheme;
+
     return IoPhysicalModelStyle(
-      gradient: IoCrosswordColors.googleGradient,
+      gradient: ioColorScheme.primaryGradient,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       border: Border.all(color: IoCrosswordColors.black),
       elevation: 4,
