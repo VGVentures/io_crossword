@@ -15,6 +15,88 @@ void main() {
         expect(IoCrosswordTheme().themeData.useMaterial3, isTrue);
       });
 
+      group('OutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme().outlinedButtonThemeData.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<GradientStadiumBorder>().having(
+                (border) => border.gradient,
+                'Google gradient',
+                IoCrosswordColors.googleGradient,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientStadiumBorder>().having(
+                  (border) => border.gradient,
+                  'Google gradient',
+                  IoCrosswordColors.googleGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
+      group('geminiOutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme.geminiOutlinedButtonThemeData.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<GradientStadiumBorder>().having(
+                (border) => border.gradient,
+                'Gemini gradient',
+                IoCrosswordColors.geminiGradient,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientStadiumBorder>().having(
+                  (border) => border.gradient,
+                  'Gemini gradient',
+                  IoCrosswordColors.geminiGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
       group('ActionIconThemeData', () {
         final actionIconTheme = IoCrosswordTheme().themeData.actionIconTheme!;
 

@@ -34,4 +34,24 @@ void main() {
       expect(find.byIcon(Icons.send), findsOneWidget);
     });
   });
+
+  group('$GeminiHintButton', () {
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
+
+    testWidgets('displays hint text', (tester) async {
+      await tester.pumpApp(GeminiHintButton());
+
+      expect(find.text(l10n.hint), findsOneWidget);
+    });
+
+    testWidgets('displays gemini icon', (tester) async {
+      await tester.pumpApp(GeminiHintButton());
+
+      expect(find.byIcon(IoIcons.gemini), findsOneWidget);
+    });
+  });
 }

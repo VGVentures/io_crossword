@@ -52,6 +52,10 @@
   "@getHint": {
     "description": "Get hint label"
   },
+  "hint": "Hint",
+  "@hint": {
+    "description": "hint label"
+  },
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
     "description": "Type to answer label"

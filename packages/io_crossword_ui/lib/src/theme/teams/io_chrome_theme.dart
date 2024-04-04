@@ -7,4 +7,26 @@ class IoChromeTheme extends IoCrosswordTheme {
   ColorScheme get colorScheme => super.colorScheme.copyWith(
         primary: IoCrosswordColors.seedGrey30,
       );
+
+  @override
+  OutlinedButtonThemeData get outlinedButtonThemeData =>
+      OutlinedButtonThemeData(
+        style: super.outlinedButtonThemeData.style!.copyWith(
+          shape: MaterialStateProperty.resolveWith(
+            (states) {
+              if (states.contains(MaterialState.disabled)) {
+                return const StadiumBorder(
+                  side: BorderSide(
+                    width: 2,
+                  ),
+                );
+              }
+
+              return const GradientStadiumBorder(
+                gradient: IoCrosswordColors.dinoGradient,
+              );
+            },
+          ),
+        ),
+      );
 }

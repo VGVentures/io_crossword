@@ -28,6 +28,7 @@ class IoCrosswordTheme {
       cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
+      outlinedButtonTheme: outlinedButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
@@ -76,6 +77,65 @@ class IoCrosswordTheme {
         ),
         elevation: 0,
         color: colorScheme.surface,
+      ),
+    );
+  }
+
+  @internal
+  // ignore: public_member_api_docs
+  OutlinedButtonThemeData get outlinedButtonThemeData {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientStadiumBorder(
+              gradient: IoCrosswordColors.googleGradient,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Gemini outlined button theme data
+  static OutlinedButtonThemeData get geminiOutlinedButtonThemeData {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientStadiumBorder(
+              gradient: IoCrosswordColors.geminiGradient,
+            );
+          },
+        ),
       ),
     );
   }
