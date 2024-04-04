@@ -49,8 +49,6 @@ class IoTextInput extends StatefulWidget {
 class _IoTextInputState extends State<IoTextInput> {
   var _currentCharacterIndex = 0;
 
-  final _focusNode = FocusNode();
-
   late final _focusNodes = List.generate(widget.length, (_) => FocusNode());
 
   late final _controllers = List.generate(
@@ -129,7 +127,6 @@ class _IoTextInputState extends State<IoTextInput> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
     for (final controller in _controllers) {
       controller.dispose();
     }
