@@ -2,6 +2,31 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+// class TextEditingController extends TextEditingController {
+//   TextEditingController() {
+//     text = _emptyCharacter;
+//   }
+
+//   static const _emptyCharacter = '_';
+
+//   @override
+//   set value(TextEditingValue newValue) {
+//     final newText = newValue.text;
+//     if (newText.isEmpty || newText == _emptyCharacter) {
+//       super.value = newValue.copyWith(text: _emptyCharacter);
+//       return;
+//     }
+
+//     final lastCharacter = newText[newText.length - 1];
+//     final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(lastCharacter);
+//     if (isAlphabetic) {
+//       super.value = newValue.copyWith(text: lastCharacter.toUpperCase());
+//     }
+//   }
+// }
+
+const _emptyCharacter = '_';
+
 /// {@template io_text_input}
 /// An IO styled text input that accepts a fixed number of characters.
 /// {@endtemplate}
@@ -26,38 +51,71 @@ class _IoTextInputState extends State<IoTextInput> {
 
   late final _focusNodes = List.generate(widget.length, (_) => FocusNode());
 
-  late final _controllers =
-      List.generate(widget.length, (_) => TextEditingController());
+  late final _controllers = List.generate(
+    widget.length,
+    (_) => TextEditingController(text: _emptyCharacter),
+  );
 
-  void _onControllerChanged() {
-    final activeController = _controllers[_currentCharacterIndex];
-
-    if (activeController.text.isNotEmpty) {
-      final nextCharacter = _nextCharacter();
-      if (nextCharacter == -1) {
-        // TODO(alestiago): Submit.
-        return;
-      }
-
-      _currentCharacterIndex = nextCharacter;
-      _focusNodes[_currentCharacterIndex].requestFocus();
+  void _onTextChanged(String value) {
+    final controller = _controllers[_currentCharacterIndex];
+    if (value.isEmpty) {
+      _previous();
+      controller.text = _emptyCharacter;
+      return;
     }
+
+    final newCharacter = value[value.length - 1];
+    final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(newCharacter);
+    if (!isAlphabetic) {
+      controller.text =
+          controller.text.substring(0, controller.text.length - 1);
+      return;
+    }
+
+    controller.text = newCharacter.toUpperCase();
+    _next();
   }
 
-  /// Find the next available character position.
-  ///
-  /// If there is no available position, returns `-1`.
-  int _nextCharacter() {
-    return _controllers.indexWhere((controller) => controller.text.isEmpty);
+  void _next() {
+    final nextCharacter = _controllers.indexWhere(
+      (controller) => controller.text == _emptyCharacter,
+    );
+    if (nextCharacter == -1) {
+      _submit();
+      return;
+    }
+    _activate(nextCharacter);
   }
+
+  void _previous() {
+    final previousCharacter = _currentCharacterIndex - 1;
+    if (previousCharacter == -1) {
+      return;
+    }
+    _activate(previousCharacter);
+  }
+
+  void _activate(int index) {
+    if (index < 0 || index >= widget.length) {
+      return;
+    }
+
+    _currentCharacterIndex = index;
+
+    final focusNode = _focusNodes[index]
+      ..canRequestFocus = true
+      ..requestFocus();
+    _focusNodes
+        .where((f) => f != focusNode)
+        .forEach((f) => f.canRequestFocus = false);
+  }
+
+  void _submit() {}
 
   @override
   void initState() {
     super.initState();
-
-    for (final controller in _controllers) {
-      controller.addListener(_onControllerChanged);
-    }
+    _activate(_currentCharacterIndex);
   }
 
   @override
@@ -84,6 +142,7 @@ class _IoTextInputState extends State<IoTextInput> {
             child: _CharacterInputField(
               focusNode: _focusNodes[i],
               controller: _controllers[i],
+              onChanged: _onTextChanged,
             ),
           ),
       ],
@@ -95,10 +154,12 @@ class _CharacterInputField extends StatefulWidget {
   const _CharacterInputField({
     required this.controller,
     required this.focusNode,
+    required this.onChanged,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
+  final void Function(String value) onChanged;
 
   @override
   State<_CharacterInputField> createState() => _CharacterInputFieldState();
@@ -121,47 +182,33 @@ class _CharacterInputFieldState extends State<_CharacterInputField> {
     setState(() {});
   }
 
-  void _onTextChanged(String? input) {
-    if (input == null) return;
-
-    final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(input);
-    if (!isAlphabetic) {
-      widget.controller.text = '_';
-      return;
-    }
-
-    if (input.length == 1) {
-      widget.controller.text = input.toUpperCase();
-    } else {
-      widget.controller.text = input[0];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).io.textInput;
+
+    final activeStyle = style.empty;
 
     return SizedBox.square(
       dimension: 50,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-          border: Border.all(
-            width: 1.8,
-            color: IoCrosswordColors.seedWhite,
-          ),
-          color: IoCrosswordColors.darkGray,
+          borderRadius: activeStyle.borderRadius,
+          border: activeStyle.border,
+          color: widget.focusNode.hasFocus
+              ? Colors.red
+              : activeStyle.backgroundColor,
         ),
         child: Center(
           child: EditableText(
             keyboardType: TextInputType.text,
-            onChanged: _onTextChanged,
+            // readOnly: widget.controller.readOnly,
             controller: widget.controller,
+            onChanged: widget.onChanged,
             focusNode: widget.focusNode,
             textAlign: TextAlign.center,
-            style: const TextStyle(),
+            style: activeStyle.textStyle,
             cursorColor: Colors.transparent,
-            backgroundCursorColor: Colors.blue,
+            backgroundCursorColor: activeStyle.backgroundColor,
           ),
         ),
       ),

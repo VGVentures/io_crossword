@@ -39,6 +39,14 @@ class IoCrosswordTheme {
   IoTextInputStyle get _textInput {
     final colorScheme = this.colorScheme;
 
+    const textStyle = TextStyle(
+      color: IoCrosswordColors.seedWhite,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Google Sans',
+      package: IoCrosswordTextStyles.package,
+    );
+
     return IoTextInputStyle(
       padding: const EdgeInsets.symmetric(horizontal: 1.8),
       empty: IoTextInputCharacterFieldStyle(
@@ -48,7 +56,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.seedWhite,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: TextStyle(),
+        textStyle: textStyle,
       ),
       filled: IoTextInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
@@ -57,7 +65,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.seedWhite,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: TextStyle(),
+        textStyle: textStyle,
       ),
       focused: IoTextInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
@@ -66,7 +74,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.seedWhite,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: TextStyle(),
+        textStyle: textStyle,
       ),
       disabled: IoTextInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
@@ -75,7 +83,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.seedWhite,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: TextStyle(),
+        textStyle: textStyle,
       ),
     );
   }
