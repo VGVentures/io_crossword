@@ -102,6 +102,10 @@ class IoWordInput extends StatefulWidget {
   State<IoWordInput> createState() => _IoWordInputState();
 }
 
+// TODO(alestiago): Updating the widget does nothing yet, since the current
+// implementation is the first iteration and ignores `didUpdateWidget`. This
+// will be updated in the future, as soon as the following is resolved:
+// https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
 class _IoWordInputState extends State<IoWordInput> {
   /// The current character that is being inputted.
   ///
@@ -125,10 +129,14 @@ class _IoWordInputState extends State<IoWordInput> {
 
   /// The entire word that has been inputted so far.
   String get _word {
-    final characters = _controllers.entries
-        .map((e) => e.value.text)
-        .where((c) => c != IoWordInput._emptyCharacter);
-    return characters.join();
+    final word = StringBuffer();
+
+    for (var i = 0; i < widget.length; i++) {
+      final isFixed =
+          widget.characters != null && widget.characters!.containsKey(i);
+      word.write(isFixed ? widget.characters![i] : _controllers[i]!.text);
+    }
+    return word.toString();
   }
 
   /// Callback for when a character field has changed its value.
@@ -243,15 +251,6 @@ class _IoWordInputState extends State<IoWordInput> {
     setState(() {
       // Styling depends on focus, update it.
     });
-  }
-
-  @override
-  void didUpdateWidget(covariant IoWordInput oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // TODO(alestiago): Updating the widget does nothing yet, since the current
-    // implementation is the first iteration. This will be updated in the
-    // future, as soon as the following is resolved:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
   }
 
   @override
