@@ -32,6 +32,7 @@ class CrosswordRepository {
       return const Point(0, 0);
     }
 
+    // Calculate the length of the board knowing that it's a square
     final boardSize = sqrt(sectionCount).floor();
 
     final maxPos = (boardSize / 2).floor();
@@ -39,6 +40,7 @@ class CrosswordRepository {
 
     final positions = <(int, int)>[];
 
+    // Get all the possible positions from top left to bottom right
     for (var x = minPos; x < maxPos; x++) {
       for (var y = minPos; y < maxPos; y++) {
         positions.add((x, y));
@@ -47,23 +49,24 @@ class CrosswordRepository {
 
     positions.shuffle(_rng);
 
-    const poolSize = 20;
+    const batchSize = 20;
 
-    for (var index = 0; index < positions.length; index += poolSize) {
-      var endIndex = index + poolSize;
+    // Get batches of 20 random sections until finding one with empty word
+    for (var index = 0; index < positions.length; index += batchSize) {
+      var endIndex = index + batchSize;
       if (endIndex > positions.length) {
         endIndex = positions.length;
       }
 
-      final currentPositions = positions.sublist(index, endIndex);
+      final batchPositions = positions.sublist(index, endIndex);
       final result = await sectionCollection
           .where(
             'position.x',
-            whereIn: currentPositions.map((e) => e.$1).toList(),
+            whereIn: batchPositions.map((e) => e.$1).toList(),
           )
           .where(
             'position.y',
-            whereIn: currentPositions.map((e) => e.$2).toList(),
+            whereIn: batchPositions.map((e) => e.$2).toList(),
           )
           .get();
 
@@ -73,9 +76,11 @@ class CrosswordRepository {
           ...sectionDoc.data(),
         });
       });
+
       final section = sections.firstWhereOrNull(
         (section) => section.words.any((word) => word.solvedTimestamp == null),
       );
+
       if (section != null) {
         return section.position;
       }

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, subtype_of_sealed_class
+// ignore_for_file: prefer_const_constructors
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,9 +9,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class _MockRandom extends Mock implements Random {}
-
-class _MockCollectionReference<T> extends Mock
-    implements CollectionReference<T> {}
 
 void main() {
   group('CrosswordRepository', () {
@@ -35,7 +32,6 @@ void main() {
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;
-    late CollectionReference<Map<String, dynamic>> collection;
     late Random rng;
 
     setUpAll(() {
@@ -45,7 +41,6 @@ void main() {
     setUp(() async {
       rng = _MockRandom();
       firebaseFirestore = FakeFirebaseFirestore();
-      collection = _MockCollectionReference();
       crosswordRepository = CrosswordRepository(
         db: firebaseFirestore,
         rng: rng,
