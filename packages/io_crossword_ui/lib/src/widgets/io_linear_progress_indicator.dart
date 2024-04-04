@@ -45,7 +45,7 @@ class IoLinearProgressIndicator extends StatelessWidget {
             height: 6,
             child: AnimatedFractionallySizedBox(
               duration: const Duration(milliseconds: 350),
-              widthFactor: value,
+              widthFactor: value.clamp(0, 1),
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: gradient,
