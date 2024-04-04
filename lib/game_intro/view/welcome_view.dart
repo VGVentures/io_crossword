@@ -48,6 +48,7 @@ class WelcomeView extends StatelessWidget {
 }
 
 class RecordProgress extends StatelessWidget {
+  @visibleForTesting
   const RecordProgress({super.key});
 
   @override
