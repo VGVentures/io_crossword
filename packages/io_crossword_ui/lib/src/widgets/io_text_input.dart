@@ -4,15 +4,21 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-const _emptyCharacter = '_';
+/// {@template character_validator}
+/// Validates a character, if it is valid.
+///
+/// Returns `true` if the character is valid, otherwise `false`.
+/// {@endtemplate}
+typedef CharacterValidator = bool Function(String character);
 
 /// {@template io_text_input}
 /// An IO styled text input that accepts a fixed number of characters.
 /// {@endtemplate}
 class IoTextInput extends StatefulWidget {
   /// {@macro io_text_input}
-  IoTextInput({
+  IoTextInput._({
     required this.length,
+    required this.characterValidator,
     Map<int, String>? characters,
     super.key,
   }) : characters = characters != null
@@ -21,6 +27,19 @@ class IoTextInput extends StatefulWidget {
                   ..removeWhere((key, value) => key >= length),
               )
             : null;
+
+  /// Creates an [IoTextInput] that only accepts alphabetic characters.
+  IoTextInput.alphabetic({
+    required int length,
+    Map<int, String>? characters,
+    Key? key,
+  }) : this._(
+          length: length,
+          key: key,
+          characters: characters,
+          characterValidator: (character) =>
+              RegExp('[a-zA-Z]').hasMatch(character),
+        );
 
   /// The length of the input.
   ///
@@ -44,6 +63,12 @@ class IoTextInput extends StatefulWidget {
   /// ignored.
   final UnmodifiableMapView<int, String>? characters;
 
+  /// {@macro character_validator}
+  final CharacterValidator characterValidator;
+
+  /// The character that represents an empty character field.
+  static const _emptyCharacter = '_';
+
   @override
   State<IoTextInput> createState() => _IoTextInputState();
 }
@@ -59,19 +84,24 @@ class _IoTextInputState extends State<IoTextInput> {
 
   final Map<int, FocusNode> _focusNodes = {};
 
+  /// The [FocusNode] of the character field that is currently being inputted.
   FocusNode? get _activeFocusNode => _focusNodes[_currentCharacterIndex];
 
   final Map<int, TextEditingController> _controllers = {};
 
+  /// The [TextEditingController] of the character field that is currently
+  /// being inputted.
   TextEditingController? get _activeController =>
       _controllers[_currentCharacterIndex];
 
+  /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
-    final isAlphabetic = RegExp('[a-zA-Z]');
-    final newValue =
-        (value.split('')..removeWhere((c) => !isAlphabetic.hasMatch(c))).join();
+    final newValue = (value.split('')
+          ..removeWhere((c) => !widget.characterValidator(c)))
+        .join();
+
     if (newValue.isEmpty) {
-      _activeController?.text = _emptyCharacter;
+      _activeController?.text = IoTextInput._emptyCharacter;
       _previous();
 
       setState(() {
@@ -89,35 +119,52 @@ class _IoTextInputState extends State<IoTextInput> {
     });
   }
 
+  /// Changes the current character field that is being inputted, to the
+  /// next available character field.
+  ///
+  /// If there are no more available character fields ahead, then nothing will
+  /// happen.
   void _next() {
-    final emptyFields = _controllers.entries
-        .where(
-          (e) =>
-              e.key > (_currentCharacterIndex ?? -1) &&
-              e.value.text == _emptyCharacter,
-        )
+    final nextFields = _controllers.entries
+        .where((e) => e.key > (_currentCharacterIndex ?? -1))
         .map((e) => e.key);
 
-    if (emptyFields.isEmpty) {
-      _submit();
-      return;
-    }
-
-    _changeCurrentIndex(emptyFields.first);
+    if (nextFields.isEmpty) return;
+    _updateCurrentIndex(nextFields.first);
   }
 
+  /// Changes the current character field that is being inputted, to the
+  /// previous available character field.
+  ///
+  /// If no more previous character fields are available, then nothing will
+  /// happen.
+  ///
+  /// Triggered when a character is removed, usually associated when the user
+  /// presses backspace.
   void _previous() {
     final previousFields = _controllers.entries
         .where((e) => e.key < (_currentCharacterIndex ?? widget.length))
         .map((e) => e.key);
 
     if (previousFields.isEmpty) return;
-    _changeCurrentIndex(previousFields.last);
+    _updateCurrentIndex(previousFields.last);
   }
 
-  void _changeCurrentIndex(int index) {
-    if ((index < 0 || index >= widget.length) ||
-        index == _currentCharacterIndex) {
+  /// Changes the current character field that is being inputted, to the
+  /// character at the [index] position.
+  ///
+  /// If [index] is already the current character field, then nothing will
+  /// happen.
+  ///
+  /// Additionally, if the [index] is invalid, then the current character field
+  /// will not be updated. An invalid [index] is one that is not within the
+  /// range of the input length or one that is fixed by
+  /// [IoTextInput.characters].
+  void _updateCurrentIndex(int index) {
+    final isWithinRange = index < 0 || index >= widget.length;
+    final isFixed =
+        widget.characters != null && widget.characters!.containsKey(index);
+    if (index == _currentCharacterIndex || isWithinRange || isFixed) {
       return;
     }
 
@@ -125,11 +172,12 @@ class _IoTextInputState extends State<IoTextInput> {
     _focus();
   }
 
-  void _focus() {
-    _activeFocusNode?.requestFocus();
-  }
-
-  void _submit() {}
+  /// Focus on the character field that is currently being inputted.
+  ///
+  /// Characters can only be inputted from left to right, hence if the user
+  /// focuses on a character field before or after the current one, the focus
+  /// will adjusted to be in the current one.
+  void _focus() => _activeFocusNode?.requestFocus();
 
   @override
   void initState() {
@@ -138,7 +186,8 @@ class _IoTextInputState extends State<IoTextInput> {
     for (var i = 0; i < widget.length; i++) {
       if (widget.characters == null || !widget.characters!.containsKey(i)) {
         _focusNodes[i] = FocusNode();
-        _controllers[i] = TextEditingController(text: _emptyCharacter);
+        _controllers[i] =
+            TextEditingController(text: IoTextInput._emptyCharacter);
       }
     }
 
@@ -150,6 +199,12 @@ class _IoTextInputState extends State<IoTextInput> {
     }
 
     _next();
+  }
+
+  @override
+  void didUpdateWidget(covariant IoTextInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // TODO(alestiago): Handle this.
   }
 
   @override
@@ -168,7 +223,6 @@ class _IoTextInputState extends State<IoTextInput> {
     final textInputStyle = Theme.of(context).io.textInput;
 
     final characters = <Widget>[];
-
     for (var i = 0; i < widget.length; i++) {
       final focusNode = _focusNodes[i];
       final controller = _controllers[i];
@@ -179,7 +233,7 @@ class _IoTextInputState extends State<IoTextInput> {
         style = textInputStyle.disabled;
       } else if (focusNode.hasFocus) {
         style = textInputStyle.focused;
-      } else if (controller.text == _emptyCharacter) {
+      } else if (controller.text == IoTextInput._emptyCharacter) {
         style = textInputStyle.empty;
       } else {
         style = textInputStyle.filled;
@@ -187,7 +241,7 @@ class _IoTextInputState extends State<IoTextInput> {
 
       final character = Padding(
         padding: textInputStyle.padding,
-        child: _CharacterInputBox(
+        child: _CharacterField(
           style: style,
           child: readOnly
               ? Text(widget.characters![i]!, style: style.textStyle)
@@ -220,14 +274,18 @@ class _IoTextInputState extends State<IoTextInput> {
   }
 }
 
-class _CharacterInputBox extends StatelessWidget {
-  const _CharacterInputBox({
+class _CharacterField extends StatelessWidget {
+  const _CharacterField({
     required this.style,
     required this.child,
   });
 
+  /// {@macro io_text_input_character_field_style}
   final IoTextInputCharacterFieldStyle style;
 
+  /// The child widget.
+  ///
+  /// Usually a [Text] or an [EditableText] widget.
   final Widget child;
 
   @override
