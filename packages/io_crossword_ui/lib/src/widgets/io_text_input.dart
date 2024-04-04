@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template character_validator}
-/// Validates a character, if it is valid.
+/// Validates a character.
 ///
 /// Returns `true` if the character is valid, otherwise `false`.
 ///
@@ -53,7 +53,7 @@ class IoTextInput extends StatefulWidget {
   /// In other words, the number of characters that the input will accept.
   final int length;
 
-  /// Values that are fixed and cannot be changed.
+  /// Characters that are fixed and cannot be changed.
   ///
   /// The key is the index of the character field. For example, if the input
   /// has a length of 5, and the first and third characters are fixed, then
@@ -89,6 +89,8 @@ class _IoTextInputState extends State<IoTextInput> {
   /// field to input since they are all fixed.
   int? _currentCharacterIndex;
 
+  late String text;
+
   final Map<int, FocusNode> _focusNodes = {};
 
   /// The [FocusNode] of the character field that is currently being inputted.
@@ -103,8 +105,6 @@ class _IoTextInputState extends State<IoTextInput> {
 
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
-    // FIXME(alestiago): Be cautious with the selection, since if focused
-    // before the first character, then the selection will be at the start.
     final newValue = (value.split('')
           ..removeWhere((c) => !widget.characterValidator(c)))
         .join();
@@ -119,7 +119,7 @@ class _IoTextInputState extends State<IoTextInput> {
       return;
     }
 
-    final newCharacter = newValue.substring(0, 1);
+    final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
     _next();
 
@@ -186,7 +186,9 @@ class _IoTextInputState extends State<IoTextInput> {
   /// Characters can only be inputted from left to right, hence if the user
   /// focuses on a character field before or after the current one, the focus
   /// will adjusted to be in the current one.
-  void _focus() => _activeFocusNode?.requestFocus();
+  void _focus() {
+    _activeFocusNode?.requestFocus();
+  }
 
   @override
   void initState() {
@@ -258,12 +260,18 @@ class _IoTextInputState extends State<IoTextInput> {
               ? Text(widget.characters![i]!, style: style.textStyle)
               : EditableText(
                   keyboardType: TextInputType.text,
+                  scrollPadding: EdgeInsets.zero,
                   controller: controller,
+                  enableSuggestions: false,
                   onChanged: _onTextChanged,
                   focusNode: focusNode,
                   textAlign: TextAlign.center,
                   style: style.textStyle,
-                  showCursor: false,
+                  onSelectionChanged: (selection, cause) {
+                    controller.selection = TextSelection.fromPosition(
+                      const TextPosition(offset: 1),
+                    );
+                  },
                   cursorColor: Colors.transparent,
                   backgroundCursorColor: Colors.transparent,
                 ),
