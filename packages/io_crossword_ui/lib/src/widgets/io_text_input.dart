@@ -26,6 +26,7 @@ class IoTextInput extends StatefulWidget {
   IoTextInput._({
     required this.length,
     required this.characterValidator,
+    this.onWord,
     Map<int, String>? characters,
     super.key,
   }) : characters = characters != null
@@ -73,6 +74,9 @@ class IoTextInput extends StatefulWidget {
   /// {@macro character_validator}
   final CharacterValidator characterValidator;
 
+  /// Callback for when the word has been completed.
+  final ValueChanged<String>? onWord;
+
   /// The character that represents an empty character field.
   static const _emptyCharacter = '_';
 
@@ -89,8 +93,6 @@ class _IoTextInputState extends State<IoTextInput> {
   /// field to input since they are all fixed.
   int? _currentCharacterIndex;
 
-  late String text;
-
   final Map<int, FocusNode> _focusNodes = {};
 
   /// The [FocusNode] of the character field that is currently being inputted.
@@ -102,6 +104,14 @@ class _IoTextInputState extends State<IoTextInput> {
   /// being inputted.
   TextEditingController? get _activeController =>
       _controllers[_currentCharacterIndex];
+
+  /// The entire word that has been inputted so far.
+  String get _word {
+    final characters = _controllers.entries
+        .map((e) => e.value.text)
+        .where((c) => c != IoTextInput._emptyCharacter);
+    return characters.join();
+  }
 
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
