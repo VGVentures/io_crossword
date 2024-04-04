@@ -191,7 +191,7 @@ class _ZoomControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 16,
+      left: 16,
       bottom: 16,
       child: Column(
         children: [
