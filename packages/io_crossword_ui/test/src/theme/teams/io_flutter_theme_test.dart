@@ -10,7 +10,7 @@ void main() {
 
     group('OutlinedButtonThemeData', () {
       final outlinedBorder =
-          IoFlutterTheme().outlinedButtonThemeData.style!.shape!;
+          IoFlutterTheme().themeData.outlinedButtonTheme.style!.shape!;
 
       test('displays StadiumBorder with ${MaterialState.disabled}', () {
         expect(

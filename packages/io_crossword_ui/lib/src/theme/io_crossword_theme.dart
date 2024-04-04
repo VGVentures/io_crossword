@@ -17,6 +17,7 @@ class IoCrosswordTheme {
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
+      colorScheme: ioColorScheme,
     );
 
     return ThemeData(
@@ -28,11 +29,19 @@ class IoCrosswordTheme {
       cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
       filledButtonTheme: _filledButtonThemeData,
-      outlinedButtonTheme: outlinedButtonThemeData,
+      outlinedButtonTheme: _outlinedButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  @internal
+  // ignore: public_member_api_docs
+  IoColorScheme get ioColorScheme {
+    return const IoColorScheme(
+      primaryGradient: IoCrosswordColors.googleGradient,
     );
   }
 
@@ -81,9 +90,8 @@ class IoCrosswordTheme {
     );
   }
 
-  @internal
-  // ignore: public_member_api_docs
-  OutlinedButtonThemeData get outlinedButtonThemeData {
+  OutlinedButtonThemeData get _outlinedButtonThemeData {
+    final ioColorScheme = this.ioColorScheme;
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: IoCrosswordColors.seedWhite,
@@ -95,15 +103,10 @@ class IoCrosswordTheme {
         shape: MaterialStateProperty.resolveWith(
           (states) {
             if (states.contains(MaterialState.disabled)) {
-              return const StadiumBorder(
-                side: BorderSide(
-                  width: 2,
-                ),
-              );
+              return const StadiumBorder(side: BorderSide(width: 2));
             }
-
-            return const GradientStadiumBorder(
-              gradient: IoCrosswordColors.googleGradient,
+            return GradientStadiumBorder(
+              gradient: ioColorScheme.primaryGradient,
             );
           },
         ),
