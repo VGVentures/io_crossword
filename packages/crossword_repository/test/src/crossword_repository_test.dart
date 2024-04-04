@@ -107,6 +107,11 @@ void main() {
         final pos = await crosswordRepository.getRandomEmptySection();
         expect(pos, isNull);
       });
+
+      test('returns null if no section found', () async {
+        final pos = await crosswordRepository.getRandomEmptySection();
+        expect(pos, isNull);
+      });
     });
 
     group('watchSection', () {
