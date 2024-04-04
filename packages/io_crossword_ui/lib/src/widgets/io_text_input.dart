@@ -8,11 +8,18 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// Validates a character, if it is valid.
 ///
 /// Returns `true` if the character is valid, otherwise `false`.
+///
+/// This determines if a new character will be accepted or not. If not accepted,
+/// it will not be rendered in the character field and it wil be considered as
+/// a backspace.
 /// {@endtemplate}
 typedef CharacterValidator = bool Function(String character);
 
 /// {@template io_text_input}
 /// An IO styled text input that accepts a fixed number of characters.
+///
+/// The input can be configured to only accept certain characters, and some
+/// characters can be fixed and not editable.
 /// {@endtemplate}
 class IoTextInput extends StatefulWidget {
   /// {@macro io_text_input}
@@ -194,7 +201,9 @@ class _IoTextInputState extends State<IoTextInput> {
     for (final focus in _focusNodes.values) {
       focus.addListener(() {
         if (focus.hasFocus) _focus();
-        setState(() {});
+        setState(() {
+          // Update the styles.
+        });
       });
     }
 
