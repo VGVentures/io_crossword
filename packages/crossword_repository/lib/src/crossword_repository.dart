@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:game_domain/game_domain.dart';
 
 /// {@template crossword_repository}
@@ -8,7 +11,8 @@ class CrosswordRepository {
   /// {@macro crossword_repository}
   CrosswordRepository({
     required this.db,
-  }) {
+    Random? rng,
+  }) : _rng = rng ?? Random() {
     sectionCollection = db.collection('boardSections');
   }
 
@@ -17,6 +21,67 @@ class CrosswordRepository {
 
   /// The [CollectionReference] for the matches.
   late final CollectionReference<Map<String, dynamic>> sectionCollection;
+
+  final Random _rng;
+
+  /// Returns the position of a random section that has empty words.
+  Future<Point<int>?> getRandomEmptySection() async {
+    final docsCount = await sectionCollection.count().get();
+    final sectionCount = docsCount.count;
+    if (sectionCount == null) {
+      return const Point(0, 0);
+    }
+
+    final boardSize = sqrt(sectionCount).floor();
+
+    final maxPos = (boardSize / 2).floor();
+    final minPos = 0 - maxPos;
+
+    final positions = <(int, int)>[];
+
+    for (var x = minPos; x < maxPos; x++) {
+      for (var y = minPos; y < maxPos; y++) {
+        positions.add((x, y));
+      }
+    }
+
+    positions.shuffle(_rng);
+
+    const poolSize = 20;
+
+    for (var index = 0; index < positions.length; index += poolSize) {
+      var endIndex = index + poolSize;
+      if (endIndex > positions.length) {
+        endIndex = positions.length;
+      }
+
+      final currentPositions = positions.sublist(index, endIndex);
+      final result = await sectionCollection
+          .where(
+            'position.x',
+            whereIn: currentPositions.map((e) => e.$1).toList(),
+          )
+          .where(
+            'position.y',
+            whereIn: currentPositions.map((e) => e.$2).toList(),
+          )
+          .get();
+
+      final sections = result.docs.map((sectionDoc) {
+        return BoardSection.fromJson({
+          'id': sectionDoc.id,
+          ...sectionDoc.data(),
+        });
+      });
+      final section = sections.firstWhereOrNull(
+        (section) => section.words.any((word) => word.solvedTimestamp == null),
+      );
+      if (section != null) {
+        return section.position;
+      }
+    }
+    return null;
+  }
 
   /// Watches a section of the crossword board
   Stream<BoardSection> watchSection(String id) {

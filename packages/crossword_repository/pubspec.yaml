@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   cloud_firestore: ^4.15.9
+  collection: ^1.18.0
   game_domain:
     path: ../../api/packages/game_domain
 

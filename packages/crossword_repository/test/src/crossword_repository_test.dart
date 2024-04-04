@@ -1,10 +1,17 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, subtype_of_sealed_class
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
+
+class _MockRandom extends Mock implements Random {}
+
+class _MockCollectionReference<T> extends Mock
+    implements CollectionReference<T> {}
 
 void main() {
   group('CrosswordRepository', () {
@@ -28,15 +35,20 @@ void main() {
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;
+    late CollectionReference<Map<String, dynamic>> collection;
+    late Random rng;
 
     setUpAll(() {
       registerFallbackValue(Uri.parse('http://localhost'));
     });
 
     setUp(() async {
+      rng = _MockRandom();
       firebaseFirestore = FakeFirebaseFirestore();
+      collection = _MockCollectionReference();
       crosswordRepository = CrosswordRepository(
         db: firebaseFirestore,
+        rng: rng,
       );
 
       await firebaseFirestore
@@ -50,6 +62,39 @@ void main() {
         CrosswordRepository(db: firebaseFirestore),
         isNotNull,
       );
+    });
+
+    group('getRandomEmptySection', () {
+      const boardHalfSize = 3;
+
+      setUp(() async {
+        for (var x = -boardHalfSize; x < boardHalfSize; x++) {
+          for (var y = -boardHalfSize; y < boardHalfSize; y++) {
+            final section = boardSection1.copyWith(
+              id: '${boardSection1.id}-$x-$y',
+              position: Point(x, y),
+              words: [
+                word.copyWith(
+                  position: Point(x, y),
+                  solvedTimestamp: x < 0 ? 1 : null,
+                ),
+              ],
+            );
+
+            await firebaseFirestore
+                .collection(sectionsCollection)
+                .doc(section.id)
+                .set(section.toJson());
+          }
+        }
+      });
+
+      test('returns a random section', () async {
+        when(() => rng.nextInt(any())).thenReturn(3);
+
+        final pos = await crosswordRepository.getRandomEmptySection();
+        expect(pos, equals(Point(0, -3)));
+      });
     });
 
     group('watchSection', () {
