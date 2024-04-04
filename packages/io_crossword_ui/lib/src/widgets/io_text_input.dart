@@ -42,47 +42,50 @@ class IoTextInput extends StatefulWidget {
 }
 
 class _IoTextInputState extends State<IoTextInput> {
-  var _currentCharacterIndex = 0;
+  /// The current character that is being inputted.
+  int? _currentCharacterIndex;
 
   final Map<int, FocusNode> _focusNodes = {};
 
   final Map<int, TextEditingController> _controllers = {};
 
-  TextEditingController get _activeController =>
-      _controllers[_currentCharacterIndex]!;
+  TextEditingController? get _activeController {
+    return _controllers[_currentCharacterIndex];
+  }
 
-  FocusNode get _activeFocusNode => _focusNodes[_currentCharacterIndex]!;
+  FocusNode? get _activeFocusNode {
+    return _focusNodes[_currentCharacterIndex];
+  }
 
   void _onTextChanged(String value) {
-    void remove() {
-      _activeController.text = _emptyCharacter;
+    final isAlphabetic = RegExp('[a-zA-Z]');
+    final newValue =
+        (value.split('')..removeWhere((c) => !isAlphabetic.hasMatch(c))).join();
+    if (newValue.isEmpty) {
+      _activeController?.text = _emptyCharacter;
       _previous();
-      setState(() {});
-    }
 
-    if (value.isEmpty) {
-      remove();
+      setState(() {
+        // Update the styles.
+      });
       return;
     }
 
-    final newCharacter = value[value.length - 1];
-
-    final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(newCharacter);
-    if (!isAlphabetic) {
-      remove();
-      return;
-    }
-
-    _activeController.text = newCharacter.toUpperCase();
+    final newCharacter = newValue.substring(0, 1);
+    _activeController?.text = newCharacter.toUpperCase();
     _next();
-    setState(() {});
+
+    setState(() {
+      // Update the styles.
+    });
   }
 
   void _next() {
     final emptyFields = _controllers.entries
         .where(
           (e) =>
-              e.key > _currentCharacterIndex && e.value.text == _emptyCharacter,
+              e.key > (_currentCharacterIndex ?? -1) &&
+              e.value.text == _emptyCharacter,
         )
         .map((e) => e.key);
 
@@ -95,11 +98,12 @@ class _IoTextInputState extends State<IoTextInput> {
   }
 
   void _previous() {
-    final previousCharacter = _currentCharacterIndex - 1;
-    if (previousCharacter == -1) {
-      return;
-    }
-    _changeCurrentIndex(previousCharacter);
+    final previousFields = _controllers.entries
+        .where((e) => e.key < (_currentCharacterIndex ?? widget.length))
+        .map((e) => e.key);
+
+    if (previousFields.isEmpty) return;
+    _changeCurrentIndex(previousFields.last);
   }
 
   void _changeCurrentIndex(int index) {
@@ -113,9 +117,7 @@ class _IoTextInputState extends State<IoTextInput> {
   }
 
   void _focus() {
-    if (!_activeFocusNode.hasFocus) {
-      _activeFocusNode.requestFocus();
-    }
+    _activeFocusNode?.requestFocus();
   }
 
   void _submit() {}
@@ -125,19 +127,20 @@ class _IoTextInputState extends State<IoTextInput> {
     super.initState();
 
     for (var i = 0; i < widget.length; i++) {
-      if (widget.values == null || widget.values!.containsKey(i)) {
+      if (widget.values == null || !widget.values!.containsKey(i)) {
         _focusNodes[i] = FocusNode();
         _controllers[i] = TextEditingController(text: _emptyCharacter);
       }
     }
 
-    _changeCurrentIndex(_currentCharacterIndex);
     for (final focus in _focusNodes.values) {
       focus.addListener(() {
         if (focus.hasFocus) _focus();
         setState(() {});
       });
     }
+
+    _next();
   }
 
   @override

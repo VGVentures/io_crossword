@@ -85,7 +85,9 @@ class IoCrosswordTheme {
           color: colorScheme.surface,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle,
+        textStyle: textStyle.copyWith(
+          color: IoCrosswordColors.black,
+        ),
       ),
     );
   }
