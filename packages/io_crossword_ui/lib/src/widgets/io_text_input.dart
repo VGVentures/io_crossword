@@ -261,19 +261,19 @@ class _IoTextInputState extends State<IoTextInput> {
               : EditableText(
                   keyboardType: TextInputType.text,
                   scrollPadding: EdgeInsets.zero,
-                  controller: controller,
                   enableSuggestions: false,
-                  onChanged: _onTextChanged,
+                  controller: controller,
                   focusNode: focusNode,
-                  textAlign: TextAlign.center,
                   style: style.textStyle,
+                  textAlign: TextAlign.center,
+                  cursorColor: Colors.transparent,
+                  backgroundCursorColor: Colors.transparent,
+                  onChanged: _onTextChanged,
                   onSelectionChanged: (selection, cause) {
                     controller.selection = TextSelection.fromPosition(
                       const TextPosition(offset: 1),
                     );
                   },
-                  cursorColor: Colors.transparent,
-                  backgroundCursorColor: Colors.transparent,
                 ),
         ),
       );
