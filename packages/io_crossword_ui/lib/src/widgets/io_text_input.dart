@@ -2,29 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-// class TextEditingController extends TextEditingController {
-//   TextEditingController() {
-//     text = _emptyCharacter;
-//   }
-
-//   static const _emptyCharacter = '_';
-
-//   @override
-//   set value(TextEditingValue newValue) {
-//     final newText = newValue.text;
-//     if (newText.isEmpty || newText == _emptyCharacter) {
-//       super.value = newValue.copyWith(text: _emptyCharacter);
-//       return;
-//     }
-
-//     final lastCharacter = newText[newText.length - 1];
-//     final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(lastCharacter);
-//     if (isAlphabetic) {
-//       super.value = newValue.copyWith(text: lastCharacter.toUpperCase());
-//     }
-//   }
-// }
-
 const _emptyCharacter = '_';
 
 /// {@template io_text_input}
