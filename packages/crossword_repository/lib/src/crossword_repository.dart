@@ -29,7 +29,7 @@ class CrosswordRepository {
     final docsCount = await sectionCollection.count().get();
     final sectionCount = docsCount.count;
     if (sectionCount == null) {
-      return const Point(0, 0);
+      return null;
     }
 
     // Calculate the length of the board knowing that it's a square
@@ -59,14 +59,18 @@ class CrosswordRepository {
       }
 
       final batchPositions = positions.sublist(index, endIndex);
+
       final result = await sectionCollection
           .where(
-            'position.x',
-            whereIn: batchPositions.map((e) => e.$1).toList(),
-          )
-          .where(
-            'position.y',
-            whereIn: batchPositions.map((e) => e.$2).toList(),
+            'position',
+            whereIn: batchPositions
+                .map(
+                  (e) => {
+                    'x': e.$1,
+                    'y': e.$2,
+                  },
+                )
+                .toList(),
           )
           .get();
 
