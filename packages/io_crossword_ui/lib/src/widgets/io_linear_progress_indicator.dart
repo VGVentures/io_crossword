@@ -27,13 +27,15 @@ class IoLinearProgressIndicator extends StatelessWidget {
 
     return Stack(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 6,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: linearTrackColor,
-              borderRadius: BorderRadius.circular(10),
+        Align(
+          child: SizedBox(
+            width: double.infinity,
+            height: 6,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: linearTrackColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
