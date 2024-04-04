@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -7,6 +9,32 @@ import '../../test_tag.dart';
 
 class _MockIoWordInputCharacterFieldStyle extends Mock
     implements IoWordInputCharacterFieldStyle {}
+
+class _GoldenFileComparator extends LocalFileComparator {
+  _GoldenFileComparator()
+      : super(
+          Uri.parse('test/src/widgets/io_word_input_test.dart'),
+        );
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+      imageBytes,
+      await getGoldenBytes(golden),
+    );
+
+    // Sufficient toleration to accommodate font rendering differences.
+    final passed = result.diffPercent <= 0.15;
+    if (passed) {
+      result.dispose();
+      return true;
+    }
+
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
 
 void main() {
   group('$IoWordInput', () {
@@ -87,6 +115,15 @@ void main() {
     group('renders as expected', () {
       Uri goldenKey(String name) =>
           Uri.parse('goldens/io_word_input/io_word_input__$name.png');
+
+      setUpAll(() async {
+        final previousComparator = goldenFileComparator;
+        final comparator = _GoldenFileComparator();
+        goldenFileComparator = comparator;
+        addTearDown(() {
+          goldenFileComparator = previousComparator;
+        });
+      });
 
       testWidgets(
         'with empty characters',
