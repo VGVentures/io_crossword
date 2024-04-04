@@ -10,7 +10,7 @@ void main() {
 
     group('OutlinedButtonThemeData', () {
       final outlinedBorder =
-          IoAndroidTheme().outlinedButtonThemeData.style!.shape!;
+          IoAndroidTheme().themeData.outlinedButtonTheme.style!.shape!;
 
       test('displays StadiumBorder with ${MaterialState.disabled}', () {
         expect(

@@ -10,7 +10,7 @@ void main() {
 
     group('OutlinedButtonThemeData', () {
       final outlinedBorder =
-          IoFirebaseTheme().outlinedButtonThemeData.style!.shape!;
+          IoFirebaseTheme().themeData.outlinedButtonTheme.style!.shape!;
 
       test('displays StadiumBorder with ${MaterialState.disabled}', () {
         expect(

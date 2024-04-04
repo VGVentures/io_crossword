@@ -11,6 +11,8 @@ class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
 class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
 
+class _MockIoColorScheme extends Mock implements IoColorScheme {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
@@ -20,6 +22,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          colorScheme: _MockIoColorScheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -33,6 +36,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          colorScheme: _MockIoColorScheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -50,6 +54,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          colorScheme: _MockIoColorScheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -63,6 +68,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          colorScheme: _MockIoColorScheme(),
         );
 
         when(
@@ -77,6 +83,9 @@ void main() {
         when(
           () => theme.physicalModel.lerp(theme.physicalModel, 0.5),
         ).thenReturn(_MockIoPhysicalModelStyle());
+        when(
+          () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
+        ).thenReturn(_MockIoColorScheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -110,6 +119,7 @@ void main() {
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
               physicalModel: _MockIoPhysicalModelStyle(),
+              colorScheme: _MockIoColorScheme(),
             ),
           ],
         );

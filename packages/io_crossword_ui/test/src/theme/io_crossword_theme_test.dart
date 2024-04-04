@@ -17,7 +17,7 @@ void main() {
 
       group('OutlinedButtonThemeData', () {
         final outlinedBorder =
-            IoCrosswordTheme().outlinedButtonThemeData.style!.shape!;
+            IoCrosswordTheme().themeData.outlinedButtonTheme.style!.shape!;
 
         test('displays StadiumBorder with ${MaterialState.disabled}', () {
           expect(
