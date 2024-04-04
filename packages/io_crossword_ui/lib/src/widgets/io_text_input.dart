@@ -11,6 +11,7 @@ class IoTextInput extends StatefulWidget {
   /// {@macro io_text_input}
   const IoTextInput({
     required this.length,
+    this.values,
     super.key,
   });
 
@@ -19,6 +20,23 @@ class IoTextInput extends StatefulWidget {
   /// In other words, the number of characters that the input will accept.
   final int length;
 
+  /// Values that are fixed and cannot be changed.
+  ///
+  /// The key is the index of the character field. For example, if the input
+  /// has a length of 5, and the first and third characters are fixed, then
+  /// the values map will be:
+  ///
+  /// ```dart
+  /// {0: 'A', 2: 'B'}
+  /// ```
+  ///
+  /// If an index is not present in the map, then the character field will be
+  /// editable.
+  ///
+  /// Those indexes that are greater than the length of the input will be
+  /// ignored.
+  final Map<int, String>? values;
+
   @override
   State<IoTextInput> createState() => _IoTextInputState();
 }
@@ -26,42 +44,54 @@ class IoTextInput extends StatefulWidget {
 class _IoTextInputState extends State<IoTextInput> {
   var _currentCharacterIndex = 0;
 
-  late final _focusNodes = List.generate(widget.length, (_) => FocusNode());
+  final Map<int, FocusNode> _focusNodes = {};
 
-  late final _controllers = List.generate(
-    widget.length,
-    (_) => TextEditingController(text: _emptyCharacter),
-  );
+  final Map<int, TextEditingController> _controllers = {};
+
+  TextEditingController get _activeController =>
+      _controllers[_currentCharacterIndex]!;
+
+  FocusNode get _activeFocusNode => _focusNodes[_currentCharacterIndex]!;
 
   void _onTextChanged(String value) {
-    final controller = _controllers[_currentCharacterIndex];
-    if (value.isEmpty) {
+    void remove() {
+      _activeController.text = _emptyCharacter;
       _previous();
-      controller.text = _emptyCharacter;
+      setState(() {});
+    }
+
+    if (value.isEmpty) {
+      remove();
       return;
     }
 
     final newCharacter = value[value.length - 1];
+
     final isAlphabetic = RegExp('[a-zA-Z]').hasMatch(newCharacter);
     if (!isAlphabetic) {
-      controller.text =
-          controller.text.substring(0, controller.text.length - 1);
+      remove();
       return;
     }
 
-    controller.text = newCharacter.toUpperCase();
+    _activeController.text = newCharacter.toUpperCase();
     _next();
+    setState(() {});
   }
 
   void _next() {
-    final nextCharacter = _controllers.indexWhere(
-      (controller) => controller.text == _emptyCharacter,
-    );
-    if (nextCharacter == -1) {
+    final emptyFields = _controllers.entries
+        .where(
+          (e) =>
+              e.key > _currentCharacterIndex && e.value.text == _emptyCharacter,
+        )
+        .map((e) => e.key);
+
+    if (emptyFields.isEmpty) {
       _submit();
       return;
     }
-    _changeCurrentIndex(nextCharacter);
+
+    _changeCurrentIndex(emptyFields.first);
   }
 
   void _previous() {
@@ -83,9 +113,8 @@ class _IoTextInputState extends State<IoTextInput> {
   }
 
   void _focus() {
-    final focusNode = _focusNodes[_currentCharacterIndex];
-    if (!focusNode.hasFocus) {
-      focusNode.requestFocus();
+    if (!_activeFocusNode.hasFocus) {
+      _activeFocusNode.requestFocus();
     }
   }
 
@@ -94,107 +123,106 @@ class _IoTextInputState extends State<IoTextInput> {
   @override
   void initState() {
     super.initState();
+
+    for (var i = 0; i < widget.length; i++) {
+      if (widget.values == null || widget.values!.containsKey(i)) {
+        _focusNodes[i] = FocusNode();
+        _controllers[i] = TextEditingController(text: _emptyCharacter);
+      }
+    }
+
     _changeCurrentIndex(_currentCharacterIndex);
-    for (final focus in _focusNodes) {
+    for (final focus in _focusNodes.values) {
       focus.addListener(() {
         if (focus.hasFocus) _focus();
+        setState(() {});
       });
     }
   }
 
   @override
   void dispose() {
-    for (final controller in _controllers) {
+    for (final controller in _controllers.values) {
       controller.dispose();
     }
-    for (final focusNode in _focusNodes) {
+    for (final focusNode in _focusNodes.values) {
       focusNode.dispose();
     }
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).io.textInput;
+    final textInputStyle = Theme.of(context).io.textInput;
+
+    final characters = <Widget>[];
+
+    for (var i = 0; i < widget.length; i++) {
+      final focusNode = _focusNodes[i];
+      final controller = _controllers[i];
+      final readOnly = !(focusNode != null && controller != null);
+
+      late final IoTextInputCharacterFieldStyle style;
+      if (readOnly) {
+        style = textInputStyle.disabled;
+      } else if (focusNode.hasFocus) {
+        style = textInputStyle.focused;
+      } else if (controller.text == _emptyCharacter) {
+        style = textInputStyle.empty;
+      } else {
+        style = textInputStyle.filled;
+      }
+
+      final character = Padding(
+        padding: textInputStyle.padding,
+        child: _CharacterInputBox(
+          style: style,
+          child: readOnly
+              ? Text(widget.values![i]!, style: style.textStyle)
+              : EditableText(
+                  keyboardType: TextInputType.text,
+                  controller: controller,
+                  onChanged: _onTextChanged,
+                  focusNode: focusNode,
+                  textAlign: TextAlign.center,
+                  style: style.textStyle,
+                  showCursor: false,
+                  cursorColor: Colors.transparent,
+                  backgroundCursorColor: Colors.transparent,
+                ),
+        ),
+      );
+      characters.add(character);
+    }
 
     return Row(
-      children: [
-        for (var i = 0; i < widget.length; i++)
-          Padding(
-            padding: style.padding,
-            child: _CharacterInputField(
-              focusNode: _focusNodes[i],
-              controller: _controllers[i],
-              onChanged: _onTextChanged,
-            ),
-          ),
-      ],
+      mainAxisSize: MainAxisSize.min,
+      children: characters,
     );
   }
 }
 
-class _CharacterInputField extends StatefulWidget {
-  const _CharacterInputField({
-    required this.controller,
-    required this.focusNode,
-    required this.onChanged,
+class _CharacterInputBox extends StatelessWidget {
+  const _CharacterInputBox({
+    required this.style,
+    required this.child,
   });
 
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final void Function(String value) onChanged;
+  final IoTextInputCharacterFieldStyle style;
 
-  @override
-  State<_CharacterInputField> createState() => _CharacterInputFieldState();
-}
-
-class _CharacterInputFieldState extends State<_CharacterInputField> {
-  @override
-  void initState() {
-    super.initState();
-    widget.focusNode.addListener(_onFocusChanged);
-  }
-
-  @override
-  void dispose() {
-    widget.focusNode.removeListener(_onFocusChanged);
-    super.dispose();
-  }
-
-  void _onFocusChanged() {
-    setState(() {});
-  }
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).io.textInput;
-
-    final activeStyle = style.empty;
-
     return SizedBox.square(
       dimension: 50,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: activeStyle.borderRadius,
-          border: activeStyle.border,
-          color: widget.focusNode.hasFocus
-              ? Colors.red
-              : activeStyle.backgroundColor,
+          borderRadius: style.borderRadius,
+          border: style.border,
+          color: style.backgroundColor,
         ),
-        child: Center(
-          child: EditableText(
-            keyboardType: TextInputType.text,
-            // readOnly: widget.controller.readOnly,
-            controller: widget.controller,
-            onChanged: widget.onChanged,
-            focusNode: widget.focusNode,
-            textAlign: TextAlign.center,
-            style: activeStyle.textStyle,
-            cursorColor: Colors.transparent,
-            backgroundCursorColor: activeStyle.backgroundColor,
-          ),
-        ),
+        child: Center(child: child),
       ),
     );
   }

@@ -59,16 +59,18 @@ class IoCrosswordTheme {
         textStyle: textStyle,
       ),
       filled: IoTextInputCharacterFieldStyle(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: IoCrosswordColors.seedWhite,
         border: Border.all(
           width: 1.8,
           color: IoCrosswordColors.seedWhite,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle,
+        textStyle: textStyle.copyWith(
+          color: IoCrosswordColors.black,
+        ),
       ),
       focused: IoTextInputCharacterFieldStyle(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: IoCrosswordColors.redError,
         border: Border.all(
           width: 1.8,
           color: IoCrosswordColors.seedWhite,
@@ -77,10 +79,10 @@ class IoCrosswordTheme {
         textStyle: textStyle,
       ),
       disabled: IoTextInputCharacterFieldStyle(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: IoCrosswordColors.seedWhite,
         border: Border.all(
           width: 1.8,
-          color: IoCrosswordColors.seedWhite,
+          color: colorScheme.surface,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
