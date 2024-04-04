@@ -17,6 +17,7 @@ class IoCrosswordTheme {
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
+      colorScheme: ioColorScheme,
       wordInput: _textInput,
     );
 
@@ -28,7 +29,10 @@ class IoCrosswordTheme {
       cardColor: _cardTheme.plain.color,
       cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
+      progressIndicatorTheme: _progressIndicatorTheme,
       filledButtonTheme: _filledButtonThemeData,
+      outlinedButtonTheme: _outlinedButtonThemeData,
+      segmentedButtonTheme: _segmentedButtonTheme,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
@@ -89,11 +93,39 @@ class IoCrosswordTheme {
     );
   }
 
+  SegmentedButtonThemeData get _segmentedButtonTheme {
+    return SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        side: const BorderSide(
+          color: IoCrosswordColors.mediumGray,
+        ),
+      ).copyWith(
+        iconColor: MaterialStatePropertyAll(
+          colorScheme.primary,
+        ),
+      ),
+    );
+  }
+
+  ProgressIndicatorThemeData get _progressIndicatorTheme {
+    return const ProgressIndicatorThemeData(
+      linearTrackColor: IoCrosswordColors.mediumGray,
+    );
+  }
+
+  @internal
+  // ignore: public_member_api_docs
+  IoColorScheme get ioColorScheme {
+    return const IoColorScheme(
+      primaryGradient: IoCrosswordColors.googleGradient,
+    );
+  }
+
   IoPhysicalModelStyle get _physicalModel {
-    // TODO(alestiago): Update gradient from new design system when available:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6365241057
+    final ioColorScheme = this.ioColorScheme;
+
     return IoPhysicalModelStyle(
-      gradient: IoCrosswordColors.googleGradient,
+      gradient: ioColorScheme.primaryGradient,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       border: Border.all(color: IoCrosswordColors.black),
       elevation: 4,
@@ -130,6 +162,59 @@ class IoCrosswordTheme {
         ),
         elevation: 0,
         color: colorScheme.surface,
+      ),
+    );
+  }
+
+  OutlinedButtonThemeData get _outlinedButtonThemeData {
+    final ioColorScheme = this.ioColorScheme;
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(side: BorderSide(width: 2));
+            }
+            return GradientStadiumBorder(
+              gradient: ioColorScheme.primaryGradient,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Gemini outlined button theme data
+  static OutlinedButtonThemeData get geminiOutlinedButtonThemeData {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(
+                side: BorderSide(
+                  width: 2,
+                ),
+              );
+            }
+
+            return const GradientStadiumBorder(
+              gradient: IoCrosswordColors.geminiGradient,
+            );
+          },
+        ),
       ),
     );
   }
@@ -231,6 +316,7 @@ class IoCrosswordTheme {
       background: IoCrosswordColors.seedBlack,
       surface: IoCrosswordColors.darkGray,
       surfaceTint: IoCrosswordColors.seedWhite,
+      primary: IoCrosswordColors.googleBlue,
     );
   }
 

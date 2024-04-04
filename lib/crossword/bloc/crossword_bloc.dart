@@ -44,23 +44,23 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       ),
       onData: (section) {
         if (section == null) return state;
-        final newSection = {
-          (section.position.x, section.position.y): section,
-        };
+
+        final newSectionKey = (section.position.x, section.position.y);
 
         if (state is CrosswordLoaded) {
           final loadedState = state as CrosswordLoaded;
+
+          final sections = {...loadedState.sections};
+          sections[newSectionKey] = section;
+
           return loadedState.copyWith(
-            sections: {
-              ...loadedState.sections,
-              ...newSection,
-            },
+            sections: sections,
           );
         }
 
         return CrosswordLoaded(
           sectionSize: section.size,
-          sections: newSection,
+          sections: {newSectionKey: section},
         );
       },
     );
@@ -97,12 +97,14 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     );
   }
 
-  FutureOr<void> _onWordSelected(
+  void _onWordSelected(
     WordSelected event,
     Emitter<CrosswordState> emit,
   ) {
     final currentState = state;
     if (currentState is CrosswordLoaded) {
+      if (currentState.selectedWord != null) return;
+
       final section = _findWordInSection(
         currentState,
         event.word,

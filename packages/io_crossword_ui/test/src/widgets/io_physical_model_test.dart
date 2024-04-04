@@ -141,7 +141,7 @@ void main() {
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
 
-          final themeData = IoFirebaseTheme().themeData;
+          final themeData = IoFlutterTheme().themeData;
 
           await tester.pumpWidget(
             _GoldenSubject(

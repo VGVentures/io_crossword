@@ -374,11 +374,17 @@ abstract class IoCrosswordColors {
   /// googleBlue
   static const googleBlue = Color(0xFF3D96FF);
 
+  /// flutterBlue
+  static const flutterBlue = Color(0xFF5CA7FF);
+
   /// androidGreen
   static const androidGreen = Color(0xFF6AC76E);
 
   /// sparkyYellow
   static const sparkyYellow = Color(0xFFFECD3C);
+
+  /// chromeRed
+  static const chromeRed = Color(0xFFFF6F5C);
 
   /// black
   static const black = Color(0xFF010101);
@@ -395,7 +401,7 @@ abstract class IoCrosswordColors {
     stops: [0.0, 1.0],
   );
 
-  /// Light theme gradient
+  /// Google multi team theme gradient
   static const LinearGradient googleGradient = LinearGradient(
     colors: [
       IoCrosswordColors.googleBlue,
@@ -404,5 +410,51 @@ abstract class IoCrosswordColors {
       IoCrosswordColors.redError,
     ],
     stops: [0.0, 0.33, 0.66, 1.0],
+  );
+
+  /// Dash theme gradient
+  static const LinearGradient dashGradient = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      Color(0xFF1F85FA),
+      Color(0xFF00A947),
+    ],
+    stops: [0.0, 1.0],
+  );
+
+  /// Android theme gradient
+  static const LinearGradient androidGradient = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      Color(0xFFFFC700),
+      Color(0xFF00A947),
+    ],
+    stops: [0.0, 1.0],
+  );
+
+  /// Sparky theme gradient
+  static const LinearGradient sparkyGradient = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      Color(0xFFFFC700),
+      Color(0xFFFF5C10),
+      Color(0xFFFD2B25),
+    ],
+    stops: [0.33, 0.66, 1.0],
+  );
+
+  /// Dino theme gradient
+  static const LinearGradient dinoGradient = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      Color(0xFF4383F2),
+      Color(0xFFA769D9),
+      Color(0xFFFD2B25),
+    ],
+    stops: [0.33, 0.66, 1.0],
   );
 }
