@@ -374,11 +374,17 @@ abstract class IoCrosswordColors {
   /// googleBlue
   static const googleBlue = Color(0xFF3D96FF);
 
+  /// flutterBlue
+  static const flutterBlue = Color(0xFF5CA7FF);
+
   /// androidGreen
   static const androidGreen = Color(0xFF6AC76E);
 
   /// sparkyYellow
   static const sparkyYellow = Color(0xFFFECD3C);
+
+  /// chromeRed
+  static const chromeRed = Color(0xFFFF6F5C);
 
   /// black
   static const black = Color(0xFF010101);
