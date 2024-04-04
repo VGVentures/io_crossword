@@ -68,10 +68,8 @@ class RecordProgress extends StatelessWidget {
           style: IoCrosswordTextStyles.bodyLG,
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
-        LinearProgressIndicator(
+        IoLinearProgressIndicator(
           value: totalWords == 0 ? 0 : solvedWords / totalWords,
-          minHeight: 4,
-          borderRadius: BorderRadius.circular(4),
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
         Text(

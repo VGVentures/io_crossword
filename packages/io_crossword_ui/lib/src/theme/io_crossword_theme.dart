@@ -28,12 +28,19 @@ class IoCrosswordTheme {
       cardColor: _cardTheme.plain.color,
       cardTheme: _cardTheme.plain,
       actionIconTheme: _actionIconThemeData,
+      progressIndicatorTheme: _progressIndicatorTheme,
       filledButtonTheme: _filledButtonThemeData,
       outlinedButtonTheme: _outlinedButtonThemeData,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  ProgressIndicatorThemeData get _progressIndicatorTheme {
+    return const ProgressIndicatorThemeData(
+      linearTrackColor: IoCrosswordColors.mediumGray,
     );
   }
 
