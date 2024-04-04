@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -9,11 +11,16 @@ const _emptyCharacter = '_';
 /// {@endtemplate}
 class IoTextInput extends StatefulWidget {
   /// {@macro io_text_input}
-  const IoTextInput({
+  IoTextInput({
     required this.length,
-    this.values,
+    Map<int, String>? characters,
     super.key,
-  });
+  }) : characters = characters != null
+            ? UnmodifiableMapView(
+                Map.from(characters)
+                  ..removeWhere((key, value) => key >= length),
+              )
+            : null;
 
   /// The length of the input.
   ///
@@ -35,7 +42,7 @@ class IoTextInput extends StatefulWidget {
   ///
   /// Those indexes that are greater than the length of the input will be
   /// ignored.
-  final Map<int, String>? values;
+  final UnmodifiableMapView<int, String>? characters;
 
   @override
   State<IoTextInput> createState() => _IoTextInputState();
@@ -43,19 +50,21 @@ class IoTextInput extends StatefulWidget {
 
 class _IoTextInputState extends State<IoTextInput> {
   /// The current character that is being inputted.
+  ///
+  /// Will be `null` if there is no available character field to input. This
+  /// happens when [IoTextInput.characters] is has the same length as
+  /// [IoTextInput.length]. In other words, when there is no available character
+  /// field to input since they are all fixed.
   int? _currentCharacterIndex;
 
   final Map<int, FocusNode> _focusNodes = {};
 
+  FocusNode? get _activeFocusNode => _focusNodes[_currentCharacterIndex];
+
   final Map<int, TextEditingController> _controllers = {};
 
-  TextEditingController? get _activeController {
-    return _controllers[_currentCharacterIndex];
-  }
-
-  FocusNode? get _activeFocusNode {
-    return _focusNodes[_currentCharacterIndex];
-  }
+  TextEditingController? get _activeController =>
+      _controllers[_currentCharacterIndex];
 
   void _onTextChanged(String value) {
     final isAlphabetic = RegExp('[a-zA-Z]');
@@ -127,7 +136,7 @@ class _IoTextInputState extends State<IoTextInput> {
     super.initState();
 
     for (var i = 0; i < widget.length; i++) {
-      if (widget.values == null || !widget.values!.containsKey(i)) {
+      if (widget.characters == null || !widget.characters!.containsKey(i)) {
         _focusNodes[i] = FocusNode();
         _controllers[i] = TextEditingController(text: _emptyCharacter);
       }
@@ -181,7 +190,7 @@ class _IoTextInputState extends State<IoTextInput> {
         child: _CharacterInputBox(
           style: style,
           child: readOnly
-              ? Text(widget.values![i]!, style: style.textStyle)
+              ? Text(widget.characters![i]!, style: style.textStyle)
               : EditableText(
                   keyboardType: TextInputType.text,
                   controller: controller,
@@ -198,10 +207,16 @@ class _IoTextInputState extends State<IoTextInput> {
       characters.add(character);
     }
 
-    return Row(
+    Widget child = Row(
       mainAxisSize: MainAxisSize.min,
       children: characters,
     );
+
+    if (widget.characters?.length != widget.length) {
+      child = GestureDetector(onTap: _focus, child: child);
+    }
+
+    return child;
   }
 }
 
