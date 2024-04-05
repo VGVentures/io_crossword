@@ -11,6 +11,8 @@ class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
 class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
 
+class _MockIoWordInputStyle extends Mock implements IoWordInputStyle {}
+
 class _MockIoColorScheme extends Mock implements IoColorScheme {}
 
 void main() {
@@ -22,6 +24,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
         );
 
@@ -36,6 +39,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
         );
 
@@ -54,6 +58,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
         );
 
@@ -68,6 +73,7 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
         );
 
@@ -83,6 +89,9 @@ void main() {
         when(
           () => theme.physicalModel.lerp(theme.physicalModel, 0.5),
         ).thenReturn(_MockIoPhysicalModelStyle());
+        when(
+          () => theme.wordInput.lerp(theme.wordInput, 0.5),
+        ).thenReturn(_MockIoWordInputStyle());
         when(
           () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
         ).thenReturn(_MockIoColorScheme());
@@ -119,6 +128,7 @@ void main() {
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
               physicalModel: _MockIoPhysicalModelStyle(),
+              wordInput: _MockIoWordInputStyle(),
               colorScheme: _MockIoColorScheme(),
             ),
           ],
