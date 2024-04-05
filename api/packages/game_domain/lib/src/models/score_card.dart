@@ -14,16 +14,16 @@ class ScoreCard extends Equatable {
     required this.id,
     this.totalScore = 0,
     this.streak = 0,
-    this.mascot = Mascots.dash,
+    Mascots? mascot,
     this.initials = '',
-  });
+  }) : mascot = mascot ?? Mascots.dash;
 
   /// {@macro score_card}
   factory ScoreCard.fromJson(Map<String, dynamic> json) =>
       _$ScoreCardFromJson(json);
 
   /// Unique identifier of the score object and session id for the player.
-  @JsonKey()
+  @JsonKey(includeToJson: false)
   final String id;
 
   /// Total score of the player.
@@ -44,6 +44,20 @@ class ScoreCard extends Equatable {
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$ScoreCardToJson(this);
+
+  /// Returns a copy of this instance with the provided fields.
+  ScoreCard copyWith({
+    int? totalScore,
+    int? streak,
+  }) {
+    return ScoreCard(
+      id: id,
+      totalScore: totalScore ?? this.totalScore,
+      streak: streak ?? this.streak,
+      mascot: mascot,
+      initials: initials,
+    );
+  }
 
   @override
   List<Object?> get props => [
