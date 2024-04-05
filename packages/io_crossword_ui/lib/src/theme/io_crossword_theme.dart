@@ -315,6 +315,7 @@ class IoCrosswordTheme {
       seedColor: IoCrosswordColors.seedBlue,
       background: IoCrosswordColors.seedBlack,
       surface: IoCrosswordColors.darkGray,
+      onSurface: IoCrosswordColors.seedWhite,
       surfaceTint: IoCrosswordColors.seedWhite,
       primary: IoCrosswordColors.googleBlue,
     );
