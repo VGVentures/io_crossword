@@ -41,13 +41,10 @@ class _Subject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Localizations(
-      delegates: AppLocalizations.localizationsDelegates,
+    return MaterialApp(
       locale: const Locale('en'),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Material(child: child),
-      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      home: child,
     );
   }
 }
