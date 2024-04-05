@@ -374,7 +374,7 @@ class IoWordInputStyle extends Equatable {
     required this.disabled,
   });
 
-  /// The margin between the character fields.
+  /// The padding around the character fields.
   final EdgeInsets padding;
 
   /// The style of an empty character field.
