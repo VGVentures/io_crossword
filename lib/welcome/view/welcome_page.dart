@@ -16,6 +16,11 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 40,
+        title: const Text('IO Crossword'),
+        bottom: const WelcomeHeaderImage(),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(50),
