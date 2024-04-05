@@ -40,6 +40,7 @@ void main() {
   group('$IoWordInput', () {
     testWidgets('renders successfully', (tester) async {
       await tester.binding.setSurfaceSize(const Size(500, 150));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(
         _Subject(child: IoWordInput.alphabetic(length: 5)),
@@ -52,6 +53,7 @@ void main() {
       tags: TestTag.golden,
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(500, 150));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
 
         final words = <String>[];
         await tester.pumpWidget(
@@ -130,6 +132,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
 
@@ -152,6 +155,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
 
@@ -177,6 +181,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
 
@@ -206,6 +211,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
 
