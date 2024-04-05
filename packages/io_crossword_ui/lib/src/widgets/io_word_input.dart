@@ -93,6 +93,7 @@ class IoWordInput extends StatefulWidget {
   ///     ),
   ///   );
   /// ),
+  /// ```
   final ValueChanged<String>? onWord;
 
   /// The character that represents an empty character field.
