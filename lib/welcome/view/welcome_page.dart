@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class WelcomePage extends StatelessWidget {
