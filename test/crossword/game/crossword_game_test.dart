@@ -223,7 +223,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -260,7 +260,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -300,7 +300,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord1.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord1.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -317,7 +317,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord2.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord2.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),

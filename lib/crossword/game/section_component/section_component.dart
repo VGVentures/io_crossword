@@ -32,7 +32,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   BoardSection? _boardSection;
 
   @visibleForTesting
-  String? lastSelectedWord;
+  String? lastSelectedWordId;
   @visibleForTesting
   (int, int)? lastSelectedSection;
 
@@ -44,7 +44,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     _subscription = gameRef.bloc.stream.listen(_onNewState);
 
-    lastSelectedWord = state.selectedWord?.word.id;
+    lastSelectedWordId = state.selectedWord?.word.id;
     lastSelectedSection = state.selectedWord?.section;
 
     final boardSection = gameRef.state.sections[index];
@@ -104,16 +104,16 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
         final selectedWord = state.selectedWord?.word.id;
         final selectedSection = state.selectedWord?.section;
-        if (selectedWord != lastSelectedWord ||
+        if (selectedWord != lastSelectedWordId ||
             selectedSection != lastSelectedSection) {
           _updateSelection(
-            previousWord: lastSelectedWord,
+            previousWord: lastSelectedWordId,
             newWord: selectedWord,
             previousSection: lastSelectedSection,
             newSection: selectedSection,
           );
         }
-        lastSelectedWord = selectedWord;
+        lastSelectedWordId = selectedWord;
         lastSelectedSection = selectedSection;
       }
     }
@@ -213,7 +213,6 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         color: Colors.white.withOpacity(.2),
         batchPosition: _wordPositions[previousWord]!,
       );
-      add(SectionKeyboardHandler(newIndex));
       indexes.add(newIndex);
     }
 
