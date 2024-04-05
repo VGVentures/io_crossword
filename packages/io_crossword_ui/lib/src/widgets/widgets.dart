@@ -4,5 +4,6 @@ export 'io_crossword_card.dart';
 export 'io_linear_progress_indicator.dart';
 export 'io_physical_model.dart';
 export 'io_player_alias.dart';
+export 'io_word_input.dart';
 export 'primary_button.dart';
 export 'responsive_layout.dart';

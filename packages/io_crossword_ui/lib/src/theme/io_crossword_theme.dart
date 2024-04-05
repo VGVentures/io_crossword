@@ -18,6 +18,7 @@ class IoCrosswordTheme {
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
       colorScheme: ioColorScheme,
+      wordInput: _textInput,
     );
 
     return ThemeData(
@@ -36,6 +37,59 @@ class IoCrosswordTheme {
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  IoWordInputStyle get _textInput {
+    final colorScheme = this.colorScheme;
+
+    const textStyle = TextStyle(
+      color: IoCrosswordColors.seedWhite,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Google Sans',
+      package: IoCrosswordTextStyles.package,
+    );
+
+    return IoWordInputStyle(
+      padding: const EdgeInsets.symmetric(horizontal: 1.8),
+      empty: IoWordInputCharacterFieldStyle(
+        backgroundColor: colorScheme.surface,
+        border: Border.all(
+          width: 1.8,
+          color: IoCrosswordColors.seedWhite,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+        textStyle: textStyle,
+      ),
+      filled: IoWordInputCharacterFieldStyle(
+        backgroundColor: IoCrosswordColors.seedWhite,
+        border: Border.all(
+          width: 1.8,
+          color: IoCrosswordColors.seedWhite,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+        textStyle: textStyle.copyWith(
+          color: IoCrosswordColors.black,
+        ),
+      ),
+      focused: IoWordInputCharacterFieldStyle(
+        backgroundColor: IoCrosswordColors.redError,
+        border: Border.all(
+          width: 1.8,
+          color: IoCrosswordColors.seedWhite,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+        textStyle: textStyle,
+      ),
+      disabled: IoWordInputCharacterFieldStyle(
+        backgroundColor: IoCrosswordColors.seedWhite,
+        border: Border.all(width: 0),
+        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+        textStyle: textStyle.copyWith(
+          color: IoCrosswordColors.black,
+        ),
+      ),
     );
   }
 

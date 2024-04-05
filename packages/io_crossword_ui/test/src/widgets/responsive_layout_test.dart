@@ -8,6 +8,8 @@ void main() {
       await tester.binding.setSurfaceSize(
         const Size(IoCrosswordBreakpoints.medium, 800),
       );
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
 
@@ -26,6 +28,8 @@ void main() {
       await tester.binding.setSurfaceSize(
         const Size(IoCrosswordBreakpoints.medium, 1200),
       );
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
 
@@ -44,6 +48,8 @@ void main() {
       await tester.binding.setSurfaceSize(
         const Size(IoCrosswordBreakpoints.medium, 800),
       );
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');
       const childKey = Key('__child__');
@@ -65,6 +71,7 @@ void main() {
       await tester.binding.setSurfaceSize(
         const Size(IoCrosswordBreakpoints.medium - 1, 800),
       );
+      addTearDown(() => tester.binding.setSurfaceSize(null));
 
       const smallKey = Key('__small__');
       const largeKey = Key('__large__');

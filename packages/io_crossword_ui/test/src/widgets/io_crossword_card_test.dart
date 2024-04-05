@@ -28,6 +28,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(390, 844));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpWidget(
             _GoldenSubject(child: IoCrosswordCard()),
@@ -45,6 +46,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(1440, 800));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpWidget(
             _GoldenSubject(child: IoCrosswordCard()),

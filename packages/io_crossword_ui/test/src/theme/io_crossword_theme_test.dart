@@ -254,6 +254,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size.square(200));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               MaterialApp(
@@ -278,6 +279,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size.square(200));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             final themeData = IoCrosswordTheme().themeData;
             final cardTheme = themeData.io.cardTheme.highlight;
