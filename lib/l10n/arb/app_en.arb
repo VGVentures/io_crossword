@@ -48,6 +48,10 @@
   "@submit": {
     "description": "Submit label"
   },
+  "solveIt": "Solve it",
+  "@solveIt": {
+    "description": "Solve it label"
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
