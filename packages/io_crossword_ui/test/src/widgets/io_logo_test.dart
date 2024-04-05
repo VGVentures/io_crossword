@@ -20,7 +20,7 @@ void main() {
         'with white surface color',
         tags: TestTag.golden,
         (tester) async {
-          await tester.binding.setSurfaceSize(const Size(50, 50));
+          await tester.binding.setSurfaceSize(const Size(100, 50));
           addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
@@ -44,7 +44,7 @@ void main() {
         'with new color after repaint',
         tags: TestTag.golden,
         (tester) async {
-          await tester.binding.setSurfaceSize(const Size(50, 50));
+          await tester.binding.setSurfaceSize(const Size(100, 50));
           addTearDown(() => tester.binding.setSurfaceSize(null));
 
           var themeData = IoCrosswordTheme().themeData;
