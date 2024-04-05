@@ -94,7 +94,6 @@ class IoCrosswordTheme {
       highlight: const CardTheme(
         margin: EdgeInsets.zero,
         shape: GradientInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
           gradient: IoCrosswordColors.googleGradient,
         ),
         elevation: 0,

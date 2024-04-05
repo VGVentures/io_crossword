@@ -1,4 +1,5 @@
 export 'card_scrollable_content_with_button.dart';
+export 'error_view.dart';
 export 'gemini_gradient.dart';
 export 'io_crossword_card.dart';
 export 'io_linear_progress_indicator.dart';

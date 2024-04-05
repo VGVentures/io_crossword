@@ -28,6 +28,22 @@ class ResponsiveLayoutBuilder extends StatelessWidget {
   /// builders as a way to share/optimize shared layout.
   final Widget? child;
 
+  /// Checks if the screen is large using [MediaQuery] size.
+  ///
+  /// If the screen is bigger or equal than [IoCrosswordBreakpoints.medium]
+  /// it returns true.
+  static bool isLarge(BuildContext context) {
+    return !isSmall(context);
+  }
+
+  /// Check if the screen is small using [MediaQuery] size.
+  ///
+  /// If the screen is smaller than [IoCrosswordBreakpoints.medium]
+  /// it returns true.
+  static bool isSmall(BuildContext context) {
+    return MediaQuery.of(context).size.width < IoCrosswordBreakpoints.medium;
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
