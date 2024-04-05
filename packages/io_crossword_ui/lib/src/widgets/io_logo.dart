@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// {@template io_logo}
-/// A widget that displays the IO logo.
+/// The IO logo, in widget form.
+///
+/// This widget uses the [ColorScheme.onSurface] color when painting the logo.
+/// Its size has been fixed according to the design specifications.
 ///
 /// See also:
 ///
