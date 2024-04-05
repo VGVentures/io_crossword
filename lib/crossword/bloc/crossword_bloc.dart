@@ -103,8 +103,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) {
     final currentState = state;
     if (currentState is CrosswordLoaded) {
-      if (currentState.selectedWord != null) return;
-
       final section = _findWordInSection(
         currentState,
         event.word,

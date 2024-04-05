@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordPage extends StatelessWidget {
@@ -116,7 +116,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
               right: 16,
               child: AboutButton(),
             ),
-            const WordFocusedDesktopView(),
+            const WordFocusedDesktopPage(),
             _ZoomControls(game: game),
           ],
         );
@@ -191,7 +191,7 @@ class _ZoomControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 16,
+      left: 16,
       bottom: 16,
       child: Column(
         children: [

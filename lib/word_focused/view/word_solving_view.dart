@@ -1,109 +1,65 @@
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/hint/view/hint_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordFocusedDesktopView extends StatelessWidget {
-  const WordFocusedDesktopView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedWord = context.select(
-      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
-    );
-    if (selectedWord == null) {
-      return const SizedBox.shrink();
-    }
-
-    return WordFocusedDesktopBody(selectedWord);
-  }
-}
-
-class WordFocusedDesktopBody extends StatelessWidget {
-  @visibleForTesting
-  const WordFocusedDesktopBody(this.selectedWord, {super.key});
+class WordSolvingDesktopView extends StatelessWidget {
+  const WordSolvingDesktopView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final offset = selectedWord.word.axis == Axis.horizontal
-        ? const Offset(0, 180)
-        : const Offset(250, 0);
 
-    return Center(
-      child: Transform.translate(
-        offset: offset,
-        child: Container(
-          height: 268,
-          width: 390,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          color: IoCrosswordColors.seedWhite,
-          child: Column(
+    return BlocListener<CrosswordBloc, CrosswordState>(
+      listenWhen: (previous, current) {
+        final previousState = previous as CrosswordLoaded;
+        final currentState = current as CrosswordLoaded;
+        return currentState.selectedWord?.solvedStatus !=
+            previousState.selectedWord?.solvedStatus;
+      },
+      listener: (context, state) {
+        final loadedState = state as CrosswordLoaded;
+        if (loadedState.selectedWord?.solvedStatus == SolvedStatus.solved) {
+          context
+              .read<WordFocusedBloc>()
+              .add(const WordFocusedSuccessRequested());
+        }
+      },
+      child: Column(
+        children: [
+          TopBar(wordId: selectedWord.word.id),
+          const SizedBox(height: 8),
+          const Spacer(),
+          Text(
+            selectedWord.word.clue,
+            style: IoCrosswordTextStyles.titleMD,
+            textAlign: TextAlign.center,
+          ),
+          const Spacer(),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    // TODO(any): Open share page
-                    onPressed: () {}, // coverage:ignore-line
-                    icon: const Icon(Icons.ios_share),
-                  ),
-                  Text(
-                    selectedWord.word.id,
-                    style: IoCrosswordTextStyles.labelMD.bold,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context.read<CrosswordBloc>().add(const WordUnselected());
-                    },
-                    icon: const Icon(Icons.cancel),
-                  ),
-                ],
+              const Expanded(
+                child: GeminiHintButton(),
               ),
-              const SizedBox(height: 8),
-              Text(
-                selectedWord.word.clue,
-                style: IoCrosswordTextStyles.titleMD,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              const Spacer(),
-              Text(
-                l10n.typeToAnswer,
-                style: IoCrosswordTextStyles.bodyLG.copyWith(
-                  color: IoCrosswordColors.accessibleGrey,
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.read<CrosswordBloc>().add(
+                        const AnswerSubmitted(),
+                      ),
+                  child: Text(l10n.submit),
                 ),
-              ),
-              const Spacer(),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      // TODO(any): Get hint
-                      onPressed: () {}, // coverage:ignore-line
-                      label: l10n.getHint,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: PrimaryButton(
-                      label: l10n.submit,
-                      onPressed: () => context.read<CrosswordBloc>().add(
-                            const AnswerSubmitted(),
-                          ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
