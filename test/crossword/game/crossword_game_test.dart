@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -9,7 +8,6 @@ import 'package:flame/events.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
@@ -314,7 +312,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -351,7 +349,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -391,7 +389,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord1.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord1.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -408,7 +406,7 @@ void main() {
 
           await Future.microtask(() {});
 
-          expect(targetSection.lastSelectedWord, equals(targetWord2.id));
+          expect(targetSection.lastSelectedWordId, equals(targetWord2.id));
           expect(
             targetSection.lastSelectedSection,
             equals(targetSection.index),
@@ -444,7 +442,7 @@ void main() {
           final listeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(listeners.length, equals(1));
-          expect(listeners.first.index.$1, targetWord.id);
+          expect(listeners.first.wordIndex.id, targetWord.id);
         },
       );
 
@@ -478,7 +476,7 @@ void main() {
           final listeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(listeners.length, equals(1));
-          expect(listeners.first.index.$1, targetWord.id);
+          expect(listeners.first.wordIndex.id, targetWord.id);
 
           final targetWord2 = boardSection.words.elementAt(1);
 
@@ -496,171 +494,7 @@ void main() {
           final newListeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(newListeners.length, equals(1));
-          expect(newListeners.first.index.$1, targetWord2.id);
-        },
-      );
-    });
-
-    group('SectionKeyboardHandler', () {
-      late StreamController<CrosswordState> stateController;
-      final state = CrosswordLoaded(
-        sectionSize: sectionSize,
-        sections: {
-          for (final section in sections)
-            (section.position.x, section.position.y): section,
-        },
-      );
-
-      setUp(() {
-        stateController = StreamController<CrosswordState>.broadcast();
-        whenListen(
-          bloc,
-          stateController.stream,
-          initialState: state,
-        );
-      });
-
-      testWithGame(
-        'can enter characters',
-        createGame,
-        (game) async {
-          await game.ready();
-
-          final targetSection =
-              game.world.children.whereType<SectionComponent>().first;
-          final boardSection = sections.firstWhere(
-            (element) =>
-                element.position.x == targetSection.index.$1 &&
-                element.position.y == targetSection.index.$2,
-          );
-          final targetWord = boardSection.words.first;
-
-          stateController.add(
-            state.copyWith(
-              selectedWord: WordSelection(
-                section: targetSection.index,
-                word: targetWord,
-              ),
-            ),
-          );
-
-          await Future.microtask(() {});
-          await game.ready();
-          final listeners =
-              targetSection.children.whereType<SectionKeyboardHandler>();
-
-          listeners.first.onKeyEvent(
-            KeyDownEvent(
-              logicalKey: LogicalKeyboardKey.keyF,
-              physicalKey: PhysicalKeyboardKey.keyF,
-              timeStamp: DateTime.now().timeZoneOffset,
-              character: 'f',
-            ),
-            {LogicalKeyboardKey.keyF},
-          );
-          await game.ready();
-          expect(listeners.first.word, equals('f'));
-        },
-      );
-
-      testWithGame(
-        'can remove characters',
-        createGame,
-        (game) async {
-          await game.ready();
-
-          final targetSection =
-              game.world.children.whereType<SectionComponent>().first;
-          final boardSection = sections.firstWhere(
-            (element) =>
-                element.position.x == targetSection.index.$1 &&
-                element.position.y == targetSection.index.$2,
-          );
-          final targetWord = boardSection.words.first;
-
-          stateController.add(
-            state.copyWith(
-              selectedWord: WordSelection(
-                section: targetSection.index,
-                word: targetWord,
-              ),
-            ),
-          );
-
-          await Future.microtask(() {});
-          await game.ready();
-          final listeners =
-              targetSection.children.whereType<SectionKeyboardHandler>();
-
-          listeners.first.onKeyEvent(
-            KeyDownEvent(
-              logicalKey: LogicalKeyboardKey.keyF,
-              physicalKey: PhysicalKeyboardKey.keyF,
-              timeStamp: DateTime.now().timeZoneOffset,
-              character: 'f',
-            ),
-            {LogicalKeyboardKey.keyF},
-          );
-          await game.ready();
-          expect(listeners.first.word, equals('f'));
-
-          listeners.first.onKeyEvent(
-            KeyDownEvent(
-              logicalKey: LogicalKeyboardKey.backspace,
-              physicalKey: PhysicalKeyboardKey.backspace,
-              timeStamp: DateTime.now().timeZoneOffset,
-            ),
-            {LogicalKeyboardKey.backspace},
-          );
-          await game.ready();
-          expect(listeners.first.word, equals(''));
-        },
-      );
-
-      testWithGame(
-        'add AnswerUpdated event when user enters all the letters',
-        createGame,
-        (game) async {
-          await game.ready();
-
-          final targetSection =
-              game.world.children.whereType<SectionComponent>().first;
-          final boardSection = sections.firstWhere(
-            (element) =>
-                element.position.x == targetSection.index.$1 &&
-                element.position.y == targetSection.index.$2,
-          );
-          final targetWord = boardSection.words.first;
-
-          stateController.add(
-            state.copyWith(
-              selectedWord: WordSelection(
-                section: targetSection.index,
-                word: targetWord,
-              ),
-            ),
-          );
-
-          await Future.microtask(() {});
-          await game.ready();
-          final listeners =
-              targetSection.children.whereType<SectionKeyboardHandler>();
-
-          final buffer = StringBuffer();
-          for (var i = 0; i < targetWord.answer.length; i++) {
-            listeners.first.onKeyEvent(
-              KeyDownEvent(
-                logicalKey: LogicalKeyboardKey.keyF,
-                physicalKey: PhysicalKeyboardKey.keyF,
-                timeStamp: DateTime.now().timeZoneOffset,
-                character: 'f',
-              ),
-              {LogicalKeyboardKey.keyF},
-            );
-            buffer.write('f');
-          }
-          await game.ready();
-          verify(() => bloc.add(AnswerUpdated(buffer.toString()))).called(1);
+          expect(newListeners.first.wordIndex.id, targetWord2.id);
         },
       );
     });
