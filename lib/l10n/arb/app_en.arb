@@ -64,6 +64,10 @@
   "@typeToAnswer": {
     "description": "Type to answer label"
   },
+  "wordSolved": "Word solved!",
+  "@wordSolved": {
+    "description": "Word solved label"
+  },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
     "description": "Title of the about modal"
