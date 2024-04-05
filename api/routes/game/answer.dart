@@ -5,6 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:jwt_middleware/jwt_middleware.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   if (context.request.method == HttpMethod.post) {
@@ -16,6 +18,8 @@ Future<Response> onRequest(RequestContext context) async {
 
 Future<Response> _onPost(RequestContext context) async {
   final crosswordRepository = context.read<CrosswordRepository>();
+  final leaderboardRepository = context.read<LeaderboardRepository>();
+  final user = context.read<AuthenticatedUser>();
 
   final json = await context.request.json() as Map<String, dynamic>;
   final sectionId = json['sectionId'] as String?;
@@ -56,6 +60,10 @@ Future<Response> _onPost(RequestContext context) async {
     mascot,
     answer,
   );
+
+  if (valid) {
+    await leaderboardRepository.updateScore(user.id);
+  }
 
   return Response.json(body: {'valid': valid});
 }
