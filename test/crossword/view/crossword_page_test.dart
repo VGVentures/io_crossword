@@ -8,8 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword/view/word_focused_view.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -111,45 +111,47 @@ void main() {
     });
 
     testWidgets(
-        'renders WordFocusedDesktopView when'
-        ' is loaded with desktop size', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
+      'renders WordFocusedDesktopPage when is loaded with desktop size',
+      (tester) async {
+        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: {
+              (0, 0): _FakeBoardSection(),
+            },
+          ),
+        );
 
-      await tester.pumpCrosswordView(bloc);
+        await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(WordFocusedDesktopView), findsOneWidget);
-    });
+        expect(find.byType(WordFocusedDesktopPage), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'does not render WordFocusedDesktopView when'
-        ' is loaded with mobile size', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
+      'does not render WordFocusedDesktopPage when is loaded with mobile size',
+      (tester) async {
+        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: {
+              (0, 0): _FakeBoardSection(),
+            },
+          ),
+        );
 
-      await tester.pumpCrosswordView(bloc);
+        await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(WordFocusedDesktopView), findsNothing);
-    });
+        expect(find.byType(WordFocusedDesktopPage), findsNothing);
+      },
+    );
 
     testWidgets(
         'renders WordFocusedMobileView when selects a word in mobile size',
         (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
+      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
       final initialState = CrosswordLoaded(
         sectionSize: 40,
         sections: {
@@ -173,7 +175,7 @@ void main() {
 
     testWidgets('renders WordFocusedMobileView and pops when tapping cancel',
         (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
+      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
       final initialState = CrosswordLoaded(
         sectionSize: 40,
         sections: {
@@ -206,7 +208,7 @@ void main() {
 
     testWidgets('renders WordFocusedMobileView and pops when answer is correct',
         (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
+      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
       final initialState = CrosswordLoaded(
         sectionSize: 40,
         sections: {

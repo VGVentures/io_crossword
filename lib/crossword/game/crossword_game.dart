@@ -6,6 +6,7 @@ import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
 class CrosswordGame extends FlameGame
@@ -199,5 +200,10 @@ class CrosswordGame extends FlameGame
   @override
   Color backgroundColor() {
     return const Color(0xFF212123);
+  }
+
+  bool get isMobile {
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
   }
 }

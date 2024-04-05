@@ -48,6 +48,10 @@
   "@submit": {
     "description": "Submit label"
   },
+  "solveIt": "Solve it",
+  "@solveIt": {
+    "description": "Solve it label"
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
@@ -59,6 +63,10 @@
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
     "description": "Type to answer label"
+  },
+  "wordSolved": "Word solved!",
+  "@wordSolved": {
+    "description": "Word solved label"
   },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
