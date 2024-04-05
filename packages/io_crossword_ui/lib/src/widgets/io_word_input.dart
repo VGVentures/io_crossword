@@ -206,10 +206,10 @@ class _IoWordInputState extends State<IoWordInput> {
   /// range of the input length or one that is fixed by
   /// [IoWordInput.characters].
   void _updateCurrentIndex(int index) {
-    final isWithinRange = index < 0 || index >= widget.length;
+    final isOutsideRange = index < 0 || index >= widget.length;
     final isFixed =
         widget.characters != null && widget.characters!.containsKey(index);
-    if (index == _currentCharacterIndex || isWithinRange || isFixed) {
+    if (index == _currentCharacterIndex || isOutsideRange || isFixed) {
       return;
     }
 
