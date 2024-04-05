@@ -11,7 +11,7 @@ import 'package:mocktail/mocktail.dart';
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 void main() {
-  group('LeaderboardBloc', () {
+  group('$LeaderboardBloc', () {
     late LeaderboardResource leaderboardResource;
     late LeaderboardBloc bloc;
 
@@ -22,7 +22,7 @@ void main() {
       );
     });
 
-    group('LoadLeaderboardEvent', () {
+    group('$LoadRequestedLeaderboardEvent', () {
       blocTest<LeaderboardBloc, LeaderboardState>(
         'emits [empty] when getLeaderboardResults returns no players',
         setUp: () {
@@ -30,7 +30,7 @@ void main() {
               .thenAnswer((_) async => []);
         },
         build: () => bloc,
-        act: (bloc) => bloc.add(LoadLeaderboardEvent()),
+        act: (bloc) => bloc.add(LoadRequestedLeaderboardEvent()),
         expect: () => [
           LeaderboardState(
             status: LeaderboardStatus.empty,
@@ -50,7 +50,7 @@ void main() {
           );
         },
         build: () => bloc,
-        act: (bloc) => bloc.add(LoadLeaderboardEvent()),
+        act: (bloc) => bloc.add(LoadRequestedLeaderboardEvent()),
         expect: () => [
           LeaderboardState(
             status: LeaderboardStatus.success,
@@ -70,7 +70,7 @@ void main() {
               .thenThrow(Exception());
         },
         build: () => bloc,
-        act: (bloc) => bloc.add(LoadLeaderboardEvent()),
+        act: (bloc) => bloc.add(LoadRequestedLeaderboardEvent()),
         expect: () => [
           LeaderboardState(
             status: LeaderboardStatus.failure,

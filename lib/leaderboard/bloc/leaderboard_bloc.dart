@@ -11,13 +11,13 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     required LeaderboardResource leaderboardResource,
   })  : _leaderboardResource = leaderboardResource,
         super(const LeaderboardState()) {
-    on<LoadLeaderboardEvent>(_onLoadLeaderboardEvent);
+    on<LoadRequestedLeaderboardEvent>(_onLoad);
   }
 
   final LeaderboardResource _leaderboardResource;
 
-  Future<void> _onLoadLeaderboardEvent(
-    LoadLeaderboardEvent event,
+  Future<void> _onLoad(
+    LoadRequestedLeaderboardEvent event,
     Emitter<LeaderboardState> emit,
   ) async {
     try {

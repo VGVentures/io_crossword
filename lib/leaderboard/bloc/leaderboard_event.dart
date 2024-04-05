@@ -4,8 +4,8 @@ abstract class LeaderboardEvent extends Equatable {
   const LeaderboardEvent();
 }
 
-class LoadLeaderboardEvent extends LeaderboardEvent {
-  const LoadLeaderboardEvent();
+class LoadRequestedLeaderboardEvent extends LeaderboardEvent {
+  const LoadRequestedLeaderboardEvent();
 
   @override
   List<Object?> get props => [];

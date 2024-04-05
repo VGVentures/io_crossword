@@ -6,7 +6,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 
 void main() {
-  group('LeaderboardState', () {
+  group('$LeaderboardState', () {
     test('supports value comparisons', () {
       expect(LeaderboardState(), equals(LeaderboardState()));
 
