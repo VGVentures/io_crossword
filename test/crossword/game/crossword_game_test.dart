@@ -353,7 +353,7 @@ void main() {
           final listeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(listeners.length, equals(1));
-          expect(listeners.first.index.$1, targetWord.id);
+          expect(listeners.first.wordIndex.id, targetWord.id);
         },
       );
 
@@ -387,7 +387,7 @@ void main() {
           final listeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(listeners.length, equals(1));
-          expect(listeners.first.index.$1, targetWord.id);
+          expect(listeners.first.wordIndex.id, targetWord.id);
 
           final targetWord2 = boardSection.words.elementAt(1);
 
@@ -405,7 +405,7 @@ void main() {
           final newListeners =
               targetSection.children.whereType<SectionKeyboardHandler>();
           expect(newListeners.length, equals(1));
-          expect(newListeners.first.index.$1, targetWord2.id);
+          expect(newListeners.first.wordIndex.id, targetWord2.id);
         },
       );
     });

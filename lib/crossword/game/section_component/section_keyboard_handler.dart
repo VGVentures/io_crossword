@@ -3,19 +3,19 @@ part of 'section_component.dart';
 class SectionKeyboardHandler extends PositionComponent
     with KeyboardHandler, ParentIsA<SectionComponent> {
   SectionKeyboardHandler(
-    this.index, {
+    this.wordIndex, {
     super.position,
   });
 
-  final (String, Color, WordBatchPosition) index;
+  final WordIndex wordIndex;
   String word = '';
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent || event is KeyUpEvent) return false;
 
-    final wordBatchPosition = index.$3;
-    final hasMaxLength = word.length == wordBatchPosition.length;
+    final batchPosition = wordIndex.batchPosition;
+    final hasMaxLength = word.length == batchPosition.length;
 
     if (event.character != null && !hasMaxLength) {
       word += event.character!;
@@ -35,16 +35,16 @@ class SectionKeyboardHandler extends PositionComponent
 
       if (rect !=
           parent.spriteBatchComponent?.spriteBatch?.sources
-              .elementAt(wordBatchPosition.startIndex + c)) {
+              .elementAt(batchPosition.startIndex + c)) {
         parent.spriteBatchComponent?.spriteBatch?.replace(
-          wordBatchPosition.startIndex + c,
+          batchPosition.startIndex + c,
           source: rect,
         );
       }
     }
     if (backspacePressed) {
       parent.spriteBatchComponent?.spriteBatch?.replace(
-        wordBatchPosition.startIndex + wordCharacters.length,
+        batchPosition.startIndex + wordCharacters.length,
         source: Rect.fromLTWH(
           2080,
           0,
@@ -53,14 +53,16 @@ class SectionKeyboardHandler extends PositionComponent
         ),
       );
     }
-    if (word.length == wordBatchPosition.length) {
+    if (word.length == batchPosition.length) {
       parent.gameRef.bloc.add(AnswerUpdated(word));
     }
     return false;
   }
 
   void resetAndRemove() {
-    for (var c = index.$3.startIndex; c < index.$3.endIndex; c++) {
+    final batchPosition = wordIndex.batchPosition;
+
+    for (var c = batchPosition.startIndex; c < batchPosition.endIndex; c++) {
       parent.spriteBatchComponent?.spriteBatch?.replace(
         c,
         source: Rect.fromLTWH(

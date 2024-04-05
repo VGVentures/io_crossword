@@ -11,22 +11,11 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
+import 'package:io_crossword/crossword/game/section_component/models/models.dart';
 
 part 'section_debug.dart';
 part 'section_keyboard_handler.dart';
 part 'section_tap_controller.dart';
-
-class WordBatchPosition {
-  const WordBatchPosition(this.startIndex, this.endIndex);
-
-  // Index of the sprite of the first letter of a word
-  final int startIndex;
-
-  // Index of the sprite of the last letter of a word
-  final int endIndex;
-
-  int get length => endIndex - startIndex;
-}
 
 class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   SectionComponent({
@@ -37,7 +26,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   final (int, int) index;
 
   SpriteBatchComponent? spriteBatchComponent;
-  late Map<String, WordBatchPosition> _wordIndex;
+  late Map<String, WordBatchPosition> _wordPositions;
   late final StreamSubscription<CrosswordState> _subscription;
 
   BoardSection? _boardSection;
@@ -155,7 +144,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     final spriteBatch = SpriteBatch(gameRef.lettersSprite);
 
-    _wordIndex = {};
+    _wordPositions = {};
 
     final color = Colors.white.withOpacity(.2);
     for (var i = 0; i < _boardSection!.words.length; i++) {
@@ -198,7 +187,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         );
       }
       final wordIndexEnd = spriteBatch.length;
-      _wordIndex[word.id] = WordBatchPosition(wordIndexStart, wordIndexEnd);
+      _wordPositions[word.id] = WordBatchPosition(wordIndexStart, wordIndexEnd);
     }
 
     add(
@@ -215,17 +204,17 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     (int, int)? previousSection,
     (int, int)? newSection,
   }) {
-    final indexes = <(String, Color, WordBatchPosition)>[];
+    final indexes = <WordIndex>[];
     if (previousSection == index &&
         previousWord != null &&
-        _wordIndex.containsKey(previousWord)) {
-      indexes.add(
-        (
-          previousWord,
-          Colors.white.withOpacity(.2),
-          _wordIndex[previousWord]!,
-        ),
+        _wordPositions.containsKey(previousWord)) {
+      final newIndex = WordIndex(
+        id: previousWord,
+        color: Colors.white.withOpacity(.2),
+        batchPosition: _wordPositions[previousWord]!,
       );
+      add(SectionKeyboardHandler(newIndex));
+      indexes.add(newIndex);
     }
 
     children.whereType<SectionKeyboardHandler>().forEach(
@@ -233,21 +222,23 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         );
     if (newSection == index &&
         newWord != null &&
-        _wordIndex.containsKey(newWord)) {
-      final newIndex = (
-        newWord,
-        Colors.white,
-        _wordIndex[newWord]!,
+        _wordPositions.containsKey(newWord)) {
+      final newIndex = WordIndex(
+        id: newWord,
+        color: Colors.white,
+        batchPosition: _wordPositions[newWord]!,
       );
       add(SectionKeyboardHandler(newIndex));
       indexes.add(newIndex);
     }
 
     for (final index in indexes) {
-      for (var i = index.$3.startIndex; i < index.$3.endIndex; i++) {
+      for (var i = index.batchPosition.startIndex;
+          i < index.batchPosition.endIndex;
+          i++) {
         spriteBatchComponent?.spriteBatch?.replace(
           i,
-          color: index.$2,
+          color: index.color,
         );
       }
     }
