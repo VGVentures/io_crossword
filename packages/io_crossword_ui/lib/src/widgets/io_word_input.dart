@@ -337,7 +337,11 @@ class _CharacterField extends StatelessWidget {
     required this.child,
   });
 
-  /// {@macro io_word_input_character_field_style}
+  /// The style of this [_CharacterField].
+  ///
+  /// See also:
+  ///
+  /// * [IoThemeExtension.wordInput], the default style for [IoWordInput].
   final IoWordInputCharacterFieldStyle style;
 
   /// The child widget.
