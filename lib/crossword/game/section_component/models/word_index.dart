@@ -9,7 +9,12 @@ class WordIndex {
     required this.batchPosition,
   });
 
+  // Id of the word
   final String id;
+
+  // Color of the word
   final Color color;
+
+  // Batch position of the word
   final WordBatchPosition batchPosition;
 }
