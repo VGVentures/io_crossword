@@ -7,12 +7,14 @@ import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -98,9 +100,14 @@ void main() {
     );
 
     testWithGame(
-      'can tap words and adapts camera position',
+      'can tap words and adapts camera position for mobile',
       createGame,
       (game) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+        addTearDown(() {
+          debugDefaultTargetPlatformOverride = null;
+        });
+
         final state = CrosswordLoaded(
           sectionSize: sectionSize,
           sections: {
@@ -134,6 +141,92 @@ void main() {
           targetWord.position.y * CrosswordGame.cellSize.toDouble() +
               targetWord.height / 2,
         );
+        final wordRect = Rect.fromLTWH(
+          (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
+          (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
+          targetWord.width.toDouble(),
+          targetWord.height.toDouble(),
+        );
+
+        final event = _MockTapUpEvent();
+        when(() => event.localPosition).thenReturn(
+          Vector2(
+            targetAbsolutePosition.x.toDouble(),
+            targetAbsolutePosition.y.toDouble(),
+          ),
+        );
+
+        targetSection.children.whereType<SectionTapController>().first.onTapUp(
+              event,
+            );
+
+        game.update(2);
+
+        expect(
+          game.camera.viewfinder.position,
+          equals(targetCenter),
+        );
+        expect(
+          game.camera.visibleWorldRect.contains(wordRect.center),
+          isTrue,
+        );
+        verify(
+          () => bloc.add(
+            WordSelected(
+              targetSection.index,
+              targetWord,
+            ),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWithGame(
+      'can tap words and adapts camera position for desktop',
+      createGame,
+      (game) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+        addTearDown(() {
+          debugDefaultTargetPlatformOverride = null;
+        });
+
+        final state = CrosswordLoaded(
+          sectionSize: sectionSize,
+          sections: {
+            for (final section in sections)
+              (section.position.x, section.position.y): section,
+          },
+        );
+
+        mockState(state);
+
+        await game.ready();
+
+        final targetSection =
+            game.world.children.whereType<SectionComponent>().first;
+
+        final targetBoardSection = sections.firstWhere(
+          (element) =>
+              element.position.x == targetSection.index.$1 &&
+              element.position.y == targetSection.index.$2,
+        );
+        final targetWord = targetBoardSection.words.first;
+        final targetAbsolutePosition =
+            targetWord.position * CrosswordGame.cellSize -
+                (targetBoardSection.position *
+                    CrosswordGame.cellSize *
+                    sectionSize);
+
+        final targetCenter = Vector2(
+          targetWord.position.x * CrosswordGame.cellSize.toDouble() +
+              targetWord.width / 2,
+          targetWord.position.y * CrosswordGame.cellSize.toDouble() +
+              targetWord.height / 2,
+        ).translated(
+            game.camera.visibleWorldRect.size.width *
+                WordFocusedDesktopView.widthRatio /
+                2,
+            0);
         final wordRect = Rect.fromLTWH(
           (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
           (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
