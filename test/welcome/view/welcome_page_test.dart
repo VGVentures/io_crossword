@@ -6,7 +6,7 @@ import 'package:io_crossword/welcome/welcome.dart';
 void main() {
   group('$WelcomePage', () {
     testWidgets('displays a $WelcomeView', (tester) async {
-      await tester.pumpWidget(const _Subject(child: WelcomePage()));
+      await tester.pumpSubject(const _Subject(child: WelcomePage()));
 
       expect(find.byType(WelcomeView), findsOneWidget);
     });
@@ -14,11 +14,16 @@ void main() {
 
   group('$WelcomeView', () {
     testWidgets('displays a $ChallengeProgress', (tester) async {
-      await tester.pumpWidget(const _Subject(child: WelcomeView()));
+      await tester.pumpSubject(const _Subject(child: WelcomeView()));
 
       expect(find.byType(ChallengeProgress), findsOneWidget);
     });
   });
+}
+
+extension on WidgetTester {
+  /// Pumps the test subject with all its required ancestors.
+  Future<void> pumpSubject(Widget child) => pumpWidget(_Subject(child: child));
 }
 
 class _Subject extends StatelessWidget {

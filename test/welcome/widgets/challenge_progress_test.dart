@@ -11,10 +11,8 @@ void main() {
         testWidgets(
           'successfully',
           (tester) async {
-            await tester.pumpWidget(
-              const _Subject(
-                child: ChallengeProgress(solvedWords: 0, totalWords: 10),
-              ),
+            await tester.pumpSubject(
+              const ChallengeProgress(solvedWords: 0, totalWords: 10),
             );
 
             expect(find.byType(ChallengeProgress), findsOneWidget);
@@ -24,10 +22,8 @@ void main() {
         testWidgets(
           'with value 0 when no words are solved',
           (tester) async {
-            await tester.pumpWidget(
-              const _Subject(
-                child: ChallengeProgress(solvedWords: 0, totalWords: 1),
-              ),
+            await tester.pumpSubject(
+              const ChallengeProgress(solvedWords: 0, totalWords: 1),
             );
 
             expect(
@@ -44,10 +40,8 @@ void main() {
         testWidgets(
           'with value 0 when total words is 0',
           (tester) async {
-            await tester.pumpWidget(
-              const _Subject(
-                child: ChallengeProgress(solvedWords: 1, totalWords: 0),
-              ),
+            await tester.pumpSubject(
+              const ChallengeProgress(solvedWords: 1, totalWords: 0),
             );
 
             expect(
@@ -64,10 +58,8 @@ void main() {
         testWidgets(
           'with value 0.5 when no half the words are solved',
           (tester) async {
-            await tester.pumpWidget(
-              const _Subject(
-                child: ChallengeProgress(solvedWords: 1, totalWords: 2),
-              ),
+            await tester.pumpSubject(
+              const ChallengeProgress(solvedWords: 1, totalWords: 2),
             );
 
             expect(
@@ -87,14 +79,12 @@ void main() {
         (tester) async {
           late final AppLocalizations l10n;
 
-          await tester.pumpWidget(
-            _Subject(
-              child: Builder(
-                builder: (context) {
-                  l10n = context.l10n;
-                  return const ChallengeProgress(solvedWords: 0, totalWords: 1);
-                },
-              ),
+          await tester.pumpSubject(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return const ChallengeProgress(solvedWords: 0, totalWords: 1);
+              },
             ),
           );
 
@@ -105,10 +95,8 @@ void main() {
       testWidgets(
         'displays words solved and total words',
         (tester) async {
-          await tester.pumpWidget(
-            const _Subject(
-              child: ChallengeProgress(solvedWords: 10500, totalWords: 50400),
-            ),
+          await tester.pumpSubject(
+            const ChallengeProgress(solvedWords: 10500, totalWords: 50400),
           );
 
           await tester.pumpAndSettle();
@@ -128,6 +116,11 @@ void main() {
       );
     });
   });
+}
+
+extension on WidgetTester {
+  /// Pumps the test subject with all its required ancestors.
+  Future<void> pumpSubject(Widget child) => pumpWidget(_Subject(child: child));
 }
 
 class _Subject extends StatelessWidget {
