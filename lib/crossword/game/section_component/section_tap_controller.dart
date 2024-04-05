@@ -29,30 +29,28 @@ class SectionTapController extends PositionComponent
         );
 
         if (wordRect.contains(localPosition.toOffset())) {
-          final newCameraPosition = Vector2(
-            wordRect.left + wordRect.width / 2,
-            wordRect.top + wordRect.height / 2,
-          );
+          gameRef.bloc.add(WordSelected(parent.index, word));
+          final viewportWidth = gameRef.camera.visibleWorldRect.size.width;
+          final newCameraPosition = gameRef.isMobile
+              ? Vector2(
+                  wordRect.left + wordRect.width / 2,
+                  wordRect.top + wordRect.height / 2,
+                )
+              : Vector2(
+                  wordRect.left + wordRect.width / 2,
+                  wordRect.top + wordRect.height / 2,
+                ).translated(
+                  viewportWidth * WordFocusedDesktopView.widthRatio / 2,
+                  0,
+                );
 
           gameRef.camera.viewfinder.add(
             MoveEffect.to(
               newCameraPosition,
-              CurvedEffectController(
-                .8,
-                Curves.easeInOut,
-              ),
-              onComplete: () {
-                parent.gameRef.bloc.add(
-                  WordSelected(parent.index, word),
-                );
-              },
+              CurvedEffectController(.8, Curves.easeInOut),
             ),
           );
 
-          while (!gameRef.camera.visibleWorldRect.contains(wordRect.topLeft) ||
-              !gameRef.camera.visibleWorldRect.contains(wordRect.bottomRight)) {
-            gameRef.camera.viewfinder.zoom -= 0.05;
-          }
           break;
         }
       }
