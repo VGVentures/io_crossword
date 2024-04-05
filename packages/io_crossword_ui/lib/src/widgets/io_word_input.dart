@@ -290,14 +290,18 @@ class _IoWordInputState extends State<IoWordInput> {
         child: _CharacterField(
           style: style,
           child: readOnly
-              ? Text(widget.characters![i]!, style: style.textStyle)
+              ? Text(
+                  widget.characters![i]!,
+                  style: style.textStyle,
+                  textAlign: TextAlign.center,
+                )
               : EditableText(
                   keyboardType: TextInputType.text,
-                  scrollPadding: EdgeInsets.zero,
                   enableSuggestions: false,
                   controller: controller,
                   focusNode: focusNode,
                   style: style.textStyle,
+                  cursorWidth: 0,
                   textAlign: TextAlign.center,
                   cursorColor: Colors.transparent,
                   backgroundCursorColor: Colors.transparent,
