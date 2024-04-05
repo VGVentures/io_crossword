@@ -221,10 +221,11 @@ void main() {
           targetWord.position.y * CrosswordGame.cellSize.toDouble() +
               targetWord.height / 2,
         ).translated(
-            game.camera.visibleWorldRect.size.width *
-                WordFocusedDesktopView.widthRatio /
-                2,
-            0);
+          game.camera.visibleWorldRect.size.width *
+              WordFocusedDesktopView.widthRatio /
+              2,
+          0,
+        );
         final wordRect = Rect.fromLTWH(
           (targetWord.position.x * CrosswordGame.cellSize).toDouble(),
           (targetWord.position.y * CrosswordGame.cellSize).toDouble(),
