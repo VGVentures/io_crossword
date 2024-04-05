@@ -7,10 +7,12 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  collection: ^1.18.0
   db_client:
     path: ../db_client
   game_domain:
     path: ../game_domain
+  meta: ^1.14.0
 
 dev_dependencies:
   mocktail: ^1.0.0
