@@ -62,3 +62,6 @@ flutter:
   generate: true
   assets:
     - assets/images/
+
+flutter_gen:
+  output: lib/assets/

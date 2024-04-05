@@ -6,17 +6,23 @@ import 'package:io_crossword/welcome/welcome.dart';
 void main() {
   group('$WelcomePage', () {
     testWidgets('displays a $WelcomeView', (tester) async {
-      await tester.pumpSubject(const _Subject(child: WelcomePage()));
+      await tester.pumpSubject(const WelcomePage());
 
       expect(find.byType(WelcomeView), findsOneWidget);
     });
   });
 
   group('$WelcomeView', () {
-    testWidgets('displays a $ChallengeProgress', (tester) async {
-      await tester.pumpSubject(const _Subject(child: WelcomeView()));
+    group('displays', () {
+      testWidgets('a $ChallengeProgress', (tester) async {
+        await tester.pumpSubject(const WelcomeView());
+        expect(find.byType(ChallengeProgress), findsOneWidget);
+      });
 
-      expect(find.byType(ChallengeProgress), findsOneWidget);
+      testWidgets('a $WelcomeHeaderImage', (tester) async {
+        await tester.pumpSubject(const WelcomeView());
+        expect(find.byType(WelcomeHeaderImage), findsOneWidget);
+      });
     });
   });
 }

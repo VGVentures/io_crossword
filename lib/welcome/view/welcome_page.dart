@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -16,6 +17,11 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 40,
+        title: const Text('IO Crossword'),
+        bottom: const WelcomeHeaderImage(),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(50),
