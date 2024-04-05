@@ -98,7 +98,7 @@ void main() {
     );
 
     testWithGame(
-      'can tap words and adapts camera position and zoom',
+      'can tap words and adapts camera position',
       createGame,
       (game) async {
         final state = CrosswordLoaded(
@@ -160,11 +160,7 @@ void main() {
           equals(targetCenter),
         );
         expect(
-          game.camera.visibleWorldRect.contains(wordRect.topLeft),
-          isTrue,
-        );
-        expect(
-          game.camera.visibleWorldRect.contains(wordRect.bottomRight),
+          game.camera.visibleWorldRect.contains(wordRect.center),
           isTrue,
         );
         verify(

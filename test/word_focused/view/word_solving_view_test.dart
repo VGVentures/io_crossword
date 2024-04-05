@@ -15,6 +15,9 @@ import '../../helpers/helpers.dart';
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
+class _MockWordFocusedBloc extends MockBloc<WordFocusedEvent, WordFocusedState>
+    implements WordFocusedBloc {}
+
 class _FakeWord extends Fake implements Word {
   @override
   String get id => 'id';
@@ -40,70 +43,22 @@ void main() {
   });
 
   group('WordSolvingDesktopView', () {
+    late WordFocusedBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
-
-      widget = Scaffold(
-        body: BlocProvider.value(
-          value: crosswordBloc,
-          child: WordSolvingDesktopView(
-            WordSelection(section: (0, 0), word: _FakeWord()),
-          ),
-        ),
-      );
-    });
-
-    testWidgets(
-      'renders an empty SizedBox when the selected word is null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 20,
-            selectedWord: null,
-          ),
-        );
-        await tester.pumpApp(widget);
-
-        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
-
-        expect(find.byType(SizedBox), findsOneWidget);
-        expect(sizedBox.child, isNull);
-      },
-    );
-
-    testWidgets(
-      'renders a WordSolvingDesktopView when the selected word is not null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 20,
-            selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
-          ),
-        );
-        await tester.pumpApp(widget);
-
-        expect(find.byType(WordSolvingDesktopView), findsOneWidget);
-      },
-    );
-  });
-
-  group('WordSolvingDesktopBody', () {
-    late CrosswordBloc crosswordBloc;
-    late Widget widget;
-    late WordSelection selectedWord;
+    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
+      wordFocusedBloc = _MockWordFocusedBloc();
       crosswordBloc = _MockCrosswordBloc();
-      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
-      widget = Scaffold(
-        body: BlocProvider.value(
-          value: crosswordBloc,
-          child: WordSolvingDesktopBody(selectedWord),
-        ),
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: wordFocusedBloc),
+          BlocProvider.value(value: crosswordBloc),
+        ],
+        child: WordSolvingDesktopView(selectedWord),
       );
 
       when(() => crosswordBloc.state).thenReturn(
@@ -144,6 +99,28 @@ void main() {
         await tester.tap(submitButton);
 
         verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+      },
+    );
+
+    testWidgets(
+      'adds WordFocusedSuccessRequested event when state changes with solved '
+      'selected word',
+      (tester) async {
+        whenListen(
+          crosswordBloc,
+          Stream.value(
+            CrosswordLoaded(
+              sectionSize: 20,
+              selectedWord: selectedWord.copyWith(
+                solvedStatus: SolvedStatus.solved,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpApp(widget);
+
+        verify(() => wordFocusedBloc.add(const WordFocusedSuccessRequested()))
+            .called(1);
       },
     );
   });

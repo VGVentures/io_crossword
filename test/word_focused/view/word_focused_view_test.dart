@@ -29,6 +29,50 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
+  group('WordFocusedDesktopPage', () {
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
+
+    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+
+    setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
+
+      widget = BlocProvider.value(
+        value: crosswordBloc,
+        child: WordFocusedDesktopPage(),
+      );
+    });
+
+    testWidgets(
+      'renders SizedBox.shrink when selectedWord is null',
+      (tester) async {
+        when(() => crosswordBloc.state)
+            .thenReturn(CrosswordLoaded(sectionSize: 20));
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(SizedBox), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders WordFocusedDesktopView when selectedWord is not null',
+      (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 20,
+            selectedWord: selectedWord,
+          ),
+        );
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(WordFocusedDesktopView), findsOneWidget);
+      },
+    );
+  });
+
   group('WordFocusedDesktopView', () {
     late WordFocusedBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;

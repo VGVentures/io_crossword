@@ -13,25 +13,6 @@ class WordSolvingDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedWord = context.select(
-      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
-    );
-    if (selectedWord == null) {
-      return const SizedBox.shrink();
-    }
-
-    return WordSolvingDesktopBody(selectedWord);
-  }
-}
-
-class WordSolvingDesktopBody extends StatelessWidget {
-  @visibleForTesting
-  const WordSolvingDesktopBody(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
-
-  @override
-  Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return BlocListener<CrosswordBloc, CrosswordState>(
