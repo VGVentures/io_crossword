@@ -35,7 +35,6 @@ void main() {
       expect(
         json,
         equals({
-          'id': 'id',
           'totalScore': 10,
           'streak': 5,
           'mascot': 'android',
@@ -65,6 +64,19 @@ void main() {
           ),
         ),
       );
+    });
+
+    test('copyWith keeps default values', () {
+      final scoreCard = ScoreCard(
+        id: 'id',
+        totalScore: 10,
+        streak: 5,
+        mascot: Mascots.android,
+        initials: 'ABC',
+      );
+      final updatedScoreCard = scoreCard.copyWith();
+
+      expect(updatedScoreCard, equals(scoreCard));
     });
   });
 }
