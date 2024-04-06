@@ -89,16 +89,18 @@ extension PumpRoute on WidgetTester {
     LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) async {
-    final widget = Center(
-      child: Builder(
-        builder: (context) {
-          return ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(route);
-            },
-            child: const Text('Push Route'),
-          );
-        },
+    final child = IoLayout(
+      child: Center(
+        child: Builder(
+          builder: (context) {
+            return ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(route);
+              },
+              child: const Text('Push Route'),
+            );
+          },
+        ),
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
@@ -137,8 +139,8 @@ extension PumpRoute on WidgetTester {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+              ? MockNavigatorProvider(navigator: navigator, child: child)
+              : child,
         ),
       ),
     );
