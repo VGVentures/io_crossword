@@ -122,44 +122,17 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
         );
       },
       small: (context, widget) {
-        return BlocListener<CrosswordBloc, CrosswordState>(
-          listenWhen: (previous, current) {
-            if (previous is CrosswordLoaded && current is CrosswordLoaded) {
-              return previous.selectedWord == null &&
-                  current.selectedWord != null;
-            }
-            return false;
-          },
-          listener: (context, state) {
-            if (state is CrosswordLoaded) {
-              if (state.selectedWord != null) {
-                final bloc = context.read<CrosswordBloc>();
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (context) {
-                    return BlocProvider.value(
-                      value: bloc,
-                      child: WordFocusedMobileView(state.selectedWord!),
-                    );
-                  },
-                ).then(
-                  (_) =>
-                      context.read<CrosswordBloc>().add(const WordUnselected()),
-                );
-              }
-            }
-          },
-          child: Stack(
-            children: [
-              GameWidget(game: game),
-              const Positioned(
-                top: 12,
-                right: 16,
-                child: AboutButton(),
-              ),
-              _ZoomControls(game: game),
-            ],
-          ),
+        return Stack(
+          children: [
+            GameWidget(game: game),
+            const Positioned(
+              top: 12,
+              right: 16,
+              child: AboutButton(),
+            ),
+            const WordFocusedMobilePage(),
+            _ZoomControls(game: game),
+          ],
         );
       },
     );
