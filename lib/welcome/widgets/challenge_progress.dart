@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -35,6 +35,7 @@ class ChallengeProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = context.l10n;
     final formatter = NumberFormat.decimalPattern(l10n.localeName);
 
@@ -43,7 +44,7 @@ class ChallengeProgress extends StatelessWidget {
       children: [
         Text(
           l10n.wordsToBreakRecord,
-          style: IoCrosswordTextStyles.bodyLG,
+          style: theme.textTheme.bodyMedium,
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
         IoLinearProgressIndicator(
@@ -60,12 +61,12 @@ class ChallengeProgress extends StatelessWidget {
             Text(
               key: solvedWordsKey,
               formatter.format(solvedWords),
-              style: IoCrosswordTextStyles.bodyLG.medium,
+              style: theme.textTheme.labelMedium,
             ),
             Text(
               key: totalWordsKey,
               formatter.format(totalWords),
-              style: IoCrosswordTextStyles.bodyLG.medium,
+              style: theme.textTheme.labelMedium,
             ),
           ],
         ),
