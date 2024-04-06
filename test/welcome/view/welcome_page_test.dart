@@ -18,8 +18,12 @@ void main() {
       (tester) async {
         await tester.pumpSubject(const WelcomeView());
 
-        await tester.tap(find.byType(OutlinedButton));
-        await tester.pump();
+        final outlinedButtonFinder = find.byType(OutlinedButton);
+        await tester.ensureVisible(outlinedButtonFinder);
+        await tester.pumpAndSettle();
+
+        await tester.tap(outlinedButtonFinder);
+        await tester.pumpAndSettle();
 
         expect(
           find.byType(WelcomeView),
