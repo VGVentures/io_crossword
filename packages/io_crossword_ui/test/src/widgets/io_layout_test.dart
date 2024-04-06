@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:io_crossword_ui/src/widgets/io_layout.dart';
 
 void main() {
   group('$IoLayout', () {
