@@ -170,7 +170,6 @@ class IoCrosswordTheme {
     final ioColorScheme = this.ioColorScheme;
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(171, 56),
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(
           vertical: 17,
