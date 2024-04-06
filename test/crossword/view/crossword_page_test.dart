@@ -34,23 +34,6 @@ extension on WidgetTester {
   }
 }
 
-class _FakeWord extends Fake implements Word {
-  @override
-  String get id => 'id';
-
-  @override
-  String get clue => 'clue';
-
-  @override
-  Axis get axis => Axis.horizontal;
-
-  @override
-  String get answer => 'answer';
-
-  @override
-  int? get solvedTimestamp => null;
-}
-
 void main() {
   group('CrosswordPage', () {
     testWidgets('renders CrosswordView', (tester) async {
