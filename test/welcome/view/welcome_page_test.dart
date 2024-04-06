@@ -13,6 +13,26 @@ void main() {
   });
 
   group('$WelcomeView', () {
+    testWidgets(
+      'does nothing when getting started button is pressed',
+      (tester) async {
+        await tester.pumpSubject(const WelcomeView());
+
+        final outlinedButtonFinder = find.byType(OutlinedButton);
+        await tester.ensureVisible(outlinedButtonFinder);
+        await tester.pumpAndSettle();
+
+        await tester.tap(outlinedButtonFinder);
+        await tester.pumpAndSettle();
+
+        expect(
+          find.byType(WelcomeView),
+          findsOneWidget,
+          reason: 'No navigation occurs when the button is pressed.',
+        );
+      },
+    );
+
     group('displays', () {
       testWidgets('a $ChallengeProgress', (tester) async {
         await tester.pumpSubject(const WelcomeView());
@@ -23,6 +43,59 @@ void main() {
         await tester.pumpSubject(const WelcomeView());
         expect(find.byType(WelcomeHeaderImage), findsOneWidget);
       });
+
+      testWidgets('a localized welcome text', (tester) async {
+        late final AppLocalizations l10n;
+        await tester.pumpSubject(
+          Builder(
+            builder: (context) {
+              l10n = context.l10n;
+              return const WelcomeView();
+            },
+          ),
+        );
+
+        expect(find.text(l10n.welcome), findsOneWidget);
+      });
+
+      testWidgets('a localized welcomeSubtitle text', (tester) async {
+        late final AppLocalizations l10n;
+        await tester.pumpSubject(
+          Builder(
+            builder: (context) {
+              l10n = context.l10n;
+              return const WelcomeView();
+            },
+          ),
+        );
+
+        expect(find.text(l10n.welcomeSubtitle), findsOneWidget);
+      });
+
+      testWidgets(
+        'an $OutlinedButton with a localized getStarted text',
+        (tester) async {
+          late final AppLocalizations l10n;
+          await tester.pumpSubject(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return const WelcomeView();
+              },
+            ),
+          );
+
+          final outlinedButtonFinder = find.byType(OutlinedButton);
+          expect(outlinedButtonFinder, findsOneWidget);
+
+          final outlinedButton =
+              tester.widget<OutlinedButton>(outlinedButtonFinder);
+          expect(
+            outlinedButton.child,
+            isA<Text>().having((text) => text.data, 'data', l10n.getStarted),
+          );
+        },
+      );
     });
   });
 }
@@ -41,13 +114,10 @@ class _Subject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Localizations(
-      delegates: AppLocalizations.localizationsDelegates,
+    return MaterialApp(
       locale: const Locale('en'),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Material(child: child),
-      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      home: child,
     );
   }
 }
