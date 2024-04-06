@@ -118,7 +118,7 @@ void main() {
       Uri goldenKey(String name) =>
           Uri.parse('goldens/io_word_input/io_word_input__$name.png');
 
-      setUpAll(() async {
+      setUp(() async {
         final previousComparator = goldenFileComparator;
         final comparator = _GoldenFileComparator();
         goldenFileComparator = comparator;
