@@ -195,6 +195,47 @@ void main() {
           expect(IoLayout.of(buildContext!), equals(IoLayoutData.large));
         },
       );
+
+      testWidgets(
+        'remains unchanged when the layout is fixed',
+        (tester) async {
+          BuildContext? buildContext;
+          StateSetter? stateSetter;
+
+          var data = const MediaQueryData(size: Size(100, 200));
+
+          await tester.pumpWidget(
+            StatefulBuilder(
+              builder: (context, setState) {
+                stateSetter ??= setState;
+                return MediaQuery(
+                  data: data,
+                  child: IoLayout(
+                    data: IoLayoutData.large,
+                    child: Builder(
+                      builder: (context) {
+                        buildContext ??= context;
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+
+          expect(IoLayout.of(buildContext!), equals(IoLayoutData.large));
+
+          stateSetter!(() {
+            data = const MediaQueryData(
+              size: Size(IoCrosswordBreakpoints.medium - 1, 100),
+            );
+          });
+          await tester.pumpAndSettle();
+
+          expect(IoLayout.of(buildContext!), equals(IoLayoutData.large));
+        },
+      );
     });
   });
 }
