@@ -22,7 +22,8 @@ class _GoldenFileComparator extends LocalFileComparator {
       await getGoldenBytes(golden),
     );
 
-    // Sufficient toleration to accommodate OS rendering differences.
+    // Sufficient toleration to accommodate for host-specific rendering
+    // differences.
     final passed = result.diffPercent <= 0.2;
     if (passed) {
       result.dispose();
