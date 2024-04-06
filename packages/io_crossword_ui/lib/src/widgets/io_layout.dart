@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template io_layout}
-/// Described the layout of the current window.
+/// Describes the layout of the current window.
 /// {@endtemplate}
 enum IoLayoutData {
   /// A small layout.
