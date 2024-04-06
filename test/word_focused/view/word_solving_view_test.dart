@@ -125,7 +125,7 @@ void main() {
     );
   });
 
-  group('WordFocusedMobileView', () {
+  group('WordSolvingMobileView', () {
     final state = CrosswordLoaded(
       sectionSize: 20,
       selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
@@ -139,7 +139,7 @@ void main() {
       widget = Scaffold(
         body: BlocProvider.value(
           value: crosswordBloc,
-          child: WordFocusedMobileView(
+          child: WordSolvingMobileView(
             WordSelection(section: (0, 0), word: _FakeWord()),
           ),
         ),
