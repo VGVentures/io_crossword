@@ -42,7 +42,7 @@ class IoLayout extends StatelessWidget {
 
   /// The layout to provide to the child.
   ///
-  /// If `null` it is derived from the current layout of the window. Otherwise,
+  /// If `null` it is derived from the current size of the window. Otherwise,
   /// it will be fixed to the provided value.
   final IoLayoutData? data;
 
