@@ -17,7 +17,7 @@ void main() {
         'OutlinedButton',
         tags: TestTag.golden,
         (tester) async {
-          await tester.binding.setSurfaceSize(const Size.square(200));
+          await tester.binding.setSurfaceSize(const Size.square(250));
           addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpApp(
