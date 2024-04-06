@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
+    IoLayoutData? layout,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
@@ -45,8 +47,9 @@ extension PumpApp on WidgetTester {
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
-    final scaffold = Scaffold(
-      body: widget,
+    final child = IoLayout(
+      data: layout,
+      child: Scaffold(body: widget),
     );
 
     return pumpWidget(
@@ -69,8 +72,8 @@ extension PumpApp on WidgetTester {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
-              : scaffold,
+              ? MockNavigatorProvider(navigator: navigator, child: child)
+              : child,
         ),
       ),
     );
