@@ -15,7 +15,7 @@ enum IoLayoutData {
   /// Typically used for tablets and desktops.
   large;
 
-  /// Derive the layout from the given [windowSize].
+  /// Derives the layout from the given [windowSize].
   static IoLayoutData _derive(Size windowSize) {
     return windowSize.width < windowSize.height ||
             windowSize.width < IoCrosswordBreakpoints.medium
