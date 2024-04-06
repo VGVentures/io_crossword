@@ -83,6 +83,7 @@ extension PumpApp on WidgetTester {
 extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
+    IoLayoutData? layout,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
@@ -90,6 +91,7 @@ extension PumpRoute on WidgetTester {
     MockNavigator? navigator,
   }) async {
     final child = IoLayout(
+      data: layout,
       child: Center(
         child: Builder(
           builder: (context) {
