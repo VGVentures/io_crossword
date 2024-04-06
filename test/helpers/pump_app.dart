@@ -83,26 +83,22 @@ extension PumpApp on WidgetTester {
 extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
-    IoLayoutData? layout,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
     MockNavigator? navigator,
   }) async {
-    final child = IoLayout(
-      data: layout,
-      child: Center(
-        child: Builder(
-          builder: (context) {
-            return ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(route);
-              },
-              child: const Text('Push Route'),
-            );
-          },
-        ),
+    final widget = Center(
+      child: Builder(
+        builder: (context) {
+          return ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(route);
+            },
+            child: const Text('Push Route'),
+          );
+        },
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
@@ -141,8 +137,8 @@ extension PumpRoute on WidgetTester {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: child)
-              : child,
+              ? MockNavigatorProvider(navigator: navigator, child: widget)
+              : widget,
         ),
       ),
     );

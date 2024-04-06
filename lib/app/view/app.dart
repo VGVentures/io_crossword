@@ -44,7 +44,7 @@ class AppView extends StatelessWidget {
       theme: themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const IoLayout(child: CrosswordPage()),
+      home: const CrosswordPage(),
     );
   }
 }
