@@ -50,11 +50,9 @@ class WordClueMobileView extends StatelessWidget {
     final l10n = context.l10n;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          selectedWord.word.id,
-          style: IoCrosswordTextStyles.labelMD.bold,
-        ),
+        TopBar(wordId: selectedWord.word.id),
         const SizedBox(height: 24),
         Text(
           selectedWord.word.clue,

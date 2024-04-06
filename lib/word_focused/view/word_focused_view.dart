@@ -76,66 +76,33 @@ class WordFocusedMobilePage extends StatelessWidget {
   }
 }
 
-class WordFocusedMobileView extends StatefulWidget {
+class WordFocusedMobileView extends StatelessWidget {
   const WordFocusedMobileView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
   @override
-  State<WordFocusedMobileView> createState() => _WordFocusedMobileViewState();
-}
-
-class _WordFocusedMobileViewState extends State<WordFocusedMobileView> {
-  late final DraggableScrollableController _controller;
-
-  @override
-  void initState() {
-    _controller = DraggableScrollableController();
-    super.initState();
-  }
-
-  static const _minBottomSheetSize = 0.3;
-  static const _maxBottomSheetSize = 0.92;
-
-  @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      controller: _controller,
-      initialChildSize: _minBottomSheetSize,
-      minChildSize: _minBottomSheetSize,
-      maxChildSize: _maxBottomSheetSize,
-      builder: (context, scrollController) {
-        return ColoredBox(
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
           color: IoCrosswordColors.darkGray,
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-              child: BlocConsumer<WordFocusedBloc, WordFocusedState>(
-                listener: (context, state) {
-                  if (state == WordFocusedState.solving) {
-                    _controller.animateTo(
-                      .92,
-                      duration: Durations.medium2,
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  return switch (state) {
-                    WordFocusedState.clue =>
-                      WordClueMobileView(widget.selectedWord),
-                    WordFocusedState.solving =>
-                      WordSolvingMobileView(widget.selectedWord),
-                    WordFocusedState.success =>
-                      WordSuccessMobileView(widget.selectedWord),
-                  };
-                },
-              ),
-            ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+          child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
+            builder: (context, state) {
+              return switch (state) {
+                WordFocusedState.clue => WordClueMobileView(selectedWord),
+                WordFocusedState.solving => WordSolvingMobileView(selectedWord),
+                WordFocusedState.success => WordSuccessMobileView(selectedWord),
+              };
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
