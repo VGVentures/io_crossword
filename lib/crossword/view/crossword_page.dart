@@ -29,7 +29,7 @@ class CrosswordPage extends StatelessWidget {
       )
         ..add(const BoardSectionRequested((0, 0)))
         ..add(const BoardLoadingInfoFetched()),
-      child: const CrosswordView(),
+      child: const IoLayout(child: CrosswordView()),
     );
   }
 }
@@ -100,41 +100,63 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-
     game = CrosswordGame(context.read());
   }
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayoutBuilder(
-      large: (context, widget) {
-        return Stack(
-          children: [
-            GameWidget(game: game),
-            const Positioned(
-              top: 12,
-              right: 16,
-              child: AboutButton(),
-            ),
-            const WordFocusedDesktopPage(),
-            _ZoomControls(game: game),
-          ],
-        );
-      },
-      small: (context, widget) {
-        return Stack(
-          children: [
-            GameWidget(game: game),
-            const Positioned(
-              top: 12,
-              right: 16,
-              child: AboutButton(),
-            ),
-            const WordFocusedMobilePage(),
-            _ZoomControls(game: game),
-          ],
-        );
-      },
+    final layout = IoLayout.of(context);
+    switch (layout) {
+      case IoLayoutData.small:
+        return _SmallBoardView(game: game);
+      case IoLayoutData.large:
+        return _LargeBoardView(game: game);
+    }
+  }
+}
+
+class _LargeBoardView extends StatelessWidget {
+  const _LargeBoardView({
+    required this.game,
+  });
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        const Positioned(
+          top: 12,
+          right: 16,
+          child: AboutButton(),
+        ),
+        const WordFocusedDesktopPage(),
+        _ZoomControls(game: game),
+      ],
+    );
+  }
+}
+
+class _SmallBoardView extends StatelessWidget {
+  const _SmallBoardView({required this.game});
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        const Positioned(
+          top: 12,
+          right: 16,
+          child: AboutButton(),
+        ),
+        const WordFocusedMobilePage(),
+        _ZoomControls(game: game),
+      ],
     );
   }
 }
