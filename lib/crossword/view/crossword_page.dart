@@ -100,68 +100,88 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-
     game = CrosswordGame(context.read());
   }
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayoutBuilder(
-      large: (context, widget) {
-        return Stack(
-          children: [
-            GameWidget(game: game),
-            const Positioned(
-              top: 12,
-              right: 16,
-              child: AboutButton(),
-            ),
-            const WordFocusedDesktopPage(),
-            _ZoomControls(game: game),
-          ],
-        );
+    final layout = IoLayout.of(context);
+    switch (layout) {
+      case IoLayoutData.small:
+        return _SmallBoardView(game: game);
+      case IoLayoutData.large:
+        return _LargeBoardView(game: game);
+    }
+  }
+}
+
+class _LargeBoardView extends StatelessWidget {
+  const _LargeBoardView({
+    required this.game,
+  });
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        const Positioned(
+          top: 12,
+          right: 16,
+          child: AboutButton(),
+        ),
+        const WordFocusedDesktopPage(),
+        _ZoomControls(game: game),
+      ],
+    );
+  }
+}
+
+class _SmallBoardView extends StatelessWidget {
+  const _SmallBoardView({required this.game});
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<CrosswordBloc, CrosswordState>(
+      listenWhen: (previous, current) {
+        if (previous is CrosswordLoaded && current is CrosswordLoaded) {
+          return previous.selectedWord == null && current.selectedWord != null;
+        }
+        return false;
       },
-      small: (context, widget) {
-        return BlocListener<CrosswordBloc, CrosswordState>(
-          listenWhen: (previous, current) {
-            if (previous is CrosswordLoaded && current is CrosswordLoaded) {
-              return previous.selectedWord == null &&
-                  current.selectedWord != null;
-            }
-            return false;
-          },
-          listener: (context, state) {
-            if (state is CrosswordLoaded) {
-              if (state.selectedWord != null) {
-                final bloc = context.read<CrosswordBloc>();
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (context) {
-                    return BlocProvider.value(
-                      value: bloc,
-                      child: WordFocusedMobileView(state.selectedWord!),
-                    );
-                  },
-                ).then(
-                  (_) =>
-                      context.read<CrosswordBloc>().add(const WordUnselected()),
+      listener: (context, state) {
+        if (state is CrosswordLoaded) {
+          if (state.selectedWord != null) {
+            final bloc = context.read<CrosswordBloc>();
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (context) {
+                return BlocProvider.value(
+                  value: bloc,
+                  child: WordFocusedMobileView(state.selectedWord!),
                 );
-              }
-            }
-          },
-          child: Stack(
-            children: [
-              GameWidget(game: game),
-              const Positioned(
-                top: 12,
-                right: 16,
-                child: AboutButton(),
-              ),
-              _ZoomControls(game: game),
-            ],
-          ),
-        );
+              },
+            ).then(
+              (_) => context.read<CrosswordBloc>().add(const WordUnselected()),
+            );
+          }
+        }
       },
+      child: Stack(
+        children: [
+          GameWidget(game: game),
+          const Positioned(
+            top: 12,
+            right: 16,
+            child: AboutButton(),
+          ),
+          _ZoomControls(game: game),
+        ],
+      ),
     );
   }
 }
