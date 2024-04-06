@@ -25,7 +25,7 @@ enum IoLayoutData {
 }
 
 /// {@template io_layout}
-/// Calculates and provides [IoLayoutData] to its descendants.
+/// Derives and provides [IoLayoutData] to its descendants.
 ///
 /// See also:
 ///
