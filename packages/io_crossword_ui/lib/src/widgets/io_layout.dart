@@ -14,6 +14,14 @@ enum IoLayoutData {
   ///
   /// Typically used for tablets and desktops.
   large;
+
+  /// Derive the layout from the given [windowSize].
+  static IoLayoutData _derive(Size windowSize) {
+    return windowSize.width < windowSize.height ||
+            windowSize.width < IoCrosswordBreakpoints.medium
+        ? IoLayoutData.small
+        : IoLayoutData.large;
+  }
 }
 
 /// {@template io_layout}
@@ -50,25 +58,9 @@ class IoLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data != null) {
-      return _IoLayoutScope(
-        layout: data!,
-        child: child,
-      );
-    }
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final layout = constraints.maxWidth < constraints.maxHeight ||
-                constraints.maxWidth < IoCrosswordBreakpoints.medium
-            ? IoLayoutData.small
-            : IoLayoutData.large;
-
-        return _IoLayoutScope(
-          layout: layout,
-          child: child,
-        );
-      },
+    return _IoLayoutScope(
+      layout: data ?? IoLayoutData._derive(MediaQuery.sizeOf(context)),
+      child: child,
     );
   }
 }
