@@ -39,3 +39,38 @@ class WordClueDesktopView extends StatelessWidget {
     );
   }
 }
+
+class WordClueMobileView extends StatelessWidget {
+  const WordClueMobileView(this.selectedWord, {super.key});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TopBar(wordId: selectedWord.word.id),
+        const SizedBox(height: 24),
+        Text(
+          selectedWord.word.clue,
+          style: IoCrosswordTextStyles.titleMD,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        OutlinedButton.icon(
+          onPressed: () {
+            context
+                .read<WordFocusedBloc>()
+                .add(const WordFocusedSolveRequested());
+          },
+          icon: const Icon(Icons.edit),
+          label: Text(l10n.solveIt),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+}
