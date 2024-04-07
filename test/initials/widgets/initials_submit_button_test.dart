@@ -30,6 +30,21 @@ void main() {
       );
     });
 
+    testWidgets('displays localized enter text', (tester) async {
+      late final AppLocalizations l10n;
+
+      await tester.pumpSubject(
+        Builder(
+          builder: (context) {
+            l10n = context.l10n;
+            return InitialsSubmitButton(onPressed: () {});
+          },
+        ),
+      );
+
+      expect(find.text(l10n.enter), findsOneWidget);
+    });
+
     group('when layout is small', () {
       testWidgets('renders text as bodySmall', (tester) async {
         final themeData = IoCrosswordTheme().themeData;

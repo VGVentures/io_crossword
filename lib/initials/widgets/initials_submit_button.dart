@@ -19,7 +19,7 @@ class InitialsSubmitButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       child: Text(
-        l10n.getStarted,
+        l10n.enter,
         style: switch (layout) {
           IoLayoutData.small => theme.textTheme.bodySmall,
           IoLayoutData.large => theme.textTheme.bodyMedium,
