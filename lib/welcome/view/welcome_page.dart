@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
