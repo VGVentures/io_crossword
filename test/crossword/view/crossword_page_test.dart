@@ -34,23 +34,6 @@ extension on WidgetTester {
   }
 }
 
-class _FakeWord extends Fake implements Word {
-  @override
-  String get id => 'id';
-
-  @override
-  String get clue => 'clue';
-
-  @override
-  Axis get axis => Axis.horizontal;
-
-  @override
-  String get answer => 'answer';
-
-  @override
-  int? get solvedTimestamp => null;
-}
-
 void main() {
   group('CrosswordPage', () {
     testWidgets('renders CrosswordView', (tester) async {
@@ -149,97 +132,43 @@ void main() {
     );
 
     testWidgets(
-        'renders WordFocusedMobileView when selects a word in mobile size',
-        (tester) async {
-      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
-      final initialState = CrosswordLoaded(
-        sectionSize: 40,
-        sections: {
-          (0, 0): _FakeBoardSection(),
-        },
-      );
-      whenListen(
-        bloc,
-        Stream.value(
-          initialState.copyWith(
-            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
+      'renders WordFocusedMobilePage when game is loaded with mobile size',
+      (tester) async {
+        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: {
+              (0, 0): _FakeBoardSection(),
+            },
           ),
-        ),
-        initialState: initialState,
-      );
+        );
 
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-      expect(find.byType(WordFocusedMobileView), findsOneWidget);
-    });
+        await tester.pumpCrosswordView(bloc);
 
-    testWidgets('renders WordFocusedMobileView and pops when tapping cancel',
-        (tester) async {
-      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
-      final initialState = CrosswordLoaded(
-        sectionSize: 40,
-        sections: {
-          (0, 0): _FakeBoardSection(),
-        },
-      );
-      whenListen(
-        bloc,
-        Stream.value(
-          initialState.copyWith(
-            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
+        expect(find.byType(WordFocusedMobilePage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'does not render WordFocusedMobilePage when game is loaded with '
+      'desktop size',
+      (tester) async {
+        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
+        when(() => bloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 40,
+            sections: {
+              (0, 0): _FakeBoardSection(),
+            },
           ),
-        ),
-        initialState: initialState,
-      );
+        );
 
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-      final iconButton = tester.widget<IconButton>(
-        find.ancestor(
-          of: find.byIcon(Icons.cancel),
-          matching: find.byType(IconButton),
-        ),
-      );
-      iconButton.onPressed?.call();
-      await tester.pump();
-      expect(find.byType(WordFocusedMobileView), findsNothing);
-      verify(() => bloc.add(const WordUnselected())).called(1);
-    });
+        await tester.pumpCrosswordView(bloc);
 
-    testWidgets('renders WordFocusedMobileView and pops when answer is correct',
-        (tester) async {
-      tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
-      final initialState = CrosswordLoaded(
-        sectionSize: 40,
-        sections: {
-          (0, 0): _FakeBoardSection(),
-        },
-      );
-      whenListen(
-        bloc,
-        Stream.value(
-          initialState.copyWith(
-            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
-          ),
-        ),
-        initialState: initialState,
-      );
-
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-
-      await tester.enterText(find.byType(TextField), 'answer');
-      final iconButton = tester.widget<IconButton>(
-        find.ancestor(
-          of: find.byIcon(Icons.cancel),
-          matching: find.byType(IconButton),
-        ),
-      );
-      iconButton.onPressed?.call();
-      await tester.pump();
-      expect(find.byType(WordFocusedMobileView), findsNothing);
-      verify(() => bloc.add(const WordUnselected())).called(1);
-    });
+        expect(find.byType(WordFocusedMobilePage), findsNothing);
+      },
+    );
 
     testWidgets(
       'displays AboutButton when status is CrosswordLoaded',

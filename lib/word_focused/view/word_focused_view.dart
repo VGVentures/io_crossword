@@ -55,3 +55,54 @@ class WordFocusedDesktopView extends StatelessWidget {
     );
   }
 }
+
+class WordFocusedMobilePage extends StatelessWidget {
+  const WordFocusedMobilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedWord = context.select(
+      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
+    );
+    if (selectedWord == null) {
+      return const SizedBox.shrink();
+    }
+
+    return BlocProvider(
+      key: ValueKey(selectedWord.word.id),
+      create: (_) => WordFocusedBloc(),
+      child: WordFocusedMobileView(selectedWord),
+    );
+  }
+}
+
+class WordFocusedMobileView extends StatelessWidget {
+  const WordFocusedMobileView(this.selectedWord, {super.key});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: IoCrosswordColors.darkGray,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+          child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
+            builder: (context, state) {
+              return switch (state) {
+                WordFocusedState.clue => WordClueMobileView(selectedWord),
+                WordFocusedState.solving => WordSolvingMobileView(selectedWord),
+                WordFocusedState.success => WordSuccessMobileView(selectedWord),
+              };
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

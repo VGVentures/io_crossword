@@ -39,4 +39,20 @@ void main() {
       expect(find.text(l10n.wordSolved), findsOneWidget);
     });
   });
+
+  group('WordSuccessMobileView', () {
+    late Widget widget;
+
+    setUp(() {
+      final wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
+
+      widget = WordSuccessMobileView(wordSelection);
+    });
+
+    testWidgets('renders word solved text', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.text(l10n.wordSolved), findsOneWidget);
+    });
+  });
 }

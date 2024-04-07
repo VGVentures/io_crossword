@@ -22,3 +22,23 @@ class WordSuccessDesktopView extends StatelessWidget {
     );
   }
 }
+
+class WordSuccessMobileView extends StatelessWidget {
+  const WordSuccessMobileView(this.selectedWord, {super.key});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return Column(
+      children: [
+        TopBar(wordId: selectedWord.word.id),
+        const SizedBox(height: 40),
+        Text(l10n.wordSolved),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+}
