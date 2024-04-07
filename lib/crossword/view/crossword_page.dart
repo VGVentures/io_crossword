@@ -29,7 +29,7 @@ class CrosswordPage extends StatelessWidget {
       )
         ..add(const BoardSectionRequested((0, 0)))
         ..add(const BoardLoadingInfoFetched()),
-      child: const IoLayout(child: CrosswordView()),
+      child: const CrosswordView(),
     );
   }
 }
