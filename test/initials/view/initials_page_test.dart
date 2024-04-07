@@ -86,12 +86,12 @@ class _Subject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Localizations(
-      delegates: AppLocalizations.localizationsDelegates,
-      locale: const Locale('en'),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Material(child: child),
+    return IoLayout(
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        locale: const Locale('en'),
+        theme: IoCrosswordTheme().themeData,
+        home: child,
       ),
     );
   }
