@@ -69,4 +69,41 @@ void main() {
       },
     );
   });
+
+  group('WordClueMobileView', () {
+    late WordSelection selectedWord;
+    late Widget widget;
+    late WordFocusedBloc wordFocusedBloc;
+
+    setUp(() {
+      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      wordFocusedBloc = _MockWordFocusedBloc();
+
+      widget = BlocProvider(
+        create: (context) => wordFocusedBloc,
+        child: WordClueMobileView(selectedWord),
+      );
+    });
+
+    testWidgets(
+      'renders the selected word clue',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        expect(find.text(selectedWord.word.clue), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'tapping the solve button dispatches a WordFocusedSolveRequested event',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.text(l10n.solveIt));
+
+        verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
+            .called(1);
+      },
+    );
+  });
 }

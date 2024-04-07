@@ -65,8 +65,8 @@ class WordSolvingDesktopView extends StatelessWidget {
   }
 }
 
-class WordFocusedMobileView extends StatelessWidget {
-  const WordFocusedMobileView(this.selectedWord, {super.key});
+class WordSolvingMobileView extends StatelessWidget {
+  const WordSolvingMobileView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
@@ -81,78 +81,49 @@ class WordFocusedMobileView extends StatelessWidget {
         return currentState.selectedWord?.solvedStatus !=
             previousState.selectedWord?.solvedStatus;
       },
-      listener: (_, state) {
+      listener: (context, state) {
         final loadedState = state as CrosswordLoaded;
         if (loadedState.selectedWord?.solvedStatus == SolvedStatus.solved) {
-          Navigator.pop(context);
+          context
+              .read<WordFocusedBloc>()
+              .add(const WordFocusedSuccessRequested());
         }
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        color: IoCrosswordColors.seedWhite,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  // TODO(any): Open share page
-                  onPressed: () {}, // coverage:ignore-line
-                  icon: const Icon(Icons.ios_share),
+      child: Column(
+        children: [
+          TopBar(wordId: selectedWord.word.id),
+          const SizedBox(height: 32),
+          IoWordInput.alphabetic(
+            length: selectedWord.word.answer.length,
+            onWord: (value) {
+              context.read<CrosswordBloc>().add(AnswerUpdated(value));
+            },
+          ),
+          const SizedBox(height: 24),
+          Text(
+            selectedWord.word.clue,
+            style: IoCrosswordTextStyles.titleMD,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(
+                child: GeminiHintButton(),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.read<CrosswordBloc>().add(
+                        const AnswerSubmitted(),
+                      ),
+                  child: Text(l10n.submit),
                 ),
-                Text(
-                  selectedWord.word.id,
-                  style: IoCrosswordTextStyles.labelMD.bold,
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.cancel),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              selectedWord.word.clue,
-              style: IoCrosswordTextStyles.titleMD,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            const Spacer(),
-            TextField(
-              maxLength: selectedWord.word.answer.length,
-              onChanged: (value) {
-                if (value.length == selectedWord.word.answer.length) {
-                  context.read<CrosswordBloc>().add(AnswerUpdated(value));
-                }
-              },
-            ),
-            const Spacer(),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: PrimaryButton(
-                    // TODO(any): Get hint
-                    onPressed: () {}, // coverage:ignore-line
-                    label: l10n.getHint,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: PrimaryButton(
-                    label: l10n.submit,
-                    onPressed: () => context.read<CrosswordBloc>().add(
-                          const AnswerSubmitted(),
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

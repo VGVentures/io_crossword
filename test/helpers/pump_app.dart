@@ -47,10 +47,7 @@ extension PumpApp on WidgetTester {
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
-    final child = IoLayout(
-      data: layout,
-      child: Scaffold(body: widget),
-    );
+    final child = Scaffold(body: widget);
 
     return pumpWidget(
       MultiProvider(
@@ -68,12 +65,15 @@ extension PumpApp on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: child)
-              : child,
+        child: IoLayout(
+          data: layout,
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: navigator != null
+                ? MockNavigatorProvider(navigator: navigator, child: child)
+                : child,
+          ),
         ),
       ),
     );
@@ -133,12 +133,14 @@ extension PumpRoute on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+        child: IoLayout(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: navigator != null
+                ? MockNavigatorProvider(navigator: navigator, child: widget)
+                : widget,
+          ),
         ),
       ),
     );

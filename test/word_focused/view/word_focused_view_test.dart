@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -26,6 +27,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   String get clue => 'clue';
+
+  @override
+  String get answer => 'answer';
 }
 
 void main() {
@@ -131,6 +135,115 @@ void main() {
         await tester.pumpApp(widget);
 
         expect(find.byType(WordSuccessDesktopView), findsOneWidget);
+      },
+    );
+  });
+
+  group('WordFocusedMobilePage', () {
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
+
+    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+
+    setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
+
+      widget = BlocProvider.value(
+        value: crosswordBloc,
+        child: WordFocusedMobilePage(),
+      );
+    });
+
+    testWidgets(
+      'renders SizedBox.shrink when selectedWord is null',
+      (tester) async {
+        when(() => crosswordBloc.state)
+            .thenReturn(CrosswordLoaded(sectionSize: 20));
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(SizedBox), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders WordFocusedMobileView when selectedWord is not null',
+      (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 20,
+            selectedWord: selectedWord,
+          ),
+        );
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(WordFocusedMobileView), findsOneWidget);
+      },
+    );
+  });
+
+  group('WordFocusedMobileView', () {
+    late WordFocusedBloc wordFocusedBloc;
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
+
+    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+
+    setUp(() {
+      wordFocusedBloc = _MockWordFocusedBloc();
+      crosswordBloc = _MockCrosswordBloc();
+
+      widget = Theme(
+        data: IoCrosswordTheme().themeData,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: wordFocusedBloc),
+            BlocProvider.value(value: crosswordBloc),
+          ],
+          child: WordFocusedMobileView(selectedWord),
+        ),
+      );
+    });
+
+    testWidgets(
+      'renders WordClueMobileView when the state is WordFocusedState.clue',
+      (tester) async {
+        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.clue);
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(WordClueMobileView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders WordSolvingMobileView when the state is '
+      'WordFocusedState.solving',
+      (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordLoaded(
+            sectionSize: 20,
+            selectedWord: selectedWord,
+          ),
+        );
+        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(WordSolvingMobileView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders WordSuccessMobileView when the state is '
+      'WordFocusedState.success',
+      (tester) async {
+        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.success);
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(WordSuccessMobileView), findsOneWidget);
       },
     );
   });

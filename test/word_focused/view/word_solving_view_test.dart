@@ -8,6 +8,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
@@ -126,22 +127,32 @@ void main() {
   });
 
   group('WordFocusedMobileView', () {
-    final state = CrosswordLoaded(
-      sectionSize: 20,
-      selectedWord: WordSelection(section: (0, 0), word: _FakeWord()),
-    );
+    late WordFocusedBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
+    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+
     setUp(() {
+      wordFocusedBloc = _MockWordFocusedBloc();
       crosswordBloc = _MockCrosswordBloc();
 
-      widget = Scaffold(
-        body: BlocProvider.value(
-          value: crosswordBloc,
-          child: WordFocusedMobileView(
-            WordSelection(section: (0, 0), word: _FakeWord()),
-          ),
+      widget = Theme(
+        data: IoCrosswordTheme().themeData,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: wordFocusedBloc),
+            BlocProvider.value(value: crosswordBloc),
+          ],
+          child: WordFocusedMobileView(selectedWord),
+        ),
+      );
+
+      when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+      when(() => crosswordBloc.state).thenReturn(
+        CrosswordLoaded(
+          sectionSize: 20,
+          selectedWord: selectedWord,
         ),
       );
     });
@@ -149,12 +160,11 @@ void main() {
     testWidgets(
       'add AnswerUpdated event when user enters all the letters',
       (tester) async {
-        when(() => crosswordBloc.state).thenReturn(state);
         await tester.pumpApp(widget);
 
-        final answerField = find.byType(TextField);
+        final input = tester.widget<IoWordInput>(find.byType(IoWordInput));
+        input.onWord!('answer');
 
-        await tester.enterText(answerField, 'answer');
         verify(
           () => crosswordBloc.add(const AnswerUpdated('answer')),
         ).called(1);
@@ -164,7 +174,6 @@ void main() {
     testWidgets(
       'tap the submit button sends AnswerSubmitted event',
       (tester) async {
-        when(() => crosswordBloc.state).thenReturn(state);
         await tester.pumpApp(widget);
 
         final submitButton = find.text(l10n.submit);
@@ -174,28 +183,24 @@ void main() {
     );
 
     testWidgets(
-      'pops if state changes with solved selected word',
+      'adds WordFocusedSuccessRequested event when state changes with solved '
+      'selected word',
       (tester) async {
-        final navigator = MockNavigator();
-        when(navigator.canPop).thenReturn(true);
         whenListen(
           crosswordBloc,
           Stream.value(
             CrosswordLoaded(
               sectionSize: 20,
-              selectedWord: WordSelection(
-                section: (0, 0),
-                word: _FakeWord(),
+              selectedWord: selectedWord.copyWith(
                 solvedStatus: SolvedStatus.solved,
               ),
             ),
           ),
-          initialState: state,
         );
-        await tester.pumpApp(widget, navigator: navigator);
+        await tester.pumpApp(widget);
 
-        await tester.pump();
-        verify(navigator.pop).called(1);
+        verify(() => wordFocusedBloc.add(const WordFocusedSuccessRequested()))
+            .called(1);
       },
     );
   });
