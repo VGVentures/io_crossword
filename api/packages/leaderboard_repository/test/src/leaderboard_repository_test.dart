@@ -44,11 +44,15 @@ void main() {
           userId: 'id',
           initials: 'AAA',
           score: 20,
+          mascot: Mascots.android,
+          streak: 3,
         );
         const playerTwo = LeaderboardPlayer(
           userId: 'id2',
           initials: 'BBB',
           score: 10,
+          mascot: Mascots.dash,
+          streak: 2,
         );
 
         when(() => dbClient.orderBy('leaderboard', 'score'))
@@ -56,17 +60,11 @@ void main() {
           return [
             DbEntityRecord(
               id: 'id',
-              data: {
-                'initials': playerOne.initials,
-                'score': 20,
-              },
+              data: playerOne.toJson()..remove('userId'),
             ),
             DbEntityRecord(
               id: 'id2',
-              data: {
-                'initials': playerTwo.initials,
-                'score': 10,
-              },
+              data: playerTwo.toJson()..remove('userId'),
             ),
           ];
         });
@@ -93,14 +91,13 @@ void main() {
           userId: 'user-id',
           initials: 'initials',
           score: 40,
+          mascot: Mascots.dash,
+          streak: 2,
         );
 
         final record = DbEntityRecord(
           id: 'user-id',
-          data: {
-            'initials': 'initials',
-            'score': 40,
-          },
+          data: leaderboardPlayer.toJson()..remove('userId'),
         );
 
         when(() => dbClient.set('leaderboard', record))

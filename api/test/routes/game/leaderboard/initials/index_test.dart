@@ -45,6 +45,8 @@ void main() {
         userId: 'user-id',
         initials: 'AAA',
         score: 10,
+        mascot: Mascots.dash,
+        streak: 2,
       );
 
       when(
@@ -71,6 +73,8 @@ void main() {
         userId: 'user-id',
         initials: 'AAA',
         score: 10,
+        mascot: Mascots.dash,
+        streak: 2,
       );
 
       when(() => request.method).thenReturn(HttpMethod.post);
