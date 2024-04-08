@@ -3,7 +3,6 @@ part of 'leaderboard_bloc.dart';
 enum LeaderboardStatus {
   initial,
   success,
-  empty,
   failure,
 }
 

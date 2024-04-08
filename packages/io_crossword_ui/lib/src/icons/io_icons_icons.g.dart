@@ -9,4 +9,6 @@ class IoIcons {
 
   static const IconData gemini =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData icon_right =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

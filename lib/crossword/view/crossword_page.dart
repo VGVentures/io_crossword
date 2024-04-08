@@ -2,6 +2,7 @@ import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
+import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -102,6 +103,7 @@ class _LargeBoardView extends StatelessWidget {
           child: AboutButton(),
         ),
         const WordFocusedDesktopPage(),
+        const BottomBar(),
         _ZoomControls(game: game),
       ],
     );

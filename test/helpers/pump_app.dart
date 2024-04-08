@@ -83,6 +83,7 @@ extension PumpApp on WidgetTester {
                   localizationsDelegates:
                       AppLocalizations.localizationsDelegates,
                   supportedLocales: AppLocalizations.supportedLocales,
+                  theme: IoCrosswordTheme().themeData,
                   home: navigator != null
                       ? MockNavigatorProvider(
                           navigator: navigator,
