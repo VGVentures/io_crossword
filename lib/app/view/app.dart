@@ -33,6 +33,10 @@ class App extends StatelessWidget {
         Provider.value(value: boardInfoRepository),
       ],
       child: BlocProvider(
+        // TODO(alestiago): Allow lazy loading once we ensure the theme gets
+        // updated according to the user's team.
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364741407
+        lazy: false,
         create: (_) => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
