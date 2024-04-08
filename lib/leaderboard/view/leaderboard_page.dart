@@ -32,41 +32,29 @@ class LeaderboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final layout = IoLayout.of(context);
-
     return Scaffold(
-      appBar: switch (layout) {
-        IoLayoutData.small => AppBar(
-            leading: const SizedBox.shrink(),
-            leadingWidth: 0,
-            title: Text(l10n.leaderboard),
-            centerTitle: false,
-            actions: const [
-              CloseButton(),
-            ],
-          ),
-        // TODO(Ayad): create app bar with logo
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6409053334
-        IoLayoutData.large => AppBar(
-            leading: const Placeholder(
-              color: Colors.white,
-            ),
-            leadingWidth: 170,
-            centerTitle: true,
-            title: Text(l10n.leaderboard),
-            actions: [
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.gamepad),
-                label: Text(l10n.playAgain),
-              ),
-              const SizedBox(width: 7),
-              const CloseButton(),
-            ],
-          ),
-      },
+      appBar: IoAppBar(
+        title: Text(l10n.leaderboard),
+        crossword: l10n.crossword,
+        actions: (layout) {
+          return switch (layout) {
+            IoLayoutData.small => const [
+                CloseButton(),
+              ],
+            IoLayoutData.large => [
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.gamepad),
+                  label: Text(l10n.playAgain),
+                ),
+                const SizedBox(width: 7),
+                const CloseButton(),
+              ],
+          };
+        },
+      ),
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
