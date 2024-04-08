@@ -35,6 +35,10 @@ void main() {
       when(
         () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));
+      when(boardInfoRepository.getSolvedWordsCount)
+          .thenAnswer((_) => Future.value(25));
+      when(boardInfoRepository.getTotalWordsCount)
+          .thenAnswer((_) => Future.value(100));
       when(boardInfoRepository.getSectionSize)
           .thenAnswer((_) => Future.value(20));
       when(boardInfoRepository.getZoomLimit)
