@@ -122,7 +122,7 @@ void main() {
     );
 
     testWidgets(
-      'when playAgain is tapped pops the screen',
+      'pops the screen when playAgain is tapped',
       (tester) async {
         tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
 
