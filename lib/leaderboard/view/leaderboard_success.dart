@@ -172,11 +172,9 @@ class UserLeaderboardRanking extends StatelessWidget {
     // TODO(Ayad): show the correct style based on the players team
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6400331391
     final style = IoPlayerAliasStyle(
-      backgroundColor: rank == 4 || rank == 1
-          ? IoCrosswordColors.chromeRed
-          : rank.isOdd
-              ? IoCrosswordColors.androidGreen
-              : IoCrosswordColors.flutterBlue,
+      backgroundColor: rank.isOdd
+          ? IoCrosswordColors.androidGreen
+          : IoCrosswordColors.flutterBlue,
       textStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w700,

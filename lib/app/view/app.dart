@@ -2,8 +2,8 @@ import 'package:api_client/api_client.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +44,7 @@ class AppView extends StatelessWidget {
       theme: themeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CrosswordPage(),
+      home: const LeaderboardPage(),
     );
   }
 }

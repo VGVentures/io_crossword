@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +69,7 @@ extension PumpApp on WidgetTester {
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          theme: IoCrosswordTheme().themeData,
           home: navigator != null
               ? MockNavigatorProvider(navigator: navigator, child: scaffold)
               : scaffold,
