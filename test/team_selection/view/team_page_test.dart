@@ -5,7 +5,7 @@ import 'package:io_crossword/team_selection/team.dart';
 
 void main() {
   group('$TeamSelectionPage', () {
-    testWidgets('displays an $TeamSelectionPage', (tester) async {
+    testWidgets('displays a $TeamSelectionPage', (tester) async {
       await tester.pumpSubject(const TeamSelectionPage());
 
       expect(find.byType(TeamSelectionPage), findsOneWidget);
