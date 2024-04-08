@@ -9,7 +9,6 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
-import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
