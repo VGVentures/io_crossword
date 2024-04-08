@@ -141,7 +141,8 @@ void main() {
         await tester.pumpApp(child);
         expect(find.byType(GameIntroView), findsOneWidget);
 
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 5));
         expect(find.byType(GameIntroView), findsNothing);
       },
     );

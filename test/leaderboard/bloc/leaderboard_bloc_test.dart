@@ -24,7 +24,8 @@ void main() {
 
     group('$LoadRequestedLeaderboardEvent', () {
       blocTest<LeaderboardBloc, LeaderboardState>(
-        'emits [empty] when getLeaderboardResults returns no players',
+        'emits [success] with empty players '
+        'when getLeaderboardResults is empty',
         setUp: () {
           when(() => leaderboardResource.getLeaderboardResults())
               .thenAnswer((_) async => []);
@@ -33,7 +34,15 @@ void main() {
         act: (bloc) => bloc.add(LoadRequestedLeaderboardEvent()),
         expect: () => [
           LeaderboardState(
-            status: LeaderboardStatus.empty,
+            status: LeaderboardStatus.success,
+            players: List.generate(
+              10,
+              (index) => const LeaderboardPlayer(
+                userId: '',
+                initials: 'AAA',
+                score: 0,
+              ),
+            ),
           ),
         ],
       );

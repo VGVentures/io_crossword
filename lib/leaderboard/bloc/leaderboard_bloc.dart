@@ -23,10 +23,19 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     try {
       final players = await _leaderboardResource.getLeaderboardResults();
 
+      // If empty we display 10 users with score 0.
       if (players.isEmpty) {
         emit(
           state.copyWith(
-            status: LeaderboardStatus.empty,
+            status: LeaderboardStatus.success,
+            players: List.generate(
+              10,
+              (index) => const LeaderboardPlayer(
+                userId: '',
+                initials: 'AAA',
+                score: 0,
+              ),
+            ),
           ),
         );
         return;

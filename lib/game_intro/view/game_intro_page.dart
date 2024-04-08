@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
-import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class GameIntroPage extends StatelessWidget {
   const GameIntroPage({super.key});
@@ -42,16 +41,14 @@ class GameIntroView extends StatelessWidget {
         if (state.isIntroCompleted) {
           context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
 
-          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacement(CrosswordPage.route());
           AboutView.showModal(context);
         }
       },
-      child: Center(
-        child: IoCrosswordCard(
-          child: FlowBuilder<GameIntroState>(
-            state: context.select((GameIntroBloc bloc) => bloc.state),
-            onGeneratePages: onGenerateGameIntroPages,
-          ),
+      child: Material(
+        child: FlowBuilder<GameIntroState>(
+          state: context.select((GameIntroBloc bloc) => bloc.state),
+          onGeneratePages: onGenerateGameIntroPages,
         ),
       ),
     );
