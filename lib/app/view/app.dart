@@ -3,6 +3,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -33,10 +34,6 @@ class App extends StatelessWidget {
         Provider.value(value: boardInfoRepository),
       ],
       child: BlocProvider(
-        // TODO(alestiago): Allow lazy loading once we ensure the theme gets
-        // updated according to the user's team.
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364741407
-        lazy: false,
         create: (_) => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -53,15 +50,44 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = IoCrosswordTheme().themeData;
-
     return IoLayout(
-      child: MaterialApp(
-        theme: themeData,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: const GameIntroPage(),
+      child: BlocSelector<CrosswordBloc, CrosswordState, Mascots?>(
+        selector: (state) {
+          return state is CrosswordLoaded ? state.mascot : null;
+        },
+        builder: (context, mascot) {
+          return MaterialApp(
+            theme: mascot.theme(),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const GameIntroPage(),
+          );
+        },
       ),
     );
+  }
+}
+
+@visibleForTesting
+extension MascotTheme on Mascots? {
+  static final flutterTheme = IoFlutterTheme().themeData;
+  static final firebaseTheme = IoFirebaseTheme().themeData;
+  static final chromeTheme = IoChromeTheme().themeData;
+  static final androidTheme = IoAndroidTheme().themeData;
+  static final defaultTheme = IoCrosswordTheme().themeData;
+
+  ThemeData theme() {
+    switch (this) {
+      case Mascots.dash:
+        return flutterTheme;
+      case Mascots.sparky:
+        return firebaseTheme;
+      case Mascots.dino:
+        return chromeTheme;
+      case Mascots.android:
+        return androidTheme;
+      case null:
+        return defaultTheme;
+    }
   }
 }

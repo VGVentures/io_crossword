@@ -30,6 +30,7 @@ extension PumpApp on WidgetTester {
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
+    CrosswordBloc? crosswordBloc,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordResource = _MockCrosswordResource();
@@ -69,11 +70,13 @@ extension PumpApp on WidgetTester {
         child: Builder(
           builder: (context) {
             return BlocProvider(
-              create: (context) => CrosswordBloc(
-                crosswordRepository: context.read<CrosswordRepository>(),
-                boardInfoRepository: context.read<BoardInfoRepository>(),
-                crosswordResource: context.read<CrosswordResource>(),
-              ),
+              create: (context) =>
+                  crosswordBloc ??
+                  CrosswordBloc(
+                    crosswordRepository: context.read<CrosswordRepository>(),
+                    boardInfoRepository: context.read<BoardInfoRepository>(),
+                    crosswordResource: context.read<CrosswordResource>(),
+                  ),
               child: IoLayout(
                 data: layout,
                 child: MaterialApp(
