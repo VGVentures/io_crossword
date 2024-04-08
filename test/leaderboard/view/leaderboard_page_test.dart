@@ -106,15 +106,14 @@ void main() {
     );
 
     testWidgets(
-      'display playAgain and icon on big screen',
+      'display playAgain and icon on large screen',
       (tester) async {
-        tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
-
-        addTearDown(tester.view.resetPhysicalSize);
-
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          widget,
+          layout: IoLayoutData.large,
+        );
 
         expect(find.text(l10n.playAgain), findsOneWidget);
         expect(find.byIcon(Icons.gamepad), findsOneWidget);
@@ -124,10 +123,6 @@ void main() {
     testWidgets(
       'pops the screen when playAgain is tapped',
       (tester) async {
-        tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
-
-        addTearDown(tester.view.resetPhysicalSize);
-
         final mockNavigator = MockNavigator();
 
         when(mockNavigator.canPop).thenReturn(true);
@@ -137,6 +132,7 @@ void main() {
         await tester.pumpApp(
           widget,
           navigator: mockNavigator,
+          layout: IoLayoutData.large,
         );
 
         await tester.tap(find.text(l10n.playAgain));
