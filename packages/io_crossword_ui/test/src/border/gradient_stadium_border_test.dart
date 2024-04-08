@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -7,17 +9,54 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import '../../test_tag.dart';
 import '../helpers/helpers.dart';
 
+class _GoldenFileComparator extends LocalFileComparator {
+  _GoldenFileComparator()
+      : super(
+          Uri.parse('test/src/border/gradient_stadium_border_test.dart'),
+        );
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+      imageBytes,
+      await getGoldenBytes(golden),
+    );
+
+    // Sufficient toleration to accommodate for host-specific rendering
+    // differences.
+    final passed = result.diffPercent <= 0.2;
+    if (passed) {
+      result.dispose();
+      return true;
+    }
+
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
+
 void main() {
   group('$GradientStadiumBorder', () {
     group('renders as expected', () {
       Uri goldenKey(String name) =>
           Uri.parse('goldens/gradient_outlined_border_$name.png');
 
+      setUp(() async {
+        final previousComparator = goldenFileComparator;
+        final comparator = _GoldenFileComparator();
+        goldenFileComparator = comparator;
+        addTearDown(() {
+          goldenFileComparator = previousComparator;
+        });
+      });
+
       testWidgets(
         'OutlinedButton',
         tags: TestTag.golden,
         (tester) async {
-          await tester.binding.setSurfaceSize(const Size.square(200));
+          await tester.binding.setSurfaceSize(const Size.square(250));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpApp(
             _GoldenSubject(

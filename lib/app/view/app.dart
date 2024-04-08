@@ -3,7 +3,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
+import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -40,11 +40,13 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = IoCrosswordTheme().themeData;
 
-    return MaterialApp(
-      theme: themeData,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const LeaderboardPage(),
+    return IoLayout(
+      child: MaterialApp(
+        theme: themeData,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const WelcomePage(),
+      ),
     );
   }
 }

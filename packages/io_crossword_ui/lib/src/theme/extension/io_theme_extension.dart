@@ -14,6 +14,7 @@ class IoThemeExtension extends Equatable
     required this.iconButtonTheme,
     required this.cardTheme,
     required this.physicalModel,
+    required this.wordInput,
     required this.colorScheme,
   });
 
@@ -29,6 +30,9 @@ class IoThemeExtension extends Equatable
   /// {@macro io_physical_model_style}
   final IoPhysicalModelStyle physicalModel;
 
+  /// {@macro io_word_input_style}
+  final IoWordInputStyle wordInput;
+
   /// {@macro io_color_scheme}
   final IoColorScheme colorScheme;
 
@@ -41,6 +45,7 @@ class IoThemeExtension extends Equatable
     IoIconButtonTheme? iconButtonTheme,
     IoCardTheme? cardTheme,
     IoPhysicalModelStyle? physicalModel,
+    IoWordInputStyle? wordInput,
     IoColorScheme? colorScheme,
   }) {
     return IoThemeExtension(
@@ -48,6 +53,7 @@ class IoThemeExtension extends Equatable
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
       cardTheme: cardTheme ?? this.cardTheme,
       physicalModel: physicalModel ?? this.physicalModel,
+      wordInput: wordInput ?? this.wordInput,
       colorScheme: colorScheme ?? this.colorScheme,
     );
   }
@@ -66,6 +72,7 @@ class IoThemeExtension extends Equatable
       iconButtonTheme: iconButtonTheme.lerp(other.iconButtonTheme, t),
       cardTheme: cardTheme.lerp(other.cardTheme, t),
       physicalModel: physicalModel.lerp(other.physicalModel, t),
+      wordInput: wordInput.lerp(other.wordInput, t),
       colorScheme: colorScheme.lerp(other.colorScheme, t),
     );
   }
@@ -76,6 +83,7 @@ class IoThemeExtension extends Equatable
         iconButtonTheme,
         cardTheme,
         physicalModel,
+        wordInput,
         colorScheme,
       ];
 }

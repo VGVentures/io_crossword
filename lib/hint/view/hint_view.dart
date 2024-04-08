@@ -43,7 +43,6 @@ class GeminiTextField extends StatelessWidget {
 }
 
 class GeminiHintButton extends StatelessWidget {
-  @visibleForTesting
   const GeminiHintButton({super.key});
 
   @override

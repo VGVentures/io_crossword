@@ -24,6 +24,7 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
+    IoLayoutData? layout,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
@@ -46,9 +47,7 @@ extension PumpApp on WidgetTester {
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
-    final scaffold = Scaffold(
-      body: widget,
-    );
+    final child = Scaffold(body: widget);
 
     return pumpWidget(
       MultiProvider(
@@ -66,13 +65,16 @@ extension PumpApp on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: IoCrosswordTheme().themeData,
+        child: IoLayout(
+          data: layout,
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: IoCrosswordTheme().themeData,
           home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
-              : scaffold,
+              ? MockNavigatorProvider(navigator: navigator, child: child)
+                : child,
+          ),
         ),
       ),
     );
@@ -132,12 +134,14 @@ extension PumpRoute on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+        child: IoLayout(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: navigator != null
+                ? MockNavigatorProvider(navigator: navigator, child: widget)
+                : widget,
+          ),
         ),
       ),
     );

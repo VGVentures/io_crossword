@@ -16,6 +16,10 @@ void main() {
 
     const blacklistDocumentId = 'id';
 
+    setUpAll(() {
+      registerFallbackValue(DbEntityRecord(id: '', data: {}));
+    });
+
     setUp(() {
       dbClient = _MockDbClient();
       leaderboardRepository = LeaderboardRepository(
@@ -159,6 +163,82 @@ void main() {
           leaderboardRepository.createScore('userId', 'ABC', 'dash'),
           completes,
         );
+      });
+    });
+
+    group('updateScore', () {
+      test('updates the score card in the database', () async {
+        when(
+          () => dbClient.getById('scoreCards', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'totalScore': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+        when(() => dbClient.set('scoreCards', any())).thenAnswer((_) async {});
+
+        await leaderboardRepository.updateScore('userId');
+
+        verify(() => dbClient.set('scoreCards', any())).called(1);
+      });
+    });
+
+    group('increaseScore', () {
+      test('updates the score correctly', () async {
+        final newScoreCard = leaderboardRepository.increaseScore(
+          ScoreCard(
+            id: 'userId',
+            totalScore: 20,
+            streak: 1,
+            mascot: Mascots.dash,
+            initials: 'ABC',
+          ),
+        );
+
+        expect(newScoreCard.totalScore, equals(40));
+        expect(newScoreCard.streak, equals(2));
+      });
+    });
+
+    group('resetStreak', () {
+      test('saves the streak as 0 in the database', () async {
+        when(
+          () => dbClient.getById('scoreCards', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'totalScore': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+        when(() => dbClient.set('scoreCards', any())).thenAnswer((_) async {});
+
+        await leaderboardRepository.resetStreak('userId');
+
+        verify(
+          () => dbClient.set(
+            'scoreCards',
+            DbEntityRecord(
+              id: 'userId',
+              data: {
+                'totalScore': 20,
+                'streak': 0,
+                'mascot': 'dash',
+                'initials': 'ABC',
+              },
+            ),
+          ),
+        ).called(1);
       });
     });
   });
