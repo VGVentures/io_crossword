@@ -1,13 +1,9 @@
-import 'package:api_client/api_client.dart';
-import 'package:board_info_repository/board_info_repository.dart';
-import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -22,44 +18,17 @@ class CrosswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => CrosswordBloc(
-        boardInfoRepository: context.read<BoardInfoRepository>(),
-        crosswordRepository: context.read<CrosswordRepository>(),
-        crosswordResource: context.read<CrosswordResource>(),
-      )
-        ..add(const BoardSectionRequested((0, 0)))
-        ..add(const BoardLoadingInfoFetched()),
-      child: const CrosswordView(),
-    );
+    context.read<CrosswordBloc>()
+      ..add(const BoardSectionRequested((0, 0)))
+      ..add(const BoardLoadingInfoFetched());
+
+    return const CrosswordView();
   }
 }
 
-class CrosswordView extends StatefulWidget {
+class CrosswordView extends StatelessWidget {
   @visibleForTesting
   const CrosswordView({super.key});
-
-  @override
-  State<CrosswordView> createState() => _CrosswordViewState();
-}
-
-class _CrosswordViewState extends State<CrosswordView> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bloc = context.read<CrosswordBloc>();
-      showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => BlocProvider.value(
-          value: bloc,
-          child: const GameIntroPage(),
-        ),
-      );
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
