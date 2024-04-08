@@ -32,8 +32,8 @@ class App extends StatelessWidget {
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
       ],
-      child: BlocProvider.value(
-        value: CrosswordBloc(
+      child: BlocProvider(
+        create: (_) => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
           crosswordResource: crosswordResource,
