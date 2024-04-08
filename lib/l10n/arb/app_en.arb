@@ -124,6 +124,14 @@
   "@type": {
     "description": "Type word."
   },
+  "submitScore": "Submit Score",
+  "@submitScore": {
+    "description": "Submit Score label."
+  },
+  "findNewWord": "Find a new word",
+  "@findNewWord": {
+    "description": "Find new word label"
+  },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {
     "description": "The first step instruction on how to play"
