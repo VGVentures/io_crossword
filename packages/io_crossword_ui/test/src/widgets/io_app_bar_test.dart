@@ -9,6 +9,20 @@ import '../helpers/helpers.dart';
 void main() {
   group('IoAppBar', () {
     testWidgets(
+      'preferredSize',
+      (tester) async {
+        expect(
+          IoAppBar(
+            crossword: 'Crossword',
+            actions: (_) => [],
+            title: Text('Title'),
+          ).preferredSize,
+          equals(Size(double.infinity, 80)),
+        );
+      },
+    );
+
+    testWidgets(
       'does not render crossword with small layout',
       (tester) async {
         await tester.pumpApp(
