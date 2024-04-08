@@ -8,5 +8,9 @@ void main() {
     test('can be instantiated', () {
       expect(WelcomeDataRequested(), isA<WelcomeEvent>());
     });
+
+    test('supports value equality', () {
+      expect(WelcomeDataRequested(), WelcomeDataRequested());
+    });
   });
 }
