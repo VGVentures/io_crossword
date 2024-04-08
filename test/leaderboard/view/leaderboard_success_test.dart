@@ -146,7 +146,7 @@ void main() {
     );
 
     testWidgets(
-      'when playAgain is tapped pops the screen',
+      'pops the screen when playAgain is tapped',
       (tester) async {
         final mockNavigator = MockNavigator();
 
