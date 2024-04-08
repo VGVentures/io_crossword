@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="development" type="FlutterRunConfigurationType" factoryName="Flutter">
-    <option name="additionalArgs" value="--dart-define RECAPTCHA_KEY=6LfYBKwpAAAAAM8vTuBW33_x8Xff3ekMqYyf-fzh --dart-define APPCHECK_DEBUG_TOKEN=EA85D3EA-85F6-4C2E-BC68-AC57385B6B9F" />
     <option name="buildFlavor" value="development" />
     <option name="filePath" value="$PROJECT_DIR$/lib/main_development.dart" />
     <method v="2" />
