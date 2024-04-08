@@ -32,7 +32,6 @@ class LeaderboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    // TODO(Ayad): create app bar
     final layout = IoLayout.of(context);
 
     return Scaffold(
@@ -46,6 +45,8 @@ class LeaderboardView extends StatelessWidget {
               CloseButton(),
             ],
           ),
+        // TODO(Ayad): create app bar with logo
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6409053334
         IoLayoutData.large => AppBar(
             leading: const Placeholder(
               color: Colors.white,

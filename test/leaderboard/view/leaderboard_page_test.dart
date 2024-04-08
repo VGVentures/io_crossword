@@ -8,7 +8,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -47,6 +47,17 @@ void main() {
     });
 
     testWidgets(
+      'renders CloseButton',
+      (tester) async {
+        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(CloseButton), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'renders CircularProgressIndicator with ${LeaderboardStatus.initial}',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
@@ -79,6 +90,58 @@ void main() {
         await tester.pumpApp(widget);
 
         expect(find.byType(LeaderboardSuccess), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'does not display playAgain and icon on small screen',
+      (tester) async {
+        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+
+        await tester.pumpApp(widget);
+
+        expect(find.text(l10n.playAgain), findsNothing);
+        expect(find.byIcon(Icons.gamepad), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'display playAgain and icon on big screen',
+      (tester) async {
+        tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
+
+        addTearDown(tester.view.resetPhysicalSize);
+
+        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+
+        await tester.pumpApp(widget);
+
+        expect(find.text(l10n.playAgain), findsOneWidget);
+        expect(find.byIcon(Icons.gamepad), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'when playAgain is tapped pops the screen',
+      (tester) async {
+        tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
+
+        addTearDown(tester.view.resetPhysicalSize);
+
+        final mockNavigator = MockNavigator();
+
+        when(mockNavigator.canPop).thenReturn(true);
+
+        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+
+        await tester.pumpApp(
+          widget,
+          navigator: mockNavigator,
+        );
+
+        await tester.tap(find.text(l10n.playAgain));
+
+        verify(mockNavigator.pop).called(1);
       },
     );
   });
