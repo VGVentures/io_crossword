@@ -8,6 +8,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
@@ -65,16 +66,29 @@ extension PumpApp on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: IoLayout(
-          data: layout,
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: IoCrosswordTheme().themeData,
+        child: Builder(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CrosswordBloc(
+                crosswordRepository: context.read<CrosswordRepository>(),
+                boardInfoRepository: context.read<BoardInfoRepository>(),
+                crosswordResource: context.read<CrosswordResource>(),
+              ),
+              child: IoLayout(
+                data: layout,
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  theme: IoCrosswordTheme().themeData,
             home: navigator != null
-                ? MockNavigatorProvider(navigator: navigator, child: child)
-                : child,
-          ),
+                ? MockNavigatorProvider(navigator: navigator, child: child,
+                        )
+                      : child,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -134,14 +148,29 @@ extension PumpRoute on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: IoLayout(
-          child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: navigator != null
-                ? MockNavigatorProvider(navigator: navigator, child: widget)
-                : widget,
-          ),
+        child: Builder(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CrosswordBloc(
+                crosswordRepository: context.read<CrosswordRepository>(),
+                boardInfoRepository: context.read<BoardInfoRepository>(),
+                crosswordResource: context.read<CrosswordResource>(),
+              ),
+              child: IoLayout(
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  home: navigator != null
+                      ? MockNavigatorProvider(
+                          navigator: navigator,
+                          child: widget,
+                        )
+                      : widget,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
