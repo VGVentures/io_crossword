@@ -56,6 +56,7 @@ void main() async {
           apiClient: apiClient,
           crosswordRepository: CrosswordRepository(db: firestore),
           boardInfoRepository: BoardInfoRepository(firestore: firestore),
+          user: await authenticationRepository.user.first,
         );
       },
     ),

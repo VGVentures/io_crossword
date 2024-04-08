@@ -1,4 +1,5 @@
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,12 @@ class App extends StatelessWidget {
     required this.apiClient,
     required this.crosswordRepository,
     required this.boardInfoRepository,
+    required this.user,
     super.key,
   });
 
   final ApiClient apiClient;
+  final User user;
   final CrosswordRepository crosswordRepository;
   final BoardInfoRepository boardInfoRepository;
 
@@ -29,6 +32,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: user),
         Provider.value(value: crosswordResource),
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),

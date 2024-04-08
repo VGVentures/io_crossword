@@ -33,10 +33,17 @@ class IoCrosswordTheme {
       filledButtonTheme: _filledButtonThemeData,
       outlinedButtonTheme: _outlinedButtonThemeData,
       segmentedButtonTheme: _segmentedButtonTheme,
+      dividerTheme: _dividerTheme,
       iconButtonTheme: IconButtonThemeData(
         style: ioExtension.iconButtonTheme.outlined,
       ),
       extensions: {ioExtension},
+    );
+  }
+
+  DividerThemeData get _dividerTheme {
+    return const DividerThemeData(
+      color: IoCrosswordColors.mediumGray,
     );
   }
 
