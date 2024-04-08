@@ -124,6 +124,34 @@
   "@type": {
     "description": "Type word."
   },
+  "rank": "Rank",
+  "@rank": {
+    "description": "Rank label"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "score": "Score",
+  "@score": {
+    "description": "Score label"
+  },
+  "playAgain": "Play again",
+  "@playAgain": {
+    "description": "Play again label"
+  },
+  "you": "You",
+  "@you": {
+    "description": "You label"
+  },
+  "leaderboard": "Leaderboard",
+  "@leaderboard": {
+    "description": "Leaderboard label"
+  },
+  "errorPromptText": "Something went wrong",
+  "@errorPromptText": {
+    "description": "Error message"
+  },
   "submitScore": "Submit Score",
   "@submitScore": {
     "description": "Submit Score label."
