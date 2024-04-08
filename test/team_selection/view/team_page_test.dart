@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/team_selection/view/team_selection_page.dart';
+import 'package:io_crossword/team_selection/team.dart';
 
 void main() {
   group('$TeamSelectionPage', () {
