@@ -23,6 +23,7 @@ class WelcomePage extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
 

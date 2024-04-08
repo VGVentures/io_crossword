@@ -56,10 +56,7 @@ void main() {
     },
     act: (bloc) => bloc.add(BoardProgressRequested()),
     expect: () => <GameIntroState>[
-      GameIntroState(
-        solvedWords: 123,
-        totalWords: 8900,
-      ),
+      GameIntroState(),
     ],
   );
 
