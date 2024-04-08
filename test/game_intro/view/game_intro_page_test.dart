@@ -9,6 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -141,7 +142,8 @@ void main() {
         await tester.pumpApp(child);
         expect(find.byType(GameIntroView), findsOneWidget);
 
-        await tester.pumpAndSettle(const Duration(seconds: 5));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 5));
         expect(find.byType(GameIntroView), findsNothing);
       },
     );

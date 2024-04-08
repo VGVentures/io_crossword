@@ -41,7 +41,7 @@ class GameIntroView extends StatelessWidget {
         if (state.isIntroCompleted) {
           context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
 
-          Navigator.pushReplacement(context, CrosswordPage.route());
+          Navigator.of(context).pushReplacement(CrosswordPage.route());
           AboutView.showModal(context);
         }
       },
