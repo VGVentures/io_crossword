@@ -33,8 +33,11 @@ class LeaderboardView extends StatelessWidget {
     final l10n = context.l10n;
 
     // TODO(Ayad): create app bar
-    final appBar = ResponsiveLayoutBuilder.isSmall(context)
-        ? AppBar(
+    final layout = IoLayout.of(context);
+
+    return Scaffold(
+      appBar: switch (layout) {
+        IoLayoutData.small => AppBar(
             leading: const SizedBox.shrink(),
             leadingWidth: 0,
             title: Text(l10n.leaderboard),
@@ -42,8 +45,8 @@ class LeaderboardView extends StatelessWidget {
             actions: const [
               CloseButton(),
             ],
-          )
-        : AppBar(
+          ),
+        IoLayoutData.large => AppBar(
             leading: const Placeholder(
               color: Colors.white,
             ),
@@ -61,10 +64,8 @@ class LeaderboardView extends StatelessWidget {
               const SizedBox(width: 7),
               const CloseButton(),
             ],
-          );
-
-    return Scaffold(
-      appBar: appBar,
+          ),
+      },
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
