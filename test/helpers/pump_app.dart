@@ -82,7 +82,9 @@ extension PumpApp on WidgetTester {
                   supportedLocales: AppLocalizations.supportedLocales,
                   home: navigator != null
                       ? MockNavigatorProvider(
-                          navigator: navigator, child: child)
+                          navigator: navigator,
+                          child: child,
+                        )
                       : child,
                 ),
               ),
