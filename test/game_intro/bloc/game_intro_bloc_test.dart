@@ -3,23 +3,18 @@
 
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
-
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 void main() {
-  late BoardInfoRepository boardInfoRepository;
   late LeaderboardResource leaderboardResource;
 
   setUp(() {
-    boardInfoRepository = _MockBoardInfoRepository();
     leaderboardResource = _MockLeaderboardResource();
   });
 
@@ -30,7 +25,6 @@ void main() {
           .thenAnswer((_) => Future.value(['TST']));
     },
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     act: (bloc) => bloc.add(BlacklistRequested()),
@@ -42,28 +36,8 @@ void main() {
   );
 
   blocTest<GameIntroBloc, GameIntroState>(
-    'emits state with updated board progress data '
-    'when BoardProgressRequested is added',
-    build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
-      leaderboardResource: leaderboardResource,
-    ),
-    setUp: () {
-      when(() => boardInfoRepository.getSolvedWordsCount())
-          .thenAnswer((_) => Future.value(123));
-      when(() => boardInfoRepository.getTotalWordsCount())
-          .thenAnswer((_) => Future.value(8900));
-    },
-    act: (bloc) => bloc.add(BoardProgressRequested()),
-    expect: () => <GameIntroState>[
-      GameIntroState(),
-    ],
-  );
-
-  blocTest<GameIntroBloc, GameIntroState>(
     'emits state with mascot selection status when WelcomeCompleted is added',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     act: (bloc) => bloc.add(WelcomeCompleted()),
@@ -75,7 +49,6 @@ void main() {
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with updated selected mascot when MascotUpdated is added',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     act: (bloc) => bloc.add(MascotUpdated(Mascots.dino)),
@@ -87,7 +60,6 @@ void main() {
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with initials input status when MascotSubmitted is added',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     act: (bloc) => bloc.add(MascotSubmitted()),
@@ -99,7 +71,6 @@ void main() {
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with updated initials when InitialsUpdated is added',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     act: (bloc) => bloc
@@ -115,7 +86,6 @@ void main() {
     'emits state with initials status invalid when InitialsSubmitted is added '
     'and initials are not valid',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     seed: () => GameIntroState(initials: ['A', 'B', '2']),
@@ -132,7 +102,6 @@ void main() {
     'emits state with initials status blacklisted when InitialsSubmitted '
     'is added and initials are blacklisted',
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     seed: () => GameIntroState(
@@ -161,7 +130,6 @@ void main() {
       ).thenAnswer((_) => Future.value());
     },
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     seed: () => GameIntroState(
@@ -202,7 +170,6 @@ void main() {
       ).thenThrow(Exception('Oops'));
     },
     build: () => GameIntroBloc(
-      boardInfoRepository: boardInfoRepository,
       leaderboardResource: leaderboardResource,
     ),
     seed: () => GameIntroState(
