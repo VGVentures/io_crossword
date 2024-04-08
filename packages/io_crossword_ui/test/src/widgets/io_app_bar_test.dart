@@ -14,7 +14,7 @@ void main() {
         expect(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => [],
+            actions: (_) => SizedBox(),
             title: Text('Title'),
           ).preferredSize,
           equals(Size(double.infinity, 80)),
@@ -28,7 +28,7 @@ void main() {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => [],
+            actions: (_) => SizedBox(),
             title: Text('Title'),
           ),
           layout: IoLayoutData.small,
@@ -44,7 +44,7 @@ void main() {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => [],
+            actions: (_) => SizedBox(),
             title: Text('Title'),
           ),
           layout: IoLayoutData.large,
@@ -61,7 +61,7 @@ void main() {
           await tester.pumpApp(
             IoAppBar(
               crossword: 'Crossword',
-              actions: (_) => [],
+              actions: (_) => SizedBox(),
               title: Text('Title'),
             ),
             layout: layout,
@@ -78,10 +78,12 @@ void main() {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (layout) {
+            actions: (context) {
+              final layout = IoLayout.of(context);
+
               return switch (layout) {
-                IoLayoutData.small => [Text('Small')],
-                IoLayoutData.large => [Text('Large')],
+                IoLayoutData.small => Text('Small'),
+                IoLayoutData.large => Text('Large'),
               };
             },
             title: Text('Title'),
@@ -100,10 +102,12 @@ void main() {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (layout) {
+            actions: (context) {
+              final layout = IoLayout.of(context);
+
               return switch (layout) {
-                IoLayoutData.small => [Text('Small')],
-                IoLayoutData.large => [Text('Large')],
+                IoLayoutData.small => Text('Small'),
+                IoLayoutData.large => Text('Large'),
               };
             },
             title: Text('Title'),
