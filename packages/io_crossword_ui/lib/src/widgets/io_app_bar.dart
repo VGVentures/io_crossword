@@ -19,7 +19,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String crossword;
 
   /// Display actions based on the [IoLayoutData] layout.
-  final List<Widget> Function(IoLayoutData layout) actions;
+  final WidgetBuilder actions;
 
   /// The title of the app bar.
   final Widget title;
@@ -50,9 +50,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     titleWidget,
-                    Row(
-                      children: actions(layout),
-                    ),
+                    actions(context),
                   ],
                 ),
               ),
@@ -77,9 +75,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ],
                     ),
                     titleWidget,
-                    Row(
-                      children: actions(layout),
-                    ),
+                    actions(context),
                   ],
                 ),
               ),
