@@ -17,10 +17,10 @@ class ErrorView extends StatelessWidget {
   /// Error message text.
   final String title;
 
-  /// Button title used in [ElevatedButton] to retry.
+  /// Button title used in [OutlinedButton] to retry.
   final String? buttonTitle;
 
-  /// OnPressed to retry used in the [ElevatedButton].
+  /// OnPressed to retry used in the [OutlinedButton].
   final VoidCallback? onPressed;
 
   @override
