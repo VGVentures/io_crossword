@@ -32,7 +32,7 @@ class LeaderboardSuccess extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: _Title(
-                          iconData: Icons.print,
+                          iconData: IoIcons.icon_right,
                           title: l10n.rank,
                         ),
                       ),
