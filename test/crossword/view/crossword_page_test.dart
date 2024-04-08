@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -55,14 +54,6 @@ void main() {
         Stream.fromIterable(const <CrosswordState>[]),
         initialState: const CrosswordInitial(),
       );
-    });
-
-    testWidgets('shows the game intro page dialog', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordInitial());
-
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-      expect(find.byType(GameIntroPage), findsOneWidget);
     });
 
     testWidgets('renders loading when is initial', (tester) async {

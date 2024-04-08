@@ -49,6 +49,7 @@ void main() {
           boardInfoRepository: boardInfoRepository,
         ),
       );
+      await tester.pumpAndSettle();
 
       expect(find.byType(AppView), findsOneWidget);
     });
