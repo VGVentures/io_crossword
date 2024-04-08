@@ -1,5 +1,9 @@
 {
   "@@locale": "en",
+  "crossword": "Crossword",
+  "@crossword": {
+    "description": "Crossword title"
+  },
   "welcome": "Welcome!",
   "@welcome": {
     "description": "Welcome label"
