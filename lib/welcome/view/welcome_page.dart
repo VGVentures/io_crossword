@@ -1,18 +1,39 @@
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
+  static Page<void> page() {
+    return const MaterialPage(child: WelcomePage());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const WelcomeView();
+    return BlocProvider(
+      create: (context) => WelcomeBloc(
+        boardInfoRepository: context.read(),
+      )..add(const WelcomeDataRequested()),
+      child: const WelcomeView(),
+    );
   }
 }
 
+@visibleForTesting
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
+
+  void _onGetStarted(BuildContext context) {
+    context.flow<GameIntroState>().update(
+          (status) => status.copyWith(
+            status: GameIntroStatus.mascotSelection,
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +66,18 @@ class WelcomeView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 48),
-                  const ChallengeProgress(
-                    solvedWords: 25,
-                    totalWords: 100,
+                  BlocSelector<WelcomeBloc, WelcomeState, (int, int)>(
+                    selector: (state) => (state.solvedWords, state.totalWords),
+                    builder: (context, words) {
+                      return ChallengeProgress(
+                        solvedWords: words.$1,
+                        totalWords: words.$2,
+                      );
+                    },
                   ),
                   const SizedBox(height: 48),
                   OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => _onGetStarted(context),
                     child: Text(
                       l10n.getStarted,
                       style: theme.textTheme.bodyMedium,

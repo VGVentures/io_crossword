@@ -9,6 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -47,14 +48,14 @@ void main() {
     });
 
     testWidgets(
-      'renders the welcome view with the default state',
+      'renders the $WelcomePage with the default state',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(
           const GameIntroState(),
         );
         await tester.pumpApp(child);
 
-        expect(find.byType(WelcomeView), findsOneWidget);
+        expect(find.byType(WelcomePage), findsOneWidget);
       },
     );
 

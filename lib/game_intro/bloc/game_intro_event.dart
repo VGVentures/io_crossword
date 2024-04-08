@@ -4,13 +4,6 @@ sealed class GameIntroEvent extends Equatable {
   const GameIntroEvent();
 }
 
-class BoardProgressRequested extends GameIntroEvent {
-  const BoardProgressRequested();
-
-  @override
-  List<Object> get props => [];
-}
-
 class BlacklistRequested extends GameIntroEvent {
   const BlacklistRequested();
 
