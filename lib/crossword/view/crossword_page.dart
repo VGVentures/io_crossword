@@ -20,16 +20,11 @@ class CrosswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => CrosswordBloc(
-        boardInfoRepository: context.read<BoardInfoRepository>(),
-        crosswordRepository: context.read<CrosswordRepository>(),
-        crosswordResource: context.read<CrosswordResource>(),
-      )
-        ..add(const BoardSectionRequested((0, 0)))
-        ..add(const BoardLoadingInfoFetched()),
-      child: const CrosswordView(),
-    );
+    context.read<CrosswordBloc>()
+      ..add(const BoardSectionRequested((0, 0)))
+      ..add(const BoardLoadingInfoFetched());
+
+    return const CrosswordView();
   }
 }
 
