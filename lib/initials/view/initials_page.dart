@@ -1,4 +1,6 @@
+import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -8,18 +10,19 @@ class InitialsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const InitialsView();
+    return BlocProvider(
+      create: (context) => InitialsBloc(
+        leaderboardResource: context.read<LeaderboardResource>(),
+      )..add(const InitialsBlocklistRequested()),
+      child: const InitialsView(),
+    );
   }
 }
 
 class InitialsView extends StatelessWidget {
   const InitialsView({super.key});
 
-  void _onSubmit() {
-    // TODO(alestiago): Validate the initials and navigate to the next screen.
-    // To be implemented once the following item is completed:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6398354276
-  }
+  void _onSubmit() {}
 
   @override
   Widget build(BuildContext context) {
