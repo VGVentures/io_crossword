@@ -20,6 +20,12 @@ class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 class _FakeBoardSection extends Fake implements BoardSection {
   @override
   List<Word> get words => [];
+
+  @override
+  Point<int> get position => Point(1, 1);
+
+  @override
+  int get size => 20;
 }
 
 extension on WidgetTester {
