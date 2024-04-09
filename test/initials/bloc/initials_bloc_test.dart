@@ -74,10 +74,7 @@ void main() {
         },
         expect: () => [
           InitialsState.initial().copyWith(
-            initials: InitialsInput.dirty(
-              'ABC',
-              blocklist: null,
-            ),
+            initials: InitialsInput.dirty('ABC'),
           ),
         ],
       );
