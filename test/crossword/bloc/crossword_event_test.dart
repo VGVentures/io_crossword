@@ -98,17 +98,17 @@ void main() {
 
     group('InitialsSelected', () {
       test('can be instantiated', () {
-        expect(InitialsSelected(['W', 'O', 'W']), isA<InitialsSelected>());
+        expect(InitialsSelected('WOW'), isA<InitialsSelected>());
       });
 
       test('supports value comparisons', () {
         expect(
-          InitialsSelected(['W', 'O', 'W']),
-          equals(InitialsSelected(['W', 'O', 'W'])),
+          InitialsSelected('WOW'),
+          equals(InitialsSelected('WOW')),
         );
         expect(
-          InitialsSelected(['W', 'O', 'W']),
-          isNot(equals(InitialsSelected(['G', 'G', 'G']))),
+          InitialsSelected('WOW'),
+          isNot(equals(InitialsSelected('GGG'))),
         );
       });
     });

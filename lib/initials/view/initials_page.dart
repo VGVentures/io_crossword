@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
-import 'package:io_crossword/initials/widgets/initials_error_text.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -43,8 +42,7 @@ class _InitialsViewState extends State<InitialsView> {
   }
 
   void _onSuccess(BuildContext context, InitialsState state) {
-    final initials = state.initials.value.split('');
-    context.read<CrosswordBloc>().add(InitialsSelected(initials));
+    context.read<CrosswordBloc>().add(InitialsSelected(state.initials.value));
     context.flow<GameIntroState>().complete();
   }
 
@@ -87,7 +85,7 @@ class _InitialsViewState extends State<InitialsView> {
                       height: 64,
                       child: BlocSelector<InitialsBloc, InitialsState,
                           InitialsInputError?>(
-                        selector: (state) => state.initials.error,
+                        selector: (state) => state.initials.displayError,
                         builder: (context, error) {
                           if (error == null) {
                             return const SizedBox.shrink();
