@@ -9,8 +9,8 @@ import 'package:flutter/material.dart' hide Axis, Image;
 import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
+import 'package:io_crossword/crossword/extensions/unsolved_words.dart';
 import 'package:io_crossword/crossword/game/section_component/models/models.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 
@@ -147,16 +147,39 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     _wordPositions = {};
 
-    final color = Colors.white.withOpacity(.2);
-    for (var i = 0; i < _boardSection!.words.length; i++) {
-      final word = _boardSection!.words[i];
+    // Sort words with solvedTimestamp not null to the end of the list
+    // to show crossing letters
+    final words = _boardSection!.words..sortBySolvedTimestamp();
+    final sectionRectangle = _boardSection!.getRectangle();
+
+    for (var i = 0; i < words.length; i++) {
+      final word = words[i];
 
       final wordCharacters = word.answer.toUpperCase().characters;
 
       final wordIndexStart = spriteBatch.length;
       for (var c = 0; c < wordCharacters.length; c++) {
         late Rect rect;
-        if (word.solvedTimestamp != null) {
+
+        final x = word.axis == Axis.horizontal
+            ? word.position.x + c
+            : word.position.x;
+
+        final y =
+            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
+        final offset = Vector2(
+          x * CrosswordGame.cellSize.toDouble(),
+          y * CrosswordGame.cellSize.toDouble(),
+        );
+
+        var charSolved = false;
+
+        // If character is out of section rectangle
+        if (!sectionRectangle.contains(offset.toOffset())) {
+          charSolved = _isCharSolved((x, y));
+        }
+
+        if (word.solvedTimestamp != null || charSolved) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
           rect = wordCharacters.getCharacterRectangle(c, word.mascot);
@@ -170,21 +193,10 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
           );
         }
 
-        final x = word.axis == Axis.horizontal
-            ? word.position.x + c
-            : word.position.x;
-
-        final y =
-            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
-        final offset = Vector2(
-          x * CrosswordGame.cellSize.toDouble(),
-          y * CrosswordGame.cellSize.toDouble(),
-        );
-
         spriteBatch.add(
           source: rect,
           offset: offset,
-          color: color,
+          color: Colors.white,
         );
       }
       final wordIndexEnd = spriteBatch.length;
@@ -197,6 +209,37 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         blendMode: BlendMode.srcATop,
       ),
     );
+  }
+
+  bool _isCharSolved((int, int) position) {
+    final wordsToCheck = <Word>[];
+    final rightNeighbour = gameRef.state.sections[(index.$1 + 1, index.$2)];
+    final bottomNeighbour = gameRef.state.sections[(index.$1, index.$2 + 1)];
+    if (rightNeighbour != null) {
+      wordsToCheck.addAll(rightNeighbour.words.solvedWords());
+    }
+    if (bottomNeighbour != null) {
+      wordsToCheck.addAll(bottomNeighbour.words.solvedWords());
+    }
+
+    for (var i = 0; i < wordsToCheck.length; i++) {
+      final word = wordsToCheck[i];
+
+      final characters = word.answer.toUpperCase().characters;
+      for (var c = 0; c < characters.length; c++) {
+        final x = word.axis == Axis.horizontal
+            ? word.position.x + c
+            : word.position.x;
+
+        final y =
+            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
+
+        if (x == position.$1 && y == position.$2) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   void _updateSelection({
