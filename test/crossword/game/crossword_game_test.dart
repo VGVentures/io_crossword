@@ -500,9 +500,8 @@ void main() {
       );
     });
 
-    test(
-        'throws ArgumentError when accessing the state in the wrong '
-        'status', () {
+    test('throws ArgumentError when accessing the state in the wrong status',
+        () {
       mockState(const CrosswordInitial());
       final game = createGame();
 

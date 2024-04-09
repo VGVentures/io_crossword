@@ -32,7 +32,10 @@ class CrosswordGame extends FlameGame
   CrosswordLoaded get state {
     final state = bloc.state;
     if (state is! CrosswordLoaded) {
-      throw ArgumentError('Cannot load game without a loaded state.');
+      // TODO(any): Check why test doesn't cover (line 503 in test file)
+      throw ArgumentError(
+        'Cannot load game without a loaded state.',
+      ); // coverage:ignore-line
     }
     return state;
   }
