@@ -190,6 +190,8 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // TODO(marwfair): Create a custom TabBarSelector.
+                    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422570849
                     TabPageSelector(
                       controller: _tabController,
                     ),
@@ -255,6 +257,8 @@ class _TeamSelector extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
+        // TODO(marwfair): Get the team player count.
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422631645
         const Text('10000 players'),
         const SizedBox(
           height: 32,
