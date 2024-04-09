@@ -15,7 +15,8 @@ enum InitialsInputError {
   processing,
 }
 
-// TODO(alestiago): Consider sharing this with the backend.
+// TODO(alestiago): Share validation with the backend.
+// https://very-good-ventures-team.monday.com/boards/6004820050
 class InitialsInput extends FormzInput<String, InitialsInputError> {
   InitialsInput.pure(
     super.value, {
