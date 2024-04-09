@@ -16,7 +16,8 @@ import 'package:io_crossword/word_focused/word_focused.dart';
 
 part 'character_resolver.dart';
 part 'section_debug.dart';
-part 'section_keyboard_handler.dart';rt 'section_tap_controller.dart';
+part 'section_keyboard_handler.dart';
+part 'section_tap_controller.dart';
 
 class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   SectionComponent({
