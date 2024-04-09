@@ -10,13 +10,11 @@ ScoreCard _$ScoreCardFromJson(Map<String, dynamic> json) => ScoreCard(
       id: json['id'] as String,
       totalScore: json['totalScore'] as int? ?? 0,
       streak: json['streak'] as int? ?? 0,
-      mascot:
-          $enumDecodeNullable(_$MascotsEnumMap, json['mascot']) ?? Mascots.dash,
+      mascot: $enumDecodeNullable(_$MascotsEnumMap, json['mascot']),
       initials: json['initials'] as String? ?? '',
     );
 
 Map<String, dynamic> _$ScoreCardToJson(ScoreCard instance) => <String, dynamic>{
-      'id': instance.id,
       'totalScore': instance.totalScore,
       'streak': instance.streak,
       'mascot': _$MascotsEnumMap[instance.mascot]!,

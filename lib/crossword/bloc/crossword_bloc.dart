@@ -103,8 +103,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) {
     final currentState = state;
     if (currentState is CrosswordLoaded) {
-      if (currentState.selectedWord != null) return;
-
       final section = _findWordInSection(
         currentState,
         event.word,
@@ -202,7 +200,10 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       final selectedWord = loadedState.selectedWord;
       if (selectedWord == null) return;
 
-      if (loadedState.answer != selectedWord.word.answer) {
+      final userAnswer = loadedState.answer.toLowerCase();
+      final correctAnswer = selectedWord.word.answer.toLowerCase();
+
+      if (userAnswer != correctAnswer) {
         emit(
           loadedState.copyWith(
             selectedWord:
@@ -216,7 +217,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         final isValidAnswer = await _crosswordResource.answerWord(
           section: loadedState.sections[selectedWord.section]!,
           word: selectedWord.word,
-          answer: loadedState.answer,
+          answer: userAnswer,
           mascot: loadedState.mascot,
         );
 

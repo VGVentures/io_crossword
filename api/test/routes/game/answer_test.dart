@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:jwt_middleware/jwt_middleware.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -17,20 +19,30 @@ class _MockRequest extends Mock implements Request {}
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
+class _MockLeaderboardRepository extends Mock
+    implements LeaderboardRepository {}
+
 void main() {
   group('/game/answer', () {
     late RequestContext requestContext;
     late Request request;
     late CrosswordRepository crosswordRepository;
+    late LeaderboardRepository leaderboardRepository;
+    late AuthenticatedUser user;
 
     setUp(() {
       requestContext = _MockRequestContext();
       request = _MockRequest();
       crosswordRepository = _MockCrosswordRepository();
+      leaderboardRepository = _MockLeaderboardRepository();
+      user = AuthenticatedUser('userId');
 
       when(() => requestContext.request).thenReturn(request);
       when(() => requestContext.read<CrosswordRepository>())
           .thenReturn(crosswordRepository);
+      when(() => requestContext.read<LeaderboardRepository>())
+          .thenReturn(leaderboardRepository);
+      when(() => requestContext.read<AuthenticatedUser>()).thenReturn(user);
     });
 
     group('other http methods', () {
@@ -54,45 +66,58 @@ void main() {
         when(() => request.method).thenReturn(HttpMethod.post);
       });
 
-      test('returns Response with valid to true if answer is correct',
-          () async {
-        when(
-          () => crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
-        ).thenAnswer((_) async => true);
-        when(() => request.json()).thenAnswer(
-          (_) async => {
-            'sectionId': '1,1',
-            'wordPosition': '1,1',
-            'mascot': 'dash',
-            'answer': 'sun',
-          },
-        );
+      test(
+        'returns Response with valid to true and updates score '
+        'if answer is correct',
+        () async {
+          when(
+            () =>
+                crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+          ).thenAnswer((_) async => true);
+          when(
+            () => leaderboardRepository.updateScore(user.id),
+          ).thenAnswer((_) async {});
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'sectionId': '1,1',
+              'wordPosition': '1,1',
+              'mascot': 'dash',
+              'answer': 'sun',
+            },
+          );
 
-        final response = await route.onRequest(requestContext);
+          final response = await route.onRequest(requestContext);
 
-        expect(response.statusCode, HttpStatus.ok);
-        expect(await response.json(), equals({'valid': true}));
-      });
+          expect(response.statusCode, HttpStatus.ok);
+          expect(await response.json(), equals({'valid': true}));
+          verify(() => leaderboardRepository.updateScore(user.id)).called(1);
+        },
+      );
 
-      test('returns Response with valid to false if answer is incorrect',
-          () async {
-        when(
-          () => crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
-        ).thenAnswer((_) async => false);
-        when(() => request.json()).thenAnswer(
-          (_) async => {
-            'sectionId': '1,1',
-            'wordPosition': '1,1',
-            'mascot': 'dash',
-            'answer': 'sun',
-          },
-        );
+      test(
+        'returns Response with valid to false and does not update score '
+        'if answer is incorrect',
+        () async {
+          when(
+            () =>
+                crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+          ).thenAnswer((_) async => false);
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'sectionId': '1,1',
+              'wordPosition': '1,1',
+              'mascot': 'dash',
+              'answer': 'sun',
+            },
+          );
 
-        final response = await route.onRequest(requestContext);
+          final response = await route.onRequest(requestContext);
 
-        expect(response.statusCode, HttpStatus.ok);
-        expect(await response.json(), equals({'valid': false}));
-      });
+          expect(response.statusCode, HttpStatus.ok);
+          expect(await response.json(), equals({'valid': false}));
+          verifyNever(() => leaderboardRepository.updateScore(user.id));
+        },
+      );
 
       test(
         'returns Response with status BadRequest if section id is invalid',

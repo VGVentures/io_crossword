@@ -8,7 +8,9 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +25,12 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
+    IoLayoutData? layout,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
+    CrosswordBloc? crosswordBloc,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordResource = _MockCrosswordResource();
@@ -45,9 +49,7 @@ extension PumpApp on WidgetTester {
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
-    final scaffold = Scaffold(
-      body: widget,
-    );
+    final child = Scaffold(body: widget);
 
     return pumpWidget(
       MultiProvider(
@@ -65,12 +67,33 @@ extension PumpApp on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
-              : scaffold,
+        child: Builder(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) =>
+                  crosswordBloc ??
+                  CrosswordBloc(
+                    crosswordRepository: context.read<CrosswordRepository>(),
+                    boardInfoRepository: context.read<BoardInfoRepository>(),
+                    crosswordResource: context.read<CrosswordResource>(),
+                  ),
+              child: IoLayout(
+                data: layout,
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  theme: IoCrosswordTheme().themeData,
+                  home: navigator != null
+                      ? MockNavigatorProvider(
+                          navigator: navigator,
+                          child: child,
+                        )
+                      : child,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -130,12 +153,29 @@ extension PumpRoute on WidgetTester {
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+        child: Builder(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CrosswordBloc(
+                crosswordRepository: context.read<CrosswordRepository>(),
+                boardInfoRepository: context.read<BoardInfoRepository>(),
+                crosswordResource: context.read<CrosswordResource>(),
+              ),
+              child: IoLayout(
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  home: navigator != null
+                      ? MockNavigatorProvider(
+                          navigator: navigator,
+                          child: widget,
+                        )
+                      : widget,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

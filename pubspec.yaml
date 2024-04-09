@@ -16,6 +16,7 @@ dependencies:
   board_info_repository:
     path: packages/board_info_repository
   cloud_firestore: ^4.16.0
+  collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
@@ -62,3 +63,6 @@ flutter:
   generate: true
   assets:
     - assets/images/
+
+flutter_gen:
+  output: lib/assets/

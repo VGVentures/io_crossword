@@ -1,13 +1,12 @@
-import 'package:api_client/api_client.dart';
-import 'package:board_info_repository/board_info_repository.dart';
-import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
+import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword/view/word_focused_view.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/music.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordPage extends StatelessWidget {
@@ -21,47 +20,22 @@ class CrosswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => CrosswordBloc(
-        boardInfoRepository: context.read<BoardInfoRepository>(),
-        crosswordRepository: context.read<CrosswordRepository>(),
-        crosswordResource: context.read<CrosswordResource>(),
-      )
-        ..add(const BoardSectionRequested((0, 0)))
-        ..add(const BoardLoadingInfoFetched()),
-      child: const CrosswordView(),
-    );
+    context.read<CrosswordBloc>()
+      ..add(const BoardSectionRequested((0, 0)))
+      ..add(const BoardLoadingInfoFetched());
+
+    return const CrosswordView();
   }
 }
 
-class CrosswordView extends StatefulWidget {
+@visibleForTesting
+class CrosswordView extends StatelessWidget {
   @visibleForTesting
   const CrosswordView({super.key});
 
   @override
-  State<CrosswordView> createState() => _CrosswordViewState();
-}
-
-class _CrosswordViewState extends State<CrosswordView> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bloc = context.read<CrosswordBloc>();
-      showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => BlocProvider.value(
-          value: bloc,
-          child: const GameIntroPage(),
-        ),
-      );
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final bloc = context.watch<CrosswordBloc>();
     final state = bloc.state;
 
@@ -76,7 +50,24 @@ class _CrosswordViewState extends State<CrosswordView> {
       child = const LoadedBoardView();
     }
 
-    return Scaffold(body: child);
+    return Scaffold(
+      appBar: IoAppBar(
+        // TODO(Ayad): add SegmentedButtons design
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417693547
+        title: const SizedBox(),
+        crossword: l10n.crossword,
+        actions: (context) {
+          return const Row(
+            children: [
+              MuteButton(),
+              SizedBox(width: 7),
+              DrawerButton(),
+            ],
+          );
+        },
+      ),
+      body: child,
+    );
   }
 }
 
@@ -100,68 +91,64 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-
     game = CrosswordGame(context.read());
   }
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayoutBuilder(
-      large: (context, widget) {
-        return Stack(
-          children: [
-            GameWidget(game: game),
-            const Positioned(
-              top: 12,
-              right: 16,
-              child: AboutButton(),
-            ),
-            const WordFocusedDesktopView(),
-            _ZoomControls(game: game),
-          ],
-        );
-      },
-      small: (context, widget) {
-        return BlocListener<CrosswordBloc, CrosswordState>(
-          listenWhen: (previous, current) {
-            if (previous is CrosswordLoaded && current is CrosswordLoaded) {
-              return previous.selectedWord == null &&
-                  current.selectedWord != null;
-            }
-            return false;
-          },
-          listener: (context, state) {
-            if (state is CrosswordLoaded) {
-              if (state.selectedWord != null) {
-                final bloc = context.read<CrosswordBloc>();
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (context) {
-                    return BlocProvider.value(
-                      value: bloc,
-                      child: WordFocusedMobileView(state.selectedWord!),
-                    );
-                  },
-                ).then(
-                  (_) =>
-                      context.read<CrosswordBloc>().add(const WordUnselected()),
-                );
-              }
-            }
-          },
-          child: Stack(
-            children: [
-              GameWidget(game: game),
-              const Positioned(
-                top: 12,
-                right: 16,
-                child: AboutButton(),
-              ),
-              _ZoomControls(game: game),
-            ],
-          ),
-        );
-      },
+    final layout = IoLayout.of(context);
+    switch (layout) {
+      case IoLayoutData.small:
+        return _SmallBoardView(game: game);
+      case IoLayoutData.large:
+        return _LargeBoardView(game: game);
+    }
+  }
+}
+
+class _LargeBoardView extends StatelessWidget {
+  const _LargeBoardView({
+    required this.game,
+  });
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        const Positioned(
+          top: 12,
+          right: 16,
+          child: AboutButton(),
+        ),
+        const WordFocusedDesktopPage(),
+        const BottomBar(),
+        _ZoomControls(game: game),
+      ],
+    );
+  }
+}
+
+class _SmallBoardView extends StatelessWidget {
+  const _SmallBoardView({required this.game});
+
+  final CrosswordGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GameWidget(game: game),
+        const Positioned(
+          top: 12,
+          right: 16,
+          child: AboutButton(),
+        ),
+        const WordFocusedMobilePage(),
+        _ZoomControls(game: game),
+      ],
     );
   }
 }
@@ -191,7 +178,7 @@ class _ZoomControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 16,
+      left: 16,
       bottom: 16,
       child: Column(
         children: [

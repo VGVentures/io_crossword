@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class MascotSelectionView extends StatelessWidget {
@@ -21,27 +22,41 @@ class MascotSelectionView extends StatelessWidget {
       (GameIntroBloc bloc) => bloc.state.selectedMascot,
     );
 
-    return CardScrollableContentWithButton(
-      onPressed: () {
-        context.read<GameIntroBloc>().add(const MascotSubmitted());
-      },
-      buttonLabel: l10n.continueLabel,
-      child: Column(
-        children: [
-          Text(
-            l10n.chooseTeam,
-            style: IoCrosswordTextStyles.headlineMD,
-          ),
-          const SizedBox(height: 16),
-          const Spacer(),
-          ...Mascots.values.map(
-            (mascot) => MascotItem(
-              mascot: mascot,
-              selectedMascot: selectedMascot,
+    return Scaffold(
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
+        actions: (context) {
+          return const Row(
+            children: [
+              MuteButton(),
+              SizedBox(width: 7),
+              DrawerButton(),
+            ],
+          );
+        },
+      ),
+      body: CardScrollableContentWithButton(
+        onPressed: () {
+          context.read<GameIntroBloc>().add(const MascotSubmitted());
+        },
+        buttonLabel: l10n.continueLabel,
+        child: Column(
+          children: [
+            Text(
+              l10n.chooseTeam,
+              style: IoCrosswordTextStyles.headlineMD,
             ),
-          ),
-          const Spacer(),
-        ],
+            const SizedBox(height: 16),
+            const Spacer(),
+            ...Mascots.values.map(
+              (mascot) => MascotItem(
+                mascot: mascot,
+                selectedMascot: selectedMascot,
+              ),
+            ),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
-import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -9,13 +8,10 @@ part 'game_intro_state.dart';
 
 class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
   GameIntroBloc({
-    required BoardInfoRepository boardInfoRepository,
     required LeaderboardResource leaderboardResource,
-  })  : _boardInfoRepository = boardInfoRepository,
-        _leaderboardResource = leaderboardResource,
+  })  : _leaderboardResource = leaderboardResource,
         super(const GameIntroState()) {
     on<BlacklistRequested>(_onBlacklistRequested);
-    on<BoardProgressRequested>(_onBoardProgressRequested);
     on<WelcomeCompleted>(_onWelcomeCompleted);
     on<MascotUpdated>(_onMascotUpdated);
     on<MascotSubmitted>(_onMascotSubmitted);
@@ -23,7 +19,6 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
-  final BoardInfoRepository _boardInfoRepository;
   final LeaderboardResource _leaderboardResource;
   final initialsRegex = RegExp('[A-Z]{3}');
 
@@ -37,23 +32,6 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     } catch (e, s) {
       addError(e, s);
     }
-  }
-
-  Future<void> _onBoardProgressRequested(
-    BoardProgressRequested event,
-    Emitter<GameIntroState> emit,
-  ) async {
-    final [solved, total] = await Future.wait([
-      _boardInfoRepository.getSolvedWordsCount(),
-      _boardInfoRepository.getTotalWordsCount(),
-    ]);
-
-    emit(
-      state.copyWith(
-        solvedWords: solved,
-        totalWords: total,
-      ),
-    );
   }
 
   void _onWelcomeCompleted(

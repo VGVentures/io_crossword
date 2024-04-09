@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:game_domain/src/models/mascots.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'leaderboard_player.g.dart';
@@ -13,6 +14,8 @@ class LeaderboardPlayer extends Equatable {
     required this.userId,
     required this.initials,
     required this.score,
+    required this.streak,
+    required this.mascot,
   });
 
   /// {@macro leaderboard_player}
@@ -28,13 +31,21 @@ class LeaderboardPlayer extends Equatable {
   @JsonKey()
   final int score;
 
+  /// Number of streaks.
+  @JsonKey()
+  final int streak;
+
   /// Initials of the player.
   @JsonKey()
   final String initials;
+
+  /// The player mascot.
+  @JsonKey()
+  final Mascots mascot;
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$LeaderboardPlayerToJson(this);
 
   @override
-  List<Object?> get props => [userId, score, initials];
+  List<Object?> get props => [userId, score, initials, streak, mascot];
 }

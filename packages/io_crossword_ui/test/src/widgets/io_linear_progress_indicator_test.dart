@@ -36,6 +36,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 50));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpApp(
             _GoldenSubject(
@@ -57,6 +58,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 50));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpApp(
             _GoldenSubject(
@@ -78,6 +80,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(500, 50));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           await tester.pumpApp(
             _GoldenSubject(

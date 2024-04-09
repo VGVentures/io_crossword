@@ -1,5 +1,9 @@
 {
   "@@locale": "en",
+  "crossword": "Crossword",
+  "@crossword": {
+    "description": "Crossword title"
+  },
   "welcome": "Welcome!",
   "@welcome": {
     "description": "Welcome label"
@@ -48,6 +52,10 @@
   "@submit": {
     "description": "Submit label"
   },
+  "solveIt": "Solve it",
+  "@solveIt": {
+    "description": "Solve it label"
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
@@ -59,6 +67,10 @@
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
     "description": "Type to answer label"
+  },
+  "wordSolved": "Word solved!",
+  "@wordSolved": {
+    "description": "Word solved label"
   },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
@@ -115,6 +127,42 @@
   "type": "Type",
   "@type": {
     "description": "Type word."
+  },
+  "rank": "Rank",
+  "@rank": {
+    "description": "Rank label"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "score": "Score",
+  "@score": {
+    "description": "Score label"
+  },
+  "playAgain": "Play again",
+  "@playAgain": {
+    "description": "Play again label"
+  },
+  "you": "You",
+  "@you": {
+    "description": "You label"
+  },
+  "leaderboard": "Leaderboard",
+  "@leaderboard": {
+    "description": "Leaderboard label"
+  },
+  "errorPromptText": "Something went wrong",
+  "@errorPromptText": {
+    "description": "Error message"
+  },
+  "submitScore": "Submit Score",
+  "@submitScore": {
+    "description": "Submit Score label."
+  },
+  "findNewWord": "Find a new word",
+  "@findNewWord": {
+    "description": "Find new word label"
   },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {

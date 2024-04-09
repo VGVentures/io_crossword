@@ -72,7 +72,7 @@ void main() {
       Uri goldenKey(String name) =>
           Uri.parse('goldens/io_player_alias/io_player_alias__$name.png');
 
-      setUpAll(() async {
+      setUp(() async {
         final previousComparator = goldenFileComparator;
         final comparator = _GoldenFileComparator();
         goldenFileComparator = comparator;
@@ -93,6 +93,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -116,6 +117,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -147,6 +149,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -170,6 +173,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -201,6 +205,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -224,6 +229,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -255,6 +261,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(
@@ -278,6 +285,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size(300, 150));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               _GoldenSubject(

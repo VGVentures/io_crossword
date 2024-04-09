@@ -19,8 +19,6 @@ class GameIntroState extends Equatable {
   const GameIntroState({
     this.status = GameIntroStatus.welcome,
     this.isIntroCompleted = false,
-    this.solvedWords = 0,
-    this.totalWords = 0,
     this.selectedMascot = Mascots.dash,
     this.initials = const ['', '', ''],
     this.initialsBlacklist = const [],
@@ -29,8 +27,6 @@ class GameIntroState extends Equatable {
 
   final GameIntroStatus status;
   final bool isIntroCompleted;
-  final int solvedWords;
-  final int totalWords;
   final Mascots selectedMascot;
   final List<String> initials;
   final List<String> initialsBlacklist;
@@ -49,8 +45,6 @@ class GameIntroState extends Equatable {
     return GameIntroState(
       status: status ?? this.status,
       isIntroCompleted: isIntroCompleted ?? this.isIntroCompleted,
-      solvedWords: solvedWords ?? this.solvedWords,
-      totalWords: totalWords ?? this.totalWords,
       selectedMascot: selectedMascot ?? this.selectedMascot,
       initials: initials ?? this.initials,
       initialsBlacklist: initialsBlacklist ?? this.initialsBlacklist,
@@ -62,8 +56,6 @@ class GameIntroState extends Equatable {
   List<Object?> get props => [
         status,
         isIntroCompleted,
-        solvedWords,
-        totalWords,
         selectedMascot,
         initials,
         initialsBlacklist,
