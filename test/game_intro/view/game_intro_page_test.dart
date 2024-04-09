@@ -2,6 +2,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,7 +62,7 @@ void main() {
     );
 
     testWidgets(
-      'renders the mascot selection view when the status is mascotSelection',
+      'renders the $MascotSelectionView when the status is mascotSelection',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(
           const GameIntroState(status: GameIntroStatus.mascotSelection),
@@ -93,7 +94,7 @@ void main() {
     );
 
     testWidgets(
-      'renders the initials input view when the status is initialsInput',
+      'renders the $InitialsPage when the status is initialsInput',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(
           const GameIntroState(status: GameIntroStatus.initialsInput),
@@ -105,22 +106,32 @@ void main() {
     );
 
     testWidgets(
-      'pops the navigator when the intro is completed',
+      'pops the navigator when completed',
       (tester) async {
+        const state = GameIntroState(status: GameIntroStatus.initialsInput);
         whenListen(
           gameIntroBloc,
-          Stream.value(
-            const GameIntroState(isIntroCompleted: true),
-          ),
+          Stream.value(state),
           initialState: const GameIntroState(
             status: GameIntroStatus.initialsInput,
           ),
         );
-        await tester.pumpApp(child);
-        expect(find.byType(GameIntroView), findsOneWidget);
 
-        await tester.pump();
-        await tester.pump(const Duration(seconds: 5));
+        final flowController = FlowController<GameIntroState>(state);
+
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: gameIntroBloc),
+              BlocProvider.value(value: crosswordBloc),
+            ],
+            child: GameIntroView(flowController: flowController),
+          ),
+        );
+
+        flowController.complete();
+
+        await tester.pumpAndSettle();
         expect(find.byType(GameIntroView), findsNothing);
       },
     );

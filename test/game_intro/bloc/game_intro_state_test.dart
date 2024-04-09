@@ -22,13 +22,6 @@ void main() {
         );
       });
 
-      test('updates isIntroCompleted', () {
-        expect(
-          GameIntroState().copyWith(isIntroCompleted: true),
-          equals(GameIntroState(isIntroCompleted: true)),
-        );
-      });
-
       test('updates selectedMascot', () {
         expect(
           GameIntroState().copyWith(selectedMascot: Mascots.android),

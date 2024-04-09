@@ -47,11 +47,7 @@ class _InitialsViewState extends State<InitialsView> {
 
     context.read<CrosswordBloc>().add(InitialsSelected(initials));
 
-    context.flow<GameIntroState>().update(
-          (state) => state.copyWith(
-            isIntroCompleted: true,
-          ),
-        );
+    context.flow<GameIntroState>().complete();
   }
 
   /// Returns the error message to display, if any.

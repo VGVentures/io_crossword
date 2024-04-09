@@ -20,28 +20,35 @@ class GameIntroPage extends StatelessWidget {
 }
 
 class GameIntroView extends StatelessWidget {
-  const GameIntroView({super.key});
+  const GameIntroView({
+    super.key,
+    @visibleForTesting FlowController<GameIntroState>? flowController,
+  }) : _flowController = flowController;
+
+  final FlowController<GameIntroState>? _flowController;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) =>
-          (previous.status != current.status) || current.isIntroCompleted,
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == GameIntroStatus.initialsInput) {
           context
               .read<CrosswordBloc>()
               .add(MascotSelected(state.selectedMascot));
         }
-        if (state.isIntroCompleted) {
-          Navigator.of(context).pushReplacement(CrosswordPage.route());
-          AboutView.showModal(context);
-        }
       },
       child: Material(
         child: FlowBuilder<GameIntroState>(
-          state: context.select((GameIntroBloc bloc) => bloc.state),
+          controller: _flowController,
+          state: _flowController == null
+              ? context.select((GameIntroBloc bloc) => bloc.state)
+              : null,
           onGeneratePages: onGenerateGameIntroPages,
+          onComplete: (_) {
+            Navigator.of(context).pushReplacement(CrosswordPage.route());
+            AboutView.showModal(context);
+          },
         ),
       ),
     );
