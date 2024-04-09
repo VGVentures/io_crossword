@@ -34,6 +34,8 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
                 userId: '',
                 initials: 'AAA',
                 score: 0,
+                streak: 0,
+                mascot: Mascots.dash,
               ),
             ),
           ),

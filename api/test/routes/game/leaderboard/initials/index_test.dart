@@ -45,6 +45,8 @@ void main() {
         userId: 'user-id',
         initials: 'AAA',
         score: 10,
+        mascot: Mascots.dash,
+        streak: 2,
       );
 
       when(
@@ -71,6 +73,8 @@ void main() {
         userId: 'user-id',
         initials: 'AAA',
         score: 10,
+        mascot: Mascots.dash,
+        streak: 2,
       );
 
       when(() => request.method).thenReturn(HttpMethod.post);
@@ -85,6 +89,32 @@ void main() {
 
       final response = await route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.noContent));
+    });
+
+    test('responds with a 400 when mascot is not correct', () async {
+      final leaderboardPlayer = LeaderboardPlayer(
+        userId: 'user-id',
+        initials: 'AAA',
+        score: 10,
+        mascot: Mascots.dash,
+        streak: 2,
+      );
+
+      when(() => request.method).thenReturn(HttpMethod.post);
+
+      when(
+        () => leaderboardRepository.addPlayerToLeaderboard(
+          leaderboardPlayer: leaderboardPlayer,
+        ),
+      ).thenAnswer((_) async {});
+
+      when(request.json).thenAnswer(
+        (_) async => leaderboardPlayer.toJson()
+          ..update('mascot', (value) => 'no-real-mascot'),
+      );
+
+      final response = await route.onRequest(context);
+      expect(response.statusCode, equals(HttpStatus.badRequest));
     });
 
     test('responds with a 400 when request is invalid', () async {
@@ -102,6 +132,8 @@ void main() {
           'userId': 'user-id',
           'initials': 'CCC',
           'score': 10,
+          'mascot': 'dash',
+          'streak': 2,
         },
       );
 
@@ -117,6 +149,8 @@ void main() {
           'userId': 'user-id',
           'initials': 'ccc',
           'score': 10,
+          'mascot': 'dash',
+          'streak': 2,
         },
       );
 
@@ -133,6 +167,8 @@ void main() {
             'userId': 'user-id',
             'initials': 'aa',
             'score': 10,
+            'mascot': 'dash',
+            'streak': 2,
           },
         );
 
@@ -150,6 +186,8 @@ void main() {
             'userId': 'user-id',
             'initials': 'aaaa',
             'score': 10,
+            'mascot': 'dash',
+            'streak': 2,
           },
         );
 
