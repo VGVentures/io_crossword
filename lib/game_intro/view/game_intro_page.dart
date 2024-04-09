@@ -2,9 +2,11 @@ import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class GameIntroPage extends StatelessWidget {
@@ -13,39 +15,51 @@ class GameIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GameIntroBloc(
-        leaderboardResource: context.read<LeaderboardResource>(),
-      )..add(const BlacklistRequested()),
+      create: (_) => GameIntroBloc(),
       child: const GameIntroView(),
     );
   }
 }
 
 class GameIntroView extends StatelessWidget {
-  const GameIntroView({super.key});
+  const GameIntroView({
+    super.key,
+    @visibleForTesting FlowController<GameIntroState>? flowController,
+  }) : _flowController = flowController;
+
+  final FlowController<GameIntroState>? _flowController;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) =>
-          (previous.status != current.status) || current.isIntroCompleted,
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == GameIntroStatus.initialsInput) {
           context
               .read<CrosswordBloc>()
               .add(MascotSelected(state.selectedMascot));
         }
-        if (state.isIntroCompleted) {
-          context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
-
-          Navigator.of(context).pushReplacement(CrosswordPage.route());
-          AboutView.showModal(context);
-        }
       },
       child: Material(
         child: FlowBuilder<GameIntroState>(
-          state: context.select((GameIntroBloc bloc) => bloc.state),
+          controller: _flowController,
+          state: _flowController == null
+              ? context.select((GameIntroBloc bloc) => bloc.state)
+              : null,
           onGeneratePages: onGenerateGameIntroPages,
+          onComplete: (state) {
+            // coverage:ignore-start
+            // TODO(alestiago): Handle this creation.
+            // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422014818
+            context.read<LeaderboardResource>().createScore(
+                  initials: 'AAA',
+                  mascot: Mascots.dash,
+                );
+            // coverage:ignore-end
+
+            Navigator.of(context).pushReplacement(CrosswordPage.route());
+            AboutView.showModal(context);
+          },
         ),
       ),
     );
@@ -59,6 +73,6 @@ List<Page<void>> onGenerateGameIntroPages(
   return switch (state.status) {
     GameIntroStatus.welcome => [WelcomePage.page()],
     GameIntroStatus.mascotSelection => [MascotSelectionView.page()],
-    GameIntroStatus.initialsInput => [InitialsInputView.page()],
+    GameIntroStatus.initialsInput => [InitialsPage.page()],
   };
 }
