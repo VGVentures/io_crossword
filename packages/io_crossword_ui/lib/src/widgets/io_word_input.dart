@@ -283,6 +283,7 @@ class _IoWordInputState extends State<IoWordInput> {
       focusNode.addListener(() => _onFocusChanged(focusNode));
     }
 
+    widget.controller?._updateWord(_word);
     _next();
   }
 
