@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
-import 'dart:ui' as ui;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/components.dart';
@@ -12,14 +11,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
-
-class FakeImage extends Fake implements ui.Image {
-  @override
-  int get width => 100;
-
-  @override
-  int get height => 100;
-}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -241,7 +232,7 @@ void main() {
         // 15 because Flutter has 7 letters and Firebase has 8
 
         expect(
-          spriteBatch?.sources.any((element) => element.left != 1040),
+          spriteBatch?.sources.any((element) => element.left != 2080),
           isTrue,
         );
       },

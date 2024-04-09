@@ -49,6 +49,7 @@ extension CharacterResolver on SectionComponent {
       for (var c = 0; c < characters.length; c++) {
         final charPosition = word.getCharactersPosition(c);
 
+        print(charPosition);
         if (charPosition.x == x && charPosition.y == y) {
           return true;
         }
