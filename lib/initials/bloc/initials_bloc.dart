@@ -14,6 +14,8 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
   })  : _leaderboardResource = leaderboardResource,
         super(InitialsState.initial()) {
     on<InitialsBlocklistRequested>(_onBlocklistRequested);
+    on<InitialsChanged>(_onInitialsChanged);
+    on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
   final LeaderboardResource _leaderboardResource;
@@ -37,5 +39,30 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
       addError(e, s);
       emit(state.copyWith(status: InitialsStatus.failure));
     }
+  }
+
+  void _onInitialsChanged(
+    InitialsChanged event,
+    Emitter<InitialsState> emit,
+  ) {
+    final initials = state.initials;
+    if (initials == null) return;
+
+    emit(
+      state.copyWith(
+        initials: InitialsInput.dirty(
+          event.initials,
+          blocklist: initials.blocklist,
+        ),
+      ),
+    );
+  }
+
+  void _onInitialsSubmitted(
+    InitialsSubmitted event,
+    Emitter<InitialsState> emit,
+  ) {
+    final initials = state.initials;
+    if (initials == null) return;
   }
 }

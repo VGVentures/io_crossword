@@ -1,10 +1,10 @@
-import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 
 class GameIntroPage extends StatelessWidget {
@@ -13,9 +13,7 @@ class GameIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GameIntroBloc(
-        leaderboardResource: context.read<LeaderboardResource>(),
-      )..add(const BlacklistRequested()),
+      create: (_) => GameIntroBloc(),
       child: const GameIntroView(),
     );
   }
@@ -36,8 +34,6 @@ class GameIntroView extends StatelessWidget {
               .add(MascotSelected(state.selectedMascot));
         }
         if (state.isIntroCompleted) {
-          context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
-
           Navigator.of(context).pushReplacement(CrosswordPage.route());
           AboutView.showModal(context);
         }
@@ -59,6 +55,6 @@ List<Page<void>> onGenerateGameIntroPages(
   return switch (state.status) {
     GameIntroStatus.welcome => [WelcomePage.page()],
     GameIntroStatus.mascotSelection => [MascotSelectionView.page()],
-    GameIntroStatus.initialsInput => [InitialsInputView.page()],
+    GameIntroStatus.initialsInput => [InitialsPage.page()],
   };
 }

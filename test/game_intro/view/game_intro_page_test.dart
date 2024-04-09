@@ -9,6 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -99,31 +100,7 @@ void main() {
         );
         await tester.pumpApp(child);
 
-        expect(find.byType(InitialsInputView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'saves the initials when the intro is completed',
-      (tester) async {
-        whenListen(
-          gameIntroBloc,
-          Stream.value(
-            GameIntroState(
-              status: GameIntroStatus.initialsInput,
-              isIntroCompleted: true,
-              initialsStatus: InitialsFormStatus.success,
-              initials: ['I', 'I', 'O'],
-            ),
-          ),
-          initialState: GameIntroState(
-            status: GameIntroStatus.initialsInput,
-          ),
-        );
-        await tester.pumpApp(child);
-
-        verify(() => crosswordBloc.add(InitialsSelected(['I', 'I', 'O'])))
-            .called(1);
+        expect(find.byType(InitialsPage), findsOneWidget);
       },
     );
 

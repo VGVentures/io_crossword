@@ -35,27 +35,6 @@ void main() {
           equals(GameIntroState(selectedMascot: Mascots.android)),
         );
       });
-
-      test('updates initials', () {
-        expect(
-          GameIntroState().copyWith(initials: ['W', 'O', 'W']),
-          equals(GameIntroState(initials: ['W', 'O', 'W'])),
-        );
-      });
-
-      test('updates initialsBlacklist', () {
-        expect(
-          GameIntroState().copyWith(initialsBlacklist: ['WOW']),
-          equals(GameIntroState(initialsBlacklist: ['WOW'])),
-        );
-      });
-
-      test('updates initialsStatus', () {
-        expect(
-          GameIntroState().copyWith(initialsStatus: InitialsFormStatus.success),
-          equals(GameIntroState(initialsStatus: InitialsFormStatus.success)),
-        );
-      });
     });
   });
 }

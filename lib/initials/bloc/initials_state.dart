@@ -27,6 +27,11 @@ class InitialsInput extends FormzInput<String, InitialsInputError> {
     required this.blocklist,
   }) : super.pure('');
 
+  InitialsInput.dirty(
+    super.value, {
+    required this.blocklist,
+  }) : super.dirty();
+
   final _initialsRegex = RegExp('[A-Z]{3}');
 
   /// Collection of initials that are not allowed.
