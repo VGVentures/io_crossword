@@ -180,17 +180,12 @@ void main() {
             ),
           );
 
-          late final AppLocalizations l10n;
           await tester.pumpSubject(
-            Builder(
-              builder: (context) {
-                l10n = context.l10n;
-                return const InitialsView();
-              },
-            ),
+            initialsBloc: initialsBloc,
+            const InitialsView(),
           );
 
-          expect(find.text(l10n.enterInitials), findsOneWidget);
+          expect(find.byType(InitialsErrorText), findsOneWidget);
         },
       );
     });
