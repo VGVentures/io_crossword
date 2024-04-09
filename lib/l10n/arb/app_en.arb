@@ -8,6 +8,10 @@
   "@welcome": {
     "description": "Welcome label"
   },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings label"
+  },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"

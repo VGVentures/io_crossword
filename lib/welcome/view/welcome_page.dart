@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
@@ -43,15 +44,18 @@ class WelcomeView extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
+      endDrawer: const CrosswordDrawer(),
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
         actions: (context) {
-          return const Row(
+          return Row(
             children: [
-              MuteButton(),
-              SizedBox(width: 7),
-              DrawerButton(),
+              const MuteButton(),
+              const SizedBox(width: 7),
+              DrawerButton(
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              ),
             ],
           );
         },
