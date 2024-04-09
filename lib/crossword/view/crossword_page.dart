@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -32,6 +33,7 @@ class CrosswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final bloc = context.watch<CrosswordBloc>();
     final state = bloc.state;
 
@@ -46,7 +48,36 @@ class CrosswordView extends StatelessWidget {
       child = const LoadedBoardView();
     }
 
-    return Scaffold(body: child);
+    return Scaffold(
+      appBar: IoAppBar(
+        // TODO(Ayad): add SegmentedButtons design
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417693547
+        title: const SizedBox(),
+        crossword: l10n.crossword,
+        actions: (context) {
+          return Row(
+            children: [
+              IconButton(
+                // TODO(Ayad): volume logic
+                // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417645325
+                // coverage:ignore-line
+                onPressed: () {},
+                icon: const Icon(Icons.volume_off),
+              ),
+              const SizedBox(width: 7),
+              IconButton(
+                // TODO(Ayad): menu logic
+                // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6373424146
+                // coverage:ignore-line
+                onPressed: () {},
+                icon: const Icon(Icons.menu),
+              ),
+            ],
+          );
+        },
+      ),
+      body: child,
+    );
   }
 }
 

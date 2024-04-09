@@ -56,6 +56,13 @@ void main() {
       );
     });
 
+    testWidgets('renders IoAppBar', (tester) async {
+      when(() => bloc.state).thenReturn(const CrosswordInitial());
+
+      await tester.pumpCrosswordView(bloc);
+      expect(find.byType(IoAppBar), findsOneWidget);
+    });
+
     testWidgets('renders loading when is initial', (tester) async {
       when(() => bloc.state).thenReturn(const CrosswordInitial());
 

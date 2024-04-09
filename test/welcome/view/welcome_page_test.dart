@@ -7,6 +7,7 @@ import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -63,6 +64,11 @@ void main() {
       testWidgets('a $WelcomeHeaderImage', (tester) async {
         await tester.pumpSubject(const WelcomeView());
         expect(find.byType(WelcomeHeaderImage), findsOneWidget);
+      });
+
+      testWidgets('a $IoAppBar', (tester) async {
+        await tester.pumpSubject(const WelcomeView());
+        expect(find.byType(IoAppBar), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {

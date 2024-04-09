@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -23,8 +24,8 @@ class WelcomePage extends StatelessWidget {
   }
 }
 
-@visibleForTesting
 class WelcomeView extends StatelessWidget {
+  @visibleForTesting
   const WelcomeView({super.key});
 
   void _onGetStarted(BuildContext context) {
@@ -41,10 +42,32 @@ class WelcomeView extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 40,
-        title: const Text('IO Crossword'),
+      appBar: IoAppBar(
+        title: const SizedBox(),
+        crossword: l10n.crossword,
+        alwaysShowLogo: true,
         bottom: const WelcomeHeaderImage(),
+        actions: (context) {
+          return Row(
+            children: [
+              IconButton(
+                // TODO(Ayad): volume logic
+                // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417645325
+                // coverage:ignore-line
+                onPressed: () {},
+                icon: const Icon(Icons.volume_off),
+              ),
+              const SizedBox(width: 7),
+              IconButton(
+                // TODO(Ayad): menu logic
+                // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6373424146
+                // coverage:ignore-line
+                onPressed: () {},
+                icon: const Icon(Icons.menu),
+              ),
+            ],
+          );
+        },
       ),
       body: SelectionArea(
         child: SingleChildScrollView(
