@@ -44,9 +44,7 @@ class _InitialsViewState extends State<InitialsView> {
 
   void _onSuccess(BuildContext context, InitialsState state) {
     final initials = state.initials.value.split('');
-
     context.read<CrosswordBloc>().add(InitialsSelected(initials));
-
     context.flow<GameIntroState>().complete();
   }
 
@@ -103,6 +101,7 @@ class _InitialsViewState extends State<InitialsView> {
                     IoWordInput.alphabetic(
                       length: 3,
                       controller: _wordInputController,
+                      onSubmit: (_) => _onSubmit(context),
                     ),
                     SizedBox(
                       height: 64,
@@ -130,10 +129,11 @@ class _InitialsViewState extends State<InitialsView> {
                                 previous.status == InitialsStatus.loading);
                       },
                       builder: (context, state) {
-                        return InitialsSubmitButton(
-                          isLoading: state.status == InitialsStatus.loading,
-                          onPressed: () => _onSubmit(context),
-                        );
+                        return state.status == InitialsStatus.loading
+                            ? const CircularProgressIndicator()
+                            : InitialsSubmitButton(
+                                onPressed: () => _onSubmit(context),
+                              );
                       },
                     ),
                   ],

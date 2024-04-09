@@ -38,6 +38,8 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     InitialsSubmitted event,
     Emitter<InitialsState> emit,
   ) async {
+    if (state.status == InitialsStatus.loading) return;
+
     final initials = InitialsInput.dirty(
       event.initials,
       blocklist: state.initials.blocklist,
@@ -67,11 +69,5 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     emit(
       state.copyWith(status: InitialsStatus.success),
     );
-  }
-
-  @override
-  void onTransition(Transition<InitialsEvent, InitialsState> transition) {
-    super.onTransition(transition);
-    print(transition);
   }
 }
