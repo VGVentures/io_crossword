@@ -14,9 +14,9 @@ import 'package:io_crossword/crossword/extensions/unsolved_words.dart';
 import 'package:io_crossword/crossword/game/section_component/models/models.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 
+part 'character_resolver.dart';
 part 'section_debug.dart';
-part 'section_keyboard_handler.dart';
-part 'section_tap_controller.dart';
+part 'section_keyboard_handler.dart';rt 'section_tap_controller.dart';
 
 class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   SectionComponent({
@@ -161,22 +161,20 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       for (var c = 0; c < wordCharacters.length; c++) {
         late Rect rect;
 
-        final x = word.axis == Axis.horizontal
-            ? word.position.x + c
-            : word.position.x;
-
-        final y =
-            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
+        final charPosition = word.getCharactersPosition(c);
         final offset = Vector2(
-          x * CrosswordGame.cellSize.toDouble(),
-          y * CrosswordGame.cellSize.toDouble(),
+          charPosition.x * CrosswordGame.cellSize.toDouble(),
+          charPosition.y * CrosswordGame.cellSize.toDouble(),
         );
 
         var charSolved = false;
 
-        // If character is out of section rectangle
-        if (!sectionRectangle.contains(offset.toOffset())) {
-          charSolved = _isCharSolved((x, y));
+        if (word.solvedTimestamp == null) {
+          charSolved = _isCharacterSolvedByNeighbour(
+            sectionRectangle,
+            charPosition.x,
+            charPosition.y,
+          );
         }
 
         if (word.solvedTimestamp != null || charSolved) {
@@ -209,37 +207,6 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         blendMode: BlendMode.srcATop,
       ),
     );
-  }
-
-  bool _isCharSolved((int, int) position) {
-    final wordsToCheck = <Word>[];
-    final rightNeighbour = gameRef.state.sections[(index.$1 + 1, index.$2)];
-    final bottomNeighbour = gameRef.state.sections[(index.$1, index.$2 + 1)];
-    if (rightNeighbour != null) {
-      wordsToCheck.addAll(rightNeighbour.words.solvedWords());
-    }
-    if (bottomNeighbour != null) {
-      wordsToCheck.addAll(bottomNeighbour.words.solvedWords());
-    }
-
-    for (var i = 0; i < wordsToCheck.length; i++) {
-      final word = wordsToCheck[i];
-
-      final characters = word.answer.toUpperCase().characters;
-      for (var c = 0; c < characters.length; c++) {
-        final x = word.axis == Axis.horizontal
-            ? word.position.x + c
-            : word.position.x;
-
-        final y =
-            word.axis == Axis.vertical ? word.position.y + c : word.position.y;
-
-        if (x == position.$1 && y == position.$2) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   void _updateSelection({
