@@ -8,7 +8,7 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
-import 'package:io_crossword/welcome/view/welcome_page.dart';
+import 'package:io_crossword/welcome/welcome.dart';
 
 class GameIntroPage extends StatelessWidget {
   const GameIntroPage({super.key});

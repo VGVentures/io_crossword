@@ -90,6 +90,8 @@ class _TeamSelectorLarge extends StatelessWidget {
                         color: state == mascots.indexOf(mascot)
                             ? Colors.blue
                             : Colors.transparent,
+                        // TODO(marwfair): Update to use sprite animations.
+                        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6423160827
                         child: Image.asset(
                           mascot.image,
                           width: 100,
@@ -166,6 +168,8 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
           children: [
             TabBarView(
               controller: _tabController,
+              // TODO(marwfair): Use sprite animations for all mascots.
+              // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6423160827
               children: widget.mascots
                   .map(
                     (mascot) => mascot.mascot == Mascots.android
