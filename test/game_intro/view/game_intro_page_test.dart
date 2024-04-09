@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/widgets.dart';
@@ -21,6 +22,8 @@ class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 void main() {
   group('GameIntroPage', () {
@@ -119,7 +122,16 @@ void main() {
 
         final flowController = FlowController<GameIntroState>(state);
 
+        final leaderboardResource = _MockLeaderboardResource();
+        when(
+          () => leaderboardResource.createScore(
+            initials: 'AAA',
+            mascot: Mascots.dash,
+          ),
+        ).thenAnswer((_) => Future.value());
+
         await tester.pumpApp(
+          leaderboardResource: leaderboardResource,
           MultiBlocProvider(
             providers: [
               BlocProvider.value(value: gameIntroBloc),
