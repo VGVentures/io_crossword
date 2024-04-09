@@ -1,6 +1,8 @@
+import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -45,7 +47,16 @@ class GameIntroView extends StatelessWidget {
               ? context.select((GameIntroBloc bloc) => bloc.state)
               : null,
           onGeneratePages: onGenerateGameIntroPages,
-          onComplete: (_) {
+          onComplete: (state) {
+            // coverage:ignore-start
+            // TODO(alestiago): Handle this creation.
+            // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422014818
+            context.read<LeaderboardResource>().createScore(
+                  initials: 'AAA',
+                  mascot: Mascots.dash,
+                );
+            // coverage:ignore-end
+
             Navigator.of(context).pushReplacement(CrosswordPage.route());
             AboutView.showModal(context);
           },
