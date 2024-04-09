@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -38,6 +37,8 @@ class _GoldenFileComparator extends LocalFileComparator {
 
 void main() {
   group('$IoWordInput', () {
+    TestWidgetsFlutterBinding.ensureInitialized();
+
     testWidgets('renders successfully', (tester) async {
       await tester.binding.setSurfaceSize(const Size(500, 150));
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -46,6 +47,55 @@ void main() {
         _Subject(child: IoWordInput.alphabetic(length: 5)),
       );
       expect(find.byType(IoWordInput), findsOneWidget);
+    });
+
+    testWidgets('onSubmit gets called with word', (tester) async {
+      final words = <String>[];
+      await tester.pumpWidget(
+        _Subject(
+          child: IoWordInput.alphabetic(
+            length: 5,
+            characters: const {0: 'A', 1: 'B', 4: 'E'},
+            onSubmit: words.add,
+          ),
+        ),
+      );
+
+      Future<void> submit() async {
+        await TestWidgetsFlutterBinding.instance.testTextInput
+            .receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+      }
+
+      final subject = find.byType(IoWordInput);
+      await tester.tap(subject);
+      await tester.pumpAndSettle();
+
+      final editableTexts = find.byType(EditableText);
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words.last, equals('ABCE'));
+
+      await tester.enterText(editableTexts.last, 'D');
+      await submit();
+      expect(words.last, equals('ABCDE'));
+
+      await tester.enterText(editableTexts.last, '!');
+      await submit();
+      expect(words.last, equals('ABCE'));
+
+      await tester.enterText(editableTexts.first, 'Y');
+      await tester.pumpAndSettle();
+      expect(
+        words.last,
+        equals('ABCE'),
+        reason: '''onSubmit should not be called since it was not submitted''',
+      );
+
+      await tester.enterText(editableTexts.last, 'Z');
+      await submit();
+      expect(words.last, equals('ABYZE'));
     });
 
     testWidgets(

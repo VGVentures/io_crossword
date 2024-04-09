@@ -54,6 +54,7 @@ class IoWordInput extends StatefulWidget {
     required this.characterValidator,
     this.controller,
     this.onWord,
+    this.onSubmit,
     Map<int, String>? characters,
     super.key,
   }) : characters = characters != null
@@ -69,13 +70,15 @@ class IoWordInput extends StatefulWidget {
     IoWordInputController? controller,
     Map<int, String>? characters,
     ValueChanged<String>? onWord,
+    ValueChanged<String>? onSubmit,
     Key? key,
   }) : this._(
           length: length,
           key: key,
           characters: characters,
-          onWord: onWord,
           controller: controller,
+          onWord: onWord,
+          onSubmit: onSubmit,
           characterValidator: (character) =>
               RegExp('[a-zA-Z]').hasMatch(character),
         );
@@ -127,6 +130,14 @@ class IoWordInput extends StatefulWidget {
   /// ),
   /// ```
   final ValueChanged<String>? onWord;
+
+  /// Callback for when the word has been submitted.
+  ///
+  /// This is called when the user presses the submit button on the keyboard.
+  ///
+  /// The given value is the word that has been inputted so far. Hence, it might
+  /// not be the full word if the input length has not been reached.
+  final ValueChanged<String>? onSubmit;
 
   /// The character that represents an empty character field.
   static const _emptyCharacter = '_';
@@ -348,6 +359,9 @@ class _IoWordInputState extends State<IoWordInput> {
                   cursorColor: Colors.transparent,
                   backgroundCursorColor: Colors.transparent,
                   onChanged: _onTextChanged,
+                  onSubmitted: widget.onSubmit != null
+                      ? (_) => widget.onSubmit!(_word)
+                      : null,
                   onSelectionChanged: (selection, cause) {
                     controller.selection = TextSelection.fromPosition(
                       const TextPosition(offset: 1),
