@@ -18,7 +18,13 @@ void main() {
       expect(
         LeaderboardState(
           players: [
-            LeaderboardPlayer(userId: '1', initials: 'AAA', score: 100),
+            LeaderboardPlayer(
+              userId: '1',
+              initials: 'AAA',
+              score: 100,
+              streak: 2,
+              mascot: Mascots.dash,
+            ),
           ],
         ),
         isNot(equals(LeaderboardState())),
@@ -37,13 +43,25 @@ void main() {
         expect(
           LeaderboardState().copyWith(
             players: [
-              LeaderboardPlayer(userId: '1', initials: 'AAA', score: 100),
+              LeaderboardPlayer(
+                userId: '1',
+                initials: 'AAA',
+                score: 100,
+                streak: 2,
+                mascot: Mascots.dash,
+              ),
             ],
           ),
           equals(
             LeaderboardState(
               players: [
-                LeaderboardPlayer(userId: '1', initials: 'AAA', score: 100),
+                LeaderboardPlayer(
+                  userId: '1',
+                  initials: 'AAA',
+                  score: 100,
+                  streak: 2,
+                  mascot: Mascots.dash,
+                ),
               ],
             ),
           ),

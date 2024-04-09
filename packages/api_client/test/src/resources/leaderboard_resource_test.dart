@@ -36,6 +36,8 @@ void main() {
           userId: 'id',
           score: 10,
           initials: 'TST',
+          mascot: Mascots.dash,
+          streak: 3,
         );
 
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
@@ -157,6 +159,8 @@ void main() {
         userId: 'id',
         score: 10,
         initials: 'TST',
+        mascot: Mascots.dash,
+        streak: 3,
       );
 
       setUp(() {

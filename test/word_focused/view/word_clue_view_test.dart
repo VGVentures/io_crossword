@@ -38,36 +38,65 @@ void main() {
     late Widget widget;
     late WordFocusedBloc wordFocusedBloc;
 
-    setUp(() {
-      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-      wordFocusedBloc = _MockWordFocusedBloc();
+    group('with unsolved word', () {
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordFocusedBloc = _MockWordFocusedBloc();
 
-      widget = BlocProvider(
-        create: (context) => wordFocusedBloc,
-        child: WordClueDesktopView(selectedWord),
+        widget = BlocProvider(
+          create: (context) => wordFocusedBloc,
+          child: WordClueDesktopView(selectedWord),
+        );
+      });
+
+      testWidgets(
+        'renders the selected word clue with solved button',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(l10n.solveIt), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          await tester.tap(find.text(l10n.solveIt));
+
+          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
+              .called(1);
+        },
       );
     });
 
-    testWidgets(
-      'renders the selected word clue',
-      (tester) async {
-        await tester.pumpApp(widget);
+    group('with solved word', () {
+      setUp(() {
+        selectedWord = WordSelection(
+          section: (0, 0),
+          word: _FakeWord(),
+          solvedStatus: SolvedStatus.solved,
+        );
+        wordFocusedBloc = _MockWordFocusedBloc();
 
-        expect(find.text(selectedWord.word.clue), findsOneWidget);
-      },
-    );
+        widget = BlocProvider(
+          create: (context) => wordFocusedBloc,
+          child: WordClueDesktopView(selectedWord),
+        );
+      });
 
-    testWidgets(
-      'tapping the solve button dispatches a WordFocusedSolveRequested event',
-      (tester) async {
-        await tester.pumpApp(widget);
+      testWidgets(
+        'renders the selected word clue with solved button',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-        await tester.tap(find.text(l10n.solveIt));
-
-        verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-            .called(1);
-      },
-    );
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(l10n.solveIt), findsNothing);
+        },
+      );
+    });
   });
 
   group('WordClueMobileView', () {
@@ -75,35 +104,63 @@ void main() {
     late Widget widget;
     late WordFocusedBloc wordFocusedBloc;
 
-    setUp(() {
-      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-      wordFocusedBloc = _MockWordFocusedBloc();
+    group('with unsolved word', () {
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordFocusedBloc = _MockWordFocusedBloc();
 
-      widget = BlocProvider(
-        create: (context) => wordFocusedBloc,
-        child: WordClueMobileView(selectedWord),
+        widget = BlocProvider(
+          create: (context) => wordFocusedBloc,
+          child: WordClueMobileView(selectedWord),
+        );
+      });
+
+      testWidgets(
+        'renders the selected word clue',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          await tester.tap(find.text(l10n.solveIt));
+
+          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
+              .called(1);
+        },
       );
     });
 
-    testWidgets(
-      'renders the selected word clue',
-      (tester) async {
-        await tester.pumpApp(widget);
+    group('with solved word', () {
+      setUp(() {
+        selectedWord = WordSelection(
+          section: (0, 0),
+          word: _FakeWord(),
+          solvedStatus: SolvedStatus.solved,
+        );
+        wordFocusedBloc = _MockWordFocusedBloc();
 
-        expect(find.text(selectedWord.word.clue), findsOneWidget);
-      },
-    );
+        widget = BlocProvider(
+          create: (context) => wordFocusedBloc,
+          child: WordClueMobileView(selectedWord),
+        );
+      });
 
-    testWidgets(
-      'tapping the solve button dispatches a WordFocusedSolveRequested event',
-      (tester) async {
-        await tester.pumpApp(widget);
+      testWidgets(
+        'renders the selected word clue with solved button',
+        (tester) async {
+          await tester.pumpApp(widget);
 
-        await tester.tap(find.text(l10n.solveIt));
-
-        verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-            .called(1);
-      },
-    );
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(l10n.solveIt), findsNothing);
+        },
+      );
+    });
   });
 }

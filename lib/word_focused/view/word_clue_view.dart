@@ -13,6 +13,7 @@ class WordClueDesktopView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final solved = selectedWord.solvedStatus == SolvedStatus.solved;
 
     return Column(
       children: [
@@ -26,15 +27,16 @@ class WordClueDesktopView extends StatelessWidget {
         ),
         const Spacer(),
         const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: () {
-            context
-                .read<WordFocusedBloc>()
-                .add(const WordFocusedSolveRequested());
-          },
-          icon: const Icon(Icons.edit),
-          label: Text(l10n.solveIt),
-        ),
+        if (!solved)
+          OutlinedButton.icon(
+            onPressed: () {
+              context
+                  .read<WordFocusedBloc>()
+                  .add(const WordFocusedSolveRequested());
+            },
+            icon: const Icon(Icons.edit),
+            label: Text(l10n.solveIt),
+          ),
       ],
     );
   }
@@ -48,6 +50,7 @@ class WordClueMobileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final solved = selectedWord.solvedStatus == SolvedStatus.solved;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -60,15 +63,16 @@ class WordClueMobileView extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        OutlinedButton.icon(
-          onPressed: () {
-            context
-                .read<WordFocusedBloc>()
-                .add(const WordFocusedSolveRequested());
-          },
-          icon: const Icon(Icons.edit),
-          label: Text(l10n.solveIt),
-        ),
+        if (!solved)
+          OutlinedButton.icon(
+            onPressed: () {
+              context
+                  .read<WordFocusedBloc>()
+                  .add(const WordFocusedSolveRequested());
+            },
+            icon: const Icon(Icons.edit),
+            label: Text(l10n.solveIt),
+          ),
         const SizedBox(height: 16),
       ],
     );
