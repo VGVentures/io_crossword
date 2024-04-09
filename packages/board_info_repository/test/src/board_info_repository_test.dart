@@ -47,6 +47,7 @@ void main() {
       ).thenReturn(collection);
 
       when(collection.get).thenAnswer((_) async => query);
+      when(collection.snapshots).thenAnswer((_) => Stream.value(query));
       when(() => query.docs).thenReturn([doc]);
       when(doc.data).thenReturn({'value': value});
     }
@@ -61,8 +62,8 @@ void main() {
     group('getTotalWordsCount', () {
       test('returns total words count from firebase', () async {
         mockQueryResult(123000);
-        final result = await boardInfoRepository.getTotalWordsCount();
-        expect(result, equals(123000));
+        final result = boardInfoRepository.getTotalWordsCount();
+        expect(result, emits(123000));
       });
 
       test('throws BoardInfoException when fetching the info fails', () {
@@ -79,8 +80,8 @@ void main() {
     group('getSolvedWordsCount', () {
       test('returns solved words count from firebase', () async {
         mockQueryResult(66000);
-        final result = await boardInfoRepository.getSolvedWordsCount();
-        expect(result, equals(66000));
+        final result = boardInfoRepository.getSolvedWordsCount();
+        expect(result, emits(66000));
       });
 
       test('throws BoardInfoException when fetching the info fails', () {

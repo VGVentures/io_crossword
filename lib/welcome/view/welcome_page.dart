@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -15,12 +16,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => WelcomeBloc(
-        boardInfoRepository: context.read(),
-      )..add(const WelcomeDataRequested()),
-      child: const WelcomeView(),
-    );
+    return const WelcomeView();
   }
 }
 
@@ -69,7 +65,7 @@ class WelcomeView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 48),
-                  BlocSelector<WelcomeBloc, WelcomeState, (int, int)>(
+                  BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
                     selector: (state) => (state.solvedWords, state.totalWords),
                     builder: (context, words) {
                       return ChallengeProgress(

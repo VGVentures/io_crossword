@@ -1,13 +1,13 @@
-part of 'welcome_bloc.dart';
+part of 'challenge_bloc.dart';
 
-class WelcomeState extends Equatable {
-  const WelcomeState({
+class ChallengeState extends Equatable {
+  const ChallengeState({
     required this.solvedWords,
     required this.totalWords,
   });
 
-  /// Creates a [WelcomeState] with the initial status.
-  const WelcomeState.initial({
+  /// Creates a [ChallengeState] with the initial status.
+  const ChallengeState.initial({
     this.solvedWords = fallbackSolvedWords,
     this.totalWords = fallbackTotalWords,
   });
@@ -30,11 +30,11 @@ class WelcomeState extends Equatable {
   /// default to [fallbackTotalWords].
   final int totalWords;
 
-  WelcomeState copyWith({
+  ChallengeState copyWith({
     int? solvedWords,
     int? totalWords,
   }) {
-    return WelcomeState(
+    return ChallengeState(
       solvedWords: solvedWords ?? this.solvedWords,
       totalWords: totalWords ?? this.totalWords,
     );
