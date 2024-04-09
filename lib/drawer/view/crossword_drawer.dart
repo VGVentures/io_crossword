@@ -40,9 +40,7 @@ class CrosswordDrawerView extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: IconButton(
-              onPressed: () {
-                Scaffold.of(context).closeEndDrawer();
-              },
+              onPressed: () => Scaffold.of(context).closeEndDrawer(),
               icon: const Icon(
                 Icons.close,
               ),
