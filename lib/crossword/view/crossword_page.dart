@@ -28,6 +28,7 @@ class CrosswordPage extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class CrosswordView extends StatelessWidget {
   @visibleForTesting
   const CrosswordView({super.key});
