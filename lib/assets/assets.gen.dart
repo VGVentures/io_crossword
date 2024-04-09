@@ -12,15 +12,28 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/android.png
+  AssetGenImage get android => const AssetGenImage('assets/images/android.png');
+
+  /// File path: assets/images/dash.png
+  AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
+
+  /// File path: assets/images/dino.png
+  AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
+
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
+
+  /// File path: assets/images/sparky.png
+  AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
 
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [letters, welcomeBackground];
+  List<AssetGenImage> get values =>
+      [android, dash, dino, letters, sparky, welcomeBackground];
 }
 
 class Assets {
@@ -87,16 +100,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

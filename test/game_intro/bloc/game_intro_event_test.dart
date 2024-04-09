@@ -36,8 +36,8 @@ void main() {
     group('MascotSubmitted', () {
       test('supports value comparisons', () {
         expect(
-          MascotSubmitted(),
-          equals(MascotSubmitted()),
+          MascotSubmitted(Mascots.sparky),
+          equals(MascotSubmitted(Mascots.sparky)),
         );
       });
     });

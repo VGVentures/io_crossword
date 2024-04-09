@@ -9,6 +9,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -60,14 +61,14 @@ void main() {
     );
 
     testWidgets(
-      'renders the mascot selection view when the status is mascotSelection',
+      'renders the TeamSelectionPage when the status is mascotSelection',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(
           const GameIntroState(status: GameIntroStatus.mascotSelection),
         );
         await tester.pumpApp(child);
 
-        expect(find.byType(MascotSelectionView), findsOneWidget);
+        expect(find.byType(TeamSelectionPage), findsOneWidget);
       },
     );
 

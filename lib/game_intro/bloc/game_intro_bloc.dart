@@ -57,7 +57,10 @@ class GameIntroBloc extends Bloc<GameIntroEvent, GameIntroState> {
     Emitter<GameIntroState> emit,
   ) {
     emit(
-      state.copyWith(status: GameIntroStatus.initialsInput),
+      state.copyWith(
+        selectedMascot: state.selectedMascot,
+        status: GameIntroStatus.initialsInput,
+      ),
     );
   }
 

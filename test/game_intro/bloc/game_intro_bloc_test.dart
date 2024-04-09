@@ -62,7 +62,7 @@ void main() {
     build: () => GameIntroBloc(
       leaderboardResource: leaderboardResource,
     ),
-    act: (bloc) => bloc.add(MascotSubmitted()),
+    act: (bloc) => bloc.add(MascotSubmitted(Mascots.dino)),
     expect: () => <GameIntroState>[
       GameIntroState(status: GameIntroStatus.initialsInput),
     ],
