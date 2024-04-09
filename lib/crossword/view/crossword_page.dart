@@ -5,7 +5,7 @@ import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/music_icon_button.dart';
+import 'package:io_crossword/music/widget/widget.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -58,7 +58,7 @@ class CrosswordView extends StatelessWidget {
         actions: (context) {
           return const Row(
             children: [
-              MusicIconButton(),
+              MuteButton(),
               SizedBox(width: 7),
               DrawerButton(),
             ],

@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/music/widget/music_icon_button.dart';
+import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -64,12 +64,12 @@ void main() {
       expect(find.byType(IoAppBar), findsOneWidget);
     });
 
-    testWidgets('renders $MusicIconButton', (tester) async {
+    testWidgets('renders $MuteButton', (tester) async {
       when(() => bloc.state).thenReturn(CrosswordInitial());
 
       await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(MusicIconButton), findsOneWidget);
+      expect(find.byType(MuteButton), findsOneWidget);
     });
 
     testWidgets('renders $DrawerButton', (tester) async {

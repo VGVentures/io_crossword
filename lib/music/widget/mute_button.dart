@@ -3,8 +3,8 @@
 // coverage:ignore-file
 import 'package:flutter/material.dart';
 
-class MusicIconButton extends StatelessWidget {
-  const MusicIconButton({super.key});
+class MuteButton extends StatelessWidget {
+  const MuteButton({super.key});
 
   @override
   Widget build(BuildContext context) {

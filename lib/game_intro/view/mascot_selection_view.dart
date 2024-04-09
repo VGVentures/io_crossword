@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/music_icon_button.dart';
+import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class MascotSelectionView extends StatelessWidget {
@@ -28,7 +28,7 @@ class MascotSelectionView extends StatelessWidget {
         actions: (context) {
           return const Row(
             children: [
-              MusicIconButton(),
+              MuteButton(),
               SizedBox(width: 7),
               DrawerButton(),
             ],

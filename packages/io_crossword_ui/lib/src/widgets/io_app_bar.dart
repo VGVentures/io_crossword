@@ -24,7 +24,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// The title of the app bar.
   ///
-  /// If null will always display [_IoLogo].
+  /// If null will always display [_IoCrosswordLogo].
   final Widget? title;
 
   /// This widget appears across the bottom of the app bar.
@@ -64,7 +64,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (title == null)
-                        _IoLogo(
+                        _IoCrosswordLogo(
                           crossword: crossword,
                         )
                       else
@@ -78,7 +78,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _IoLogo(
+                      _IoCrosswordLogo(
                         crossword: crossword,
                       ),
                       titleWidget,
@@ -111,8 +111,8 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _IoLogo extends StatelessWidget {
-  const _IoLogo({
+class _IoCrosswordLogo extends StatelessWidget {
+  const _IoCrosswordLogo({
     required this.crossword,
   });
 
