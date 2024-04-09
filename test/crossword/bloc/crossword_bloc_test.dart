@@ -819,7 +819,7 @@ void main() {
           crosswordResource: crosswordResource,
         ),
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(InitialsSelected(['A', 'B', 'C'])),
+        act: (bloc) => bloc.add(InitialsSelected('ABC')),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: sectionSize,

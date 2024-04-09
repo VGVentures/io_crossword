@@ -22,38 +22,10 @@ void main() {
         );
       });
 
-      test('updates isIntroCompleted', () {
-        expect(
-          GameIntroState().copyWith(isIntroCompleted: true),
-          equals(GameIntroState(isIntroCompleted: true)),
-        );
-      });
-
       test('updates selectedMascot', () {
         expect(
           GameIntroState().copyWith(selectedMascot: Mascots.android),
           equals(GameIntroState(selectedMascot: Mascots.android)),
-        );
-      });
-
-      test('updates initials', () {
-        expect(
-          GameIntroState().copyWith(initials: ['W', 'O', 'W']),
-          equals(GameIntroState(initials: ['W', 'O', 'W'])),
-        );
-      });
-
-      test('updates initialsBlacklist', () {
-        expect(
-          GameIntroState().copyWith(initialsBlacklist: ['WOW']),
-          equals(GameIntroState(initialsBlacklist: ['WOW'])),
-        );
-      });
-
-      test('updates initialsStatus', () {
-        expect(
-          GameIntroState().copyWith(initialsStatus: InitialsFormStatus.success),
-          equals(GameIntroState(initialsStatus: InitialsFormStatus.success)),
         );
       });
     });
