@@ -506,7 +506,16 @@ void main() {
       mockState(const CrosswordInitial());
       final game = createGame();
 
-      expect(() => game.state, throwsArgumentError);
+      expect(
+        () => game.state,
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            equals('Cannot load game without a loaded state.'),
+          ),
+        ),
+      );
     });
 
     testWithGame(

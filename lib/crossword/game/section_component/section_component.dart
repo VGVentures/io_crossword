@@ -153,14 +153,12 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     final words = _boardSection!.words..sortBySolvedTimestamp();
     final sectionRectangle = _boardSection!.getRectangle();
 
-    print(words);
     for (var i = 0; i < words.length; i++) {
       final word = words[i];
 
       final wordCharacters = word.answer.toUpperCase().characters;
 
       final wordIndexStart = spriteBatch.length;
-      print(word.answer);
       for (var c = 0; c < wordCharacters.length; c++) {
         late Rect rect;
 
@@ -171,7 +169,6 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
         );
 
         var charSolved = false;
-        print('CharPos: $charPosition');
         if (word.solvedTimestamp == null) {
           charSolved = _isCharacterSolvedByNeighbour(
             sectionRectangle,

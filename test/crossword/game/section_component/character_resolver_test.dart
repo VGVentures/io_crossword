@@ -33,14 +33,6 @@ void main() {
       );
     });
 
-    void setUpStreamController({CrosswordState? state}) {
-      whenListen(
-        bloc,
-        stateStreamController.stream,
-        initialState: state ?? defaultState,
-      );
-    }
-
     void setUpInitialState(CrosswordState state) {
       when(() => bloc.state).thenReturn(state);
     }
@@ -226,7 +218,66 @@ void main() {
         expect(spriteBatch, isNotNull);
         // 15 because Flutter has 7 letters and Firebase has 8
 
-        print(spriteBatch?.sources.map((element) => element.left));
+        final solvedCharacter = spriteBatch?.sources.elementAt(4);
+        expect(solvedCharacter, isNotNull);
+        expect(solvedCharacter?.left, isNot(2080));
+      },
+    );
+
+    testWithGame(
+      'build unsolved word with letters solved by crossing word'
+      ' from top right neighbour',
+      createGame,
+      (game) async {
+        setUpInitialState(
+          CrosswordLoaded(
+            sectionSize: sectionSize,
+            sections: {
+              (0, -1): BoardSection(
+                id: '',
+                position: const Point(0, -1),
+                size: sectionSize,
+                words: [
+                  Word(
+                    position: const Point(1, -3),
+                    axis: Axis.vertical,
+                    answer: 'Flutter',
+                    clue: '',
+                    solvedTimestamp: 1,
+                  ),
+                ],
+                borderWords: const [],
+              ),
+              (-1, 0): BoardSection(
+                id: '',
+                position: const Point(-1, 0),
+                size: sectionSize,
+                words: [
+                  Word(
+                    position: const Point(-3, 1),
+                    axis: Axis.horizontal,
+                    answer: 'Paint',
+                    clue: '',
+                    solvedTimestamp: null,
+                  ),
+                ],
+                borderWords: const [],
+              ),
+            },
+          ),
+        );
+        final component1 = SectionComponent(index: (0, -1));
+        final component2 = SectionComponent(index: (-1, 0));
+        await game.world.ensureAddAll([component1, component2]);
+
+        final spriteBatchComponent =
+            component2.firstChild<SpriteBatchComponent>();
+        expect(spriteBatchComponent, isNotNull);
+
+        final spriteBatch = spriteBatchComponent?.spriteBatch;
+        expect(spriteBatch, isNotNull);
+        // 15 because Flutter has 7 letters and Firebase has 8
+
         final solvedCharacter = spriteBatch?.sources.elementAt(4);
         expect(solvedCharacter, isNotNull);
         expect(solvedCharacter?.left, isNot(2080));
