@@ -92,19 +92,16 @@ class _InitialsViewState extends State<InitialsView> {
                           if (error == null) {
                             return const SizedBox.shrink();
                           }
-
                           return Padding(
                             padding: const EdgeInsets.only(top: 16),
-                            child: InitialsErrorText(
-                              error.toLocalizedString(context),
-                            ),
+                            child: InitialsErrorText(error),
                           );
                         },
                       ),
                     ),
                     InitialsSubmitButton(
                       onPressed: () => _onSubmit(context),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -113,18 +110,5 @@ class _InitialsViewState extends State<InitialsView> {
         ),
       ),
     );
-  }
-}
-
-extension on InitialsInputError {
-  String toLocalizedString(BuildContext context) {
-    switch (this) {
-      case InitialsInputError.format:
-        return context.l10n.initialsErrorMessage;
-      case InitialsInputError.blocklisted:
-        return context.l10n.initialsBlacklistedMessage;
-      case InitialsInputError.processing:
-        return context.l10n.initialsSubmissionErrorMessage;
-    }
   }
 }
