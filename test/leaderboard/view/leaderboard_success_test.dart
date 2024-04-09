@@ -80,6 +80,8 @@ void main() {
                 userId: '',
                 initials: 'AAA',
                 score: 50,
+                streak: 2,
+                mascot: Mascots.dash,
               ),
             ),
           ),
@@ -104,6 +106,8 @@ void main() {
                 userId: '',
                 initials: 'AAA',
                 score: 50,
+                streak: 20,
+                mascot: Mascots.dash,
               ),
             ),
           ),
@@ -172,6 +176,8 @@ void main() {
       userId: '123',
       initials: 'ABC',
       score: 200,
+      streak: 2,
+      mascot: Mascots.dash,
     );
 
     setUpAll(() async {
@@ -209,6 +215,17 @@ void main() {
       userId: '123',
       initials: 'ABC',
       score: 200,
+      streak: 25,
+      mascot: Mascots.dash,
+    );
+
+    testWidgets(
+      'displays streak',
+      (tester) async {
+        await tester.pumpApp(CurrentUserPosition(player: player, rank: 7));
+
+        expect(find.text('25'), findsOneWidget);
+      },
     );
 
     testWidgets(
@@ -245,6 +262,8 @@ void main() {
           userId: '123',
           initials: 'ABC',
           score: 23700,
+          streak: 2,
+          mascot: Mascots.dash,
         );
 
         await tester.pumpApp(CurrentUserPosition(player: player, rank: 4));
@@ -263,5 +282,57 @@ void main() {
         expect(find.text('C'), findsOneWidget);
       },
     );
+
+    for (final mascot in [
+      _MascotTester(
+        mascot: Mascots.dash,
+        color: IoCrosswordColors.flutterBlue,
+      ),
+      _MascotTester(
+        mascot: Mascots.sparky,
+        color: IoCrosswordColors.sparkyYellow,
+      ),
+      _MascotTester(
+        mascot: Mascots.dino,
+        color: IoCrosswordColors.chromeRed,
+      ),
+      _MascotTester(
+        mascot: Mascots.android,
+        color: IoCrosswordColors.androidGreen,
+      ),
+    ]) {
+      testWidgets(
+        'displays color for ${mascot.mascot}',
+        (tester) async {
+          final player = LeaderboardPlayer(
+            userId: '123',
+            initials: 'ABC',
+            score: 23700,
+            streak: 2,
+            mascot: mascot.mascot,
+          );
+
+          await tester.pumpApp(CurrentUserPosition(player: player, rank: 4));
+
+          expect(
+            tester
+                .widget<IoPlayerAlias>(find.byType(IoPlayerAlias))
+                .style
+                .backgroundColor,
+            equals(mascot.color),
+          );
+        },
+      );
+    }
   });
+}
+
+class _MascotTester {
+  const _MascotTester({
+    required this.mascot,
+    required this.color,
+  });
+
+  final Mascots mascot;
+  final Color color;
 }

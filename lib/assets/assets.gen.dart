@@ -9,6 +9,30 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAnimGen {
+  const $AssetsAnimGen();
+
+  /// File path: assets/anim/android_celebrating.png
+  AssetGenImage get androidCelebrating =>
+      const AssetGenImage('assets/anim/android_celebrating.png');
+
+  /// File path: assets/anim/android_dangle.png
+  AssetGenImage get androidDangle =>
+      const AssetGenImage('assets/anim/android_dangle.png');
+
+  /// File path: assets/anim/android_idle.png
+  AssetGenImage get androidIdle =>
+      const AssetGenImage('assets/anim/android_idle.png');
+
+  /// File path: assets/anim/android_look_up.png
+  AssetGenImage get androidLookUp =>
+      const AssetGenImage('assets/anim/android_look_up.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [androidCelebrating, androidDangle, androidIdle, androidLookUp];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -39,6 +63,7 @@ class $AssetsImagesGen {
 class Assets {
   Assets._();
 
+  static const $AssetsAnimGen anim = $AssetsAnimGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 

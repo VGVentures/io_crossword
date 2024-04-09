@@ -11,6 +11,8 @@ void main() {
           userId: 'id',
           initials: 'TST',
           score: 10,
+          mascot: Mascots.android,
+          streak: 2,
         ),
         isNotNull,
       );
@@ -20,6 +22,8 @@ void main() {
       userId: 'id',
       initials: 'TST',
       score: 20,
+      mascot: Mascots.android,
+      streak: 2,
     );
 
     test('toJson returns the instance as json', () {
@@ -29,16 +33,20 @@ void main() {
           'userId': 'id',
           'initials': 'TST',
           'score': 20,
+          'mascot': Mascots.android.name,
+          'streak': 2,
         }),
       );
     });
 
     test('fromJson returns the correct instance', () {
       expect(
-        LeaderboardPlayer.fromJson(const {
+        LeaderboardPlayer.fromJson({
           'userId': 'id',
           'initials': 'TST',
           'score': 20,
+          'mascot': Mascots.android.name,
+          'streak': 2,
         }),
         equals(leaderboardPlayer),
       );
@@ -46,8 +54,22 @@ void main() {
 
     test('supports equality', () {
       expect(
-        LeaderboardPlayer(userId: '', initials: 'TST', score: 20),
-        equals(LeaderboardPlayer(userId: '', initials: 'TST', score: 20)),
+        LeaderboardPlayer(
+          userId: '',
+          initials: 'TST',
+          score: 20,
+          mascot: Mascots.android,
+          streak: 2,
+        ),
+        equals(
+          LeaderboardPlayer(
+            userId: '',
+            initials: 'TST',
+            score: 20,
+            mascot: Mascots.android,
+            streak: 2,
+          ),
+        ),
       );
 
       expect(
@@ -55,6 +77,8 @@ void main() {
           userId: '',
           initials: 'TST',
           score: 20,
+          mascot: Mascots.android,
+          streak: 2,
         ),
         isNot(
           equals(leaderboardPlayer),
@@ -66,6 +90,34 @@ void main() {
           userId: 'id',
           initials: 'WOW',
           score: 20,
+          mascot: Mascots.android,
+          streak: 2,
+        ),
+        isNot(
+          equals(leaderboardPlayer),
+        ),
+      );
+
+      expect(
+        LeaderboardPlayer(
+          userId: 'id',
+          initials: 'TST',
+          score: 20,
+          mascot: Mascots.dash,
+          streak: 2,
+        ),
+        isNot(
+          equals(leaderboardPlayer),
+        ),
+      );
+
+      expect(
+        LeaderboardPlayer(
+          userId: 'id',
+          initials: 'TST',
+          score: 20,
+          mascot: Mascots.android,
+          streak: 3,
         ),
         isNot(
           equals(leaderboardPlayer),

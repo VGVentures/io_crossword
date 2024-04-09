@@ -62,6 +62,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/anim/
     - assets/images/
 
 flutter_gen:

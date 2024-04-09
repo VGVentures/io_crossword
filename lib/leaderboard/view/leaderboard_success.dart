@@ -171,12 +171,13 @@ class UserLeaderboardRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(Ayad): show the correct style based on the players team
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6400331391
     final style = IoPlayerAliasStyle(
-      backgroundColor: rank.isOdd
-          ? IoCrosswordColors.androidGreen
-          : IoCrosswordColors.flutterBlue,
+      backgroundColor: switch (player.mascot) {
+        Mascots.dash => IoCrosswordColors.flutterBlue,
+        Mascots.sparky => IoCrosswordColors.sparkyYellow,
+        Mascots.dino => IoCrosswordColors.chromeRed,
+        Mascots.android => IoCrosswordColors.androidGreen,
+      },
       textStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w700,
@@ -204,11 +205,10 @@ class UserLeaderboardRanking extends StatelessWidget {
             ],
           ),
         ),
-
-        // TODO(Ayad): add missing streak in [LeaderboardPlayer]
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6400331391
         Expanded(
-          child: Text(1524.toDisplayNumber()),
+          child: Text(
+            player.streak.toDisplayNumber(),
+          ),
         ),
         Expanded(
           child: Text(

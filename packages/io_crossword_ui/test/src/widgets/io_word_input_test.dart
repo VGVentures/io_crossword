@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -38,6 +37,8 @@ class _GoldenFileComparator extends LocalFileComparator {
 
 void main() {
   group('$IoWordInput', () {
+    TestWidgetsFlutterBinding.ensureInitialized();
+
     testWidgets('renders successfully', (tester) async {
       await tester.binding.setSurfaceSize(const Size(500, 150));
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -48,13 +49,58 @@ void main() {
       expect(find.byType(IoWordInput), findsOneWidget);
     });
 
+    testWidgets('onSubmit gets called with word', (tester) async {
+      final words = <String>[];
+      await tester.pumpWidget(
+        _Subject(
+          child: IoWordInput.alphabetic(
+            length: 5,
+            characters: const {0: 'A', 1: 'B', 4: 'E'},
+            onSubmit: words.add,
+          ),
+        ),
+      );
+
+      Future<void> submit() async {
+        await TestWidgetsFlutterBinding.instance.testTextInput
+            .receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+      }
+
+      final subject = find.byType(IoWordInput);
+      await tester.tap(subject);
+      await tester.pumpAndSettle();
+
+      final editableTexts = find.byType(EditableText);
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words.last, equals('ABCE'));
+
+      await tester.enterText(editableTexts.last, 'D');
+      await submit();
+      expect(words.last, equals('ABCDE'));
+
+      await tester.enterText(editableTexts.last, '!');
+      await submit();
+      expect(words.last, equals('ABCE'));
+
+      await tester.enterText(editableTexts.first, 'Y');
+      await tester.pumpAndSettle();
+      expect(
+        words.last,
+        equals('ABCE'),
+        reason: '''onSubmit should not be called since it was not submitted''',
+      );
+
+      await tester.enterText(editableTexts.last, 'Z');
+      await submit();
+      expect(words.last, equals('ABYZE'));
+    });
+
     testWidgets(
       'onWord gets called as words are filled',
-      tags: TestTag.golden,
       (tester) async {
-        await tester.binding.setSurfaceSize(const Size(500, 150));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
         final words = <String>[];
         await tester.pumpWidget(
           _Subject(
@@ -113,6 +159,83 @@ void main() {
         );
       },
     );
+
+    group('controller', () {
+      testWidgets('word gets updated as input changes', (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              controller: controller,
+            ),
+          ),
+        );
+
+        expect(controller.word, equals('ABE'));
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCE'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCDE'));
+
+        await tester.enterText(editableTexts.last, '!');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCE'));
+
+        await tester.enterText(editableTexts.first, 'Y');
+        await tester.enterText(editableTexts.last, 'Z');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABYZE'));
+      });
+
+      testWidgets('word gets notified as input changes', (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        final words = <String>[];
+        controller.addListener(() => words.add(controller.word));
+
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              controller: controller,
+            ),
+          ),
+        );
+
+        expect(words.last, equals('ABE'));
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCE'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCDE'));
+
+        await tester.enterText(editableTexts.last, '!');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCE'));
+
+        await tester.enterText(editableTexts.first, 'Y');
+        await tester.enterText(editableTexts.last, 'Z');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABYZE'));
+      });
+    });
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>

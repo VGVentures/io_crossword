@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -24,6 +25,8 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockUser extends Mock implements User {}
 
 void main() {
   group('App', () {
@@ -59,6 +62,7 @@ void main() {
           apiClient: apiClient,
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
+          user: _MockUser(),
         ),
       );
 

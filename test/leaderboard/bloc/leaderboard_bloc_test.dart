@@ -41,6 +41,8 @@ void main() {
                 userId: '',
                 initials: 'AAA',
                 score: 0,
+                streak: 0,
+                mascot: Mascots.dash,
               ),
             ),
           ),
@@ -52,9 +54,27 @@ void main() {
         setUp: () {
           when(() => leaderboardResource.getLeaderboardResults()).thenAnswer(
             (_) async => [
-              LeaderboardPlayer(userId: '1', initials: 'AAA', score: 100),
-              LeaderboardPlayer(userId: '2', initials: 'BBB', score: 80),
-              LeaderboardPlayer(userId: '3', initials: 'CCC', score: 60),
+              LeaderboardPlayer(
+                userId: '1',
+                initials: 'AAA',
+                score: 100,
+                streak: 20,
+                mascot: Mascots.dash,
+              ),
+              LeaderboardPlayer(
+                userId: '2',
+                initials: 'BBB',
+                score: 80,
+                streak: 10,
+                mascot: Mascots.android,
+              ),
+              LeaderboardPlayer(
+                userId: '3',
+                initials: 'CCC',
+                score: 60,
+                streak: 5,
+                mascot: Mascots.sparky,
+              ),
             ],
           );
         },
@@ -64,9 +84,27 @@ void main() {
           LeaderboardState(
             status: LeaderboardStatus.success,
             players: [
-              LeaderboardPlayer(userId: '1', initials: 'AAA', score: 100),
-              LeaderboardPlayer(userId: '2', initials: 'BBB', score: 80),
-              LeaderboardPlayer(userId: '3', initials: 'CCC', score: 60),
+              LeaderboardPlayer(
+                userId: '1',
+                initials: 'AAA',
+                score: 100,
+                streak: 20,
+                mascot: Mascots.dash,
+              ),
+              LeaderboardPlayer(
+                userId: '2',
+                initials: 'BBB',
+                score: 80,
+                streak: 10,
+                mascot: Mascots.android,
+              ),
+              LeaderboardPlayer(
+                userId: '3',
+                initials: 'CCC',
+                score: 60,
+                streak: 5,
+                mascot: Mascots.sparky,
+              ),
             ],
           ),
         ],

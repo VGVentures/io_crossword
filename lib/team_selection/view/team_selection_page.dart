@@ -1,3 +1,6 @@
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
@@ -164,7 +167,20 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
             TabBarView(
               controller: _tabController,
               children: widget.mascots
-                  .map((mascot) => Image.asset(mascot.image))
+                  .map(
+                    (mascot) => mascot.mascot == Mascots.android
+                        ? SpriteAnimationWidget.asset(
+                            images: Images(prefix: ''),
+                            path: Assets.anim.androidIdle.path,
+                            data: SpriteAnimationData.sequenced(
+                              amount: 28,
+                              stepTime: 0.042,
+                              textureSize: Vector2(597, 597),
+                              amountPerRow: 7,
+                            ),
+                          )
+                        : Image.asset(mascot.image),
+                  )
                   .toList(),
             ),
             Padding(
