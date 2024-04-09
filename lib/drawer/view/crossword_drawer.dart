@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/drawer/bloc/drawer_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class CrosswordDrawer extends StatelessWidget {
   const CrosswordDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => DrawerBloc(
+        boardInfoRepository: context.read(),
+      )..add(const RecordDataRequested()),
+      child: const CrosswordDrawerView(),
+    );
+  }
+}
+
+class CrosswordDrawerView extends StatelessWidget {
+  @visibleForTesting
+  const CrosswordDrawerView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +49,7 @@ class CrosswordDrawer extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          BlocSelector<WelcomeBloc, WelcomeState, (int, int)>(
+          BlocSelector<DrawerBloc, DrawerState, (int, int)>(
             selector: (state) => (state.solvedWords, state.totalWords),
             builder: (context, words) {
               return ChallengeProgress(

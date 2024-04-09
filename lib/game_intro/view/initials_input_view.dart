@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class InitialsInputView extends StatelessWidget {
@@ -23,13 +22,7 @@ class InitialsInputView extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         actions: (context) {
-          return const Row(
-            children: [
-              MuteButton(),
-              SizedBox(width: 7),
-              DrawerButton(),
-            ],
-          );
+          return const SizedBox();
         },
       ),
       body: CardScrollableContentWithButton(

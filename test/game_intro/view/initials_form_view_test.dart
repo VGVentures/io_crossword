@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/game_intro/formatters/formatters.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -103,22 +102,6 @@ void main() {
       await tester.pumpApp(child);
 
       expect(find.byType(IoAppBar), findsOneWidget);
-    });
-
-    testWidgets('renders $MuteButton', (tester) async {
-      when(() => bloc.state).thenReturn(GameIntroState());
-
-      await tester.pumpApp(child);
-
-      expect(find.byType(MuteButton), findsOneWidget);
-    });
-
-    testWidgets('renders $DrawerButton', (tester) async {
-      when(() => bloc.state).thenReturn(GameIntroState());
-
-      await tester.pumpApp(child);
-
-      expect(find.byType(DrawerButton), findsOneWidget);
     });
 
     group('initials textfield', () {

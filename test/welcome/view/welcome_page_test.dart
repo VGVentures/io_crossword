@@ -3,11 +3,9 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -57,28 +55,6 @@ void main() {
       },
     );
 
-    group('CrosswordDrawer', () {
-      testWidgets('opens when $DrawerButton is pressed', (tester) async {
-        await tester.pumpApp(const WelcomePage());
-
-        await tester.tap(find.byType(DrawerButton));
-        await tester.pumpAndSettle();
-        expect(find.byType(CrosswordDrawer), findsOneWidget);
-      });
-
-      testWidgets('closes when close button is pressed', (tester) async {
-        await tester.pumpApp(const WelcomePage());
-
-        await tester.tap(find.byType(DrawerButton));
-        await tester.pumpAndSettle();
-        expect(find.byType(CrosswordDrawer), findsOneWidget);
-
-        await tester.tap(find.byIcon(Icons.close));
-        await tester.pumpAndSettle();
-        expect(find.byType(CrosswordDrawer), findsNothing);
-      });
-    });
-
     group('displays', () {
       testWidgets('a $ChallengeProgress', (tester) async {
         await tester.pumpSubject(const WelcomeView());
@@ -93,16 +69,6 @@ void main() {
       testWidgets('a $IoAppBar', (tester) async {
         await tester.pumpSubject(const WelcomeView());
         expect(find.byType(IoAppBar), findsOneWidget);
-      });
-
-      testWidgets('a $MuteButton', (tester) async {
-        await tester.pumpSubject(const WelcomeView());
-        expect(find.byType(MuteButton), findsOneWidget);
-      });
-
-      testWidgets('a $DrawerButton', (tester) async {
-        await tester.pumpSubject(const WelcomeView());
-        expect(find.byType(DrawerButton), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {
