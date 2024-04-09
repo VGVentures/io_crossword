@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'challenge_event.dart';
 part 'challenge_state.dart';
@@ -20,20 +21,20 @@ class ChallengeBloc extends Bloc<ChallengeEvent, ChallengeState> {
     ChallengeDataRequested event,
     Emitter<ChallengeState> emit,
   ) async {
-    try {
-      final [solved, total] = await Future.wait([
+    return emit.forEach(
+      Rx.combineLatest2(
         _boardInfoRepository.getSolvedWordsCount(),
         _boardInfoRepository.getTotalWordsCount(),
-      ]);
-
-      emit(
-        state.copyWith(
+        (solved, total) => state.copyWith(
           solvedWords: solved,
           totalWords: total,
         ),
-      );
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-    }
+      ),
+      onData: (state) => state,
+      onError: (error, stackTrace) {
+        addError(error, stackTrace);
+        return state;
+      },
+    );
   }
 }

@@ -43,9 +43,9 @@ extension PumpApp on WidgetTester {
     ).thenAnswer((_) => Stream.value(null));
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
@@ -145,9 +145,9 @@ extension PumpRoute on WidgetTester {
 
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)

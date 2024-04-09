@@ -23,12 +23,13 @@ void main() {
 
     blocTest<ChallengeBloc, ChallengeState>(
       'remains the same when retrieval fails',
+      seed: () => const ChallengeState(solvedWords: 1, totalWords: 2),
       build: () => ChallengeBloc(boardInfoRepository: boardInfoRepository),
       act: (bloc) {
         when(() => boardInfoRepository.getSolvedWordsCount())
-            .thenThrow(Exception('oops'));
+            .thenAnswer((_) => Stream.error(Exception()));
         when(() => boardInfoRepository.getTotalWordsCount())
-            .thenThrow(Exception('oops'));
+            .thenAnswer((_) => Stream.error(Exception()));
         bloc.add(const ChallengeDataRequested());
       },
       expect: () => <ChallengeState>[],
@@ -39,9 +40,9 @@ void main() {
       build: () => ChallengeBloc(boardInfoRepository: boardInfoRepository),
       act: (bloc) {
         when(() => boardInfoRepository.getSolvedWordsCount())
-            .thenAnswer((_) => Future.value(1));
+            .thenAnswer((_) => Stream.value(1));
         when(() => boardInfoRepository.getTotalWordsCount())
-            .thenAnswer((_) => Future.value(2));
+            .thenAnswer((_) => Stream.value(2));
         bloc.add(const ChallengeDataRequested());
       },
       expect: () => <ChallengeState>[
