@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +11,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,6 +23,8 @@ class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 void main() {
   group('GameIntroPage', () {
@@ -93,58 +98,55 @@ void main() {
     );
 
     testWidgets(
-      'renders the initials input view when the status is initialsInput',
+      'renders the $InitialsPage when the status is initialsInput',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(
           const GameIntroState(status: GameIntroStatus.initialsInput),
         );
         await tester.pumpApp(child);
 
-        expect(find.byType(InitialsInputView), findsOneWidget);
+        expect(find.byType(InitialsPage), findsOneWidget);
       },
     );
 
     testWidgets(
-      'saves the initials when the intro is completed',
+      'pops the navigator when completed',
       (tester) async {
+        const state = GameIntroState(status: GameIntroStatus.initialsInput);
         whenListen(
           gameIntroBloc,
-          Stream.value(
-            GameIntroState(
-              status: GameIntroStatus.initialsInput,
-              isIntroCompleted: true,
-              initialsStatus: InitialsFormStatus.success,
-              initials: ['I', 'I', 'O'],
-            ),
-          ),
-          initialState: GameIntroState(
-            status: GameIntroStatus.initialsInput,
-          ),
-        );
-        await tester.pumpApp(child);
-
-        verify(() => crosswordBloc.add(InitialsSelected(['I', 'I', 'O'])))
-            .called(1);
-      },
-    );
-
-    testWidgets(
-      'pops the navigator when the intro is completed',
-      (tester) async {
-        whenListen(
-          gameIntroBloc,
-          Stream.value(
-            const GameIntroState(isIntroCompleted: true),
-          ),
+          Stream.value(state),
           initialState: const GameIntroState(
             status: GameIntroStatus.initialsInput,
           ),
         );
-        await tester.pumpApp(child);
-        expect(find.byType(GameIntroView), findsOneWidget);
+
+        final flowController = FlowController<GameIntroState>(state);
+
+        final leaderboardResource = _MockLeaderboardResource();
+        when(
+          () => leaderboardResource.createScore(
+            initials: 'AAA',
+            mascot: Mascots.dash,
+          ),
+        ).thenAnswer((_) => Future.value());
+
+        await tester.pumpApp(
+          leaderboardResource: leaderboardResource,
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: gameIntroBloc),
+              BlocProvider.value(value: crosswordBloc),
+            ],
+            child: GameIntroView(flowController: flowController),
+          ),
+        );
+
+        flowController.complete();
 
         await tester.pump();
         await tester.pump(const Duration(seconds: 5));
+
         expect(find.byType(GameIntroView), findsNothing);
       },
     );

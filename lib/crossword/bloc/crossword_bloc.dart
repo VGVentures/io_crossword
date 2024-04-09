@@ -178,7 +178,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) async {
     if (state is CrosswordLoaded) {
       emit(
-        (state as CrosswordLoaded).copyWith(initials: event.initials.join()),
+        (state as CrosswordLoaded).copyWith(initials: event.initials),
       );
     }
   }

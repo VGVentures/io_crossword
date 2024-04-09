@@ -34,6 +34,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_localizations:
     sdk: flutter
+  formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
   http: ^1.2.1

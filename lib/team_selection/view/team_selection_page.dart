@@ -239,9 +239,11 @@ class _TeamSelector extends StatelessWidget {
                     : null,
                 icon: const Icon(Icons.chevron_left),
               ),
-              Text(
-                mascots[index].name,
-                style: theme.textTheme.headlineLarge,
+              Flexible(
+                child: Text(
+                  mascots[index].name,
+                  style: theme.textTheme.headlineLarge,
+                ),
               ),
               IconButton(
                 onPressed: index < mascots.length - 1
