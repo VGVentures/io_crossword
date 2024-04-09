@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/game_intro/formatters/formatters.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/widget/music_icon_button.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -95,6 +96,30 @@ void main() {
         expect(find.text(l10n.initialsSubmissionErrorMessage), findsOneWidget);
       },
     );
+
+    testWidgets('renders $IoAppBar', (tester) async {
+      when(() => bloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(child);
+
+      expect(find.byType(IoAppBar), findsOneWidget);
+    });
+
+    testWidgets('renders $MusicIconButton', (tester) async {
+      when(() => bloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(child);
+
+      expect(find.byType(MusicIconButton), findsOneWidget);
+    });
+
+    testWidgets('renders $DrawerButton', (tester) async {
+      when(() => bloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(child);
+
+      expect(find.byType(DrawerButton), findsOneWidget);
+    });
 
     group('initials textfield', () {
       testWidgets('correctly updates fields and focus', (tester) async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/widget/music_icon_button.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class InitialsInputView extends StatelessWidget {
@@ -18,26 +19,40 @@ class InitialsInputView extends StatelessWidget {
         context.select((GameIntroBloc bloc) => bloc.state.initialsStatus);
     final isLoading = initialsStatus == InitialsFormStatus.loading;
 
-    return CardScrollableContentWithButton(
-      onPressed: isLoading
-          ? null
-          : () {
-              context.read<GameIntroBloc>().add(const InitialsSubmitted());
-            },
-      buttonLabel: l10n.enter,
-      child: Column(
-        children: [
-          Text(
-            l10n.enterInitials,
-            style: IoCrosswordTextStyles.headlineMD,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          const Spacer(),
-          const InitialsFormView(),
-          const Spacer(flex: 4),
-          const SizedBox(height: 16),
-        ],
+    return Scaffold(
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
+        actions: (context) {
+          return const Row(
+            children: [
+              MusicIconButton(),
+              SizedBox(width: 7),
+              DrawerButton(),
+            ],
+          );
+        },
+      ),
+      body: CardScrollableContentWithButton(
+        onPressed: isLoading
+            ? null
+            : () {
+                context.read<GameIntroBloc>().add(const InitialsSubmitted());
+              },
+        buttonLabel: l10n.enter,
+        child: Column(
+          children: [
+            Text(
+              l10n.enterInitials,
+              style: IoCrosswordTextStyles.headlineMD,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            const Spacer(),
+            const InitialsFormView(),
+            const Spacer(flex: 4),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

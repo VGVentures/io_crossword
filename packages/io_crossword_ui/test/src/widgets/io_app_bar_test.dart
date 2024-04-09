@@ -66,14 +66,13 @@ void main() {
     );
 
     testWidgets(
-      'render crossword with small layout if alwaysShowLogo is true',
+      'render crossword with small layout if title is null',
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
             actions: (_) => SizedBox(),
-            title: Text('Title'),
-            alwaysShowLogo: true,
+            title: null,
           ),
           layout: IoLayoutData.small,
         );

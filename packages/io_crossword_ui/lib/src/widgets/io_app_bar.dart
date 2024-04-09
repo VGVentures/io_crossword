@@ -11,16 +11,10 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   const IoAppBar({
     required this.crossword,
     required this.actions,
-    required this.title,
-    this.alwaysShowLogo = false,
+    this.title,
     this.bottom,
     super.key,
   });
-
-  /// Display the logo always in the app bar.
-  ///
-  /// If this is false we display only in web.
-  final bool alwaysShowLogo;
 
   /// The crossword title used for desktop to show the leading icon.
   final String crossword;
@@ -29,7 +23,9 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final WidgetBuilder actions;
 
   /// The title of the app bar.
-  final Widget title;
+  ///
+  /// If null will always display [_IoLogo].
+  final Widget? title;
 
   /// This widget appears across the bottom of the app bar.
   ///
@@ -51,7 +47,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
             fontWeight: FontWeight.w500,
           ),
-      child: title,
+      child: title ?? const SizedBox(),
     );
 
     final widget = Material(
@@ -67,11 +63,12 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (alwaysShowLogo)
+                      if (title == null)
                         _IoLogo(
                           crossword: crossword,
-                        ),
-                      titleWidget,
+                        )
+                      else
+                        titleWidget,
                       actions(context),
                     ],
                   ),
