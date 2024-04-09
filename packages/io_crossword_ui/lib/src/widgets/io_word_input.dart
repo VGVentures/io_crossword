@@ -15,6 +15,32 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// {@endtemplate}
 typedef CharacterValidator = bool Function(String character);
 
+/// {@template io_word_input_controller}
+/// A controller for the [IoWordInput].
+/// {@endtemplate}
+class IoWordInputController extends ChangeNotifier {
+  String _word = '';
+
+  void _updateWord(String word) {
+    if (word == _word) return;
+
+    _word = word;
+    notifyListeners();
+  }
+
+  /// The word that has been inputted so far.
+  ///
+  /// This word might not reach the specified [IoWordInput.length].
+  ///
+  /// Updating the word through the controller is not supported.
+  ///
+  /// See also:
+  ///
+  /// * [IoWordInput.onWord], the callback that is called when a word has been
+  ///  completed.
+  String get word => _word;
+}
+
 /// {@template io_word_input}
 /// An IO styled text input that accepts a fixed number of characters.
 ///
@@ -26,6 +52,7 @@ class IoWordInput extends StatefulWidget {
   IoWordInput._({
     required this.length,
     required this.characterValidator,
+    this.controller,
     this.onWord,
     Map<int, String>? characters,
     super.key,
@@ -39,6 +66,7 @@ class IoWordInput extends StatefulWidget {
   /// Creates an [IoWordInput] that only accepts alphabetic characters.
   IoWordInput.alphabetic({
     required int length,
+    IoWordInputController? controller,
     Map<int, String>? characters,
     ValueChanged<String>? onWord,
     Key? key,
@@ -47,9 +75,13 @@ class IoWordInput extends StatefulWidget {
           key: key,
           characters: characters,
           onWord: onWord,
+          controller: controller,
           characterValidator: (character) =>
               RegExp('[a-zA-Z]').hasMatch(character),
         );
+
+  /// {@macro io_word_input_controller}
+  final IoWordInputController? controller;
 
   /// The length of the input.
   ///
@@ -135,7 +167,10 @@ class _IoWordInputState extends State<IoWordInput> {
     for (var i = 0; i < widget.length; i++) {
       final isFixed =
           widget.characters != null && widget.characters!.containsKey(i);
-      word.write(isFixed ? widget.characters![i] : _controllers[i]!.text);
+      final character =
+          (isFixed ? widget.characters![i] : _controllers[i]!.text)!
+              .replaceAll(IoWordInput._emptyCharacter, '');
+      if (character.isNotEmpty) word.write(character);
     }
     return word.toString();
   }
@@ -146,10 +181,15 @@ class _IoWordInputState extends State<IoWordInput> {
           ..removeWhere((c) => !widget.characterValidator(c)))
         .join();
 
+    void updateWord() {
+      setState(() {});
+      widget.controller?._updateWord(_word);
+    }
+
     if (newValue.isEmpty) {
       _activeController?.text = IoWordInput._emptyCharacter;
       _previous();
-      setState(() {});
+      updateWord();
       return;
     }
 
@@ -158,7 +198,7 @@ class _IoWordInputState extends State<IoWordInput> {
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
     _next();
-    setState(() {});
+    updateWord();
   }
 
   /// Changes the current character field that is being inputted, to the
@@ -243,6 +283,7 @@ class _IoWordInputState extends State<IoWordInput> {
       focusNode.addListener(() => _onFocusChanged(focusNode));
     }
 
+    widget.controller?._updateWord(_word);
     _next();
   }
 
