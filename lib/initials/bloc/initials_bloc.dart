@@ -38,7 +38,10 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     InitialsSubmitted event,
     Emitter<InitialsState> emit,
   ) async {
-    final initials = state.initials.copyWith(value: event.initials);
+    final initials = InitialsInput.dirty(
+      event.initials,
+      blocklist: state.initials.blocklist,
+    );
 
     emit(
       state.copyWith(

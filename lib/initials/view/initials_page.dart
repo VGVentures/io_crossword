@@ -34,22 +34,16 @@ class InitialsView extends StatefulWidget {
 }
 
 class _InitialsViewState extends State<InitialsView> {
-  /// The latest word entered by the user.
-  // TODO(alestiago): Retrieve this information from the IoWordInputController,
-  // upon submission. See:
-  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
-  String _initials = '';
-
-  void _onWord(BuildContext context, String word) {
-    _initials = word;
-  }
+  final _wordInputController = IoWordInputController();
 
   void _onSubmit(BuildContext context) {
-    context.read<InitialsBloc>().add(InitialsSubmitted(_initials));
+    context.read<InitialsBloc>().add(
+          InitialsSubmitted(_wordInputController.word),
+        );
   }
 
   void _onSuccess(BuildContext context, InitialsState state) {
-    final initials = state.initials!.value.split('');
+    final initials = state.initials.value.split('');
 
     context.read<CrosswordBloc>().add(InitialsSelected(initials));
 
@@ -80,6 +74,12 @@ class _InitialsViewState extends State<InitialsView> {
   }
 
   @override
+  void dispose() {
+    _wordInputController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
@@ -106,7 +106,7 @@ class _InitialsViewState extends State<InitialsView> {
                     const SizedBox(height: 32),
                     IoWordInput.alphabetic(
                       length: 3,
-                      onWord: (word) => _onWord(context, word),
+                      controller: _wordInputController,
                     ),
                     SizedBox(
                       height: 64,
