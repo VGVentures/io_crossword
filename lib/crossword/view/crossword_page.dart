@@ -70,7 +70,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-    game = CrosswordGame(context.read(), showDebugOverlay: true);
+    game = CrosswordGame(context.read());
   }
 
   @override
