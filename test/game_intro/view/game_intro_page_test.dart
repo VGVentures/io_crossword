@@ -143,7 +143,9 @@ void main() {
 
         flowController.complete();
 
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 5));
+
         expect(find.byType(GameIntroView), findsNothing);
       },
     );
