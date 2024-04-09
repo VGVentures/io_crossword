@@ -1,51 +1,78 @@
 part of 'initials_bloc.dart';
 
+/// Collection of initials that are not allowed.
+typedef Blocklist = UnmodifiableSetView<String>;
+
 enum InitialsStatus {
-  /// The blocklist of initials has not been fetched yet.
+  /// The initials are yet to be entered.
   initial,
 
-  /// The blocklist of initials is being fetched.
+  /// The initials have been submitted and are processed.
   loading,
 
-  /// The blocklist of initials has been fetched successfully.
+  /// The initials have been successfully processed.
   success,
 
-  /// An error occurred while fetching the blocklist of initials.
+  /// An error occurred while processing the initials.
   failure,
 }
 
 enum InitialsInputError {
   /// The given initials are in an invalid format.
-  invalid,
+  format,
 
   /// The given initials are not allowed.
   blocklisted,
+
+  /// The given initials could not be processed, since
+  /// the blocklist has not been retrieved yet.
+  processing,
 }
 
+// TODO(alestiago): Consider sharing this with the backend.
 class InitialsInput extends FormzInput<String, InitialsInputError> {
-  InitialsInput.pure({
-    required this.blocklist,
-  }) : super.pure('');
+  InitialsInput.pure(
+    super.value, {
+    this.blocklist,
+  }) : super.pure();
 
   InitialsInput.dirty(
     super.value, {
-    required this.blocklist,
+    this.blocklist,
   }) : super.dirty();
 
   final _initialsRegex = RegExp('[A-Z]{3}');
 
   /// Collection of initials that are not allowed.
   ///
-  /// `null` if the blocklist has not been fetched.
-  final UnmodifiableSetView<String> blocklist;
+  /// If `null`, the blocklist has not been retrieved yet.
+  final Blocklist? blocklist;
+
+  InitialsInput copyWith({
+    String? value,
+    Blocklist? blocklist,
+  }) {
+    final newValue = value ?? this.value;
+    final newBlocklist = blocklist ?? this.blocklist;
+
+    if (isPure) {
+      return InitialsInput.pure(newValue, blocklist: newBlocklist);
+    } else {
+      return InitialsInput.dirty(newValue, blocklist: newBlocklist);
+    }
+  }
 
   @override
   InitialsInputError? validator(String value) {
     if (value.isEmpty || value.length != 3 || !_initialsRegex.hasMatch(value)) {
-      return InitialsInputError.invalid;
+      return InitialsInputError.format;
     }
 
-    if (blocklist.contains(value)) {
+    if (blocklist == null) {
+      return InitialsInputError.processing;
+    }
+
+    if (blocklist!.contains(value)) {
       return InitialsInputError.blocklisted;
     }
 
@@ -59,19 +86,16 @@ class InitialsState extends Equatable {
     required this.initials,
   });
 
-  const InitialsState.initial()
+  InitialsState.initial()
       : this(
-          initials: null,
           status: InitialsStatus.initial,
+          initials: InitialsInput.pure(''),
         );
 
   final InitialsStatus status;
 
   /// The initials that have been entered.
-  ///
-  /// If `null` the initials can't be entered yet, since the blocklist has not
-  /// been fetched.
-  final InitialsInput? initials;
+  final InitialsInput initials;
 
   InitialsState copyWith({
     InitialsInput? initials,

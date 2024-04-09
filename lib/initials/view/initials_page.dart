@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
+import 'package:io_crossword/initials/widgets/initials_error_text.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -24,44 +25,33 @@ class InitialsPage extends StatelessWidget {
   }
 }
 
-class InitialsView extends StatelessWidget {
+@visibleForTesting
+class InitialsView extends StatefulWidget {
   const InitialsView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return BlocBuilder<InitialsBloc, InitialsState>(
-      builder: (context, state) {
-        switch (state.status) {
-          case InitialsStatus.initial:
-            return const _InitialsLoaded();
-          case InitialsStatus.loading:
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          case InitialsStatus.success:
-            return const _InitialsLoaded();
-          case InitialsStatus.failure:
-            return ErrorView(title: l10n.initialsSubmissionErrorMessage);
-        }
-      },
-    );
-  }
+  State<InitialsView> createState() => _InitialsViewState();
 }
 
-class _InitialsLoaded extends StatelessWidget {
-  const _InitialsLoaded();
+class _InitialsViewState extends State<InitialsView> {
+  /// The latest word entered by the user.
+  // TODO(alestiago): Retrieve this information from the IoWordInputController,
+  // upon submission. See:
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
+  String _initials = '';
 
   void _onWord(BuildContext context, String word) {
-    context.read<InitialsBloc>().add(InitialsChanged(word));
+    _initials = word;
   }
 
   void _onSubmit(BuildContext context) {
-    final initials = context.read<InitialsBloc>().state.initials;
-    context.read<CrosswordBloc>().add(
-          InitialsSelected(initials!.value.split('')),
-        );
+    context.read<InitialsBloc>().add(InitialsSubmitted(_initials));
+  }
+
+  void _onSuccess(BuildContext context, InitialsState state) {
+    final initials = state.initials!.value.split('');
+
+    context.read<CrosswordBloc>().add(InitialsSelected(initials));
 
     context.flow<GameIntroState>().update(
           (state) => state.copyWith(
@@ -70,40 +60,88 @@ class _InitialsLoaded extends StatelessWidget {
         );
   }
 
+  /// Returns the error message to display, if any.
+  String? _displayError(BuildContext context) {
+    final state = context.read<InitialsBloc>().state;
+    final initials = state.initials;
+
+    if (state.status != InitialsStatus.failure) return null;
+
+    switch (initials.validator(initials.value)) {
+      case InitialsInputError.format:
+        return context.l10n.initialsErrorMessage;
+      case InitialsInputError.blocklisted:
+        return context.l10n.initialsBlacklistedMessage;
+      case InitialsInputError.processing:
+        return context.l10n.initialsSubmissionErrorMessage;
+      case null:
+        return context.l10n.initialsSubmissionErrorMessage;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
 
-    // if (state.initialsStatus == InitialsFormStatus.blacklisted)
-    //   _ErrorTextWidget(l10n.initialsBlacklistedMessage)
-    // else if (state.initialsStatus == InitialsFormStatus.invalid)
-    //   _ErrorTextWidget(l10n.initialsErrorMessage)
-    // else if (state.initialsStatus == InitialsFormStatus.failure)
-    //   _ErrorTextWidget(l10n.initialsSubmissionErrorMessage),
-
-    return Scaffold(
-      body: SelectionArea(
-        child: SingleChildScrollView(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 294),
-              child: Column(
-                children: [
-                  const SizedBox(height: 32),
-                  Text(
-                    l10n.enterInitials,
-                    style: theme.textTheme.headlineLarge,
-                  ),
-                  const SizedBox(height: 32),
-                  IoWordInput.alphabetic(
-                    length: 3,
-                    onWord: (word) => _onWord(context, word),
-                  ),
-                  const SizedBox(height: 32),
-                  InitialsSubmitButton(onPressed: () => _onSubmit(context)),
-                ],
+    return BlocListener<InitialsBloc, InitialsState>(
+      listenWhen: (previous, current) =>
+          current.status == InitialsStatus.success,
+      listener: _onSuccess,
+      child: Scaffold(
+        body: SelectionArea(
+          child: SingleChildScrollView(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 294),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 32),
+                    Text(
+                      l10n.enterInitials,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headlineLarge,
+                    ),
+                    const SizedBox(height: 32),
+                    IoWordInput.alphabetic(
+                      length: 3,
+                      onWord: (word) => _onWord(context, word),
+                    ),
+                    SizedBox(
+                      height: 64,
+                      child: BlocBuilder<InitialsBloc, InitialsState>(
+                        buildWhen: (previous, current) {
+                          return previous.status != current.status &&
+                              (current.status == InitialsStatus.failure ||
+                                  previous.status == InitialsStatus.failure);
+                        },
+                        builder: (context, state) {
+                          final displayError = _displayError(context);
+                          return displayError != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: InitialsErrorText(displayError),
+                                )
+                              : const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                    BlocBuilder<InitialsBloc, InitialsState>(
+                      buildWhen: (previous, current) {
+                        return previous.status != current.status &&
+                            (current.status == InitialsStatus.loading ||
+                                previous.status == InitialsStatus.loading);
+                      },
+                      builder: (context, state) {
+                        return InitialsSubmitButton(
+                          isLoading: state.status == InitialsStatus.loading,
+                          onPressed: () => _onSubmit(context),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

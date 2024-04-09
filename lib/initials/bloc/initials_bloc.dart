@@ -13,56 +13,62 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     required LeaderboardResource leaderboardResource,
   })  : _leaderboardResource = leaderboardResource,
         super(InitialsState.initial()) {
-    on<InitialsBlocklistRequested>(_onBlocklistRequested);
-    on<InitialsChanged>(_onInitialsChanged);
+    on<InitialsBlocklistRequested>((_, emit) => _onBlocklistRequested(emit));
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
   final LeaderboardResource _leaderboardResource;
 
-  void _onBlocklistRequested(
-    InitialsBlocklistRequested event,
-    Emitter<InitialsState> emit,
-  ) async {
+  Future<void> _onBlocklistRequested(Emitter<InitialsState> emit) async {
     try {
-      emit(state.copyWith(status: InitialsStatus.loading));
-      final blocklist = await _leaderboardResource.getInitialsBlacklist();
+      final blocklist = Blocklist(
+        (await _leaderboardResource.getInitialsBlacklist()).toSet(),
+      );
       emit(
         state.copyWith(
-          status: InitialsStatus.success,
-          initials: InitialsInput.pure(
-            blocklist: UnmodifiableSetView(Set.from(blocklist)),
-          ),
+          initials: state.initials.copyWith(blocklist: blocklist),
         ),
       );
     } catch (e, s) {
       addError(e, s);
-      emit(state.copyWith(status: InitialsStatus.failure));
     }
   }
 
-  void _onInitialsChanged(
-    InitialsChanged event,
+  Future<void> _onInitialsSubmitted(
+    InitialsSubmitted event,
     Emitter<InitialsState> emit,
-  ) {
-    final initials = state.initials;
-    if (initials == null) return;
+  ) async {
+    final initials = state.initials.copyWith(value: event.initials);
 
     emit(
       state.copyWith(
-        initials: InitialsInput.dirty(
-          event.initials,
-          blocklist: initials.blocklist,
-        ),
+        status: InitialsStatus.loading,
+        initials: initials,
       ),
+    );
+
+    if (initials.blocklist == null) {
+      await _onBlocklistRequested(emit);
+      if (initials.blocklist == null) {
+        emit(state.copyWith(status: InitialsStatus.failure));
+        return;
+      }
+    }
+
+    final error = initials.validator(event.initials);
+    if (error != null) {
+      emit(state.copyWith(status: InitialsStatus.failure));
+      return;
+    }
+
+    emit(
+      state.copyWith(status: InitialsStatus.success),
     );
   }
 
-  void _onInitialsSubmitted(
-    InitialsSubmitted event,
-    Emitter<InitialsState> emit,
-  ) {
-    final initials = state.initials;
-    if (initials == null) return;
+  @override
+  void onTransition(Transition<InitialsEvent, InitialsState> transition) {
+    super.onTransition(transition);
+    print(transition);
   }
 }
