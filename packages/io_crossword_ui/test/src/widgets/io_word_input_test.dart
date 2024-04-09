@@ -50,11 +50,7 @@ void main() {
 
     testWidgets(
       'onWord gets called as words are filled',
-      tags: TestTag.golden,
       (tester) async {
-        await tester.binding.setSurfaceSize(const Size(500, 150));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
         final words = <String>[];
         await tester.pumpWidget(
           _Subject(
@@ -113,6 +109,83 @@ void main() {
         );
       },
     );
+
+    group('controller', () {
+      testWidgets('word gets updated as input changes', (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              controller: controller,
+            ),
+          ),
+        );
+
+        expect(controller.word, equals('ABE'));
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCE'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCDE'));
+
+        await tester.enterText(editableTexts.last, '!');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABCE'));
+
+        await tester.enterText(editableTexts.first, 'Y');
+        await tester.enterText(editableTexts.last, 'Z');
+        await tester.pumpAndSettle();
+        expect(controller.word, equals('ABYZE'));
+      });
+
+      testWidgets('word gets notified as input changes', (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        final words = <String>[];
+        controller.addListener(() => words.add(controller.word));
+
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              controller: controller,
+            ),
+          ),
+        );
+
+        expect(words.last, equals('ABE'));
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCE'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCDE'));
+
+        await tester.enterText(editableTexts.last, '!');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCE'));
+
+        await tester.enterText(editableTexts.first, 'Y');
+        await tester.enterText(editableTexts.last, 'Z');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABYZE'));
+      });
+    });
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>
