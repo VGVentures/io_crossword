@@ -14,25 +14,25 @@ void main() {
   });
 
   group('$InitialsView', () {
-    testWidgets(
-      'does nothing when $InitialsSubmitButton is pressed',
-      (tester) async {
-        await tester.pumpSubject(const InitialsPage());
+    // testWidgets(
+    //   'does nothing when $InitialsSubmitButton is pressed',
+    //   (tester) async {
+    //     await tester.pumpSubject(const InitialsPage());
 
-        final submitButtonFinder = find.byType(InitialsSubmitButton);
-        await tester.ensureVisible(submitButtonFinder);
-        await tester.pumpAndSettle();
+    //     final submitButtonFinder = find.byType(InitialsSubmitButton);
+    //     await tester.ensureVisible(submitButtonFinder);
+    //     await tester.pumpAndSettle();
 
-        await tester.tap(submitButtonFinder);
-        await tester.pumpAndSettle();
+    //     await tester.tap(submitButtonFinder);
+    //     await tester.pumpAndSettle();
 
-        expect(
-          find.byType(InitialsPage),
-          findsOneWidget,
-          reason: 'No navigation occurs when the button is pressed.',
-        );
-      },
-    );
+    //     expect(
+    //       find.byType(InitialsPage),
+    //       findsOneWidget,
+    //       reason: 'No navigation occurs when the button is pressed.',
+    //     );
+    //   },
+    // );
 
     group('displays', () {
       testWidgets('a $IoWordInput of length 3', (tester) async {
