@@ -3,22 +3,22 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-part 'welcome_event.dart';
-part 'welcome_state.dart';
+part 'challenge_event.dart';
+part 'challenge_state.dart';
 
-class WelcomeBloc extends Bloc<WelcomeEvent, WelcomeState> {
-  WelcomeBloc({
+class ChallengeBloc extends Bloc<ChallengeEvent, ChallengeState> {
+  ChallengeBloc({
     required BoardInfoRepository boardInfoRepository,
   })  : _boardInfoRepository = boardInfoRepository,
-        super(const WelcomeState.initial()) {
-    on<WelcomeDataRequested>(_onDataRequested);
+        super(const ChallengeState.initial()) {
+    on<ChallengeDataRequested>(_onDataRequested);
   }
 
   final BoardInfoRepository _boardInfoRepository;
 
   Future<void> _onDataRequested(
-    WelcomeDataRequested event,
-    Emitter<WelcomeState> emit,
+    ChallengeDataRequested event,
+    Emitter<ChallengeState> emit,
   ) async {
     try {
       final [solved, total] = await Future.wait([

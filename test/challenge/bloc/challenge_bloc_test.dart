@@ -1,51 +1,51 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
 void main() {
-  group('$WelcomeBloc', () {
+  group('$ChallengeBloc', () {
     late BoardInfoRepository boardInfoRepository;
 
     setUp(() {
       boardInfoRepository = _MockBoardInfoRepository();
     });
 
-    test('initial state is WelcomeState.initial', () {
+    test('initial state is ChallengeState.initial', () {
       expect(
-        WelcomeBloc(boardInfoRepository: boardInfoRepository).state,
-        equals(const WelcomeState.initial()),
+        ChallengeBloc(boardInfoRepository: boardInfoRepository).state,
+        equals(const ChallengeState.initial()),
       );
     });
 
-    blocTest<WelcomeBloc, WelcomeState>(
+    blocTest<ChallengeBloc, ChallengeState>(
       'remains the same when retrieval fails',
-      build: () => WelcomeBloc(boardInfoRepository: boardInfoRepository),
+      build: () => ChallengeBloc(boardInfoRepository: boardInfoRepository),
       act: (bloc) {
         when(() => boardInfoRepository.getSolvedWordsCount())
             .thenThrow(Exception('oops'));
         when(() => boardInfoRepository.getTotalWordsCount())
             .thenThrow(Exception('oops'));
-        bloc.add(const WelcomeDataRequested());
+        bloc.add(const ChallengeDataRequested());
       },
-      expect: () => <WelcomeState>[],
+      expect: () => <ChallengeState>[],
     );
 
-    blocTest<WelcomeBloc, WelcomeState>(
-      'emits WelcomeState with updated values when data is requested',
-      build: () => WelcomeBloc(boardInfoRepository: boardInfoRepository),
+    blocTest<ChallengeBloc, ChallengeState>(
+      'emits ChallengeState with updated values when data is requested',
+      build: () => ChallengeBloc(boardInfoRepository: boardInfoRepository),
       act: (bloc) {
         when(() => boardInfoRepository.getSolvedWordsCount())
             .thenAnswer((_) => Future.value(1));
         when(() => boardInfoRepository.getTotalWordsCount())
             .thenAnswer((_) => Future.value(2));
-        bloc.add(const WelcomeDataRequested());
+        bloc.add(const ChallengeDataRequested());
       },
-      expect: () => <WelcomeState>[
-        const WelcomeState(solvedWords: 1, totalWords: 2),
+      expect: () => <ChallengeState>[
+        const ChallengeState(solvedWords: 1, totalWords: 2),
       ],
     );
   });
