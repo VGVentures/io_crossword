@@ -3,20 +3,6 @@ part of 'initials_bloc.dart';
 /// Collection of initials that are not allowed.
 typedef Blocklist = UnmodifiableSetView<String>;
 
-enum InitialsStatus {
-  /// The initials are yet to be entered.
-  initial,
-
-  /// The initials have been submitted and are processed.
-  loading,
-
-  /// The initials have been successfully processed.
-  success,
-
-  /// An error occurred while processing the initials.
-  failure,
-}
-
 enum InitialsInputError {
   /// The given initials are in an invalid format.
   format,
@@ -82,31 +68,25 @@ class InitialsInput extends FormzInput<String, InitialsInputError> {
 
 class InitialsState extends Equatable {
   const InitialsState({
-    required this.status,
     required this.initials,
   });
 
   InitialsState.initial()
       : this(
-          status: InitialsStatus.initial,
           initials: InitialsInput.pure(''),
         );
-
-  final InitialsStatus status;
 
   /// The initials that have been entered.
   final InitialsInput initials;
 
   InitialsState copyWith({
     InitialsInput? initials,
-    InitialsStatus? status,
   }) {
     return InitialsState(
-      status: status ?? this.status,
       initials: initials ?? this.initials,
     );
   }
 
   @override
-  List<Object?> get props => [status, initials];
+  List<Object?> get props => [initials];
 }

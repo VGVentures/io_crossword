@@ -37,34 +37,15 @@ class _InitialsViewState extends State<InitialsView> {
   final _wordInputController = IoWordInputController();
 
   void _onSubmit(BuildContext context) {
-    context.read<InitialsBloc>().add(
-          InitialsSubmitted(_wordInputController.word),
-        );
+    context.read<InitialsBloc>()
+      ..add(const InitialsBlocklistRequested())
+      ..add(InitialsSubmitted(_wordInputController.word));
   }
 
   void _onSuccess(BuildContext context, InitialsState state) {
     final initials = state.initials.value.split('');
     context.read<CrosswordBloc>().add(InitialsSelected(initials));
     context.flow<GameIntroState>().complete();
-  }
-
-  /// Returns the error message to display, if any.
-  String? _displayError(BuildContext context) {
-    final state = context.read<InitialsBloc>().state;
-    final initials = state.initials;
-
-    if (state.status != InitialsStatus.failure) return null;
-
-    switch (initials.validator(initials.value)) {
-      case InitialsInputError.format:
-        return context.l10n.initialsErrorMessage;
-      case InitialsInputError.blocklisted:
-        return context.l10n.initialsBlacklistedMessage;
-      case InitialsInputError.processing:
-        return context.l10n.initialsSubmissionErrorMessage;
-      case null:
-        return context.l10n.initialsSubmissionErrorMessage;
-    }
   }
 
   @override
@@ -79,8 +60,7 @@ class _InitialsViewState extends State<InitialsView> {
     final theme = Theme.of(context);
 
     return BlocListener<InitialsBloc, InitialsState>(
-      listenWhen: (previous, current) =>
-          current.status == InitialsStatus.success,
+      listenWhen: (previous, current) => current.initials.isValid,
       listener: _onSuccess,
       child: Scaffold(
         body: SelectionArea(
@@ -105,37 +85,26 @@ class _InitialsViewState extends State<InitialsView> {
                     ),
                     SizedBox(
                       height: 64,
-                      child: BlocBuilder<InitialsBloc, InitialsState>(
-                        buildWhen: (previous, current) {
-                          return previous.status != current.status &&
-                              (current.status == InitialsStatus.failure ||
-                                  previous.status == InitialsStatus.failure);
-                        },
-                        builder: (context, state) {
-                          final displayError = _displayError(context);
-                          return displayError != null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: InitialsErrorText(displayError),
-                                )
-                              : const SizedBox.shrink();
+                      child: BlocSelector<InitialsBloc, InitialsState,
+                          InitialsInputError?>(
+                        selector: (state) => state.initials.error,
+                        builder: (context, error) {
+                          if (error == null) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: InitialsErrorText(
+                              error.toLocalizedString(context),
+                            ),
+                          );
                         },
                       ),
                     ),
-                    BlocBuilder<InitialsBloc, InitialsState>(
-                      buildWhen: (previous, current) {
-                        return previous.status != current.status &&
-                            (current.status == InitialsStatus.loading ||
-                                previous.status == InitialsStatus.loading);
-                      },
-                      builder: (context, state) {
-                        return state.status == InitialsStatus.loading
-                            ? const CircularProgressIndicator()
-                            : InitialsSubmitButton(
-                                onPressed: () => _onSubmit(context),
-                              );
-                      },
-                    ),
+                    InitialsSubmitButton(
+                      onPressed: () => _onSubmit(context),
+                    )
                   ],
                 ),
               ),
@@ -144,5 +113,18 @@ class _InitialsViewState extends State<InitialsView> {
         ),
       ),
     );
+  }
+}
+
+extension on InitialsInputError {
+  String toLocalizedString(BuildContext context) {
+    switch (this) {
+      case InitialsInputError.format:
+        return context.l10n.initialsErrorMessage;
+      case InitialsInputError.blocklisted:
+        return context.l10n.initialsBlacklistedMessage;
+      case InitialsInputError.processing:
+        return context.l10n.initialsSubmissionErrorMessage;
+    }
   }
 }

@@ -13,13 +13,19 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     required LeaderboardResource leaderboardResource,
   })  : _leaderboardResource = leaderboardResource,
         super(InitialsState.initial()) {
-    on<InitialsBlocklistRequested>((_, emit) => _onBlocklistRequested(emit));
+    on<InitialsBlocklistRequested>(_onBlocklistRequested);
     on<InitialsSubmitted>(_onInitialsSubmitted);
   }
 
   final LeaderboardResource _leaderboardResource;
 
-  Future<void> _onBlocklistRequested(Emitter<InitialsState> emit) async {
+  Future<void> _onBlocklistRequested(
+    InitialsBlocklistRequested event,
+    Emitter<InitialsState> emit,
+  ) async {
+    final hasBlocklist = state.initials.blocklist != null;
+    if (hasBlocklist) return;
+
     try {
       final blocklist = Blocklist(
         (await _leaderboardResource.getInitialsBlacklist()).toSet(),
@@ -29,8 +35,8 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
           initials: state.initials.copyWith(blocklist: blocklist),
         ),
       );
-    } catch (e, s) {
-      addError(e, s);
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
     }
   }
 
@@ -38,36 +44,13 @@ class InitialsBloc extends Bloc<InitialsEvent, InitialsState> {
     InitialsSubmitted event,
     Emitter<InitialsState> emit,
   ) async {
-    if (state.status == InitialsStatus.loading) return;
-
-    final initials = InitialsInput.dirty(
-      event.initials,
-      blocklist: state.initials.blocklist,
-    );
-
     emit(
       state.copyWith(
-        status: InitialsStatus.loading,
-        initials: initials,
+        initials: InitialsInput.dirty(
+          event.initials,
+          blocklist: state.initials.blocklist,
+        ),
       ),
-    );
-
-    if (initials.blocklist == null) {
-      await _onBlocklistRequested(emit);
-      if (initials.blocklist == null) {
-        emit(state.copyWith(status: InitialsStatus.failure));
-        return;
-      }
-    }
-
-    final error = initials.validator(event.initials);
-    if (error != null) {
-      emit(state.copyWith(status: InitialsStatus.failure));
-      return;
-    }
-
-    emit(
-      state.copyWith(status: InitialsStatus.success),
     );
   }
 }
