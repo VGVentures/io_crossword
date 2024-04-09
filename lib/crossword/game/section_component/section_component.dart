@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
-import 'package:io_crossword/crossword/extensions/unsolved_words.dart';
+import 'package:io_crossword/crossword/extensions/filter_words.dart';
 import 'package:io_crossword/crossword/game/section_component/models/models.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 

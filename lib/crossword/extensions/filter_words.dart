@@ -1,6 +1,6 @@
 import 'package:game_domain/game_domain.dart';
 
-extension UnsolvedWords on List<Word> {
+extension FilterWords on List<Word> {
   Iterable<Word> unsolvedWords() {
     return where((word) => word.solvedTimestamp == null);
   }
