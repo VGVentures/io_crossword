@@ -55,6 +55,14 @@ void main() {
       },
     );
 
+    testWidgets('renders $IoAppBar', (tester) async {
+      when(() => bloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(child);
+
+      expect(find.byType(IoAppBar), findsOneWidget);
+    });
+
     testWidgets(
       'emits MascotUpdated when tapping a mascot item',
       (tester) async {

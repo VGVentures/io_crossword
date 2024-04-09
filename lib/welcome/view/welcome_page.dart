@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -23,8 +24,8 @@ class WelcomePage extends StatelessWidget {
   }
 }
 
-@visibleForTesting
 class WelcomeView extends StatelessWidget {
+  @visibleForTesting
   const WelcomeView({super.key});
 
   void _onGetStarted(BuildContext context) {
@@ -41,10 +42,12 @@ class WelcomeView extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 40,
-        title: const Text('IO Crossword'),
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
+        actions: (context) {
+          return const SizedBox();
+        },
       ),
       body: SelectionArea(
         child: SingleChildScrollView(

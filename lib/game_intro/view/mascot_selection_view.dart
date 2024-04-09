@@ -21,27 +21,35 @@ class MascotSelectionView extends StatelessWidget {
       (GameIntroBloc bloc) => bloc.state.selectedMascot,
     );
 
-    return CardScrollableContentWithButton(
-      onPressed: () {
-        context.read<GameIntroBloc>().add(const MascotSubmitted());
-      },
-      buttonLabel: l10n.continueLabel,
-      child: Column(
-        children: [
-          Text(
-            l10n.chooseTeam,
-            style: IoCrosswordTextStyles.headlineMD,
-          ),
-          const SizedBox(height: 16),
-          const Spacer(),
-          ...Mascots.values.map(
-            (mascot) => MascotItem(
-              mascot: mascot,
-              selectedMascot: selectedMascot,
+    return Scaffold(
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
+        actions: (context) {
+          return const SizedBox();
+        },
+      ),
+      body: CardScrollableContentWithButton(
+        onPressed: () {
+          context.read<GameIntroBloc>().add(const MascotSubmitted());
+        },
+        buttonLabel: l10n.continueLabel,
+        child: Column(
+          children: [
+            Text(
+              l10n.chooseTeam,
+              style: IoCrosswordTextStyles.headlineMD,
             ),
-          ),
-          const Spacer(),
-        ],
+            const SizedBox(height: 16),
+            const Spacer(),
+            ...Mascots.values.map(
+              (mascot) => MascotItem(
+                mascot: mascot,
+                selectedMascot: selectedMascot,
+              ),
+            ),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }
