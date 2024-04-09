@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/mute_button.dart';
+import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
