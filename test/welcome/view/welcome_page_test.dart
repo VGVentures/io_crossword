@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -28,11 +27,11 @@ void main() {
     testWidgets(
       'updates flow when "Get Started" button is pressed',
       (tester) async {
-        final flowController = FlowController(const GameIntroState());
+        final flowController = FlowController(GameIntroStatus.welcome);
         addTearDown(flowController.dispose);
 
         await tester.pumpSubject(
-          FlowBuilder<GameIntroState>(
+          FlowBuilder<GameIntroStatus>(
             controller: flowController,
             onGeneratePages: (_, __) => [
               const MaterialPage(child: WelcomeView()),
@@ -49,9 +48,7 @@ void main() {
 
         expect(
           flowController.state,
-          equals(
-            const GameIntroState(status: GameIntroStatus.mascotSelection),
-          ),
+          equals(GameIntroStatus.teamSelection),
         );
       },
     );

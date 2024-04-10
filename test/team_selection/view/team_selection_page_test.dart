@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -16,8 +18,8 @@ import '../../helpers/helpers.dart';
 class _MockTeamSelectionCubit extends MockCubit<int>
     implements TeamSelectionCubit {}
 
-class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
-    implements GameIntroBloc {}
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
 
 void main() {
   group('$TeamSelectionPage', () {
@@ -30,7 +32,6 @@ void main() {
 
   group('$TeamSelectionView', () {
     late TeamSelectionCubit teamSelectionCubit;
-    late GameIntroBloc gameIntroBloc;
     late Widget widget;
     late AppLocalizations l10n;
 
@@ -40,7 +41,6 @@ void main() {
 
     setUp(() {
       teamSelectionCubit = _MockTeamSelectionCubit();
-      gameIntroBloc = _MockGameIntroBloc();
 
       widget = BlocProvider<TeamSelectionCubit>(
         create: (_) => teamSelectionCubit,
@@ -132,20 +132,67 @@ void main() {
       });
     });
 
-    testWidgets('verify MascotSubmitted is called', (tester) async {
-      when(() => teamSelectionCubit.state).thenReturn(2);
+    group('joining a team', () {
+      late CrosswordBloc crosswordBloc;
+      late FlowController<GameIntroStatus> flowController;
 
-      await tester.pumpApp(
-        BlocProvider<GameIntroBloc>.value(
-          value: gameIntroBloc,
-          child: widget,
-        ),
+      setUp(() {
+        when(() => teamSelectionCubit.state).thenReturn(2);
+
+        crosswordBloc = _MockCrosswordBloc();
+        flowController = FlowController<GameIntroStatus>(
+          GameIntroStatus.teamSelection,
+        );
+        addTearDown(flowController.dispose);
+      });
+
+      testWidgets('adds MascotSelected', (tester) async {
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => teamSelectionCubit,
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: TeamSelectionView()),
+              ],
+            ),
+          ),
+        );
+
+        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+        await tester.ensureVisible(submitButtonFinder);
+        await tester.tap(submitButtonFinder);
+        await tester.pumpAndSettle();
+
+        verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
+            .called(1);
+      });
+
+      testWidgets(
+        'flows into enterInitials',
+        (tester) async {
+          await tester.pumpApp(
+            crosswordBloc: crosswordBloc,
+            BlocProvider(
+              create: (_) => teamSelectionCubit,
+              child: FlowBuilder<GameIntroStatus>(
+                controller: flowController,
+                onGeneratePages: (_, __) => [
+                  const MaterialPage(child: TeamSelectionView()),
+                ],
+              ),
+            ),
+          );
+
+          final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+          await tester.ensureVisible(submitButtonFinder);
+          await tester.tap(submitButtonFinder);
+          await tester.pumpAndSettle();
+
+          expect(flowController.state, equals(GameIntroStatus.enterInitials));
+        },
       );
-
-      await tester.tap(find.text(l10n.joinTeam('Android')));
-
-      verify(() => gameIntroBloc.add(MascotSubmitted(Mascots.android)))
-          .called(1);
     });
   });
 }
