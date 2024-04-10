@@ -15,13 +15,13 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.16.0
+  cloud_firestore: ^4.16.1
   collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
   firebase_app_check: ^0.2.2
-  firebase_auth: ^4.19.0
+  firebase_auth: ^4.19.1
   firebase_core: ^2.29.0
   flame: ^1.16.0
   flame_audio: ^2.10.1
