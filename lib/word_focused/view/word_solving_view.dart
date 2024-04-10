@@ -15,14 +15,11 @@ class WordSolvingDesktopView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
-        final previousState = previous as CrosswordLoaded;
-        final currentState = current as CrosswordLoaded;
-        return currentState.selectedWord?.solvedStatus !=
-            previousState.selectedWord?.solvedStatus;
+        return previous.selectedWord?.solvedStatus !=
+            current.selectedWord?.solvedStatus;
       },
       listener: (context, state) {
-        final loadedState = state as CrosswordLoaded;
-        if (loadedState.selectedWord?.solvedStatus == WordStatus.solved) {
+        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
           context
               .read<WordFocusedBloc>()
               .add(const WordFocusedSuccessRequested());
@@ -56,14 +53,11 @@ class WordSolvingMobileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
-        final previousState = previous as CrosswordLoaded;
-        final currentState = current as CrosswordLoaded;
-        return currentState.selectedWord?.solvedStatus !=
-            previousState.selectedWord?.solvedStatus;
+        return previous.selectedWord?.solvedStatus !=
+            current.selectedWord?.solvedStatus;
       },
       listener: (context, state) {
-        final loadedState = state as CrosswordLoaded;
-        if (loadedState.selectedWord?.solvedStatus == WordStatus.solved) {
+        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
           context
               .read<WordFocusedBloc>()
               .add(const WordFocusedSuccessRequested());

@@ -52,7 +52,7 @@ void main() {
       'renders SizedBox.shrink when selectedWord is null',
       (tester) async {
         when(() => crosswordBloc.state)
-            .thenReturn(CrosswordLoaded(sectionSize: 20));
+            .thenReturn(CrosswordState(sectionSize: 20));
 
         await tester.pumpApp(widget);
 
@@ -64,7 +64,7 @@ void main() {
       'renders WordFocusedDesktopView when selectedWord is not null',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: 20,
             selectedWord: selectedWord,
           ),
@@ -113,7 +113,7 @@ void main() {
       'WordFocusedStatus.solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: 20,
             selectedWord: selectedWord,
           ),
@@ -162,7 +162,7 @@ void main() {
       'renders SizedBox.shrink when selectedWord is null',
       (tester) async {
         when(() => crosswordBloc.state)
-            .thenReturn(CrosswordLoaded(sectionSize: 20));
+            .thenReturn(CrosswordState(sectionSize: 20));
 
         await tester.pumpApp(widget);
 
@@ -174,7 +174,7 @@ void main() {
       'renders WordFocusedMobileView when selectedWord is not null',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: 20,
             selectedWord: selectedWord,
           ),
@@ -226,7 +226,7 @@ void main() {
       'WordFocusedStatus.solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: 20,
             selectedWord: selectedWord,
           ),

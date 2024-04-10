@@ -25,11 +25,9 @@ class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
 
   void _onGetStarted(BuildContext context) {
-    context.flow<GameIntroState>().update(
-          (status) => status.copyWith(
-            status: GameIntroStatus.mascotSelection,
-          ),
-        );
+    context
+        .flow<GameIntroStatus>()
+        .update((status) => GameIntroStatus.teamSelection);
   }
 
   @override

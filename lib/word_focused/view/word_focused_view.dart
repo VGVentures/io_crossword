@@ -10,7 +10,7 @@ class WordFocusedDesktopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord = context.select(
-      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
+      (CrosswordBloc bloc) => bloc.state.selectedWord,
     );
     if (selectedWord == null) {
       return const SizedBox.shrink();
@@ -62,7 +62,7 @@ class WordFocusedMobilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord = context.select(
-      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
+      (CrosswordBloc bloc) => bloc.state.selectedWord,
     );
     if (selectedWord == null) {
       return const SizedBox.shrink();

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -48,7 +49,7 @@ void main() {
       'renders SizedBox.shrink when selectedWord is not null',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: 20,
             selectedWord: selectedWord,
           ),
@@ -65,7 +66,7 @@ void main() {
       'renders BottomBarContent when selectedWord is null',
       (tester) async {
         when(() => crosswordBloc.state)
-            .thenReturn(CrosswordLoaded(sectionSize: 20));
+            .thenReturn(CrosswordState(sectionSize: 20));
 
         await tester.pumpApp(widget);
 

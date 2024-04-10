@@ -67,7 +67,7 @@ class AppView extends StatelessWidget {
     return IoLayout(
       child: BlocSelector<CrosswordBloc, CrosswordState, Mascots?>(
         selector: (state) {
-          return state is CrosswordLoaded ? state.mascot : null;
+          return state.mascot;
         },
         builder: (context, mascot) {
           return MaterialApp(
