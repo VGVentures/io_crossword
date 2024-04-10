@@ -8,6 +8,10 @@
   "@welcome": {
     "description": "Welcome label"
   },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings label"
+  },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
@@ -24,9 +28,18 @@
   "@continueLabel": {
     "description": "Continue label"
   },
-  "chooseTeam": "Choose a team",
-  "@chooseTeam": {
-    "description": "Label displayed in the team selection modal"
+  "chooseYourTeam": "Choose your team",
+  "@chooseYourTeam": {
+    "description": "The title for the team selection page"
+  },
+  "joinTeam": "Join {team} team",
+  "@joinTeam": {
+    "description": "Text for which team you are choosing",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
   },
   "enterInitials": "Enter your initials for the leaderboard",
   "@enterInitials": {
@@ -159,6 +172,18 @@
   "submitScore": "Submit Score",
   "@submitScore": {
     "description": "Submit Score label."
+  },
+  "exploreAiStudio": "Explore in AI Studio",
+  "@exploreAiStudio": {
+    "description": "Explore in AI Studio label."
+  },
+  "googleIO": "Google I/O",
+  "@googleIO": {
+    "description": "Google I/O label."
+  },
+  "developerProfile": "Developer Profile",
+  "@developerProfile": {
+    "description": "Developer Profile label."
   },
   "findNewWord": "Find a new word",
   "@findNewWord": {

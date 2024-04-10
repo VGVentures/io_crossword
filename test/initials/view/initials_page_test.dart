@@ -48,13 +48,13 @@ void main() {
         );
         final crosswordBloc = _MockCrosswordBloc();
 
-        final flowController = FlowController(const GameIntroState());
+        final flowController = FlowController(GameIntroStatus.enterInitials);
         addTearDown(flowController.dispose);
 
         await tester.pumpSubject(
           crosswordBloc: crosswordBloc,
           initialsBloc: initialsBloc,
-          FlowBuilder<GameIntroState>(
+          FlowBuilder<GameIntroStatus>(
             controller: flowController,
             onGeneratePages: (_, __) => [
               const MaterialPage(child: InitialsView()),
@@ -125,6 +125,12 @@ void main() {
     });
 
     group('displays', () {
+      testWidgets('a $IoAppBar', (tester) async {
+        await tester.pumpSubject(const InitialsView());
+
+        expect(find.byType(IoAppBar), findsOneWidget);
+      });
+
       testWidgets('a $IoWordInput of length 3', (tester) async {
         await tester.pumpSubject(const InitialsView());
 

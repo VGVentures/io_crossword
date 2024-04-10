@@ -25,11 +25,9 @@ class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
 
   void _onGetStarted(BuildContext context) {
-    context.flow<GameIntroState>().update(
-          (status) => status.copyWith(
-            status: GameIntroStatus.mascotSelection,
-          ),
-        );
+    context
+        .flow<GameIntroStatus>()
+        .update((status) => GameIntroStatus.teamSelection);
   }
 
   @override
@@ -41,9 +39,6 @@ class WelcomeView extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
-        actions: (context) {
-          return const SizedBox();
-        },
       ),
       body: SelectionArea(
         child: SingleChildScrollView(

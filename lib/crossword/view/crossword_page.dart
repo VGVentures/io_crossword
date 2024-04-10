@@ -22,7 +22,7 @@ class CrosswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CrosswordBloc>()
       ..add(const BoardSectionRequested((0, 0)))
-      ..add(const BoardLoadingInfoFetched());
+      ..add(const BoardLoadingInformationRequested());
 
     return const CrosswordView();
   }
@@ -36,19 +36,6 @@ class CrosswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final bloc = context.watch<CrosswordBloc>();
-    final state = bloc.state;
-
-    late final Widget child;
-    if (state is CrosswordInitial) {
-      child = const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is CrosswordError) {
-      child = const Center(child: Text('Error loading crossword'));
-    } else if (state is CrosswordLoaded) {
-      child = const LoadedBoardView();
-    }
 
     return Scaffold(
       appBar: IoAppBar(
@@ -66,7 +53,23 @@ class CrosswordView extends StatelessWidget {
           );
         },
       ),
-      body: child,
+      body: BlocBuilder<CrosswordBloc, CrosswordState>(
+        buildWhen: (previous, current) => previous.status != current.status,
+        builder: (context, state) {
+          switch (state.status) {
+            case CrosswordStatus.initial:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case CrosswordStatus.success:
+              return const LoadedBoardView();
+            case CrosswordStatus.failure:
+              return ErrorView(
+                title: l10n.errorPromptText,
+              );
+          }
+        },
+      ),
     );
   }
 }

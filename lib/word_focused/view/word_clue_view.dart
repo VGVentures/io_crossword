@@ -13,7 +13,7 @@ class WordClueDesktopView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final solved = selectedWord.solvedStatus == SolvedStatus.solved;
+    final solved = selectedWord.solvedStatus == WordStatus.solved;
 
     return Column(
       children: [
@@ -50,7 +50,7 @@ class WordClueMobileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final solved = selectedWord.solvedStatus == SolvedStatus.solved;
+    final solved = selectedWord.solvedStatus == WordStatus.solved;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

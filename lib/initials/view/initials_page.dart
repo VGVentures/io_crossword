@@ -43,7 +43,7 @@ class _InitialsViewState extends State<InitialsView> {
 
   void _onSuccess(BuildContext context, InitialsState state) {
     context.read<CrosswordBloc>().add(InitialsSelected(state.initials.value));
-    context.flow<GameIntroState>().complete();
+    context.flow<GameIntroStatus>().complete();
   }
 
   @override
@@ -61,6 +61,9 @@ class _InitialsViewState extends State<InitialsView> {
       listenWhen: (previous, current) => current.initials.isValid,
       listener: _onSuccess,
       child: Scaffold(
+        appBar: IoAppBar(
+          crossword: l10n.crossword,
+        ),
         body: SelectionArea(
           child: SingleChildScrollView(
             child: Align(

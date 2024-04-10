@@ -2,26 +2,16 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:api_client/api_client.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flow_builder/flow_builder.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
-
-class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
-    implements GameIntroBloc {}
-
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
@@ -35,74 +25,61 @@ void main() {
   });
 
   group('GameIntroView', () {
-    late CrosswordBloc crosswordBloc;
-    late GameIntroBloc gameIntroBloc;
-    late Widget child;
-
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
-      gameIntroBloc = _MockGameIntroBloc();
-
-      child = MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: gameIntroBloc),
-          BlocProvider.value(value: crosswordBloc),
-        ],
-        child: const GameIntroView(),
-      );
-    });
-
     testWidgets(
-      'renders the $WelcomePage with the default state',
+      'renders the $WelcomePage by default',
       (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(
-          const GameIntroState(),
-        );
-        await tester.pumpApp(child);
+        await tester.pumpApp(GameIntroView());
 
         expect(find.byType(WelcomePage), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders the $MascotSelectionView when the status is mascotSelection',
+      'renders the $WelcomePage with the state is welcome',
       (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(
-          const GameIntroState(status: GameIntroStatus.mascotSelection),
-        );
-        await tester.pumpApp(child);
+        final flowController =
+            FlowController<GameIntroStatus>(GameIntroStatus.welcome);
+        addTearDown(flowController.dispose);
 
-        expect(find.byType(MascotSelectionView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'adds MascotSelected event to the crossword bloc when the mascot '
-      'is selected',
-      (tester) async {
-        whenListen(
-          gameIntroBloc,
-          Stream.value(
-            GameIntroState(
-              status: GameIntroStatus.initialsInput,
-              selectedMascot: Mascots.android,
-            ),
+        await tester.pumpApp(
+          GameIntroView(
+            flowController: flowController,
           ),
-          initialState: GameIntroState(status: GameIntroStatus.mascotSelection),
         );
-        await tester.pumpApp(child);
-        verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
-            .called(1);
+
+        expect(find.byType(WelcomePage), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders the $InitialsPage when the status is initialsInput',
+      'renders the $TeamSelectionPage when the status is teamSelection',
       (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(
-          const GameIntroState(status: GameIntroStatus.initialsInput),
+        final flowController =
+            FlowController<GameIntroStatus>(GameIntroStatus.teamSelection);
+        addTearDown(flowController.dispose);
+
+        await tester.pumpApp(
+          GameIntroView(
+            flowController: flowController,
+          ),
         );
-        await tester.pumpApp(child);
+
+        expect(find.byType(TeamSelectionPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders the $InitialsPage when the status is enterInitials',
+      (tester) async {
+        final flowController =
+            FlowController<GameIntroStatus>(GameIntroStatus.enterInitials);
+        addTearDown(flowController.dispose);
+
+        await tester.pumpApp(
+          GameIntroView(
+            flowController: flowController,
+          ),
+        );
 
         expect(find.byType(InitialsPage), findsOneWidget);
       },
@@ -111,16 +88,9 @@ void main() {
     testWidgets(
       'pops the navigator when completed',
       (tester) async {
-        const state = GameIntroState(status: GameIntroStatus.initialsInput);
-        whenListen(
-          gameIntroBloc,
-          Stream.value(state),
-          initialState: const GameIntroState(
-            status: GameIntroStatus.initialsInput,
-          ),
-        );
-
-        final flowController = FlowController<GameIntroState>(state);
+        final flowController =
+            FlowController<GameIntroStatus>(GameIntroStatus.enterInitials);
+        addTearDown(flowController.dispose);
 
         final leaderboardResource = _MockLeaderboardResource();
         when(
@@ -132,13 +102,7 @@ void main() {
 
         await tester.pumpApp(
           leaderboardResource: leaderboardResource,
-          MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: gameIntroBloc),
-              BlocProvider.value(value: crosswordBloc),
-            ],
-            child: GameIntroView(flowController: flowController),
-          ),
+          GameIntroView(flowController: flowController),
         );
 
         flowController.complete();
