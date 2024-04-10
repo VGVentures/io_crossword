@@ -909,7 +909,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.solved,
+              solvedStatus: WordStatus.solved,
             ),
             sections: {
               (0, 0): section,
@@ -946,7 +946,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.invalid,
+              solvedStatus: WordStatus.invalid,
             ),
             sections: {
               (0, 0): section,
@@ -993,7 +993,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.invalid,
+              solvedStatus: WordStatus.invalid,
             ),
             sections: {
               (0, 0): section,

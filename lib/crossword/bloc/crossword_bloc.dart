@@ -207,7 +207,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         emit(
           loadedState.copyWith(
             selectedWord:
-                selectedWord.copyWith(solvedStatus: SolvedStatus.invalid),
+                selectedWord.copyWith(solvedStatus: WordStatus.invalid),
           ),
         );
         return;
@@ -225,7 +225,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           loadedState.copyWith(
             selectedWord: selectedWord.copyWith(
               solvedStatus:
-                  isValidAnswer ? SolvedStatus.solved : SolvedStatus.invalid,
+                  isValidAnswer ? WordStatus.solved : WordStatus.invalid,
             ),
           ),
         );

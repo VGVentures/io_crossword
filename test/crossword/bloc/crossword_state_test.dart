@@ -307,10 +307,10 @@ void main() {
           final solvedWordSelection = WordSelection(
             section: (0, 0),
             word: fakeWord,
-            solvedStatus: SolvedStatus.solved,
+            solvedStatus: WordStatus.solved,
           );
           expect(
-            wordSelection.copyWith(solvedStatus: SolvedStatus.solved),
+            wordSelection.copyWith(solvedStatus: WordStatus.solved),
             equals(solvedWordSelection),
           );
         });
