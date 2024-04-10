@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
-import 'package:io_crossword/challenge/bloc/challenge_bloc.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
