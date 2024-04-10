@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/hint/view/hint_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -132,6 +133,25 @@ void main() {
         verify(
           () => wordFocusedBloc.add(const SolvingFocusSwitched()),
         ).called(1);
+      },
+    );
+
+    testWidgets(
+      'BottomPanel switches view when WordSolvingFocus changes',
+      (tester) async {
+        whenListen(
+          wordFocusedBloc,
+          Stream.value(WordFocusedState(focus: WordSolvingFocus.hint)),
+          initialState: WordFocusedState(),
+        );
+        await tester.pumpApp(widget);
+
+        expect(find.byType(GeminiHintButton), findsOneWidget);
+        expect(find.byType(GeminiTextField), findsNothing);
+        await tester.pump();
+
+        expect(find.byType(GeminiHintButton), findsNothing);
+        expect(find.byType(GeminiTextField), findsOneWidget);
       },
     );
 
