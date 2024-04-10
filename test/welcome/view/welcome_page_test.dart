@@ -3,6 +3,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -12,7 +13,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockWelcomeBloc extends Mock implements WelcomeBloc {}
+class _MockChallengeBloc extends Mock implements ChallengeBloc {}
 
 void main() {
   group('$WelcomePage', () {
@@ -131,14 +132,14 @@ extension on WidgetTester {
   /// Pumps the test subject with all its required ancestors.
   Future<void> pumpSubject(
     Widget child, {
-    WelcomeBloc? welcomeBloc,
+    ChallengeBloc? welcomeBloc,
   }) {
-    final bloc = welcomeBloc ?? _MockWelcomeBloc();
+    final bloc = welcomeBloc ?? _MockChallengeBloc();
     if (welcomeBloc == null) {
       whenListen(
         bloc,
-        const Stream<WelcomeState>.empty(),
-        initialState: const WelcomeState.initial(),
+        const Stream<ChallengeState>.empty(),
+        initialState: const ChallengeState.initial(),
       );
       when(bloc.close).thenAnswer((_) => Future.value());
     }

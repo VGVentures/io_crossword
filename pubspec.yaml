@@ -34,6 +34,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_localizations:
     sdk: flutter
+  formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
   http: ^1.2.1
@@ -41,6 +42,7 @@ dependencies:
   io_crossword_ui:
     path: packages/io_crossword_ui
   provider: ^6.1.2
+  rxdart: ^0.27.7
   url_launcher: ^6.2.5
 
 dev_dependencies:
@@ -62,6 +64,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/anim/
     - assets/images/
 
 flutter_gen:

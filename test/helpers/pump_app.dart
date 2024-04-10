@@ -8,6 +8,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -31,6 +32,7 @@ extension PumpApp on WidgetTester {
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
     CrosswordBloc? crosswordBloc,
+    ChallengeBloc? challengeBloc,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordResource = _MockCrosswordResource();
@@ -41,9 +43,9 @@ extension PumpApp on WidgetTester {
     ).thenAnswer((_) => Stream.value(null));
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
@@ -69,14 +71,28 @@ extension PumpApp on WidgetTester {
         ],
         child: Builder(
           builder: (context) {
-            return BlocProvider(
-              create: (context) =>
-                  crosswordBloc ??
-                  CrosswordBloc(
-                    crosswordRepository: context.read<CrosswordRepository>(),
-                    boardInfoRepository: context.read<BoardInfoRepository>(),
-                    crosswordResource: context.read<CrosswordResource>(),
-                  ),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>
+                      crosswordBloc ??
+                      CrosswordBloc(
+                        crosswordRepository:
+                            context.read<CrosswordRepository>(),
+                        boardInfoRepository:
+                            context.read<BoardInfoRepository>(),
+                        crosswordResource: context.read<CrosswordResource>(),
+                      ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      challengeBloc ??
+                      ChallengeBloc(
+                        boardInfoRepository:
+                            context.read<BoardInfoRepository>(),
+                      ),
+                ),
+              ],
               child: IoLayout(
                 data: layout,
                 child: MaterialApp(
@@ -129,9 +145,9 @@ extension PumpRoute on WidgetTester {
 
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)

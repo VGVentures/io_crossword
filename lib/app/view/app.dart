@@ -5,6 +5,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -37,12 +38,21 @@ class App extends StatelessWidget {
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
       ],
-      child: BlocProvider(
-        create: (_) => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-          crosswordResource: crosswordResource,
-        ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => CrosswordBloc(
+              crosswordRepository: crosswordRepository,
+              boardInfoRepository: boardInfoRepository,
+              crosswordResource: crosswordResource,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => ChallengeBloc(
+              boardInfoRepository: context.read(),
+            )..add(const ChallengeDataRequested()),
+          ),
+        ],
         child: const AppView(),
       ),
     );
