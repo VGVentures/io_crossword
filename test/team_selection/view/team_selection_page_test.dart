@@ -132,7 +132,7 @@ void main() {
       });
     });
 
-    testWidgets(' joining a team adds MascotSelected after', (tester) async {
+    testWidgets(' joining a team adds MascotSelected', (tester) async {
       when(() => teamSelectionCubit.state).thenReturn(2);
 
       final flowController = FlowController<GameIntroStatus>(
@@ -165,7 +165,7 @@ void main() {
     });
 
     testWidgets(
-      'joining a team flows into enterInitials after',
+      'joining a team flows into enterInitials',
       (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(2);
 
