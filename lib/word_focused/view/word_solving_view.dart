@@ -13,8 +13,6 @@ class WordSolvingDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
         final previousState = previous as CrosswordLoaded;
@@ -56,8 +54,6 @@ class WordSolvingMobileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
         final previousState = previous as CrosswordLoaded;
@@ -126,7 +122,7 @@ class BottomPanel extends StatelessWidget {
                 ),
               ],
             ),
-          WordSolvingFocus.hint => GeminiTextField(),
+          WordSolvingFocus.hint => const GeminiTextField(),
         };
       },
     );

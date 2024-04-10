@@ -54,13 +54,13 @@ dev_dependencies:
   very_good_analysis: ^5.1.0
 
 dependency_overrides:
+  # Adds support for wasm while flame_audio does not update this dependency
+  audioplayers: 6.0.0
   flame:
     git:
       url: https://github.com/flame-engine/flame.git
       ref: main
       path: packages/flame
-  # Adds support for wasm while flame_audio does not update this dependency
-  audioplayers: 6.0.0
 
 flutter:
   uses-material-design: true

@@ -5,7 +5,6 @@ import 'package:io_crossword/word_focused/bloc/word_focused_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class GeminiTextField extends StatelessWidget {
-  @visibleForTesting
   const GeminiTextField({
     super.key,
   });
