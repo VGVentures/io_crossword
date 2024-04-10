@@ -34,6 +34,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_localizations:
     sdk: flutter
+  flutter_svg: ^2.0.5
   formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
@@ -47,6 +48,8 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
+  build_runner: ^2.3.3
+  flutter_gen_runner: ^5.3.0
   flutter_test:
     sdk: flutter
   mockingjay: ^0.5.0
@@ -67,7 +70,10 @@ flutter:
   generate: true
   assets:
     - assets/anim/
+    - assets/icons/
     - assets/images/
 
 flutter_gen:
   output: lib/assets/
+  integrations:
+    flutter_svg: true
