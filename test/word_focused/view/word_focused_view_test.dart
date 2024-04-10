@@ -130,6 +130,7 @@ void main() {
       'renders WordSuccessDesktopView when the state is '
       'WordFocusedState.success',
       (tester) async {
+        tester.setDisplaySize(Size(1800, 800));
         when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.success);
 
         await tester.pumpApp(widget);

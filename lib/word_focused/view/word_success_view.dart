@@ -26,7 +26,7 @@ class WordSuccessDesktopView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const _SuccessTopBar(),
+          const SuccessTopBar(),
           const SizedBox(height: 32),
           IoPlayerAlias(
             selectedWord.word.answer.toUpperCase(),
@@ -39,7 +39,7 @@ class WordSuccessDesktopView extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 318),
                 child: const Column(
                   children: [
-                    _SuccessStats(),
+                    SuccessStats(),
                     SizedBox(height: 40),
                     _SuccessChallengeProgress(),
                     SizedBox(height: 24),
@@ -91,7 +91,7 @@ class WordSuccessMobileView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const _SuccessTopBar(),
+          const SuccessTopBar(),
           const SizedBox(height: 32),
           Expanded(
             child: SingleChildScrollView(
@@ -104,7 +104,7 @@ class WordSuccessMobileView extends StatelessWidget {
                       style: themeData.io.playerAliasTheme.big,
                     ),
                     const SizedBox(height: 40),
-                    const _SuccessStats(),
+                    const SuccessStats(),
                     const SizedBox(height: 40),
                     const _SuccessChallengeProgress(),
                     const SizedBox(height: 24),
@@ -137,8 +137,9 @@ class WordSuccessMobileView extends StatelessWidget {
   }
 }
 
-class _SuccessTopBar extends StatelessWidget {
-  const _SuccessTopBar();
+class SuccessTopBar extends StatelessWidget {
+  @visibleForTesting
+  const SuccessTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -170,8 +171,9 @@ class _SuccessTopBar extends StatelessWidget {
   }
 }
 
-class _SuccessStats extends StatelessWidget {
-  const _SuccessStats();
+class SuccessStats extends StatelessWidget {
+  @visibleForTesting
+  const SuccessStats({super.key});
 
   @override
   Widget build(BuildContext context) {

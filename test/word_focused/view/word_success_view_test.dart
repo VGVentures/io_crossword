@@ -6,6 +6,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -15,6 +16,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   String get id => 'id';
+
+  @override
+  String get answer => 'answer';
 }
 
 void main() {
@@ -38,6 +42,36 @@ void main() {
 
       expect(find.text(l10n.wordSolved), findsOneWidget);
     });
+
+    testWidgets('renders top bar', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(SuccessTopBar), findsOneWidget);
+    });
+
+    testWidgets('renders $IoPlayerAlias', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(IoPlayerAlias), findsOneWidget);
+    });
+
+    testWidgets('renders success stats', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(SuccessStats), findsOneWidget);
+    });
+
+    testWidgets('renders keep playing button', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(KeepPlayingButton), findsOneWidget);
+    });
+
+    testWidgets('renders claim badge button', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(ClaimBadgeButton), findsOneWidget);
+    });
   });
 
   group('WordSuccessMobileView', () {
@@ -54,5 +88,41 @@ void main() {
 
       expect(find.text(l10n.wordSolved), findsOneWidget);
     });
+
+    testWidgets('renders top bar', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(SuccessTopBar), findsOneWidget);
+    });
+
+    testWidgets('renders $IoPlayerAlias', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(IoPlayerAlias), findsOneWidget);
+    });
+
+    testWidgets('renders success stats', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(SuccessStats), findsOneWidget);
+    });
+
+    testWidgets('renders keep playing button', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(KeepPlayingButton), findsOneWidget);
+    });
+
+    testWidgets('renders claim badge button', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(ClaimBadgeButton), findsOneWidget);
+    });
   });
+
+  group('SuccessTopBar', () {});
+
+  group('KeepPlayingButton', () {});
+
+  group('ClaimBadgeButton', () {});
 }
