@@ -132,7 +132,7 @@ void main() {
       });
     });
 
-    testWidgets('flows and submits new mascot', (tester) async {
+    testWidgets('adds MascotSelected when joined team', (tester) async {
       when(() => teamSelectionCubit.state).thenReturn(2);
 
       final flowController = FlowController<GameIntroStatus>(
@@ -162,6 +162,36 @@ void main() {
 
       verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
           .called(1);
+    });
+
+    testWidgets('flows into enterInitials when joined team', (tester) async {
+      when(() => teamSelectionCubit.state).thenReturn(2);
+
+      final flowController = FlowController<GameIntroStatus>(
+        GameIntroStatus.teamSelection,
+      );
+      addTearDown(flowController.dispose);
+
+      final crosswordBloc = _MockCrosswordBloc();
+
+      await tester.pumpApp(
+        crosswordBloc: crosswordBloc,
+        BlocProvider(
+          create: (_) => teamSelectionCubit,
+          child: FlowBuilder<GameIntroStatus>(
+            controller: flowController,
+            onGeneratePages: (_, __) => [
+              const MaterialPage(child: TeamSelectionView()),
+            ],
+          ),
+        ),
+      );
+
+      final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+      await tester.ensureVisible(submitButtonFinder);
+      await tester.tap(submitButtonFinder);
+      await tester.pumpAndSettle();
+
       expect(flowController.state, equals(GameIntroStatus.enterInitials));
     });
   });
