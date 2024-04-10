@@ -24,7 +24,7 @@ class WordSolvingDesktopView extends StatelessWidget {
       },
       listener: (context, state) {
         final loadedState = state as CrosswordLoaded;
-        if (loadedState.selectedWord?.solvedStatus == SolvedStatus.solved) {
+        if (loadedState.selectedWord?.solvedStatus == WordStatus.solved) {
           context
               .read<WordFocusedBloc>()
               .add(const WordFocusedSuccessRequested());
@@ -83,7 +83,7 @@ class WordSolvingMobileView extends StatelessWidget {
       },
       listener: (context, state) {
         final loadedState = state as CrosswordLoaded;
-        if (loadedState.selectedWord?.solvedStatus == SolvedStatus.solved) {
+        if (loadedState.selectedWord?.solvedStatus == WordStatus.solved) {
           context
               .read<WordFocusedBloc>()
               .add(const WordFocusedSuccessRequested());
