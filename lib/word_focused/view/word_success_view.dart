@@ -196,7 +196,7 @@ class SuccessStats extends StatelessWidget {
         const SizedBox(height: 12),
         _StatsRow(
           title: l10n.rank,
-          icon: IoIcons.icon_right,
+          icon: IoIcons.trophy,
           value: 'value',
         ),
         const SizedBox(height: 12),
