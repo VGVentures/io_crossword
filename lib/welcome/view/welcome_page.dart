@@ -41,9 +41,6 @@ class WelcomeView extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
-        actions: (context) {
-          return const SizedBox();
-        },
       ),
       body: SelectionArea(
         child: SingleChildScrollView(

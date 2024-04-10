@@ -49,6 +49,19 @@ void main() {
     });
 
     group('TeamSelectionView', () {
+      for (final layout in IoLayoutData.values) {
+        testWidgets('displays IoAppBar with $layout', (tester) async {
+          when(() => teamSelectionCubit.state).thenReturn(0);
+
+          await tester.pumpApp(
+            widget,
+            layout: layout,
+          );
+
+          expect(find.byType(IoAppBar), findsOneWidget);
+        });
+      }
+
       testWidgets('displays TabBarView on small screen', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(0);
 

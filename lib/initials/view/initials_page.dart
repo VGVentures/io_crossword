@@ -61,6 +61,9 @@ class _InitialsViewState extends State<InitialsView> {
       listenWhen: (previous, current) => current.initials.isValid,
       listener: _onSuccess,
       child: Scaffold(
+        appBar: IoAppBar(
+          crossword: l10n.crossword,
+        ),
         body: SelectionArea(
           child: SingleChildScrollView(
             child: Align(

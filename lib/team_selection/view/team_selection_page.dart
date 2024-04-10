@@ -28,11 +28,15 @@ class TeamSelectionPage extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class TeamSelectionView extends StatelessWidget {
+  @visibleForTesting
   const TeamSelectionView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     final mascots = [
       Mascot(
         mascot: Mascots.dash,
@@ -58,12 +62,15 @@ class TeamSelectionView extends StatelessWidget {
 
     final layout = IoLayout.of(context);
 
-    switch (layout) {
-      case IoLayoutData.small:
-        return _TeamSelectorSmall(mascots);
-      case IoLayoutData.large:
-        return _TeamSelectorLarge(mascots);
-    }
+    return Scaffold(
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
+      ),
+      body: switch (layout) {
+        IoLayoutData.small => _TeamSelectorSmall(mascots),
+        IoLayoutData.large => _TeamSelectorLarge(mascots),
+      },
+    );
   }
 }
 
