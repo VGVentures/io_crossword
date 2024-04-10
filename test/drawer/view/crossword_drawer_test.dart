@@ -11,7 +11,7 @@ void main() {
     testWidgets('renders correctly', (tester) async {
       await tester.pumpApp(CrosswordDrawer());
 
-      expect(find.byType(CrosswordDrawerView), findsOneWidget);
+      expect(find.byType(Drawer), findsOneWidget);
     });
 
     testWidgets('closes when close button is tapped', (tester) async {
@@ -26,11 +26,11 @@ void main() {
 
       scaffoldKey.currentState!.openEndDrawer();
       await tester.pumpAndSettle();
-      expect(find.byType(CrosswordDrawerView), findsOneWidget);
+      expect(find.byType(Drawer), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
-      expect(find.byType(CrosswordDrawerView), findsNothing);
+      expect(find.byType(Drawer), findsNothing);
     });
   });
 }
