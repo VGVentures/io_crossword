@@ -43,7 +43,7 @@ class _InitialsViewState extends State<InitialsView> {
 
   void _onSuccess(BuildContext context, InitialsState state) {
     context.read<CrosswordBloc>().add(InitialsSelected(state.initials.value));
-    context.flow<GameIntroState>().complete();
+    context.flow<GameIntroStatus>().complete();
   }
 
   @override
