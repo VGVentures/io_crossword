@@ -14,8 +14,10 @@ class MascotUpdated extends GameIntroEvent {
 }
 
 class MascotSubmitted extends GameIntroEvent {
-  const MascotSubmitted();
+  const MascotSubmitted(this.mascot);
+
+  final Mascots mascot;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [mascot];
 }

@@ -23,7 +23,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<MascotSelected>(_onMascotSelected);
-    on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
+    on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
     on<InitialsSelected>(_onInitialsSelected);
     on<AnswerUpdated>(_onAnswerUpdated);
     on<AnswerSubmitted>(_onAnswerSubmitted);
@@ -143,8 +143,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     }
   }
 
-  FutureOr<void> _onBoardLoadingInfoFetched(
-    BoardLoadingInfoFetched event,
+  FutureOr<void> _onBoardLoadingInformationRequested(
+    BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
   ) async {
     try {
@@ -207,7 +207,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         emit(
           loadedState.copyWith(
             selectedWord:
-                selectedWord.copyWith(solvedStatus: SolvedStatus.invalid),
+                selectedWord.copyWith(solvedStatus: WordStatus.invalid),
           ),
         );
         return;
@@ -225,7 +225,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           loadedState.copyWith(
             selectedWord: selectedWord.copyWith(
               solvedStatus:
-                  isValidAnswer ? SolvedStatus.solved : SolvedStatus.invalid,
+                  isValidAnswer ? WordStatus.solved : WordStatus.invalid,
             ),
           ),
         );

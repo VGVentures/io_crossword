@@ -7,6 +7,7 @@ import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
 class GameIntroPage extends StatelessWidget {
@@ -72,7 +73,7 @@ List<Page<void>> onGenerateGameIntroPages(
 ) {
   return switch (state.status) {
     GameIntroStatus.welcome => [WelcomePage.page()],
-    GameIntroStatus.mascotSelection => [MascotSelectionView.page()],
+    GameIntroStatus.mascotSelection => [TeamSelectionPage.page()],
     GameIntroStatus.initialsInput => [InitialsPage.page()],
   };
 }

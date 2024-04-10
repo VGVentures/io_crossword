@@ -125,6 +125,12 @@ void main() {
     });
 
     group('displays', () {
+      testWidgets('a $IoAppBar', (tester) async {
+        await tester.pumpSubject(const InitialsView());
+
+        expect(find.byType(IoAppBar), findsOneWidget);
+      });
+
       testWidgets('a $IoWordInput of length 3', (tester) async {
         await tester.pumpSubject(const InitialsView());
 

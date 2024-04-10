@@ -10,7 +10,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// {@macro io_app_bar}
   const IoAppBar({
     required this.crossword,
-    required this.actions,
+    this.actions,
     this.title,
     this.bottom,
     super.key,
@@ -20,7 +20,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String crossword;
 
   /// Display actions based on the [IoLayoutData] layout.
-  final WidgetBuilder actions;
+  final WidgetBuilder? actions;
 
   /// The title of the app bar.
   ///
@@ -50,6 +50,8 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: title ?? const SizedBox(),
     );
 
+    final actions = this.actions;
+
     final widget = Material(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -69,7 +71,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                         )
                       else
                         titleWidget,
-                      actions(context),
+                      if (actions != null) actions(context),
                     ],
                   ),
                 ),
@@ -82,7 +84,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                         crossword: crossword,
                       ),
                       titleWidget,
-                      actions(context),
+                      if (actions != null) actions(context),
                     ],
                   ),
                 ),
