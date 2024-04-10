@@ -5,6 +5,7 @@ import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordDrawer extends StatelessWidget {
   const CrosswordDrawer({super.key});
@@ -35,7 +36,7 @@ class CrosswordDrawer extends StatelessWidget {
       ),
       DrawerItem(
         title: l10n.exploreAiStudio,
-        svgIcon: Assets.icons.gemini.svg(),
+        icon: IoIcons.gemini,
         onPressed: () {}, // coverage:ignore-line
       ),
       DrawerItem(
