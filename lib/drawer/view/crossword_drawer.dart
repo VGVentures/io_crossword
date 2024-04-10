@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/challenge/bloc/challenge_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordDrawer extends StatelessWidget {
   const CrosswordDrawer({super.key});
@@ -14,6 +17,51 @@ class CrosswordDrawer extends StatelessWidget {
       DrawerItem(
         title: l10n.settings,
         icon: Icons.settings,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.howToPlay,
+        icon: Icons.games,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.submitScore,
+        icon: Icons.sports_score,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.projectDetails,
+        icon: Icons.info,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.exploreAiStudio,
+        icon: IoIcons.gemini,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.googleIO,
+        svgIcon: Assets.icons.io.svg(),
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.developerProfile,
+        icon: IoIcons.google,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.privacyPolicy,
+        icon: Icons.text_snippet,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.termsOfService,
+        icon: Icons.note_alt,
+        onPressed: () {}, // coverage:ignore-line
+      ),
+      DrawerItem(
+        title: l10n.faqs,
+        icon: Icons.chat,
         onPressed: () {}, // coverage:ignore-line
       ),
     ];
@@ -58,11 +106,13 @@ class CrosswordDrawer extends StatelessWidget {
 class DrawerItem {
   DrawerItem({
     required this.title,
-    required this.icon,
     required this.onPressed,
-  });
+    this.icon,
+    this.svgIcon,
+  }) : assert(icon != null || svgIcon != null, 'item must have an icon');
 
   final String title;
-  final IconData icon;
+  final IconData? icon;
+  final SvgPicture? svgIcon;
   final VoidCallback onPressed;
 }
