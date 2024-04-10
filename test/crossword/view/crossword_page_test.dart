@@ -53,19 +53,19 @@ void main() {
       whenListen(
         bloc,
         Stream.fromIterable(const <CrosswordState>[]),
-        initialState: const CrosswordInitial(),
+        initialState: const CrosswordState(),
       );
     });
 
     testWidgets('renders IoAppBar', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordInitial());
+      when(() => bloc.state).thenReturn(const CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
       expect(find.byType(IoAppBar), findsOneWidget);
     });
 
     testWidgets('renders $MuteButton', (tester) async {
-      when(() => bloc.state).thenReturn(CrosswordInitial());
+      when(() => bloc.state).thenReturn(CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
 
@@ -73,30 +73,40 @@ void main() {
     });
 
     testWidgets('renders $DrawerButton', (tester) async {
-      when(() => bloc.state).thenReturn(CrosswordInitial());
+      when(() => bloc.state).thenReturn(CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
 
       expect(find.byType(DrawerButton), findsOneWidget);
     });
 
-    testWidgets('renders loading when is initial', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordInitial());
+    testWidgets(
+        'renders CircularProgressIndicator with ${CrosswordStatus.initial}',
+        (tester) async {
+      when(() => bloc.state).thenReturn(const CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
+
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('renders error when is error', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordError(''));
+    testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
+        (tester) async {
+      when(() => bloc.state).thenReturn(
+        const CrosswordState(
+          status: CrosswordStatus.failure,
+        ),
+      );
 
       await tester.pumpCrosswordView(bloc);
-      expect(find.text('Error loading crossword'), findsOneWidget);
+
+      expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders game when is loaded', (tester) async {
+    testWidgets('renders game with ${CrosswordStatus.success}', (tester) async {
       when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
+        CrosswordState(
+          status: CrosswordStatus.success,
           sectionSize: 40,
           sections: {
             (0, 0): _FakeBoardSection(),
@@ -105,6 +115,7 @@ void main() {
       );
 
       await tester.pumpCrosswordView(bloc);
+
       expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
     });
 
@@ -113,7 +124,8 @@ void main() {
       (tester) async {
         tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
             sections: {
               (0, 0): _FakeBoardSection(),
@@ -132,7 +144,8 @@ void main() {
       (tester) async {
         tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
             sections: {
               (0, 0): _FakeBoardSection(),
@@ -151,7 +164,8 @@ void main() {
       (tester) async {
         tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
             sections: {
               (0, 0): _FakeBoardSection(),
@@ -171,7 +185,8 @@ void main() {
       (tester) async {
         tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
             sections: {
               (0, 0): _FakeBoardSection(),
@@ -186,10 +201,11 @@ void main() {
     );
 
     testWidgets(
-      'displays AboutButton when status is CrosswordLoaded',
+      'displays AboutButton with ${CrosswordStatus.success}',
       (tester) async {
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
           ),
         );
@@ -204,7 +220,8 @@ void main() {
       'can zoom in',
       (tester) async {
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
           ),
         );
@@ -230,7 +247,8 @@ void main() {
       'can zoom out',
       (tester) async {
         when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
           ),
         );
@@ -265,7 +283,7 @@ void main() {
         'displays question_mark_rounded icon',
         (tester) async {
           when(() => bloc.state).thenReturn(
-            CrosswordLoaded(
+            CrosswordState(
               sectionSize: 40,
             ),
           );
@@ -280,7 +298,7 @@ void main() {
         'displays AboutView when button is pressed',
         (tester) async {
           when(() => bloc.state).thenReturn(
-            CrosswordLoaded(
+            CrosswordState(
               sectionSize: 40,
             ),
           );
