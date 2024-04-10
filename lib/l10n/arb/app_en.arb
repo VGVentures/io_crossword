@@ -24,9 +24,18 @@
   "@continueLabel": {
     "description": "Continue label"
   },
-  "chooseTeam": "Choose a team",
-  "@chooseTeam": {
-    "description": "Label displayed in the team selection modal"
+  "chooseYourTeam": "Choose your team",
+  "@chooseYourTeam": {
+    "description": "The title for the team selection page"
+  },
+  "joinTeam": "Join {team} team",
+  "@joinTeam": {
+    "description": "Text for which team you are choosing",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
   },
   "enterInitials": "Enter your initials for the leaderboard",
   "@enterInitials": {

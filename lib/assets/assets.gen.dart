@@ -9,23 +9,61 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAnimGen {
+  const $AssetsAnimGen();
+
+  /// File path: assets/anim/android_celebrating.png
+  AssetGenImage get androidCelebrating =>
+      const AssetGenImage('assets/anim/android_celebrating.png');
+
+  /// File path: assets/anim/android_dangle.png
+  AssetGenImage get androidDangle =>
+      const AssetGenImage('assets/anim/android_dangle.png');
+
+  /// File path: assets/anim/android_idle.png
+  AssetGenImage get androidIdle =>
+      const AssetGenImage('assets/anim/android_idle.png');
+
+  /// File path: assets/anim/android_look_up.png
+  AssetGenImage get androidLookUp =>
+      const AssetGenImage('assets/anim/android_look_up.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [androidCelebrating, androidDangle, androidIdle, androidLookUp];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/android.png
+  AssetGenImage get android => const AssetGenImage('assets/images/android.png');
+
+  /// File path: assets/images/dash.png
+  AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
+
+  /// File path: assets/images/dino.png
+  AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
+
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
+
+  /// File path: assets/images/sparky.png
+  AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
 
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [letters, welcomeBackground];
+  List<AssetGenImage> get values =>
+      [android, dash, dino, letters, sparky, welcomeBackground];
 }
 
 class Assets {
   Assets._();
 
+  static const $AssetsAnimGen anim = $AssetsAnimGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
@@ -87,16 +125,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

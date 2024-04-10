@@ -19,7 +19,7 @@ void main() {
   blocTest<GameIntroBloc, GameIntroState>(
     'emits state with initials input status when MascotSubmitted is added',
     build: GameIntroBloc.new,
-    act: (bloc) => bloc.add(MascotSubmitted()),
+    act: (bloc) => bloc.add(MascotSubmitted(Mascots.dino)),
     expect: () => <GameIntroState>[
       GameIntroState(status: GameIntroStatus.initialsInput),
     ],
