@@ -44,10 +44,10 @@ class WordFocusedDesktopView extends StatelessWidget {
         color: IoCrosswordColors.darkGray,
         child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
           builder: (context, state) {
-            return switch (state) {
-              WordFocusedState.clue => WordClueDesktopView(selectedWord),
-              WordFocusedState.solving => WordSolvingDesktopView(selectedWord),
-              WordFocusedState.success => WordSuccessDesktopView(selectedWord),
+            return switch (state.status) {
+              WordFocusedStatus.clue => WordClueDesktopView(selectedWord),
+              WordFocusedStatus.solving => WordSolvingDesktopView(selectedWord),
+              WordFocusedStatus.success => WordSuccessDesktopView(selectedWord),
             };
           },
         ),
@@ -94,10 +94,12 @@ class WordFocusedMobileView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
           child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
             builder: (context, state) {
-              return switch (state) {
-                WordFocusedState.clue => WordClueMobileView(selectedWord),
-                WordFocusedState.solving => WordSolvingMobileView(selectedWord),
-                WordFocusedState.success => WordSuccessMobileView(selectedWord),
+              return switch (state.status) {
+                WordFocusedStatus.clue => WordClueMobileView(selectedWord),
+                WordFocusedStatus.solving =>
+                  WordSolvingMobileView(selectedWord),
+                WordFocusedStatus.success =>
+                  WordSuccessMobileView(selectedWord),
               };
             },
           ),

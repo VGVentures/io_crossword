@@ -68,6 +68,7 @@ void main() {
           selectedWord: selectedWord,
         ),
       );
+      when(() => wordFocusedBloc.state).thenReturn(WordFocusedState());
     });
 
     testWidgets(
@@ -100,6 +101,37 @@ void main() {
         await tester.tap(submitButton);
 
         verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+      },
+    );
+
+    testWidgets(
+      'tapping the hint button sends SolvingFocusSwitched event',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        final hintButton = find.text(l10n.hint);
+        await tester.tap(hintButton);
+
+        verify(
+          () => wordFocusedBloc.add(const SolvingFocusSwitched()),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'tapping send button when focus is hint sends SolvingFocusSwitched event',
+      (tester) async {
+        when(() => wordFocusedBloc.state).thenReturn(
+          WordFocusedState(focus: WordSolvingFocus.hint),
+        );
+        await tester.pumpApp(widget);
+
+        final sendButton = find.byIcon(Icons.send);
+        await tester.tap(sendButton);
+
+        verify(
+          () => wordFocusedBloc.add(const SolvingFocusSwitched()),
+        ).called(1);
       },
     );
 
@@ -148,7 +180,9 @@ void main() {
         ),
       );
 
-      when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+      when(() => wordFocusedBloc.state).thenReturn(
+        WordFocusedState(status: WordFocusedStatus.solving),
+      );
       when(() => crosswordBloc.state).thenReturn(
         CrosswordLoaded(
           sectionSize: 20,

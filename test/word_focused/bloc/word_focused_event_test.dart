@@ -21,4 +21,13 @@ void main() {
       );
     });
   });
+
+  group('SolvingFocusSwitched', () {
+    test('supports equality', () {
+      expect(
+        SolvingFocusSwitched(),
+        equals(SolvingFocusSwitched()),
+      );
+    });
+  });
 }

@@ -42,23 +42,7 @@ class WordSolvingDesktopView extends StatelessWidget {
           ),
           const Spacer(),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Expanded(
-                child: GeminiHintButton(),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.read<CrosswordBloc>().add(
-                        const AnswerSubmitted(),
-                      ),
-                  child: Text(l10n.submit),
-                ),
-              ),
-            ],
-          ),
+          const BottomPanel(),
         ],
       ),
     );
@@ -106,25 +90,45 @@ class WordSolvingMobileView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Expanded(
-                child: GeminiHintButton(),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.read<CrosswordBloc>().add(
-                        const AnswerSubmitted(),
-                      ),
-                  child: Text(l10n.submit),
-                ),
-              ),
-            ],
-          ),
+          const BottomPanel(),
         ],
       ),
+    );
+  }
+}
+
+class BottomPanel extends StatelessWidget {
+  const BottomPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return BlocBuilder<WordFocusedBloc, WordFocusedState>(
+      buildWhen: (previous, current) => previous.focus != current.focus,
+      builder: (context, state) {
+        return switch (state.focus) {
+          WordSolvingFocus.word => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  flex: 6,
+                  child: GeminiHintButton(),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 10,
+                  child: OutlinedButton(
+                    onPressed: () => context.read<CrosswordBloc>().add(
+                          const AnswerSubmitted(),
+                        ),
+                    child: Text(l10n.submit),
+                  ),
+                ),
+              ],
+            ),
+          WordSolvingFocus.hint => GeminiTextField(),
+        };
+      },
     );
   }
 }

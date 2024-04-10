@@ -98,9 +98,9 @@ void main() {
     });
 
     testWidgets(
-      'renders WordClueDesktopView when the state is WordFocusedState.clue',
+      'renders WordClueDesktopView when the status is WordFocusedStatus.clue',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.clue);
+        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState());
 
         await tester.pumpApp(widget);
 
@@ -110,7 +110,7 @@ void main() {
 
     testWidgets(
       'renders WordSolvingDesktopView when the state is '
-      'WordFocusedState.solving',
+      'WordFocusedStatus.solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordLoaded(
@@ -118,7 +118,9 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+        when(() => wordFocusedBloc.state).thenReturn(
+          WordFocusedState(status: WordFocusedStatus.solving),
+        );
 
         await tester.pumpApp(widget);
 
@@ -128,9 +130,11 @@ void main() {
 
     testWidgets(
       'renders WordSuccessDesktopView when the state is '
-      'WordFocusedState.success',
+      'WordFocusedStatus.success',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.success);
+        when(() => wordFocusedBloc.state).thenReturn(
+          WordFocusedState(status: WordFocusedStatus.success),
+        );
 
         await tester.pumpApp(widget);
 
@@ -209,7 +213,7 @@ void main() {
     testWidgets(
       'renders WordClueMobileView when the state is WordFocusedState.clue',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.clue);
+        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState());
 
         await tester.pumpApp(widget);
 
@@ -219,7 +223,7 @@ void main() {
 
     testWidgets(
       'renders WordSolvingMobileView when the state is '
-      'WordFocusedState.solving',
+      'WordFocusedStatus.solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordLoaded(
@@ -227,7 +231,9 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+        when(() => wordFocusedBloc.state).thenReturn(
+          WordFocusedState(status: WordFocusedStatus.solving),
+        );
 
         await tester.pumpApp(widget);
 
@@ -237,9 +243,11 @@ void main() {
 
     testWidgets(
       'renders WordSuccessMobileView when the state is '
-      'WordFocusedState.success',
+      'WordFocusedStatus.success',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.success);
+        when(() => wordFocusedBloc.state).thenReturn(
+          WordFocusedState(status: WordFocusedStatus.success),
+        );
 
         await tester.pumpApp(widget);
 

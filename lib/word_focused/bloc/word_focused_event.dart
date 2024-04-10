@@ -17,3 +17,10 @@ class WordFocusedSuccessRequested extends WordFocusedEvent {
   @override
   List<Object> get props => [];
 }
+
+class SolvingFocusSwitched extends WordFocusedEvent {
+  const SolvingFocusSwitched();
+
+  @override
+  List<Object> get props => [];
+}

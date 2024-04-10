@@ -6,25 +6,50 @@ import 'package:io_crossword/word_focused/word_focused.dart';
 
 void main() {
   group('WordFocusedBloc', () {
-    test('initial state is WordFocusedState.clue', () {
+    test('initial state has WordFocusedStatus.clue', () {
       final bloc = WordFocusedBloc();
 
-      expect(bloc.state, equals(WordFocusedState.clue));
+      expect(bloc.state.status, equals(WordFocusedStatus.clue));
     });
 
     blocTest<WordFocusedBloc, WordFocusedState>(
-      'emits WordFocusedState.solving when WordFocusedSolveRequested is added',
+      'emits state with solving status when WordFocusedSolveRequested is added',
       build: WordFocusedBloc.new,
       act: (bloc) => bloc.add(WordFocusedSolveRequested()),
-      expect: () => const <WordFocusedState>[WordFocusedState.solving],
+      expect: () => const <WordFocusedState>[
+        WordFocusedState(status: WordFocusedStatus.solving),
+      ],
     );
 
     blocTest<WordFocusedBloc, WordFocusedState>(
-      'emits WordFocusedState.success when WordFocusedSuccessRequested '
+      'emits state with success status when WordFocusedSuccessRequested '
       'is added',
       build: WordFocusedBloc.new,
       act: (bloc) => bloc.add(WordFocusedSuccessRequested()),
-      expect: () => const <WordFocusedState>[WordFocusedState.success],
+      expect: () => const <WordFocusedState>[
+        WordFocusedState(status: WordFocusedStatus.success),
+      ],
     );
+
+    group('SolvingFocusSwitched', () {
+      blocTest<WordFocusedBloc, WordFocusedState>(
+        'emits state with hint focus when current focus is word',
+        build: WordFocusedBloc.new,
+        act: (bloc) => bloc.add(SolvingFocusSwitched()),
+        expect: () => const <WordFocusedState>[
+          WordFocusedState(focus: WordSolvingFocus.hint),
+        ],
+      );
+
+      blocTest<WordFocusedBloc, WordFocusedState>(
+        'emits state with word focus when current focus is hint',
+        build: WordFocusedBloc.new,
+        seed: () => WordFocusedState(focus: WordSolvingFocus.hint),
+        act: (bloc) => bloc.add(SolvingFocusSwitched()),
+        expect: () => const <WordFocusedState>[
+          WordFocusedState(),
+        ],
+      );
+    });
   });
 }

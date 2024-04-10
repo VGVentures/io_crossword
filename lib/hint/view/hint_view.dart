@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/word_focused/bloc/word_focused_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class GeminiTextField extends StatelessWidget {
@@ -28,12 +30,18 @@ class GeminiTextField extends StatelessWidget {
               ),
             ),
           ),
-          suffixIcon: const Padding(
-            padding: EdgeInsets.only(right: 8),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.only(right: 8),
             child: GeminiGradient(
-              // TODO(Ayad): Add IconButton to ask for a hint
-              // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6372181970
-              child: Icon(Icons.send),
+              child: IconButton(
+                onPressed: () {
+                  // TODO(Any): send question to gemini
+                  context.read<WordFocusedBloc>().add(
+                        const SolvingFocusSwitched(),
+                      );
+                },
+                icon: const Icon(Icons.send),
+              ),
             ),
           ),
         ),
@@ -51,7 +59,9 @@ class GeminiHintButton extends StatelessWidget {
 
     return OutlinedButton.icon(
       style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
-      onPressed: null,
+      onPressed: () => context.read<WordFocusedBloc>().add(
+            const SolvingFocusSwitched(),
+          ),
       icon: const GeminiGradient(
         child: Icon(
           IoIcons.gemini,
