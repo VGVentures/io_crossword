@@ -3,13 +3,13 @@
 ///  FlutterGen
 /// *****************************************************
 
-import 'package:flutter/services.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 
 class $AssetsAnimGen {
   const $AssetsAnimGen();
@@ -51,25 +51,60 @@ class $AssetsImagesGen {
   /// File path: assets/images/android.png
   AssetGenImage get android => const AssetGenImage('assets/images/android.png');
 
+  /// File path: assets/images/android_platform.png
+  AssetGenImage get androidPlatform =>
+      const AssetGenImage('assets/images/android_platform.png');
+
   /// File path: assets/images/dash.png
   AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
+
+  /// File path: assets/images/dash_platform.png
+  AssetGenImage get dashPlatform =>
+      const AssetGenImage('assets/images/dash_platform.png');
 
   /// File path: assets/images/dino.png
   AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
 
+  /// File path: assets/images/dino_platform.png
+  AssetGenImage get dinoPlatform =>
+      const AssetGenImage('assets/images/dino_platform.png');
+
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
 
+  /// File path: assets/images/platform.png
+  AssetGenImage get platform =>
+      const AssetGenImage('assets/images/platform.png');
+
   /// File path: assets/images/sparky.png
   AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
+
+  /// File path: assets/images/sparky_platform.png
+  AssetGenImage get sparkyPlatform =>
+      const AssetGenImage('assets/images/sparky_platform.png');
+
+  /// File path: assets/images/tile.png
+  AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
 
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [android, dash, dino, letters, sparky, welcomeBackground];
+  List<AssetGenImage> get values => [
+        android,
+        androidPlatform,
+        dash,
+        dashPlatform,
+        dino,
+        dinoPlatform,
+        letters,
+        platform,
+        sparky,
+        sparkyPlatform,
+        tile,
+        welcomeBackground
+      ];
 }
 
 class Assets {
@@ -138,16 +173,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 
@@ -174,9 +200,9 @@ class SvgGenImage {
     bool excludeFromSemantics = false,
     SvgTheme theme = const SvgTheme(),
     ColorFilter? colorFilter,
-    Clip clipBehavior = Clip.hardEdge,
     @deprecated Color? color,
     @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated Clip? clipBehavior,
     @deprecated bool cacheColorFilter = false,
   }) {
     return SvgPicture.asset(

@@ -88,24 +88,95 @@ class _TeamSelectorLarge extends StatelessWidget {
       builder: (context, state) {
         return Stack(
           children: [
-            Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: mascots
-                    .map(
-                      (mascot) => ColoredBox(
-                        color: state == mascots.indexOf(mascot)
-                            ? Colors.blue
-                            : Colors.transparent,
-                        // TODO(marwfair): Update to use sprite animations.
-                        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6423160827
-                        child: Image.asset(
-                          mascot.image,
-                          width: 100,
-                        ),
+            Positioned.fill(
+              child: Image.asset(
+                Assets.images.tile.path,
+                repeat: ImageRepeat.repeat,
+              ),
+            ),
+            Align(
+              child: SizedBox(
+                width: 209 * 5,
+                height: 400,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 250,
+                      left: 0,
+                      child: state == Mascots.dash.index
+                          ? Assets.images.dashPlatform.image()
+                          : Assets.images.platform.image(),
+                    ),
+                    Positioned(
+                      top: 132,
+                      left: 209,
+                      child: state == Mascots.sparky.index
+                          ? Assets.images.sparkyPlatform.image()
+                          : Assets.images.platform.image(),
+                    ),
+                    Positioned(
+                      top: 132,
+                      left: 209 * 3,
+                      child: state == Mascots.android.index
+                          ? Assets.images.androidPlatform.image()
+                          : Assets.images.platform.image(),
+                    ),
+                    Positioned(
+                      top: 250,
+                      left: 209 * 4,
+                      child: state == Mascots.dino.index
+                          ? Assets.images.dinoPlatform.image()
+                          : Assets.images.platform.image(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              child: SizedBox(
+                // Width:
+                // 5 square wide (209 * 5)
+                // Center moscots by subtacting a half a square.
+                width: (209 * 5) - (209 * .5),
+                height: 400,
+                child: Stack(
+                  children: [
+                    ...mascots.map(
+                      (mascot) => Positioned(
+                        top: mascots.indexOf(mascot) == 1 ||
+                                mascots.indexOf(mascot) == 2
+                            ? 0
+                            : 125,
+                        left: mascots.indexOf(mascot) == 2 ||
+                                mascots.indexOf(mascot) == 3
+                            ? ((mascots.indexOf(mascot).toDouble()) * 209) + 209
+                            : (mascots.indexOf(mascot).toDouble()) * 209,
+                        child: mascot.mascot == Mascots.android
+                            ? SizedBox(
+                                width: 100,
+                                height: 200,
+                                child: SpriteAnimationWidget.asset(
+                                  images: Images(prefix: ''),
+                                  anchor: Anchor.bottomCenter,
+                                  path: Assets.anim.androidIdle.path,
+                                  data: SpriteAnimationData.sequenced(
+                                    amount: 28,
+                                    stepTime: 0.042,
+                                    textureSize: Vector2(250, 360),
+                                    amountPerRow: 7,
+                                  ),
+                                ),
+                              )
+                            : Image.asset(
+                                mascot.image,
+                                alignment: Alignment.bottomCenter,
+                                width: 100,
+                                height: 200,
+                              ),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  ],
+                ),
               ),
             ),
             Align(
@@ -186,7 +257,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                             data: SpriteAnimationData.sequenced(
                               amount: 28,
                               stepTime: 0.042,
-                              textureSize: Vector2(597, 597),
+                              textureSize: Vector2(250, 360),
                               amountPerRow: 7,
                             ),
                           )
