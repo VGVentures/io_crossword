@@ -46,7 +46,7 @@ class CrosswordDrawer extends StatelessWidget {
       ),
       DrawerItem(
         title: l10n.developerProfile,
-        svgIcon: Assets.icons.google.svg(),
+        icon: IoIcons.google,
         onPressed: () {}, // coverage:ignore-line
       ),
       DrawerItem(
