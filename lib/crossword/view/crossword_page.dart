@@ -22,7 +22,7 @@ class CrosswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CrosswordBloc>()
       ..add(const BoardSectionRequested((0, 0)))
-      ..add(const BoardLoadingInfoFetched());
+      ..add(const BoardLoadingInformationRequested());
 
     return const CrosswordView();
   }

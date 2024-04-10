@@ -729,7 +729,7 @@ void main() {
             (_) => Stream.value(originSection),
           );
         },
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
@@ -760,7 +760,7 @@ void main() {
               .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
@@ -782,7 +782,7 @@ void main() {
           when(boardInfoRepository.getZoomLimit).thenThrow(Exception('error'));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordError('Exception: error'),
         ],
@@ -802,7 +802,7 @@ void main() {
               .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordError('Exception: error'),
         ],
