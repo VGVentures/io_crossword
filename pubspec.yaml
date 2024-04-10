@@ -22,7 +22,7 @@ dependencies:
   equatable: ^2.0.5
   firebase_app_check: ^0.2.2
   firebase_auth: ^4.19.0
-  firebase_core: ^2.28.0
+  firebase_core: ^2.29.0
   flame: ^1.16.0
   flame_audio: ^2.10.1
   flame_behaviors: ^1.0.0
