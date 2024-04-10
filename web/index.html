@@ -166,10 +166,6 @@
       }
     </style>
 
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      var serviceWorkerVersion = null;
-    </script>
   </head>
   <body class="loading-mode">
     <img id="splash_logo" src = "logo-placeholder.svg" alt="I/O Crossword logo"/>
@@ -191,6 +187,7 @@
       <button id="confirm-cookies">Ok, got it</button>
     </div>
     <script>
+      {{flutter_js}}
       (function () {
         const cookieBar = document.querySelector("#cookie-bar");
         const cookieBarButton = document.querySelector("#confirm-cookies");
@@ -271,16 +268,14 @@
               await injectScript(additionalScripts[i]);
             }
 
-            await injectScript("flutter.js");
-
-            // Download main.dart.js
-            _flutter.loader.loadEntrypoint({
-              serviceWorker: {
-                serviceWorkerVersion: serviceWorkerVersion,
-              },
-              onEntrypointLoaded: function (engineInitializer) {
+        
+        {{flutter_build_config}}
+        const searchParams = new URLSearchParams(window.location.search);
+        const forceCanvaskit = searchParams.get('force_canvaskit') === 'true';
+        const config = forceCanvaskit ? {'renderer': 'canvaskit'} : {};
+        _flutter.loader.load({config, onEntrypointLoaded: function (engineInitializer) {
                 engineInitializer
-                  .initializeEngine()
+                  .initializeEngine(config)
                   .then(async function (appRunner) {
                     await hasUserAcceptedCookies;
                     window.addEventListener(
@@ -295,8 +290,34 @@
 
                     appRunner.runApp();
                 });
-              },
-            });
+              }}).then(function() {
+          window.document.getElementById('splash')?.remove();
+        });
+
+            // // Download main.dart.js
+            // _flutter.loader.loadEntrypoint({
+            //   serviceWorker: {
+            //     serviceWorkerVersion: serviceWorkerVersion,
+            //   },
+            //   onEntrypointLoaded: function (engineInitializer) {
+            //     engineInitializer
+            //       .initializeEngine()
+            //       .then(async function (appRunner) {
+            //         await hasUserAcceptedCookies;
+            //         window.addEventListener(
+            //           "flutter-first-frame",
+            //           function () {
+            //             circularLoader.remove();
+            //             splashLogo.remove();
+            //             splashCopy.remove();
+            //             document.body.classList.remove("loading-mode");
+            //           }
+            //         );
+
+            //         appRunner.runApp();
+            //     });
+            //   },
+            // });
           }
 
           startBatch();

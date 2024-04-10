@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
 import 'dart:async';
-import 'dart:js' as js;
+import 'dart:js_interop' as js;
+import 'dart:js_interop_unsafe';
 
 import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -17,8 +18,10 @@ import 'package:io_crossword/firebase_options_development.dart';
 
 void main() async {
   if (kDebugMode) {
-    js.context['FIREBASE_APPCHECK_DEBUG_TOKEN'] =
-        const String.fromEnvironment('APPCHECK_DEBUG_TOKEN');
+    js.globalContext.setProperty(
+      'FIREBASE_APPCHECK_DEBUG_TOKEN'.toJS,
+      const String.fromEnvironment('APPCHECK_DEBUG_TOKEN').toJS,
+    );
   }
 
   WidgetsFlutterBinding.ensureInitialized();
