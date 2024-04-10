@@ -132,7 +132,7 @@ void main() {
       });
     });
 
-    testWidgets('adds MascotSelected when joined team', (tester) async {
+    testWidgets(' joining a team adds MascotSelected after', (tester) async {
       when(() => teamSelectionCubit.state).thenReturn(2);
 
       final flowController = FlowController<GameIntroStatus>(
@@ -164,35 +164,38 @@ void main() {
           .called(1);
     });
 
-    testWidgets('flows into enterInitials when joined team', (tester) async {
-      when(() => teamSelectionCubit.state).thenReturn(2);
+    testWidgets(
+      'joining a team flows into enterInitials after',
+      (tester) async {
+        when(() => teamSelectionCubit.state).thenReturn(2);
 
-      final flowController = FlowController<GameIntroStatus>(
-        GameIntroStatus.teamSelection,
-      );
-      addTearDown(flowController.dispose);
+        final flowController = FlowController<GameIntroStatus>(
+          GameIntroStatus.teamSelection,
+        );
+        addTearDown(flowController.dispose);
 
-      final crosswordBloc = _MockCrosswordBloc();
+        final crosswordBloc = _MockCrosswordBloc();
 
-      await tester.pumpApp(
-        crosswordBloc: crosswordBloc,
-        BlocProvider(
-          create: (_) => teamSelectionCubit,
-          child: FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: TeamSelectionView()),
-            ],
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => teamSelectionCubit,
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: TeamSelectionView()),
+              ],
+            ),
           ),
-        ),
-      );
+        );
 
-      final submitButtonFinder = find.text(l10n.joinTeam('Android'));
-      await tester.ensureVisible(submitButtonFinder);
-      await tester.tap(submitButtonFinder);
-      await tester.pumpAndSettle();
+        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+        await tester.ensureVisible(submitButtonFinder);
+        await tester.tap(submitButtonFinder);
+        await tester.pumpAndSettle();
 
-      expect(flowController.state, equals(GameIntroStatus.enterInitials));
-    });
+        expect(flowController.state, equals(GameIntroStatus.enterInitials));
+      },
+    );
   });
 }
