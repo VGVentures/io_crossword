@@ -26,7 +26,7 @@ void main() {
 
   group('$WelcomeView', () {
     testWidgets(
-      'updates flow when pressed',
+      'updates flow when "Get Started" button is pressed',
       (tester) async {
         final flowController = FlowController(const GameIntroState());
         addTearDown(flowController.dispose);
