@@ -1,14 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import '../../helpers/helpers.dart';
+
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
+class _MockUrlLauncherPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements UrlLauncherPlatform {}
+
+class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -120,9 +134,93 @@ void main() {
     });
   });
 
-  group('SuccessTopBar', () {});
+  group('SuccessTopBar', () {
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
 
-  group('KeepPlayingButton', () {});
+    setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
+      widget = BlocProvider.value(
+        value: crosswordBloc,
+        child: SuccessTopBar(),
+      );
+    });
 
-  group('ClaimBadgeButton', () {});
+    testWidgets(
+      'adds WordUnselected event when tapping the close button',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.byIcon(Icons.cancel));
+
+        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+      },
+    );
+  });
+
+  group('KeepPlayingButton', () {
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
+
+    setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
+      widget = BlocProvider.value(
+        value: crosswordBloc,
+        child: KeepPlayingButton(),
+      );
+    });
+
+    testWidgets(
+      'adds WordUnselected event when tapping the keep playing button',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.byIcon(Icons.gamepad));
+
+        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+      },
+    );
+  });
+
+  group('ClaimBadgeButton', () {
+    late UrlLauncherPlatform urlLauncher;
+    late CrosswordBloc crosswordBloc;
+    late Widget widget;
+
+    setUpAll(() {
+      registerFallbackValue(_FakeLaunchOptions());
+    });
+
+    setUp(() {
+      crosswordBloc = _MockCrosswordBloc();
+      widget = BlocProvider.value(
+        value: crosswordBloc,
+        child: ClaimBadgeButton(),
+      );
+
+      urlLauncher = _MockUrlLauncherPlatform();
+
+      UrlLauncherPlatform.instance = urlLauncher;
+
+      when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => true);
+      when(() => urlLauncher.launchUrl(any(), any()))
+          .thenAnswer((_) async => true);
+    });
+
+    testWidgets(
+      'launches developer profile url when tapping the claim badge button',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.byIcon(IoIcons.google));
+
+        verify(
+          () => urlLauncher.launchUrl(
+            'https://io.google/2024',
+            any(),
+          ),
+        );
+      },
+    );
+  });
 }
