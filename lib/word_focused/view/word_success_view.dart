@@ -235,6 +235,8 @@ class _StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -248,6 +250,7 @@ class _StatsRow extends StatelessWidget {
             Icon(
               icon,
               size: 18,
+              color: primaryColor,
             ),
             const SizedBox(width: 8),
             Text(
