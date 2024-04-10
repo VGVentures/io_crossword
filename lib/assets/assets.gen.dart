@@ -3,13 +3,13 @@
 ///  FlutterGen
 /// *****************************************************
 
+import 'package:flutter/services.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/services.dart';
 
 class $AssetsAnimGen {
   const $AssetsAnimGen();
@@ -38,17 +38,11 @@ class $AssetsAnimGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/gemini.svg
-  SvgGenImage get gemini => const SvgGenImage('assets/icons/gemini.svg');
-
-  /// File path: assets/icons/google.svg
-  SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
-
   /// File path: assets/icons/io.svg
   SvgGenImage get io => const SvgGenImage('assets/icons/io.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [gemini, google, io];
+  List<SvgGenImage> get values => [io];
 }
 
 class $AssetsImagesGen {
