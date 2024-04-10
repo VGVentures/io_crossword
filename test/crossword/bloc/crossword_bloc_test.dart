@@ -729,7 +729,7 @@ void main() {
             (_) => Stream.value(originSection),
           );
         },
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
@@ -760,7 +760,7 @@ void main() {
               .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordLoaded(
             sectionSize: 20,
@@ -782,7 +782,7 @@ void main() {
           when(boardInfoRepository.getZoomLimit).thenThrow(Exception('error'));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordError('Exception: error'),
         ],
@@ -802,7 +802,7 @@ void main() {
               .thenAnswer((_) => Future.value(0.8));
         },
         seed: () => CrosswordLoaded(sectionSize: sectionSize, sections: {}),
-        act: (bloc) => bloc.add(BoardLoadingInfoFetched()),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
         expect: () => <CrosswordState>[
           CrosswordError('Exception: error'),
         ],
@@ -909,7 +909,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.solved,
+              solvedStatus: WordStatus.solved,
             ),
             sections: {
               (0, 0): section,
@@ -946,7 +946,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.invalid,
+              solvedStatus: WordStatus.invalid,
             ),
             sections: {
               (0, 0): section,
@@ -993,7 +993,7 @@ void main() {
             selectedWord: WordSelection(
               section: (0, 0),
               word: words.first,
-              solvedStatus: SolvedStatus.invalid,
+              solvedStatus: WordStatus.invalid,
             ),
             sections: {
               (0, 0): section,
