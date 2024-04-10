@@ -48,13 +48,13 @@ void main() {
         );
         final crosswordBloc = _MockCrosswordBloc();
 
-        final flowController = FlowController(const GameIntroState());
+        final flowController = FlowController(GameIntroStatus.enterInitials);
         addTearDown(flowController.dispose);
 
         await tester.pumpSubject(
           crosswordBloc: crosswordBloc,
           initialsBloc: initialsBloc,
-          FlowBuilder<GameIntroState>(
+          FlowBuilder<GameIntroStatus>(
             controller: flowController,
             onGeneratePages: (_, __) => [
               const MaterialPage(child: InitialsView()),

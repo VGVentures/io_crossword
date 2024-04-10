@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -294,7 +294,7 @@ class _SubmitButton extends StatelessWidget {
 
     return OutlinedButton(
       onPressed: () {
-        context.read<GameIntroBloc>().add(MascotSubmitted(mascot.mascot));
+        context.read<CrosswordBloc>().add(MascotSelected(mascot.mascot));
       },
       child: Text(
         l10n.joinTeam(mascot.name),
