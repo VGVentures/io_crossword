@@ -173,6 +173,18 @@
   "@submitScore": {
     "description": "Submit Score label."
   },
+  "exploreAiStudio": "Explore in AI Studio",
+  "@exploreAiStudio": {
+    "description": "Explore in AI Studio label."
+  },
+  "googleIO": "Google I/O",
+  "@googleIO": {
+    "description": "Google I/O label."
+  },
+  "developerProfile": "Developer Profile",
+  "@developerProfile": {
+    "description": "Developer Profile label."
+  },
   "findNewWord": "Find a new word",
   "@findNewWord": {
     "description": "Find new word label"
