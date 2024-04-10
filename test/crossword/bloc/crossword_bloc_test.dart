@@ -83,7 +83,27 @@ void main() {
 
     group('BoardSectionRequested', () {
       blocTest<CrosswordBloc, CrosswordState>(
-        'adds first sections when BoardSectionRequested is '
+        'emits [failure] when watchSectionFromPosition returns error',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          crosswordResource: crosswordResource,
+        ),
+        setUp: () {
+          when(
+            () => crosswordRepository.watchSectionFromPosition(1, 1),
+          ).thenAnswer((_) => Stream.error(Exception()));
+        },
+        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.failure,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [success] and adds first sections when BoardSectionRequested is '
         'called for the first time',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
@@ -108,7 +128,8 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'adds new sections when BoardSectionRequested is added',
+        'emits [success] and adds new sections '
+        'when BoardSectionRequested is added',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -119,8 +140,11 @@ void main() {
             () => crosswordRepository.watchSectionFromPosition(1, 1),
           ).thenAnswer((_) => Stream.value(section));
         },
-        seed: () => const CrosswordState(
+        seed: () => CrosswordState(
           sectionSize: sectionSize,
+          sections: {
+            (0, 1): section,
+          },
         ),
         act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
         expect: () => <CrosswordState>[
@@ -128,6 +152,7 @@ void main() {
             status: CrosswordStatus.success,
             sectionSize: sectionSize,
             sections: {
+              (0, 1): section,
               (1, 1): section,
             },
           ),
