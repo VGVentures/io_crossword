@@ -145,7 +145,7 @@ void main() {
             CrosswordLoaded(
               sectionSize: 20,
               selectedWord: selectedWord.copyWith(
-                solvedStatus: SolvedStatus.solved,
+                solvedStatus: WordStatus.solved,
               ),
             ),
           ),
@@ -226,7 +226,7 @@ void main() {
             CrosswordLoaded(
               sectionSize: 20,
               selectedWord: selectedWord.copyWith(
-                solvedStatus: SolvedStatus.solved,
+                solvedStatus: WordStatus.solved,
               ),
             ),
           ),

@@ -11,7 +11,7 @@ class CrosswordInitial extends CrosswordState {
   List<Object> get props => [];
 }
 
-enum SolvedStatus {
+enum WordStatus {
   solved,
   pending,
   invalid,
@@ -21,17 +21,17 @@ class WordSelection extends Equatable {
   WordSelection({
     required this.section,
     required this.word,
-    SolvedStatus? solvedStatus,
+    WordStatus? solvedStatus,
   }) : solvedStatus = solvedStatus ??
             (word.solvedTimestamp != null
-                ? SolvedStatus.solved
-                : SolvedStatus.pending);
+                ? WordStatus.solved
+                : WordStatus.pending);
 
   final (int, int) section;
   final Word word;
-  final SolvedStatus solvedStatus;
+  final WordStatus solvedStatus;
 
-  WordSelection copyWith({SolvedStatus? solvedStatus}) {
+  WordSelection copyWith({WordStatus? solvedStatus}) {
     return WordSelection(
       section: section,
       word: word,

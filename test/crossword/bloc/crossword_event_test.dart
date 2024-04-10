@@ -85,13 +85,16 @@ void main() {
 
     group('BoardLoadingInfoFetched', () {
       test('can be instantiated', () {
-        expect(BoardLoadingInfoFetched(), isA<BoardLoadingInfoFetched>());
+        expect(
+          BoardLoadingInformationRequested(),
+          isA<BoardLoadingInformationRequested>(),
+        );
       });
 
       test('supports value comparisons', () {
         expect(
-          BoardLoadingInfoFetched(),
-          equals(BoardLoadingInfoFetched()),
+          BoardLoadingInformationRequested(),
+          equals(BoardLoadingInformationRequested()),
         );
       });
     });
