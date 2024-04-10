@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/word_focused/bloc/word_focused_bloc.dart';
+import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class GeminiTextField extends StatelessWidget {
