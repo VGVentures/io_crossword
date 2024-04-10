@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/about/link/about_links.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -57,20 +59,12 @@ class WordSuccessDesktopView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          Row(
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              OutlinedButton.icon(
-                style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
-                onPressed: () {},
-                icon: const Icon(Icons.person),
-                label: Text(l10n.claimBadge),
-              ),
-              const SizedBox(width: 16),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.play_arrow),
-                label: Text(l10n.keepPlaying),
-              ),
+              ClaimBadgeButton(),
+              SizedBox(width: 16),
+              KeepPlayingButton(),
             ],
           ),
         ],
@@ -99,49 +93,43 @@ class WordSuccessMobileView extends StatelessWidget {
         children: [
           const _SuccessTopBar(),
           const SizedBox(height: 32),
-          IoPlayerAlias(
-            selectedWord.word.answer.toUpperCase(),
-            style: themeData.io.playerAliasTheme.big,
-          ),
-          const SizedBox(height: 40),
-          const Expanded(
+          Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _SuccessStats(),
-                  SizedBox(height: 40),
-                  _SuccessChallengeProgress(),
-                  SizedBox(height: 24),
-                ],
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 342),
+                child: Column(
+                  children: [
+                    IoPlayerAlias(
+                      selectedWord.word.answer.toUpperCase(),
+                      style: themeData.io.playerAliasTheme.big,
+                    ),
+                    const SizedBox(height: 40),
+                    const _SuccessStats(),
+                    const SizedBox(height: 40),
+                    const _SuccessChallengeProgress(),
+                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
+                    const KeepPlayingButton(),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.or,
+                      style: IoCrosswordTextStyles.labelMD
+                          .copyWith(color: IoCrosswordColors.softGray),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.claimBadgeDescription,
+                      style: IoCrosswordTextStyles.labelMD
+                          .copyWith(color: IoCrosswordColors.softGray),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    const ClaimBadgeButton(),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.play_arrow),
-            label: Text(l10n.keepPlaying),
-          ),
-          const SizedBox(width: 16),
-          Text(
-            'or',
-            style: IoCrosswordTextStyles.labelMD
-                .copyWith(color: IoCrosswordColors.softGray),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.claimBadgeDescription,
-            style: IoCrosswordTextStyles.labelMD
-                .copyWith(color: IoCrosswordColors.softGray),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton.icon(
-            style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
-            onPressed: () {},
-            icon: const Icon(Icons.person),
-            label: Text(l10n.claimBadge),
           ),
         ],
       ),
@@ -189,7 +177,7 @@ class _SuccessStats extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    // TODO(any): update icons and real values
+    // TODO(any): update to real values
     return Column(
       children: [
         _StatsRow(
@@ -277,6 +265,48 @@ class _SuccessChallengeProgress extends StatelessWidget {
           totalWords: words.$2,
         );
       },
+    );
+  }
+}
+
+class KeepPlayingButton extends StatelessWidget {
+  @visibleForTesting
+  const KeepPlayingButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return OutlinedButton.icon(
+      onPressed: () {
+        context.read<CrosswordBloc>().add(const WordUnselected());
+      },
+      icon: const Icon(
+        Icons.gamepad,
+        size: 20,
+      ),
+      label: Text(l10n.keepPlaying),
+    );
+  }
+}
+
+class ClaimBadgeButton extends StatelessWidget {
+  @visibleForTesting
+  const ClaimBadgeButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return OutlinedButton.icon(
+      style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
+      onPressed: () {
+        context.launchUrl(AboutLinks.claimBadge);
+      },
+      icon: const Icon(
+        IoIcons.google,
+        size: 20,
+      ),
+      label: Text(l10n.claimBadge),
     );
   }
 }
