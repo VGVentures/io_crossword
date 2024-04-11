@@ -49,7 +49,7 @@ class CrosswordView extends StatelessWidget {
             children: [
               const MuteButton(),
               const SizedBox(width: 7),
-              DrawerButton(
+              EndDrawerButton(
                 onPressed: () => Scaffold.of(context).openEndDrawer(),
               ),
             ],

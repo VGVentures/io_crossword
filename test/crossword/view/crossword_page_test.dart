@@ -71,21 +71,21 @@ void main() {
       expect(find.byType(MuteButton), findsOneWidget);
     });
 
-    testWidgets('renders $DrawerButton', (tester) async {
+    testWidgets('renders $EndDrawerButton', (tester) async {
       when(() => bloc.state).thenReturn(CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
 
-      expect(find.byType(DrawerButton), findsOneWidget);
+      expect(find.byType(EndDrawerButton), findsOneWidget);
     });
 
-    testWidgets('opens $CrosswordDrawer when $DrawerButton is tapped',
+    testWidgets('opens $CrosswordDrawer when $EndDrawerButton is tapped',
         (tester) async {
       when(() => bloc.state).thenReturn(CrosswordState());
 
       await tester.pumpCrosswordView(bloc);
 
-      await tester.tap(find.byType(DrawerButton));
+      await tester.tap(find.byType(EndDrawerButton));
 
       await tester.pump();
 
