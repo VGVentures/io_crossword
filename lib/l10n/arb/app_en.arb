@@ -189,6 +189,30 @@
   "@findNewWord": {
     "description": "Find new word label"
   },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
+  },
+  "totalScore": "Total score",
+  "@totalScore": {
+    "description": "Total score label"
+  },
+  "claimBadge": "Claim my badge",
+  "@claimBadge": {
+    "description": "Claim badge label"
+  },
+  "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
+  "@claimBadgeDescription": {
+    "description": "Developer Profile label"
+  },
+  "keepPlaying": "Keep playing",
+  "@keepPlaying": {
+    "description": "Keep playing label"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or label"
+  },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {
     "description": "The first step instruction on how to play"
