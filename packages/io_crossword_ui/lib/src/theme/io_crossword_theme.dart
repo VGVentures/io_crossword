@@ -13,7 +13,7 @@ class IoCrosswordTheme {
   /// [ThemeData] for IO Crossword.
   ThemeData get themeData {
     final ioExtension = IoThemeExtension(
-      playerAliasTheme: _playerAliasTheme,
+      wordTheme: _wordTheme,
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
@@ -226,14 +226,14 @@ class IoCrosswordTheme {
     );
   }
 
-  IoPlayerAliasTheme get _playerAliasTheme {
+  IoWordTheme get _wordTheme {
     final colorScheme = this.colorScheme;
 
     // TODO(alestiago): Update text styles from new Design System when
     // available:
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6371389285
-    return IoPlayerAliasTheme(
-      small: IoPlayerAliasStyle(
+    return IoWordTheme(
+      small: IoWordStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.31),
         textStyle: const TextStyle(
@@ -246,7 +246,7 @@ class IoCrosswordTheme {
         margin: const EdgeInsets.symmetric(horizontal: 0.5),
         boxSize: const Size.square(20.16),
       ),
-      big: IoPlayerAliasStyle(
+      big: IoWordStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
         textStyle: const TextStyle(

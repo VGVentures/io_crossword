@@ -171,7 +171,7 @@ class UserLeaderboardRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = IoPlayerAliasStyle(
+    final style = IoWordStyle(
       backgroundColor: switch (player.mascot) {
         Mascots.dash => IoCrosswordColors.flutterBlue,
         Mascots.sparky => IoCrosswordColors.sparkyYellow,
@@ -197,7 +197,7 @@ class UserLeaderboardRanking extends StatelessWidget {
               Text(
                 rank.toDisplayNumber(),
               ),
-              IoPlayerAlias(
+              IoWord(
                 player.initials.toUpperCase(),
                 style: style,
               ),
