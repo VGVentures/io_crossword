@@ -75,7 +75,7 @@ class IoCrosswordTheme {
       ),
       filled: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.primary,
-        border: Border.all(width: borderSide.width, color: borderSide.color),
+        border: Border.all(width: borderSide.width, color: colorScheme.primary),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle.copyWith(
           color: IoCrosswordColors.black,
