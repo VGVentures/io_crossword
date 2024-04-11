@@ -433,7 +433,6 @@ class _CharacterFieldState extends State<_CharacterField>
   @override
   void didUpdateWidget(covariant _CharacterField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.forward(from: 0);
 
     _offsetTween = Tween(
       begin: Offset(0, -oldWidget.style.elevation),
@@ -443,6 +442,14 @@ class _CharacterFieldState extends State<_CharacterField>
       begin: oldWidget.style._toBoxDecoration(),
       end: widget.style._toBoxDecoration(),
     );
+
+    _controller.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
