@@ -28,9 +28,9 @@ class WordSuccessDesktopView extends StatelessWidget {
         children: [
           const SuccessTopBar(),
           const SizedBox(height: 32),
-          IoPlayerAlias(
+          IoWord(
             selectedWord.word.answer.toUpperCase(),
-            style: themeData.io.playerAliasTheme.big,
+            style: themeData.io.wordTheme.big,
           ),
           const SizedBox(height: 40),
           Expanded(
@@ -99,9 +99,9 @@ class WordSuccessMobileView extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 342),
                 child: Column(
                   children: [
-                    IoPlayerAlias(
+                    IoWord(
                       selectedWord.word.answer.toUpperCase(),
-                      style: themeData.io.playerAliasTheme.big,
+                      style: themeData.io.wordTheme.big,
                     ),
                     const SizedBox(height: 40),
                     const SuccessStats(),

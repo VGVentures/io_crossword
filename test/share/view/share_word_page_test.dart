@@ -22,13 +22,13 @@ void main() {
     testWidgets(
       'renders correctly',
       (tester) async {
+        final word = _FakeWord();
         await tester.pumpApp(
-          ShareWordPage(
-            word: _FakeWord(),
-          ),
+          ShareWordPage(word: word),
         );
 
-        expect(find.byType(WordInformation), findsOneWidget);
+        expect(find.byType(IoWord), findsOneWidget);
+        expect(find.text(word.clue), findsOneWidget);
       },
     );
 
@@ -41,7 +41,10 @@ void main() {
             body: Builder(
               builder: (BuildContext context) {
                 return ElevatedButton(
-                  onPressed: () => ShareWordPage.showModal(context),
+                  onPressed: () => ShareWordPage.showModal(
+                    context,
+                    _FakeWord(),
+                  ),
                   child: Text('Show ShareWordPage'),
                 );
               },

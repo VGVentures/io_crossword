@@ -10,7 +10,7 @@ class IoThemeExtension extends Equatable
     implements ThemeExtension<IoThemeExtension> {
   /// {@macro io_theme_extension}
   const IoThemeExtension({
-    required this.playerAliasTheme,
+    required this.wordTheme,
     required this.iconButtonTheme,
     required this.cardTheme,
     required this.physicalModel,
@@ -18,8 +18,8 @@ class IoThemeExtension extends Equatable
     required this.colorScheme,
   });
 
-  /// {@macro io_player_alias_theme}
-  final IoPlayerAliasTheme playerAliasTheme;
+  /// {@macro io_word_theme}
+  final IoWordTheme wordTheme;
 
   /// {@macro io_icon_button_theme}
   final IoIconButtonTheme iconButtonTheme;
@@ -41,7 +41,7 @@ class IoThemeExtension extends Equatable
 
   @override
   ThemeExtension<IoThemeExtension> copyWith({
-    IoPlayerAliasTheme? playerAliasTheme,
+    IoWordTheme? wordTheme,
     IoIconButtonTheme? iconButtonTheme,
     IoCardTheme? cardTheme,
     IoPhysicalModelStyle? physicalModel,
@@ -49,7 +49,7 @@ class IoThemeExtension extends Equatable
     IoColorScheme? colorScheme,
   }) {
     return IoThemeExtension(
-      playerAliasTheme: playerAliasTheme ?? this.playerAliasTheme,
+      wordTheme: wordTheme ?? this.wordTheme,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
       cardTheme: cardTheme ?? this.cardTheme,
       physicalModel: physicalModel ?? this.physicalModel,
@@ -68,7 +68,7 @@ class IoThemeExtension extends Equatable
     }
 
     return IoThemeExtension(
-      playerAliasTheme: playerAliasTheme.lerp(other.playerAliasTheme, t),
+      wordTheme: wordTheme.lerp(other.wordTheme, t),
       iconButtonTheme: iconButtonTheme.lerp(other.iconButtonTheme, t),
       cardTheme: cardTheme.lerp(other.cardTheme, t),
       physicalModel: physicalModel.lerp(other.physicalModel, t),
@@ -79,7 +79,7 @@ class IoThemeExtension extends Equatable
 
   @override
   List<Object?> get props => [
-        playerAliasTheme,
+        wordTheme,
         iconButtonTheme,
         cardTheme,
         physicalModel,

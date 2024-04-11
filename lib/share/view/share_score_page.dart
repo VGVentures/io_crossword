@@ -24,7 +24,7 @@ class ShareScorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    const style = IoPlayerAliasStyle(
+    const style = IoWordStyle(
       backgroundColor: IoCrosswordColors.flutterBlue,
       textStyle: TextStyle(
         color: Colors.black,
@@ -49,7 +49,7 @@ class ShareScorePage extends StatelessWidget {
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         // TODO(any): Update with new alias widget
-        const IoPlayerAlias('ABC', style: style),
+        const IoWord('ABC', style: style),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const ScoreInformation(),
       ],

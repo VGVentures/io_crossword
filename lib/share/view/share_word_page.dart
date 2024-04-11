@@ -29,7 +29,7 @@ class ShareWordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    const style = IoPlayerAliasStyle(
+    const style = IoWordStyle(
       backgroundColor: IoCrosswordColors.seedWhite,
       textStyle: TextStyle(
         color: Colors.black,
@@ -55,7 +55,7 @@ class ShareWordPage extends StatelessWidget {
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         // TODO(any): Update with new IoWord widget
-        IoPlayerAlias(
+        IoWord(
           '${word.answer.substring(0, 1)}______',
           style: style,
         ),
