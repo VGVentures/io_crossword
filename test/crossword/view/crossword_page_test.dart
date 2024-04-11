@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/drawer/view/crossword_drawer.dart';
+import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
