@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/share/widgets/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ShareScorePage extends StatelessWidget {
@@ -9,7 +10,12 @@ class ShareScorePage extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (context) {
-        return const ShareScorePage();
+        final l10n = context.l10n;
+
+        return ShareDialog(
+          title: l10n.shareYourScore,
+          content: const ShareScorePage(),
+        );
       },
     );
   }
@@ -29,76 +35,24 @@ class ShareScorePage extends StatelessWidget {
       boxSize: Size.square(30),
     );
 
-    return Center(
-      child: IoCrosswordCard(
-        maxWidth: 340,
-        maxHeight: 598,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.ios_share,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    l10n.shareYourScore,
-                    textAlign: TextAlign.center,
-                    style: textTheme.bodySmall.medium,
-                  ),
-                  const Expanded(child: SizedBox()),
-                  const CloseButton(),
-                ],
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const SizedBox(
-                height: 153,
-                child: Placeholder(),
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              Text(
-                l10n.shareScoreContent,
-                textAlign: TextAlign.center,
-                style: textTheme.bodySmall.regular,
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              // TODO(any): Update with new alias widget
-              const IoPlayerAlias('ABC', style: style),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const ScoreInfos(),
-              const SizedBox(height: IoCrosswordSpacing.lg * 2),
-              Text(
-                l10n.shareOn,
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.linkedin),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.instagram),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.twitter),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.facebook),
-                  ),
-                ],
-              ),
-            ],
-          ),
+    return Column(
+      children: [
+        const SizedBox(
+          height: 153,
+          child: Placeholder(),
         ),
-      ),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        Text(
+          l10n.shareScoreContent,
+          textAlign: TextAlign.center,
+          style: textTheme.bodySmall.regular,
+        ),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        // TODO(any): Update with new alias widget
+        const IoPlayerAlias('ABC', style: style),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        const ScoreInfos(),
+      ],
     );
   }
 }
