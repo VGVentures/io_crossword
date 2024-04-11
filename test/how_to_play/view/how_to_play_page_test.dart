@@ -18,7 +18,7 @@ void main() {
 
   group('$HowToPlayView', () {
     testWidgets('completes flow when button is pressed', (tester) async {
-      final flowController = FlowController(GameIntroStatus.welcome);
+      final flowController = FlowController(GameIntroStatus.howToPlay);
       addTearDown(flowController.dispose);
 
       await tester.pumpApp(
@@ -33,7 +33,7 @@ void main() {
       await tester.tap(find.byType(OutlinedButton));
       await tester.pumpAndSettle();
 
-      expect(flowController.state, equals(GameIntroStatus.teamSelection));
+      expect(flowController.completed, isTrue);
     });
 
     group('displays', () {
