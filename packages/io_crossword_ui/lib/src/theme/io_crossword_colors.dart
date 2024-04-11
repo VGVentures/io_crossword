@@ -389,6 +389,9 @@ abstract class IoCrosswordColors {
   /// black
   static const black = Color(0xFF010101);
 
+  /// soft gray
+  static const softGray = Color(0xFF80858B);
+
   /// error red color
   static const redError = Color(0xFFEA4335);
 

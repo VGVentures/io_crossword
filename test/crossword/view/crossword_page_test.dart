@@ -6,7 +6,6 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
@@ -14,7 +13,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
-import '../../helpers/set_display_size.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 
@@ -201,22 +199,6 @@ void main() {
     );
 
     testWidgets(
-      'displays AboutButton with ${CrosswordStatus.success}',
-      (tester) async {
-        when(() => bloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpCrosswordView(bloc);
-
-        expect(find.byType(AboutButton), findsOneWidget);
-      },
-    );
-
-    testWidgets(
       'can zoom in',
       (tester) async {
         when(() => bloc.state).thenReturn(
@@ -268,50 +250,5 @@ void main() {
       },
       timeout: const Timeout(Duration(seconds: 30)),
     );
-
-    group('AboutButton', () {
-      late Widget widget;
-
-      setUp(() {
-        widget = BlocProvider.value(
-          value: bloc,
-          child: AboutButton(),
-        );
-      });
-
-      testWidgets(
-        'displays question_mark_rounded icon',
-        (tester) async {
-          when(() => bloc.state).thenReturn(
-            CrosswordState(
-              sectionSize: 40,
-            ),
-          );
-
-          await tester.pumpApp(widget);
-
-          expect(find.byIcon(Icons.question_mark_rounded), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'displays AboutView when button is pressed',
-        (tester) async {
-          when(() => bloc.state).thenReturn(
-            CrosswordState(
-              sectionSize: 40,
-            ),
-          );
-
-          await tester.pumpApp(widget);
-
-          await tester.tap(find.byIcon(Icons.question_mark_rounded));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(AboutView), findsOneWidget);
-        },
-      );
-    });
   });
 }

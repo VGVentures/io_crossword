@@ -65,7 +65,7 @@ void main() {
         verify(
           () => crosswordBloc.add(const InitialsSelected('ABC')),
         ).called(1);
-        expect(flowController.completed, isTrue);
+        expect(flowController.state, equals(GameIntroStatus.howToPlay));
       },
     );
 
