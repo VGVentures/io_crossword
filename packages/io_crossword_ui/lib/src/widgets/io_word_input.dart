@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -386,7 +387,7 @@ class _IoWordInputState extends State<IoWordInput> {
   }
 }
 
-class _CharacterField extends StatelessWidget {
+class _CharacterField extends StatefulWidget {
   const _CharacterField({
     required this.style,
     required this.child,
@@ -405,17 +406,64 @@ class _CharacterField extends StatelessWidget {
   final Widget child;
 
   @override
+  State<_CharacterField> createState() => _CharacterFieldState();
+}
+
+class _CharacterFieldState extends State<_CharacterField>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 150),
+  );
+
+  late var _offsetTween = Tween(
+    begin: Offset(0, -widget.style.elevation),
+    end: Offset(0, -widget.style.elevation),
+  );
+
+  late var _decorationTween = DecorationTween(
+    begin: widget.style._toBoxDecoration(),
+    end: widget.style._toBoxDecoration(),
+  );
+
+  @override
+  void didUpdateWidget(covariant _CharacterField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _offsetTween = Tween(
+      begin: Offset(0, -oldWidget.style.elevation),
+      end: Offset(0, -widget.style.elevation),
+    );
+    _decorationTween = DecorationTween(
+      begin: oldWidget.style._toBoxDecoration(),
+      end: widget.style._toBoxDecoration(),
+    );
+
+    _animationController.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 48.61,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: style.borderRadius,
-          border: style.border,
-          color: style.backgroundColor,
-        ),
-        child: Center(child: child),
-      ),
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: _offsetTween.evaluate(_animationController),
+          child: SizedBox.fromSize(
+            size: widget.style.size,
+            child: DecoratedBox(
+              decoration: _decorationTween.evaluate(_animationController),
+              child: Center(child: widget.child),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -485,6 +533,8 @@ class IoWordInputCharacterFieldStyle extends Equatable {
     required this.border,
     required this.borderRadius,
     required this.textStyle,
+    required this.size,
+    this.elevation = 0,
   });
 
   /// The background color of the character field.
@@ -499,6 +549,20 @@ class IoWordInputCharacterFieldStyle extends Equatable {
   /// The text style of the character field.
   final TextStyle textStyle;
 
+  /// The size of the character field.
+  final Size size;
+
+  /// How much should the character field be elevated.
+  final double elevation;
+
+  BoxDecoration _toBoxDecoration() {
+    return BoxDecoration(
+      color: backgroundColor,
+      border: border,
+      borderRadius: borderRadius,
+    );
+  }
+
   /// Linearly interpolate between two [IoWordInputCharacterFieldStyle].
   IoWordInputCharacterFieldStyle lerp(
     IoWordInputCharacterFieldStyle other,
@@ -509,9 +573,18 @@ class IoWordInputCharacterFieldStyle extends Equatable {
       border: Border.lerp(border, other.border, t)!,
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
+      size: Size.lerp(size, other.size, t)!,
+      elevation: lerpDouble(elevation, other.elevation, t)!,
     );
   }
 
   @override
-  List<Object?> get props => [backgroundColor, border, borderRadius, textStyle];
+  List<Object?> get props => [
+        backgroundColor,
+        border,
+        borderRadius,
+        textStyle,
+        size,
+        elevation,
+      ];
 }
