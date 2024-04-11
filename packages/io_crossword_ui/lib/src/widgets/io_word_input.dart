@@ -3,8 +3,6 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template character_validator}
