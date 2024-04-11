@@ -1,7 +1,6 @@
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -121,11 +120,6 @@ class _LargeBoardView extends StatelessWidget {
     return Stack(
       children: [
         GameWidget(game: game),
-        const Positioned(
-          top: 12,
-          right: 16,
-          child: AboutButton(),
-        ),
         const WordFocusedDesktopPage(),
         const BottomBar(),
         _ZoomControls(game: game),
@@ -144,29 +138,9 @@ class _SmallBoardView extends StatelessWidget {
     return Stack(
       children: [
         GameWidget(game: game),
-        const Positioned(
-          top: 12,
-          right: 16,
-          child: AboutButton(),
-        ),
         const WordFocusedMobilePage(),
         _ZoomControls(game: game),
       ],
-    );
-  }
-}
-
-class AboutButton extends StatelessWidget {
-  @visibleForTesting
-  const AboutButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: const Icon(Icons.question_mark_rounded),
-      onPressed: () {
-        AboutView.showModal(context);
-      },
     );
   }
 }
