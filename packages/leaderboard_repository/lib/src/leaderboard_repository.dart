@@ -2,40 +2,50 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:rxdart/rxdart.dart';
 
+const _collection = 'leaderboard';
+
 /// {@template leaderboard_repository}
 /// Leaderboard repository
 /// {@endtemplate}
 class LeaderboardRepository {
   /// {@macro leaderboard_repository}
-  const LeaderboardRepository({
+  LeaderboardRepository({
     required FirebaseFirestore firestore,
-  }) : _firestore = firestore;
+  })  : _leaderboardCollection = firestore.collection(_collection),
+        _leaderboardPlayer = BehaviorSubject<LeaderboardPlayer>(),
+        _userRankingPosition = BehaviorSubject<int>();
 
-  final FirebaseFirestore _firestore;
+  late final CollectionReference<Map<String, dynamic>> _leaderboardCollection;
 
-  BehaviorSubject<int>? _userRanking;
+  final BehaviorSubject<int> _userRankingPosition;
+  final BehaviorSubject<LeaderboardPlayer> _leaderboardPlayer;
 
-  /// Returns a [Stream] with the users ranking.
-  Stream<int> getUserRanking(LeaderboardPlayer player) async {
-    try {
-      if (_userRanking == null) {
-        _userRanking = BehaviorSubject();
+  /// Returns a [Stream] with the users position in the ranking.
+  Stream<int> getRankingPosition(LeaderboardPlayer player) {
+    _leaderboardCollection
+        .where('score', isGreaterThan: player.score)
+        .count()
+        .get()
+        .then((userRank) => _userRankingPosition.add(userRank.count ?? 0))
+        .onError(_userRankingPosition.addError);
 
-        final userRank = await _firestore
-            .collection('leaderboard')
-            .where(
-              'score',
-              isGreaterThan: player.score,
-            )
-            .count()
-            .get();
+    return _userRankingPosition.stream;
+  }
 
-        _userRanking!.add(userRank.count ?? 0);
-      }
+  /// Returns a [Stream] of [LeaderboardPlayer] with the users
+  /// information in the leaderboard.
+  Stream<LeaderboardPlayer> getLeaderboardPlayer(String userId) {
+    _leaderboardCollection
+        .doc(userId)
+        .snapshots()
+        .map((snapshot) => LeaderboardPlayer.fromJson(snapshot.data()!))
+        .listen((player) {
+      _leaderboardPlayer.add(player);
+      // each time this listen is triggered we will call the ranking position
+      // to get updated
+      getRankingPosition(player);
+    }).onError(_leaderboardPlayer.addError);
 
-      return _userRanking!.stream;
-    } catch (error, stackTrace) {
-      Error.throwWithStackTrace(GetGalleryFailure(error), stackTrace);
-    }
+    return _leaderboardPlayer;
   }
 }
