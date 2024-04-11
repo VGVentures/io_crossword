@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -76,6 +77,19 @@ void main() {
       await tester.pumpCrosswordView(bloc);
 
       expect(find.byType(DrawerButton), findsOneWidget);
+    });
+
+    testWidgets('opens $CrosswordDrawer when $DrawerButton is tapped',
+        (tester) async {
+      when(() => bloc.state).thenReturn(CrosswordState());
+
+      await tester.pumpCrosswordView(bloc);
+
+      await tester.tap(find.byType(DrawerButton));
+
+      await tester.pump();
+
+      expect(find.byType(CrosswordDrawer), findsOneWidget);
     });
 
     testWidgets(
