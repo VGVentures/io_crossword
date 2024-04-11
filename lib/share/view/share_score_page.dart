@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -56,44 +55,68 @@ class ShareScorePage extends StatelessWidget {
                 style: textTheme.bodySmall.regular,
               ),
               const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _InfoItem(
-                    label: l10n.rank,
-                    info: 'info',
-                    icon: IoIcons.trophy,
-                  ),
-                  _InfoItem(
-                    label: l10n.streak,
-                    info: 'info',
-                    icon: IoIcons.trophy,
-                  ),
-                  _InfoItem(
-                    label: l10n.points,
-                    info: 'info',
-                    icon: IoIcons.trophy,
-                  ),
-                ],
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
+              const ScoreInfos(),
+              const SizedBox(height: IoCrosswordSpacing.lg * 2),
               Text(
                 l10n.shareOn,
               ),
-              const SizedBox(height: IoCrosswordSpacing.lg * 2),
-              Row(
+              const SizedBox(height: IoCrosswordSpacing.xlgsm),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset(Assets.images.linkedin.path),
-                  Image.asset(Assets.images.instagram.path),
-                  Image.asset(Assets.images.twitter.path),
-                  Image.asset(Assets.images.facebook.path),
+                  IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.facebook),
+                  ),
+                  IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.facebook),
+                  ),
+                  IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.facebook),
+                  ),
+                  IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.facebook),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ScoreInfos extends StatelessWidget {
+  @visibleForTesting
+  const ScoreInfos({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _InfoItem(
+          label: l10n.rank,
+          info: '320',
+          icon: IoIcons.trophy,
+        ),
+        _InfoItem(
+          label: l10n.streak,
+          info: '222',
+          icon: IoIcons.trophy,
+        ),
+        _InfoItem(
+          label: l10n.points,
+          info: '100,000',
+          icon: IoIcons.trophy,
+        ),
+      ],
     );
   }
 }
@@ -122,7 +145,11 @@ class _InfoItem extends StatelessWidget {
         const SizedBox(height: IoCrosswordSpacing.lg),
         Row(
           children: [
-            Icon(icon),
+            Icon(
+              icon,
+              size: 20,
+              color: IoCrosswordColors.seedGreen,
+            ),
             Text(
               info,
               style: textTheme.labelSmall.regular,
