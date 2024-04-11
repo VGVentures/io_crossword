@@ -45,13 +45,11 @@ class CrosswordView extends StatelessWidget {
         title: const SizedBox(),
         crossword: l10n.crossword,
         actions: (context) {
-          return Row(
+          return const Row(
             children: [
-              const MuteButton(),
-              const SizedBox(width: 7),
-              EndDrawerButton(
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-              ),
+              MuteButton(),
+              SizedBox(width: 7),
+              EndDrawerButton(),
             ],
           );
         },
