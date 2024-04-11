@@ -21,41 +21,43 @@ class ShareDialog extends StatelessWidget {
         maxWidth: 340,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-          child: Column(
-            children: [
-              ShareDialogHeader(title: title),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: IoCrosswordSpacing.xlgsm,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ShareDialogHeader(title: title),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: IoCrosswordSpacing.xlgsm,
+                  ),
+                  child: content,
                 ),
-                child: content,
-              ),
-              Text(
-                l10n.shareOn,
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.linkedin),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.instagram),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.twitter),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.facebook),
-                  ),
-                ],
-              ),
-            ],
+                Text(
+                  l10n.shareOn,
+                ),
+                const SizedBox(height: IoCrosswordSpacing.xlgsm),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: null,
+                      icon: Icon(IoIcons.linkedin),
+                    ),
+                    IconButton(
+                      onPressed: null,
+                      icon: Icon(IoIcons.instagram),
+                    ),
+                    IconButton(
+                      onPressed: null,
+                      icon: Icon(IoIcons.twitter),
+                    ),
+                    IconButton(
+                      onPressed: null,
+                      icon: Icon(IoIcons.facebook),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
