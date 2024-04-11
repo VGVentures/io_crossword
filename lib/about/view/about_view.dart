@@ -11,15 +11,6 @@ part 'about_project_details.dart';
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
 
-  static Future<void> showModal(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (context) {
-        return const AboutView();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
