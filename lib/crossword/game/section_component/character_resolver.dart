@@ -8,14 +8,14 @@ extension CharacterResolver on SectionComponent {
     );
 
     if (!sectionRectangle.contains(offset.toOffset())) {
-      return _isCharSolved(x, y);
+      return _isOutsideCharSolved(x, y);
     } else {
-      return _isCharSolvedBis(x, y);
+      return _isInsideCharSolved(x, y);
     }
   }
 
   // If character in out of section rectangle and solved by neighbour's word
-  bool _isCharSolved(int x, int y) {
+  bool _isOutsideCharSolved(int x, int y) {
     final wordsToCheck = <Word>[];
     final rightNeighbour = gameRef.state.sections[(index.$1 + 1, index.$2)];
     final topRightNeighbour =
@@ -41,7 +41,7 @@ extension CharacterResolver on SectionComponent {
   }
 
   // If character is in section rectangle and solved by border word
-  bool _isCharSolvedBis(int x, int y) {
+  bool _isInsideCharSolved(int x, int y) {
     final wordsToCheck = <Word>[];
 
     final leftNeighbour = gameRef.state.sections[(index.$1 - 1, index.$2)];
