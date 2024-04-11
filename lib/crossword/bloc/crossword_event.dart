@@ -39,8 +39,8 @@ class MascotSelected extends CrosswordEvent {
   List<Object> get props => [mascot];
 }
 
-class BoardLoadingInfoFetched extends CrosswordEvent {
-  const BoardLoadingInfoFetched();
+class BoardLoadingInformationRequested extends CrosswordEvent {
+  const BoardLoadingInformationRequested();
 
   @override
   List<Object?> get props => [];
@@ -49,7 +49,7 @@ class BoardLoadingInfoFetched extends CrosswordEvent {
 class InitialsSelected extends CrosswordEvent {
   const InitialsSelected(this.initials);
 
-  final List<String> initials;
+  final String initials;
 
   @override
   List<Object> get props => [initials];

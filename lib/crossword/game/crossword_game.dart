@@ -29,17 +29,8 @@ class CrosswordGame extends FlameGame
 
   var _visibleSections = <(double, double)>[];
 
-  CrosswordLoaded get state {
-    final state = bloc.state;
-    if (state is! CrosswordLoaded) {
-      // TODO(any): Check why test doesn't cover (line 503 in test file)
-      // coverage:ignore-start
-      throw ArgumentError(
-        'Cannot load game without a loaded state.',
-      );
-      // coverage:ignore-end
-    }
-    return state;
+  CrosswordState get state {
+    return bloc.state;
   }
 
   @override

@@ -32,7 +32,7 @@ class LeaderboardSuccess extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: _Title(
-                          iconData: IoIcons.icon_right,
+                          iconData: IoIcons.trophy,
                           title: l10n.rank,
                         ),
                       ),
@@ -171,7 +171,7 @@ class UserLeaderboardRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = IoPlayerAliasStyle(
+    final style = IoWordStyle(
       backgroundColor: switch (player.mascot) {
         Mascots.dash => IoCrosswordColors.flutterBlue,
         Mascots.sparky => IoCrosswordColors.sparkyYellow,
@@ -197,7 +197,7 @@ class UserLeaderboardRanking extends StatelessWidget {
               Text(
                 rank.toDisplayNumber(),
               ),
-              IoPlayerAlias(
+              IoWord(
                 player.initials.toUpperCase(),
                 style: style,
               ),

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 
 import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -47,9 +47,9 @@ void main() {
         () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));
       when(boardInfoRepository.getSolvedWordsCount)
-          .thenAnswer((_) => Future.value(25));
+          .thenAnswer((_) => Stream.value(25));
       when(boardInfoRepository.getTotalWordsCount)
-          .thenAnswer((_) => Future.value(100));
+          .thenAnswer((_) => Stream.value(100));
       when(boardInfoRepository.getSectionSize)
           .thenAnswer((_) => Future.value(20));
       when(boardInfoRepository.getZoomLimit)
@@ -84,8 +84,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordLoaded(
-            // ignore: avoid_redundant_argument_values
+          initialState: CrosswordState(
             mascot: Mascots.dash,
             sectionSize: 20,
           ),
@@ -107,8 +106,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordLoaded(
-            // ignore: avoid_redundant_argument_values
+          initialState: CrosswordState(
             mascot: Mascots.dash,
             sectionSize: 20,
           ),
@@ -130,7 +128,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordLoaded(
+          initialState: CrosswordState(
             mascot: Mascots.sparky,
             sectionSize: 20,
           ),
@@ -152,7 +150,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordLoaded(
+          initialState: CrosswordState(
             mascot: Mascots.dino,
             sectionSize: 20,
           ),
@@ -174,7 +172,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordLoaded(
+          initialState: CrosswordState(
             mascot: Mascots.android,
             sectionSize: 20,
           ),
@@ -196,7 +194,7 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream<CrosswordState>.empty(),
-          initialState: CrosswordInitial(),
+          initialState: CrosswordState(),
         );
 
         await tester.pumpApp(

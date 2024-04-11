@@ -90,34 +90,32 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
   }
 
   void _onNewState(CrosswordState state) {
-    if (state is CrosswordLoaded) {
-      if (_boardSection == null) {
-        final boardSection = state.sections[index];
-        if (boardSection != null) {
-          _boardSection = boardSection;
-          _loadBoardSection();
-        }
-      } else {
-        if (state.sections[index] != null &&
-            state.sections[index] != _boardSection) {
-          _boardSection = state.sections[index];
-          _loadBoardSection();
-        }
-
-        final selectedWord = state.selectedWord?.word.id;
-        final selectedSection = state.selectedWord?.section;
-        if (selectedWord != lastSelectedWordId ||
-            selectedSection != lastSelectedSection) {
-          _updateSelection(
-            previousWord: lastSelectedWordId,
-            newWord: selectedWord,
-            previousSection: lastSelectedSection,
-            newSection: selectedSection,
-          );
-        }
-        lastSelectedWordId = selectedWord;
-        lastSelectedSection = selectedSection;
+    if (_boardSection == null) {
+      final boardSection = state.sections[index];
+      if (boardSection != null) {
+        _boardSection = boardSection;
+        _loadBoardSection();
       }
+    } else {
+      if (state.sections[index] != null &&
+          state.sections[index] != _boardSection) {
+        _boardSection = state.sections[index];
+        _loadBoardSection();
+      }
+
+      final selectedWord = state.selectedWord?.word.id;
+      final selectedSection = state.selectedWord?.section;
+      if (selectedWord != lastSelectedWordId ||
+          selectedSection != lastSelectedSection) {
+        _updateSelection(
+          previousWord: lastSelectedWordId,
+          newWord: selectedWord,
+          previousSection: lastSelectedSection,
+          newSection: selectedSection,
+        );
+      }
+      lastSelectedWordId = selectedWord;
+      lastSelectedSection = selectedSection;
     }
   }
 

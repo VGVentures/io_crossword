@@ -6,6 +6,18 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 import '../helpers/helpers.dart';
 
+class _BottomWidget extends StatelessWidget implements PreferredSizeWidget {
+  const _BottomWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Placeholder();
+  }
+
+  @override
+  Size get preferredSize => Size(200, 100);
+}
+
 void main() {
   group('IoAppBar', () {
     testWidgets(
@@ -18,6 +30,21 @@ void main() {
             title: Text('Title'),
           ).preferredSize,
           equals(Size(double.infinity, 80)),
+        );
+      },
+    );
+
+    testWidgets(
+      'preferredSize height increments with bottom widget',
+      (tester) async {
+        expect(
+          IoAppBar(
+            crossword: 'Crossword',
+            actions: (_) => SizedBox(),
+            bottom: _BottomWidget(),
+            title: Text('Title'),
+          ).preferredSize,
+          equals(Size(double.infinity, 180)),
         );
       },
     );
@@ -39,7 +66,23 @@ void main() {
     );
 
     testWidgets(
-      'does not render crossword with large layout',
+      'render crossword with small layout if title is null',
+      (tester) async {
+        await tester.pumpApp(
+          IoAppBar(
+            crossword: 'Crossword',
+            actions: (_) => SizedBox(),
+            title: null,
+          ),
+          layout: IoLayoutData.small,
+        );
+
+        expect(find.text('Crossword'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders crossword with large layout',
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
@@ -68,6 +111,25 @@ void main() {
           );
 
           expect(find.text('Title'), findsOneWidget);
+        },
+      );
+    }
+
+    for (final layout in IoLayoutData.values) {
+      testWidgets(
+        'renders bottom widget with $layout',
+        (tester) async {
+          await tester.pumpApp(
+            IoAppBar(
+              crossword: 'Crossword',
+              actions: (_) => SizedBox(),
+              title: Text('Title'),
+              bottom: _BottomWidget(),
+            ),
+            layout: layout,
+          );
+
+          expect(find.byType(_BottomWidget), findsOneWidget);
         },
       );
     }

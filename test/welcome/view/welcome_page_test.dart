@@ -3,15 +3,16 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockWelcomeBloc extends Mock implements WelcomeBloc {}
+class _MockChallengeBloc extends Mock implements ChallengeBloc {}
 
 void main() {
   group('$WelcomePage', () {
@@ -24,13 +25,13 @@ void main() {
 
   group('$WelcomeView', () {
     testWidgets(
-      'updates flow when pressed',
+      'updates flow when "Get Started" button is pressed',
       (tester) async {
-        final flowController = FlowController(const GameIntroState());
+        final flowController = FlowController(GameIntroStatus.welcome);
         addTearDown(flowController.dispose);
 
         await tester.pumpSubject(
-          FlowBuilder<GameIntroState>(
+          FlowBuilder<GameIntroStatus>(
             controller: flowController,
             onGeneratePages: (_, __) => [
               const MaterialPage(child: WelcomeView()),
@@ -47,9 +48,7 @@ void main() {
 
         expect(
           flowController.state,
-          equals(
-            const GameIntroState(status: GameIntroStatus.mascotSelection),
-          ),
+          equals(GameIntroStatus.teamSelection),
         );
       },
     );
@@ -63,6 +62,11 @@ void main() {
       testWidgets('a $WelcomeHeaderImage', (tester) async {
         await tester.pumpSubject(const WelcomeView());
         expect(find.byType(WelcomeHeaderImage), findsOneWidget);
+      });
+
+      testWidgets('a $IoAppBar', (tester) async {
+        await tester.pumpSubject(const WelcomeView());
+        expect(find.byType(IoAppBar), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {
@@ -125,14 +129,14 @@ extension on WidgetTester {
   /// Pumps the test subject with all its required ancestors.
   Future<void> pumpSubject(
     Widget child, {
-    WelcomeBloc? welcomeBloc,
+    ChallengeBloc? welcomeBloc,
   }) {
-    final bloc = welcomeBloc ?? _MockWelcomeBloc();
+    final bloc = welcomeBloc ?? _MockChallengeBloc();
     if (welcomeBloc == null) {
       whenListen(
         bloc,
-        const Stream<WelcomeState>.empty(),
-        initialState: const WelcomeState.initial(),
+        const Stream<ChallengeState>.empty(),
+        initialState: const ChallengeState.initial(),
       );
       when(bloc.close).thenAnswer((_) => Future.value());
     }

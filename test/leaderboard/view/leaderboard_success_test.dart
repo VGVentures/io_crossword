@@ -315,10 +315,7 @@ void main() {
           await tester.pumpApp(CurrentUserPosition(player: player, rank: 4));
 
           expect(
-            tester
-                .widget<IoPlayerAlias>(find.byType(IoPlayerAlias))
-                .style
-                .backgroundColor,
+            tester.widget<IoWord>(find.byType(IoWord)).style.backgroundColor,
             equals(mascot.color),
           );
         },

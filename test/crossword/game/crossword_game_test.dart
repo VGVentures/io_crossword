@@ -40,7 +40,7 @@ void main() {
     setUp(() {
       bloc = _MockCrosswordBloc();
 
-      final state = CrosswordLoaded(
+      final state = CrosswordState(
         sectionSize: sectionSize,
       );
       mockState(state);
@@ -55,7 +55,7 @@ void main() {
       'loads',
       createGame,
       (game) async {
-        final state = CrosswordLoaded(
+        final state = CrosswordState(
           sectionSize: sectionSize,
           sections: {
             for (final section in sections)
@@ -76,7 +76,7 @@ void main() {
       'adds debug components when debugOverlay is true',
       () => createGame(showDebugOverlay: true),
       (game) async {
-        final state = CrosswordLoaded(
+        final state = CrosswordState(
           sectionSize: sectionSize,
           sections: {
             for (final section in sections)
@@ -106,7 +106,7 @@ void main() {
           debugDefaultTargetPlatformOverride = null;
         });
 
-        final state = CrosswordLoaded(
+        final state = CrosswordState(
           sectionSize: sectionSize,
           sections: {
             for (final section in sections)
@@ -188,7 +188,7 @@ void main() {
           debugDefaultTargetPlatformOverride = null;
         });
 
-        final state = CrosswordLoaded(
+        final state = CrosswordState(
           sectionSize: sectionSize,
           sections: {
             for (final section in sections)
@@ -268,7 +268,7 @@ void main() {
 
     group('highlights word', () {
       late StreamController<CrosswordState> stateController;
-      final state = CrosswordLoaded(
+      final state = CrosswordState(
         sectionSize: sectionSize,
         sections: {
           for (final section in sections)
@@ -500,28 +500,11 @@ void main() {
       );
     });
 
-    test('throws ArgumentError when accessing the state in the wrong status',
-        () {
-      mockState(const CrosswordInitial());
-      final game = createGame();
-
-      expect(
-        () => game.state,
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            equals('Cannot load game without a loaded state.'),
-          ),
-        ),
-      );
-    });
-
     testWithGame(
       'remove sections that are not visible when panning',
       createGame,
       (game) async {
-        final state = CrosswordLoaded(
+        final state = CrosswordState(
           sectionSize: sectionSize,
           sections: {
             for (final section in sections)
@@ -567,7 +550,7 @@ void main() {
       'can zoom in',
       createGame,
       (game) async {
-        const state = CrosswordLoaded(
+        const state = CrosswordState(
           sectionSize: 400,
         );
         mockState(state);
@@ -582,7 +565,7 @@ void main() {
       'can zoom out',
       createGame,
       (game) async {
-        const state = CrosswordLoaded(
+        const state = CrosswordState(
           sectionSize: 400,
         );
         mockState(state);
@@ -597,7 +580,7 @@ void main() {
       'cannot zoom out more than 0.05',
       createGame,
       (game) async {
-        const state = CrosswordLoaded(
+        const state = CrosswordState(
           sectionSize: 400,
         );
         mockState(state);

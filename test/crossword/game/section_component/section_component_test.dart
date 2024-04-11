@@ -19,7 +19,7 @@ void main() {
   group('SectionComponent', () {
     late CrosswordBloc bloc;
     late StreamController<CrosswordState> stateStreamController;
-    final defaultState = CrosswordLoaded(
+    final defaultState = CrosswordState(
       sectionSize: sectionSize,
     );
 
@@ -76,7 +76,7 @@ void main() {
           solvedTimestamp: null,
         );
         setUpStreamController(
-          state: CrosswordLoaded(
+          state: CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
@@ -100,7 +100,7 @@ void main() {
         final initialSprites = initialSection.first.spriteBatchComponent;
 
         stateStreamController.add(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
@@ -143,7 +143,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
@@ -192,7 +192,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(
@@ -251,7 +251,7 @@ void main() {
 
         expect(spriteBatchComponent, isNull);
         stateStreamController.add(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (100, 100): BoardSection(

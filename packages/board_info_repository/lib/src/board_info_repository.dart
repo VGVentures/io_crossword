@@ -35,28 +35,24 @@ class BoardInfoRepository {
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
 
   /// Returns the total words count available in the crossword.
-  Future<int> getTotalWordsCount() async {
+  Stream<int> getTotalWordsCount() {
     try {
-      final results = await boardInfoCollection
+      return boardInfoCollection
           .where('type', isEqualTo: 'total_words_count')
-          .get();
-
-      final data = results.docs.first.data();
-      return data['value'] as int;
+          .snapshots()
+          .map((event) => event.docs.first.data()['value'] as int);
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
   }
 
   /// Returns the solved words count in the crossword.
-  Future<int> getSolvedWordsCount() async {
+  Stream<int> getSolvedWordsCount() {
     try {
-      final results = await boardInfoCollection
+      return boardInfoCollection
           .where('type', isEqualTo: 'solved_words_count')
-          .get();
-
-      final data = results.docs.first.data();
-      return data['value'] as int;
+          .snapshots()
+          .map((event) => event.docs.first.data()['value'] as int);
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }

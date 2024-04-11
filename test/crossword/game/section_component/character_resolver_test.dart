@@ -19,7 +19,7 @@ void main() {
   group('CharacterResolver', () {
     late CrosswordBloc bloc;
     late StreamController<CrosswordState> stateStreamController;
-    final defaultState = CrosswordLoaded(
+    final defaultState = CrosswordState(
       sectionSize: sectionSize,
     );
 
@@ -48,7 +48,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (0, 0): BoardSection(
@@ -109,7 +109,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (0, 0): BoardSection(
@@ -170,7 +170,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (0, -1): BoardSection(
@@ -230,7 +230,7 @@ void main() {
       createGame,
       (game) async {
         setUpInitialState(
-          CrosswordLoaded(
+          CrosswordState(
             sectionSize: sectionSize,
             sections: {
               (0, -1): BoardSection(
