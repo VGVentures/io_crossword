@@ -51,15 +51,15 @@ class ShareScorePage extends StatelessWidget {
         // TODO(any): Update with new alias widget
         const IoPlayerAlias('ABC', style: style),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
-        const ScoreInfos(),
+        const ScoreInformation(),
       ],
     );
   }
 }
 
-class ScoreInfos extends StatelessWidget {
+class ScoreInformation extends StatelessWidget {
   @visibleForTesting
-  const ScoreInfos({super.key});
+  const ScoreInformation({super.key});
 
   @override
   Widget build(BuildContext context) {
