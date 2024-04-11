@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -338,37 +339,39 @@ class _IoWordInputState extends State<IoWordInput> {
         style = textInputStyle.filled;
       }
 
+      final characterField = _CharacterField(
+        style: style,
+        child: readOnly
+            ? Text(
+                widget.characters![i]!,
+                style: style.textStyle,
+                textAlign: TextAlign.center,
+              )
+            : EditableText(
+                keyboardType: TextInputType.text,
+                enableSuggestions: false,
+                controller: controller,
+                focusNode: focusNode,
+                style: style.textStyle,
+                cursorWidth: 0,
+                textAlign: TextAlign.center,
+                cursorColor: Colors.transparent,
+                backgroundCursorColor: Colors.transparent,
+                onChanged: _onTextChanged,
+                onSubmitted: widget.onSubmit != null
+                    ? (_) => widget.onSubmit!(_word)
+                    : null,
+                onSelectionChanged: (selection, cause) {
+                  controller.selection = TextSelection.fromPosition(
+                    const TextPosition(offset: 1),
+                  );
+                },
+              ),
+      );
+
       final character = Padding(
         padding: textInputStyle.padding,
-        child: _CharacterField(
-          style: style,
-          child: readOnly
-              ? Text(
-                  widget.characters![i]!,
-                  style: style.textStyle,
-                  textAlign: TextAlign.center,
-                )
-              : EditableText(
-                  keyboardType: TextInputType.text,
-                  enableSuggestions: false,
-                  controller: controller,
-                  focusNode: focusNode,
-                  style: style.textStyle,
-                  cursorWidth: 0,
-                  textAlign: TextAlign.center,
-                  cursorColor: Colors.transparent,
-                  backgroundCursorColor: Colors.transparent,
-                  onChanged: _onTextChanged,
-                  onSubmitted: widget.onSubmit != null
-                      ? (_) => widget.onSubmit!(_word)
-                      : null,
-                  onSelectionChanged: (selection, cause) {
-                    controller.selection = TextSelection.fromPosition(
-                      const TextPosition(offset: 1),
-                    );
-                  },
-                ),
-        ),
+        child: characterField,
       );
       characters.add(character);
     }
@@ -406,15 +409,18 @@ class _CharacterField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 48.61,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: style.borderRadius,
-          border: style.border,
-          color: style.backgroundColor,
+    return Transform.translate(
+      offset: Offset(0, -style.elevation.toDouble()),
+      child: SizedBox.fromSize(
+        size: style.size,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: style.borderRadius,
+            border: style.border,
+            color: style.backgroundColor,
+          ),
+          child: Center(child: child),
         ),
-        child: Center(child: child),
       ),
     );
   }
@@ -485,6 +491,8 @@ class IoWordInputCharacterFieldStyle extends Equatable {
     required this.border,
     required this.borderRadius,
     required this.textStyle,
+    required this.size,
+    this.elevation = 0,
   });
 
   /// The background color of the character field.
@@ -499,6 +507,12 @@ class IoWordInputCharacterFieldStyle extends Equatable {
   /// The text style of the character field.
   final TextStyle textStyle;
 
+  /// The size of the character field.
+  final Size size;
+
+  /// How much should the character field be elevated.
+  final int elevation;
+
   /// Linearly interpolate between two [IoWordInputCharacterFieldStyle].
   IoWordInputCharacterFieldStyle lerp(
     IoWordInputCharacterFieldStyle other,
@@ -509,9 +523,18 @@ class IoWordInputCharacterFieldStyle extends Equatable {
       border: Border.lerp(border, other.border, t)!,
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
+      size: Size.lerp(size, other.size, t)!,
+      elevation: lerpDouble(elevation, other.elevation, t)!.toInt(),
     );
   }
 
   @override
-  List<Object?> get props => [backgroundColor, border, borderRadius, textStyle];
+  List<Object?> get props => [
+        backgroundColor,
+        border,
+        borderRadius,
+        textStyle,
+        size,
+        elevation,
+      ];
 }

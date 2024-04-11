@@ -58,34 +58,44 @@ class IoCrosswordTheme {
       package: IoCrosswordTextStyles.package,
     );
 
+    const size = Size.square(48.61);
+    const borderSide = BorderSide(
+      width: 1.8,
+      color: IoCrosswordColors.seedWhite,
+    );
+
     return IoWordInputStyle(
       padding: const EdgeInsets.symmetric(horizontal: 1.8),
       empty: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
-        border: Border.all(
-          width: 1.8,
-          color: IoCrosswordColors.seedWhite,
-        ),
+        border: Border.all(width: borderSide.width, color: borderSide.color),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
+        size: size,
       ),
       filled: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.primary,
-        border: Border.all(
-          width: 1.8,
-          color: colorScheme.primary,
-        ),
+        border: Border.all(width: borderSide.width, color: borderSide.color),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle.copyWith(
           color: IoCrosswordColors.black,
         ),
+        size: size,
       ),
       focused: IoWordInputCharacterFieldStyle(
         backgroundColor: IoCrosswordColors.redError,
-        border: Border.all(
-          width: 1.8,
-          color: IoCrosswordColors.seedWhite,
+        border: Border(
+          top: borderSide,
+          left: borderSide,
+          right: borderSide,
+          bottom: BorderSide(
+            width: 10,
+            color: borderSide.color,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
         ),
+        size: size,
+        elevation: 10,
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
       ),
@@ -96,6 +106,7 @@ class IoCrosswordTheme {
         textStyle: textStyle.copyWith(
           color: IoCrosswordColors.black,
         ),
+        size: size,
       ),
     );
   }
