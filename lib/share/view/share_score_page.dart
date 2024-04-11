@@ -18,6 +18,16 @@ class ShareScorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
+    const style = IoPlayerAliasStyle(
+      backgroundColor: IoCrosswordColors.flutterBlue,
+      textStyle: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.w700,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(0.36)),
+      margin: EdgeInsets.all(0.5),
+      boxSize: Size.square(30),
+    );
 
     return Center(
       child: IoCrosswordCard(
@@ -55,6 +65,9 @@ class ShareScorePage extends StatelessWidget {
                 style: textTheme.bodySmall.regular,
               ),
               const SizedBox(height: IoCrosswordSpacing.xlgsm),
+              // TODO(any): Update with new alias widget
+              const IoPlayerAlias('ABC', style: style),
+              const SizedBox(height: IoCrosswordSpacing.xlgsm),
               const ScoreInfos(),
               const SizedBox(height: IoCrosswordSpacing.lg * 2),
               Text(
@@ -66,19 +79,19 @@ class ShareScorePage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: null,
-                    icon: Icon(Icons.facebook),
+                    icon: Icon(IoIcons.linkedin),
                   ),
                   IconButton(
                     onPressed: null,
-                    icon: Icon(Icons.facebook),
+                    icon: Icon(IoIcons.instagram),
                   ),
                   IconButton(
                     onPressed: null,
-                    icon: Icon(Icons.facebook),
+                    icon: Icon(IoIcons.twitter),
                   ),
                   IconButton(
                     onPressed: null,
-                    icon: Icon(Icons.facebook),
+                    icon: Icon(IoIcons.facebook),
                   ),
                 ],
               ),
@@ -109,12 +122,12 @@ class ScoreInfos extends StatelessWidget {
         _InfoItem(
           label: l10n.streak,
           info: '222',
-          icon: IoIcons.trophy,
+          icon: Icons.local_fire_department,
         ),
         _InfoItem(
           label: l10n.points,
           info: '100,000',
-          icon: IoIcons.trophy,
+          icon: Icons.stars_rounded,
         ),
       ],
     );
@@ -144,12 +157,14 @@ class _InfoItem extends StatelessWidget {
         ),
         const SizedBox(height: IoCrosswordSpacing.lg),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
               size: 20,
               color: IoCrosswordColors.seedGreen,
             ),
+            const SizedBox(width: 7.5),
             Text(
               info,
               style: textTheme.labelSmall.regular,
