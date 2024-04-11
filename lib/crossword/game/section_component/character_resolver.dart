@@ -42,19 +42,7 @@ extension CharacterResolver on SectionComponent {
       wordsToCheck.addAll(bottomLeftNeighbour.words.solvedWords());
     }
 
-    for (var i = 0; i < wordsToCheck.length; i++) {
-      final word = wordsToCheck[i];
-
-      final characters = word.answer.toUpperCase().characters;
-      for (var c = 0; c < characters.length; c++) {
-        final charPosition = word.getCharactersPosition(c);
-
-        if (charPosition.x == x && charPosition.y == y) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return _charExistsInWords(x, y, wordsToCheck);
   }
 
   // If character is in section rectangle and solved by border word
@@ -71,14 +59,18 @@ extension CharacterResolver on SectionComponent {
       wordsToCheck.addAll(topNeighbour.words.solvedWords());
     }
 
-    for (var i = 0; i < wordsToCheck.length; i++) {
-      final word = wordsToCheck[i];
+    return _charExistsInWords(x, y, wordsToCheck);
+  }
+
+  bool _charExistsInWords(int charX, int charY, List<Word> words) {
+    for (var i = 0; i < words.length; i++) {
+      final word = words[i];
 
       final characters = word.answer.toUpperCase().characters;
       for (var c = 0; c < characters.length; c++) {
         final charPosition = word.getCharactersPosition(c);
 
-        if (charPosition.x == x && charPosition.y == y) {
+        if (charPosition.x == charX && charPosition.y == charY) {
           return true;
         }
       }
