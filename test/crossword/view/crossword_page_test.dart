@@ -14,7 +14,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
-import '../../helpers/set_display_size.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 

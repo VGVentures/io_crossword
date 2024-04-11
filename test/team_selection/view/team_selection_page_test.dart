@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -130,20 +132,67 @@ void main() {
       });
     });
 
-    testWidgets('verify MascotSubmitted is called', (tester) async {
-      when(() => teamSelectionCubit.state).thenReturn(2);
+    group('joining a team', () {
+      late CrosswordBloc crosswordBloc;
+      late FlowController<GameIntroStatus> flowController;
 
-      final crosswordBloc = _MockCrosswordBloc();
+      setUp(() {
+        when(() => teamSelectionCubit.state).thenReturn(2);
 
-      await tester.pumpApp(
-        crosswordBloc: crosswordBloc,
-        widget,
+        crosswordBloc = _MockCrosswordBloc();
+        flowController = FlowController<GameIntroStatus>(
+          GameIntroStatus.teamSelection,
+        );
+        addTearDown(flowController.dispose);
+      });
+
+      testWidgets('adds MascotSelected', (tester) async {
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => teamSelectionCubit,
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: TeamSelectionView()),
+              ],
+            ),
+          ),
+        );
+
+        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+        await tester.ensureVisible(submitButtonFinder);
+        await tester.tap(submitButtonFinder);
+        await tester.pumpAndSettle();
+
+        verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
+            .called(1);
+      });
+
+      testWidgets(
+        'flows into enterInitials',
+        (tester) async {
+          await tester.pumpApp(
+            crosswordBloc: crosswordBloc,
+            BlocProvider(
+              create: (_) => teamSelectionCubit,
+              child: FlowBuilder<GameIntroStatus>(
+                controller: flowController,
+                onGeneratePages: (_, __) => [
+                  const MaterialPage(child: TeamSelectionView()),
+                ],
+              ),
+            ),
+          );
+
+          final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+          await tester.ensureVisible(submitButtonFinder);
+          await tester.tap(submitButtonFinder);
+          await tester.pumpAndSettle();
+
+          expect(flowController.state, equals(GameIntroStatus.enterInitials));
+        },
       );
-
-      await tester.tap(find.text(l10n.joinTeam('Android')));
-
-      verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
-          .called(1);
     });
   });
 }

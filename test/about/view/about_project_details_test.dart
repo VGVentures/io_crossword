@@ -5,9 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:mocktail/mocktail.dart';
-// ignore: depend_on_referenced_packages
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-// ignore: depend_on_referenced_packages
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import '../../helpers/helpers.dart';
