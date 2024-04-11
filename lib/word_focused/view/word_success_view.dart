@@ -107,8 +107,7 @@ class WordSuccessMobileView extends StatelessWidget {
                     const SuccessStats(),
                     const SizedBox(height: 40),
                     const _SuccessChallengeProgress(),
-                    const SizedBox(height: 24),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 40),
                     const KeepPlayingButton(),
                     const SizedBox(height: 16),
                     Text(
@@ -137,6 +136,7 @@ class WordSuccessMobileView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class SuccessTopBar extends StatelessWidget {
   @visibleForTesting
   const SuccessTopBar({super.key});
@@ -171,6 +171,7 @@ class SuccessTopBar extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class SuccessStats extends StatelessWidget {
   @visibleForTesting
   const SuccessStats({super.key});
