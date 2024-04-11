@@ -406,6 +406,7 @@ void main() {
         border: Border.all(),
         borderRadius: BorderRadius.circular(1),
         textStyle: const TextStyle(color: Color(0xff00ff00)),
+        size: Size.zero,
       );
 
       final to = IoWordInputCharacterFieldStyle(
@@ -413,6 +414,8 @@ void main() {
         border: Border.all(width: 2),
         borderRadius: BorderRadius.circular(2),
         textStyle: const TextStyle(color: Color(0xff0000ff)),
+        size: const Size(2, 2),
+        elevation: 2,
       );
 
       final lerp = from.lerp(to, 0.5);
@@ -424,6 +427,8 @@ void main() {
       expect(lerp.border.top.width, 1.5);
       expect(lerp.borderRadius, BorderRadius.circular(1.5));
       expect(lerp.textStyle.color, const Color(0xff007f7f));
+      expect(lerp.size, const Size(1, 1));
+      expect(lerp.elevation, 1);
     });
   });
 }
