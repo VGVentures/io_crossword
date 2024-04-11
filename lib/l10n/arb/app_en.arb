@@ -113,6 +113,18 @@
   "@playNow": {
     "description": "Play now label"
   },
+  "shareOn": "Share on:",
+  "@shareOn": {
+    "description": "Share on label"
+  },
+  "shareYourScore": "Share your score",
+  "@shareYourScore": {
+    "description": "Share your score label"
+  },
+  "shareScoreContent": "Check my score in I/O Crosswords and join to break the world record!",
+  "@shareScoreContent": {
+    "description": "Sentence sent when sharing score"
+  },
   "couldNotOpenUrl": "Could not open url",
   "@couldNotOpenUrl": {
     "description": "Could not open url error message when trying to open link"
@@ -160,6 +172,10 @@
   "streak": "Streak",
   "@streak": {
     "description": "Streak label"
+  },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
   },
   "score": "Score",
   "@score": {
