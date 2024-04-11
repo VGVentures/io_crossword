@@ -7,12 +7,12 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../test_tag.dart';
 
-class _MockIoPlayerAliasStyle extends Mock implements IoPlayerAliasStyle {}
+class _MockIoWordStyle extends Mock implements IoWordStyle {}
 
 class _GoldenFileComparator extends LocalFileComparator {
   _GoldenFileComparator()
       : super(
-          Uri.parse('test/src/widgets/io_player_alias_test.dart'),
+          Uri.parse('test/src/widgets/io_word.dart'),
         );
 
   @override
@@ -36,8 +36,8 @@ class _GoldenFileComparator extends LocalFileComparator {
 }
 
 void main() {
-  group('$IoPlayerAlias', () {
-    const style = IoPlayerAliasStyle(
+  group('$IoWord', () {
+    const style = IoWordStyle(
       backgroundColor: Color(0xff00ff00),
       textStyle: TextStyle(),
       borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -49,17 +49,17 @@ void main() {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: IoPlayerAlias('ABC', style: style),
+          child: IoWord('ABC', style: style),
         ),
       );
-      expect(find.byType(IoPlayerAlias), findsOneWidget);
+      expect(find.byType(IoWord), findsOneWidget);
     });
 
     testWidgets('renders characters', (tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: IoPlayerAlias('ABC', style: style),
+          child: IoWord('ABC', style: style),
         ),
       );
 
@@ -70,7 +70,7 @@ void main() {
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>
-          Uri.parse('goldens/io_player_alias/io_player_alias__$name.png');
+          Uri.parse('goldens/io_word/io_word__$name.png');
 
       setUp(() async {
         final previousComparator = goldenFileComparator;
@@ -98,15 +98,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.wordTheme.big,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('android--big')),
             );
           },
@@ -122,15 +122,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.wordTheme.small,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('android--small')),
             );
           },
@@ -154,15 +154,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.wordTheme.big,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('chrome--big')),
             );
           },
@@ -178,15 +178,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.wordTheme.small,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('chrome--small')),
             );
           },
@@ -210,15 +210,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.wordTheme.big,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('firebase--big')),
             );
           },
@@ -234,15 +234,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.wordTheme.small,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('firebase--small')),
             );
           },
@@ -266,15 +266,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.big,
+                  style: themeData.io.wordTheme.big,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('flutter--big')),
             );
           },
@@ -290,15 +290,15 @@ void main() {
             await tester.pumpWidget(
               _GoldenSubject(
                 themeData: themeData,
-                child: IoPlayerAlias(
+                child: IoWord(
                   'ABC',
-                  style: themeData.io.playerAliasTheme.small,
+                  style: themeData.io.wordTheme.small,
                 ),
               ),
             );
 
             await expectLater(
-              find.byType(IoPlayerAlias),
+              find.byType(IoWord),
               matchesGoldenFile(goldenKey('flutter--small')),
             );
           },
@@ -307,10 +307,10 @@ void main() {
     });
   });
 
-  group('$IoPlayerAliasStyle', () {
+  group('$IoWordStyle', () {
     group('copyWith', () {
       test('remains the same when no arguments are give', () {
-        const style = IoPlayerAliasStyle(
+        const style = IoWordStyle(
           backgroundColor: Color(0xff00ff00),
           borderRadius: BorderRadius.all(Radius.circular(4)),
           textStyle: TextStyle(),
@@ -324,7 +324,7 @@ void main() {
       });
 
       test('changes when arguments are give', () {
-        const style = IoPlayerAliasStyle(
+        const style = IoWordStyle(
           backgroundColor: Color(0xff00ff00),
           borderRadius: BorderRadius.all(Radius.circular(4)),
           textStyle: TextStyle(),
@@ -332,7 +332,7 @@ void main() {
           boxSize: Size.square(30),
         );
 
-        const newStyle = IoPlayerAliasStyle(
+        const newStyle = IoWordStyle(
           backgroundColor: Color(0xff0000ff),
           borderRadius: BorderRadius.all(Radius.circular(8)),
           textStyle: TextStyle(),
@@ -353,14 +353,14 @@ void main() {
     });
 
     test('lerps', () {
-      const from = IoPlayerAliasStyle(
+      const from = IoWordStyle(
         backgroundColor: Color(0xff00ff00),
         borderRadius: BorderRadius.all(Radius.circular(4)),
         textStyle: TextStyle(),
         margin: EdgeInsets.all(4),
         boxSize: Size.square(30),
       );
-      const to = IoPlayerAliasStyle(
+      const to = IoWordStyle(
         backgroundColor: Color(0xff0000ff),
         borderRadius: BorderRadius.all(Radius.circular(8)),
         textStyle: TextStyle(),
@@ -377,12 +377,12 @@ void main() {
     });
   });
 
-  group('$IoPlayerAliasTheme', () {
+  group('$IoWordTheme', () {
     test('lerps', () {
-      final small = _MockIoPlayerAliasStyle();
-      final big = _MockIoPlayerAliasStyle();
+      final small = _MockIoWordStyle();
+      final big = _MockIoWordStyle();
 
-      final theme = IoPlayerAliasTheme(
+      final theme = IoWordTheme(
         small: small,
         big: big,
       );
@@ -406,7 +406,7 @@ class _GoldenSubject extends StatelessWidget {
 
   final ThemeData themeData;
 
-  final IoPlayerAlias child;
+  final IoWord child;
 
   @override
   Widget build(BuildContext context) {

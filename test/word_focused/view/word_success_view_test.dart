@@ -63,10 +63,10 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoPlayerAlias', (tester) async {
+    testWidgets('renders $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoPlayerAlias), findsOneWidget);
+      expect(find.byType(IoWord), findsOneWidget);
     });
 
     testWidgets('renders success stats', (tester) async {
@@ -109,10 +109,10 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoPlayerAlias', (tester) async {
+    testWidgets('renders $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoPlayerAlias), findsOneWidget);
+      expect(find.byType(IoWord), findsOneWidget);
     });
 
     testWidgets('renders success stats', (tester) async {
