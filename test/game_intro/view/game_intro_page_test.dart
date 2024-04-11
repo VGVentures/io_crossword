@@ -6,6 +6,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
@@ -82,6 +83,23 @@ void main() {
         );
 
         expect(find.byType(InitialsPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders the $HowToPlayPage when the status is howToPlay',
+      (tester) async {
+        final flowController =
+            FlowController<GameIntroStatus>(GameIntroStatus.howToPlay);
+        addTearDown(flowController.dispose);
+
+        await tester.pumpApp(
+          GameIntroView(
+            flowController: flowController,
+          ),
+        );
+
+        expect(find.byType(HowToPlayPage), findsOneWidget);
       },
     );
 
