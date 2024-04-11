@@ -2,63 +2,69 @@ import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/about.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
-import 'package:io_crossword/welcome/view/welcome_page.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword/welcome/welcome.dart';
 
 class GameIntroPage extends StatelessWidget {
   const GameIntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GameIntroBloc(
-        leaderboardResource: context.read<LeaderboardResource>(),
-      )..add(const BlacklistRequested()),
-      child: const GameIntroView(),
-    );
+    return const GameIntroView();
   }
 }
 
+enum GameIntroStatus {
+  welcome,
+  teamSelection,
+  enterInitials,
+  howToPlay,
+}
+
 class GameIntroView extends StatelessWidget {
-  const GameIntroView({super.key});
+  const GameIntroView({
+    super.key,
+    @visibleForTesting FlowController<GameIntroStatus>? flowController,
+  }) : _flowController = flowController;
+
+  final FlowController<GameIntroStatus>? _flowController;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) =>
-          (previous.status != current.status) || current.isIntroCompleted,
-      listener: (context, state) {
-        if (state.status == GameIntroStatus.initialsInput) {
-          context
-              .read<CrosswordBloc>()
-              .add(MascotSelected(state.selectedMascot));
-        }
-        if (state.isIntroCompleted) {
-          context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
+    return Material(
+      child: FlowBuilder<GameIntroStatus>(
+        controller: _flowController,
+        state: _flowController == null ? GameIntroStatus.welcome : null,
+        onGeneratePages: onGenerateGameIntroPages,
+        onComplete: (state) {
+          // coverage:ignore-start
+          // TODO(alestiago): Handle this creation.
+          // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422014818
+          context.read<LeaderboardResource>().createScore(
+                initials: 'AAA',
+                mascot: Mascots.dash,
+              );
+          // coverage:ignore-end
 
           Navigator.of(context).pushReplacement(CrosswordPage.route());
-          AboutView.showModal(context);
-        }
-      },
-      child: Material(
-        child: FlowBuilder<GameIntroState>(
-          state: context.select((GameIntroBloc bloc) => bloc.state),
-          onGeneratePages: onGenerateGameIntroPages,
-        ),
+        },
       ),
     );
   }
 }
 
 List<Page<void>> onGenerateGameIntroPages(
-  GameIntroState state,
+  GameIntroStatus state,
   List<Page<void>> pages,
 ) {
-  return switch (state.status) {
+  return switch (state) {
     GameIntroStatus.welcome => [WelcomePage.page()],
-    GameIntroStatus.mascotSelection => [MascotSelectionView.page()],
-    GameIntroStatus.initialsInput => [InitialsInputView.page()],
+    GameIntroStatus.teamSelection => [TeamSelectionPage.page()],
+    GameIntroStatus.enterInitials => [InitialsPage.page()],
+    GameIntroStatus.howToPlay => [HowToPlayPage.page()],
   };
 }

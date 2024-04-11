@@ -8,6 +8,10 @@
   "@welcome": {
     "description": "Welcome label"
   },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings label"
+  },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
@@ -24,9 +28,18 @@
   "@continueLabel": {
     "description": "Continue label"
   },
-  "chooseTeam": "Choose a team",
-  "@chooseTeam": {
-    "description": "Label displayed in the team selection modal"
+  "chooseYourTeam": "Choose your team",
+  "@chooseYourTeam": {
+    "description": "The title for the team selection page"
+  },
+  "joinTeam": "Join {team} team",
+  "@joinTeam": {
+    "description": "Text for which team you are choosing",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
   },
   "enterInitials": "Enter your initials for the leaderboard",
   "@enterInitials": {
@@ -160,9 +173,45 @@
   "@submitScore": {
     "description": "Submit Score label."
   },
+  "exploreAiStudio": "Explore in AI Studio",
+  "@exploreAiStudio": {
+    "description": "Explore in AI Studio label."
+  },
+  "googleIO": "Google I/O",
+  "@googleIO": {
+    "description": "Google I/O label."
+  },
+  "developerProfile": "Developer Profile",
+  "@developerProfile": {
+    "description": "Developer Profile label."
+  },
   "findNewWord": "Find a new word",
   "@findNewWord": {
     "description": "Find new word label"
+  },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
+  },
+  "totalScore": "Total score",
+  "@totalScore": {
+    "description": "Total score label"
+  },
+  "claimBadge": "Claim my badge",
+  "@claimBadge": {
+    "description": "Claim badge label"
+  },
+  "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
+  "@claimBadgeDescription": {
+    "description": "Developer Profile label"
+  },
+  "keepPlaying": "Keep playing",
+  "@keepPlaying": {
+    "description": "Keep playing label"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or label"
   },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {

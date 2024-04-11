@@ -10,7 +10,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord = context.select(
-      (CrosswordBloc bloc) => (bloc.state as CrosswordLoaded).selectedWord,
+      (CrosswordBloc bloc) => bloc.state.selectedWord,
     );
 
     if (selectedWord != null) {

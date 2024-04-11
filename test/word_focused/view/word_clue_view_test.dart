@@ -77,7 +77,7 @@ void main() {
         selectedWord = WordSelection(
           section: (0, 0),
           word: _FakeWord(),
-          solvedStatus: SolvedStatus.solved,
+          solvedStatus: WordStatus.solved,
         );
         wordFocusedBloc = _MockWordFocusedBloc();
 
@@ -142,7 +142,7 @@ void main() {
         selectedWord = WordSelection(
           section: (0, 0),
           word: _FakeWord(),
-          solvedStatus: SolvedStatus.solved,
+          solvedStatus: WordStatus.solved,
         );
         wordFocusedBloc = _MockWordFocusedBloc();
 

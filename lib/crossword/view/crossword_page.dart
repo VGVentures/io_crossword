@@ -1,7 +1,6 @@
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -22,7 +21,7 @@ class CrosswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CrosswordBloc>()
       ..add(const BoardSectionRequested((0, 0)))
-      ..add(const BoardLoadingInfoFetched());
+      ..add(const BoardLoadingInformationRequested());
 
     return const CrosswordView();
   }
@@ -36,19 +35,6 @@ class CrosswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final bloc = context.watch<CrosswordBloc>();
-    final state = bloc.state;
-
-    late final Widget child;
-    if (state is CrosswordInitial) {
-      child = const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is CrosswordError) {
-      child = const Center(child: Text('Error loading crossword'));
-    } else if (state is CrosswordLoaded) {
-      child = const LoadedBoardView();
-    }
 
     return Scaffold(
       appBar: IoAppBar(
@@ -66,7 +52,23 @@ class CrosswordView extends StatelessWidget {
           );
         },
       ),
-      body: child,
+      body: BlocBuilder<CrosswordBloc, CrosswordState>(
+        buildWhen: (previous, current) => previous.status != current.status,
+        builder: (context, state) {
+          switch (state.status) {
+            case CrosswordStatus.initial:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case CrosswordStatus.success:
+              return const LoadedBoardView();
+            case CrosswordStatus.failure:
+              return ErrorView(
+                title: l10n.errorPromptText,
+              );
+          }
+        },
+      ),
     );
   }
 }
@@ -118,11 +120,6 @@ class _LargeBoardView extends StatelessWidget {
     return Stack(
       children: [
         GameWidget(game: game),
-        const Positioned(
-          top: 12,
-          right: 16,
-          child: AboutButton(),
-        ),
         const WordFocusedDesktopPage(),
         const BottomBar(),
         _ZoomControls(game: game),
@@ -141,29 +138,9 @@ class _SmallBoardView extends StatelessWidget {
     return Stack(
       children: [
         GameWidget(game: game),
-        const Positioned(
-          top: 12,
-          right: 16,
-          child: AboutButton(),
-        ),
         const WordFocusedMobilePage(),
         _ZoomControls(game: game),
       ],
-    );
-  }
-}
-
-class AboutButton extends StatelessWidget {
-  @visibleForTesting
-  const AboutButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: const Icon(Icons.question_mark_rounded),
-      onPressed: () {
-        AboutView.showModal(context);
-      },
     );
   }
 }

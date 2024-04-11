@@ -63,7 +63,7 @@ void main() {
       );
 
       when(() => crosswordBloc.state).thenReturn(
-        CrosswordLoaded(
+        CrosswordState(
           sectionSize: 20,
           selectedWord: selectedWord,
         ),
@@ -110,10 +110,10 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream.value(
-            CrosswordLoaded(
+            CrosswordState(
               sectionSize: 20,
               selectedWord: selectedWord.copyWith(
-                solvedStatus: SolvedStatus.solved,
+                solvedStatus: WordStatus.solved,
               ),
             ),
           ),
@@ -150,7 +150,7 @@ void main() {
 
       when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
       when(() => crosswordBloc.state).thenReturn(
-        CrosswordLoaded(
+        CrosswordState(
           sectionSize: 20,
           selectedWord: selectedWord,
         ),
@@ -189,10 +189,10 @@ void main() {
         whenListen(
           crosswordBloc,
           Stream.value(
-            CrosswordLoaded(
+            CrosswordState(
               sectionSize: 20,
               selectedWord: selectedWord.copyWith(
-                solvedStatus: SolvedStatus.solved,
+                solvedStatus: WordStatus.solved,
               ),
             ),
           ),

@@ -70,10 +70,10 @@ class IoCrosswordTheme {
         textStyle: textStyle,
       ),
       filled: IoWordInputCharacterFieldStyle(
-        backgroundColor: IoCrosswordColors.seedWhite,
+        backgroundColor: colorScheme.primary,
         border: Border.all(
           width: 1.8,
-          color: IoCrosswordColors.seedWhite,
+          color: colorScheme.primary,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle.copyWith(

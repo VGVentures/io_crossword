@@ -19,7 +19,7 @@ void main() {
   group('SectionKeyboardHandler', () {
     late CrosswordBloc bloc;
     late StreamController<CrosswordState> stateController;
-    final state = CrosswordLoaded(
+    final state = CrosswordState(
       sectionSize: sectionSize,
       sections: {
         for (final section in sections)
