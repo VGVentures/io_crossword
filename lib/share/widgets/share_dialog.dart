@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ShareDialog extends StatelessWidget {
@@ -13,10 +14,11 @@ class ShareDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Center(
       child: IoCrosswordCard(
         maxWidth: 340,
-        maxHeight: 540,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
           child: Column(
@@ -28,6 +30,10 @@ class ShareDialog extends StatelessWidget {
                 ),
                 child: content,
               ),
+              Text(
+                l10n.shareOn,
+              ),
+              const SizedBox(height: IoCrosswordSpacing.xlgsm),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -82,7 +88,7 @@ class ShareDialogHeader extends StatelessWidget {
           textAlign: TextAlign.center,
           style: textTheme.bodySmall.medium,
         ),
-        const Expanded(child: SizedBox()),
+        const Spacer(),
         const CloseButton(),
       ],
     );

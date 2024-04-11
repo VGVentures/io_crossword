@@ -28,39 +28,32 @@ class ShareWordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const style = IoWordStyle(
-      backgroundColor: IoCrosswordColors.seedWhite,
-      textStyle: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w700,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(0.36)),
-      margin: EdgeInsets.all(0.5),
-      boxSize: Size.square(30),
-    );
+    final themeData = Theme.of(context);
 
     return Column(
       children: [
         Text(
           l10n.shareWordTitle,
           textAlign: TextAlign.center,
-          style: textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodySmall.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         Text(
           l10n.shareWordSubtitle,
           textAlign: TextAlign.center,
-          style: textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodySmall.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
-        // TODO(any): Update with new IoWord widget
         IoWord(
-          '${word.answer.substring(0, 1)}______',
-          style: style,
+          '${word.answer.substring(0, 1)}_____',
+          style: themeData.io.wordTheme.big,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
-        Text(word.clue),
+        Text(
+          word.clue,
+          style: themeData.textTheme.bodySmall.regular
+              ?.copyWith(color: IoCrosswordColors.seedGreen),
+        ),
       ],
     );
   }

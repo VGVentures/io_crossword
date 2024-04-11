@@ -23,17 +23,7 @@ class ShareScorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const style = IoWordStyle(
-      backgroundColor: IoCrosswordColors.flutterBlue,
-      textStyle: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w700,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(0.36)),
-      margin: EdgeInsets.all(0.5),
-      boxSize: Size.square(30),
-    );
+    final themeData = Theme.of(context);
 
     return Column(
       children: [
@@ -45,11 +35,10 @@ class ShareScorePage extends StatelessWidget {
         Text(
           l10n.shareScoreContent,
           textAlign: TextAlign.center,
-          style: textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodySmall.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
-        // TODO(any): Update with new alias widget
-        const IoWord('ABC', style: style),
+        IoWord('ABC', style: themeData.io.wordTheme.big),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const ScoreInformation(),
       ],
