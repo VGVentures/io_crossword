@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
@@ -37,6 +38,7 @@ class CrosswordView extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
+      endDrawer: const CrosswordDrawer(),
       appBar: IoAppBar(
         // TODO(Ayad): add SegmentedButtons design
         // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417693547
@@ -47,7 +49,7 @@ class CrosswordView extends StatelessWidget {
             children: [
               MuteButton(),
               SizedBox(width: 7),
-              DrawerButton(),
+              EndDrawerButton(),
             ],
           );
         },
