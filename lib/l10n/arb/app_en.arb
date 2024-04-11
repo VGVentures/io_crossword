@@ -12,6 +12,18 @@
   "@settings": {
     "description": "Settings label"
   },
+  "shareThisWord": "Share this word",
+  "@shareThisWord": {
+    "description": "Share this word label"
+  },
+  "shareWordTitle": "Hey, I need your help!",
+  "@shareWordTitle": {
+    "description": "Title of the share word modal"
+  },
+  "shareWordSubtitle": "Join me on I/O Crossword to help me solve this word and break a world record.",
+  "@shareWordSubtitle": {
+    "description": "Subtitle of the share word modal"
+  },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
