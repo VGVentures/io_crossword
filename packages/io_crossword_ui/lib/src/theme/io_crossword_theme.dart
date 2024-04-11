@@ -83,7 +83,7 @@ class IoCrosswordTheme {
         size: size,
       ),
       focused: IoWordInputCharacterFieldStyle(
-        backgroundColor: IoCrosswordColors.redError,
+        backgroundColor: colorScheme.surface,
         border: Border(
           top: borderSide,
           left: borderSide,
@@ -94,8 +94,8 @@ class IoCrosswordTheme {
             strokeAlign: BorderSide.strokeAlignOutside,
           ),
         ),
-        size: size,
         elevation: 10,
+        size: size,
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
       ),

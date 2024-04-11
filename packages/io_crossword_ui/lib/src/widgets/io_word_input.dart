@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template character_validator}
@@ -389,7 +391,7 @@ class _IoWordInputState extends State<IoWordInput> {
   }
 }
 
-class _CharacterField extends StatelessWidget {
+class _CharacterField extends StatefulWidget {
   const _CharacterField({
     required this.style,
     required this.child,
@@ -408,20 +410,57 @@ class _CharacterField extends StatelessWidget {
   final Widget child;
 
   @override
+  State<_CharacterField> createState() => _CharacterFieldState();
+}
+
+class _CharacterFieldState extends State<_CharacterField>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 150),
+  );
+
+  late var _offsetTween = Tween(
+    begin: Offset(0, -widget.style.elevation),
+    end: Offset(0, -widget.style.elevation),
+  );
+
+  late var _decorationTween = DecorationTween(
+    begin: widget.style._toBoxDecoration(),
+    end: widget.style._toBoxDecoration(),
+  );
+
+  @override
+  void didUpdateWidget(covariant _CharacterField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.forward(from: 0);
+
+    _offsetTween = Tween(
+      begin: Offset(0, -oldWidget.style.elevation),
+      end: Offset(0, -widget.style.elevation),
+    );
+    _decorationTween = DecorationTween(
+      begin: oldWidget.style._toBoxDecoration(),
+      end: widget.style._toBoxDecoration(),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: Offset(0, -style.elevation.toDouble()),
-      child: SizedBox.fromSize(
-        size: style.size,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: style.borderRadius,
-            border: style.border,
-            color: style.backgroundColor,
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: _offsetTween.evaluate(_controller),
+          child: SizedBox.fromSize(
+            size: widget.style.size,
+            child: DecoratedBox(
+              decoration: _decorationTween.evaluate(_controller),
+              child: Center(child: widget.child),
+            ),
           ),
-          child: Center(child: child),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -511,7 +550,15 @@ class IoWordInputCharacterFieldStyle extends Equatable {
   final Size size;
 
   /// How much should the character field be elevated.
-  final int elevation;
+  final double elevation;
+
+  BoxDecoration _toBoxDecoration() {
+    return BoxDecoration(
+      color: backgroundColor,
+      border: border,
+      borderRadius: borderRadius,
+    );
+  }
 
   /// Linearly interpolate between two [IoWordInputCharacterFieldStyle].
   IoWordInputCharacterFieldStyle lerp(
@@ -524,7 +571,7 @@ class IoWordInputCharacterFieldStyle extends Equatable {
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
       size: Size.lerp(size, other.size, t)!,
-      elevation: lerpDouble(elevation, other.elevation, t)!.toInt(),
+      elevation: lerpDouble(elevation, other.elevation, t)!,
     );
   }
 
