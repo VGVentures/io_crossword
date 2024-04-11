@@ -339,39 +339,37 @@ class _IoWordInputState extends State<IoWordInput> {
         style = textInputStyle.filled;
       }
 
-      final characterField = _CharacterField(
-        style: style,
-        child: readOnly
-            ? Text(
-                widget.characters![i]!,
-                style: style.textStyle,
-                textAlign: TextAlign.center,
-              )
-            : EditableText(
-                keyboardType: TextInputType.text,
-                enableSuggestions: false,
-                controller: controller,
-                focusNode: focusNode,
-                style: style.textStyle,
-                cursorWidth: 0,
-                textAlign: TextAlign.center,
-                cursorColor: Colors.transparent,
-                backgroundCursorColor: Colors.transparent,
-                onChanged: _onTextChanged,
-                onSubmitted: widget.onSubmit != null
-                    ? (_) => widget.onSubmit!(_word)
-                    : null,
-                onSelectionChanged: (selection, cause) {
-                  controller.selection = TextSelection.fromPosition(
-                    const TextPosition(offset: 1),
-                  );
-                },
-              ),
-      );
-
       final character = Padding(
         padding: textInputStyle.padding,
-        child: characterField,
+        child: _CharacterField(
+          style: style,
+          child: readOnly
+              ? Text(
+                  widget.characters![i]!,
+                  style: style.textStyle,
+                  textAlign: TextAlign.center,
+                )
+              : EditableText(
+                  keyboardType: TextInputType.text,
+                  enableSuggestions: false,
+                  controller: controller,
+                  focusNode: focusNode,
+                  style: style.textStyle,
+                  cursorWidth: 0,
+                  textAlign: TextAlign.center,
+                  cursorColor: Colors.transparent,
+                  backgroundCursorColor: Colors.transparent,
+                  onChanged: _onTextChanged,
+                  onSubmitted: widget.onSubmit != null
+                      ? (_) => widget.onSubmit!(_word)
+                      : null,
+                  onSelectionChanged: (selection, cause) {
+                    controller.selection = TextSelection.fromPosition(
+                      const TextPosition(offset: 1),
+                    );
+                  },
+                ),
+        ),
       );
       characters.add(character);
     }
