@@ -2,21 +2,16 @@ part of 'section_component.dart';
 
 extension CharacterResolver on SectionComponent {
   bool _isCharacterSolvedByNeighbour(Rect sectionRectangle, int x, int y) {
-    var charSolved = false;
     final offset = Vector2(
       x * CrosswordGame.cellSize.toDouble(),
       y * CrosswordGame.cellSize.toDouble(),
     );
 
     if (!sectionRectangle.contains(offset.toOffset())) {
-      charSolved = _isCharSolved(x, y);
+      return _isCharSolved(x, y);
+    } else {
+      return _isCharSolvedBis(x, y);
     }
-
-    if (!charSolved) {
-      charSolved = _isCharSolvedBis(x, y);
-    }
-
-    return charSolved;
   }
 
   // If character in out of section rectangle and solved by neighbour's word
