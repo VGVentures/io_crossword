@@ -50,7 +50,6 @@ class GameIntroView extends StatelessWidget {
           // coverage:ignore-end
 
           Navigator.of(context).pushReplacement(CrosswordPage.route());
-          AboutView.showModal(context);
         },
       ),
     );
