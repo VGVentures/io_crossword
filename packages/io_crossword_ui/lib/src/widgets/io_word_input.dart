@@ -411,7 +411,7 @@ class _CharacterField extends StatefulWidget {
 
 class _CharacterFieldState extends State<_CharacterField>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
+  late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 150),
   );
@@ -439,26 +439,26 @@ class _CharacterFieldState extends State<_CharacterField>
       end: widget.style._toBoxDecoration(),
     );
 
-    _controller.forward(from: 0);
+    _animationController.forward(from: 0);
   }
 
   @override
   void dispose() {
+    _animationController.dispose();
     super.dispose();
-    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: _animationController,
       builder: (context, child) {
         return Transform.translate(
-          offset: _offsetTween.evaluate(_controller),
+          offset: _offsetTween.evaluate(_animationController),
           child: SizedBox.fromSize(
             size: widget.style.size,
             child: DecoratedBox(
-              decoration: _decorationTween.evaluate(_controller),
+              decoration: _decorationTween.evaluate(_animationController),
               child: Center(child: widget.child),
             ),
           ),
