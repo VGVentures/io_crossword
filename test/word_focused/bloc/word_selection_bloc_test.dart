@@ -89,16 +89,15 @@ void main() {
           wordIdentifier: '1',
         ),
         wait: Duration(seconds: 2),
-        act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
+        act: (bloc) => bloc.add(WordSolveAttempted(answer: 'incorrect')),
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.validating,
             wordIdentifier: '1',
           ),
           WordSelectionState(
-            status: WordSelectionStatus.solved,
+            status: WordSelectionStatus.incorrect,
             wordIdentifier: '1',
-            wordPoints: 10,
           ),
         ],
       );
