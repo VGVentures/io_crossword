@@ -149,7 +149,13 @@ void main() {
         ),
       );
 
-      when(() => wordFocusedBloc.state).thenReturn(WordSelectionState.solving);
+      when(() => wordFocusedBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+          wordPoints: null,
+        ),
+      );
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,

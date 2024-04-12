@@ -6,26 +6,31 @@ import 'package:io_crossword/word_focused/word_focused.dart';
 
 void main() {
   group('$WordSelectionBloc', () {
-    test('initial state is WordSelectionState.clue', () {
+    test('initial state is WordSelectionState.initial', () {
       final bloc = WordSelectionBloc();
-
-      expect(bloc.state, equals(WordSelectionState.clue));
+      expect(bloc.state, equals(WordSelectionState.initial()));
     });
 
     blocTest<WordSelectionBloc, WordSelectionState>(
-      'emits WordSelectionState.solving when WordFocusedSolveRequested '
+      'emits solving status when WordFocusedSolveRequested '
       'is added',
       build: WordSelectionBloc.new,
       act: (bloc) => bloc.add(WordFocusedSolveRequested()),
-      expect: () => const <WordSelectionState>[WordSelectionState.solving],
+      expect: () => <WordSelectionState>[
+        WordSelectionState.initial()
+            .copyWith(status: WordSelectionStatus.solving),
+      ],
     );
 
     blocTest<WordSelectionBloc, WordSelectionState>(
-      'emits WordSelectionState.success when WordFocusedSuccessRequested '
+      'emits success status when WordFocusedSuccessRequested '
       'is added',
       build: WordSelectionBloc.new,
       act: (bloc) => bloc.add(WordFocusedSuccessRequested()),
-      expect: () => const <WordSelectionState>[WordSelectionState.success],
+      expect: () => <WordSelectionState>[
+        WordSelectionState.initial()
+            .copyWith(status: WordSelectionStatus.success),
+      ],
     );
   });
 }
