@@ -10,6 +10,7 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
     required this.apiClient,
     required this.crosswordRepository,
     required this.boardInfoRepository,
+    required this.leaderboardRepository,
     required this.user,
     super.key,
   });
@@ -25,6 +27,7 @@ class App extends StatelessWidget {
   final User user;
   final CrosswordRepository crosswordRepository;
   final BoardInfoRepository boardInfoRepository;
+  final LeaderboardRepository leaderboardRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class App extends StatelessWidget {
         Provider.value(value: crosswordResource),
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
+        Provider.value(value: leaderboardRepository),
       ],
       child: MultiBlocProvider(
         providers: [

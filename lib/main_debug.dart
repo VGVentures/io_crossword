@@ -15,6 +15,7 @@ import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/bootstrap.dart';
 import 'package:io_crossword/crossword/game/game.dart';
 import 'package:io_crossword/firebase_options_development.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -42,6 +43,10 @@ void main() async {
           firebaseAuth: firebaseAuth,
         );
 
+        final leaderboardRepository = LeaderboardRepository(
+          firestore: firestore,
+        );
+
         await authenticationRepository.signInAnonymously();
         await authenticationRepository.idToken.first;
 
@@ -57,6 +62,7 @@ void main() async {
 
         return App(
           apiClient: apiClient,
+          leaderboardRepository: leaderboardRepository,
           crosswordRepository: CrosswordRepository(db: firestore),
           boardInfoRepository: BoardInfoRepository(firestore: firestore),
           user: await authenticationRepository.user.first,
