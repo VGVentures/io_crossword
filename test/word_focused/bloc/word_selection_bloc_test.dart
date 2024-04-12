@@ -15,10 +15,14 @@ void main() {
       'emits solving status when WordFocusedSolveRequested '
       'is added',
       build: WordSelectionBloc.new,
-      act: (bloc) => bloc.add(WordSolveRequested()),
+      act: (bloc) => bloc.add(
+        WordSolveRequested(wordIdentifier: '1'),
+      ),
       expect: () => <WordSelectionState>[
-        WordSelectionState.initial()
-            .copyWith(status: WordSelectionStatus.solving),
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+        ),
       ],
     );
 

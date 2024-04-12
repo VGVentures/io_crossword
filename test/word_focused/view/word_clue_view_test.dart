@@ -67,8 +67,13 @@ void main() {
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });
@@ -132,8 +137,13 @@ void main() {
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });

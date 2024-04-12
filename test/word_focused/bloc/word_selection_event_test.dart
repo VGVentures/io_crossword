@@ -7,8 +7,8 @@ void main() {
   group('WordFocusedSolveRequested', () {
     test('supports equality', () {
       expect(
-        WordSolveRequested(),
-        equals(WordSolveRequested()),
+        WordSolveRequested(wordIdentifier: '1'),
+        equals(WordSolveRequested(wordIdentifier: '1')),
       );
     });
   });
