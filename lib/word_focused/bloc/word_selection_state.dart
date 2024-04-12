@@ -1,8 +1,5 @@
 part of 'word_selection_bloc.dart';
 
-/// {@template word_selection_status}
-/// The status of the word selection.
-/// {@endtemplate}
 enum WordSelectionStatus {
   clue,
   solving,
@@ -21,7 +18,6 @@ class WordSelectionState extends Equatable {
         wordIdentifier = null,
         wordPoints = null;
 
-  /// {@macro word_selection_status}
   final WordSelectionStatus status;
 
   /// The unique identifier of the word.
@@ -33,7 +29,7 @@ class WordSelectionState extends Equatable {
   /// The amount of points that will be awarded to the user if the
   /// word is correctly solved.
   ///
-  /// Is `null` if the word is not yet solved.
+  /// Is `null` if the word is has not yet been solved.
   final int? wordPoints;
 
   WordSelectionState copyWith({
