@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/share/views/views.dart';
+import 'package:io_crossword/share/view/views.dart';
 import 'package:io_crossword/share/widgets/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -18,7 +18,7 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
-  group('ShareWordPage', () {
+  group('$ShareWordPage', () {
     testWidgets(
       'renders correctly',
       (tester) async {
@@ -33,9 +33,8 @@ void main() {
     );
 
     testWidgets(
-      'showModal opens the ShareWordPage in a $ShareDialog',
+      'showModal opens the $ShareWordPage in a $ShareDialog',
       (tester) async {
-        // Build the test widget
         await tester.pumpApp(
           Scaffold(
             body: Builder(

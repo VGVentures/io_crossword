@@ -46,6 +46,7 @@ class ShareScorePage extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class ScoreInformation extends StatelessWidget {
   @visibleForTesting
   const ScoreInformation({super.key});

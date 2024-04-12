@@ -44,6 +44,9 @@ class ShareWordPage extends StatelessWidget {
           style: themeData.textTheme.bodySmall.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        // TODO(any): Replace with the actual word from the
+        // SelectedWordBloc:
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6443977120
         IoWord(
           '${word.answer.substring(0, 1)}_____',
           style: themeData.io.wordTheme.big,
@@ -52,7 +55,7 @@ class ShareWordPage extends StatelessWidget {
         Text(
           word.clue,
           style: themeData.textTheme.bodySmall.regular
-              ?.copyWith(color: IoCrosswordColors.seedGreen),
+              ?.copyWith(color: themeData.colorScheme.primary),
         ),
       ],
     );
