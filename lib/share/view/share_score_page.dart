@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ShareScorePage extends StatelessWidget {
@@ -9,7 +10,12 @@ class ShareScorePage extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (context) {
-        return const ShareScorePage();
+        final l10n = context.l10n;
+
+        return ShareDialog(
+          title: l10n.shareYourScore,
+          content: const ShareScorePage(),
+        );
       },
     );
   }
@@ -17,95 +23,35 @@ class ShareScorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    const style = IoWordStyle(
-      backgroundColor: IoCrosswordColors.flutterBlue,
-      textStyle: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w700,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(0.36)),
-      margin: EdgeInsets.all(0.5),
-      boxSize: Size.square(30),
-    );
+    final themeData = Theme.of(context);
 
-    return Center(
-      child: IoCrosswordCard(
-        maxWidth: 340,
-        maxHeight: 598,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.ios_share,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    l10n.shareYourScore,
-                    textAlign: TextAlign.center,
-                    style: textTheme.bodySmall.medium,
-                  ),
-                  const Expanded(child: SizedBox()),
-                  const CloseButton(),
-                ],
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const SizedBox(
-                height: 153,
-                child: Placeholder(),
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              Text(
-                l10n.shareScoreContent,
-                textAlign: TextAlign.center,
-                style: textTheme.bodySmall.regular,
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              // TODO(any): Update with new alias widget
-              const IoWord('ABC', style: style),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const ScoreInfos(),
-              const SizedBox(height: IoCrosswordSpacing.lg * 2),
-              Text(
-                l10n.shareOn,
-              ),
-              const SizedBox(height: IoCrosswordSpacing.xlgsm),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.linkedin),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.instagram),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.twitter),
-                  ),
-                  IconButton(
-                    onPressed: null,
-                    icon: Icon(IoIcons.facebook),
-                  ),
-                ],
-              ),
-            ],
-          ),
+    return Column(
+      children: [
+        const SizedBox(
+          height: 153,
+          child: Placeholder(),
         ),
-      ),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        Text(
+          l10n.shareScoreContent,
+          textAlign: TextAlign.center,
+          style: themeData.textTheme.bodySmall.regular,
+        ),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        // TODO(any): Use the actual player initials:
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444032764
+        IoWord('ABC', style: themeData.io.wordTheme.big),
+        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        const ScoreInformation(),
+      ],
     );
   }
 }
 
-class ScoreInfos extends StatelessWidget {
+@visibleForTesting
+class ScoreInformation extends StatelessWidget {
   @visibleForTesting
-  const ScoreInfos({super.key});
+  const ScoreInformation({super.key});
 
   @override
   Widget build(BuildContext context) {

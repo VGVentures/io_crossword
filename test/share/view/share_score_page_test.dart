@@ -2,26 +2,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/share/view/share_score_page.dart';
-import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:io_crossword/share/share.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  group('ShareScorePage', () {
+  group('$ShareScorePage', () {
     testWidgets(
       'renders correctly',
       (tester) async {
         await tester.pumpApp(ShareScorePage());
 
-        expect(find.byType(IoCrosswordCard), findsOneWidget);
+        expect(find.byType(ScoreInformation), findsOneWidget);
       },
     );
 
     testWidgets(
-      'showModal opens the ShareScorePage',
+      'showModal opens the $ShareScorePage in a $ShareDialog',
       (tester) async {
-        // Build the test widget
         await tester.pumpApp(
           Scaffold(
             body: Builder(
@@ -38,6 +36,7 @@ void main() {
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
+        expect(find.byType(ShareDialog), findsOneWidget);
         expect(find.byType(ShareScorePage), findsOneWidget);
       },
     );

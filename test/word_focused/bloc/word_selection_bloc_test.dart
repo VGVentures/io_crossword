@@ -12,13 +12,17 @@ void main() {
     });
 
     blocTest<WordSelectionBloc, WordSelectionState>(
-      'emits solving status when WordFocusedSolveRequested '
+      'emits solving status when $WordSolveRequested '
       'is added',
       build: WordSelectionBloc.new,
-      act: (bloc) => bloc.add(WordFocusedSolveRequested()),
+      act: (bloc) => bloc.add(
+        WordSolveRequested(wordIdentifier: '1'),
+      ),
       expect: () => <WordSelectionState>[
-        WordSelectionState.initial()
-            .copyWith(status: WordSelectionStatus.solving),
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+        ),
       ],
     );
 

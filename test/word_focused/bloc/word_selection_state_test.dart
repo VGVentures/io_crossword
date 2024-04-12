@@ -8,7 +8,7 @@ void main() {
     test('.initial initializes correctly', () {
       final state = WordSelectionState.initial();
 
-      expect(state.status, WordSelectionStatus.clue);
+      expect(state.status, WordSelectionStatus.preSolving);
       expect(state.wordIdentifier, isNull);
       expect(state.wordPoints, isNull);
     });
@@ -16,12 +16,12 @@ void main() {
     test('supports value equality', () {
       final state1 = WordSelectionState(
         wordIdentifier: '1',
-        status: WordSelectionStatus.clue,
+        status: WordSelectionStatus.preSolving,
         wordPoints: 10,
       );
       final state2 = WordSelectionState(
         wordIdentifier: '1',
-        status: WordSelectionStatus.clue,
+        status: WordSelectionStatus.preSolving,
         wordPoints: 10,
       );
       final state3 = WordSelectionState(
@@ -39,7 +39,7 @@ void main() {
       test('does nothing when no parameters are specified', () {
         final state = WordSelectionState(
           wordIdentifier: '1',
-          status: WordSelectionStatus.clue,
+          status: WordSelectionStatus.preSolving,
           wordPoints: 10,
         );
 
@@ -51,7 +51,7 @@ void main() {
       test('copies specified parameters', () {
         final state = WordSelectionState(
           wordIdentifier: '1',
-          status: WordSelectionStatus.clue,
+          status: WordSelectionStatus.preSolving,
           wordPoints: 10,
         );
         final newState = WordSelectionState(

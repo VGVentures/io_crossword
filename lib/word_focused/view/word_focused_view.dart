@@ -45,7 +45,8 @@ class WordFocusedDesktopView extends StatelessWidget {
         child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
           builder: (context, state) {
             return switch (state.status) {
-              WordSelectionStatus.clue => WordClueDesktopView(selectedWord),
+              WordSelectionStatus.preSolving =>
+                WordClueDesktopView(selectedWord),
               WordSelectionStatus.solving =>
                 WordSolvingDesktopView(selectedWord),
               WordSelectionStatus.success =>
@@ -97,7 +98,8 @@ class WordFocusedMobileView extends StatelessWidget {
           child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
             builder: (context, state) {
               return switch (state.status) {
-                WordSelectionStatus.clue => WordClueMobileView(selectedWord),
+                WordSelectionStatus.preSolving =>
+                  WordClueMobileView(selectedWord),
                 WordSelectionStatus.solving =>
                   WordSolvingMobileView(selectedWord),
                 WordSelectionStatus.success =>
