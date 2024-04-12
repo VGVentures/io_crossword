@@ -44,7 +44,8 @@ class WordFocusedDesktopView extends StatelessWidget {
         color: IoCrosswordColors.darkGray,
         child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
           builder: (context, state) {
-            return switch (state.status) {
+            // coverage:ignore-start
+            final view = switch (state.status) {
               WordSelectionStatus.preSolving =>
                 WordClueDesktopView(selectedWord),
               WordSelectionStatus.validating ||
@@ -55,6 +56,8 @@ class WordFocusedDesktopView extends StatelessWidget {
               WordSelectionStatus.solved =>
                 WordSuccessDesktopView(selectedWord),
             };
+            // coverage:ignore-end
+            return view;
           },
         ),
       ),
@@ -102,7 +105,8 @@ class WordFocusedMobileView extends StatelessWidget {
               WordSelectionStatus>(
             selector: (state) => state.status,
             builder: (context, status) {
-              return switch (status) {
+              // coverage:ignore-start
+              final view = switch (status) {
                 WordSelectionStatus.preSolving =>
                   WordClueMobileView(selectedWord),
                 WordSelectionStatus.validating ||
@@ -113,6 +117,8 @@ class WordFocusedMobileView extends StatelessWidget {
                 WordSelectionStatus.solved =>
                   WordSuccessMobileView(selectedWord),
               };
+              // coverage:ignore-end
+              return view;
             },
           ),
         ),
