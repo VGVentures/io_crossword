@@ -1,31 +1,31 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part 'word_focused_event.dart';
+part 'word_selection_event.dart';
 
-enum WordFocusedState {
+enum WordSelectionState {
   clue,
   solving,
   success,
 }
 
-class WordFocusedBloc extends Bloc<WordFocusedEvent, WordFocusedState> {
-  WordFocusedBloc() : super(WordFocusedState.clue) {
+class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
+  WordSelectionBloc() : super(WordSelectionState.clue) {
     on<WordFocusedSolveRequested>(_onWordFocusedSolveRequested);
     on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
   }
 
   void _onWordFocusedSolveRequested(
     WordFocusedSolveRequested event,
-    Emitter<WordFocusedState> emit,
+    Emitter<WordSelectionState> emit,
   ) {
-    emit(WordFocusedState.solving);
+    emit(WordSelectionState.solving);
   }
 
   void _onWordFocusedSuccessRequested(
     WordFocusedSuccessRequested event,
-    Emitter<WordFocusedState> emit,
+    Emitter<WordSelectionState> emit,
   ) {
-    emit(WordFocusedState.success);
+    emit(WordSelectionState.success);
   }
 }
