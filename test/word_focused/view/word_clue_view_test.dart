@@ -23,8 +23,9 @@ class _FakeWord extends Fake implements Word {
   int? get solvedTimestamp => null;
 }
 
-class _MockWordFocusedBloc extends MockBloc<WordFocusedEvent, WordFocusedState>
-    implements WordFocusedBloc {}
+class _MockWordFocusedBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   late AppLocalizations l10n;
@@ -36,7 +37,7 @@ void main() {
   group('WordClueDesktopView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
 
     group('with unsolved word', () {
       setUp(() {
@@ -60,14 +61,19 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });
@@ -102,7 +108,7 @@ void main() {
   group('WordClueMobileView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
 
     group('with unsolved word', () {
       setUp(() {
@@ -125,14 +131,19 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });
