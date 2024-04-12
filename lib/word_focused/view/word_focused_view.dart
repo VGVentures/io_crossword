@@ -18,7 +18,7 @@ class WordFocusedDesktopPage extends StatelessWidget {
 
     return BlocProvider(
       key: ValueKey(selectedWord.word.id),
-      create: (_) => WordFocusedBloc(),
+      create: (_) => WordSelectionBloc(),
       child: WordFocusedDesktopView(selectedWord),
     );
   }
@@ -42,12 +42,14 @@ class WordFocusedDesktopView extends StatelessWidget {
         width: size.width * widthRatio,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
         color: IoCrosswordColors.darkGray,
-        child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
+        child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
           builder: (context, state) {
             return switch (state) {
-              WordFocusedState.clue => WordClueDesktopView(selectedWord),
-              WordFocusedState.solving => WordSolvingDesktopView(selectedWord),
-              WordFocusedState.success => WordSuccessDesktopView(selectedWord),
+              WordSelectionState.clue => WordClueDesktopView(selectedWord),
+              WordSelectionState.solving =>
+                WordSolvingDesktopView(selectedWord),
+              WordSelectionState.success =>
+                WordSuccessDesktopView(selectedWord),
             };
           },
         ),
@@ -70,7 +72,7 @@ class WordFocusedMobilePage extends StatelessWidget {
 
     return BlocProvider(
       key: ValueKey(selectedWord.word.id),
-      create: (_) => WordFocusedBloc(),
+      create: (_) => WordSelectionBloc(),
       child: WordFocusedMobileView(selectedWord),
     );
   }
@@ -92,12 +94,14 @@ class WordFocusedMobileView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: BlocBuilder<WordFocusedBloc, WordFocusedState>(
+          child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
             builder: (context, state) {
               return switch (state) {
-                WordFocusedState.clue => WordClueMobileView(selectedWord),
-                WordFocusedState.solving => WordSolvingMobileView(selectedWord),
-                WordFocusedState.success => WordSuccessMobileView(selectedWord),
+                WordSelectionState.clue => WordClueMobileView(selectedWord),
+                WordSelectionState.solving =>
+                  WordSolvingMobileView(selectedWord),
+                WordSelectionState.success =>
+                  WordSuccessMobileView(selectedWord),
               };
             },
           ),
