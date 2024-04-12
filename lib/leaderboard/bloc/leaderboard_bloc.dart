@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 part 'leaderboard_event.dart';
 part 'leaderboard_state.dart';
@@ -9,12 +10,15 @@ part 'leaderboard_state.dart';
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
   LeaderboardBloc({
     required LeaderboardResource leaderboardResource,
+    required LeaderboardRepository leaderboardRepository,
   })  : _leaderboardResource = leaderboardResource,
+        _leaderboardRepository = leaderboardRepository,
         super(const LeaderboardState()) {
     on<LoadRequestedLeaderboardEvent>(_onLoadRequested);
   }
 
   final LeaderboardResource _leaderboardResource;
+  final LeaderboardRepository _leaderboardRepository;
 
   Future<void> _onLoadRequested(
     LoadRequestedLeaderboardEvent event,
