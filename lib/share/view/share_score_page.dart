@@ -38,6 +38,8 @@ class ShareScorePage extends StatelessWidget {
           style: themeData.textTheme.bodySmall.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        // TODO(any): Use the actual player initials:
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444032764
         IoWord('ABC', style: themeData.io.wordTheme.big),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const ScoreInformation(),
