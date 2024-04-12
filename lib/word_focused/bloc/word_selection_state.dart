@@ -1,7 +1,11 @@
 part of 'word_selection_bloc.dart';
 
 enum WordSelectionStatus {
-  clue,
+  /// The word has not yet been solved, but it is being considered
+  /// by the user.
+  preSolving,
+
+  /// The user has committed to solve the word.
   solving,
   success,
 }
@@ -14,7 +18,7 @@ class WordSelectionState extends Equatable {
   });
 
   const WordSelectionState.initial()
-      : status = WordSelectionStatus.clue,
+      : status = WordSelectionStatus.preSolving,
         wordIdentifier = null,
         wordPoints = null;
 

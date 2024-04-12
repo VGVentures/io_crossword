@@ -15,7 +15,7 @@ void main() {
       'emits solving status when WordFocusedSolveRequested '
       'is added',
       build: WordSelectionBloc.new,
-      act: (bloc) => bloc.add(WordFocusedSolveRequested()),
+      act: (bloc) => bloc.add(WordSolveRequested()),
       expect: () => <WordSelectionState>[
         WordSelectionState.initial()
             .copyWith(status: WordSelectionStatus.solving),

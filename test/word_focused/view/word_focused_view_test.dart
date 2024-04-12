@@ -102,7 +102,7 @@ void main() {
       'renders WordClueDesktopView when the status is WordSelectionStatus.clue',
       (tester) async {
         when(() => wordFocusedBloc.state).thenReturn(
-          WordSelectionState(status: WordSelectionStatus.clue),
+          WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
         await tester.pumpApp(widget);
@@ -225,7 +225,7 @@ void main() {
       'renders WordClueMobileView when the status is WordSelectionStatus.clue',
       (tester) async {
         when(() => wordFocusedBloc.state).thenReturn(
-          WordSelectionState(status: WordSelectionStatus.clue),
+          WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
         await tester.pumpApp(widget);

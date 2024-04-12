@@ -67,7 +67,7 @@ void main() {
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
+          verify(() => wordFocusedBloc.add(const WordSolveRequested()))
               .called(1);
         },
       );
@@ -132,7 +132,7 @@ void main() {
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
+          verify(() => wordFocusedBloc.add(const WordSolveRequested()))
               .called(1);
         },
       );
