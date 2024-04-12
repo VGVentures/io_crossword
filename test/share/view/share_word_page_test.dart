@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/share/view/views.dart';
+import 'package:io_crossword/share/view/view.dart';
 import 'package:io_crossword/share/widgets/widgets.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
