@@ -10,6 +10,7 @@ dependencies:
   cloud_firestore: ^4.16.1
   game_domain:
     path: ../../api/packages/game_domain
+  meta: ^1.11.0
   rxdart: ^0.27.7
 
 dev_dependencies:

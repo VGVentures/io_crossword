@@ -118,6 +118,17 @@ void main() {
       });
     });
 
+    group('updateUsersRankingPosition', () {
+      test('updates user ranking score', () {
+        leaderboardRepository.updateUsersRankingPosition(2);
+
+        expect(
+          leaderboardRepository.userRankingPosition.stream,
+          emits(2),
+        );
+      });
+    });
+
     group('getLeaderboardPlayer', () {
       test('returns the fist player', () {
         final player = players.first;

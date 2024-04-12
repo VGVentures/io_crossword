@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 const _collection = 'leaderboard';
@@ -14,12 +15,19 @@ class LeaderboardRepository {
   LeaderboardRepository({
     required FirebaseFirestore firestore,
   })  : _leaderboardCollection = firestore.collection(_collection),
-        _userRankingPosition = BehaviorSubject<int>();
+        userRankingPosition = BehaviorSubject<int>();
 
   late final CollectionReference<Map<String, dynamic>> _leaderboardCollection;
 
-  final BehaviorSubject<int> _userRankingPosition;
+  /// The users ranking position stream.
+  @visibleForTesting
+  final BehaviorSubject<int> userRankingPosition;
   BehaviorSubject<LeaderboardPlayer>? _leaderboardPlayer;
+
+  /// Updates the [userRankingPosition] of the current user.
+  void updateUsersRankingPosition(int position) {
+    userRankingPosition.add(position);
+  }
 
   /// Returns a [Stream] with the users position in the ranking.
   Stream<int> getRankingPosition(LeaderboardPlayer player) {
@@ -27,10 +35,10 @@ class LeaderboardRepository {
         .where('score', isGreaterThan: player.score)
         .count()
         .get()
-        .then((userRank) => _userRankingPosition.add((userRank.count ?? 0) + 1))
-        .onError(_userRankingPosition.addError);
+        .then((userRank) => userRankingPosition.add((userRank.count ?? 0) + 1))
+        .onError(userRankingPosition.addError);
 
-    return _userRankingPosition.stream;
+    return userRankingPosition.stream;
   }
 
   /// Returns a [Stream] of [LeaderboardPlayer] with the users

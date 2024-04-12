@@ -8,6 +8,8 @@ class LeaderboardSuccess extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final user = context.read<User>();
+
     final players =
         context.select((LeaderboardBloc bloc) => bloc.state.players);
 
@@ -55,19 +57,17 @@ class LeaderboardSuccess extends StatelessWidget {
                 const SizedBox(height: 24),
                 ...players.mapIndexed(
                   (index, player) {
-                    // TODO(Ayad): check current user
-                    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6400343873
-                    // if (player.userId == user.id) {
-                    //   return Padding(
-                    //     padding: const EdgeInsets.only(
-                    //       bottom: 16,
-                    //     ),
-                    //     child: CurrentUserPosition(
-                    //       player: player,
-                    //       rank: index + 1,
-                    //     ),
-                    //   );
-                    // }
+                    if (player.userId == user.id) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16,
+                        ),
+                        child: CurrentUserPosition(
+                          player: player,
+                          rank: index + 1,
+                        ),
+                      );
+                    }
 
                     return Padding(
                       padding: const EdgeInsets.only(
@@ -82,17 +82,7 @@ class LeaderboardSuccess extends StatelessWidget {
                     );
                   },
                 ),
-                // TODO(Ayad): check current user
-                // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6400343873
-                // if ()
-                //   Padding(
-                //     padding: const EdgeInsets.only(top: 8, bottom: 16),
-                //     child: CurrentUserPosition(
-                //       player: players.last,
-                //       rank: 320,
-                //     ),
-                //   ),
-
+                const CurrentPlayerNotTopRank(),
                 if (layout == IoLayoutData.small)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -114,6 +104,31 @@ class LeaderboardSuccess extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CurrentPlayerNotTopRank extends StatelessWidget {
+  @visibleForTesting
+  const CurrentPlayerNotTopRank({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final player =
+        context.select((LeaderboardBloc bloc) => bloc.state.currentPlayer);
+
+    if (player == null) return const SizedBox.shrink();
+
+    final rank = context.select(
+      (LeaderboardBloc bloc) => bloc.state.currentUserPosition,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 16),
+      child: CurrentUserPosition(
+        player: player,
+        rank: rank,
       ),
     );
   }

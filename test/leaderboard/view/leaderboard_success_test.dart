@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ void main() {
   group('LeaderboardSuccess', () {
     late LeaderboardBloc leaderboardBloc;
     late Widget widget;
+    const user = User(id: 'user-id');
 
     late AppLocalizations l10n;
 
@@ -70,6 +72,55 @@ void main() {
     );
 
     testWidgets(
+      'renders CurrentPlayerNotTopRank',
+      (tester) async {
+        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+
+        await tester.pumpApp(widget);
+
+        expect(find.byType(CurrentPlayerNotTopRank), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders CurrentUserPosition with one CurrentUserPosition '
+      'with the user in the top 10',
+      (tester) async {
+        when(() => leaderboardBloc.state).thenReturn(
+          LeaderboardState(
+            players: List.generate(
+              9,
+              (index) => LeaderboardPlayer(
+                userId: '',
+                initials: 'AAA',
+                score: 50,
+                streak: 2,
+                mascot: Mascots.dash,
+              ),
+            )..insert(
+                2,
+                LeaderboardPlayer(
+                  userId: user.id,
+                  initials: 'BBB',
+                  score: 500,
+                  streak: 2,
+                  mascot: Mascots.android,
+                ),
+              ),
+          ),
+        );
+
+        await tester.pumpApp(
+          widget,
+          user: user,
+        );
+
+        expect(find.byType(UserLeaderboardRanking), findsNWidgets(10));
+        expect(find.byType(CurrentUserPosition), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'renders UserLeaderboardRanking',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(
@@ -87,7 +138,10 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          widget,
+          user: user,
+        );
 
         expect(find.byType(UserLeaderboardRanking), findsNWidgets(10));
       },
@@ -113,7 +167,10 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          widget,
+          user: user,
+        );
 
         for (var i = 1; i <= numberOfPlayers; i++) {
           expect(find.text(i.toString()), findsOneWidget);
@@ -168,6 +225,80 @@ void main() {
         verify(mockNavigator.pop).called(1);
       },
     );
+
+    group('CurrentPlayerNotTopRank', () {
+      setUp(() {
+        widget = BlocProvider<LeaderboardBloc>(
+          create: (_) => leaderboardBloc,
+          child: CurrentPlayerNotTopRank(),
+        );
+      });
+
+      testWidgets(
+        'does not render CurrentUserPosition when there are no currentPlayer',
+        (tester) async {
+          when(() => leaderboardBloc.state).thenReturn(
+            LeaderboardState(
+              currentUserPosition: 50,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.byType(CurrentUserPosition), findsNothing);
+        },
+      );
+
+      testWidgets(
+        'renders CurrentUserPosition when there is a currentPlayer',
+        (tester) async {
+          when(() => leaderboardBloc.state).thenReturn(
+            LeaderboardState(
+              currentPlayer: LeaderboardPlayer(
+                userId: '',
+                initials: 'AAA',
+                score: 50,
+                streak: 2,
+                mascot: Mascots.dash,
+              ),
+              currentUserPosition: 50,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.byType(CurrentUserPosition), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'renders CurrentUserPosition when there is a currentPlayer '
+        'with the ranking',
+        (tester) async {
+          when(() => leaderboardBloc.state).thenReturn(
+            LeaderboardState(
+              currentPlayer: LeaderboardPlayer(
+                userId: '',
+                initials: 'AAA',
+                score: 50,
+                streak: 2,
+                mascot: Mascots.dash,
+              ),
+              currentUserPosition: 50,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(
+            tester
+                .widget<CurrentUserPosition>(find.byType(CurrentUserPosition))
+                .rank,
+            equals(50),
+          );
+        },
+      );
+    });
   });
 
   group('CurrentUserPosition', () {

@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,13 @@ class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
+class _MockUser extends Mock implements User {}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     IoLayoutData? layout,
+    User? user,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
@@ -67,6 +71,9 @@ extension PumpApp on WidgetTester {
           ),
           Provider.value(
             value: leaderboardResource ?? _MockLeaderboardResource(),
+          ),
+          Provider.value(
+            value: user ?? _MockUser(),
           ),
         ],
         child: Builder(

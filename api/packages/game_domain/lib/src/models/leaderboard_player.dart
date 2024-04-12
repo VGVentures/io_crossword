@@ -22,15 +22,6 @@ class LeaderboardPlayer extends Equatable {
   factory LeaderboardPlayer.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardPlayerFromJson(json);
 
-  /// Empty [LeaderboardPlayer] player.
-  static const empty = LeaderboardPlayer(
-    userId: '',
-    initials: '',
-    score: 0,
-    streak: 0,
-    mascot: Mascots.dash,
-  );
-
   /// Unique identifier of the leaderboard player object
   /// and session id for the player.
   @JsonKey()
