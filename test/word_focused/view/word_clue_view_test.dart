@@ -23,8 +23,9 @@ class _FakeWord extends Fake implements Word {
   int? get solvedTimestamp => null;
 }
 
-class _MockWordFocusedBloc extends MockBloc<WordFocusedEvent, WordFocusedState>
-    implements WordFocusedBloc {}
+class _MockWordFocusedBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   late AppLocalizations l10n;
@@ -36,7 +37,7 @@ void main() {
   group('WordClueDesktopView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
 
     group('with unsolved word', () {
       setUp(() {
@@ -102,7 +103,7 @@ void main() {
   group('WordClueMobileView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
 
     group('with unsolved word', () {
       setUp(() {

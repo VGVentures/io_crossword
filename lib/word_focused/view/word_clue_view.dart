@@ -31,7 +31,7 @@ class WordClueDesktopView extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () {
               context
-                  .read<WordFocusedBloc>()
+                  .read<WordSelectionBloc>()
                   .add(const WordFocusedSolveRequested());
             },
             icon: const Icon(Icons.edit),
@@ -67,7 +67,7 @@ class WordClueMobileView extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () {
               context
-                  .read<WordFocusedBloc>()
+                  .read<WordSelectionBloc>()
                   .add(const WordFocusedSolveRequested());
             },
             icon: const Icon(Icons.edit),

@@ -13,7 +13,7 @@ class IoCrosswordTheme {
   /// [ThemeData] for IO Crossword.
   ThemeData get themeData {
     final ioExtension = IoThemeExtension(
-      playerAliasTheme: _playerAliasTheme,
+      wordTheme: _wordTheme,
       iconButtonTheme: _iconButtonTheme,
       cardTheme: _cardTheme,
       physicalModel: _physicalModel,
@@ -58,34 +58,44 @@ class IoCrosswordTheme {
       package: IoCrosswordTextStyles.package,
     );
 
+    const size = Size.square(48.61);
+    const borderSide = BorderSide(
+      width: 1.8,
+      color: IoCrosswordColors.seedWhite,
+    );
+
     return IoWordInputStyle(
       padding: const EdgeInsets.symmetric(horizontal: 1.8),
       empty: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.surface,
-        border: Border.all(
-          width: 1.8,
-          color: IoCrosswordColors.seedWhite,
-        ),
+        border: Border.all(width: borderSide.width, color: borderSide.color),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
+        size: size,
       ),
       filled: IoWordInputCharacterFieldStyle(
         backgroundColor: colorScheme.primary,
-        border: Border.all(
-          width: 1.8,
-          color: colorScheme.primary,
-        ),
+        border: Border.all(width: borderSide.width, color: colorScheme.primary),
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle.copyWith(
           color: IoCrosswordColors.black,
         ),
+        size: size,
       ),
       focused: IoWordInputCharacterFieldStyle(
-        backgroundColor: IoCrosswordColors.redError,
-        border: Border.all(
-          width: 1.8,
-          color: IoCrosswordColors.seedWhite,
+        backgroundColor: colorScheme.surface,
+        border: Border(
+          top: borderSide,
+          left: borderSide,
+          right: borderSide,
+          bottom: BorderSide(
+            width: 10,
+            color: borderSide.color,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
         ),
+        elevation: 10,
+        size: size,
         borderRadius: const BorderRadius.all(Radius.circular(0.77)),
         textStyle: textStyle,
       ),
@@ -96,6 +106,7 @@ class IoCrosswordTheme {
         textStyle: textStyle.copyWith(
           color: IoCrosswordColors.black,
         ),
+        size: size,
       ),
     );
   }
@@ -226,14 +237,14 @@ class IoCrosswordTheme {
     );
   }
 
-  IoPlayerAliasTheme get _playerAliasTheme {
+  IoWordTheme get _wordTheme {
     final colorScheme = this.colorScheme;
 
     // TODO(alestiago): Update text styles from new Design System when
     // available:
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6371389285
-    return IoPlayerAliasTheme(
-      small: IoPlayerAliasStyle(
+    return IoWordTheme(
+      small: IoWordStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.31),
         textStyle: const TextStyle(
@@ -246,7 +257,7 @@ class IoCrosswordTheme {
         margin: const EdgeInsets.symmetric(horizontal: 0.5),
         boxSize: const Size.square(20.16),
       ),
-      big: IoPlayerAliasStyle(
+      big: IoWordStyle(
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
         textStyle: const TextStyle(

@@ -1,35 +1,31 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-/// {@template io_player_alias}
-/// A widget that displays a player alias.
-///
-/// An alias is usually a three letter abbreviation of the player's name.
+/// {@template io_word}
+/// A widget that displays a word, with each character enclosed in a box.
 /// {@endtemplate}
-class IoPlayerAlias extends StatelessWidget {
-  /// {@macro io_player_alias}
-  const IoPlayerAlias(
-    this.alias, {
+class IoWord extends StatelessWidget {
+  /// {@macro io_word}
+  const IoWord(
+    this.data, {
     required this.style,
     super.key,
   });
 
-  /// The player alias.
-  ///
-  /// Usually a three letter abbreviation of its name.
-  final String alias;
+  /// The word to display.
+  final String data;
 
-  /// {@macro io_player_alias_style}
-  final IoPlayerAliasStyle style;
+  /// {@macro io_word_style}
+  final IoWordStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: alias,
+      label: data,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final char in alias.split(''))
+          for (final char in data.split(''))
             Padding(
               padding: style.margin,
               child: _CharacterBox(char, style: style),
@@ -50,7 +46,7 @@ class _CharacterBox extends StatelessWidget {
   /// The character to display.
   final String data;
 
-  final IoPlayerAliasStyle style;
+  final IoWordStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +68,12 @@ class _CharacterBox extends StatelessWidget {
   }
 }
 
-/// {@template io_player_alias_style}
-/// The style configuration of a [IoPlayerAlias].
+/// {@template io_word_style}
+/// The style configuration of a [IoWord].
 /// {@endtemplate}
-class IoPlayerAliasStyle extends Equatable {
-  /// {@macro io_player_alias_style}
-  const IoPlayerAliasStyle({
+class IoWordStyle extends Equatable {
+  /// {@macro io_word_style}
+  const IoWordStyle({
     required this.backgroundColor,
     required this.borderRadius,
     required this.textStyle,
@@ -100,9 +96,9 @@ class IoPlayerAliasStyle extends Equatable {
   /// The size of the box that encloses a character.
   final Size boxSize;
 
-  /// Linearly interpolate between two [IoPlayerAliasStyle]s.
-  IoPlayerAliasStyle lerp(IoPlayerAliasStyle other, double t) {
-    return IoPlayerAliasStyle(
+  /// Linearly interpolate between two [IoWordStyle]s.
+  IoWordStyle lerp(IoWordStyle other, double t) {
+    return IoWordStyle(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
       borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t)!,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
@@ -111,16 +107,16 @@ class IoPlayerAliasStyle extends Equatable {
     );
   }
 
-  /// Creates a copy of this [IoPlayerAliasStyle] but with the given fields
+  /// Creates a copy of this [IoWordStyle] but with the given fields
   /// replaced with the new values.
-  IoPlayerAliasStyle copyWith({
+  IoWordStyle copyWith({
     Color? backgroundColor,
     BorderRadius? borderRadius,
     TextStyle? textStyle,
     EdgeInsets? margin,
     Size? boxSize,
   }) {
-    return IoPlayerAliasStyle(
+    return IoWordStyle(
       backgroundColor: backgroundColor ?? this.backgroundColor,
       borderRadius: borderRadius ?? this.borderRadius,
       textStyle: textStyle ?? this.textStyle,
@@ -139,25 +135,25 @@ class IoPlayerAliasStyle extends Equatable {
       ];
 }
 
-/// {@template io_player_alias_theme}
-/// Collection of a [IoPlayerAliasStyle]s.
+/// {@template io_word_theme}
+/// Collection of a [IoWordStyle]s.
 /// {@endtemplate}
-class IoPlayerAliasTheme extends Equatable {
-  /// {@macro io_player_alias_theme}
-  const IoPlayerAliasTheme({
+class IoWordTheme extends Equatable {
+  /// {@macro io_word_theme}
+  const IoWordTheme({
     required this.small,
     required this.big,
   });
 
-  /// A small [IoPlayerAliasStyle].
-  final IoPlayerAliasStyle small;
+  /// A small [IoWordStyle].
+  final IoWordStyle small;
 
-  /// A medium [IoPlayerAliasStyle].
-  final IoPlayerAliasStyle big;
+  /// A medium [IoWordStyle].
+  final IoWordStyle big;
 
-  /// Linearly interpolate between two [IoPlayerAliasTheme]s.
-  IoPlayerAliasTheme lerp(IoPlayerAliasTheme other, double t) {
-    return IoPlayerAliasTheme(
+  /// Linearly interpolate between two [IoWordTheme]s.
+  IoWordTheme lerp(IoWordTheme other, double t) {
+    return IoWordTheme(
       small: small.lerp(other.small, t),
       big: big.lerp(other.big, t),
     );

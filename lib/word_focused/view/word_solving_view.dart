@@ -23,7 +23,7 @@ class WordSolvingDesktopView extends StatelessWidget {
       listener: (context, state) {
         if (state.selectedWord?.solvedStatus == WordStatus.solved) {
           context
-              .read<WordFocusedBloc>()
+              .read<WordSelectionBloc>()
               .add(const WordFocusedSuccessRequested());
         }
       },
@@ -79,7 +79,7 @@ class WordSolvingMobileView extends StatelessWidget {
       listener: (context, state) {
         if (state.selectedWord?.solvedStatus == WordStatus.solved) {
           context
-              .read<WordFocusedBloc>()
+              .read<WordSelectionBloc>()
               .add(const WordFocusedSuccessRequested());
         }
       },
