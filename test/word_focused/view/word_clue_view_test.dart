@@ -61,7 +61,7 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 
@@ -131,7 +131,7 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/word_focused/word_focused.dart';
 
 void main() {
-  group('WordFocusedSolveRequested', () {
+  group('$WordSolveRequested', () {
     test('supports equality', () {
       expect(
         WordSolveRequested(wordIdentifier: '1'),
