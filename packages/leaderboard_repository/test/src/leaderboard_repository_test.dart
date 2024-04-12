@@ -129,6 +129,31 @@ void main() {
       });
     });
 
+    group('getLeaderboardResults', () {
+      test('returns the fist player', () async {
+        expect(
+          await leaderboardRepository.getLeaderboardResults('id'),
+          equals(players),
+        );
+      });
+
+      test('does not call updateUsersRankingPosition when not in top 10',
+          () async {
+        await leaderboardRepository.getLeaderboardResults('id');
+
+        expect(leaderboardRepository.userRankingPosition, emitsInOrder([]));
+      });
+
+      test('calls updateUsersRankingPosition when the ranking gets updated',
+          () async {
+        leaderboardRepository.userRankingPosition.add(9);
+
+        await leaderboardRepository.getLeaderboardResults(players.first.userId);
+
+        expect(leaderboardRepository.userRankingPosition, emitsInOrder([9, 1]));
+      });
+    });
+
     group('getLeaderboardPlayer', () {
       test('returns the fist player', () {
         final player = players.first;

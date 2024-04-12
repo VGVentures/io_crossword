@@ -25,8 +25,39 @@ class LeaderboardRepository {
   BehaviorSubject<LeaderboardPlayer>? _leaderboardPlayer;
 
   /// Updates the [userRankingPosition] of the current user.
+  @visibleForTesting
   void updateUsersRankingPosition(int position) {
     userRankingPosition.add(position);
+  }
+
+  /// Retrieves the leaderboard players.
+  ///
+  /// The players are ordered by longest streak and returns the top 10.
+  Future<List<LeaderboardPlayer>> getLeaderboardResults(String userId) async {
+    final results = await _leaderboardCollection
+        .orderBy('score', descending: true)
+        .limit(10)
+        .get();
+
+    final players = results.docs
+        .map(
+          (e) => LeaderboardPlayer.fromJson({
+            'userId': e.id,
+            ...e.data(),
+          }),
+        )
+        .toList();
+
+    final foundCurrentUser = players.where((player) => player.userId == userId);
+
+    if (foundCurrentUser.isNotEmpty) {
+      // We want to update the users ranking to show the latest position.
+      updateUsersRankingPosition(
+        players.indexOf(foundCurrentUser.first) + 1,
+      );
+    }
+
+    return players;
   }
 
   /// Returns a [Stream] with the users position in the ranking.
@@ -51,7 +82,12 @@ class LeaderboardRepository {
     _leaderboardCollection
         .doc(userId)
         .snapshots()
-        .map((snapshot) => LeaderboardPlayer.fromJson(snapshot.data()!))
+        .map(
+          (snapshot) => LeaderboardPlayer.fromJson({
+            'userId': userId,
+            ...snapshot.data()!,
+          }),
+        )
         .listen(_leaderboardPlayer!.add)
         .onError(_leaderboardPlayer!.addError);
 

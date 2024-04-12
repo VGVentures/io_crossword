@@ -18,7 +18,7 @@ class LeaderboardState extends Equatable {
   final List<LeaderboardPlayer> players;
 
   // TODO(Ayad): Remove currentUserPosition and currentPlayer
-  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444902861
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6445638020
   final int currentUserPosition;
   final LeaderboardPlayer? currentPlayer;
 

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -9,22 +8,17 @@ import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
-
 class _MockLeaderboardRepository extends Mock
     implements LeaderboardRepository {}
 
 void main() {
   group('$LeaderboardBloc', () {
-    late LeaderboardResource leaderboardResource;
     late LeaderboardRepository leaderboardRepository;
     late LeaderboardBloc bloc;
 
     setUp(() {
-      leaderboardResource = _MockLeaderboardResource();
       leaderboardRepository = _MockLeaderboardRepository();
       bloc = LeaderboardBloc(
-        leaderboardResource: leaderboardResource,
         leaderboardRepository: leaderboardRepository,
       );
     });
@@ -34,7 +28,7 @@ void main() {
         'emits [success] with empty players '
         'when getLeaderboardResults is empty',
         setUp: () {
-          when(() => leaderboardResource.getLeaderboardResults())
+          when(() => leaderboardRepository.getLeaderboardResults('user-id'))
               .thenAnswer((_) async => []);
         },
         build: () => bloc,
@@ -62,7 +56,8 @@ void main() {
         'emits [success] when getLeaderboardResults returns players '
         'with current user in top 10 rank',
         setUp: () {
-          when(() => leaderboardResource.getLeaderboardResults()).thenAnswer(
+          when(() => leaderboardRepository.getLeaderboardResults('1'))
+              .thenAnswer(
             (_) async => [
               LeaderboardPlayer(
                 userId: '1',
@@ -126,7 +121,8 @@ void main() {
         'emits [success] when getLeaderboardResults returns players and '
         'getPlayerRanked gets users position and information',
         setUp: () {
-          when(() => leaderboardResource.getLeaderboardResults()).thenAnswer(
+          when(() => leaderboardRepository.getLeaderboardResults('400'))
+              .thenAnswer(
             (_) async => [
               LeaderboardPlayer(
                 userId: '1',
@@ -212,7 +208,8 @@ void main() {
       blocTest<LeaderboardBloc, LeaderboardState>(
         'emits [failure] when getPlayerRanked throws error',
         setUp: () {
-          when(() => leaderboardResource.getLeaderboardResults()).thenAnswer(
+          when(() => leaderboardRepository.getLeaderboardResults('400'))
+              .thenAnswer(
             (_) async => [
               LeaderboardPlayer(
                 userId: '1',
@@ -255,7 +252,7 @@ void main() {
       blocTest<LeaderboardBloc, LeaderboardState>(
         'emits [failure] when getLeaderboardResults throws exception',
         setUp: () {
-          when(() => leaderboardResource.getLeaderboardResults())
+          when(() => leaderboardRepository.getLeaderboardResults('user-id'))
               .thenThrow(Exception());
         },
         build: () => bloc,

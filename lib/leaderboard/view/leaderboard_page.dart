@@ -1,4 +1,3 @@
-import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class LeaderboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<LeaderboardBloc>(
       create: (context) => LeaderboardBloc(
-        leaderboardResource: context.read<LeaderboardResource>(),
         leaderboardRepository: context.read<LeaderboardRepository>(),
       )..add(
           LoadRequestedLeaderboardEvent(
