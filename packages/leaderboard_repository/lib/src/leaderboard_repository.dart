@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:rxdart/rxdart.dart';
@@ -42,13 +44,24 @@ class LeaderboardRepository {
         .doc(userId)
         .snapshots()
         .map((snapshot) => LeaderboardPlayer.fromJson(snapshot.data()!))
-        .listen((player) {
-      _leaderboardPlayer!.add(player);
-      // each time this listen is triggered we will call the ranking position
-      // to get updated
-      getRankingPosition(player);
-    }).onError(_leaderboardPlayer!.addError);
+        .listen(_leaderboardPlayer!.add)
+        .onError(_leaderboardPlayer!.addError);
 
     return _leaderboardPlayer!.stream;
+  }
+
+  /// Returns the [LeaderboardPlayer] with the ranking position in
+  /// the leaderboard.
+  Stream<(LeaderboardPlayer, int)> getPlayerRanked(String userId) {
+    final stream = BehaviorSubject<(LeaderboardPlayer, int)>();
+
+    getLeaderboardPlayer(userId).listen((player) {
+      // each time the player gets updated the ranking will also get updated
+      getRankingPosition(player).listen((rank) {
+        stream.add((player, rank));
+      });
+    });
+
+    return stream.stream;
   }
 }

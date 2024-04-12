@@ -154,6 +154,35 @@ void main() {
           emits(player),
         );
       });
+    });
+
+    group('getPlayerRanked', () {
+      test('displays the user with the first rank', () async {
+        final player = players.first;
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 1)),
+        );
+      });
+
+      test('displays the user with the second rank', () async {
+        final player = players[1];
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 2)),
+        );
+      });
+
+      test('displays the user with the last rank', () async {
+        final player = players.last;
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 7)),
+        );
+      });
 
       test('reloads the user ranking when players information gets updated',
           () async {
@@ -168,7 +197,7 @@ void main() {
               player.toJson()..update('score', (value) => 9000000),
             );
 
-        leaderboardRepository.getLeaderboardPlayer(player.userId);
+        leaderboardRepository.getPlayerRanked(player.userId);
       });
     });
   });
