@@ -146,11 +146,14 @@ void main() {
 
       test('calls updateUsersRankingPosition when the ranking gets updated',
           () async {
-        leaderboardRepository.userRankingPosition.add(9);
+        leaderboardRepository.updateUsersRankingPosition(9);
 
         await leaderboardRepository.getLeaderboardResults(players.first.userId);
 
-        expect(leaderboardRepository.userRankingPosition, emitsInOrder([9, 1]));
+        expect(
+          leaderboardRepository.userRankingPosition.stream,
+          emits(1),
+        );
       });
     });
 
