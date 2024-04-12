@@ -8,9 +8,9 @@ enum Mascots {
   /// Firebase Sparky mascot
   sparky,
 
-  /// Chrome Dino mascot
-  dino,
-
   /// Android mascot
   android,
+
+  /// Chrome Dino mascot
+  dino,
 }

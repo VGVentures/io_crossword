@@ -51,23 +51,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/android.png
   AssetGenImage get android => const AssetGenImage('assets/images/android.png');
 
-  /// File path: assets/images/android_platform.png
-  AssetGenImage get androidPlatform =>
-      const AssetGenImage('assets/images/android_platform.png');
-
   /// File path: assets/images/dash.png
   AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
-
-  /// File path: assets/images/dash_platform.png
-  AssetGenImage get dashPlatform =>
-      const AssetGenImage('assets/images/dash_platform.png');
 
   /// File path: assets/images/dino.png
   AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
 
-  /// File path: assets/images/dino_platform.png
-  AssetGenImage get dinoPlatform =>
-      const AssetGenImage('assets/images/dino_platform.png');
+  /// File path: assets/images/gradient.svg
+  SvgGenImage get gradient => const SvgGenImage('assets/images/gradient.svg');
 
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
@@ -76,33 +67,36 @@ class $AssetsImagesGen {
   AssetGenImage get platform =>
       const AssetGenImage('assets/images/platform.png');
 
+  /// File path: assets/images/platform_large.png
+  AssetGenImage get platformLarge =>
+      const AssetGenImage('assets/images/platform_large.png');
+
   /// File path: assets/images/sparky.png
   AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
 
-  /// File path: assets/images/sparky_platform.png
-  AssetGenImage get sparkyPlatform =>
-      const AssetGenImage('assets/images/sparky_platform.png');
-
   /// File path: assets/images/tile.png
   AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
+
+  /// File path: assets/images/tile_large.png
+  AssetGenImage get tileLarge =>
+      const AssetGenImage('assets/images/tile_large.png');
 
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
         android,
-        androidPlatform,
         dash,
-        dashPlatform,
         dino,
-        dinoPlatform,
+        gradient,
         letters,
         platform,
+        platformLarge,
         sparky,
-        sparkyPlatform,
         tile,
+        tileLarge,
         welcomeBackground
       ];
 }
