@@ -25,6 +25,8 @@ class ShareResource {
   String _linkedinShareUrl(String shareUrl) =>
       'https://www.linkedin.com/sharing/share-offsite/?url=$shareUrl';
 
+  // TODO(any): Consider relying on built-in Uri encoding.
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444093330
   String _encode(List<String> content) =>
       content.join('%0a').replaceAll(' ', '%20').replaceAll('#', '%23');
 
