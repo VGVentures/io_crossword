@@ -8,9 +8,9 @@ environment:
 
 dependencies:
   cloud_firestore: ^4.16.1
-  rxdart: ^0.27.7
   game_domain:
     path: ../../api/packages/game_domain
+  rxdart: ^0.27.7
 
 dev_dependencies:
   fake_cloud_firestore: ^2.4.9
