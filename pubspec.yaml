@@ -44,7 +44,7 @@ dependencies:
     path: packages/io_crossword_ui
   provider: ^6.1.2
   rxdart: ^0.27.7
-  url_launcher: ^6.2.5
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   bloc_test: ^9.1.7
