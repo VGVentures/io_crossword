@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/share/widgets/widgets.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ShareWordPage extends StatelessWidget {
