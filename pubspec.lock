@@ -664,6 +664,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  leaderboard_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/leaderboard_repository"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   leak_tracker:
     dependency: transitive
     description:
@@ -1081,10 +1088,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "0ecc004c62fd3ed36a2ffcbe0dd9700aee63bd7532d0b642a488b1ec310f492e"
+      sha256: "6ce1e04375be4eed30548f10a315826fd933c1e493206eab82eed01f438c8d2e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.5"
+    version: "6.2.6"
   url_launcher_android:
     dependency: transitive
     description:

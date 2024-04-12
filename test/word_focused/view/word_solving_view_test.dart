@@ -16,8 +16,9 @@ import '../../helpers/helpers.dart';
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
-class _MockWordFocusedBloc extends MockBloc<WordFocusedEvent, WordFocusedState>
-    implements WordFocusedBloc {}
+class _MockWordFocusedBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -44,7 +45,7 @@ void main() {
   });
 
   group('WordSolvingDesktopView', () {
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
@@ -127,7 +128,7 @@ void main() {
   });
 
   group('WordFocusedMobileView', () {
-    late WordFocusedBloc wordFocusedBloc;
+    late WordSelectionBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
@@ -148,7 +149,13 @@ void main() {
         ),
       );
 
-      when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+      when(() => wordFocusedBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+          wordPoints: null,
+        ),
+      );
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,

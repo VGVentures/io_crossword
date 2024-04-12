@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -28,16 +29,21 @@ class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 
 class _MockUser extends Mock implements User {}
 
+class _MockLeaderboardRepository extends Mock
+    implements LeaderboardRepository {}
+
 void main() {
   group('App', () {
     late ApiClient apiClient;
     late CrosswordRepository crosswordRepository;
     late BoardInfoRepository boardInfoRepository;
+    late LeaderboardRepository leaderboardRepository;
 
     setUp(() {
       apiClient = _MockApiClient();
       crosswordRepository = _MockCrosswordRepository();
       boardInfoRepository = _MockBoardInfoRepository();
+      leaderboardRepository = _MockLeaderboardRepository();
 
       when(() => apiClient.leaderboardResource)
           .thenReturn(_MockLeaderboardResource());
@@ -60,6 +66,7 @@ void main() {
       await tester.pumpWidget(
         App(
           apiClient: apiClient,
+          leaderboardRepository: leaderboardRepository,
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
           user: _MockUser(),
