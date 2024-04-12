@@ -47,9 +47,12 @@ class WordFocusedDesktopView extends StatelessWidget {
             return switch (state.status) {
               WordSelectionStatus.preSolving =>
                 WordClueDesktopView(selectedWord),
-              WordSelectionStatus.solving =>
+              WordSelectionStatus.solving ||
+              WordSelectionStatus.validating ||
+              WordSelectionStatus.incorrect ||
+              WordSelectionStatus.failure =>
                 WordSolvingDesktopView(selectedWord),
-              WordSelectionStatus.success =>
+              WordSelectionStatus.solved =>
                 WordSuccessDesktopView(selectedWord),
             };
           },
@@ -95,14 +98,19 @@ class WordFocusedMobileView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-            builder: (context, state) {
-              return switch (state.status) {
+          child: BlocSelector<WordSelectionBloc, WordSelectionState,
+              WordSelectionStatus>(
+            selector: (state) => state.status,
+            builder: (context, status) {
+              return switch (status) {
                 WordSelectionStatus.preSolving =>
                   WordClueMobileView(selectedWord),
-                WordSelectionStatus.solving =>
+                WordSelectionStatus.solving ||
+                WordSelectionStatus.validating ||
+                WordSelectionStatus.incorrect ||
+                WordSelectionStatus.failure =>
                   WordSolvingMobileView(selectedWord),
-                WordSelectionStatus.success =>
+                WordSelectionStatus.solved =>
                   WordSuccessMobileView(selectedWord),
               };
             },

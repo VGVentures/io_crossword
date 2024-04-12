@@ -7,7 +7,23 @@ enum WordSelectionStatus {
 
   /// The user has committed to solve the word.
   solving,
-  success,
+
+  /// The user has submitted an answer to the word, and this is being
+  /// validated.
+  validating,
+
+  /// The word has been solved.
+  solved,
+
+  /// The attempt to solve the word was incorrect, meaning that the
+  /// user's answer was not the correct solution to the clue.
+  incorrect,
+
+  /// The attempt to solve the word has failed, but for an unknown
+  /// reason.
+  ///
+  /// Most likely, the server couldn't validate the user's answer.
+  failure;
 }
 
 class WordSelectionState extends Equatable {
