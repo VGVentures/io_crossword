@@ -26,7 +26,7 @@ class LeaderboardRepository {
         .where('score', isGreaterThan: player.score)
         .count()
         .get()
-        .then((userRank) => _userRankingPosition.add(userRank.count ?? 0))
+        .then((userRank) => _userRankingPosition.add((userRank.count ?? 0) + 1))
         .onError(_userRankingPosition.addError);
 
     return _userRankingPosition.stream;

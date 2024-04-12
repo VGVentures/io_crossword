@@ -13,6 +13,7 @@ dependencies:
     path: ../../api/packages/game_domain
 
 dev_dependencies:
+  fake_cloud_firestore: ^2.4.9
   mocktail: ^1.0.3
   test: ^1.15.1
   very_good_analysis: ^5.1.0
