@@ -248,5 +248,17 @@
   "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
   "@aboutHowToPlayFifthInstructions": {
     "description": "The Fifth step instruction on how to play"
+  },
+  "streakAtRiskTitle": "Your streak is at risk!",
+  "@streakAtRiskTitle": {
+    "description": "Title for alerting the streak is at risk."
+  },
+  "streakAtRiskMessage": "If you close the window without solving the word, you will lose your streak.\nIf you need a hand, you can ask Gemini for a hint.",
+  "@streakAtRiskMessage": {
+    "description": "Message for clarifying why the streak is at risk."
+  },
+  "continuationConfirmation": "Are you sure you want to continue?",
+  "@continuationConfirmation": {
+    "description": "Asks for confirmation before continuing."
   }
 }
