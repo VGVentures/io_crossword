@@ -61,14 +61,19 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });
@@ -126,14 +131,19 @@ void main() {
       );
 
       testWidgets(
-        'tapping the solve button dispatches a WordFocusedSolveRequested event',
+        'tapping the solve button dispatches a $WordSolveRequested event',
         (tester) async {
           await tester.pumpApp(widget);
 
           await tester.tap(find.text(l10n.solveIt));
 
-          verify(() => wordFocusedBloc.add(const WordFocusedSolveRequested()))
-              .called(1);
+          verify(
+            () => wordFocusedBloc.add(
+              WordSolveRequested(
+                wordIdentifier: selectedWord.word.id,
+              ),
+            ),
+          ).called(1);
         },
       );
     });

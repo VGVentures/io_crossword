@@ -6,16 +6,19 @@ part 'word_selection_state.dart';
 
 class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   WordSelectionBloc() : super(const WordSelectionState.initial()) {
-    on<WordFocusedSolveRequested>(_onWordFocusedSolveRequested);
+    on<WordSolveRequested>(_onWordSolveRequested);
     on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
   }
 
-  void _onWordFocusedSolveRequested(
-    WordFocusedSolveRequested event,
+  void _onWordSolveRequested(
+    WordSolveRequested event,
     Emitter<WordSelectionState> emit,
   ) {
     emit(
-      state.copyWith(status: WordSelectionStatus.solving),
+      state.copyWith(
+        status: WordSelectionStatus.solving,
+        wordIdentifier: event.wordIdentifier,
+      ),
     );
   }
 
