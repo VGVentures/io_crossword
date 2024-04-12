@@ -47,10 +47,10 @@ class WordFocusedDesktopView extends StatelessWidget {
             return switch (state.status) {
               WordSelectionStatus.preSolving =>
                 WordClueDesktopView(selectedWord),
-              WordSelectionStatus.solving ||
               WordSelectionStatus.validating ||
               WordSelectionStatus.incorrect ||
-              WordSelectionStatus.failure =>
+              WordSelectionStatus.failure ||
+              WordSelectionStatus.solving =>
                 WordSolvingDesktopView(selectedWord),
               WordSelectionStatus.solved =>
                 WordSuccessDesktopView(selectedWord),
@@ -105,10 +105,10 @@ class WordFocusedMobileView extends StatelessWidget {
               return switch (status) {
                 WordSelectionStatus.preSolving =>
                   WordClueMobileView(selectedWord),
-                WordSelectionStatus.solving ||
                 WordSelectionStatus.validating ||
                 WordSelectionStatus.incorrect ||
-                WordSelectionStatus.failure =>
+                WordSelectionStatus.failure ||
+                WordSelectionStatus.solving =>
                   WordSolvingMobileView(selectedWord),
                 WordSelectionStatus.solved =>
                   WordSuccessMobileView(selectedWord),
