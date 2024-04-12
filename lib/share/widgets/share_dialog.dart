@@ -65,6 +65,7 @@ class ShareDialog extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class ShareDialogHeader extends StatelessWidget {
   @visibleForTesting
   const ShareDialogHeader({
