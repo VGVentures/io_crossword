@@ -5,8 +5,10 @@ abstract class LeaderboardEvent extends Equatable {
 }
 
 class LoadRequestedLeaderboardEvent extends LeaderboardEvent {
-  const LoadRequestedLeaderboardEvent();
+  const LoadRequestedLeaderboardEvent({required this.userId});
+
+  final String userId;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [userId];
 }

@@ -1,4 +1,4 @@
-import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 part 'leaderboard_success.dart';
 
@@ -17,8 +18,12 @@ class LeaderboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<LeaderboardBloc>(
       create: (context) => LeaderboardBloc(
-        leaderboardResource: context.read<LeaderboardResource>(),
-      )..add(const LoadRequestedLeaderboardEvent()),
+        leaderboardRepository: context.read<LeaderboardRepository>(),
+      )..add(
+          LoadRequestedLeaderboardEvent(
+            userId: context.read<User>().id,
+          ),
+        ),
       child: const LeaderboardView(),
     );
   }

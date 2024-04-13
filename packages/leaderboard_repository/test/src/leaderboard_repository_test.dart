@@ -118,6 +118,45 @@ void main() {
       });
     });
 
+    group('updateUsersRankingPosition', () {
+      test('updates user ranking score', () {
+        leaderboardRepository.updateUsersRankingPosition(2);
+
+        expect(
+          leaderboardRepository.userRankingPosition.stream,
+          emits(2),
+        );
+      });
+    });
+
+    group('getLeaderboardResults', () {
+      test('returns the fist player', () async {
+        expect(
+          await leaderboardRepository.getLeaderboardResults('id'),
+          equals(players),
+        );
+      });
+
+      test('does not call updateUsersRankingPosition when not in top 10',
+          () async {
+        await leaderboardRepository.getLeaderboardResults('id');
+
+        expect(leaderboardRepository.userRankingPosition, emitsInOrder([]));
+      });
+
+      test('calls updateUsersRankingPosition when the ranking gets updated',
+          () async {
+        leaderboardRepository.updateUsersRankingPosition(9);
+
+        await leaderboardRepository.getLeaderboardResults(players.first.userId);
+
+        expect(
+          leaderboardRepository.userRankingPosition.stream,
+          emits(1),
+        );
+      });
+    });
+
     group('getLeaderboardPlayer', () {
       test('returns the fist player', () {
         final player = players.first;
@@ -154,6 +193,35 @@ void main() {
           emits(player),
         );
       });
+    });
+
+    group('getPlayerRanked', () {
+      test('displays the user with the first rank', () async {
+        final player = players.first;
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 1)),
+        );
+      });
+
+      test('displays the user with the second rank', () async {
+        final player = players[1];
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 2)),
+        );
+      });
+
+      test('displays the user with the last rank', () async {
+        final player = players.last;
+
+        expect(
+          leaderboardRepository.getPlayerRanked(player.userId),
+          emits((player, 7)),
+        );
+      });
 
       test('reloads the user ranking when players information gets updated',
           () async {
@@ -168,7 +236,7 @@ void main() {
               player.toJson()..update('score', (value) => 9000000),
             );
 
-        leaderboardRepository.getLeaderboardPlayer(player.userId);
+        leaderboardRepository.getPlayerRanked(player.userId);
       });
     });
   });

@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:provider/provider.dart';
 
@@ -23,14 +25,24 @@ class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
+class _MockLeaderboardRepository extends Mock
+    implements LeaderboardRepository {}
+
+class _MockUser extends Mock implements User {
+  @override
+  String get id => '';
+}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
     IoLayoutData? layout,
+    User? user,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
+    LeaderboardRepository? leaderboardRepository,
     CrosswordBloc? crosswordBloc,
     ChallengeBloc? challengeBloc,
     MockNavigator? navigator,
@@ -67,6 +79,12 @@ extension PumpApp on WidgetTester {
           ),
           Provider.value(
             value: leaderboardResource ?? _MockLeaderboardResource(),
+          ),
+          Provider.value(
+            value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: user ?? _MockUser(),
           ),
         ],
         child: Builder(
