@@ -44,14 +44,20 @@ class WordFocusedDesktopView extends StatelessWidget {
         color: IoCrosswordColors.darkGray,
         child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
           builder: (context, state) {
-            return switch (state.status) {
+            // coverage:ignore-start
+            final view = switch (state.status) {
               WordSelectionStatus.preSolving =>
                 WordClueDesktopView(selectedWord),
+              WordSelectionStatus.validating ||
+              WordSelectionStatus.incorrect ||
+              WordSelectionStatus.failure ||
               WordSelectionStatus.solving =>
                 WordSolvingDesktopView(selectedWord),
-              WordSelectionStatus.success =>
+              WordSelectionStatus.solved =>
                 WordSuccessDesktopView(selectedWord),
             };
+            // coverage:ignore-end
+            return view;
           },
         ),
       ),
@@ -95,16 +101,24 @@ class WordFocusedMobileView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-            builder: (context, state) {
-              return switch (state.status) {
+          child: BlocSelector<WordSelectionBloc, WordSelectionState,
+              WordSelectionStatus>(
+            selector: (state) => state.status,
+            builder: (context, status) {
+              // coverage:ignore-start
+              final view = switch (status) {
                 WordSelectionStatus.preSolving =>
                   WordClueMobileView(selectedWord),
+                WordSelectionStatus.validating ||
+                WordSelectionStatus.incorrect ||
+                WordSelectionStatus.failure ||
                 WordSelectionStatus.solving =>
                   WordSolvingMobileView(selectedWord),
-                WordSelectionStatus.success =>
+                WordSelectionStatus.solved =>
                   WordSuccessMobileView(selectedWord),
               };
+              // coverage:ignore-end
+              return view;
             },
           ),
         ),

@@ -13,6 +13,15 @@ void main() {
     });
   });
 
+  group('$WordSolveAttempted', () {
+    test('supports equality', () {
+      expect(
+        WordSolveAttempted(answer: 'answer'),
+        equals(WordSolveAttempted(answer: 'answer')),
+      );
+    });
+  });
+
   group('WordFocusedSuccessRequested', () {
     test('supports equality', () {
       expect(

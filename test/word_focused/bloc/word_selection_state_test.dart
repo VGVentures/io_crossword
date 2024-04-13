@@ -56,7 +56,7 @@ void main() {
         );
         final newState = WordSelectionState(
           wordIdentifier: '2',
-          status: WordSelectionStatus.success,
+          status: WordSelectionStatus.solved,
           wordPoints: 20,
         );
 

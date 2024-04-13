@@ -141,7 +141,7 @@ void main() {
         tester.setDisplaySize(Size(1800, 800));
         when(() => wordFocusedBloc.state).thenReturn(
           WordSelectionState(
-            status: WordSelectionStatus.success,
+            status: WordSelectionStatus.solved,
             wordIdentifier: '1',
             wordPoints: 10,
           ),
@@ -263,7 +263,7 @@ void main() {
       (tester) async {
         when(() => wordFocusedBloc.state).thenReturn(
           WordSelectionState(
-            status: WordSelectionStatus.success,
+            status: WordSelectionStatus.solved,
             wordIdentifier: '1',
             wordPoints: 10,
           ),
