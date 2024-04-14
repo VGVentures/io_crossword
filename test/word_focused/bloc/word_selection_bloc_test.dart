@@ -2,8 +2,8 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/word_focused/bloc/word_selection_bloc.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 void main() {
   group('$WordSelectionBloc', () {
