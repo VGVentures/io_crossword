@@ -95,7 +95,9 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-    game = CrosswordGame(context.read());
+    game = CrosswordGame(
+      crosswordBloc: context.read(),
+    );
   }
 
   @override
