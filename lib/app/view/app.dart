@@ -9,6 +9,7 @@ import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/streak/streak.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +79,10 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const GameIntroPage(),
+            home: ColoredBox(
+              color: Theme.of(context).colorScheme.background,
+              child: Center(child: StreakAtRiskView()),
+            ),
           );
         },
       ),
