@@ -9,9 +9,15 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class FakeImage extends Fake implements ui.Image {
   @override
@@ -27,6 +33,7 @@ void main() {
 
   group('SectionComponent', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateStreamController;
     final defaultState = CrosswordState(
       sectionSize: sectionSize,
@@ -34,6 +41,7 @@ void main() {
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       stateStreamController = StreamController<CrosswordState>.broadcast();
       whenListen(
         crosswordBloc,
@@ -56,6 +64,7 @@ void main() {
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
           crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
           showDebugOverlay: showDebugOverlay,
         );
 

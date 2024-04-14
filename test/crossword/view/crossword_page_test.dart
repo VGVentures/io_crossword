@@ -18,6 +18,10 @@ import '../../helpers/helpers.dart';
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
+
 class _FakeBoardSection extends Fake implements BoardSection {
   @override
   List<Word> get words => [];
@@ -210,6 +214,7 @@ void main() {
 
     testWidgets(
       'can zoom in',
+      timeout: const Timeout(Duration(seconds: 30)),
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -235,11 +240,11 @@ void main() {
           greaterThan(1),
         );
       },
-      timeout: const Timeout(Duration(seconds: 30)),
     );
 
     testWidgets(
       'can zoom out',
+      timeout: const Timeout(Duration(seconds: 30)),
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -265,7 +270,6 @@ void main() {
           lessThan(1),
         );
       },
-      timeout: const Timeout(Duration(seconds: 30)),
     );
   });
 }
@@ -280,9 +284,21 @@ extension on WidgetTester {
       when(() => bloc.state).thenReturn(const CrosswordState());
     }
 
+    final wordSelectionBloc = _MockWordSelectionBloc();
+    when(() => wordSelectionBloc.state).thenReturn(
+      const WordSelectionState.initial(),
+    );
+
     return pumpApp(
-      BlocProvider.value(
-        value: bloc,
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<CrosswordBloc>(
+            create: (_) => bloc,
+          ),
+          BlocProvider<WordSelectionBloc>(
+            create: (_) => wordSelectionBloc,
+          ),
+        ],
         child: child,
       ),
     );

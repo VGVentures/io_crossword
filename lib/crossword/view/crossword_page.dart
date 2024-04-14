@@ -24,7 +24,10 @@ class CrosswordPage extends StatelessWidget {
       ..add(const BoardSectionRequested((0, 0)))
       ..add(const BoardLoadingInformationRequested());
 
-    return const CrosswordView();
+    return BlocProvider(
+      create: (_) => WordSelectionBloc(),
+      child: const CrosswordView(),
+    );
   }
 }
 
@@ -97,6 +100,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     super.initState();
     game = CrosswordGame(
       crosswordBloc: context.read(),
+      wordSelectionBloc: context.read(),
     );
   }
 
