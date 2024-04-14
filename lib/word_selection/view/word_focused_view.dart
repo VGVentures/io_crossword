@@ -4,7 +4,22 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+class WordSelectedView extends StatelessWidget {
+  const WordSelectedView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
+
+    return layout == IoLayoutData.large
+        ? const WordFocusedDesktopPage()
+        : const WordFocusedMobilePage();
+  }
+}
+
+@visibleForTesting
 class WordFocusedDesktopPage extends StatelessWidget {
+  @visibleForTesting
   const WordFocusedDesktopPage({super.key});
 
   @override
@@ -65,7 +80,9 @@ class WordFocusedDesktopView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class WordFocusedMobilePage extends StatelessWidget {
+  @visibleForTesting
   const WordFocusedMobilePage({super.key});
 
   @override
