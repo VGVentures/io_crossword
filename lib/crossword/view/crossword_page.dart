@@ -95,52 +95,20 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-    game = CrosswordGame(context.read());
+    game = CrosswordGame(
+      crosswordBloc: context.read(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
-    switch (layout) {
-      case IoLayoutData.small:
-        return _SmallBoardView(game: game);
-      case IoLayoutData.large:
-        return _LargeBoardView(game: game);
-    }
-  }
-}
 
-class _LargeBoardView extends StatelessWidget {
-  const _LargeBoardView({
-    required this.game,
-  });
-
-  final CrosswordGame game;
-
-  @override
-  Widget build(BuildContext context) {
     return Stack(
       children: [
         GameWidget(game: game),
-        const WordFocusedDesktopPage(),
-        const BottomBar(),
-        _ZoomControls(game: game),
-      ],
-    );
-  }
-}
-
-class _SmallBoardView extends StatelessWidget {
-  const _SmallBoardView({required this.game});
-
-  final CrosswordGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GameWidget(game: game),
-        const WordFocusedMobilePage(),
+        const WordSelectionView(),
+        if (layout == IoLayoutData.large) const BottomBar(),
         _ZoomControls(game: game),
       ],
     );

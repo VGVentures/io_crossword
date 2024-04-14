@@ -34,6 +34,36 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
+  group('$WordSelectionView', () {
+    testWidgets(
+      'renders WordFocusedDesktopPage when layout is large',
+      (tester) async {
+        await tester.pumpApp(
+          IoLayout(
+            data: IoLayoutData.large,
+            child: WordSelectionView(),
+          ),
+        );
+
+        expect(find.byType(WordFocusedDesktopPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders WordFocusedMobilePage when layout is small',
+      (tester) async {
+        await tester.pumpApp(
+          IoLayout(
+            data: IoLayoutData.small,
+            child: WordSelectionView(),
+          ),
+        );
+
+        expect(find.byType(WordFocusedMobilePage), findsOneWidget);
+      },
+    );
+  });
+
   group('WordFocusedDesktopPage', () {
     late CrosswordBloc crosswordBloc;
     late Widget widget;

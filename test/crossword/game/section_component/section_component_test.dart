@@ -26,17 +26,17 @@ void main() {
   const sectionSize = 400;
 
   group('SectionComponent', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
     late StreamController<CrosswordState> stateStreamController;
     final defaultState = CrosswordState(
       sectionSize: sectionSize,
     );
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
       stateStreamController = StreamController<CrosswordState>.broadcast();
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: defaultState,
       );
@@ -44,18 +44,18 @@ void main() {
 
     void setUpStreamController({CrosswordState? state}) {
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: state ?? defaultState,
       );
     }
 
     void setUpInitialState(CrosswordState state) {
-      when(() => bloc.state).thenReturn(state);
+      when(() => crosswordBloc.state).thenReturn(state);
     }
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
-          bloc,
+          crosswordBloc: crosswordBloc,
           showDebugOverlay: showDebugOverlay,
         );
 
@@ -308,7 +308,7 @@ void main() {
         await game.world.ensureAdd(SectionComponent(index: (100, 100)));
 
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             const BoardSectionRequested((100, 100)),
           ),
         ).called(1);

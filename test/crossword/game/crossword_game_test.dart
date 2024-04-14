@@ -28,18 +28,18 @@ void main() {
   final sectionSize = sections.first.size;
 
   group('CrosswordGame', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
 
     void mockState(CrosswordState state) {
       whenListen(
-        bloc,
+        crosswordBloc,
         Stream.value(state),
         initialState: state,
       );
     }
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
 
       final state = CrosswordState(
         sectionSize: sectionSize,
@@ -50,7 +50,10 @@ void main() {
     CrosswordGame createGame({
       bool? showDebugOverlay,
     }) =>
-        CrosswordGame(bloc, showDebugOverlay: showDebugOverlay);
+        CrosswordGame(
+          crosswordBloc: crosswordBloc,
+          showDebugOverlay: showDebugOverlay,
+        );
 
     testWithGame(
       'loads',
@@ -170,7 +173,7 @@ void main() {
           isTrue,
         );
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             WordSelected(
               targetSection.index,
               targetWord,
@@ -257,7 +260,7 @@ void main() {
           isTrue,
         );
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             WordSelected(
               targetSection.index,
               targetWord,
@@ -280,7 +283,7 @@ void main() {
       setUp(() {
         stateController = StreamController<CrosswordState>.broadcast();
         whenListen(
-          bloc,
+          crosswordBloc,
           stateController.stream,
           initialState: state,
         );
