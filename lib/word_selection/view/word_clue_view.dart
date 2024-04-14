@@ -67,9 +67,7 @@ class _SolveItButton extends StatelessWidget {
   final String wordIdentifier;
 
   void _onSolveIt(BuildContext context) {
-    context.read<WordSelectionBloc>().add(
-          WordSolveRequested(wordIdentifier: wordIdentifier),
-        );
+    context.read<WordSelectionBloc>().add(const WordSolveRequested());
   }
 
   @override

@@ -12,7 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
-import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordSelected;
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';

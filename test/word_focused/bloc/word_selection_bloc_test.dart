@@ -12,12 +12,39 @@ void main() {
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
 
+    group('$WordSelected', () {
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits preSolving status',
+        build: WordSelectionBloc.new,
+        act: (bloc) => bloc.add(WordSelected(wordIdentifier: '1')),
+        expect: () => <WordSelectionState>[
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        ],
+      );
+    });
+
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
-        'emits solving status with word identifier',
+        'does nothing if there is no word identifier',
         build: WordSelectionBloc.new,
         act: (bloc) => bloc.add(
-          WordSolveRequested(wordIdentifier: '1'),
+          WordSolveRequested(),
+        ),
+        expect: () => <WordSelectionState>[],
+      );
+
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits solving status when there is a word identifier',
+        build: WordSelectionBloc.new,
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          wordIdentifier: '1',
+        ),
+        act: (bloc) => bloc.add(
+          WordSolveRequested(),
         ),
         expect: () => <WordSelectionState>[
           WordSelectionState(
