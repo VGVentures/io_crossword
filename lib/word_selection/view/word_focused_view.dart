@@ -4,8 +4,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordSelectedView extends StatelessWidget {
-  const WordSelectedView({super.key});
+class WordSelectionView extends StatelessWidget {
+  const WordSelectionView({super.key});
 
   @override
   Widget build(BuildContext context) {

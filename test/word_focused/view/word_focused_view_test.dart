@@ -34,14 +34,14 @@ class _FakeWord extends Fake implements Word {
 }
 
 void main() {
-  group('$WordSelectedView', () {
+  group('$WordSelectionView', () {
     testWidgets(
       'renders WordFocusedDesktopPage when layout is large',
       (tester) async {
         await tester.pumpApp(
           IoLayout(
             data: IoLayoutData.large,
-            child: WordSelectedView(),
+            child: WordSelectionView(),
           ),
         );
 
@@ -55,7 +55,7 @@ void main() {
         await tester.pumpApp(
           IoLayout(
             data: IoLayoutData.small,
-            child: WordSelectedView(),
+            child: WordSelectionView(),
           ),
         );
 

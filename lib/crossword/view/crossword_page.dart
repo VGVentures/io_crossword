@@ -105,7 +105,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
-        const WordSelectedView(),
+        const WordSelectionView(),
         if (layout == IoLayoutData.large) const BottomBar(),
         _ZoomControls(game: game),
       ],
