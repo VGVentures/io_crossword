@@ -11,8 +11,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 
 class CrosswordGame extends FlameGame
     with PanDetector, HasKeyboardHandlerComponents {
-  CrosswordGame(
-    this.bloc, {
+  CrosswordGame({
+    required this.crosswordBloc,
     bool? showDebugOverlay,
   }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
 
@@ -21,7 +21,7 @@ class CrosswordGame extends FlameGame
   static bool debugOverlay = false;
   final bool showDebugOverlay;
 
-  final CrosswordBloc bloc;
+  final CrosswordBloc crosswordBloc;
 
   late final int sectionSize;
 
@@ -30,7 +30,7 @@ class CrosswordGame extends FlameGame
   var _visibleSections = <(double, double)>[];
 
   CrosswordState get state {
-    return bloc.state;
+    return crosswordBloc.state;
   }
 
   @override

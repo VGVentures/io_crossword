@@ -43,7 +43,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     final state = gameRef.state;
 
-    _subscription = gameRef.bloc.stream.listen(_onNewState);
+    _subscription = gameRef.crosswordBloc.stream.listen(_onNewState);
 
     lastSelectedWordId = state.selectedWord?.word.id;
     lastSelectedSection = state.selectedWord?.section;
@@ -53,7 +53,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       _boardSection = boardSection;
       _loadBoardSection();
     } else {
-      gameRef.bloc.add(
+      gameRef.crosswordBloc.add(
         BoardSectionRequested(index),
       );
     }

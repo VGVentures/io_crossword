@@ -17,7 +17,7 @@ void main() {
   final sectionSize = sections.first.size;
 
   group('SectionKeyboardHandler', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
     late StreamController<CrosswordState> stateController;
     final state = CrosswordState(
       sectionSize: sectionSize,
@@ -28,10 +28,10 @@ void main() {
     );
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
       stateController = StreamController<CrosswordState>.broadcast();
       whenListen(
-        bloc,
+        crosswordBloc,
         stateController.stream,
         initialState: state,
       );
@@ -40,7 +40,10 @@ void main() {
     CrosswordGame createGame({
       bool? showDebugOverlay,
     }) =>
-        CrosswordGame(bloc, showDebugOverlay: showDebugOverlay);
+        CrosswordGame(
+          crosswordBloc: crosswordBloc,
+          showDebugOverlay: showDebugOverlay,
+        );
 
     testWithGame(
       'can enter characters',
@@ -179,7 +182,8 @@ void main() {
           buffer.write('f');
         }
         await game.ready();
-        verify(() => bloc.add(AnswerUpdated(buffer.toString()))).called(1);
+        verify(() => crosswordBloc.add(AnswerUpdated(buffer.toString())))
+            .called(1);
       },
     );
   });
