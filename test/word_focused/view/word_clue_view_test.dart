@@ -68,11 +68,7 @@ void main() {
           await tester.tap(find.text(l10n.solveIt));
 
           verify(
-            () => wordFocusedBloc.add(
-              WordSolveRequested(
-                wordIdentifier: selectedWord.word.id,
-              ),
-            ),
+            () => wordFocusedBloc.add(WordSolveRequested()),
           ).called(1);
         },
       );
@@ -138,11 +134,7 @@ void main() {
           await tester.tap(find.text(l10n.solveIt));
 
           verify(
-            () => wordFocusedBloc.add(
-              WordSolveRequested(
-                wordIdentifier: selectedWord.word.id,
-              ),
-            ),
+            () => wordFocusedBloc.add(WordSolveRequested()),
           ).called(1);
         },
       );

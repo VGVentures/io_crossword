@@ -4,11 +4,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
 void main() {
+  group('$WordSelected', () {
+    test('supports equality', () {
+      expect(
+        WordSelected(wordIdentifier: '1'),
+        equals(WordSelected(wordIdentifier: '1')),
+      );
+    });
+  });
+
   group('$WordSolveRequested', () {
     test('supports equality', () {
       expect(
-        WordSolveRequested(wordIdentifier: '1'),
-        equals(WordSolveRequested(wordIdentifier: '1')),
+        WordSolveRequested(),
+        equals(WordSolveRequested()),
       );
     });
   });
