@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/hint/view/hint_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WordSolvingDesktopView extends StatelessWidget {
