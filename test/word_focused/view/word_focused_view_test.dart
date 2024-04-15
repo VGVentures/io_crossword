@@ -12,7 +12,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockWordFocusedBloc
+class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
@@ -66,15 +66,24 @@ void main() {
 
   group('WordFocusedDesktopPage', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
 
-      widget = BlocProvider.value(
-        value: crosswordBloc,
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: crosswordBloc,
+          ),
+          BlocProvider.value(
+            value: wordSelectionBloc,
+          ),
+        ],
         child: WordFocusedDesktopPage(),
       );
     });
@@ -100,6 +109,12 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         await tester.pumpApp(widget);
 
@@ -109,19 +124,19 @@ void main() {
   });
 
   group('WordFocusedDesktopView', () {
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: wordFocusedBloc),
+          BlocProvider.value(value: wordSelectionBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
         child: WordFocusedDesktopView(selectedWord),
@@ -131,7 +146,7 @@ void main() {
     testWidgets(
       'renders WordClueDesktopView when the status is WordSelectionStatus.clue',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
@@ -151,7 +166,7 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solving,
             wordIdentifier: '1',
@@ -169,7 +184,7 @@ void main() {
       'WordSelectionStatus.success',
       (tester) async {
         tester.setDisplaySize(Size(1800, 800));
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
             wordIdentifier: '1',
@@ -186,15 +201,20 @@ void main() {
 
   group('WordFocusedMobilePage', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
 
-      widget = BlocProvider.value(
-        value: crosswordBloc,
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: crosswordBloc),
+          BlocProvider.value(value: wordSelectionBloc),
+        ],
         child: WordFocusedMobilePage(),
       );
     });
@@ -220,6 +240,12 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         await tester.pumpApp(widget);
 
@@ -229,21 +255,21 @@ void main() {
   });
 
   group('WordFocusedMobileView', () {
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = Theme(
         data: IoCrosswordTheme().themeData,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: wordFocusedBloc),
+            BlocProvider.value(value: wordSelectionBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
           child: WordFocusedMobileView(selectedWord),
@@ -254,7 +280,7 @@ void main() {
     testWidgets(
       'renders WordClueMobileView when the status is WordSelectionStatus.clue',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
@@ -274,7 +300,7 @@ void main() {
             selectedWord: selectedWord,
           ),
         );
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solving,
             wordIdentifier: '1',
@@ -291,7 +317,7 @@ void main() {
       'renders WordSuccessMobileView when the state is '
       'WordSelectionStatus.success',
       (tester) async {
-        when(() => wordFocusedBloc.state).thenReturn(
+        when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
             wordIdentifier: '1',
