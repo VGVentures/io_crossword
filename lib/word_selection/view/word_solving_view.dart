@@ -6,8 +6,8 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordSolvingDesktopView extends StatelessWidget {
-  const WordSolvingDesktopView(this.selectedWord, {super.key});
+class WordSolvingLargeView extends StatelessWidget {
+  const WordSolvingLargeView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
@@ -51,8 +51,8 @@ class WordSolvingDesktopView extends StatelessWidget {
   }
 }
 
-class WordSolvingMobileView extends StatelessWidget {
-  const WordSolvingMobileView(this.selectedWord, {super.key});
+class WordSolvingSmallView extends StatelessWidget {
+  const WordSolvingSmallView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 

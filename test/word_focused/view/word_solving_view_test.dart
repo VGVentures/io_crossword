@@ -16,7 +16,7 @@ import '../../helpers/helpers.dart';
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
-class _MockWordFocusedBloc
+class _MockWordSolvingBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
@@ -44,23 +44,23 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
-  group('WordSolvingDesktopView', () {
-    late WordSelectionBloc wordFocusedBloc;
+  group('$WordSolvingLargeView', () {
+    late WordSelectionBloc wordSolvingBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordSolvingBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: wordFocusedBloc),
+          BlocProvider.value(value: wordSolvingBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
-        child: WordSolvingDesktopView(selectedWord),
+        child: WordSolvingLargeView(selectedWord),
       );
 
       when(() => crosswordBloc.state).thenReturn(
@@ -121,13 +121,13 @@ void main() {
         );
         await tester.pumpApp(widget);
 
-        verify(() => wordFocusedBloc.add(const WordFocusedSuccessRequested()))
+        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
             .called(1);
       },
     );
   });
 
-  group('WordFocusedMobileView', () {
+  group('$WordSolvingSmallView', () {
     late WordSelectionBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
@@ -135,7 +135,7 @@ void main() {
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordFocusedBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = Theme(
@@ -145,7 +145,7 @@ void main() {
             BlocProvider.value(value: wordFocusedBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordSelectionSmallView(selectedWord),
+          child: WordSolvingSmallView(selectedWord),
         ),
       );
 
