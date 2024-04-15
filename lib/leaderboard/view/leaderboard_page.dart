@@ -6,6 +6,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 

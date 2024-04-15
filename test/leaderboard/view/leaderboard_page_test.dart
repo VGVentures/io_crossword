@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
@@ -14,6 +15,9 @@ import '../../helpers/helpers.dart';
 
 class _MockLeaderboardBloc extends MockBloc<LeaderboardEvent, LeaderboardState>
     implements LeaderboardBloc {}
+
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 void main() {
   group('LeaderboardPage', () {
@@ -29,6 +33,7 @@ void main() {
 
   group('LeaderboardView', () {
     late LeaderboardBloc leaderboardBloc;
+    late PlayerBloc playerBloc;
     late Widget widget;
 
     late AppLocalizations l10n;
@@ -39,9 +44,17 @@ void main() {
 
     setUp(() {
       leaderboardBloc = _MockLeaderboardBloc();
+      playerBloc = _MockPlayerBloc();
 
-      widget = BlocProvider<LeaderboardBloc>(
-        create: (_) => leaderboardBloc,
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider<LeaderboardBloc>(
+            create: (_) => leaderboardBloc,
+          ),
+          BlocProvider<PlayerBloc>(
+            create: (context) => playerBloc,
+          ),
+        ],
         child: LeaderboardView(),
       );
     });
@@ -86,6 +99,7 @@ void main() {
       (tester) async {
         when(() => leaderboardBloc.state)
             .thenReturn(LeaderboardState(status: LeaderboardStatus.success));
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
