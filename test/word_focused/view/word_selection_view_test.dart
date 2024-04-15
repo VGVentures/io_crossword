@@ -35,95 +35,84 @@ class _FakeWord extends Fake implements Word {
 
 void main() {
   group('$WordSelectionView', () {
-    testWidgets(
-      'renders WordFocusedDesktopPage when layout is large',
-      (tester) async {
-        await tester.pumpApp(
-          IoLayout(
-            data: IoLayoutData.large,
-            child: WordSelectionView(),
-          ),
-        );
+    group('renders', () {
+      late CrosswordBloc crosswordBloc;
+      late WordSelectionBloc wordSelectionBloc;
+      late WordSelection selectedWord;
 
-        expect(find.byType(WordFocusedDesktopPage), findsOneWidget);
-      },
-    );
+      setUp(() {
+        crosswordBloc = _MockCrosswordBloc();
+        wordSelectionBloc = _MockWordSelectionBloc();
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      });
 
-    testWidgets(
-      'renders WordFocusedMobilePage when layout is small',
-      (tester) async {
-        await tester.pumpApp(
-          IoLayout(
-            data: IoLayoutData.small,
-            child: WordSelectionView(),
-          ),
-        );
-
-        expect(find.byType(WordFocusedMobilePage), findsOneWidget);
-      },
-    );
-  });
-
-  group('WordFocusedDesktopPage', () {
-    late CrosswordBloc crosswordBloc;
-    late WordSelectionBloc wordSelectionBloc;
-    late Widget widget;
-
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
-      wordSelectionBloc = _MockWordSelectionBloc();
-
-      widget = MultiBlocProvider(
-        providers: [
-          BlocProvider.value(
-            value: crosswordBloc,
-          ),
-          BlocProvider.value(
-            value: wordSelectionBloc,
-          ),
-        ],
-        child: WordFocusedDesktopPage(),
-      );
-    });
-
-    testWidgets(
-      'renders SizedBox.shrink when selectedWord is null',
-      (tester) async {
+      testWidgets('SizedBox when there is no selected word', (tester) async {
         when(() => crosswordBloc.state)
             .thenReturn(CrosswordState(sectionSize: 20));
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          WordSelectionView(),
+        );
 
         expect(find.byType(SizedBox), findsOneWidget);
-      },
-    );
+      });
 
-    testWidgets(
-      'renders WordFocusedDesktopView when selectedWord is not null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: selectedWord,
-          ),
-        );
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
-          ),
-        );
+      testWidgets(
+        '$WordSelectionLargeView when layout is large',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            CrosswordState(
+              sectionSize: 20,
+              selectedWord: selectedWord,
+            ),
+          );
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(status: WordSelectionStatus.preSolving),
+          );
 
-        await tester.pumpApp(widget);
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            crosswordBloc: crosswordBloc,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordSelectionView(),
+            ),
+          );
 
-        expect(find.byType(WordFocusedDesktopView), findsOneWidget);
-      },
-    );
+          expect(find.byType(WordSelectionLargeView), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        '$WordSelectionSmallView when layout is small',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            CrosswordState(
+              sectionSize: 20,
+              selectedWord: selectedWord,
+            ),
+          );
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(status: WordSelectionStatus.preSolving),
+          );
+
+          await tester.pumpApp(
+            layout: IoLayoutData.small,
+            crosswordBloc: crosswordBloc,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordSelectionView(),
+            ),
+          );
+
+          expect(find.byType(WordSelectionSmallView), findsOneWidget);
+        },
+      );
+    });
   });
 
-  group('WordFocusedDesktopView', () {
+  group('$WordSelectionLargeView', () {
     late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
@@ -139,7 +128,7 @@ void main() {
           BlocProvider.value(value: wordSelectionBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
-        child: WordFocusedDesktopView(selectedWord),
+        child: WordSelectionLargeView(selectedWord),
       );
     });
 
@@ -199,62 +188,7 @@ void main() {
     );
   });
 
-  group('WordFocusedMobilePage', () {
-    late CrosswordBloc crosswordBloc;
-    late WordSelectionBloc wordSelectionBloc;
-    late Widget widget;
-
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
-    setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
-      wordSelectionBloc = _MockWordSelectionBloc();
-
-      widget = MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: crosswordBloc),
-          BlocProvider.value(value: wordSelectionBloc),
-        ],
-        child: WordFocusedMobilePage(),
-      );
-    });
-
-    testWidgets(
-      'renders SizedBox.shrink when selectedWord is null',
-      (tester) async {
-        when(() => crosswordBloc.state)
-            .thenReturn(CrosswordState(sectionSize: 20));
-
-        await tester.pumpApp(widget);
-
-        expect(find.byType(SizedBox), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'renders WordFocusedMobileView when selectedWord is not null',
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: selectedWord,
-          ),
-        );
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
-          ),
-        );
-
-        await tester.pumpApp(widget);
-
-        expect(find.byType(WordFocusedMobileView), findsOneWidget);
-      },
-    );
-  });
-
-  group('WordFocusedMobileView', () {
+  group('$WordSelectionSmallView', () {
     late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
@@ -272,7 +206,7 @@ void main() {
             BlocProvider.value(value: wordSelectionBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordFocusedMobileView(selectedWord),
+          child: WordSelectionSmallView(selectedWord),
         ),
       );
     });
