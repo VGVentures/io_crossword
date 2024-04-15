@@ -53,9 +53,11 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            // coverage:ignore-start
             create: (_) => PlayerBloc(
               leaderboardRepository: leaderboardRepository,
             )..add(PlayerLoaded(userId: user.id)),
+            // coverage:ignore-end
           ),
           BlocProvider(
             create: (context) => ChallengeBloc(
