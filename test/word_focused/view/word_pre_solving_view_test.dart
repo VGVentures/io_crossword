@@ -34,7 +34,7 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
-  group('WordClueDesktopView', () {
+  group('$WordPreSolvingLargeView', () {
     late WordSelection selectedWord;
     late Widget widget;
     late WordSelectionBloc wordFocusedBloc;
@@ -46,7 +46,7 @@ void main() {
 
         widget = BlocProvider(
           create: (context) => wordFocusedBloc,
-          child: WordClueDesktopView(selectedWord),
+          child: WordPreSolvingLargeView(selectedWord),
         );
       });
 
@@ -85,7 +85,7 @@ void main() {
 
         widget = BlocProvider(
           create: (context) => wordFocusedBloc,
-          child: WordClueDesktopView(selectedWord),
+          child: WordPreSolvingLargeView(selectedWord),
         );
       });
 
@@ -101,7 +101,7 @@ void main() {
     });
   });
 
-  group('WordClueMobileView', () {
+  group('$WordPreSolvingSmallView', () {
     late WordSelection selectedWord;
     late Widget widget;
     late WordSelectionBloc wordFocusedBloc;
@@ -113,7 +113,7 @@ void main() {
 
         widget = BlocProvider(
           create: (context) => wordFocusedBloc,
-          child: WordClueMobileView(selectedWord),
+          child: WordPreSolvingSmallView(selectedWord),
         );
       });
 
@@ -151,7 +151,7 @@ void main() {
 
         widget = BlocProvider(
           create: (context) => wordFocusedBloc,
-          child: WordClueMobileView(selectedWord),
+          child: WordPreSolvingSmallView(selectedWord),
         );
       });
 

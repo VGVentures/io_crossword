@@ -20,6 +20,10 @@ import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
 
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
+
 class _MockTapUpEvent extends Mock implements TapUpEvent {}
 
 void main() {
@@ -29,6 +33,7 @@ void main() {
 
   group('CrosswordGame', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
     void mockState(CrosswordState state) {
       whenListen(
@@ -40,6 +45,7 @@ void main() {
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
 
       final state = CrosswordState(
         sectionSize: sectionSize,
@@ -52,6 +58,7 @@ void main() {
     }) =>
         CrosswordGame(
           crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
           showDebugOverlay: showDebugOverlay,
         );
 

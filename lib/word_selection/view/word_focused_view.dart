@@ -31,11 +31,7 @@ class WordFocusedDesktopPage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return BlocProvider(
-      key: ValueKey(selectedWord.word.id),
-      create: (_) => WordSelectionBloc(),
-      child: WordFocusedDesktopView(selectedWord),
-    );
+    return WordFocusedDesktopView(selectedWord);
   }
 }
 
@@ -62,7 +58,7 @@ class WordFocusedDesktopView extends StatelessWidget {
             // coverage:ignore-start
             final view = switch (state.status) {
               WordSelectionStatus.preSolving =>
-                WordClueDesktopView(selectedWord),
+                WordPreSolvingLargeView(selectedWord),
               WordSelectionStatus.validating ||
               WordSelectionStatus.incorrect ||
               WordSelectionStatus.failure ||
@@ -94,11 +90,7 @@ class WordFocusedMobilePage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return BlocProvider(
-      key: ValueKey(selectedWord.word.id),
-      create: (_) => WordSelectionBloc(),
-      child: WordFocusedMobileView(selectedWord),
-    );
+    return WordFocusedMobileView(selectedWord);
   }
 }
 
@@ -125,7 +117,7 @@ class WordFocusedMobileView extends StatelessWidget {
               // coverage:ignore-start
               final view = switch (status) {
                 WordSelectionStatus.preSolving =>
-                  WordClueMobileView(selectedWord),
+                  WordPreSolvingSmallView(selectedWord),
                 WordSelectionStatus.validating ||
                 WordSelectionStatus.incorrect ||
                 WordSelectionStatus.failure ||

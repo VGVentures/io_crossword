@@ -25,6 +25,61 @@ void main() {
 
   group('$WelcomeView', () {
     testWidgets(
+      'displays a $WelcomeLarge and $WelcomeBody when layout is large',
+      (tester) async {
+        await tester.pumpSubject(
+          const IoLayout(
+            data: IoLayoutData.large,
+            child: WelcomeView(),
+          ),
+        );
+
+        expect(find.byType(WelcomeLarge), findsOneWidget);
+        expect(find.byType(WelcomeBody), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'displays a $WelcomeSmall and $WelcomeBody when layout is large',
+      (tester) async {
+        await tester.pumpSubject(
+          const IoLayout(
+            data: IoLayoutData.small,
+            child: WelcomeView(),
+          ),
+        );
+
+        expect(find.byType(WelcomeSmall), findsOneWidget);
+        expect(find.byType(WelcomeBody), findsOneWidget);
+      },
+    );
+  });
+
+  group('$WelcomeLarge', () {
+    group('displays', () {
+      testWidgets('an $IoAppBar', (tester) async {
+        await tester.pumpSubject(const WelcomeLarge());
+        expect(find.byType(IoAppBar), findsOneWidget);
+      });
+    });
+  });
+
+  group('$WelcomeSmall', () {
+    group('displays', () {
+      testWidgets('an $IoAppBar', (tester) async {
+        await tester.pumpSubject(const WelcomeSmall());
+        expect(find.byType(IoAppBar), findsOneWidget);
+      });
+
+      testWidgets('a $WelcomeHeaderImage', (tester) async {
+        await tester.pumpSubject(const WelcomeSmall());
+        expect(find.byType(WelcomeHeaderImage), findsOneWidget);
+      });
+    });
+  });
+
+  group('$WelcomeBody', () {
+    testWidgets(
       'updates flow when "Get Started" button is pressed',
       (tester) async {
         final flowController = FlowController(GameIntroStatus.welcome);
@@ -34,7 +89,7 @@ void main() {
           FlowBuilder<GameIntroStatus>(
             controller: flowController,
             onGeneratePages: (_, __) => [
-              const MaterialPage(child: WelcomeView()),
+              const MaterialPage(child: WelcomeBody()),
             ],
           ),
         );
@@ -55,18 +110,8 @@ void main() {
 
     group('displays', () {
       testWidgets('a $ChallengeProgress', (tester) async {
-        await tester.pumpSubject(const WelcomeView());
+        await tester.pumpSubject(const WelcomeBody());
         expect(find.byType(ChallengeProgress), findsOneWidget);
-      });
-
-      testWidgets('a $WelcomeHeaderImage', (tester) async {
-        await tester.pumpSubject(const WelcomeView());
-        expect(find.byType(WelcomeHeaderImage), findsOneWidget);
-      });
-
-      testWidgets('a $IoAppBar', (tester) async {
-        await tester.pumpSubject(const WelcomeView());
-        expect(find.byType(IoAppBar), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {
@@ -75,7 +120,7 @@ void main() {
           Builder(
             builder: (context) {
               l10n = context.l10n;
-              return const WelcomeView();
+              return const WelcomeBody();
             },
           ),
         );
@@ -89,7 +134,7 @@ void main() {
           Builder(
             builder: (context) {
               l10n = context.l10n;
-              return const WelcomeView();
+              return const WelcomeBody();
             },
           ),
         );
@@ -105,7 +150,7 @@ void main() {
             Builder(
               builder: (context) {
                 l10n = context.l10n;
-                return const WelcomeView();
+                return const WelcomeBody();
               },
             ),
           );

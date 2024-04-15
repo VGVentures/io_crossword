@@ -13,8 +13,6 @@ class WordSolvingDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
         return previous.selectedWord?.solvedStatus !=
@@ -39,21 +37,12 @@ class WordSolvingDesktopView extends StatelessWidget {
           ),
           const Spacer(),
           const SizedBox(height: 8),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
-                child: GeminiHintButton(),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.read<CrosswordBloc>().add(
-                        const AnswerSubmitted(),
-                      ),
-                  child: Text(l10n.submit),
-                ),
-              ),
+              Expanded(child: GeminiHintButton()),
+              SizedBox(width: 8),
+              Expanded(child: _SubmitButton()),
             ],
           ),
         ],
@@ -69,8 +58,6 @@ class WordSolvingMobileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
         return previous.selectedWord?.solvedStatus !=
@@ -100,25 +87,34 @@ class WordSolvingMobileView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
-                child: GeminiHintButton(),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.read<CrosswordBloc>().add(
-                        const AnswerSubmitted(),
-                      ),
-                  child: Text(l10n.submit),
-                ),
-              ),
+              Expanded(child: GeminiHintButton()),
+              SizedBox(width: 8),
+              Expanded(child: _SubmitButton()),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton();
+
+  void _onSubmit(BuildContext context) {
+    context.read<CrosswordBloc>().add(const AnswerSubmitted());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return OutlinedButton(
+      onPressed: () => _onSubmit(context),
+      child: Text(l10n.submit),
     );
   }
 }
