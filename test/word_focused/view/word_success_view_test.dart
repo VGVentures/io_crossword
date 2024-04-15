@@ -177,13 +177,11 @@ void main() {
     });
 
     testWidgets(
-      'adds WordUnselected event when tapping the close button',
+      'renders a $CloseWordSelectionIconButton',
       (tester) async {
         await tester.pumpApp(widget);
 
-        await tester.tap(find.byIcon(Icons.cancel));
-
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+        expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
       },
     );
   });
@@ -201,7 +199,7 @@ void main() {
     });
 
     testWidgets(
-      'adds WordUnselected event when tapping the keep playing button',
+      'adds $WordUnselected event when tapping the keep playing button',
       (tester) async {
         await tester.pumpApp(widget);
 
