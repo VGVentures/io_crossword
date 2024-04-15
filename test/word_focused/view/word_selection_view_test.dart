@@ -164,7 +164,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingDesktopView), findsOneWidget);
+        expect(find.byType(WordSolvingLargeView), findsOneWidget);
       },
     );
 
@@ -243,7 +243,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingMobileView), findsOneWidget);
+        expect(find.byType(WordSolvingSmallView), findsOneWidget);
       },
     );
 
