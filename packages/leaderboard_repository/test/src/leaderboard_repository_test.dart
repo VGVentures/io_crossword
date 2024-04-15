@@ -130,10 +130,32 @@ void main() {
     });
 
     group('getLeaderboardResults', () {
-      test('returns the fist player', () async {
+      test('returns the players', () async {
         expect(
           await leaderboardRepository.getLeaderboardResults('id'),
           equals(players),
+        );
+      });
+
+      test('returns the players with limit of 10', () async {
+        for (final player in List.generate(
+          11,
+          (index) => LeaderboardPlayer(
+            userId: 'userId+$index',
+            initials: 'AAA',
+            score: 20,
+            streak: 0,
+            mascot: Mascots.dash,
+          ),
+        )) {
+          await firestore.doc('leaderboard/${player.userId}').set(
+                player.toJson(),
+              );
+        }
+
+        expect(
+          await leaderboardRepository.getLeaderboardResults('id'),
+          hasLength(10),
         );
       });
 
