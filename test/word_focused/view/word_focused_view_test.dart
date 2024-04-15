@@ -137,7 +137,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordClueDesktopView), findsOneWidget);
+        expect(find.byType(WordPreSolvingLargeView), findsOneWidget);
       },
     );
 
@@ -260,7 +260,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordClueMobileView), findsOneWidget);
+        expect(find.byType(WordPreSolvingSmallView), findsOneWidget);
       },
     );
 
