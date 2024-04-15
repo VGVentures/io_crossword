@@ -50,7 +50,7 @@ void main() {
         selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
       });
 
-      testWidgets('WordSelectionSuccessLargeView when layout is large',
+      testWidgets('$WordSelectionSuccessLargeView when layout is large',
           (tester) async {
         await tester.pumpApp(
           layout: IoLayoutData.large,
@@ -60,7 +60,7 @@ void main() {
         expect(find.byType(WordSelectionSuccessLargeView), findsOneWidget);
       });
 
-      testWidgets('WordSelectionSuccessSmallView when layout is small',
+      testWidgets('$WordSelectionSuccessSmallView when layout is small',
           (tester) async {
         await tester.pumpApp(
           layout: IoLayoutData.small,
