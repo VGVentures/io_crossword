@@ -58,7 +58,7 @@ class WordFocusedDesktopView extends StatelessWidget {
             // coverage:ignore-start
             final view = switch (state.status) {
               WordSelectionStatus.preSolving =>
-                WordClueDesktopView(selectedWord),
+                WordPreSolvingLargeView(selectedWord),
               WordSelectionStatus.validating ||
               WordSelectionStatus.incorrect ||
               WordSelectionStatus.failure ||
@@ -117,7 +117,7 @@ class WordFocusedMobileView extends StatelessWidget {
               // coverage:ignore-start
               final view = switch (status) {
                 WordSelectionStatus.preSolving =>
-                  WordClueMobileView(selectedWord),
+                  WordPreSolvingSmallView(selectedWord),
                 WordSelectionStatus.validating ||
                 WordSelectionStatus.incorrect ||
                 WordSelectionStatus.failure ||
