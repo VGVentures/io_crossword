@@ -17,9 +17,10 @@ class WordSelectionView extends StatelessWidget {
 
     final layout = IoLayout.of(context);
 
-    return layout == IoLayoutData.large
-        ? WordSelectionLargeView(selectedWord)
-        : WordSelectionSmallView(selectedWord);
+    return switch (layout) {
+      IoLayoutData.large => WordSelectionLargeView(selectedWord),
+      IoLayoutData.small => WordSelectionSmallView(selectedWord),
+    };
   }
 }
 
@@ -54,7 +55,7 @@ class WordSelectionLargeView extends StatelessWidget {
               WordSelectionStatus.solving =>
                 WordSolvingDesktopView(selectedWord),
               WordSelectionStatus.solved =>
-                WordSuccessDesktopView(selectedWord),
+                WordSuccessView(selectedWord: selectedWord),
             };
             // coverage:ignore-end
             return view;
@@ -97,7 +98,7 @@ class WordSelectionSmallView extends StatelessWidget {
                 WordSelectionStatus.solving =>
                   WordSolvingMobileView(selectedWord),
                 WordSelectionStatus.solved =>
-                  WordSuccessMobileView(selectedWord),
+                  WordSuccessView(selectedWord: selectedWord),
               };
               // coverage:ignore-end
               return view;
