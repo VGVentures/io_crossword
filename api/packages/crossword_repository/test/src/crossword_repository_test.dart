@@ -142,11 +142,12 @@ void main() {
     group('answerWord', () {
       late CrosswordRepository repository;
       final word = Word(
+        id: '1',
         position: const Point(1, 1),
         axis: Axis.vertical,
         answer: 'flutter',
+        length: 7,
         clue: '',
-        solvedTimestamp: null,
       );
 
       setUp(() {
@@ -157,7 +158,10 @@ void main() {
             'position': {'x': 1, 'y': 1},
             'size': 300,
             'words': [
-              word.toJson(),
+              {
+                'id': '1',
+                ...word.toJson(),
+              },
             ],
             'borderWords': const <dynamic>[],
           },

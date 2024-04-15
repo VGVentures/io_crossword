@@ -30,7 +30,10 @@ class _FakeWord extends Fake implements Word {
   String get clue => 'clue';
 
   @override
-  String get answer => 'answer';
+  String? get answer => 'answer';
+
+  @override
+  int get length => 6;
 }
 
 void main() {

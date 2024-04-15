@@ -34,7 +34,7 @@ class _FakeWord extends Fake implements Word {
   int? get solvedTimestamp => null;
 
   @override
-  String get answer => 'answer';
+  int get length => 6;
 }
 
 void main() {

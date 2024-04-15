@@ -11,10 +11,18 @@ class CrosswordRepository {
   /// The firestore instance.
   final Firestore firestore;
 
+  /// Adds a list of word answers to the database.
+  Future<void> addAnswers(Map<String, String> answers) async {
+    final answersCollection = firestore.collection('answers');
+    for (final answer in answers.entries) {
+      await answersCollection.doc(answer.key).set({'answer': answer.value});
+    }
+  }
+
   /// Adds a list of sections to the database.
   Future<void> addSections(List<BoardSection> sections) async {
     for (final section in sections) {
-      await firestore.collection('boardSections').add(section.toJson());
+      await firestore.collection('newBoardSections').add(section.toJson());
     }
   }
 

@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'dart:async';
 import 'dart:ui' as ui;
@@ -86,11 +87,12 @@ void main() {
       createGame,
       (game) async {
         final word = Word(
+          id: '1',
           position: const Point(0, 0),
           axis: Axis.vertical,
           answer: 'Flutter',
+          length: 7,
           clue: '',
-          solvedTimestamp: null,
         );
         setUpStreamController(
           state: CrosswordState(
@@ -169,18 +171,20 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],
@@ -218,18 +222,21 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
                     solvedTimestamp: 1,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],
@@ -277,18 +284,20 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],

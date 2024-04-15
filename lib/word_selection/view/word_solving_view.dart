@@ -75,7 +75,7 @@ class WordSolvingSmallView extends StatelessWidget {
           TopBar(wordId: selectedWord.word.id),
           const SizedBox(height: 32),
           IoWordInput.alphabetic(
-            length: selectedWord.word.answer.length,
+            length: selectedWord.word.length,
             onWord: (value) {
               context.read<CrosswordBloc>().add(AnswerUpdated(value));
             },

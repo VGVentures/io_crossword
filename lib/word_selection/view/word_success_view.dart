@@ -27,7 +27,6 @@ class WordSuccessView extends StatelessWidget {
   }
 }
 
-@visibleForTesting
 class WordSelectionSuccessLargeView extends StatelessWidget {
   @visibleForTesting
   const WordSelectionSuccessLargeView(this.selectedWord, {super.key});
@@ -50,7 +49,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
           const SuccessTopBar(),
           const SizedBox(height: 32),
           IoWord(
-            selectedWord.word.answer.toUpperCase(),
+            selectedWord.word.answer!.toUpperCase(),
             style: themeData.io.wordTheme.big,
           ),
           const SizedBox(height: 40),
@@ -123,7 +122,7 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                 child: Column(
                   children: [
                     IoWord(
-                      selectedWord.word.answer.toUpperCase(),
+                      selectedWord.word.answer!.toUpperCase(),
                       style: themeData.io.wordTheme.big,
                     ),
                     const SizedBox(height: 40),

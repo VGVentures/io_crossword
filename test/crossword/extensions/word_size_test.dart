@@ -8,18 +8,20 @@ import 'package:io_crossword/crossword/extensions/extensions.dart';
 void main() {
   group('WordSize', () {
     final verticalWord = Word(
+      id: '1',
       position: Point(2, 7),
       axis: Axis.vertical,
       answer: 'hello',
+      length: 5,
       clue: '',
-      solvedTimestamp: null,
     );
     final horizontalWord = Word(
+      id: '2',
       position: Point(3, 7),
       axis: Axis.horizontal,
       answer: 'exactly',
+      length: 7,
       clue: '',
-      solvedTimestamp: null,
     );
 
     test('returns correct width for vertical word', () {

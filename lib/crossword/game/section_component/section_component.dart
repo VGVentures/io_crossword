@@ -150,14 +150,13 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
     for (var i = 0; i < _boardSection!.words.length; i++) {
       final word = _boardSection!.words[i];
 
-      final wordCharacters = word.answer.toUpperCase().characters;
-
       final wordIndexStart = spriteBatch.length;
-      for (var c = 0; c < wordCharacters.length; c++) {
+      for (var c = 0; c < word.length; c++) {
         late Rect rect;
-        if (word.solvedTimestamp != null) {
+        if (word.answer != null) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
+          final wordCharacters = word.answer!.toUpperCase().characters;
           rect = wordCharacters.getCharacterRectangle(c, word.mascot);
           // coverage:ignore-end
         } else {
