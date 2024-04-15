@@ -23,7 +23,6 @@ class WordSelectionView extends StatelessWidget {
   }
 }
 
-@visibleForTesting
 class WordSelectionLargeView extends StatelessWidget {
   @visibleForTesting
   const WordSelectionLargeView(this.selectedWord, {super.key});
