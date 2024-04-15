@@ -46,9 +46,8 @@ class TeamSelectionView extends StatelessWidget {
         image: Assets.images.dash.path,
         gradientColors: const [
           Color(0xFF00A947),
+          Color(0xFF1F85FA),
           Color(0xFF00A947),
-          Color(0xFF1F85FA),
-          Color(0xFF1F85FA),
         ],
       ),
       Mascot(
@@ -57,9 +56,8 @@ class TeamSelectionView extends StatelessWidget {
         image: Assets.images.sparky.path,
         gradientColors: const [
           Color(0xFFFFC700),
+          Color(0xFFFD2B25),
           Color(0xFFFFC700),
-          Color(0xFFFD2B25),
-          Color(0xFFFD2B25),
         ],
       ),
       Mascot(
@@ -68,9 +66,8 @@ class TeamSelectionView extends StatelessWidget {
         image: Assets.images.android.path,
         gradientColors: const [
           Color(0xFFFFC700),
+          Color(0xFF00A947),
           Color(0xFFFFC700),
-          Color(0xFF00A947),
-          Color(0xFF00A947),
         ],
       ),
       Mascot(
@@ -79,9 +76,8 @@ class TeamSelectionView extends StatelessWidget {
         image: Assets.images.dino.path,
         gradientColors: const [
           Color(0xFF4383F2),
+          Color(0xFFFD2B25),
           Color(0xFF4383F2),
-          Color(0xFFFD2B25),
-          Color(0xFFFD2B25),
         ],
       ),
     ];
@@ -370,24 +366,42 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                               ),
                               Positioned(
                                 left: tileWidth * 2,
-                                child: Assets.images.platformLarge.image(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                ),
+                                child: state == Mascots.sparky.index
+                                    ? GradientAnimation(
+                                        mascot: widget.mascots[state],
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      )
+                                    : Assets.images.platformLarge.image(
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      ),
                               ),
                               Positioned(
                                 left: tileWidth * 4,
-                                child: Assets.images.platformLarge.image(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                ),
+                                child: state == Mascots.android.index
+                                    ? GradientAnimation(
+                                        mascot: widget.mascots[state],
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      )
+                                    : Assets.images.platformLarge.image(
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      ),
                               ),
                               Positioned(
                                 left: tileWidth * 6,
-                                child: Assets.images.platformLarge.image(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                ),
+                                child: state == Mascots.dino.index
+                                    ? GradientAnimation(
+                                        mascot: widget.mascots[state],
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      )
+                                    : Assets.images.platformLarge.image(
+                                        width: tileWidth,
+                                        height: platformTileHeight,
+                                      ),
                               ),
                             ],
                           ),
@@ -600,7 +614,18 @@ class _GradientAnimationState extends State<GradientAnimation>
       vsync: this,
       duration: const Duration(seconds: 3),
     )..repeat();
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _animation = TweenSequence<double>(
+      <TweenSequenceItem<double>>[
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: .3, end: 1.3),
+          weight: 1,
+        ),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: -.3, end: .3),
+          weight: 1,
+        ),
+      ],
+    ).animate(_controller);
   }
 
   @override
@@ -615,10 +640,9 @@ class _GradientAnimationState extends State<GradientAnimation>
                 return LinearGradient(
                   colors: widget.mascot.gradientColors,
                   stops: [
-                    _animation.value + .1,
+                    _animation.value - .3,
+                    _animation.value,
                     _animation.value + .3,
-                    _animation.value + .5,
-                    _animation.value + 1,
                   ],
                 ).createShader(bounds);
               },
