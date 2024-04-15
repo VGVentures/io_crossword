@@ -116,10 +116,8 @@ void main() {
     });
 
     testWidgets(
-      'renders $WordFocusedDesktopPage when is loaded with desktop size',
+      'renders $WordSelectionView when loaded',
       (tester) async {
-        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
-
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             status: CrosswordStatus.success,
@@ -135,80 +133,7 @@ void main() {
           crosswordBloc: crosswordBloc,
         );
 
-        expect(find.byType(WordFocusedDesktopPage), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'does not render $WordFocusedDesktopPage when is loaded with mobile size',
-      (tester) async {
-        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
-
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-            sections: {
-              (0, 0): _FakeBoardSection(),
-            },
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        expect(find.byType(WordFocusedDesktopPage), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'renders $WordFocusedMobilePage when game is loaded with mobile size',
-      (tester) async {
-        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium - 1, 800));
-
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-            sections: {
-              (0, 0): _FakeBoardSection(),
-            },
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        expect(find.byType(WordFocusedMobilePage), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'does not render $WordFocusedMobilePage when game is loaded with '
-      'desktop size',
-      (tester) async {
-        tester.setDisplaySize(Size(IoCrosswordBreakpoints.medium, 800));
-
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-            sections: {
-              (0, 0): _FakeBoardSection(),
-            },
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        expect(find.byType(WordFocusedMobilePage), findsNothing);
+        expect(find.byType(WordSelectionView), findsOneWidget);
       },
     );
 
