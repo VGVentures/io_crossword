@@ -8,7 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,6 +20,9 @@ import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
@@ -39,14 +45,21 @@ void main() {
 
   group('$CrosswordView', () {
     late CrosswordBloc crosswordBloc;
+    late PlayerBloc playerBloc;
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      playerBloc = _MockPlayerBloc();
     });
 
     testWidgets('renders $IoAppBar', (tester) async {
       await tester.pumpSubject(CrosswordView());
       expect(find.byType(IoAppBar), findsOneWidget);
+    });
+
+    testWidgets('renders $AppBarRankingInformation', (tester) async {
+      await tester.pumpSubject(CrosswordView());
+      expect(find.byType(AppBarRankingInformation), findsOneWidget);
     });
 
     testWidgets('renders $MuteButton', (tester) async {
@@ -196,6 +209,121 @@ void main() {
         );
       },
     );
+
+    group('AppBarRankingInformation', () {
+      testWidgets(
+        'renders $SegmentedButton',
+        (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(),
+          );
+
+          await tester.pumpSubject(
+            AppBarRankingInformation(),
+            playerBloc: playerBloc,
+          );
+
+          expect(find.byType(SegmentedButton), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays rank',
+        (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              rank: 50,
+            ),
+          );
+
+          await tester.pumpSubject(
+            AppBarRankingInformation(),
+            playerBloc: playerBloc,
+          );
+
+          expect(find.text('50'), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays score',
+        (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              player: LeaderboardPlayer(
+                userId: 'userId',
+                initials: 'ABC',
+                score: 200,
+                streak: 10,
+                mascot: Mascots.sparky,
+              ),
+              rank: 50,
+            ),
+          );
+
+          await tester.pumpSubject(
+            AppBarRankingInformation(),
+            playerBloc: playerBloc,
+          );
+
+          expect(find.text('200'), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays streak',
+        (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              player: LeaderboardPlayer(
+                userId: 'userId',
+                initials: 'ABC',
+                score: 200,
+                streak: 10,
+                mascot: Mascots.sparky,
+              ),
+              rank: 50,
+            ),
+          );
+
+          await tester.pumpSubject(
+            AppBarRankingInformation(),
+            playerBloc: playerBloc,
+          );
+
+          expect(find.text('10'), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays LeaderboardPage when tapped',
+        (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              player: LeaderboardPlayer(
+                userId: 'userId',
+                initials: 'ABC',
+                score: 200,
+                streak: 10,
+                mascot: Mascots.sparky,
+              ),
+              rank: 50,
+            ),
+          );
+
+          await tester.pumpSubject(
+            AppBarRankingInformation(),
+            playerBloc: playerBloc,
+          );
+
+          await tester.tap(find.byType(SegmentedButton));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(LeaderboardPage), findsOneWidget);
+        },
+      );
+    });
   });
 }
 
@@ -203,10 +331,16 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget child, {
     CrosswordBloc? crosswordBloc,
+    PlayerBloc? playerBloc,
   }) {
     final bloc = crosswordBloc ?? _MockCrosswordBloc();
     if (crosswordBloc == null) {
       when(() => bloc.state).thenReturn(const CrosswordState());
+    }
+
+    final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
+    if (playerBloc == null) {
+      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
     }
 
     final wordSelectionBloc = _MockWordSelectionBloc();
@@ -219,6 +353,9 @@ extension on WidgetTester {
         providers: [
           BlocProvider<CrosswordBloc>(
             create: (_) => bloc,
+          ),
+          BlocProvider<PlayerBloc>(
+            create: (_) => playerBlocUpdate,
           ),
           BlocProvider<WordSelectionBloc>(
             create: (_) => wordSelectionBloc,
