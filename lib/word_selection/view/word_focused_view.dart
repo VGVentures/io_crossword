@@ -31,11 +31,7 @@ class WordFocusedDesktopPage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return BlocProvider(
-      key: ValueKey(selectedWord.word.id),
-      create: (_) => WordSelectionBloc(),
-      child: WordFocusedDesktopView(selectedWord),
-    );
+    return WordFocusedDesktopView(selectedWord);
   }
 }
 
@@ -94,11 +90,7 @@ class WordFocusedMobilePage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return BlocProvider(
-      key: ValueKey(selectedWord.word.id),
-      create: (_) => WordSelectionBloc(),
-      child: WordFocusedMobileView(selectedWord),
-    );
+    return WordFocusedMobileView(selectedWord);
   }
 }
 
