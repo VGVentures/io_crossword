@@ -129,7 +129,7 @@ void main() {
         when(() => playerBloc.state).thenReturn(
           PlayerState(
             rank: 3,
-            leaderboardPlayer: currentPlayer,
+            player: currentPlayer,
           ),
         );
 
@@ -248,7 +248,7 @@ void main() {
 
             when(() => playerBloc.state).thenReturn(
               PlayerState(
-                leaderboardPlayer: player,
+                player: player,
                 rank: i,
               ),
             );
@@ -273,7 +273,7 @@ void main() {
 
           when(() => playerBloc.state).thenReturn(
             PlayerState(
-              leaderboardPlayer: player,
+              player: player,
               rank: 11,
             ),
           );

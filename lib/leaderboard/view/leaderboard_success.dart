@@ -115,8 +115,7 @@ class CurrentPlayerNotTopRank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final player =
-        context.select((PlayerBloc bloc) => bloc.state.leaderboardPlayer);
+    final player = context.select((PlayerBloc bloc) => bloc.state.player);
 
     final rank = context.select(
       (PlayerBloc bloc) => bloc.state.rank,

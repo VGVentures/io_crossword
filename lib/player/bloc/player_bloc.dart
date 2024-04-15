@@ -25,7 +25,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       onData: (data) {
         return PlayerState(
           status: PlayerStatus.playing,
-          leaderboardPlayer: data.$1,
+          player: data.$1,
           rank: data.$2,
         );
       },

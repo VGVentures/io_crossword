@@ -43,7 +43,7 @@ void main() {
           PlayerState(
             status: PlayerStatus.playing,
             rank: 3,
-            leaderboardPlayer: player,
+            player: player,
           ),
         ],
       );
