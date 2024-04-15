@@ -45,10 +45,7 @@ class BottomBarContent extends StatelessWidget {
               onPressed: () {}, // coverage:ignore-line
               child: Text(
                 l10n.submitScore,
-                style: switch (layout) {
-                  IoLayoutData.small => theme.textTheme.bodySmall,
-                  IoLayoutData.large => theme.textTheme.bodyMedium,
-                },
+                style: theme.textTheme.bodySmall,
               ),
             ),
             const SizedBox(width: 16),
