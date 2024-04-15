@@ -9,19 +9,16 @@ void main() {
     test('supports value equality', () {
       final theme1 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
-        plainAlternative: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
         elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final theme2 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
-        plainAlternative: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
         elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final theme3 = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
-        plainAlternative: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff0000ff)),
         elevated: CardTheme(color: Color(0xff00ff00)),
       );
@@ -34,13 +31,11 @@ void main() {
     test('lerps', () {
       final from = IoCardTheme(
         plain: CardTheme(color: Color(0xff00ff00)),
-        plainAlternative: CardTheme(color: Color(0xff00ff00)),
         highlight: CardTheme(color: Color(0xff00ff00)),
         elevated: CardTheme(color: Color(0xff00ff00)),
       );
       final to = IoCardTheme(
         plain: CardTheme(color: Color(0xff0000ff)),
-        plainAlternative: CardTheme(color: Color(0xff0000ff)),
         highlight: CardTheme(color: Color(0xff0000ff)),
         elevated: CardTheme(color: Color(0xff0000ff)),
       );
