@@ -18,9 +18,17 @@ class $AssetsAnimGen {
   AssetGenImage get androidCelebrating =>
       const AssetGenImage('assets/anim/android_celebrating.png');
 
+  /// File path: assets/anim/android_celebration.png
+  AssetGenImage get androidCelebration =>
+      const AssetGenImage('assets/anim/android_celebration.png');
+
   /// File path: assets/anim/android_dangle.png
   AssetGenImage get androidDangle =>
       const AssetGenImage('assets/anim/android_dangle.png');
+
+  /// File path: assets/anim/android_drop_in.png
+  AssetGenImage get androidDropIn =>
+      const AssetGenImage('assets/anim/android_drop_in.png');
 
   /// File path: assets/anim/android_idle.png
   AssetGenImage get androidIdle =>
@@ -30,9 +38,50 @@ class $AssetsAnimGen {
   AssetGenImage get androidLookUp =>
       const AssetGenImage('assets/anim/android_look_up.png');
 
+  /// File path: assets/anim/android_picking_up.png
+  AssetGenImage get androidPickingUp =>
+      const AssetGenImage('assets/anim/android_picking_up.png');
+
+  /// File path: assets/anim/android_platform.png
+  AssetGenImage get androidPlatform =>
+      const AssetGenImage('assets/anim/android_platform.png');
+
+  /// File path: assets/anim/dash_celebration.png
+  AssetGenImage get dashCelebration =>
+      const AssetGenImage('assets/anim/dash_celebration.png');
+
+  /// File path: assets/anim/dash_dangle.png
+  AssetGenImage get dashDangle =>
+      const AssetGenImage('assets/anim/dash_dangle.png');
+
+  /// File path: assets/anim/dash_idle.png
+  AssetGenImage get dashIdle =>
+      const AssetGenImage('assets/anim/dash_idle.png');
+
+  /// File path: assets/anim/dash_looking_up.png
+  AssetGenImage get dashLookingUp =>
+      const AssetGenImage('assets/anim/dash_looking_up.png');
+
+  /// File path: assets/anim/dash_platform.png
+  AssetGenImage get dashPlatform =>
+      const AssetGenImage('assets/anim/dash_platform.png');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [androidCelebrating, androidDangle, androidIdle, androidLookUp];
+  List<AssetGenImage> get values => [
+        androidCelebrating,
+        androidCelebration,
+        androidDangle,
+        androidDropIn,
+        androidIdle,
+        androidLookUp,
+        androidPickingUp,
+        androidPlatform,
+        dashCelebration,
+        dashDangle,
+        dashIdle,
+        dashLookingUp,
+        dashPlatform
+      ];
 }
 
 class $AssetsIconsGen {

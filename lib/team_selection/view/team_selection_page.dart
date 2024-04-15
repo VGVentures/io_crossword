@@ -138,10 +138,20 @@ class _TeamSelectorLarge extends StatelessWidget {
                       top: bottomPlatformTileTopPosition,
                       left: 0,
                       child: state == Mascots.dash.index
-                          ? GradientAnimation(
-                              mascot: mascots[state],
+                          ? SizedBox(
                               width: tileWidth,
                               height: platformTileHeight,
+                              child: SpriteAnimationWidget.asset(
+                                images: Images(prefix: ''),
+                                anchor: Anchor.bottomCenter,
+                                path: Assets.anim.dashPlatform.path,
+                                data: SpriteAnimationData.sequenced(
+                                  amount: 60,
+                                  stepTime: 0.042,
+                                  textureSize: Vector2(958, 605),
+                                  amountPerRow: 6,
+                                ),
+                              ),
                             )
                           : Assets.images.platform.image(),
                     ),
@@ -203,28 +213,44 @@ class _TeamSelectorLarge extends StatelessWidget {
                                 mascots.indexOf(mascot) == 2
                             ? tileHeight + (tileHeight / 2)
                             : 0 + (tileHeight / 2),
-                        child: mascot.mascot == Mascots.android
+                        child: mascot.mascot == Mascots.dash
                             ? SizedBox(
                                 width: mascotWidth,
                                 height: mascotHeight,
                                 child: SpriteAnimationWidget.asset(
                                   images: Images(prefix: ''),
                                   anchor: Anchor.bottomCenter,
-                                  path: Assets.anim.androidIdle.path,
+                                  path: Assets.anim.dashIdle.path,
                                   data: SpriteAnimationData.sequenced(
-                                    amount: 28,
+                                    amount: 70,
                                     stepTime: 0.042,
-                                    textureSize: Vector2(250, 360),
-                                    amountPerRow: 7,
+                                    textureSize: Vector2(300, 336),
+                                    amountPerRow: 10,
                                   ),
                                 ),
                               )
-                            : Image.asset(
-                                mascot.image,
-                                alignment: Alignment.bottomCenter,
-                                width: mascotWidth,
-                                height: mascotHeight,
-                              ),
+                            : mascot.mascot == Mascots.android
+                                ? SizedBox(
+                                    width: mascotWidth,
+                                    height: mascotHeight,
+                                    child: SpriteAnimationWidget.asset(
+                                      images: Images(prefix: ''),
+                                      anchor: Anchor.bottomCenter,
+                                      path: Assets.anim.androidIdle.path,
+                                      data: SpriteAnimationData.sequenced(
+                                        amount: 28,
+                                        stepTime: 0.042,
+                                        textureSize: Vector2(250, 360),
+                                        amountPerRow: 7,
+                                      ),
+                                    ),
+                                  )
+                                : Image.asset(
+                                    mascot.image,
+                                    alignment: Alignment.bottomCenter,
+                                    width: mascotWidth,
+                                    height: mascotHeight,
+                                  ),
                       ),
                     ),
                   ],
@@ -354,10 +380,25 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                             children: [
                               Positioned(
                                 child: state == Mascots.dash.index
-                                    ? GradientAnimation(
-                                        mascot: widget.mascots[state],
+                                    // ? GradientAnimation(
+                                    //     mascot: widget.mascots[state],
+                                    //     width: tileWidth,
+                                    //     height: platformTileHeight,
+                                    //   )
+                                    ? SizedBox(
                                         width: tileWidth,
                                         height: platformTileHeight,
+                                        child: SpriteAnimationWidget.asset(
+                                          images: Images(prefix: ''),
+                                          anchor: Anchor.bottomCenter,
+                                          path: Assets.anim.dashPlatform.path,
+                                          data: SpriteAnimationData.sequenced(
+                                            amount: 60,
+                                            stepTime: 0.042,
+                                            textureSize: Vector2(958, 605),
+                                            amountPerRow: 6,
+                                          ),
+                                        ),
                                       )
                                     : Assets.images.platformLarge.image(
                                         width: tileWidth,
@@ -425,28 +466,48 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                               .indexOf(mascot)
                                               .toDouble()) *
                                       tileWidth,
-                                  child: mascot.mascot == Mascots.android
+                                  child: mascot.mascot == Mascots.dash
                                       ? SizedBox(
                                           width: 200,
                                           height: 400,
                                           child: SpriteAnimationWidget.asset(
                                             images: Images(prefix: ''),
                                             anchor: Anchor.bottomCenter,
-                                            path: Assets.anim.androidIdle.path,
+                                            path: Assets.anim.dashIdle.path,
                                             data: SpriteAnimationData.sequenced(
-                                              amount: 28,
+                                              amount: 70,
                                               stepTime: 0.042,
-                                              textureSize: Vector2(250, 360),
-                                              amountPerRow: 7,
+                                              textureSize: Vector2(300, 336),
+                                              amountPerRow: 10,
                                             ),
                                           ),
                                         )
-                                      : Image.asset(
-                                          mascot.image,
-                                          alignment: Alignment.bottomCenter,
-                                          width: 200,
-                                          height: 400,
-                                        ),
+                                      : mascot.mascot == Mascots.android
+                                          ? SizedBox(
+                                              width: 200,
+                                              height: 400,
+                                              child:
+                                                  SpriteAnimationWidget.asset(
+                                                images: Images(prefix: ''),
+                                                anchor: Anchor.bottomCenter,
+                                                path: Assets
+                                                    .anim.androidIdle.path,
+                                                data: SpriteAnimationData
+                                                    .sequenced(
+                                                  amount: 28,
+                                                  stepTime: 0.042,
+                                                  textureSize:
+                                                      Vector2(250, 360),
+                                                  amountPerRow: 7,
+                                                ),
+                                              ),
+                                            )
+                                          : Image.asset(
+                                              mascot.image,
+                                              alignment: Alignment.bottomCenter,
+                                              width: 200,
+                                              height: 400,
+                                            ),
                                 ),
                               ),
                             ],
