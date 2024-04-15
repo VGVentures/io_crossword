@@ -15,6 +15,12 @@ part 'leaderboard_success.dart';
 class LeaderboardPage extends StatelessWidget {
   const LeaderboardPage({super.key});
 
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const LeaderboardPage(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LeaderboardBloc>(

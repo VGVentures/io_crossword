@@ -83,10 +83,14 @@ class LeaderboardRepository {
         .doc(userId)
         .snapshots()
         .map(
-          (snapshot) => LeaderboardPlayer.fromJson({
-            'userId': userId,
-            ...snapshot.data()!,
-          }),
+          (snapshot) {
+            if (!snapshot.exists) return LeaderboardPlayer.empty;
+
+            return LeaderboardPlayer.fromJson({
+              'userId': userId,
+              ...snapshot.data()!,
+            });
+          },
         )
         .listen(_leaderboardPlayer!.add)
         .onError(_leaderboardPlayer!.addError);

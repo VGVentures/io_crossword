@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mockingjay/mockingjay.dart';
@@ -44,6 +45,7 @@ extension PumpApp on WidgetTester {
     LeaderboardResource? leaderboardResource,
     LeaderboardRepository? leaderboardRepository,
     CrosswordBloc? crosswordBloc,
+    PlayerBloc? playerBloc,
     ChallengeBloc? challengeBloc,
     MockNavigator? navigator,
   }) {
@@ -104,6 +106,14 @@ extension PumpApp on WidgetTester {
                 ),
                 BlocProvider(
                   create: (context) =>
+                      playerBloc ??
+                      PlayerBloc(
+                        leaderboardRepository:
+                            context.read<LeaderboardRepository>(),
+                      ),
+                ),
+                BlocProvider(
+                  create: (context) =>
                       challengeBloc ??
                       ChallengeBloc(
                         boardInfoRepository:
@@ -137,10 +147,12 @@ extension PumpApp on WidgetTester {
 extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
+    User? user,
     CrosswordRepository? crosswordRepository,
     CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
     LeaderboardResource? leaderboardResource,
+    LeaderboardRepository? leaderboardRepository,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -186,15 +198,31 @@ extension PumpRoute on WidgetTester {
           Provider.value(
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
+          Provider.value(
+            value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: user ?? _MockUser(),
+          ),
         ],
         child: Builder(
           builder: (context) {
-            return BlocProvider(
-              create: (context) => CrosswordBloc(
-                crosswordRepository: context.read<CrosswordRepository>(),
-                boardInfoRepository: context.read<BoardInfoRepository>(),
-                crosswordResource: context.read<CrosswordResource>(),
-              ),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => CrosswordBloc(
+                    crosswordRepository: context.read<CrosswordRepository>(),
+                    boardInfoRepository: context.read<BoardInfoRepository>(),
+                    crosswordResource: context.read<CrosswordResource>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => PlayerBloc(
+                    leaderboardRepository:
+                        leaderboardRepository ?? _MockLeaderboardRepository(),
+                  ),
+                ),
+              ],
               child: IoLayout(
                 child: MaterialApp(
                   localizationsDelegates:

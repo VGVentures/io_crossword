@@ -180,6 +180,13 @@ void main() {
     });
 
     group('getLeaderboardPlayer', () {
+      test('returns empty player when cannot find player', () {
+        expect(
+          leaderboardRepository.getLeaderboardPlayer('no-player'),
+          emits(LeaderboardPlayer.empty),
+        );
+      });
+
       test('returns the fist player', () {
         final player = players.first;
 
