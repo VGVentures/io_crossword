@@ -28,8 +28,6 @@ class BottomBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    final layout = IoLayout.of(context);
     final theme = Theme.of(context);
 
     return Align(
