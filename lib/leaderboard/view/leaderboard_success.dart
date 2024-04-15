@@ -116,13 +116,13 @@ class CurrentPlayerNotTopRank extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player =
-        context.select((LeaderboardBloc bloc) => bloc.state.currentPlayer);
-
-    if (player == null) return const SizedBox.shrink();
+        context.select((PlayerBloc bloc) => bloc.state.leaderboardPlayer);
 
     final rank = context.select(
-      (LeaderboardBloc bloc) => bloc.state.currentUserPosition,
+      (PlayerBloc bloc) => bloc.state.rank,
     );
+
+    if (rank <= 10) return const SizedBox();
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 16),
