@@ -8,8 +8,29 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordSuccessDesktopView extends StatelessWidget {
-  const WordSuccessDesktopView(this.selectedWord, {super.key});
+/// {@template word_success_view}
+/// Displays a player's successful word guess.
+/// {@endtemplate}
+class WordSuccessView extends StatelessWidget {
+  /// {@macro word_success_view}
+  const WordSuccessView({required this.selectedWord, super.key});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
+    return switch (layout) {
+      IoLayoutData.large => WordSelectionSuccessLargeView(selectedWord),
+      IoLayoutData.small => WordSelectionSuccessSmallView(selectedWord),
+    };
+  }
+}
+
+@visibleForTesting
+class WordSelectionSuccessLargeView extends StatelessWidget {
+  @visibleForTesting
+  const WordSelectionSuccessLargeView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
@@ -73,8 +94,10 @@ class WordSuccessDesktopView extends StatelessWidget {
   }
 }
 
-class WordSuccessMobileView extends StatelessWidget {
-  const WordSuccessMobileView(this.selectedWord, {super.key});
+@visibleForTesting
+class WordSelectionSuccessSmallView extends StatelessWidget {
+  @visibleForTesting
+  const WordSelectionSuccessSmallView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
