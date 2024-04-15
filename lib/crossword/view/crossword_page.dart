@@ -26,6 +26,7 @@ class CrosswordPage extends StatelessWidget {
 
     return BlocProvider(
       create: (_) => WordSelectionBloc(),
+      lazy: false,
       child: const CrosswordView(),
     );
   }
@@ -84,6 +85,7 @@ class LoadedBoardView extends StatefulWidget {
 
   @visibleForTesting
   static const zoomInKey = Key('game_zoomIn');
+
   @visibleForTesting
   static const zoomOutKey = Key('game_zoomOut');
 
