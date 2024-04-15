@@ -145,7 +145,7 @@ void main() {
             BlocProvider.value(value: wordFocusedBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordFocusedMobileView(selectedWord),
+          child: WordSelectionSmallView(selectedWord),
         ),
       );
 

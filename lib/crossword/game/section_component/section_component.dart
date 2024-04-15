@@ -13,7 +13,7 @@ import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
 import 'package:io_crossword/crossword/game/section_component/models/models.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
-    show WordFocusedDesktopView;
+    show WordSelectionLargeView;
 
 part 'section_debug.dart';
 part 'section_keyboard_handler.dart';
