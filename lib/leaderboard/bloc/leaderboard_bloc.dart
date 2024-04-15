@@ -45,37 +45,12 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
         return;
       }
 
-      final foundCurrentUser =
-          players.where((player) => player.userId == event.userId);
-
-      // In this case we don't need to search for the player position
-      // because its in top 10 leaderboard.
-      if (foundCurrentUser.isNotEmpty) {
-        emit(
-          state.copyWith(
-            status: LeaderboardStatus.success,
-            players: players,
-          ),
-        );
-      } else {
-        return emit.forEach(
-          _leaderboardRepository.getPlayerRanked(event.userId),
-          onData: (data) {
-            return state.copyWith(
-              currentPlayer: data.$1,
-              currentUserPosition: data.$2,
-              status: LeaderboardStatus.success,
-              players: players,
-            );
-          },
-          onError: (error, stackTrace) {
-            addError(error, stackTrace);
-            return state.copyWith(
-              status: LeaderboardStatus.failure,
-            );
-          },
-        );
-      }
+      emit(
+        state.copyWith(
+          status: LeaderboardStatus.success,
+          players: players,
+        ),
+      );
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(state.copyWith(status: LeaderboardStatus.failure));

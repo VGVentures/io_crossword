@@ -5,6 +5,21 @@ import 'package:test/test.dart';
 
 void main() {
   group('LeaderboardPlayer', () {
+    test('empty', () {
+      expect(
+        LeaderboardPlayer.empty,
+        equals(
+          LeaderboardPlayer(
+            userId: '',
+            initials: '',
+            score: 0,
+            streak: 0,
+            mascot: Mascots.dash,
+          ),
+        ),
+      );
+    });
+
     test('can be instantiated', () {
       expect(
         LeaderboardPlayer(
