@@ -5,11 +5,16 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +23,7 @@ void main() {
 
   group('SectionKeyboardHandler', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateController;
     final state = CrosswordState(
       sectionSize: sectionSize,
@@ -29,6 +35,7 @@ void main() {
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       stateController = StreamController<CrosswordState>.broadcast();
       whenListen(
         crosswordBloc,
@@ -41,6 +48,7 @@ void main() {
       bool? showDebugOverlay,
     }) =>
         CrosswordGame(
+          wordSelectionBloc: wordSelectionBloc,
           crosswordBloc: crosswordBloc,
           showDebugOverlay: showDebugOverlay,
         );
