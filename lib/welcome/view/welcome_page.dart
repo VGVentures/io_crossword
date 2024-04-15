@@ -43,6 +43,7 @@ class WelcomeLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final themeData = Theme.of(context);
 
     return Scaffold(
       appBar: IoAppBar(
@@ -57,19 +58,16 @@ class WelcomeLarge extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: IoCrosswordColors.darkGray,
-                borderRadius: BorderRadius.circular(2),
-                border: Border.all(
-                  color: IoCrosswordColors.mediumGray,
-                  width: 2,
-                ),
+            child: Theme(
+              data: themeData.copyWith(
+                cardTheme: themeData.io.cardTheme.plainAlternative,
               ),
-              child: const SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: WelcomeBody(),
+              child: const Card(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: WelcomeBody(),
+                  ),
                 ),
               ),
             ),

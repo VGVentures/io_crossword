@@ -57,7 +57,7 @@ void main() {
 
   group('$WelcomeLarge', () {
     group('displays', () {
-      testWidgets('a $IoAppBar', (tester) async {
+      testWidgets('an $IoAppBar', (tester) async {
         await tester.pumpSubject(const WelcomeLarge());
         expect(find.byType(IoAppBar), findsOneWidget);
       });
@@ -66,7 +66,7 @@ void main() {
 
   group('$WelcomeSmall', () {
     group('displays', () {
-      testWidgets('a $IoAppBar', (tester) async {
+      testWidgets('an $IoAppBar', (tester) async {
         await tester.pumpSubject(const WelcomeSmall());
         expect(find.byType(IoAppBar), findsOneWidget);
       });

@@ -13,12 +13,18 @@ class IoCardTheme extends Equatable {
   /// {@macro io_card_theme}
   const IoCardTheme({
     required this.plain,
+    required this.plainAlternative,
     required this.highlight,
     required this.elevated,
   });
 
   /// The style for plain [Card].
   final CardTheme plain;
+
+  /// An alternative style for plain [Card].
+  ///
+  /// With a different border color.
+  final CardTheme plainAlternative;
 
   /// The style for highlighted [Card].
   ///
@@ -35,11 +41,13 @@ class IoCardTheme extends Equatable {
   IoCardTheme lerp(IoCardTheme other, double t) {
     return IoCardTheme(
       plain: CardTheme.lerp(plain, other.plain, t),
+      plainAlternative:
+          CardTheme.lerp(plainAlternative, other.plainAlternative, t),
       highlight: CardTheme.lerp(highlight, other.highlight, t),
       elevated: CardTheme.lerp(elevated, other.elevated, t),
     );
   }
 
   @override
-  List<Object?> get props => [plain, highlight, elevated];
+  List<Object?> get props => [plain, plainAlternative, highlight, elevated];
 }

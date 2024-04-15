@@ -163,6 +163,15 @@ class IoCrosswordTheme {
         elevation: 0,
         color: colorScheme.surface,
       ),
+      plainAlternative: CardTheme(
+        margin: EdgeInsets.zero,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(color: IoCrosswordColors.mediumGray),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        elevation: 0,
+        color: colorScheme.surface,
+      ),
       highlight: const CardTheme(
         margin: EdgeInsets.zero,
         shape: GradientInputBorder(
