@@ -8,7 +8,7 @@ import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
 import 'package:io_crossword/music/music.dart';
-import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
