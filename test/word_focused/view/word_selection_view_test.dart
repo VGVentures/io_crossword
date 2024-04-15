@@ -183,7 +183,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSuccessDesktopView), findsOneWidget);
+        expect(find.byType(WordSelectionSuccessLargeView), findsOneWidget);
       },
     );
   });
@@ -261,7 +261,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSuccessMobileView), findsOneWidget);
+        expect(find.byType(WordSelectionSuccessSmallView), findsOneWidget);
       },
     );
   });
