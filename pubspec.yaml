@@ -42,9 +42,11 @@ dependencies:
   intl: ^0.18.1
   io_crossword_ui:
     path: packages/io_crossword_ui
+  leaderboard_repository:
+    path: packages/leaderboard_repository
   provider: ^6.1.2
   rxdart: ^0.27.7
-  url_launcher: ^6.2.5
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   bloc_test: ^9.1.7
@@ -54,6 +56,8 @@ dev_dependencies:
     sdk: flutter
   mockingjay: ^0.5.0
   mocktail: ^1.0.3
+  plugin_platform_interface: ^2.1.8
+  url_launcher_platform_interface: ^2.3.2
   very_good_analysis: ^5.1.0
 
 dependency_overrides:

@@ -12,7 +12,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/characters_rectangle.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
 import 'package:io_crossword/crossword/game/section_component/models/models.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    show WordSelectionLargeView;
 
 part 'section_debug.dart';
 part 'section_keyboard_handler.dart';
@@ -43,7 +44,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
 
     final state = gameRef.state;
 
-    _subscription = gameRef.bloc.stream.listen(_onNewState);
+    _subscription = gameRef.crosswordBloc.stream.listen(_onNewState);
 
     lastSelectedWordId = state.selectedWord?.word.id;
     lastSelectedSection = state.selectedWord?.section;
@@ -53,7 +54,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       _boardSection = boardSection;
       _loadBoardSection();
     } else {
-      gameRef.bloc.add(
+      gameRef.crosswordBloc.add(
         BoardSectionRequested(index),
       );
     }

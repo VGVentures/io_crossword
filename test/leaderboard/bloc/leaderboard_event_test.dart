@@ -8,8 +8,13 @@ void main() {
     group('$LoadRequestedLeaderboardEvent', () {
       test('updates status', () {
         expect(
-          LoadRequestedLeaderboardEvent(),
-          equals(LoadRequestedLeaderboardEvent()),
+          LoadRequestedLeaderboardEvent(userId: 'user-id'),
+          equals(LoadRequestedLeaderboardEvent(userId: 'user-id')),
+        );
+
+        expect(
+          LoadRequestedLeaderboardEvent(userId: 'user-id'),
+          isNot(equals(LoadRequestedLeaderboardEvent(userId: 'user-id-1'))),
         );
       });
     });

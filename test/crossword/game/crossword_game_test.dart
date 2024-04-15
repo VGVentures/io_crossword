@@ -12,12 +12,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordSelected;
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _MockTapUpEvent extends Mock implements TapUpEvent {}
 
@@ -27,18 +32,20 @@ void main() {
   final sectionSize = sections.first.size;
 
   group('CrosswordGame', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
     void mockState(CrosswordState state) {
       whenListen(
-        bloc,
+        crosswordBloc,
         Stream.value(state),
         initialState: state,
       );
     }
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
 
       final state = CrosswordState(
         sectionSize: sectionSize,
@@ -49,7 +56,11 @@ void main() {
     CrosswordGame createGame({
       bool? showDebugOverlay,
     }) =>
-        CrosswordGame(bloc, showDebugOverlay: showDebugOverlay);
+        CrosswordGame(
+          crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
+          showDebugOverlay: showDebugOverlay,
+        );
 
     testWithGame(
       'loads',
@@ -169,7 +180,7 @@ void main() {
           isTrue,
         );
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             WordSelected(
               targetSection.index,
               targetWord,
@@ -222,7 +233,7 @@ void main() {
               targetWord.height / 2,
         ).translated(
           game.camera.visibleWorldRect.size.width *
-              WordFocusedDesktopView.widthRatio /
+              WordSelectionLargeView.widthRatio /
               2,
           0,
         );
@@ -256,7 +267,7 @@ void main() {
           isTrue,
         );
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             WordSelected(
               targetSection.index,
               targetWord,
@@ -279,7 +290,7 @@ void main() {
       setUp(() {
         stateController = StreamController<CrosswordState>.broadcast();
         whenListen(
-          bloc,
+          crosswordBloc,
           stateController.stream,
           initialState: state,
         );

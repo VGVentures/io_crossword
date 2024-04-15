@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
@@ -16,8 +16,9 @@ import '../../helpers/helpers.dart';
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
-class _MockWordFocusedBloc extends MockBloc<WordFocusedEvent, WordFocusedState>
-    implements WordFocusedBloc {}
+class _MockWordSolvingBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -43,23 +44,23 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
-  group('WordSolvingDesktopView', () {
-    late WordFocusedBloc wordFocusedBloc;
+  group('$WordSolvingLargeView', () {
+    late WordSelectionBloc wordSolvingBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordSolvingBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: wordFocusedBloc),
+          BlocProvider.value(value: wordSolvingBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
-        child: WordSolvingDesktopView(selectedWord),
+        child: WordSolvingLargeView(selectedWord),
       );
 
       when(() => crosswordBloc.state).thenReturn(
@@ -120,21 +121,21 @@ void main() {
         );
         await tester.pumpApp(widget);
 
-        verify(() => wordFocusedBloc.add(const WordFocusedSuccessRequested()))
+        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
             .called(1);
       },
     );
   });
 
-  group('WordFocusedMobileView', () {
-    late WordFocusedBloc wordFocusedBloc;
+  group('$WordSolvingSmallView', () {
+    late WordSelectionBloc wordFocusedBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordFocusedBloc();
+      wordFocusedBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = Theme(
@@ -144,11 +145,17 @@ void main() {
             BlocProvider.value(value: wordFocusedBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordFocusedMobileView(selectedWord),
+          child: WordSolvingSmallView(selectedWord),
         ),
       );
 
-      when(() => wordFocusedBloc.state).thenReturn(WordFocusedState.solving);
+      when(() => wordFocusedBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+          wordPoints: null,
+        ),
+      );
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,

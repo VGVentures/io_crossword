@@ -9,9 +9,14 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class FakeImage extends Fake implements ui.Image {
   @override
@@ -26,17 +31,19 @@ void main() {
   const sectionSize = 400;
 
   group('SectionComponent', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateStreamController;
     final defaultState = CrosswordState(
       sectionSize: sectionSize,
     );
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       stateStreamController = StreamController<CrosswordState>.broadcast();
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: defaultState,
       );
@@ -44,18 +51,19 @@ void main() {
 
     void setUpStreamController({CrosswordState? state}) {
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: state ?? defaultState,
       );
     }
 
     void setUpInitialState(CrosswordState state) {
-      when(() => bloc.state).thenReturn(state);
+      when(() => crosswordBloc.state).thenReturn(state);
     }
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
-          bloc,
+          crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
           showDebugOverlay: showDebugOverlay,
         );
 
@@ -308,7 +316,7 @@ void main() {
         await game.world.ensureAdd(SectionComponent(index: (100, 100)));
 
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             const BoardSectionRequested((100, 100)),
           ),
         ).called(1);

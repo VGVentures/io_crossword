@@ -12,6 +12,18 @@
   "@settings": {
     "description": "Settings label"
   },
+  "shareThisWord": "Share this word",
+  "@shareThisWord": {
+    "description": "Share this word label"
+  },
+  "shareWordTitle": "Hey, I need your help!",
+  "@shareWordTitle": {
+    "description": "Title of the share word modal"
+  },
+  "shareWordSubtitle": "Join me on I/O Crossword to help me solve this word and break a world record.",
+  "@shareWordSubtitle": {
+    "description": "Subtitle of the share word modal"
+  },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
@@ -101,6 +113,18 @@
   "@playNow": {
     "description": "Play now label"
   },
+  "shareOn": "Share on:",
+  "@shareOn": {
+    "description": "Share on label"
+  },
+  "shareYourScore": "Share your score",
+  "@shareYourScore": {
+    "description": "Share your score label"
+  },
+  "shareScoreContent": "Check my score in I/O Crosswords and join to break the world record!",
+  "@shareScoreContent": {
+    "description": "Sentence sent when sharing score"
+  },
   "couldNotOpenUrl": "Could not open url",
   "@couldNotOpenUrl": {
     "description": "Could not open url error message when trying to open link"
@@ -149,6 +173,10 @@
   "@streak": {
     "description": "Streak label"
   },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
+  },
   "score": "Score",
   "@score": {
     "description": "Score label"
@@ -189,6 +217,30 @@
   "@findNewWord": {
     "description": "Find new word label"
   },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
+  },
+  "totalScore": "Total score",
+  "@totalScore": {
+    "description": "Total score label"
+  },
+  "claimBadge": "Claim my badge",
+  "@claimBadge": {
+    "description": "Claim badge label"
+  },
+  "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
+  "@claimBadgeDescription": {
+    "description": "Developer Profile label"
+  },
+  "keepPlaying": "Keep playing",
+  "@keepPlaying": {
+    "description": "Keep playing label"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or label"
+  },
   "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
   "@aboutHowToPlayFirstInstructions": {
     "description": "The first step instruction on how to play"
@@ -208,5 +260,21 @@
   "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
   "@aboutHowToPlayFifthInstructions": {
     "description": "The Fifth step instruction on how to play"
+  },
+  "streakAtRiskTitle": "Your streak is at risk!",
+  "@streakAtRiskTitle": {
+    "description": "Title for alerting the streak is at risk."
+  },
+  "streakAtRiskMessage": "If you close the window without solving the word, you will lose your streak.\nIf you need a hand, you can ask Gemini for a hint.",
+  "@streakAtRiskMessage": {
+    "description": "Message for clarifying why the streak is at risk."
+  },
+  "continuationConfirmation": "Are you sure you want to continue?",
+  "@continuationConfirmation": {
+    "description": "Asks for confirmation before continuing."
+  },
+  "leave": "Leave",
+  "@leave": {
+    "description": "Action to leave something behind."
   }
 }
