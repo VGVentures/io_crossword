@@ -28,8 +28,6 @@ class BottomBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    final layout = IoLayout.of(context);
     final theme = Theme.of(context);
 
     return Align(
@@ -45,10 +43,7 @@ class BottomBarContent extends StatelessWidget {
               onPressed: () {}, // coverage:ignore-line
               child: Text(
                 l10n.submitScore,
-                style: switch (layout) {
-                  IoLayoutData.small => theme.textTheme.bodySmall,
-                  IoLayoutData.large => theme.textTheme.bodyMedium,
-                },
+                style: theme.textTheme.bodySmall,
               ),
             ),
             const SizedBox(width: 16),

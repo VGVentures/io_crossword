@@ -9,34 +9,23 @@ class WordSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final layout = IoLayout.of(context);
-
-    return layout == IoLayoutData.large
-        ? const WordFocusedDesktopPage()
-        : const WordFocusedMobilePage();
-  }
-}
-
-@visibleForTesting
-class WordFocusedDesktopPage extends StatelessWidget {
-  @visibleForTesting
-  const WordFocusedDesktopPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedWord = context.select(
-      (CrosswordBloc bloc) => bloc.state.selectedWord,
-    );
+    final selectedWord =
+        context.select((CrosswordBloc bloc) => bloc.state.selectedWord);
     if (selectedWord == null) {
       return const SizedBox.shrink();
     }
 
-    return WordFocusedDesktopView(selectedWord);
+    final layout = IoLayout.of(context);
+
+    return layout == IoLayoutData.large
+        ? WordSelectionLargeView(selectedWord)
+        : WordSelectionSmallView(selectedWord);
   }
 }
 
-class WordFocusedDesktopView extends StatelessWidget {
-  const WordFocusedDesktopView(this.selectedWord, {super.key});
+class WordSelectionLargeView extends StatelessWidget {
+  @visibleForTesting
+  const WordSelectionLargeView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
@@ -77,25 +66,9 @@ class WordFocusedDesktopView extends StatelessWidget {
 }
 
 @visibleForTesting
-class WordFocusedMobilePage extends StatelessWidget {
+class WordSelectionSmallView extends StatelessWidget {
   @visibleForTesting
-  const WordFocusedMobilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedWord = context.select(
-      (CrosswordBloc bloc) => bloc.state.selectedWord,
-    );
-    if (selectedWord == null) {
-      return const SizedBox.shrink();
-    }
-
-    return WordFocusedMobileView(selectedWord);
-  }
-}
-
-class WordFocusedMobileView extends StatelessWidget {
-  const WordFocusedMobileView(this.selectedWord, {super.key});
+  const WordSelectionSmallView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
