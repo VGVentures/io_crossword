@@ -18,22 +18,6 @@ class WordSolvingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
-    return switch (layout) {
-      IoLayoutData.large => WordSolvingLargeView(selectedWord),
-      IoLayoutData.small => WordSolvingSmallView(selectedWord),
-    };
-  }
-}
-
-@visibleForTesting
-class WordSolvingLargeView extends StatelessWidget {
-  @visibleForTesting
-  const WordSolvingLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
-
-  @override
-  Widget build(BuildContext context) {
     return BlocListener<CrosswordBloc, CrosswordState>(
       listenWhen: (previous, current) {
         return previous.selectedWord?.solvedStatus !=
@@ -46,28 +30,44 @@ class WordSolvingLargeView extends StatelessWidget {
               .add(const WordFocusedSuccessRequested());
         }
       },
-      child: Column(
-        children: [
-          TopBar(wordId: selectedWord.word.id),
-          const SizedBox(height: 8),
-          const Spacer(),
-          Text(
-            selectedWord.word.clue,
-            style: IoCrosswordTextStyles.titleMD,
-            textAlign: TextAlign.center,
-          ),
-          const Spacer(),
-          const SizedBox(height: 8),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: GeminiHintButton()),
-              SizedBox(width: 8),
-              Expanded(child: _SubmitButton()),
-            ],
-          ),
-        ],
-      ),
+      child: switch (layout) {
+        IoLayoutData.large => WordSolvingLargeView(selectedWord),
+        IoLayoutData.small => WordSolvingSmallView(selectedWord),
+      },
+    );
+  }
+}
+
+@visibleForTesting
+class WordSolvingLargeView extends StatelessWidget {
+  @visibleForTesting
+  const WordSolvingLargeView(this.selectedWord, {super.key});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TopBar(wordId: selectedWord.word.id),
+        const SizedBox(height: 8),
+        const Spacer(),
+        Text(
+          selectedWord.word.clue,
+          style: IoCrosswordTextStyles.titleMD,
+          textAlign: TextAlign.center,
+        ),
+        const Spacer(),
+        const SizedBox(height: 8),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: GeminiHintButton()),
+            SizedBox(width: 8),
+            Expanded(child: _SubmitButton()),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -81,45 +81,32 @@ class WordSolvingSmallView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CrosswordBloc, CrosswordState>(
-      listenWhen: (previous, current) {
-        return previous.selectedWord?.solvedStatus !=
-            current.selectedWord?.solvedStatus;
-      },
-      listener: (context, state) {
-        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
-          context
-              .read<WordSelectionBloc>()
-              .add(const WordFocusedSuccessRequested());
-        }
-      },
-      child: Column(
-        children: [
-          TopBar(wordId: selectedWord.word.id),
-          const SizedBox(height: 32),
-          IoWordInput.alphabetic(
-            length: selectedWord.word.length,
-            onWord: (value) {
-              context.read<CrosswordBloc>().add(AnswerUpdated(value));
-            },
-          ),
-          const SizedBox(height: 24),
-          Text(
-            selectedWord.word.clue,
-            style: IoCrosswordTextStyles.titleMD,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: GeminiHintButton()),
-              SizedBox(width: 8),
-              Expanded(child: _SubmitButton()),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        TopBar(wordId: selectedWord.word.id),
+        const SizedBox(height: 32),
+        IoWordInput.alphabetic(
+          length: selectedWord.word.length,
+          onWord: (value) {
+            context.read<CrosswordBloc>().add(AnswerUpdated(value));
+          },
+        ),
+        const SizedBox(height: 24),
+        Text(
+          selectedWord.word.clue,
+          style: IoCrosswordTextStyles.titleMD,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: GeminiHintButton()),
+            SizedBox(width: 8),
+            Expanded(child: _SubmitButton()),
+          ],
+        ),
+      ],
     );
   }
 }
