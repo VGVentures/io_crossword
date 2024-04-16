@@ -8,7 +8,7 @@ void main() {
     test('.initial initializes correctly', () {
       final state = WordSelectionState.initial();
 
-      expect(state.status, WordSelectionStatus.preSolving);
+      expect(state.status, WordSelectionStatus.empty);
       expect(state.wordIdentifier, isNull);
       expect(state.wordPoints, isNull);
     });
