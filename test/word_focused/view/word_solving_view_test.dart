@@ -189,18 +189,6 @@ void main() {
         },
       );
     });
-
-    testWidgets(
-      'tapping the submit button sends $AnswerSubmitted event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final submitButton = find.text(l10n.submit);
-        await tester.tap(submitButton);
-
-        verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
   });
 
   group('$WordSolvingSmallView', () {
@@ -238,32 +226,6 @@ void main() {
         ),
       );
     });
-
-    testWidgets(
-      'add AnswerUpdated event when user enters all the letters',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final input = tester.widget<IoWordInput>(find.byType(IoWordInput));
-        input.onWord!('answer');
-
-        verify(
-          () => crosswordBloc.add(const AnswerUpdated('answer')),
-        ).called(1);
-      },
-    );
-
-    testWidgets(
-      'tap the submit button sends $AnswerSubmitted event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final submitButton = find.text(l10n.submit);
-        await tester.tap(submitButton);
-
-        verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
 
     testWidgets(
       'tap the submit button sends $WordSolveAttempted',

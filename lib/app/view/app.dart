@@ -49,7 +49,6 @@ class App extends StatelessWidget {
             create: (_) => CrosswordBloc(
               crosswordRepository: crosswordRepository,
               boardInfoRepository: boardInfoRepository,
-              crosswordResource: crosswordResource,
             ),
           ),
           BlocProvider(

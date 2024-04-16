@@ -99,9 +99,6 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         const SizedBox(height: 32),
         IoWordInput.alphabetic(
           length: selectedWord.word.length,
-          onWord: (value) {
-            context.read<CrosswordBloc>().add(AnswerUpdated(value));
-          },
           controller: _controller,
         ),
         const SizedBox(height: 24),
@@ -139,8 +136,6 @@ class _SubmitButton extends StatelessWidget {
   final IoWordInputController? controller;
 
   void _onSubmit(BuildContext context) {
-    context.read<CrosswordBloc>().add(const AnswerSubmitted());
-
     if (controller != null) {
       context
           .read<WordSelectionBloc>()
