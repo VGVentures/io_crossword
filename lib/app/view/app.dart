@@ -35,45 +35,39 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final crosswordResource = apiClient.crosswordResource;
-    final mediaQueryData = MediaQuery.of(context);
 
-    return RotatedBox(
-      quarterTurns: (mediaQueryData.orientation == Orientation.landscape &&
-              mediaQueryData.size.width < _kPhoneWidth)
-          ? 1
-          : 0,
-      child: MultiProvider(
+
+    return MultiProvider(
+      providers: [
+        Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: user),
+        Provider.value(value: crosswordResource),
+        Provider.value(value: crosswordRepository),
+        Provider.value(value: boardInfoRepository),
+        Provider.value(value: leaderboardRepository),
+      ],
+      child: MultiBlocProvider(
         providers: [
-          Provider.value(value: apiClient.leaderboardResource),
-          Provider.value(value: user),
-          Provider.value(value: crosswordResource),
-          Provider.value(value: crosswordRepository),
-          Provider.value(value: boardInfoRepository),
-          Provider.value(value: leaderboardRepository),
+          BlocProvider(
+            create: (_) => CrosswordBloc(
+              crosswordRepository: crosswordRepository,
+              boardInfoRepository: boardInfoRepository,
+            ),
+          ),
+          BlocProvider(
+            // coverage:ignore-start
+            create: (_) => PlayerBloc(
+              leaderboardRepository: leaderboardRepository,
+            )..add(PlayerLoaded(userId: user.id)),
+            // coverage:ignore-end
+          ),
+          BlocProvider(
+            create: (context) => ChallengeBloc(
+              boardInfoRepository: context.read(),
+            )..add(const ChallengeDataRequested()),
+          ),
         ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => CrosswordBloc(
-                crosswordRepository: crosswordRepository,
-                boardInfoRepository: boardInfoRepository,
-              ),
-            ),
-            BlocProvider(
-              // coverage:ignore-start
-              create: (_) => PlayerBloc(
-                leaderboardRepository: leaderboardRepository,
-              )..add(PlayerLoaded(userId: user.id)),
-              // coverage:ignore-end
-            ),
-            BlocProvider(
-              create: (context) => ChallengeBloc(
-                boardInfoRepository: context.read(),
-              )..add(const ChallengeDataRequested()),
-            ),
-          ],
-          child: const AppView(),
-        ),
+        child: const AppView(),
       ),
     );
   }
@@ -90,11 +84,18 @@ class AppView extends StatelessWidget {
           return state.mascot;
         },
         builder: (context, mascot) {
-          return MaterialApp(
-            theme: mascot.theme(),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: const GameIntroPage(),
+          return RotatedBox(
+            quarterTurns:
+                (MediaQuery.of(context).orientation == Orientation.landscape &&
+                        IoLayout.of(context) == IoLayoutData.small)
+                    ? 1
+                    : 0,
+            child: MaterialApp(
+              theme: mascot.theme(),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: const GameIntroPage(),
+            ),
           );
         },
       ),
