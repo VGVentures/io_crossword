@@ -1,3 +1,4 @@
+import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
@@ -6,12 +7,17 @@ part 'word_selection_event.dart';
 part 'word_selection_state.dart';
 
 class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
-  WordSelectionBloc() : super(const WordSelectionState.initial()) {
+  WordSelectionBloc({
+    required CrosswordResource crosswordResource,
+  })  : _crosswordResource = crosswordResource,
+        super(const WordSelectionState.initial()) {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
   }
+
+  final CrosswordResource _crosswordResource;
 
   void _onWordSelected(
     WordSelected event,
@@ -65,14 +71,13 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       state.copyWith(status: WordSelectionStatus.validating),
     );
 
-    final isCorrect = await Future.delayed(
-      const Duration(seconds: 1),
-      // TODO(alesstiago): Replace with a call to the backend that validates
-      // the answer.
-      // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444661142
-      () => event.answer.toLowerCase() == 'correct',
+    final points = await _crosswordResource.answerWord(
+      section: state.word!.section,
+      word: state.word!.word,
+      answer: event.answer,
     );
 
+    final isCorrect = points > 0;
     if (isCorrect) {
       emit(
         state.copyWith(
@@ -80,7 +85,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
           word: state.word!.copyWith(
             word: state.word!.word.copyWith(answer: event.answer),
           ),
-          wordPoints: 10,
+          wordPoints: points,
         ),
       );
     } else {

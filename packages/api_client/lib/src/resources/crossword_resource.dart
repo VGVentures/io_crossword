@@ -18,19 +18,17 @@ class CrosswordResource {
   /// Post /game/answer
   ///
   /// Returns a [bool].
-  Future<bool> answerWord({
-    required BoardSection section,
+  Future<int> answerWord({
+    required (int, int) section,
     required Word word,
     required String answer,
-    required Mascots mascot,
   }) async {
     final response = await _apiClient.post(
       '/game/answer',
       body: jsonEncode({
-        'sectionId': '${section.position.x},${section.position.y}',
-        'wordPosition': '${word.position.x},${word.position.y}',
+        'sectionId': '${section.$1},${section.$2}',
+        'wordId': word.id,
         'answer': answer,
-        'mascot': mascot.name,
       }),
     );
 
@@ -45,8 +43,8 @@ class CrosswordResource {
 
     try {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final isValidAnswer = body['valid'] as bool;
-      return isValidAnswer;
+      final points = body['points'] as int;
+      return points;
     } catch (error, stackTrace) {
       throw ApiClientError(
         'POST /game/answer'

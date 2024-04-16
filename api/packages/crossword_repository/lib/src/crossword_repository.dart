@@ -15,6 +15,8 @@ class CrosswordRepository {
   final DbClient _dbClient;
 
   static const _sectionsCollection = 'boardChunks';
+  static const _answersCollection = 'answers';
+  static const _boardInfoCollection = 'boardInfo';
 
   /// Fetches all sections from the board.
   Future<List<BoardSection>> listAllSections() async {
@@ -59,16 +61,26 @@ class CrosswordRepository {
     );
   }
 
+  /// Fetches a word answer by its id.
+  Future<String?> findAnswerById(String id) async {
+    final result = await _dbClient.getById(_answersCollection, 'id$id');
+
+    if (result != null) {
+      return result.data['answer'] as String;
+    }
+
+    return null;
+  }
+
   /// Tries solving a word.
   /// Returns true if succeeds and updates the word's solvedTimestamp
   /// attribute.
   Future<bool> answerWord(
     int sectionX,
     int sectionY,
-    int wordX,
-    int wordY,
+    String wordId,
     Mascots mascot,
-    String answer,
+    String userAnswer,
   ) async {
     final section = await findSectionByPosition(sectionX, sectionY);
 
@@ -76,16 +88,17 @@ class CrosswordRepository {
       return false;
     }
 
-    final word = section.words.firstWhereOrNull(
-      (element) => element.position.x == wordX && element.position.y == wordY,
-    );
+    final word = section.words.firstWhereOrNull((e) => e.id == wordId);
 
     if (word == null) {
       return false;
     }
 
-    if (answer == word.answer) {
+    final correctAnswer = await findAnswerById(wordId);
+
+    if (userAnswer.toLowerCase() == correctAnswer?.toLowerCase()) {
       final solvedWord = word.copyWith(
+        answer: correctAnswer,
         solvedTimestamp: clock.now().millisecondsSinceEpoch,
         mascot: mascot,
       );
@@ -96,5 +109,29 @@ class CrosswordRepository {
       return true;
     }
     return false;
+  }
+
+  /// Adds one to the solved words count in the crossword.
+  Future<void> updateSolvedWordsCount() async {
+    final snapshot = await _dbClient.find(
+      _boardInfoCollection,
+      {
+        'type': 'solved_words_count',
+      },
+    );
+
+    final document = snapshot.first;
+    final solvedWordsCount = document.data['value'] as int;
+    final newValue = solvedWordsCount + 1;
+
+    await _dbClient.update(
+      _boardInfoCollection,
+      DbEntityRecord(
+        id: document.id,
+        data: {
+          'value': newValue,
+        },
+      ),
+    );
   }
 }
