@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class BottomBar extends StatelessWidget {
@@ -9,18 +9,17 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedWord = context.select(
-      (CrosswordBloc bloc) => bloc.state.selectedWord,
-    );
+    final selectionStatus =
+        context.select((WordSelectionBloc bloc) => bloc.state.status);
 
-    if (selectedWord != null) {
-      return const SizedBox.shrink();
-    }
-
-    return const BottomBarContent();
+    return switch (selectionStatus) {
+      WordSelectionStatus.empty => const BottomBarContent(),
+      _ => const SizedBox.shrink(),
+    };
   }
 }
 
+@visibleForTesting
 class BottomBarContent extends StatelessWidget {
   @visibleForTesting
   const BottomBarContent({super.key});
