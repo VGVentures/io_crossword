@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -15,9 +14,6 @@ import '../../helpers/helpers.dart';
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
-
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -39,28 +35,19 @@ class _FakeWord extends Fake implements Word {
 void main() {
   group('$WordSelectionView', () {
     group('renders', () {
-      late CrosswordBloc crosswordBloc;
       late WordSelectionBloc wordSelectionBloc;
-      late WordSelection wordSelection;
       late SelectedWord selectedWord;
 
       setUp(() {
-        crosswordBloc = _MockCrosswordBloc();
-
         wordSelectionBloc = _MockWordSelectionBloc();
-
-        wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
         selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
       });
 
       testWidgets('SizedBox when there is no selected word', (tester) async {
-        when(() => crosswordBloc.state)
-            .thenReturn(CrosswordState(sectionSize: 20));
         when(() => wordSelectionBloc.state)
             .thenReturn(WordSelectionState.initial());
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSelectionBloc,
             child: WordSelectionView(),
@@ -73,12 +60,6 @@ void main() {
       testWidgets(
         '$WordSelectionLargeContainer when layout is large',
         (tester) async {
-          when(() => crosswordBloc.state).thenReturn(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: wordSelection,
-            ),
-          );
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
@@ -88,7 +69,6 @@ void main() {
 
           await tester.pumpApp(
             layout: IoLayoutData.large,
-            crosswordBloc: crosswordBloc,
             BlocProvider(
               create: (_) => wordSelectionBloc,
               child: WordSelectionView(),
@@ -102,12 +82,6 @@ void main() {
       testWidgets(
         '$WordSelectionSmallContainer when layout is small',
         (tester) async {
-          when(() => crosswordBloc.state).thenReturn(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: wordSelection,
-            ),
-          );
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
@@ -117,7 +91,6 @@ void main() {
 
           await tester.pumpApp(
             layout: IoLayoutData.small,
-            crosswordBloc: crosswordBloc,
             BlocProvider(
               create: (_) => wordSelectionBloc,
               child: WordSelectionView(),
@@ -130,12 +103,6 @@ void main() {
 
       testWidgets('$WordPreSolvingView when status is preSolving',
           (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: wordSelection,
-          ),
-        );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
@@ -144,7 +111,6 @@ void main() {
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSelectionBloc,
             child: WordSelectionView(),
@@ -155,12 +121,6 @@ void main() {
       });
 
       testWidgets('$WordSolvingView when status is solving', (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: wordSelection,
-          ),
-        );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solving,
@@ -169,7 +129,6 @@ void main() {
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSelectionBloc,
             child: WordSelectionView(),
@@ -180,12 +139,6 @@ void main() {
       });
 
       testWidgets('$WordSuccessView when status is solved', (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: wordSelection,
-          ),
-        );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
@@ -195,7 +148,6 @@ void main() {
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSelectionBloc,
             child: WordSelectionView(),
