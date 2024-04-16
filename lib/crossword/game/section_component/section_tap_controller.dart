@@ -40,7 +40,7 @@ class SectionTapController extends PositionComponent
                   wordRect.left + wordRect.width / 2,
                   wordRect.top + wordRect.height / 2,
                 ).translated(
-                  viewportWidth * WordSelectionLargeView.widthRatio / 2,
+                  viewportWidth * WordSelectionLargeContainer.widthRatio / 2,
                   0,
                 );
 
