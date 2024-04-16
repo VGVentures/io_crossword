@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:meta/meta.dart';
+
+const _playerEntity = 'players';
 
 /// {@template leaderboard_repository}
 /// Access to Leaderboard datasource.
@@ -18,35 +19,6 @@ class LeaderboardRepository {
 
   final DbClient _dbClient;
   final String _blacklistDocumentId;
-
-  /// Retrieves the leaderboard players.
-  ///
-  /// The players are ordered by longest streak and returns the top 10.
-  Future<List<LeaderboardPlayer>> getLeaderboard() async {
-    final results = await _dbClient.orderBy('leaderboard', 'score');
-
-    return results
-        .map(
-          (e) => LeaderboardPlayer.fromJson({
-            'userId': e.id,
-            ...e.data,
-          }),
-        )
-        .toList();
-  }
-
-  /// Saves player to the leaderboard.
-  Future<void> addPlayerToLeaderboard({
-    required LeaderboardPlayer leaderboardPlayer,
-  }) async {
-    return _dbClient.set(
-      'leaderboard',
-      DbEntityRecord(
-        id: leaderboardPlayer.userId,
-        data: leaderboardPlayer.toJson()..remove('userId'),
-      ),
-    );
-  }
 
   /// Retrieves the blacklist for player initials.
   Future<List<String>> getInitialsBlacklist() async {
@@ -69,50 +41,50 @@ class LeaderboardRepository {
     String initials,
     String mascotName,
   ) async {
-    final mascot = Mascots.values.firstWhereOrNull((e) => e.name == mascotName);
-    final scoreCard = ScoreCard(
+    final mascot = Mascots.values.firstWhere((e) => e.name == mascotName);
+    final player = Player(
       id: userId,
       initials: initials,
       mascot: mascot,
     );
 
     return _dbClient.set(
-      'scoreCards',
+      _playerEntity,
       DbEntityRecord(
-        id: scoreCard.id,
-        data: scoreCard.toJson(),
+        id: player.id,
+        data: player.toJson(),
       ),
     );
   }
 
   /// Updates the score for the provided user when it solves one word.
   Future<void> updateScore(String userId) async {
-    final scoreData = await _dbClient.getById('scoreCards', userId);
+    final playerData = await _dbClient.getById(_playerEntity, userId);
 
-    if (scoreData == null) {
+    if (playerData == null) {
       return;
     }
 
-    final scoreCard = ScoreCard.fromJson({
+    final player = Player.fromJson({
       'id': userId,
-      ...scoreData.data,
+      ...playerData.data,
     });
 
-    final updatedScoreCard = increaseScore(scoreCard);
+    final updatedPlayerData = increaseScore(player);
 
     return _dbClient.set(
-      'scoreCards',
+      _playerEntity,
       DbEntityRecord(
-        id: updatedScoreCard.id,
-        data: updatedScoreCard.toJson(),
+        id: updatedPlayerData.id,
+        data: updatedPlayerData.toJson(),
       ),
     );
   }
 
   /// Increases the score for the provided score card.
   @visibleForTesting
-  ScoreCard increaseScore(ScoreCard scoreCard) {
-    final streak = scoreCard.streak;
+  Player increaseScore(Player player) {
+    final streak = player.streak;
 
     // Streak multiplier would be 1 for the first answer, 2 for the second,
     // and 10 * log(streak) for the rest. The series would look like:
@@ -122,34 +94,34 @@ class LeaderboardRepository {
     const pointsPerWord = 10;
     final points = streakMultiplier * pointsPerWord;
 
-    final updatedScoreCard = scoreCard.copyWith(
-      totalScore: scoreCard.totalScore + points.round(),
-      streak: scoreCard.streak + 1,
+    final updatedPlayerData = player.copyWith(
+      score: player.score + points.round(),
+      streak: player.streak + 1,
     );
 
-    return updatedScoreCard;
+    return updatedPlayerData;
   }
 
   /// Resets the streak for the provided user.
   Future<void> resetStreak(String userId) async {
-    final scoreData = await _dbClient.getById('scoreCards', userId);
+    final playerData = await _dbClient.getById(_playerEntity, userId);
 
-    if (scoreData == null) {
+    if (playerData == null) {
       return;
     }
 
-    final scoreCard = ScoreCard.fromJson({
+    final player = Player.fromJson({
       'id': userId,
-      ...scoreData.data,
+      ...playerData.data,
     });
 
-    final updatedScoreCard = scoreCard.copyWith(streak: 0);
+    final updatedPlayerData = player.copyWith(streak: 0);
 
     return _dbClient.set(
-      'scoreCards',
+      _playerEntity,
       DbEntityRecord(
-        id: updatedScoreCard.id,
-        data: updatedScoreCard.toJson(),
+        id: updatedPlayerData.id,
+        data: updatedPlayerData.toJson(),
       ),
     );
   }

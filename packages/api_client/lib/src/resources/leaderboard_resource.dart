@@ -17,8 +17,8 @@ class LeaderboardResource {
 
   /// Get /game/leaderboard/results
   ///
-  /// Returns a list of [LeaderboardPlayer].
-  Future<List<LeaderboardPlayer>> getLeaderboardResults() async {
+  /// Returns a list of [Player].
+  Future<List<Player>> getLeaderboardResults() async {
     final response = await _apiClient.get('/game/leaderboard/results');
 
     if (response.statusCode != HttpStatus.ok) {
@@ -35,7 +35,7 @@ class LeaderboardResource {
 
       return leaderboardPlayers
           .map(
-            (json) => LeaderboardPlayer.fromJson(json as Map<String, dynamic>),
+            (json) => Player.fromJson(json as Map<String, dynamic>),
           )
           .toList();
     } catch (error, stackTrace) {
@@ -80,7 +80,7 @@ class LeaderboardResource {
 
   /// Post /game/leaderboard/initials
   Future<void> addLeaderboardPlayer({
-    required LeaderboardPlayer leaderboardPlayer,
+    required Player leaderboardPlayer,
   }) async {
     final response = await _apiClient.post(
       '/game/leaderboard/initials',

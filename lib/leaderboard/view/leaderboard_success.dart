@@ -57,7 +57,7 @@ class LeaderboardSuccess extends StatelessWidget {
                 const SizedBox(height: 24),
                 ...players.mapIndexed(
                   (index, player) {
-                    if (player.userId == user.id) {
+                    if (player.id == user.id) {
                       return Padding(
                         padding: const EdgeInsets.only(
                           bottom: 16,
@@ -141,7 +141,7 @@ class CurrentUserPosition extends StatelessWidget {
     super.key,
   });
 
-  final LeaderboardPlayer player;
+  final Player player;
   final int rank;
 
   @override
@@ -180,7 +180,7 @@ class UserLeaderboardRanking extends StatelessWidget {
     super.key,
   });
 
-  final LeaderboardPlayer player;
+  final Player player;
   final int rank;
 
   @override

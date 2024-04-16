@@ -7,13 +7,11 @@ void main() {
   group('LeaderboardPlayer', () {
     test('empty', () {
       expect(
-        LeaderboardPlayer.empty,
+        Player.empty,
         equals(
-          LeaderboardPlayer(
-            userId: '',
+          Player(
+            id: '',
             initials: '',
-            score: 0,
-            streak: 0,
             mascot: Mascots.dash,
           ),
         ),
@@ -22,8 +20,8 @@ void main() {
 
     test('can be instantiated', () {
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 10,
           mascot: Mascots.android,
@@ -33,8 +31,8 @@ void main() {
       );
     });
 
-    final leaderboardPlayer = LeaderboardPlayer(
-      userId: 'id',
+    final leaderboardPlayer = Player(
+      id: 'id',
       initials: 'TST',
       score: 20,
       mascot: Mascots.android,
@@ -56,7 +54,7 @@ void main() {
 
     test('fromJson returns the correct instance', () {
       expect(
-        LeaderboardPlayer.fromJson({
+        Player.fromJson({
           'userId': 'id',
           'initials': 'TST',
           'score': 20,
@@ -69,16 +67,16 @@ void main() {
 
     test('supports equality', () {
       expect(
-        LeaderboardPlayer(
-          userId: '',
+        Player(
+          id: '',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,
           streak: 2,
         ),
         equals(
-          LeaderboardPlayer(
-            userId: '',
+          Player(
+            id: '',
             initials: 'TST',
             score: 20,
             mascot: Mascots.android,
@@ -88,8 +86,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: '',
+        Player(
+          id: '',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,
@@ -101,8 +99,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'WOW',
           score: 20,
           mascot: Mascots.android,
@@ -114,8 +112,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 20,
           mascot: Mascots.dash,
@@ -127,8 +125,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,

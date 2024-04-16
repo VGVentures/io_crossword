@@ -32,8 +32,8 @@ void main() {
       });
 
       test('makes the correct call ', () async {
-        final leaderboardPlayer = LeaderboardPlayer(
-          userId: 'id',
+        final leaderboardPlayer = Player(
+          id: 'id',
           score: 10,
           initials: 'TST',
           mascot: Mascots.dash,
@@ -155,8 +155,8 @@ void main() {
     });
 
     group('addLeaderboardPlayer', () {
-      final leaderboardPlayer = LeaderboardPlayer(
-        userId: 'id',
+      final leaderboardPlayer = Player(
+        id: 'id',
         score: 10,
         initials: 'TST',
         mascot: Mascots.dash,
