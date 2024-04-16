@@ -26,6 +26,19 @@ void main() {
       );
     });
 
+    group('$WordUnselected', () {
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits initial state',
+        build: WordSelectionBloc.new,
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          wordIdentifier: '1',
+        ),
+        act: (bloc) => bloc.add(WordUnselected()),
+        expect: () => <WordSelectionState>[WordSelectionState.initial()],
+      );
+    });
+
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if there is no word identifier',

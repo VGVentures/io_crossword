@@ -102,6 +102,7 @@ class _WordSelectionBody extends StatelessWidget {
             WordSolvingView(selectedWord: selectedWord),
           WordSelectionStatus.solved =>
             WordSuccessView(selectedWord: selectedWord),
+          WordSelectionStatus.empty => const SizedBox.shrink(),
         };
         // coverage:ignore-end
         return view;

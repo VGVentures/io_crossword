@@ -7,6 +7,7 @@ part 'word_selection_state.dart';
 class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   WordSelectionBloc() : super(const WordSelectionState.initial()) {
     on<WordSelected>(_onWordSelected);
+    on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
     on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
@@ -21,6 +22,15 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
         status: WordSelectionStatus.preSolving,
         wordIdentifier: event.wordIdentifier,
       ),
+    );
+  }
+
+  void _onWordUnselected(
+    WordUnselected event,
+    Emitter<WordSelectionState> emit,
+  ) {
+    emit(
+      const WordSelectionState.initial(),
     );
   }
 
