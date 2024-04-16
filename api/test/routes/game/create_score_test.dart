@@ -50,9 +50,62 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
+        when(() => leaderboardRepository.getInitialsBlacklist())
+            .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = await route.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.created));
+      },
+    );
+
+    test(
+      'responds with a ${HttpStatus.badRequest} status when initials are '
+      'unwanted',
+      () async {
+        when(() => request.method).thenReturn(HttpMethod.post);
+        when(request.json)
+            .thenAnswer((_) async => {'initials': 'FUU', 'mascot': 'dash'});
+        when(() => leaderboardRepository.createScore(any(), any(), any()))
+            .thenAnswer((_) async {});
+        when(() => leaderboardRepository.getInitialsBlacklist())
+            .thenAnswer((_) async => ['FUU', 'FAA']);
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.badRequest));
+      },
+    );
+
+    test(
+      'responds with a ${HttpStatus.badRequest} status when initials are '
+      'smaller than 3',
+      () async {
+        when(() => request.method).thenReturn(HttpMethod.post);
+        when(request.json)
+            .thenAnswer((_) async => {'initials': 'AA', 'mascot': 'dash'});
+        when(() => leaderboardRepository.createScore(any(), any(), any()))
+            .thenAnswer((_) async {});
+        when(() => leaderboardRepository.getInitialsBlacklist())
+            .thenAnswer((_) async => ['FUU', 'FAA']);
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.badRequest));
+      },
+    );
+
+    test(
+      'responds with a ${HttpStatus.badRequest} status when initials are '
+      'bigger than 3',
+      () async {
+        when(() => request.method).thenReturn(HttpMethod.post);
+        when(request.json)
+            .thenAnswer((_) async => {'initials': 'AAAA', 'mascot': 'dash'});
+        when(() => leaderboardRepository.createScore(any(), any(), any()))
+            .thenAnswer((_) async {});
+        when(() => leaderboardRepository.getInitialsBlacklist())
+            .thenAnswer((_) async => ['FUU', 'FAA']);
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.badRequest));
       },
     );
 
@@ -76,6 +129,8 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenThrow(Exception());
+        when(() => leaderboardRepository.getInitialsBlacklist())
+            .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = route.onRequest(context);
         expect(response, throwsA(isA<Exception>()));
