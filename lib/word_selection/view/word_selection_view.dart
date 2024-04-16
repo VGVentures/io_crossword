@@ -11,26 +11,29 @@ class WordSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedWord =
         context.select((CrosswordBloc bloc) => bloc.state.selectedWord);
-    if (selectedWord == null) {
-      return const SizedBox.shrink();
-    }
+    if (selectedWord == null) return const SizedBox.shrink();
+
+    final body = _WordSelectionBody(selectedWord: selectedWord);
 
     final layout = IoLayout.of(context);
 
     return switch (layout) {
-      IoLayoutData.large => WordSelectionLargeView(selectedWord),
-      IoLayoutData.small => WordSelectionSmallView(selectedWord),
+      IoLayoutData.large => WordSelectionLargeContainer(child: body),
+      IoLayoutData.small => WordSelectionSmallContainer(child: body),
     };
   }
 }
 
-class WordSelectionLargeView extends StatelessWidget {
+class WordSelectionLargeContainer extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionLargeContainer({
+    required this.child,
+    super.key,
+  });
 
   static const widthRatio = 0.35;
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -43,35 +46,21 @@ class WordSelectionLargeView extends StatelessWidget {
         width: size.width * widthRatio,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
         color: IoCrosswordColors.darkGray,
-        child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-          builder: (context, state) {
-            // coverage:ignore-start
-            final view = switch (state.status) {
-              WordSelectionStatus.preSolving =>
-                WordPreSolvingLargeView(selectedWord),
-              WordSelectionStatus.validating ||
-              WordSelectionStatus.incorrect ||
-              WordSelectionStatus.failure ||
-              WordSelectionStatus.solving =>
-                WordSolvingLargeView(selectedWord),
-              WordSelectionStatus.solved =>
-                WordSuccessView(selectedWord: selectedWord),
-            };
-            // coverage:ignore-end
-            return view;
-          },
-        ),
+        child: child,
       ),
     );
   }
 }
 
 @visibleForTesting
-class WordSelectionSmallView extends StatelessWidget {
+class WordSelectionSmallContainer extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSmallView(this.selectedWord, {super.key});
+  const WordSelectionSmallContainer({
+    required this.child,
+    super.key,
+  });
 
-  final WordSelection selectedWord;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -84,28 +73,40 @@ class WordSelectionSmallView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: BlocSelector<WordSelectionBloc, WordSelectionState,
-              WordSelectionStatus>(
-            selector: (state) => state.status,
-            builder: (context, status) {
-              // coverage:ignore-start
-              final view = switch (status) {
-                WordSelectionStatus.preSolving =>
-                  WordPreSolvingSmallView(selectedWord),
-                WordSelectionStatus.validating ||
-                WordSelectionStatus.incorrect ||
-                WordSelectionStatus.failure ||
-                WordSelectionStatus.solving =>
-                  WordSolvingSmallView(selectedWord),
-                WordSelectionStatus.solved =>
-                  WordSuccessView(selectedWord: selectedWord),
-              };
-              // coverage:ignore-end
-              return view;
-            },
-          ),
+          child: child,
         ),
       ),
+    );
+  }
+}
+
+class _WordSelectionBody extends StatelessWidget {
+  const _WordSelectionBody({required this.selectedWord});
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<WordSelectionBloc, WordSelectionState,
+        WordSelectionStatus>(
+      selector: (state) => state.status,
+      builder: (context, status) {
+        // coverage:ignore-start
+        final view = switch (status) {
+          WordSelectionStatus.preSolving =>
+            WordPreSolvingView(selectedWord: selectedWord),
+          WordSelectionStatus.validating ||
+          WordSelectionStatus.incorrect ||
+          WordSelectionStatus.failure ||
+          WordSelectionStatus.solving =>
+            WordSolvingView(selectedWord: selectedWord),
+          WordSelectionStatus.solved =>
+            WordSuccessView(selectedWord: selectedWord),
+          WordSelectionStatus.empty => const SizedBox.shrink(),
+        };
+        // coverage:ignore-end
+        return view;
+      },
     );
   }
 }

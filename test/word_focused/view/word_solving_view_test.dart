@@ -44,6 +44,42 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
+  group('$WordSolvingView', () {
+    group('renders', () {
+      late WordSelection selectedWord;
+
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      });
+
+      testWidgets(
+        'a $WordSolvingLargeView when layout is large',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            WordSolvingView(selectedWord: selectedWord),
+          );
+
+          expect(find.byType(WordSolvingLargeView), findsOneWidget);
+          expect(find.byType(WordSolvingSmallView), findsNothing);
+        },
+      );
+
+      testWidgets(
+        'a $WordSolvingSmallView when layout is small',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.small,
+            WordSolvingView(selectedWord: selectedWord),
+          );
+
+          expect(find.byType(WordSolvingSmallView), findsOneWidget);
+          expect(find.byType(WordSolvingLargeView), findsNothing);
+        },
+      );
+    });
+  });
+
   group('$WordSolvingLargeView', () {
     late WordSelectionBloc wordSolvingBloc;
     late CrosswordBloc crosswordBloc;
@@ -71,26 +107,23 @@ void main() {
       );
     });
 
-    testWidgets(
-      'renders the clue text',
-      (tester) async {
-        await tester.pumpApp(widget);
+    group('renders', () {
+      testWidgets(
+        'the clue text',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+        },
+      );
 
-        expect(find.text(selectedWord.word.clue), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'tapping the close button sends WordUnselected event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final closeButton = find.byIcon(Icons.cancel);
-        await tester.tap(closeButton);
-
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-      },
-    );
+      testWidgets(
+        'a $TopBar',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(TopBar), findsOneWidget);
+        },
+      );
+    });
 
     testWidgets(
       'tapping the submit button sends AnswerSubmitted event',

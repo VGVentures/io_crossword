@@ -6,6 +6,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordUnselected;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template word_success_view}
@@ -181,13 +183,7 @@ class SuccessTopBar extends StatelessWidget {
           l10n.wordSolved,
           style: IoCrosswordTextStyles.headlineSM,
         ),
-        IconButton(
-          onPressed: () {
-            context.read<CrosswordBloc>().add(const WordUnselected());
-          },
-          icon: const Icon(Icons.cancel),
-          style: themeData.io.iconButtonTheme.filled,
-        ),
+        const CloseWordSelectionIconButton(),
       ],
     );
   }
