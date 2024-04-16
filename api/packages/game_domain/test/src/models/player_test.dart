@@ -4,16 +4,14 @@ import 'package:game_domain/game_domain.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LeaderboardPlayer', () {
+  group('$Player', () {
     test('empty', () {
       expect(
-        LeaderboardPlayer.empty,
+        Player.empty,
         equals(
-          LeaderboardPlayer(
-            userId: '',
+          Player(
+            id: '',
             initials: '',
-            score: 0,
-            streak: 0,
             mascot: Mascots.dash,
           ),
         ),
@@ -22,8 +20,8 @@ void main() {
 
     test('can be instantiated', () {
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 10,
           mascot: Mascots.android,
@@ -33,19 +31,18 @@ void main() {
       );
     });
 
-    final leaderboardPlayer = LeaderboardPlayer(
-      userId: 'id',
+    final leaderboardPlayer = Player(
+      id: 'id',
       initials: 'TST',
       score: 20,
       mascot: Mascots.android,
       streak: 2,
     );
 
-    test('toJson returns the instance as json', () {
+    test('toJson returns the instance as json without the id', () {
       expect(
         leaderboardPlayer.toJson(),
         equals({
-          'userId': 'id',
           'initials': 'TST',
           'score': 20,
           'mascot': Mascots.android.name,
@@ -56,8 +53,8 @@ void main() {
 
     test('fromJson returns the correct instance', () {
       expect(
-        LeaderboardPlayer.fromJson({
-          'userId': 'id',
+        Player.fromJson({
+          'id': 'id',
           'initials': 'TST',
           'score': 20,
           'mascot': Mascots.android.name,
@@ -69,16 +66,16 @@ void main() {
 
     test('supports equality', () {
       expect(
-        LeaderboardPlayer(
-          userId: '',
+        Player(
+          id: '',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,
           streak: 2,
         ),
         equals(
-          LeaderboardPlayer(
-            userId: '',
+          Player(
+            id: '',
             initials: 'TST',
             score: 20,
             mascot: Mascots.android,
@@ -88,8 +85,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: '',
+        Player(
+          id: '',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,
@@ -101,8 +98,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'WOW',
           score: 20,
           mascot: Mascots.android,
@@ -114,8 +111,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 20,
           mascot: Mascots.dash,
@@ -127,8 +124,8 @@ void main() {
       );
 
       expect(
-        LeaderboardPlayer(
-          userId: 'id',
+        Player(
+          id: 'id',
           initials: 'TST',
           score: 20,
           mascot: Mascots.android,
@@ -136,6 +133,31 @@ void main() {
         ),
         isNot(
           equals(leaderboardPlayer),
+        ),
+      );
+    });
+
+    test('copyWith', () {
+      expect(
+        Player(
+          id: 'id',
+          initials: 'AAA',
+          mascot: Mascots.android,
+          streak: 10,
+          score: 500,
+        ).copyWith(),
+        equals(
+          Player(
+            id: '',
+            initials: '',
+            mascot: Mascots.dash,
+          ).copyWith(
+            id: 'id',
+            initials: 'AAA',
+            mascot: Mascots.android,
+            streak: 10,
+            score: 500,
+          ),
         ),
       );
     });

@@ -32,11 +32,9 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
             status: LeaderboardStatus.success,
             players: List.generate(
               10,
-              (index) => const LeaderboardPlayer(
-                userId: '',
+              (index) => const Player(
+                id: '',
                 initials: 'AAA',
-                score: 0,
-                streak: 0,
                 mascot: Mascots.dash,
               ),
             ),
