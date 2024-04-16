@@ -118,9 +118,11 @@ void main(List<String> args) async {
     }
   }
 
+  print('Uploading answers...');
   await crosswordRepository.addAnswers(answers);
   print('Added all answers to the database.');
 
+  print('Uploading sections...');
   await crosswordRepository.addSections(sections);
   print('Added all ${sections.length} section to the database.');
 }
