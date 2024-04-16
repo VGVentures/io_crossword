@@ -34,38 +34,43 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final crosswordResource = apiClient.crosswordResource;
 
-    return MultiProvider(
-      providers: [
-        Provider.value(value: apiClient.leaderboardResource),
-        Provider.value(value: user),
-        Provider.value(value: crosswordResource),
-        Provider.value(value: crosswordRepository),
-        Provider.value(value: boardInfoRepository),
-        Provider.value(value: leaderboardRepository),
-      ],
-      child: MultiBlocProvider(
+
+    return RotatedBox(
+      quarterTurns:
+          MediaQuery.of(context).orientation == Orientation.landscape ? 1 : 0,
+      child: MultiProvider(
         providers: [
-          BlocProvider(
-            create: (_) => CrosswordBloc(
-              crosswordRepository: crosswordRepository,
-              boardInfoRepository: boardInfoRepository,
-              crosswordResource: crosswordResource,
-            ),
-          ),
-          BlocProvider(
-            // coverage:ignore-start
-            create: (_) => PlayerBloc(
-              leaderboardRepository: leaderboardRepository,
-            )..add(PlayerLoaded(userId: user.id)),
-            // coverage:ignore-end
-          ),
-          BlocProvider(
-            create: (context) => ChallengeBloc(
-              boardInfoRepository: context.read(),
-            )..add(const ChallengeDataRequested()),
-          ),
+          Provider.value(value: apiClient.leaderboardResource),
+          Provider.value(value: user),
+          Provider.value(value: crosswordResource),
+          Provider.value(value: crosswordRepository),
+          Provider.value(value: boardInfoRepository),
+          Provider.value(value: leaderboardRepository),
         ],
-        child: const AppView(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => CrosswordBloc(
+                crosswordRepository: crosswordRepository,
+                boardInfoRepository: boardInfoRepository,
+                crosswordResource: crosswordResource,
+              ),
+            ),
+            BlocProvider(
+              // coverage:ignore-start
+              create: (_) => PlayerBloc(
+                leaderboardRepository: leaderboardRepository,
+              )..add(PlayerLoaded(userId: user.id)),
+              // coverage:ignore-end
+            ),
+            BlocProvider(
+              create: (context) => ChallengeBloc(
+                boardInfoRepository: context.read(),
+              )..add(const ChallengeDataRequested()),
+            ),
+          ],
+          child: const AppView(),
+        ),
       ),
     );
   }
