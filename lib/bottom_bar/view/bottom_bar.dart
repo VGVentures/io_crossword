@@ -12,10 +12,9 @@ class BottomBar extends StatelessWidget {
     final selectionStatus =
         context.select((WordSelectionBloc bloc) => bloc.state.status);
 
-    return switch (selectionStatus) {
-      WordSelectionStatus.empty => const BottomBarContent(),
-      _ => const SizedBox.shrink(),
-    };
+    return selectionStatus != WordSelectionStatus.empty
+        ? const SizedBox.shrink()
+        : const BottomBarContent();
   }
 }
 
