@@ -182,9 +182,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     if (selectedWord == null) return;
 
     final userAnswer = loadedState.answer.toLowerCase();
-    final correctAnswer = selectedWord.word.answer.toLowerCase();
 
-    if (userAnswer != correctAnswer) {
+    if (userAnswer.length != selectedWord.word.length) {
       emit(
         loadedState.copyWith(
           selectedWord: selectedWord.copyWith(solvedStatus: WordStatus.invalid),

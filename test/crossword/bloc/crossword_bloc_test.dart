@@ -23,30 +23,38 @@ void main() {
   group('CrosswordBloc', () {
     final words = [
       Word(
+        id: '1',
         axis: Axis.horizontal,
         position: const Point(0, 0),
         answer: 'flutter',
+        length: 7,
         clue: 'flutter',
         solvedTimestamp: null,
       ),
       Word(
+        id: '2',
         axis: Axis.vertical,
         position: const Point(4, 1),
         answer: 'android',
+        length: 7,
         clue: 'flutter',
         solvedTimestamp: null,
       ),
       Word(
+        id: '3',
         axis: Axis.vertical,
         position: const Point(8, 3),
         answer: 'dino',
+        length: 4,
         clue: 'flutter',
         solvedTimestamp: null,
       ),
       Word(
+        id: '4',
         position: const Point(4, 6),
         axis: Axis.horizontal,
         answer: 'sparky',
+        length: 6,
         clue: 'flutter',
         solvedTimestamp: null,
       ),
@@ -880,14 +888,14 @@ void main() {
             () => crosswordResource.answerWord(
               section: section,
               word: words.first,
-              answer: words.first.answer,
+              answer: words.first.answer!,
               mascot: Mascots.android,
             ),
           ).thenAnswer((_) async => true);
         },
         seed: () => CrosswordState(
           sectionSize: sectionSize,
-          answer: words.first.answer,
+          answer: words.first.answer!,
           mascot: Mascots.android,
           selectedWord: WordSelection(
             section: (0, 0),
@@ -901,7 +909,7 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             sectionSize: sectionSize,
-            answer: words.first.answer,
+            answer: words.first.answer!,
             mascot: Mascots.android,
             selectedWord: WordSelection(
               section: (0, 0),
@@ -964,14 +972,14 @@ void main() {
             () => crosswordResource.answerWord(
               section: section,
               word: words.first,
-              answer: words.first.answer,
+              answer: words.first.answer!,
               mascot: Mascots.android,
             ),
           ).thenAnswer((_) async => false);
         },
         seed: () => CrosswordState(
           sectionSize: sectionSize,
-          answer: words.first.answer,
+          answer: words.first.answer!,
           mascot: Mascots.android,
           selectedWord: WordSelection(
             section: (0, 0),
@@ -985,7 +993,7 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             sectionSize: sectionSize,
-            answer: words.first.answer,
+            answer: words.first.answer!,
             mascot: Mascots.android,
             selectedWord: WordSelection(
               section: (0, 0),
@@ -1011,14 +1019,14 @@ void main() {
             () => crosswordResource.answerWord(
               section: section,
               word: words.first,
-              answer: words.first.answer,
+              answer: words.first.answer!,
               mascot: Mascots.android,
             ),
           ).thenThrow(Exception('error'));
         },
         seed: () => CrosswordState(
           sectionSize: sectionSize,
-          answer: words.first.answer,
+          answer: words.first.answer!,
           mascot: Mascots.android,
           selectedWord: WordSelection(
             section: (0, 0),
@@ -1032,7 +1040,7 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             sectionSize: sectionSize,
-            answer: words.first.answer,
+            answer: words.first.answer!,
             mascot: Mascots.android,
             selectedWord: WordSelection(
               section: (0, 0),

@@ -24,11 +24,11 @@ extension on List<Word> {
       minPositionY = math.min(minPositionY, word.position.y);
 
       final sizeX = word.axis == Axis.horizontal
-          ? word.position.x + word.answer.length
+          ? word.position.x + word.length
           : word.position.x;
 
       final sizeY = word.axis == Axis.vertical
-          ? word.position.y + word.answer.length
+          ? word.position.y + word.length
           : word.position.y;
 
       maxPositionX = math.max(maxPositionX, sizeX);
@@ -192,7 +192,7 @@ class BoardRenderer {
       );
 
       final isHorizontal = word.axis == Axis.horizontal;
-      final wordCharacters = word.answer.split('');
+      final wordCharacters = word.answer!.split('');
 
       for (var i = 0; i < wordCharacters.length; i++) {
         final x1 =
@@ -280,7 +280,7 @@ class BoardRenderer {
 
       final position = (x, y);
 
-      final wordCharacters = word.answer.split('');
+      final wordCharacters = word.answer!.split('');
 
       for (var c = 0; c < wordCharacters.length; c++) {
         final char = wordCharacters.elementAt(c).toUpperCase();
@@ -438,7 +438,7 @@ class BoardRenderer {
 
       final position = (x, y);
 
-      final wordCharacters = word.answer.split('');
+      final wordCharacters = word.answer!.split('');
 
       for (var c = 0; c < wordCharacters.length; c++) {
         final char = wordCharacters.elementAt(c).toUpperCase();
