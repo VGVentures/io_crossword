@@ -46,7 +46,7 @@ void main() {
 
   group('$WordSolvingView', () {
     late WordSelection selectedWord;
-    late WordSelectionBloc wordSelectionBloc;
+    late WordSelectionBloc wordSolvingBloc;
     late CrosswordBloc crosswordBloc;
 
     setUp(() {
@@ -59,7 +59,14 @@ void main() {
         ),
       );
 
-      wordSelectionBloc = _MockWordSolvingBloc();
+      wordSolvingBloc = _MockWordSolvingBloc();
+      when(() => wordSolvingBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+          wordPoints: null,
+        ),
+      );
     });
 
     group('renders', () {
@@ -68,7 +75,10 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.large,
-            WordSolvingView(selectedWord: selectedWord),
+            BlocProvider(
+              create: (_) => wordSolvingBloc,
+              child: WordSolvingView(selectedWord: selectedWord),
+            ),
           );
 
           expect(find.byType(WordSolvingLargeView), findsOneWidget);
@@ -81,7 +91,10 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.small,
-            WordSolvingView(selectedWord: selectedWord),
+            BlocProvider(
+              create: (_) => wordSolvingBloc,
+              child: WordSolvingView(selectedWord: selectedWord),
+            ),
           );
 
           expect(find.byType(WordSolvingSmallView), findsOneWidget);
@@ -108,12 +121,12 @@ void main() {
         await tester.pumpApp(
           crosswordBloc: crosswordBloc,
           BlocProvider(
-            create: (_) => wordSelectionBloc,
+            create: (_) => wordSolvingBloc,
             child: WordSolvingView(selectedWord: selectedWord),
           ),
         );
 
-        verify(() => wordSelectionBloc.add(const WordFocusedSuccessRequested()))
+        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
             .called(1);
       },
     );
@@ -128,6 +141,13 @@ void main() {
 
     setUp(() {
       wordSelectionBloc = _MockWordSolvingBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          wordIdentifier: '1',
+        ),
+      );
+
       crosswordBloc = _MockCrosswordBloc();
 
       widget = MultiBlocProvider(
@@ -156,10 +176,10 @@ void main() {
       );
 
       testWidgets(
-        'a $TopBar',
+        'a $WordSelectionTopBar',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.byType(TopBar), findsOneWidget);
+          expect(find.byType(WordSelectionTopBar), findsOneWidget);
         },
       );
     });
@@ -203,7 +223,6 @@ void main() {
         WordSelectionState(
           status: WordSelectionStatus.solving,
           wordIdentifier: '1',
-          wordPoints: null,
         ),
       );
       when(() => crosswordBloc.state).thenReturn(

@@ -45,17 +45,24 @@ void main() {
 
       setUp(() {
         crosswordBloc = _MockCrosswordBloc();
+
         wordSelectionBloc = _MockWordSelectionBloc();
+
         selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
       });
 
       testWidgets('SizedBox when there is no selected word', (tester) async {
         when(() => crosswordBloc.state)
             .thenReturn(CrosswordState(sectionSize: 20));
+        when(() => wordSelectionBloc.state)
+            .thenReturn(WordSelectionState.initial());
 
         await tester.pumpApp(
           crosswordBloc: crosswordBloc,
-          WordSelectionView(),
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSelectionView(),
+          ),
         );
 
         expect(find.byType(SizedBox), findsOneWidget);
@@ -71,7 +78,10 @@ void main() {
             ),
           );
           when(() => wordSelectionBloc.state).thenReturn(
-            WordSelectionState(status: WordSelectionStatus.preSolving),
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              wordIdentifier: '1',
+            ),
           );
 
           await tester.pumpApp(
@@ -97,7 +107,10 @@ void main() {
             ),
           );
           when(() => wordSelectionBloc.state).thenReturn(
-            WordSelectionState(status: WordSelectionStatus.preSolving),
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              wordIdentifier: '1',
+            ),
           );
 
           await tester.pumpApp(
@@ -122,7 +135,10 @@ void main() {
           ),
         );
         when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(status: WordSelectionStatus.preSolving),
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
         );
 
         await tester.pumpApp(

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class TopBar extends StatelessWidget {
-  const TopBar({required this.wordId, super.key});
-
-  final String wordId;
+class WordSelectionTopBar extends StatelessWidget {
+  const WordSelectionTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +16,14 @@ class TopBar extends StatelessWidget {
           onPressed: () {}, // coverage:ignore-line
           icon: const Icon(Icons.ios_share),
         ),
-        Text(
-          wordId,
-          style: IoCrosswordTextStyles.labelMD.bold,
+        BlocSelector<WordSelectionBloc, WordSelectionState, String>(
+          selector: (state) => state.wordIdentifier!,
+          builder: (context, wordIdentifier) {
+            return Text(
+              wordIdentifier,
+              style: IoCrosswordTextStyles.labelMD.bold,
+            );
+          },
         ),
         const CloseWordSelectionIconButton(),
       ],
