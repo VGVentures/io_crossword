@@ -13,9 +13,11 @@ void main() {
         size: 200,
         words: [
           Word(
+            id: 'id',
             position: Point(1, 2),
             axis: Axis.horizontal,
             answer: 'answer',
+            length: 6,
             clue: 'clue',
             solvedTimestamp: 1234,
             mascot: Mascots.android,
@@ -32,9 +34,11 @@ void main() {
           'size': 200,
           'words': [
             {
+              'id': 'id',
               'position': {'x': 1, 'y': 2},
               'axis': 'horizontal',
               'answer': 'answer',
+              'length': 6,
               'clue': 'clue',
               'solvedTimestamp': 1234,
               'mascot': 'android',
@@ -57,6 +61,7 @@ void main() {
             'position': {'x': 1, 'y': 2},
             'axis': 'horizontal',
             'answer': 'answer',
+            'length': 6,
             'clue': 'clue',
             'solvedTimestamp': 1234,
             'mascot': 'android',
@@ -75,9 +80,11 @@ void main() {
             size: 200,
             words: [
               Word(
+                id: 'id',
                 position: Point(1, 2),
                 axis: Axis.horizontal,
                 answer: 'answer',
+                length: 6,
                 clue: 'clue',
                 solvedTimestamp: 1234,
                 mascot: Mascots.android,
@@ -190,9 +197,11 @@ void main() {
         size: 300,
         words: [
           Word(
+            id: '1',
             position: Point(1, 2),
             axis: Axis.horizontal,
             answer: 'answer',
+            length: 6,
             clue: 'clue',
             solvedTimestamp: 1234,
           ),
@@ -202,9 +211,11 @@ void main() {
       final newBoardSection = boardSection.copyWith(
         words: [
           Word(
+            id: '2',
             position: Point(3, 4),
             axis: Axis.vertical,
             answer: 'newAnswer',
+            length: 9,
             clue: 'newClue',
             solvedTimestamp: 5678,
           ),
@@ -220,9 +231,11 @@ void main() {
             size: 300,
             words: [
               Word(
+                id: '2',
                 position: Point(3, 4),
                 axis: Axis.vertical,
                 answer: 'newAnswer',
+                length: 9,
                 clue: 'newClue',
                 solvedTimestamp: 5678,
               ),
@@ -243,9 +256,11 @@ void main() {
           words: [],
           borderWords: [
             Word(
+              id: '1',
               position: Point(1, 2),
               axis: Axis.horizontal,
               answer: 'answer',
+              length: 6,
               clue: 'clue',
               solvedTimestamp: 1234,
             ),
@@ -254,9 +269,11 @@ void main() {
         final newBoardSection = boardSection.copyWith(
           borderWords: [
             Word(
+              id: '2',
               position: Point(3, 4),
               axis: Axis.vertical,
               answer: 'newAnswer',
+              length: 9,
               clue: 'newClue',
               solvedTimestamp: 5678,
             ),
@@ -273,9 +290,11 @@ void main() {
               words: [],
               borderWords: [
                 Word(
+                  id: '2',
                   position: Point(3, 4),
                   axis: Axis.vertical,
                   answer: 'newAnswer',
+                  length: 9,
                   clue: 'newClue',
                   solvedTimestamp: 5678,
                 ),

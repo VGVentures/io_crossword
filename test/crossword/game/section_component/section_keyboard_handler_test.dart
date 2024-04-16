@@ -177,7 +177,7 @@ void main() {
             targetSection.children.whereType<SectionKeyboardHandler>();
 
         final buffer = StringBuffer();
-        for (var i = 0; i < targetWord.answer.length; i++) {
+        for (var i = 0; i < targetWord.length; i++) {
           listeners.first.onKeyEvent(
             KeyDownEvent(
               logicalKey: LogicalKeyboardKey.keyF,

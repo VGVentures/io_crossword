@@ -1,7 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordUnselected;
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';

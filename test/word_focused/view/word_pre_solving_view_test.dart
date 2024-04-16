@@ -8,6 +8,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -32,6 +33,46 @@ void main() {
 
   setUpAll(() async {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
+  });
+
+  group('$WordPreSolvingView', () {
+    group('renders', () {
+      late WordSelection selectedWord;
+
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      });
+
+      testWidgets(
+        '$WordPreSolvingLargeView when layout is large',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            WordPreSolvingView(
+              selectedWord: selectedWord,
+            ),
+          );
+
+          expect(find.byType(WordPreSolvingLargeView), findsOneWidget);
+          expect(find.byType(WordPreSolvingSmallView), findsNothing);
+        },
+      );
+
+      testWidgets(
+        '$WordPreSolvingSmallView when layout is small',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.small,
+            WordPreSolvingView(
+              selectedWord: selectedWord,
+            ),
+          );
+
+          expect(find.byType(WordPreSolvingSmallView), findsOneWidget);
+          expect(find.byType(WordPreSolvingLargeView), findsNothing);
+        },
+      );
+    });
   });
 
   group('$WordPreSolvingLargeView', () {

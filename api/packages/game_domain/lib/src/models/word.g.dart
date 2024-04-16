@@ -7,20 +7,24 @@ part of 'word.dart';
 // **************************************************************************
 
 Word _$WordFromJson(Map<String, dynamic> json) => Word(
+      id: json['id'] as String,
       position: const PointConverter()
           .fromJson(json['position'] as Map<String, dynamic>),
       axis: $enumDecode(_$AxisEnumMap, json['axis']),
-      answer: json['answer'] as String,
+      length: json['length'] as int,
       clue: json['clue'] as String,
+      answer: json['answer'] as String?,
       solvedTimestamp: json['solvedTimestamp'] as int?,
       mascot: $enumDecodeNullable(_$MascotsEnumMap, json['mascot']),
     );
 
 Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
+      'id': instance.id,
       'position': const PointConverter().toJson(instance.position),
       'axis': _$AxisEnumMap[instance.axis]!,
-      'answer': instance.answer,
+      'length': instance.length,
       'clue': instance.clue,
+      'answer': instance.answer,
       'solvedTimestamp': instance.solvedTimestamp,
       'mascot': _$MascotsEnumMap[instance.mascot],
     };

@@ -6,7 +6,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
-import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordUnselected;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template word_success_view}
@@ -28,7 +29,6 @@ class WordSuccessView extends StatelessWidget {
   }
 }
 
-@visibleForTesting
 class WordSelectionSuccessLargeView extends StatelessWidget {
   @visibleForTesting
   const WordSelectionSuccessLargeView(this.selectedWord, {super.key});
@@ -51,7 +51,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
           const SuccessTopBar(),
           const SizedBox(height: 32),
           IoWord(
-            selectedWord.word.answer.toUpperCase(),
+            selectedWord.word.answer!.toUpperCase(),
             style: themeData.io.wordTheme.big,
           ),
           const SizedBox(height: 40),
@@ -124,7 +124,7 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                 child: Column(
                   children: [
                     IoWord(
-                      selectedWord.word.answer.toUpperCase(),
+                      selectedWord.word.answer!.toUpperCase(),
                       style: themeData.io.wordTheme.big,
                     ),
                     const SizedBox(height: 40),

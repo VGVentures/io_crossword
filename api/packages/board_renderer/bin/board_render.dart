@@ -44,11 +44,12 @@ void main(List<String> args) async {
       final answer = values[2];
       final axis = values[3] == 'horizontal' ? Axis.horizontal : Axis.vertical;
       final word = Word(
+        id: '$x,$y',
         position: Point(x, y),
         axis: axis,
         answer: answer,
+        length: answer.length,
         clue: '',
-        solvedTimestamp: null,
       );
 
       return word;

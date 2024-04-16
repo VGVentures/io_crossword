@@ -34,7 +34,7 @@ class _FakeWord extends Fake implements Word {
   int? get solvedTimestamp => null;
 
   @override
-  String get answer => 'answer';
+  int get length => 6;
 }
 
 void main() {
@@ -42,6 +42,42 @@ void main() {
 
   setUpAll(() async {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
+  });
+
+  group('$WordSolvingView', () {
+    group('renders', () {
+      late WordSelection selectedWord;
+
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      });
+
+      testWidgets(
+        'a $WordSolvingLargeView when layout is large',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            WordSolvingView(selectedWord: selectedWord),
+          );
+
+          expect(find.byType(WordSolvingLargeView), findsOneWidget);
+          expect(find.byType(WordSolvingSmallView), findsNothing);
+        },
+      );
+
+      testWidgets(
+        'a $WordSolvingSmallView when layout is small',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.small,
+            WordSolvingView(selectedWord: selectedWord),
+          );
+
+          expect(find.byType(WordSolvingSmallView), findsOneWidget);
+          expect(find.byType(WordSolvingLargeView), findsNothing);
+        },
+      );
+    });
   });
 
   group('$WordSolvingLargeView', () {

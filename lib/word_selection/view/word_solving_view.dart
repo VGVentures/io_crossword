@@ -6,7 +6,28 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
+class WordSolvingView extends StatelessWidget {
+  const WordSolvingView({
+    required this.selectedWord,
+    super.key,
+  });
+
+  final WordSelection selectedWord;
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
+
+    return switch (layout) {
+      IoLayoutData.large => WordSolvingLargeView(selectedWord),
+      IoLayoutData.small => WordSolvingSmallView(selectedWord),
+    };
+  }
+}
+
+@visibleForTesting
 class WordSolvingLargeView extends StatelessWidget {
+  @visibleForTesting
   const WordSolvingLargeView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
@@ -51,7 +72,9 @@ class WordSolvingLargeView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class WordSolvingSmallView extends StatelessWidget {
+  @visibleForTesting
   const WordSolvingSmallView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
@@ -75,7 +98,7 @@ class WordSolvingSmallView extends StatelessWidget {
           TopBar(wordId: selectedWord.word.id),
           const SizedBox(height: 32),
           IoWordInput.alphabetic(
-            length: selectedWord.word.answer.length,
+            length: selectedWord.word.length,
             onWord: (value) {
               context.read<CrosswordBloc>().add(AnswerUpdated(value));
             },

@@ -48,7 +48,7 @@ class ShareWordPage extends StatelessWidget {
         // SelectedWordBloc:
         // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6443977120
         IoWord(
-          '${word.answer.substring(0, 1)}_____',
+          '_' * word.length,
           style: themeData.io.wordTheme.big,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
