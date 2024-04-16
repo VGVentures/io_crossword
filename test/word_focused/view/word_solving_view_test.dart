@@ -39,23 +39,28 @@ class _FakeWord extends Fake implements Word {
 
 void main() {
   late AppLocalizations l10n;
+  late SelectedWord selectedWord;
 
   setUpAll(() async {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
+  setUp(() {
+    selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
+  });
+
   group('$WordSolvingView', () {
-    late WordSelection selectedWord;
+    late WordSelection wordSelection;
     late WordSelectionBloc wordSolvingBloc;
     late CrosswordBloc crosswordBloc;
 
     setUp(() {
-      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
       crosswordBloc = _MockCrosswordBloc();
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,
-          selectedWord: selectedWord,
+          selectedWord: wordSelection,
         ),
       );
 
@@ -63,7 +68,7 @@ void main() {
       when(() => wordSolvingBloc.state).thenReturn(
         WordSelectionState(
           status: WordSelectionStatus.solving,
-          wordIdentifier: '1',
+          word: selectedWord,
           wordPoints: null,
         ),
       );
@@ -77,7 +82,7 @@ void main() {
             layout: IoLayoutData.large,
             BlocProvider(
               create: (_) => wordSolvingBloc,
-              child: WordSolvingView(selectedWord: selectedWord),
+              child: WordSolvingView(selectedWord: wordSelection),
             ),
           );
 
@@ -93,7 +98,7 @@ void main() {
             layout: IoLayoutData.small,
             BlocProvider(
               create: (_) => wordSolvingBloc,
-              child: WordSolvingView(selectedWord: selectedWord),
+              child: WordSolvingView(selectedWord: wordSelection),
             ),
           );
 
@@ -112,7 +117,7 @@ void main() {
           Stream.value(
             CrosswordState(
               sectionSize: 20,
-              selectedWord: selectedWord.copyWith(
+              selectedWord: wordSelection.copyWith(
                 solvedStatus: WordStatus.solved,
               ),
             ),
@@ -122,7 +127,7 @@ void main() {
           crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSolvingBloc,
-            child: WordSolvingView(selectedWord: selectedWord),
+            child: WordSolvingView(selectedWord: wordSelection),
           ),
         );
 
@@ -136,15 +141,16 @@ void main() {
     late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
-
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+    late WordSelection wordSelection;
 
     setUp(() {
+      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
+
       wordSelectionBloc = _MockWordSolvingBloc();
       when(() => wordSelectionBloc.state).thenReturn(
         WordSelectionState(
           status: WordSelectionStatus.solving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
       );
 
@@ -155,13 +161,13 @@ void main() {
           BlocProvider.value(value: wordSelectionBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
-        child: WordSolvingLargeView(selectedWord),
+        child: WordSolvingLargeView(wordSelection),
       );
 
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,
-          selectedWord: selectedWord,
+          selectedWord: wordSelection,
         ),
       );
     });
@@ -171,7 +177,7 @@ void main() {
         'the clue text',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
         },
       );
 
@@ -199,12 +205,12 @@ void main() {
 
   group('$WordSolvingSmallView', () {
     late WordSelectionBloc wordSelectionBloc;
+    late WordSelection wordSelection;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
     setUp(() {
+      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
       wordSelectionBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
@@ -215,20 +221,20 @@ void main() {
             BlocProvider.value(value: wordSelectionBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordSolvingSmallView(selectedWord),
+          child: WordSolvingSmallView(wordSelection),
         ),
       );
 
       when(() => wordSelectionBloc.state).thenReturn(
         WordSelectionState(
           status: WordSelectionStatus.solving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
       );
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
           sectionSize: 20,
-          selectedWord: selectedWord,
+          selectedWord: wordSelection,
         ),
       );
     });

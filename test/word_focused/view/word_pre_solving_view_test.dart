@@ -30,24 +30,27 @@ class _MockWordFocusedBloc
 
 void main() {
   late AppLocalizations l10n;
+  late SelectedWord selectedWord;
 
   setUpAll(() async {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
+
+    selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
   });
 
   group('$WordPreSolvingView', () {
     group('renders', () {
-      late WordSelection selectedWord;
+      late WordSelection wordSelection;
       late WordSelectionBloc wordSelectionBloc;
 
       setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
 
         wordSelectionBloc = _MockWordFocusedBloc();
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
       });
@@ -60,7 +63,7 @@ void main() {
             BlocProvider(
               create: (_) => wordSelectionBloc,
               child: WordPreSolvingView(
-                selectedWord: selectedWord,
+                selectedWord: wordSelection,
               ),
             ),
           );
@@ -78,7 +81,7 @@ void main() {
             BlocProvider(
               create: (_) => wordSelectionBloc,
               child: WordPreSolvingView(
-                selectedWord: selectedWord,
+                selectedWord: wordSelection,
               ),
             ),
           );
@@ -91,25 +94,25 @@ void main() {
   });
 
   group('$WordPreSolvingLargeView', () {
-    late WordSelection selectedWord;
+    late WordSelection wordSelection;
     late Widget widget;
     late WordSelectionBloc wordSelectionBloc;
 
     group('with unsolved word', () {
       setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
 
         wordSelectionBloc = _MockWordFocusedBloc();
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
         widget = BlocProvider(
           create: (_) => wordSelectionBloc,
-          child: WordPreSolvingLargeView(selectedWord),
+          child: WordPreSolvingLargeView(wordSelection),
         );
       });
 
@@ -118,7 +121,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
 
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
           expect(find.text(l10n.solveIt), findsOneWidget);
         },
       );
@@ -139,7 +142,7 @@ void main() {
 
     group('with solved word', () {
       setUp(() {
-        selectedWord = WordSelection(
+        wordSelection = WordSelection(
           section: (0, 0),
           word: _FakeWord(),
           solvedStatus: WordStatus.solved,
@@ -149,13 +152,13 @@ void main() {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
         widget = BlocProvider(
           create: (context) => wordSelectionBloc,
-          child: WordPreSolvingLargeView(selectedWord),
+          child: WordPreSolvingLargeView(wordSelection),
         );
       });
 
@@ -164,7 +167,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
 
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
           expect(find.text(l10n.solveIt), findsNothing);
         },
       );
@@ -172,24 +175,24 @@ void main() {
   });
 
   group('$WordPreSolvingSmallView', () {
-    late WordSelection selectedWord;
+    late WordSelection wordSelection;
     late Widget widget;
     late WordSelectionBloc wordSelectionBloc;
 
     group('with unsolved word', () {
       setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
         wordSelectionBloc = _MockWordFocusedBloc();
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
         widget = BlocProvider(
           create: (context) => wordSelectionBloc,
-          child: WordPreSolvingSmallView(selectedWord),
+          child: WordPreSolvingSmallView(wordSelection),
         );
       });
 
@@ -198,7 +201,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
 
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
         },
       );
 
@@ -218,7 +221,7 @@ void main() {
 
     group('with solved word', () {
       setUp(() {
-        selectedWord = WordSelection(
+        wordSelection = WordSelection(
           section: (0, 0),
           word: _FakeWord(),
           solvedStatus: WordStatus.solved,
@@ -228,13 +231,13 @@ void main() {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
         widget = BlocProvider(
           create: (context) => wordSelectionBloc,
-          child: WordPreSolvingSmallView(selectedWord),
+          child: WordPreSolvingSmallView(wordSelection),
         );
       });
 
@@ -243,7 +246,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
 
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
           expect(find.text(l10n.solveIt), findsNothing);
         },
       );

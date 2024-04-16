@@ -2,11 +2,23 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
+class _FakeWord extends Fake implements Word {}
+
 void main() {
   group('$WordSelectionBloc', () {
+    late SelectedWord selectedWord;
+
+    setUp(() {
+      selectedWord = SelectedWord(
+        word: _FakeWord(),
+        section: (0, 0),
+      );
+    });
+
     test('initial state is WordSelectionState.initial', () {
       final bloc = WordSelectionBloc();
       expect(bloc.state, equals(WordSelectionState.initial()));
@@ -16,11 +28,11 @@ void main() {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits preSolving status',
         build: WordSelectionBloc.new,
-        act: (bloc) => bloc.add(WordSelected(wordIdentifier: '1')),
+        act: (bloc) => bloc.add(WordSelected(selectedWord: selectedWord)),
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         ],
       );
@@ -32,7 +44,7 @@ void main() {
         build: WordSelectionBloc.new,
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
         act: (bloc) => bloc.add(WordUnselected()),
         expect: () => <WordSelectionState>[WordSelectionState.initial()],
@@ -54,7 +66,7 @@ void main() {
         build: WordSelectionBloc.new,
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
         act: (bloc) => bloc.add(
           WordSolveRequested(),
@@ -62,7 +74,7 @@ void main() {
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.solving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         ],
       );
@@ -93,7 +105,7 @@ void main() {
         build: WordSelectionBloc.new,
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solved,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'answer')),
         expect: () => <WordSelectionState>[],
@@ -104,18 +116,18 @@ void main() {
         build: WordSelectionBloc.new,
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
         wait: Duration(seconds: 2),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.validating,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
           WordSelectionState(
             status: WordSelectionStatus.solved,
-            wordIdentifier: '1',
+            word: selectedWord,
             wordPoints: 10,
           ),
         ],
@@ -126,18 +138,18 @@ void main() {
         build: WordSelectionBloc.new,
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
-          wordIdentifier: '1',
+          word: selectedWord,
         ),
         wait: Duration(seconds: 2),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'incorrect')),
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.validating,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
           WordSelectionState(
             status: WordSelectionStatus.incorrect,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         ],
       );

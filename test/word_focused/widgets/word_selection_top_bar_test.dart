@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -12,6 +13,11 @@ import '../../helpers/helpers.dart';
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _FakeWord extends Fake implements Word {
+  @override
+  String get id => 'wordId';
+}
 
 void main() {
   group('$WordSelectionTopBar', () {
@@ -22,7 +28,7 @@ void main() {
       wordSelectionBloc = _MockWordSelectionBloc();
       when(() => wordSelectionBloc.state).thenReturn(
         WordSelectionState(
-          wordIdentifier: 'wordId',
+          word: SelectedWord(section: (0, 0), word: _FakeWord()),
           status: WordSelectionStatus.preSolving,
         ),
       );
