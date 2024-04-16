@@ -59,7 +59,7 @@ void main() {
       });
 
       testWidgets(
-        '$WordSelectionLargeView when layout is large',
+        '$WordSelectionLargeContainer when layout is large',
         (tester) async {
           when(() => crosswordBloc.state).thenReturn(
             CrosswordState(
@@ -80,12 +80,12 @@ void main() {
             ),
           );
 
-          expect(find.byType(WordSelectionLargeView), findsOneWidget);
+          expect(find.byType(WordSelectionLargeContainer), findsOneWidget);
         },
       );
 
       testWidgets(
-        '$WordSelectionSmallView when layout is small',
+        '$WordSelectionSmallContainer when layout is small',
         (tester) async {
           when(() => crosswordBloc.state).thenReturn(
             CrosswordState(
@@ -106,50 +106,34 @@ void main() {
             ),
           );
 
-          expect(find.byType(WordSelectionSmallView), findsOneWidget);
+          expect(find.byType(WordSelectionSmallContainer), findsOneWidget);
         },
       );
-    });
-  });
 
-  group('$WordSelectionLargeView', () {
-    late WordSelectionBloc wordSelectionBloc;
-    late CrosswordBloc crosswordBloc;
-    late Widget widget;
-
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
-    setUp(() {
-      wordSelectionBloc = _MockWordSelectionBloc();
-      crosswordBloc = _MockCrosswordBloc();
-
-      widget = MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: wordSelectionBloc),
-          BlocProvider.value(value: crosswordBloc),
-        ],
-        child: WordSelectionLargeView(selectedWord),
-      );
-    });
-
-    testWidgets(
-      'renders $WordPreSolvingView when the status is preSolving',
-      (tester) async {
+      testWidgets('$WordPreSolvingView when status is preSolving',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordState(
+            sectionSize: 20,
+            selectedWord: selectedWord,
+          ),
+        );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSelectionView(),
+          ),
+        );
 
         expect(find.byType(WordPreSolvingView), findsOneWidget);
-      },
-    );
+      });
 
-    testWidgets(
-      'renders $WordSolvingView when the status is solving',
-      (tester) async {
-        tester.setDisplaySize(Size(1800, 800));
-
+      testWidgets('$WordSolvingView when status is solving', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
@@ -163,71 +147,18 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(widget);
-
-        expect(find.byType(WordSolvingView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'renders $WordSuccessView when the status is success',
-      (tester) async {
-        tester.setDisplaySize(Size(1800, 800));
-
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.solved,
-            wordIdentifier: '1',
-            wordPoints: 10,
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSelectionView(),
           ),
         );
 
-        await tester.pumpApp(widget);
+        expect(find.byType(WordSolvingView), findsOneWidget);
+      });
 
-        expect(find.byType(WordSuccessView), findsOneWidget);
-      },
-    );
-  });
-
-  group('$WordSelectionSmallView', () {
-    late WordSelectionBloc wordSelectionBloc;
-    late CrosswordBloc crosswordBloc;
-    late Widget widget;
-
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
-    setUp(() {
-      wordSelectionBloc = _MockWordSelectionBloc();
-      crosswordBloc = _MockCrosswordBloc();
-
-      widget = Theme(
-        data: IoCrosswordTheme().themeData,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: wordSelectionBloc),
-            BlocProvider.value(value: crosswordBloc),
-          ],
-          child: WordSelectionSmallView(selectedWord),
-        ),
-      );
-    });
-
-    testWidgets(
-      'renders $WordPreSolvingView when the status is preSolving',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(status: WordSelectionStatus.preSolving),
-        );
-
-        await tester.pumpApp(widget);
-
-        expect(find.byType(WordPreSolvingView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'renders $WordSolvingView when the status is solving',
-      (tester) async {
+      testWidgets('$WordSuccessView when status is solved', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
@@ -236,32 +167,22 @@ void main() {
         );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
-            status: WordSelectionStatus.solving,
-            wordIdentifier: '1',
-          ),
-        );
-
-        await tester.pumpApp(widget);
-
-        expect(find.byType(WordSolvingView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'renders $WordSuccessView when the status is success',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
             status: WordSelectionStatus.solved,
             wordIdentifier: '1',
             wordPoints: 10,
           ),
         );
 
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSelectionView(),
+          ),
+        );
 
         expect(find.byType(WordSuccessView), findsOneWidget);
-      },
-    );
+      });
+    });
   });
 }
