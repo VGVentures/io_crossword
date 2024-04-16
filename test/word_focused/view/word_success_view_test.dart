@@ -7,7 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordUnselected;
+import 'package:io_crossword/word_selection/word_selection.dart' as selection;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -17,6 +19,10 @@ import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
@@ -42,13 +48,43 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
-  group('WordSuccessDesktopView', () {
+  group('$WordSuccessView', () {
+    group('renders', () {
+      late WordSelection selectedWord;
+
+      setUp(() {
+        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      });
+
+      testWidgets('$WordSelectionSuccessLargeView when layout is large',
+          (tester) async {
+        await tester.pumpApp(
+          layout: IoLayoutData.large,
+          WordSuccessView(selectedWord: selectedWord),
+        );
+
+        expect(find.byType(WordSelectionSuccessLargeView), findsOneWidget);
+      });
+
+      testWidgets('$WordSelectionSuccessSmallView when layout is small',
+          (tester) async {
+        await tester.pumpApp(
+          layout: IoLayoutData.small,
+          WordSuccessView(selectedWord: selectedWord),
+        );
+
+        expect(find.byType(WordSelectionSuccessSmallView), findsOneWidget);
+      });
+    });
+  });
+
+  group('$WordSelectionSuccessLargeView', () {
     late Widget widget;
 
     setUp(() {
       final wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
 
-      widget = WordSuccessDesktopView(wordSelection);
+      widget = WordSelectionSuccessLargeView(wordSelection);
     });
 
     testWidgets('renders word solved text', (tester) async {
@@ -88,13 +124,13 @@ void main() {
     });
   });
 
-  group('WordSuccessMobileView', () {
+  group('$WordSelectionSuccessSmallView', () {
     late Widget widget;
 
     setUp(() {
       final wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
 
-      widget = WordSuccessMobileView(wordSelection);
+      widget = WordSelectionSuccessSmallView(wordSelection);
     });
 
     testWidgets('renders word solved text', (tester) async {
@@ -147,22 +183,22 @@ void main() {
     });
 
     testWidgets(
-      'adds WordUnselected event when tapping the close button',
+      'renders a $CloseWordSelectionIconButton',
       (tester) async {
         await tester.pumpApp(widget);
 
-        await tester.tap(find.byIcon(Icons.cancel));
-
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+        expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
       },
     );
   });
 
   group('KeepPlayingButton', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     setUp(() {
+      wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
       widget = BlocProvider.value(
         value: crosswordBloc,
@@ -171,13 +207,20 @@ void main() {
     });
 
     testWidgets(
-      'adds WordUnselected event when tapping the keep playing button',
+      'adds $WordUnselected event when tapping the keep playing button',
       (tester) async {
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: widget,
+          ),
+        );
 
         await tester.tap(find.byIcon(Icons.gamepad));
 
         verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+        verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
+            .called(1);
       },
     );
   });

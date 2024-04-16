@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'dart:async';
 import 'dart:ui' as ui;
@@ -9,9 +10,14 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class FakeImage extends Fake implements ui.Image {
   @override
@@ -26,17 +32,19 @@ void main() {
   const sectionSize = 400;
 
   group('SectionComponent', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateStreamController;
     final defaultState = CrosswordState(
       sectionSize: sectionSize,
     );
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       stateStreamController = StreamController<CrosswordState>.broadcast();
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: defaultState,
       );
@@ -44,18 +52,19 @@ void main() {
 
     void setUpStreamController({CrosswordState? state}) {
       whenListen(
-        bloc,
+        crosswordBloc,
         stateStreamController.stream,
         initialState: state ?? defaultState,
       );
     }
 
     void setUpInitialState(CrosswordState state) {
-      when(() => bloc.state).thenReturn(state);
+      when(() => crosswordBloc.state).thenReturn(state);
     }
 
     CrosswordGame createGame({bool? showDebugOverlay}) => CrosswordGame(
-          bloc,
+          crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
           showDebugOverlay: showDebugOverlay,
         );
 
@@ -78,11 +87,12 @@ void main() {
       createGame,
       (game) async {
         final word = Word(
+          id: '1',
           position: const Point(0, 0),
           axis: Axis.vertical,
           answer: 'Flutter',
+          length: 7,
           clue: '',
-          solvedTimestamp: null,
         );
         setUpStreamController(
           state: CrosswordState(
@@ -161,18 +171,20 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],
@@ -210,18 +222,21 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
                     solvedTimestamp: 1,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],
@@ -269,18 +284,20 @@ void main() {
                 size: sectionSize,
                 words: [
                   Word(
+                    id: '1',
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
+                    length: 7,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                   Word(
+                    id: '2',
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
+                    length: 8,
                     clue: '',
-                    solvedTimestamp: null,
                   ),
                 ],
                 borderWords: const [],
@@ -308,7 +325,7 @@ void main() {
         await game.world.ensureAdd(SectionComponent(index: (100, 100)));
 
         verify(
-          () => bloc.add(
+          () => crosswordBloc.add(
             const BoardSectionRequested((100, 100)),
           ),
         ).called(1);

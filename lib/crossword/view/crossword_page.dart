@@ -6,7 +6,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordPage extends StatelessWidget {
@@ -24,7 +25,11 @@ class CrosswordPage extends StatelessWidget {
       ..add(const BoardSectionRequested((0, 0)))
       ..add(const BoardLoadingInformationRequested());
 
-    return const CrosswordView();
+    return BlocProvider(
+      create: (_) => WordSelectionBloc(),
+      lazy: false,
+      child: const CrosswordView(),
+    );
   }
 }
 
@@ -40,9 +45,7 @@ class CrosswordView extends StatelessWidget {
     return Scaffold(
       endDrawer: const CrosswordDrawer(),
       appBar: IoAppBar(
-        // TODO(Ayad): add SegmentedButtons design
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417693547
-        title: const SizedBox(),
+        title: const PlayerRankingInformation(),
         crossword: l10n.crossword,
         actions: (context) {
           return const Row(
@@ -81,6 +84,7 @@ class LoadedBoardView extends StatefulWidget {
 
   @visibleForTesting
   static const zoomInKey = Key('game_zoomIn');
+
   @visibleForTesting
   static const zoomOutKey = Key('game_zoomOut');
 
@@ -95,52 +99,21 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
   @override
   void initState() {
     super.initState();
-    game = CrosswordGame(context.read());
+    game = CrosswordGame(
+      crosswordBloc: context.read(),
+      wordSelectionBloc: context.read(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
-    switch (layout) {
-      case IoLayoutData.small:
-        return _SmallBoardView(game: game);
-      case IoLayoutData.large:
-        return _LargeBoardView(game: game);
-    }
-  }
-}
 
-class _LargeBoardView extends StatelessWidget {
-  const _LargeBoardView({
-    required this.game,
-  });
-
-  final CrosswordGame game;
-
-  @override
-  Widget build(BuildContext context) {
     return Stack(
       children: [
         GameWidget(game: game),
-        const WordFocusedDesktopPage(),
-        const BottomBar(),
-        _ZoomControls(game: game),
-      ],
-    );
-  }
-}
-
-class _SmallBoardView extends StatelessWidget {
-  const _SmallBoardView({required this.game});
-
-  final CrosswordGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GameWidget(game: game),
-        const WordFocusedMobilePage(),
+        const WordSelectionView(),
+        if (layout == IoLayoutData.large) const BottomBar(),
         _ZoomControls(game: game),
       ],
     );

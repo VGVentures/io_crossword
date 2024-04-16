@@ -272,5 +272,9 @@
   "continuationConfirmation": "Are you sure you want to continue?",
   "@continuationConfirmation": {
     "description": "Asks for confirmation before continuing."
+  },
+  "leave": "Leave",
+  "@leave": {
+    "description": "Action to leave something behind."
   }
 }

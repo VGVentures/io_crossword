@@ -40,11 +40,9 @@ void main() {
             status: LeaderboardStatus.success,
             players: List.generate(
               10,
-              (index) => const LeaderboardPlayer(
-                userId: '',
+              (index) => const Player(
+                id: '',
                 initials: 'AAA',
-                score: 0,
-                streak: 0,
                 mascot: Mascots.dash,
               ),
             ),
@@ -54,27 +52,27 @@ void main() {
 
       blocTest<LeaderboardBloc, LeaderboardState>(
         'emits [success] when getLeaderboardResults returns players '
-        'with current user in top 10 rank',
+        'with the top 10 rank',
         setUp: () {
           when(() => leaderboardRepository.getLeaderboardResults('1'))
               .thenAnswer(
             (_) async => [
-              LeaderboardPlayer(
-                userId: '1',
+              Player(
+                id: '1',
                 initials: 'AAA',
                 score: 100,
                 streak: 20,
                 mascot: Mascots.dash,
               ),
-              LeaderboardPlayer(
-                userId: '2',
+              Player(
+                id: '2',
                 initials: 'BBB',
                 score: 80,
                 streak: 10,
                 mascot: Mascots.android,
               ),
-              LeaderboardPlayer(
-                userId: '3',
+              Player(
+                id: '3',
                 initials: 'CCC',
                 score: 60,
                 streak: 5,
@@ -91,160 +89,28 @@ void main() {
           LeaderboardState(
             status: LeaderboardStatus.success,
             players: [
-              LeaderboardPlayer(
-                userId: '1',
+              Player(
+                id: '1',
                 initials: 'AAA',
                 score: 100,
                 streak: 20,
                 mascot: Mascots.dash,
               ),
-              LeaderboardPlayer(
-                userId: '2',
+              Player(
+                id: '2',
                 initials: 'BBB',
                 score: 80,
                 streak: 10,
                 mascot: Mascots.android,
               ),
-              LeaderboardPlayer(
-                userId: '3',
+              Player(
+                id: '3',
                 initials: 'CCC',
                 score: 60,
                 streak: 5,
                 mascot: Mascots.sparky,
               ),
             ],
-          ),
-        ],
-      );
-
-      blocTest<LeaderboardBloc, LeaderboardState>(
-        'emits [success] when getLeaderboardResults returns players and '
-        'getPlayerRanked gets users position and information',
-        setUp: () {
-          when(() => leaderboardRepository.getLeaderboardResults('400'))
-              .thenAnswer(
-            (_) async => [
-              LeaderboardPlayer(
-                userId: '1',
-                initials: 'AAA',
-                score: 100,
-                streak: 20,
-                mascot: Mascots.dash,
-              ),
-              LeaderboardPlayer(
-                userId: '2',
-                initials: 'BBB',
-                score: 80,
-                streak: 10,
-                mascot: Mascots.android,
-              ),
-              LeaderboardPlayer(
-                userId: '3',
-                initials: 'CCC',
-                score: 60,
-                streak: 5,
-                mascot: Mascots.sparky,
-              ),
-            ],
-          );
-
-          when(() => leaderboardRepository.getPlayerRanked('400')).thenAnswer(
-            (invocation) => Stream.value(
-              (
-                LeaderboardPlayer(
-                  userId: '3',
-                  initials: 'CCC',
-                  score: 60,
-                  streak: 5,
-                  mascot: Mascots.sparky,
-                ),
-                50,
-              ),
-            ),
-          );
-        },
-        build: () => bloc,
-        act: (bloc) => bloc.add(
-          LoadRequestedLeaderboardEvent(userId: '400'),
-        ),
-        expect: () => [
-          LeaderboardState(
-            status: LeaderboardStatus.success,
-            players: [
-              LeaderboardPlayer(
-                userId: '1',
-                initials: 'AAA',
-                score: 100,
-                streak: 20,
-                mascot: Mascots.dash,
-              ),
-              LeaderboardPlayer(
-                userId: '2',
-                initials: 'BBB',
-                score: 80,
-                streak: 10,
-                mascot: Mascots.android,
-              ),
-              LeaderboardPlayer(
-                userId: '3',
-                initials: 'CCC',
-                score: 60,
-                streak: 5,
-                mascot: Mascots.sparky,
-              ),
-            ],
-            currentPlayer: LeaderboardPlayer(
-              userId: '3',
-              initials: 'CCC',
-              score: 60,
-              streak: 5,
-              mascot: Mascots.sparky,
-            ),
-            currentUserPosition: 50,
-          ),
-        ],
-      );
-
-      blocTest<LeaderboardBloc, LeaderboardState>(
-        'emits [failure] when getPlayerRanked throws error',
-        setUp: () {
-          when(() => leaderboardRepository.getLeaderboardResults('400'))
-              .thenAnswer(
-            (_) async => [
-              LeaderboardPlayer(
-                userId: '1',
-                initials: 'AAA',
-                score: 100,
-                streak: 20,
-                mascot: Mascots.dash,
-              ),
-              LeaderboardPlayer(
-                userId: '2',
-                initials: 'BBB',
-                score: 80,
-                streak: 10,
-                mascot: Mascots.android,
-              ),
-              LeaderboardPlayer(
-                userId: '3',
-                initials: 'CCC',
-                score: 60,
-                streak: 5,
-                mascot: Mascots.sparky,
-              ),
-            ],
-          );
-
-          when(() => leaderboardRepository.getPlayerRanked('400'))
-              .thenAnswer((invocation) => Stream.error(Exception()));
-        },
-        build: () => bloc,
-        act: (bloc) => bloc.add(
-          LoadRequestedLeaderboardEvent(userId: '400'),
-        ),
-        expect: () => [
-          LeaderboardState(
-            status: LeaderboardStatus.failure,
           ),
         ],
       );

@@ -15,37 +15,6 @@ class LeaderboardResource {
 
   final ApiClient _apiClient;
 
-  /// Get /game/leaderboard/results
-  ///
-  /// Returns a list of [LeaderboardPlayer].
-  Future<List<LeaderboardPlayer>> getLeaderboardResults() async {
-    final response = await _apiClient.get('/game/leaderboard/results');
-
-    if (response.statusCode != HttpStatus.ok) {
-      throw ApiClientError(
-        'GET /leaderboard/results returned status ${response.statusCode} '
-        'with the following response: "${response.body}"',
-        StackTrace.current,
-      );
-    }
-
-    try {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final leaderboardPlayers = json['leaderboardPlayers'] as List;
-
-      return leaderboardPlayers
-          .map(
-            (json) => LeaderboardPlayer.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
-    } catch (error, stackTrace) {
-      throw ApiClientError(
-        'GET /leaderboard/results returned invalid response "${response.body}"',
-        stackTrace,
-      );
-    }
-  }
-
   /// Get /game/leaderboard/initials_blacklist
   ///
   /// Returns a [List<String>].
@@ -74,24 +43,6 @@ class LeaderboardResource {
         'GET /leaderboard/initials_blacklist '
         'returned invalid response "${response.body}"',
         stackTrace,
-      );
-    }
-  }
-
-  /// Post /game/leaderboard/initials
-  Future<void> addLeaderboardPlayer({
-    required LeaderboardPlayer leaderboardPlayer,
-  }) async {
-    final response = await _apiClient.post(
-      '/game/leaderboard/initials',
-      body: jsonEncode(leaderboardPlayer.toJson()),
-    );
-
-    if (response.statusCode != HttpStatus.noContent) {
-      throw ApiClientError(
-        'POST /leaderboard/initials returned status ${response.statusCode} '
-        'with the following response: "${response.body}"',
-        StackTrace.current,
       );
     }
   }

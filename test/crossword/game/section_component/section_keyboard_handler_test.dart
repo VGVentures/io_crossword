@@ -5,11 +5,16 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +22,8 @@ void main() {
   final sectionSize = sections.first.size;
 
   group('SectionKeyboardHandler', () {
-    late CrosswordBloc bloc;
+    late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateController;
     final state = CrosswordState(
       sectionSize: sectionSize,
@@ -28,10 +34,11 @@ void main() {
     );
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
+      crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
       stateController = StreamController<CrosswordState>.broadcast();
       whenListen(
-        bloc,
+        crosswordBloc,
         stateController.stream,
         initialState: state,
       );
@@ -40,7 +47,11 @@ void main() {
     CrosswordGame createGame({
       bool? showDebugOverlay,
     }) =>
-        CrosswordGame(bloc, showDebugOverlay: showDebugOverlay);
+        CrosswordGame(
+          wordSelectionBloc: wordSelectionBloc,
+          crosswordBloc: crosswordBloc,
+          showDebugOverlay: showDebugOverlay,
+        );
 
     testWithGame(
       'can enter characters',
@@ -166,7 +177,7 @@ void main() {
             targetSection.children.whereType<SectionKeyboardHandler>();
 
         final buffer = StringBuffer();
-        for (var i = 0; i < targetWord.answer.length; i++) {
+        for (var i = 0; i < targetWord.length; i++) {
           listeners.first.onKeyEvent(
             KeyDownEvent(
               logicalKey: LogicalKeyboardKey.keyF,
@@ -179,7 +190,8 @@ void main() {
           buffer.write('f');
         }
         await game.ready();
-        verify(() => bloc.add(AnswerUpdated(buffer.toString()))).called(1);
+        verify(() => crosswordBloc.add(AnswerUpdated(buffer.toString())))
+            .called(1);
       },
     );
   });

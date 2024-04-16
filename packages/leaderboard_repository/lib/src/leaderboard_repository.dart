@@ -5,7 +5,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-const _collection = 'leaderboard';
+const _collection = 'players';
 
 /// {@template leaderboard_repository}
 /// Leaderboard repository
@@ -22,7 +22,7 @@ class LeaderboardRepository {
   /// The users ranking position stream.
   @visibleForTesting
   final BehaviorSubject<int> userRankingPosition;
-  BehaviorSubject<LeaderboardPlayer>? _leaderboardPlayer;
+  BehaviorSubject<Player>? _leaderboardPlayer;
 
   /// Updates the [userRankingPosition] of the current user.
   @visibleForTesting
@@ -33,7 +33,7 @@ class LeaderboardRepository {
   /// Retrieves the leaderboard players.
   ///
   /// The players are ordered by longest streak and returns the top 10.
-  Future<List<LeaderboardPlayer>> getLeaderboardResults(String userId) async {
+  Future<List<Player>> getLeaderboardResults(String userId) async {
     final results = await _leaderboardCollection
         .orderBy('score', descending: true)
         .limit(10)
@@ -41,14 +41,14 @@ class LeaderboardRepository {
 
     final players = results.docs
         .map(
-          (e) => LeaderboardPlayer.fromJson({
-            'userId': e.id,
+          (e) => Player.fromJson({
+            'id': e.id,
             ...e.data(),
           }),
         )
         .toList();
 
-    final foundCurrentUser = players.where((player) => player.userId == userId);
+    final foundCurrentUser = players.where((player) => player.id == userId);
 
     if (foundCurrentUser.isNotEmpty) {
       // We want to update the users ranking to show the latest position.
@@ -61,7 +61,7 @@ class LeaderboardRepository {
   }
 
   /// Returns a [Stream] with the users position in the ranking.
-  Stream<int> getRankingPosition(LeaderboardPlayer player) {
+  Stream<int> getRankingPosition(Player player) {
     _leaderboardCollection
         .where('score', isGreaterThan: player.score)
         .count()
@@ -72,21 +72,25 @@ class LeaderboardRepository {
     return userRankingPosition.stream;
   }
 
-  /// Returns a [Stream] of [LeaderboardPlayer] with the users
+  /// Returns a [Stream] of [Player] with the users
   /// information in the leaderboard.
-  Stream<LeaderboardPlayer> getLeaderboardPlayer(String userId) {
+  Stream<Player> getPlayer(String userId) {
     if (_leaderboardPlayer != null) return _leaderboardPlayer!.stream;
 
-    _leaderboardPlayer = BehaviorSubject<LeaderboardPlayer>();
+    _leaderboardPlayer = BehaviorSubject<Player>();
 
     _leaderboardCollection
         .doc(userId)
         .snapshots()
         .map(
-          (snapshot) => LeaderboardPlayer.fromJson({
-            'userId': userId,
-            ...snapshot.data()!,
-          }),
+          (snapshot) {
+            if (!snapshot.exists) return Player.empty;
+
+            return Player.fromJson({
+              'id': snapshot.id,
+              ...snapshot.data()!,
+            });
+          },
         )
         .listen(_leaderboardPlayer!.add)
         .onError(_leaderboardPlayer!.addError);
@@ -94,12 +98,12 @@ class LeaderboardRepository {
     return _leaderboardPlayer!.stream;
   }
 
-  /// Returns the [LeaderboardPlayer] with the ranking position in
+  /// Returns the [Player] with the ranking position in
   /// the leaderboard.
-  Stream<(LeaderboardPlayer, int)> getPlayerRanked(String userId) {
-    final stream = BehaviorSubject<(LeaderboardPlayer, int)>();
+  Stream<(Player, int)> getPlayerRanked(String userId) {
+    final stream = BehaviorSubject<(Player, int)>();
 
-    getLeaderboardPlayer(userId).listen((player) {
+    getPlayer(userId).listen((player) {
       // each time the player gets updated the ranking will also get updated
       getRankingPosition(player).listen((rank) {
         stream.add((player, rank));

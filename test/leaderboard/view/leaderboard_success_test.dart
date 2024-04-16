@@ -9,6 +9,8 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/bloc/leaderboard_bloc.dart';
 import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
@@ -17,9 +19,13 @@ import '../../helpers/helpers.dart';
 class _MockLeaderboardBloc extends MockBloc<LeaderboardEvent, LeaderboardState>
     implements LeaderboardBloc {}
 
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
+
 void main() {
   group('LeaderboardSuccess', () {
     late LeaderboardBloc leaderboardBloc;
+    late PlayerBloc playerBloc;
     late Widget widget;
     const user = User(id: 'user-id');
 
@@ -31,9 +37,17 @@ void main() {
 
     setUp(() {
       leaderboardBloc = _MockLeaderboardBloc();
+      playerBloc = _MockPlayerBloc();
 
-      widget = BlocProvider<LeaderboardBloc>(
-        create: (_) => leaderboardBloc,
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider<LeaderboardBloc>(
+            create: (_) => leaderboardBloc,
+          ),
+          BlocProvider<PlayerBloc>(
+            create: (context) => playerBloc,
+          ),
+        ],
         child: LeaderboardSuccess(),
       );
     });
@@ -42,6 +56,7 @@ void main() {
       'displays rank title',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -53,6 +68,7 @@ void main() {
       'displays streak title',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -64,6 +80,7 @@ void main() {
       'displays score title',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -75,6 +92,7 @@ void main() {
       'renders CurrentPlayerNotTopRank',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -86,27 +104,32 @@ void main() {
       'renders CurrentUserPosition with one CurrentUserPosition '
       'with the user in the top 10',
       (tester) async {
+        final currentPlayer = Player(
+          id: user.id,
+          initials: 'BBB',
+          score: 500,
+          streak: 2,
+          mascot: Mascots.android,
+        );
+
         when(() => leaderboardBloc.state).thenReturn(
           LeaderboardState(
             players: List.generate(
               9,
-              (index) => LeaderboardPlayer(
-                userId: '',
+              (index) => Player(
+                id: '',
                 initials: 'AAA',
                 score: 50,
                 streak: 2,
                 mascot: Mascots.dash,
               ),
-            )..insert(
-                2,
-                LeaderboardPlayer(
-                  userId: user.id,
-                  initials: 'BBB',
-                  score: 500,
-                  streak: 2,
-                  mascot: Mascots.android,
-                ),
-              ),
+            )..insert(2, currentPlayer),
+          ),
+        );
+        when(() => playerBloc.state).thenReturn(
+          PlayerState(
+            rank: 3,
+            player: currentPlayer,
           ),
         );
 
@@ -121,34 +144,7 @@ void main() {
     );
 
     testWidgets(
-      'renders UserLeaderboardRanking',
-      (tester) async {
-        when(() => leaderboardBloc.state).thenReturn(
-          LeaderboardState(
-            players: List.generate(
-              10,
-              (index) => LeaderboardPlayer(
-                userId: '',
-                initials: 'AAA',
-                score: 50,
-                streak: 2,
-                mascot: Mascots.dash,
-              ),
-            ),
-          ),
-        );
-
-        await tester.pumpApp(
-          widget,
-          user: user,
-        );
-
-        expect(find.byType(UserLeaderboardRanking), findsNWidgets(10));
-      },
-    );
-
-    testWidgets(
-      'displays rank positions based on number of players',
+      'displays rank position based on number of players',
       (tester) async {
         const numberOfPlayers = 10;
 
@@ -156,8 +152,8 @@ void main() {
           LeaderboardState(
             players: List.generate(
               numberOfPlayers,
-              (index) => LeaderboardPlayer(
-                userId: '',
+              (index) => Player(
+                id: '',
                 initials: 'AAA',
                 score: 50,
                 streak: 20,
@@ -166,6 +162,7 @@ void main() {
             ),
           ),
         );
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(
           widget,
@@ -186,6 +183,7 @@ void main() {
         addTearDown(tester.view.resetPhysicalSize);
 
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -198,6 +196,7 @@ void main() {
       'displays playAgain and icon in button',
       (tester) async {
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(widget);
 
@@ -214,6 +213,7 @@ void main() {
         when(mockNavigator.canPop).thenReturn(true);
 
         when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
+        when(() => playerBloc.state).thenReturn(PlayerState());
 
         await tester.pumpApp(
           widget,
@@ -228,63 +228,74 @@ void main() {
 
     group('CurrentPlayerNotTopRank', () {
       setUp(() {
-        widget = BlocProvider<LeaderboardBloc>(
-          create: (_) => leaderboardBloc,
+        widget = BlocProvider<PlayerBloc>(
+          create: (_) => playerBloc,
           child: CurrentPlayerNotTopRank(),
         );
       });
 
+      for (var i = 1; i <= 10; i++) {
+        testWidgets(
+          'does not render CurrentUserPosition with player in $i position',
+          (tester) async {
+            final player = Player(
+              id: '1234',
+              initials: 'AAA',
+              score: 50,
+              streak: 2,
+              mascot: Mascots.dash,
+            );
+
+            when(() => playerBloc.state).thenReturn(
+              PlayerState(
+                player: player,
+                rank: i,
+              ),
+            );
+
+            await tester.pumpApp(widget);
+
+            expect(find.byType(CurrentUserPosition), findsNothing);
+          },
+        );
+      }
+
       testWidgets(
-        'does not render CurrentUserPosition when there are no currentPlayer',
+        'renders CurrentUserPosition with the players information',
         (tester) async {
-          when(() => leaderboardBloc.state).thenReturn(
-            LeaderboardState(
-              currentUserPosition: 50,
-            ),
+          final player = Player(
+            id: '1234',
+            initials: 'AAA',
+            score: 50,
+            streak: 2,
+            mascot: Mascots.dash,
           );
 
-          await tester.pumpApp(widget);
-
-          expect(find.byType(CurrentUserPosition), findsNothing);
-        },
-      );
-
-      testWidgets(
-        'renders CurrentUserPosition when there is a currentPlayer',
-        (tester) async {
-          when(() => leaderboardBloc.state).thenReturn(
-            LeaderboardState(
-              currentPlayer: LeaderboardPlayer(
-                userId: '',
-                initials: 'AAA',
-                score: 50,
-                streak: 2,
-                mascot: Mascots.dash,
-              ),
-              currentUserPosition: 50,
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              player: player,
+              rank: 11,
             ),
           );
 
           await tester.pumpApp(widget);
 
           expect(find.byType(CurrentUserPosition), findsOneWidget);
+          expect(
+            tester
+                .widget<CurrentUserPosition>(find.byType(CurrentUserPosition))
+                .player,
+            equals(player),
+          );
         },
       );
 
       testWidgets(
-        'renders CurrentUserPosition when there is a currentPlayer '
-        'with the ranking',
+        'renders CurrentUserPosition with ranking',
         (tester) async {
-          when(() => leaderboardBloc.state).thenReturn(
-            LeaderboardState(
-              currentPlayer: LeaderboardPlayer(
-                userId: '',
-                initials: 'AAA',
-                score: 50,
-                streak: 2,
-                mascot: Mascots.dash,
-              ),
-              currentUserPosition: 50,
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              rank: 50,
             ),
           );
 
@@ -303,8 +314,8 @@ void main() {
 
   group('CurrentUserPosition', () {
     late AppLocalizations l10n;
-    const player = LeaderboardPlayer(
-      userId: '123',
+    const player = Player(
+      id: '123',
       initials: 'ABC',
       score: 200,
       streak: 2,
@@ -342,8 +353,8 @@ void main() {
   });
 
   group('UserLeaderboardRanking', () {
-    const player = LeaderboardPlayer(
-      userId: '123',
+    const player = Player(
+      id: '123',
       initials: 'ABC',
       score: 200,
       streak: 25,
@@ -389,8 +400,8 @@ void main() {
     testWidgets(
       'displays score with k(1000)',
       (tester) async {
-        const player = LeaderboardPlayer(
-          userId: '123',
+        const player = Player(
+          id: '123',
           initials: 'ABC',
           score: 23700,
           streak: 2,
@@ -435,8 +446,8 @@ void main() {
       testWidgets(
         'displays color for ${mascot.mascot}',
         (tester) async {
-          final player = LeaderboardPlayer(
-            userId: '123',
+          final player = Player(
+            id: '123',
             initials: 'ABC',
             score: 23700,
             streak: 2,

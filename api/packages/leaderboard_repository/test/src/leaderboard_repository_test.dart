@@ -38,79 +38,6 @@ void main() {
       );
     });
 
-    group('getLeaderboard', () {
-      test('returns list of leaderboard players', () async {
-        const playerOne = LeaderboardPlayer(
-          userId: 'id',
-          initials: 'AAA',
-          score: 20,
-          mascot: Mascots.android,
-          streak: 3,
-        );
-        const playerTwo = LeaderboardPlayer(
-          userId: 'id2',
-          initials: 'BBB',
-          score: 10,
-          mascot: Mascots.dash,
-          streak: 2,
-        );
-
-        when(() => dbClient.orderBy('leaderboard', 'score'))
-            .thenAnswer((_) async {
-          return [
-            DbEntityRecord(
-              id: 'id',
-              data: playerOne.toJson()..remove('userId'),
-            ),
-            DbEntityRecord(
-              id: 'id2',
-              data: playerTwo.toJson()..remove('userId'),
-            ),
-          ];
-        });
-
-        final result = await leaderboardRepository.getLeaderboard();
-
-        expect(result, equals([playerOne, playerTwo]));
-      });
-
-      test('returns empty list if results are empty', () async {
-        when(() => dbClient.orderBy('leaderboard', 'score'))
-            .thenAnswer((_) async {
-          return [];
-        });
-
-        final response = await leaderboardRepository.getLeaderboard();
-        expect(response, isEmpty);
-      });
-    });
-
-    group('addPlayerToLeaderboard', () {
-      test('calls set with correct entity and record', () async {
-        final leaderboardPlayer = LeaderboardPlayer(
-          userId: 'user-id',
-          initials: 'initials',
-          score: 40,
-          mascot: Mascots.dash,
-          streak: 2,
-        );
-
-        final record = DbEntityRecord(
-          id: 'user-id',
-          data: leaderboardPlayer.toJson()..remove('userId'),
-        );
-
-        when(() => dbClient.set('leaderboard', record))
-            .thenAnswer((_) async {});
-
-        await leaderboardRepository.addPlayerToLeaderboard(
-          leaderboardPlayer: leaderboardPlayer,
-        );
-
-        verify(() => dbClient.set('leaderboard', record)).called(1);
-      });
-    });
-
     group('getInitialsBlacklist', () {
       const blacklist = ['AAA', 'BBB', 'CCC'];
 
@@ -143,11 +70,11 @@ void main() {
       test('completes when writing in the db is successful', () async {
         when(
           () => dbClient.set(
-            'scoreCards',
+            'players',
             DbEntityRecord(
               id: 'userId',
               data: {
-                'totalScore': 0,
+                'score': 0,
                 'streak': 0,
                 'mascot': 'dash',
                 'initials': 'ABC',
@@ -166,39 +93,39 @@ void main() {
     group('updateScore', () {
       test('updates the score card in the database', () async {
         when(
-          () => dbClient.getById('scoreCards', 'userId'),
+          () => dbClient.getById('players', 'userId'),
         ).thenAnswer((_) async {
           return DbEntityRecord(
             id: 'userId',
             data: {
-              'totalScore': 20,
+              'score': 20,
               'streak': 3,
               'mascot': 'dash',
               'initials': 'ABC',
             },
           );
         });
-        when(() => dbClient.set('scoreCards', any())).thenAnswer((_) async {});
+        when(() => dbClient.set('players', any())).thenAnswer((_) async {});
 
         await leaderboardRepository.updateScore('userId');
 
-        verify(() => dbClient.set('scoreCards', any())).called(1);
+        verify(() => dbClient.set('players', any())).called(1);
       });
     });
 
     group('increaseScore', () {
       test('updates the score correctly', () async {
         final newScoreCard = leaderboardRepository.increaseScore(
-          ScoreCard(
+          Player(
             id: 'userId',
-            totalScore: 20,
+            score: 20,
             streak: 1,
             mascot: Mascots.dash,
             initials: 'ABC',
           ),
         );
 
-        expect(newScoreCard.totalScore, equals(40));
+        expect(newScoreCard.score, equals(40));
         expect(newScoreCard.streak, equals(2));
       });
     });
@@ -206,29 +133,29 @@ void main() {
     group('resetStreak', () {
       test('saves the streak as 0 in the database', () async {
         when(
-          () => dbClient.getById('scoreCards', 'userId'),
+          () => dbClient.getById('players', 'userId'),
         ).thenAnswer((_) async {
           return DbEntityRecord(
             id: 'userId',
             data: {
-              'totalScore': 20,
+              'score': 20,
               'streak': 3,
               'mascot': 'dash',
               'initials': 'ABC',
             },
           );
         });
-        when(() => dbClient.set('scoreCards', any())).thenAnswer((_) async {});
+        when(() => dbClient.set('players', any())).thenAnswer((_) async {});
 
         await leaderboardRepository.resetStreak('userId');
 
         verify(
           () => dbClient.set(
-            'scoreCards',
+            'players',
             DbEntityRecord(
               id: 'userId',
               data: {
-                'totalScore': 20,
+                'score': 20,
                 'streak': 0,
                 'mascot': 'dash',
                 'initials': 'ABC',

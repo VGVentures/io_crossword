@@ -11,24 +11,25 @@ part 'word.g.dart';
 class Word extends Equatable {
   /// {@macro word}
   const Word({
+    required this.id,
     required this.position,
     required this.axis,
-    required this.answer,
+    required this.length,
     required this.clue,
-    required this.solvedTimestamp,
+    this.answer,
+    this.solvedTimestamp,
     this.mascot,
-  }) : id = '$position-$axis';
+  });
 
   /// {@macro word}
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
-  /// Unique identifier of the word determined by its position and axis.
-  ///
-  /// Intentionally left out of serialization to avoid redundancy.
-  @JsonKey(includeToJson: false)
+  /// Unique identifier of the word.
+  @JsonKey()
   final String id;
 
-  /// Position of the board section in the board. The origin is the top left.
+  /// Position of the word starting letter in the board.
+  /// The origin is the top left.
   @JsonKey()
   @PointConverter()
   final Point<int> position;
@@ -37,13 +38,18 @@ class Word extends Equatable {
   @JsonKey()
   final Axis axis;
 
-  /// The word answer to display in the crossword when solved.
+  /// The length of the word.
   @JsonKey()
-  final String answer;
+  final int length;
 
   /// The clue to show users when guessing for the first time.
   @JsonKey()
   final String clue;
+
+  /// The word answer to display in the crossword when solved.
+  /// If the word is not solved, this value is null.
+  @JsonKey()
+  final String? answer;
 
   /// The timestamp when the word was solved. In milliseconds since epoch.
   /// If the word is not solved, this value is null.
@@ -64,16 +70,19 @@ class Word extends Equatable {
     String? id,
     Point<int>? position,
     Axis? axis,
-    String? answer,
+    int? length,
     String? clue,
+    String? answer,
     int? solvedTimestamp,
     Mascots? mascot,
   }) {
     return Word(
+      id: id ?? this.id,
       position: position ?? this.position,
       axis: axis ?? this.axis,
-      answer: answer ?? this.answer,
+      length: length ?? this.length,
       clue: clue ?? this.clue,
+      answer: answer ?? this.answer,
       solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
       mascot: mascot ?? this.mascot,
     );
@@ -84,8 +93,9 @@ class Word extends Equatable {
         id,
         position,
         axis,
-        answer,
+        length,
         clue,
+        answer,
         solvedTimestamp,
         mascot,
       ];

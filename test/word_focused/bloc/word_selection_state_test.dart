@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 void main() {
   group('$WordSelectionState', () {
     test('.initial initializes correctly', () {
       final state = WordSelectionState.initial();
 
-      expect(state.status, WordSelectionStatus.preSolving);
+      expect(state.status, WordSelectionStatus.empty);
       expect(state.wordIdentifier, isNull);
       expect(state.wordPoints, isNull);
     });

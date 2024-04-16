@@ -2,8 +2,8 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/word_focused/bloc/word_selection_bloc.dart';
-import 'package:io_crossword/word_focused/word_focused.dart';
+import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 void main() {
   group('$WordSelectionBloc', () {
@@ -12,12 +12,52 @@ void main() {
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
 
+    group('$WordSelected', () {
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits preSolving status',
+        build: WordSelectionBloc.new,
+        act: (bloc) => bloc.add(WordSelected(wordIdentifier: '1')),
+        expect: () => <WordSelectionState>[
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        ],
+      );
+    });
+
+    group('$WordUnselected', () {
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits initial state',
+        build: WordSelectionBloc.new,
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          wordIdentifier: '1',
+        ),
+        act: (bloc) => bloc.add(WordUnselected()),
+        expect: () => <WordSelectionState>[WordSelectionState.initial()],
+      );
+    });
+
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
-        'emits solving status with word identifier',
+        'does nothing if there is no word identifier',
         build: WordSelectionBloc.new,
         act: (bloc) => bloc.add(
-          WordSolveRequested(wordIdentifier: '1'),
+          WordSolveRequested(),
+        ),
+        expect: () => <WordSelectionState>[],
+      );
+
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits solving status when there is a word identifier',
+        build: WordSelectionBloc.new,
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          wordIdentifier: '1',
+        ),
+        act: (bloc) => bloc.add(
+          WordSolveRequested(),
         ),
         expect: () => <WordSelectionState>[
           WordSelectionState(
