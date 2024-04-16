@@ -170,6 +170,8 @@ void main() {
     testWidgets(
       'renders $WordSuccessView when the status is success',
       (tester) async {
+        tester.setDisplaySize(const Size(5000, 5000));
+
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
