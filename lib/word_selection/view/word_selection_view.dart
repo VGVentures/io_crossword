@@ -53,7 +53,7 @@ class WordSelectionLargeView extends StatelessWidget {
               WordSelectionStatus.incorrect ||
               WordSelectionStatus.failure ||
               WordSelectionStatus.solving =>
-                WordSolvingLargeView(selectedWord),
+                WordSolvingView(selectedWord: selectedWord),
               WordSelectionStatus.solved =>
                 WordSuccessView(selectedWord: selectedWord),
             };
@@ -96,7 +96,7 @@ class WordSelectionSmallView extends StatelessWidget {
                 WordSelectionStatus.incorrect ||
                 WordSelectionStatus.failure ||
                 WordSelectionStatus.solving =>
-                  WordSolvingSmallView(selectedWord),
+                  WordSolvingView(selectedWord: selectedWord),
                 WordSelectionStatus.solved =>
                   WordSuccessView(selectedWord: selectedWord),
               };

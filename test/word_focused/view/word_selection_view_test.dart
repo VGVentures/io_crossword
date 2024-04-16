@@ -146,9 +146,10 @@ void main() {
     );
 
     testWidgets(
-      'renders WordSolvingDesktopView when the status is '
-      'WordSelectionStatus.solving',
+      'renders $WordSolvingView when the status is solving',
       (tester) async {
+        tester.setDisplaySize(Size(1800, 800));
+
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
@@ -164,7 +165,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingLargeView), findsOneWidget);
+        expect(find.byType(WordSolvingView), findsOneWidget);
       },
     );
 
@@ -225,8 +226,7 @@ void main() {
     );
 
     testWidgets(
-      'renders WordSolvingMobileView when the state is '
-      'WordSelectionStatus.solving',
+      'renders $WordSolvingView when the status is solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -243,7 +243,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingSmallView), findsOneWidget);
+        expect(find.byType(WordSolvingView), findsOneWidget);
       },
     );
 
