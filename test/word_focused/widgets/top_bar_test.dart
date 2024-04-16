@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -14,7 +13,7 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
 void main() {
-  group('TopBar', () {
+  group('$TopBar', () {
     late Widget widget;
     late CrosswordBloc crosswordBloc;
 
@@ -26,21 +25,16 @@ void main() {
       );
     });
 
-    testWidgets('renders the word id', (tester) async {
-      await tester.pumpApp(widget);
-
-      expect(find.text('wordId'), findsOneWidget);
-    });
-
-    testWidgets(
-      'tapping the cancel button dispatches the WordUnselected event',
-      (tester) async {
+    group('renders', () {
+      testWidgets('the word identifier', (tester) async {
         await tester.pumpApp(widget);
+        expect(find.text('wordId'), findsOneWidget);
+      });
 
-        await tester.tap(find.byIcon(Icons.cancel));
-
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-      },
-    );
+      testWidgets('a $CloseWordSelectionIconButton', (tester) async {
+        await tester.pumpApp(widget);
+        expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
+      });
+    });
   });
 }

@@ -30,10 +30,10 @@ class _FakeWord extends Fake implements Word {
   String get clue => 'clue';
 
   @override
-  String? get answer => 'answer';
+  String? get answer => 'ant';
 
   @override
-  int get length => 6;
+  int get length => 3;
 }
 
 void main() {
@@ -136,7 +136,7 @@ void main() {
     });
 
     testWidgets(
-      'renders WordClueDesktopView when the status is WordSelectionStatus.clue',
+      'renders $WordPreSolvingView when the status is preSolving',
       (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(status: WordSelectionStatus.preSolving),
@@ -144,14 +144,15 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordPreSolvingLargeView), findsOneWidget);
+        expect(find.byType(WordPreSolvingView), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders WordSolvingDesktopView when the status is '
-      'WordSelectionStatus.solving',
+      'renders $WordSolvingView when the status is solving',
       (tester) async {
+        tester.setDisplaySize(Size(1800, 800));
+
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
@@ -167,15 +168,15 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingLargeView), findsOneWidget);
+        expect(find.byType(WordSolvingView), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders WordSuccessDesktopView when the status is '
-      'WordSelectionStatus.success',
+      'renders $WordSuccessView when the status is success',
       (tester) async {
         tester.setDisplaySize(Size(1800, 800));
+
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
@@ -186,7 +187,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSelectionSuccessLargeView), findsOneWidget);
+        expect(find.byType(WordSuccessView), findsOneWidget);
       },
     );
   });
@@ -215,7 +216,7 @@ void main() {
     });
 
     testWidgets(
-      'renders WordClueMobileView when the status is WordSelectionStatus.clue',
+      'renders $WordPreSolvingView when the status is preSolving',
       (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(status: WordSelectionStatus.preSolving),
@@ -223,13 +224,12 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordPreSolvingSmallView), findsOneWidget);
+        expect(find.byType(WordPreSolvingView), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders WordSolvingMobileView when the state is '
-      'WordSelectionStatus.solving',
+      'renders $WordSolvingView when the status is solving',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -246,13 +246,12 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSolvingSmallView), findsOneWidget);
+        expect(find.byType(WordSolvingView), findsOneWidget);
       },
     );
 
     testWidgets(
-      'renders WordSuccessMobileView when the state is '
-      'WordSelectionStatus.success',
+      'renders $WordSuccessView when the status is success',
       (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
@@ -264,7 +263,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WordSelectionSuccessSmallView), findsOneWidget);
+        expect(find.byType(WordSuccessView), findsOneWidget);
       },
     );
   });
