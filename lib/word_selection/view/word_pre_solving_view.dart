@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -10,20 +9,15 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// already been solved.
 /// {@endtemplate}
 class WordPreSolvingView extends StatelessWidget {
-  const WordPreSolvingView({
-    required this.selectedWord,
-    super.key,
-  });
-
-  final WordSelection selectedWord;
+  const WordPreSolvingView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
     return switch (layout) {
-      IoLayoutData.large => WordPreSolvingLargeView(selectedWord),
-      IoLayoutData.small => WordPreSolvingSmallView(selectedWord),
+      IoLayoutData.large => const WordPreSolvingLargeView(),
+      IoLayoutData.small => const WordPreSolvingSmallView(),
     };
   }
 }
@@ -31,13 +25,13 @@ class WordPreSolvingView extends StatelessWidget {
 @visibleForTesting
 class WordPreSolvingLargeView extends StatelessWidget {
   @visibleForTesting
-  const WordPreSolvingLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordPreSolvingLargeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final solved = selectedWord.solvedStatus == WordStatus.solved;
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word!);
+    final isSolved = selectedWord.word.solvedTimestamp != null;
 
     return Column(
       children: [
@@ -51,7 +45,7 @@ class WordPreSolvingLargeView extends StatelessWidget {
         ),
         const Spacer(),
         const SizedBox(height: 8),
-        if (!solved) _SolveItButton(wordIdentifier: selectedWord.word.id),
+        if (!isSolved) _SolveItButton(wordIdentifier: selectedWord.word.id),
       ],
     );
   }
@@ -60,13 +54,13 @@ class WordPreSolvingLargeView extends StatelessWidget {
 @visibleForTesting
 class WordPreSolvingSmallView extends StatelessWidget {
   @visibleForTesting
-  const WordPreSolvingSmallView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordPreSolvingSmallView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final solved = selectedWord.solvedStatus == WordStatus.solved;
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word!);
+    final isSolved = selectedWord.word.solvedTimestamp != null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -79,7 +73,7 @@ class WordPreSolvingSmallView extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        if (!solved) _SolveItButton(wordIdentifier: selectedWord.word.id),
+        if (!isSolved) _SolveItButton(wordIdentifier: selectedWord.word.id),
         const SizedBox(height: 16),
       ],
     );

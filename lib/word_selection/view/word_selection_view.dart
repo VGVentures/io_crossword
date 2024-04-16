@@ -93,8 +93,7 @@ class _WordSelectionBody extends StatelessWidget {
       builder: (context, status) {
         // coverage:ignore-start
         final view = switch (status) {
-          WordSelectionStatus.preSolving =>
-            WordPreSolvingView(selectedWord: selectedWord),
+          WordSelectionStatus.preSolving => const WordPreSolvingView(),
           WordSelectionStatus.validating ||
           WordSelectionStatus.incorrect ||
           WordSelectionStatus.failure ||
