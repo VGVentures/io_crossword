@@ -115,35 +115,5 @@ void main() {
         );
       });
     });
-
-    group('AnswerUpdated', () {
-      test('can be instantiated', () {
-        expect(AnswerUpdated('answer'), isA<AnswerUpdated>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          AnswerUpdated('answer'),
-          equals(AnswerUpdated('answer')),
-        );
-        expect(
-          AnswerUpdated('answer'),
-          isNot(equals(AnswerUpdated('word'))),
-        );
-      });
-    });
-
-    group('AnswerSubmitted', () {
-      test('can be instantiated', () {
-        expect(AnswerSubmitted(), isA<AnswerSubmitted>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          AnswerSubmitted(),
-          equals(AnswerSubmitted()),
-        );
-      });
-    });
   });
 }

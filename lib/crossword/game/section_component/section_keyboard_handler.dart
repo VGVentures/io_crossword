@@ -54,7 +54,6 @@ class SectionKeyboardHandler extends PositionComponent
       );
     }
     if (word.length == batchPosition.length) {
-      parent.gameRef.crosswordBloc.add(AnswerUpdated(word));
       parent.gameRef.wordSelectionBloc
           .add(selection.WordSolveAttempted(answer: word));
     }
