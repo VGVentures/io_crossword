@@ -40,11 +40,9 @@ void main() {
             status: LeaderboardStatus.success,
             players: List.generate(
               10,
-              (index) => const LeaderboardPlayer(
-                userId: '',
+              (index) => const Player(
+                id: '',
                 initials: 'AAA',
-                score: 0,
-                streak: 0,
                 mascot: Mascots.dash,
               ),
             ),
@@ -59,22 +57,22 @@ void main() {
           when(() => leaderboardRepository.getLeaderboardResults('1'))
               .thenAnswer(
             (_) async => [
-              LeaderboardPlayer(
-                userId: '1',
+              Player(
+                id: '1',
                 initials: 'AAA',
                 score: 100,
                 streak: 20,
                 mascot: Mascots.dash,
               ),
-              LeaderboardPlayer(
-                userId: '2',
+              Player(
+                id: '2',
                 initials: 'BBB',
                 score: 80,
                 streak: 10,
                 mascot: Mascots.android,
               ),
-              LeaderboardPlayer(
-                userId: '3',
+              Player(
+                id: '3',
                 initials: 'CCC',
                 score: 60,
                 streak: 5,
@@ -91,22 +89,22 @@ void main() {
           LeaderboardState(
             status: LeaderboardStatus.success,
             players: [
-              LeaderboardPlayer(
-                userId: '1',
+              Player(
+                id: '1',
                 initials: 'AAA',
                 score: 100,
                 streak: 20,
                 mascot: Mascots.dash,
               ),
-              LeaderboardPlayer(
-                userId: '2',
+              Player(
+                id: '2',
                 initials: 'BBB',
                 score: 80,
                 streak: 10,
                 mascot: Mascots.android,
               ),
-              LeaderboardPlayer(
-                userId: '3',
+              Player(
+                id: '3',
                 initials: 'CCC',
                 score: 60,
                 streak: 5,

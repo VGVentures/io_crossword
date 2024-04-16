@@ -60,8 +60,8 @@ void main() {
       (tester) async {
         when(() => playerBloc.state).thenReturn(
           PlayerState(
-            player: LeaderboardPlayer(
-              userId: 'userId',
+            player: Player(
+              id: 'userId',
               initials: 'ABC',
               score: 200,
               streak: 10,
@@ -82,8 +82,8 @@ void main() {
       (tester) async {
         when(() => playerBloc.state).thenReturn(
           PlayerState(
-            player: LeaderboardPlayer(
-              userId: 'userId',
+            player: Player(
+              id: 'userId',
               initials: 'ABC',
               score: 200,
               streak: 10,
@@ -104,8 +104,8 @@ void main() {
       (tester) async {
         when(() => playerBloc.state).thenReturn(
           PlayerState(
-            player: LeaderboardPlayer(
-              userId: 'userId',
+            player: Player(
+              id: 'userId',
               initials: 'ABC',
               score: 200,
               streak: 10,

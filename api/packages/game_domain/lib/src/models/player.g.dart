@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'score_card.dart';
+part of 'player.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ScoreCard _$ScoreCardFromJson(Map<String, dynamic> json) => ScoreCard(
+Player _$PlayerFromJson(Map<String, dynamic> json) => Player(
       id: json['id'] as String,
-      totalScore: json['totalScore'] as int? ?? 0,
+      initials: json['initials'] as String,
+      mascot: $enumDecode(_$MascotsEnumMap, json['mascot']),
+      score: json['score'] as int? ?? 0,
       streak: json['streak'] as int? ?? 0,
-      mascot: $enumDecodeNullable(_$MascotsEnumMap, json['mascot']),
-      initials: json['initials'] as String? ?? '',
     );
 
-Map<String, dynamic> _$ScoreCardToJson(ScoreCard instance) => <String, dynamic>{
-      'totalScore': instance.totalScore,
+Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
+      'score': instance.score,
       'streak': instance.streak,
-      'mascot': _$MascotsEnumMap[instance.mascot]!,
       'initials': instance.initials,
+      'mascot': _$MascotsEnumMap[instance.mascot]!,
     };
 
 const _$MascotsEnumMap = {

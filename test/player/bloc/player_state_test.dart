@@ -20,8 +20,8 @@ void main() {
 
       expect(
         PlayerState(
-          player: LeaderboardPlayer(
-            userId: '1',
+          player: Player(
+            id: '1',
             initials: 'AAA',
             score: 100,
             streak: 2,
@@ -55,8 +55,8 @@ void main() {
       test('updates players', () {
         expect(
           PlayerState().copyWith(
-            player: LeaderboardPlayer(
-              userId: '1',
+            player: Player(
+              id: '1',
               initials: 'AAA',
               score: 100,
               streak: 2,
@@ -65,8 +65,8 @@ void main() {
           ),
           equals(
             PlayerState(
-              player: LeaderboardPlayer(
-                userId: '1',
+              player: Player(
+                id: '1',
                 initials: 'AAA',
                 score: 100,
                 streak: 2,
