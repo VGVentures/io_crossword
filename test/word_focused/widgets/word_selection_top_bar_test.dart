@@ -46,6 +46,20 @@ void main() {
         expect(find.text('wordId'), findsOneWidget);
       });
 
+      testWidgets('empty when no word is selected', (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            // ignore: avoid_redundant_argument_values
+            word: null,
+            status: WordSelectionStatus.empty,
+          ),
+        );
+
+        await tester.pumpApp(widget);
+
+        expect(find.text(''), findsOneWidget);
+      });
+
       testWidgets('a $CloseWordSelectionIconButton', (tester) async {
         await tester.pumpApp(widget);
         expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
