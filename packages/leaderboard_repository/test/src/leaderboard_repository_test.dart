@@ -7,7 +7,7 @@ import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LeaderboardRepository', () {
+  group('$LeaderboardRepository', () {
     late FirebaseFirestore firestore;
     late LeaderboardRepository leaderboardRepository;
     late List<Player> players;

@@ -4,7 +4,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LeaderboardPlayer', () {
+  group('$Player', () {
     test('empty', () {
       expect(
         Player.empty,
@@ -39,11 +39,10 @@ void main() {
       streak: 2,
     );
 
-    test('toJson returns the instance as json', () {
+    test('toJson returns the instance as json without the id', () {
       expect(
         leaderboardPlayer.toJson(),
         equals({
-          'userId': 'id',
           'initials': 'TST',
           'score': 20,
           'mascot': Mascots.android.name,
@@ -55,7 +54,7 @@ void main() {
     test('fromJson returns the correct instance', () {
       expect(
         Player.fromJson({
-          'userId': 'id',
+          'id': 'id',
           'initials': 'TST',
           'score': 20,
           'mascot': Mascots.android.name,
