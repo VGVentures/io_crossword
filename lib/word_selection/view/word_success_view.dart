@@ -28,6 +28,7 @@ class WordSuccessView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class WordSelectionSuccessLargeView extends StatelessWidget {
   @visibleForTesting
   const WordSelectionSuccessLargeView({super.key});

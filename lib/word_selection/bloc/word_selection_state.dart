@@ -38,6 +38,16 @@ class SelectedWord extends Equatable {
   final (int, int) section;
   final Word word;
 
+  SelectedWord copyWith({
+    (int, int)? section,
+    Word? word,
+  }) {
+    return SelectedWord(
+      section: section ?? this.section,
+      word: word ?? this.word,
+    );
+  }
+
   @override
   List<Object> get props => [section, word];
 }
