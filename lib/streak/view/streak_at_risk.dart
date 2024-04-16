@@ -76,7 +76,9 @@ class _BottomActions extends StatelessWidget {
 
   void _onLeave(BuildContext context) {}
 
-  void _onSolveIt(BuildContext context) {}
+  void _onSolveIt(BuildContext context) {
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {

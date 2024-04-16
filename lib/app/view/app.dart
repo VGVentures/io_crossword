@@ -88,6 +88,8 @@ class AppView extends StatelessWidget {
             supportedLocales: AppLocalizations.supportedLocales,
             home: ColoredBox(
               color: Theme.of(context).colorScheme.background,
+              // child: const GameIntroPage(),
+
               child: Center(child: StreakAtRiskView()),
             ),
           );
