@@ -30,7 +30,7 @@ class WordPreSolvingLargeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord =
-        context.select((WordSelectionBloc bloc) => bloc.state.word!);
+        context.select((WordSelectionBloc bloc) => bloc.state.word)!;
     final isSolved = selectedWord.word.solvedTimestamp != null;
 
     return Column(
@@ -59,7 +59,7 @@ class WordPreSolvingSmallView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord =
-        context.select((WordSelectionBloc bloc) => bloc.state.word!);
+        context.select((WordSelectionBloc bloc) => bloc.state.word)!;
     final isSolved = selectedWord.word.solvedTimestamp != null;
 
     return Column(
