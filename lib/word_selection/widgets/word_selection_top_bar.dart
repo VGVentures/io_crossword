@@ -17,7 +17,7 @@ class WordSelectionTopBar extends StatelessWidget {
           icon: const Icon(Icons.ios_share),
         ),
         BlocSelector<WordSelectionBloc, WordSelectionState, String>(
-          selector: (state) => state.word!.word.id,
+          selector: (state) => state.word?.word.id ?? '',
           builder: (context, wordIdentifier) {
             return Text(
               wordIdentifier,
