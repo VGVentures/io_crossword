@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -10,16 +9,14 @@ class WordSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord =
-        context.select((CrosswordBloc bloc) => bloc.state.selectedWord);
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
 
-    final body = _WordSelectionBody(selectedWord: selectedWord);
-
     final layout = IoLayout.of(context);
-
+    const body = _WordSelectionBody();
     return switch (layout) {
-      IoLayoutData.large => WordSelectionLargeContainer(child: body),
-      IoLayoutData.small => WordSelectionSmallContainer(child: body),
+      IoLayoutData.large => const WordSelectionLargeContainer(child: body),
+      IoLayoutData.small => const WordSelectionSmallContainer(child: body),
     };
   }
 }
@@ -81,9 +78,7 @@ class WordSelectionSmallContainer extends StatelessWidget {
 }
 
 class _WordSelectionBody extends StatelessWidget {
-  const _WordSelectionBody({required this.selectedWord});
-
-  final WordSelection selectedWord;
+  const _WordSelectionBody();
 
   @override
   Widget build(BuildContext context) {
