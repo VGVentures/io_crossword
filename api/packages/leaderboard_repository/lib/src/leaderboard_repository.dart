@@ -4,7 +4,7 @@ import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:meta/meta.dart';
 
-const _playerEntity = 'players';
+const _playersCollection = 'players';
 
 /// {@template leaderboard_repository}
 /// Access to Leaderboard datasource.
@@ -49,7 +49,7 @@ class LeaderboardRepository {
     );
 
     return _dbClient.set(
-      _playerEntity,
+      _playersCollection,
       DbEntityRecord(
         id: player.id,
         data: player.toJson(),
@@ -59,7 +59,7 @@ class LeaderboardRepository {
 
   /// Updates the score for the provided user when it solves one word.
   Future<void> updateScore(String userId) async {
-    final playerData = await _dbClient.getById(_playerEntity, userId);
+    final playerData = await _dbClient.getById(_playersCollection, userId);
 
     if (playerData == null) {
       return;
@@ -73,7 +73,7 @@ class LeaderboardRepository {
     final updatedPlayerData = increaseScore(player);
 
     return _dbClient.set(
-      _playerEntity,
+      _playersCollection,
       DbEntityRecord(
         id: updatedPlayerData.id,
         data: updatedPlayerData.toJson(),
@@ -104,7 +104,7 @@ class LeaderboardRepository {
 
   /// Resets the streak for the provided user.
   Future<void> resetStreak(String userId) async {
-    final playerData = await _dbClient.getById(_playerEntity, userId);
+    final playerData = await _dbClient.getById(_playersCollection, userId);
 
     if (playerData == null) {
       return;
@@ -118,7 +118,7 @@ class LeaderboardRepository {
     final updatedPlayerData = player.copyWith(streak: 0);
 
     return _dbClient.set(
-      _playerEntity,
+      _playersCollection,
       DbEntityRecord(
         id: updatedPlayerData.id,
         data: updatedPlayerData.toJson(),

@@ -87,7 +87,7 @@ class LeaderboardRepository {
             if (!snapshot.exists) return Player.empty;
 
             return Player.fromJson({
-              'id': userId,
+              'id': snapshot.id,
               ...snapshot.data()!,
             });
           },

@@ -136,5 +136,30 @@ void main() {
         ),
       );
     });
+
+    test('copyWith', () {
+      expect(
+        Player(
+          id: 'id',
+          initials: 'AAA',
+          mascot: Mascots.android,
+          streak: 10,
+          score: 500,
+        ).copyWith(),
+        equals(
+          Player(
+            id: '',
+            initials: '',
+            mascot: Mascots.dash,
+          ).copyWith(
+            id: 'id',
+            initials: 'AAA',
+            mascot: Mascots.android,
+            streak: 10,
+            score: 500,
+          ),
+        ),
+      );
+    });
   });
 }

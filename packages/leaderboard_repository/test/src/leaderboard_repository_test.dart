@@ -71,7 +71,7 @@ void main() {
       ];
 
       for (final player in players) {
-        await firestore.doc('leaderboard/${player.id}').set(
+        await firestore.doc('players/${player.id}').set(
               player.toJson(),
             );
       }
@@ -147,7 +147,7 @@ void main() {
             mascot: Mascots.dash,
           ),
         )) {
-          await firestore.doc('leaderboard/${player.id}').set(
+          await firestore.doc('players/${player.id}').set(
                 player.toJson(),
               );
         }
@@ -260,7 +260,7 @@ void main() {
           emitsInOrder([7, 1]),
         );
 
-        await firestore.doc('leaderboard/${player.id}').set(
+        await firestore.doc('players/${player.id}').set(
               player.toJson()..update('score', (value) => 9000000),
             );
 
