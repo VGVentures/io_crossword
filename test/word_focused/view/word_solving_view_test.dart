@@ -45,13 +45,24 @@ void main() {
   });
 
   group('$WordSolvingView', () {
+    late WordSelection selectedWord;
+    late WordSelectionBloc wordSelectionBloc;
+    late CrosswordBloc crosswordBloc;
+
+    setUp(() {
+      selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+      crosswordBloc = _MockCrosswordBloc();
+      when(() => crosswordBloc.state).thenReturn(
+        CrosswordState(
+          sectionSize: 20,
+          selectedWord: selectedWord,
+        ),
+      );
+
+      wordSelectionBloc = _MockWordSolvingBloc();
+    });
+
     group('renders', () {
-      late WordSelection selectedWord;
-
-      setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-      });
-
       testWidgets(
         'a $WordSolvingLargeView when layout is large',
         (tester) async {
@@ -78,22 +89,50 @@ void main() {
         },
       );
     });
+
+    testWidgets(
+      'adds $WordFocusedSuccessRequested event when state changes with solved '
+      'selected word',
+      (tester) async {
+        whenListen(
+          crosswordBloc,
+          Stream.value(
+            CrosswordState(
+              sectionSize: 20,
+              selectedWord: selectedWord.copyWith(
+                solvedStatus: WordStatus.solved,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpApp(
+          crosswordBloc: crosswordBloc,
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSolvingView(selectedWord: selectedWord),
+          ),
+        );
+
+        verify(() => wordSelectionBloc.add(const WordFocusedSuccessRequested()))
+            .called(1);
+      },
+    );
   });
 
   group('$WordSolvingLargeView', () {
-    late WordSelectionBloc wordSolvingBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordSolvingBloc = _MockWordSolvingBloc();
+      wordSelectionBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: wordSolvingBloc),
+          BlocProvider.value(value: wordSelectionBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
         child: WordSolvingLargeView(selectedWord),
@@ -134,28 +173,6 @@ void main() {
         await tester.tap(submitButton);
 
         verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
-
-    testWidgets(
-      'adds WordFocusedSuccessRequested event when state changes with solved '
-      'selected word',
-      (tester) async {
-        whenListen(
-          crosswordBloc,
-          Stream.value(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: selectedWord.copyWith(
-                solvedStatus: WordStatus.solved,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpApp(widget);
-
-        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
-            .called(1);
       },
     );
   });
@@ -219,28 +236,6 @@ void main() {
         final submitButton = find.text(l10n.submit);
         await tester.tap(submitButton);
         verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
-
-    testWidgets(
-      'adds WordFocusedSuccessRequested event when state changes with solved '
-      'selected word',
-      (tester) async {
-        whenListen(
-          crosswordBloc,
-          Stream.value(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: selectedWord.copyWith(
-                solvedStatus: WordStatus.solved,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpApp(widget);
-
-        verify(() => wordFocusedBloc.add(const WordFocusedSuccessRequested()))
-            .called(1);
       },
     );
   });
