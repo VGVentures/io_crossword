@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class TopBar extends StatelessWidget {
-  const TopBar({required this.wordId, super.key});
+class WordSelectionTopBar extends StatelessWidget {
+  const WordSelectionTopBar({required this.wordId, super.key});
 
   final String wordId;
 

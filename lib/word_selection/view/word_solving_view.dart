@@ -49,7 +49,7 @@ class WordSolvingLargeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TopBar(wordId: selectedWord.word.id),
+        WordSelectionTopBar(wordId: selectedWord.word.id),
         const SizedBox(height: 8),
         const Spacer(),
         Text(
@@ -96,7 +96,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TopBar(wordId: widget.selectedWord.word.id),
+        WordSelectionTopBar(wordId: widget.selectedWord.word.id),
         const SizedBox(height: 32),
         IoWordInput.alphabetic(
           length: widget.selectedWord.word.length,

@@ -156,10 +156,10 @@ void main() {
       );
 
       testWidgets(
-        'a $TopBar',
+        'a $WordSelectionTopBar',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.byType(TopBar), findsOneWidget);
+          expect(find.byType(WordSelectionTopBar), findsOneWidget);
         },
       );
     });

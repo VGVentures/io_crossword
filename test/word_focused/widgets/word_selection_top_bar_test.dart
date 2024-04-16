@@ -13,7 +13,7 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
 void main() {
-  group('$TopBar', () {
+  group('$WordSelectionTopBar', () {
     late Widget widget;
     late CrosswordBloc crosswordBloc;
 
@@ -21,7 +21,7 @@ void main() {
       crosswordBloc = _MockCrosswordBloc();
       widget = BlocProvider(
         create: (context) => crosswordBloc,
-        child: TopBar(wordId: 'wordId'),
+        child: WordSelectionTopBar(wordId: 'wordId'),
       );
     });
 
