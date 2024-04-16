@@ -36,7 +36,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final crosswordResource = apiClient.crosswordResource;
 
-
     return MultiProvider(
       providers: [
         Provider.value(value: apiClient.leaderboardResource),
