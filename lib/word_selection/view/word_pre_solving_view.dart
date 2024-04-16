@@ -41,7 +41,7 @@ class WordPreSolvingLargeView extends StatelessWidget {
 
     return Column(
       children: [
-        WordSelectionTopBar(wordId: selectedWord.word.id),
+        const WordSelectionTopBar(),
         const SizedBox(height: 8),
         const Spacer(),
         Text(
@@ -71,7 +71,7 @@ class WordPreSolvingSmallView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        WordSelectionTopBar(wordId: selectedWord.word.id),
+        const WordSelectionTopBar(),
         const SizedBox(height: 24),
         Text(
           selectedWord.word.clue,

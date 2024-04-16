@@ -38,9 +38,18 @@ void main() {
   group('$WordPreSolvingView', () {
     group('renders', () {
       late WordSelection selectedWord;
+      late WordSelectionBloc wordSelectionBloc;
 
       setUp(() {
         selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
       });
 
       testWidgets(
@@ -48,8 +57,11 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.large,
-            WordPreSolvingView(
-              selectedWord: selectedWord,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordPreSolvingView(
+                selectedWord: selectedWord,
+              ),
             ),
           );
 
@@ -63,8 +75,11 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.small,
-            WordPreSolvingView(
-              selectedWord: selectedWord,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordPreSolvingView(
+                selectedWord: selectedWord,
+              ),
             ),
           );
 
@@ -78,15 +93,22 @@ void main() {
   group('$WordPreSolvingLargeView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
     group('with unsolved word', () {
       setUp(() {
         selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-        wordFocusedBloc = _MockWordFocusedBloc();
+
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
+          create: (_) => wordSelectionBloc,
           child: WordPreSolvingLargeView(selectedWord),
         );
       });
@@ -109,7 +131,7 @@ void main() {
           await tester.tap(find.text(l10n.solveIt));
 
           verify(
-            () => wordFocusedBloc.add(WordSolveRequested()),
+            () => wordSelectionBloc.add(WordSolveRequested()),
           ).called(1);
         },
       );
@@ -122,10 +144,17 @@ void main() {
           word: _FakeWord(),
           solvedStatus: WordStatus.solved,
         );
-        wordFocusedBloc = _MockWordFocusedBloc();
+
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
+          create: (context) => wordSelectionBloc,
           child: WordPreSolvingLargeView(selectedWord),
         );
       });
@@ -145,15 +174,21 @@ void main() {
   group('$WordPreSolvingSmallView', () {
     late WordSelection selectedWord;
     late Widget widget;
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
     group('with unsolved word', () {
       setUp(() {
         selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-        wordFocusedBloc = _MockWordFocusedBloc();
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
+          create: (context) => wordSelectionBloc,
           child: WordPreSolvingSmallView(selectedWord),
         );
       });
@@ -175,7 +210,7 @@ void main() {
           await tester.tap(find.text(l10n.solveIt));
 
           verify(
-            () => wordFocusedBloc.add(WordSolveRequested()),
+            () => wordSelectionBloc.add(WordSolveRequested()),
           ).called(1);
         },
       );
@@ -188,10 +223,17 @@ void main() {
           word: _FakeWord(),
           solvedStatus: WordStatus.solved,
         );
-        wordFocusedBloc = _MockWordFocusedBloc();
+
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            wordIdentifier: '1',
+          ),
+        );
 
         widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
+          create: (context) => wordSelectionBloc,
           child: WordPreSolvingSmallView(selectedWord),
         );
       });

@@ -4,30 +4,39 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   group('$WordSelectionTopBar', () {
     late Widget widget;
-    late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
     setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
+      wordSelectionBloc = _MockWordSelectionBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          wordIdentifier: 'wordId',
+          status: WordSelectionStatus.preSolving,
+        ),
+      );
+
       widget = BlocProvider(
-        create: (context) => crosswordBloc,
-        child: WordSelectionTopBar(wordId: 'wordId'),
+        create: (context) => wordSelectionBloc,
+        child: const WordSelectionTopBar(),
       );
     });
 
     group('renders', () {
       testWidgets('the word identifier', (tester) async {
         await tester.pumpApp(widget);
+
         expect(find.text('wordId'), findsOneWidget);
       });
 
