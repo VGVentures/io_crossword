@@ -41,14 +41,16 @@ void main() {
     group('renders', () {
       late CrosswordBloc crosswordBloc;
       late WordSelectionBloc wordSelectionBloc;
-      late WordSelection selectedWord;
+      late WordSelection wordSelection;
+      late SelectedWord selectedWord;
 
       setUp(() {
         crosswordBloc = _MockCrosswordBloc();
 
         wordSelectionBloc = _MockWordSelectionBloc();
 
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
+        wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
+        selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
       });
 
       testWidgets('SizedBox when there is no selected word', (tester) async {
@@ -74,13 +76,13 @@ void main() {
           when(() => crosswordBloc.state).thenReturn(
             CrosswordState(
               sectionSize: 20,
-              selectedWord: selectedWord,
+              selectedWord: wordSelection,
             ),
           );
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
-              wordIdentifier: '1',
+              word: selectedWord,
             ),
           );
 
@@ -103,13 +105,13 @@ void main() {
           when(() => crosswordBloc.state).thenReturn(
             CrosswordState(
               sectionSize: 20,
-              selectedWord: selectedWord,
+              selectedWord: wordSelection,
             ),
           );
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
-              wordIdentifier: '1',
+              word: selectedWord,
             ),
           );
 
@@ -131,13 +133,13 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
-            selectedWord: selectedWord,
+            selectedWord: wordSelection,
           ),
         );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
@@ -156,13 +158,13 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
-            selectedWord: selectedWord,
+            selectedWord: wordSelection,
           ),
         );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solving,
-            wordIdentifier: '1',
+            word: selectedWord,
           ),
         );
 
@@ -181,13 +183,13 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
             sectionSize: 20,
-            selectedWord: selectedWord,
+            selectedWord: wordSelection,
           ),
         );
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.solved,
-            wordIdentifier: '1',
+            word: selectedWord,
             wordPoints: 10,
           ),
         );
