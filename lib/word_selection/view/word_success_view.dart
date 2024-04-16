@@ -16,28 +16,28 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// {@endtemplate}
 class WordSuccessView extends StatelessWidget {
   /// {@macro word_success_view}
-  const WordSuccessView({required this.selectedWord, super.key});
-
-  final WordSelection selectedWord;
+  const WordSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
     return switch (layout) {
-      IoLayoutData.large => WordSelectionSuccessLargeView(selectedWord),
-      IoLayoutData.small => WordSelectionSuccessSmallView(selectedWord),
+      IoLayoutData.large => const WordSelectionSuccessLargeView(),
+      IoLayoutData.small => const WordSelectionSuccessSmallView(),
     };
   }
 }
 
 class WordSelectionSuccessLargeView extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSuccessLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionSuccessLargeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     final l10n = context.l10n;
     final themeData = Theme.of(context);
 
@@ -99,12 +99,14 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
 @visibleForTesting
 class WordSelectionSuccessSmallView extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSuccessSmallView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionSuccessSmallView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     final l10n = context.l10n;
     final themeData = Theme.of(context);
 

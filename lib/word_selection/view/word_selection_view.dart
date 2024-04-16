@@ -98,9 +98,8 @@ class _WordSelectionBody extends StatelessWidget {
           WordSelectionStatus.incorrect ||
           WordSelectionStatus.failure ||
           WordSelectionStatus.solving =>
-            WordSolvingView(selectedWord: selectedWord),
-          WordSelectionStatus.solved =>
-            WordSuccessView(selectedWord: selectedWord),
+            const WordSolvingView(),
+          WordSelectionStatus.solved => const WordSuccessView(),
           WordSelectionStatus.empty => const SizedBox.shrink(),
         };
         // coverage:ignore-end

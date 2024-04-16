@@ -82,7 +82,7 @@ void main() {
             layout: IoLayoutData.large,
             BlocProvider(
               create: (_) => wordSolvingBloc,
-              child: WordSolvingView(selectedWord: wordSelection),
+              child: WordSolvingView(),
             ),
           );
 
@@ -98,7 +98,7 @@ void main() {
             layout: IoLayoutData.small,
             BlocProvider(
               create: (_) => wordSolvingBloc,
-              child: WordSolvingView(selectedWord: wordSelection),
+              child: WordSolvingView(),
             ),
           );
 
@@ -127,7 +127,7 @@ void main() {
           crosswordBloc: crosswordBloc,
           BlocProvider(
             create: (_) => wordSolvingBloc,
-            child: WordSolvingView(selectedWord: wordSelection),
+            child: WordSolvingView(),
           ),
         );
 
@@ -161,7 +161,7 @@ void main() {
           BlocProvider.value(value: wordSelectionBloc),
           BlocProvider.value(value: crosswordBloc),
         ],
-        child: WordSolvingLargeView(wordSelection),
+        child: WordSolvingLargeView(),
       );
 
       when(() => crosswordBloc.state).thenReturn(
@@ -221,7 +221,7 @@ void main() {
             BlocProvider.value(value: wordSelectionBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
-          child: WordSolvingSmallView(wordSelection),
+          child: WordSolvingSmallView(),
         ),
       );
 

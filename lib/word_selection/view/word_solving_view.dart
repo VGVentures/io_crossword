@@ -7,12 +7,7 @@ import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WordSolvingView extends StatelessWidget {
-  const WordSolvingView({
-    required this.selectedWord,
-    super.key,
-  });
-
-  final WordSelection selectedWord;
+  const WordSolvingView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +26,8 @@ class WordSolvingView extends StatelessWidget {
         }
       },
       child: switch (layout) {
-        IoLayoutData.large => WordSolvingLargeView(selectedWord),
-        IoLayoutData.small => WordSolvingSmallView(selectedWord),
+        IoLayoutData.large => const WordSolvingLargeView(),
+        IoLayoutData.small => const WordSolvingSmallView(),
       },
     );
   }
@@ -41,12 +36,14 @@ class WordSolvingView extends StatelessWidget {
 @visibleForTesting
 class WordSolvingLargeView extends StatelessWidget {
   @visibleForTesting
-  const WordSolvingLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSolvingLargeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     return Column(
       children: [
         const WordSelectionTopBar(),
@@ -75,9 +72,7 @@ class WordSolvingLargeView extends StatelessWidget {
 @visibleForTesting
 class WordSolvingSmallView extends StatefulWidget {
   @visibleForTesting
-  const WordSolvingSmallView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSolvingSmallView({super.key});
 
   @override
   State<WordSolvingSmallView> createState() => _WordSolvingSmallViewState();
@@ -94,12 +89,16 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     return Column(
       children: [
         const WordSelectionTopBar(),
         const SizedBox(height: 32),
         IoWordInput.alphabetic(
-          length: widget.selectedWord.word.length,
+          length: selectedWord.word.length,
           onWord: (value) {
             context.read<CrosswordBloc>().add(AnswerUpdated(value));
           },
@@ -107,7 +106,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         ),
         const SizedBox(height: 24),
         Text(
-          widget.selectedWord.word.clue,
+          selectedWord.word.clue,
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
