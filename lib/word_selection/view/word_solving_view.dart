@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/hint/view/hint_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -73,37 +74,53 @@ class WordSolvingLargeView extends StatelessWidget {
 }
 
 @visibleForTesting
-class WordSolvingSmallView extends StatelessWidget {
+class WordSolvingSmallView extends StatefulWidget {
   @visibleForTesting
   const WordSolvingSmallView(this.selectedWord, {super.key});
 
   final WordSelection selectedWord;
 
   @override
+  State<WordSolvingSmallView> createState() => _WordSolvingSmallViewState();
+}
+
+class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
+  final _controller = IoWordInputController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TopBar(wordId: selectedWord.word.id),
+        TopBar(wordId: widget.selectedWord.word.id),
         const SizedBox(height: 32),
         IoWordInput.alphabetic(
-          length: selectedWord.word.length,
+          length: widget.selectedWord.word.length,
           onWord: (value) {
             context.read<CrosswordBloc>().add(AnswerUpdated(value));
           },
+          controller: _controller,
         ),
         const SizedBox(height: 24),
         Text(
-          selectedWord.word.clue,
+          widget.selectedWord.word.clue,
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: GeminiHintButton()),
-            SizedBox(width: 8),
-            Expanded(child: _SubmitButton()),
+            const Expanded(child: GeminiHintButton()),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _SubmitButton(controller: _controller),
+            ),
           ],
         ),
       ],
@@ -112,10 +129,25 @@ class WordSolvingSmallView extends StatelessWidget {
 }
 
 class _SubmitButton extends StatelessWidget {
-  const _SubmitButton();
+  const _SubmitButton({this.controller});
+
+  /// The controller that holds the user's input.
+  ///
+  /// Is `null` on large layout since the input is currently being handled by
+  /// the [CrosswordGame].
+  // TODO(alestiago): Make non-nullable when the input is handled by the
+  // [IoWordInput] even on large layout.
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6463469220
+  final IoWordInputController? controller;
 
   void _onSubmit(BuildContext context) {
     context.read<CrosswordBloc>().add(const AnswerSubmitted());
+
+    if (controller != null) {
+      context
+          .read<WordSelectionBloc>()
+          .add(WordSolveAttempted(answer: controller!.word));
+    }
   }
 
   @override
