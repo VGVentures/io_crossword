@@ -165,7 +165,7 @@ void main() {
     });
 
     testWidgets(
-      'tapping the submit button sends AnswerSubmitted event',
+      'tapping the submit button sends $AnswerSubmitted event',
       (tester) async {
         await tester.pumpApp(widget);
 
@@ -178,28 +178,28 @@ void main() {
   });
 
   group('$WordSolvingSmallView', () {
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
     late Widget widget;
 
     final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
 
     setUp(() {
-      wordFocusedBloc = _MockWordSolvingBloc();
+      wordSelectionBloc = _MockWordSolvingBloc();
       crosswordBloc = _MockCrosswordBloc();
 
       widget = Theme(
         data: IoCrosswordTheme().themeData,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: wordFocusedBloc),
+            BlocProvider.value(value: wordSelectionBloc),
             BlocProvider.value(value: crosswordBloc),
           ],
           child: WordSolvingSmallView(selectedWord),
         ),
       );
 
-      when(() => wordFocusedBloc.state).thenReturn(
+      when(() => wordSelectionBloc.state).thenReturn(
         WordSelectionState(
           status: WordSelectionStatus.solving,
           wordIdentifier: '1',
@@ -229,13 +229,44 @@ void main() {
     );
 
     testWidgets(
-      'tap the submit button sends AnswerSubmitted event',
+      'tap the submit button sends $AnswerSubmitted event',
       (tester) async {
         await tester.pumpApp(widget);
 
         final submitButton = find.text(l10n.submit);
         await tester.tap(submitButton);
+
         verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
+      },
+    );
+
+    testWidgets(
+      'tap the submit button sends $WordSolveAttempted',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        final editableTexts = find.byType(EditableText);
+        await tester.enterText(editableTexts.at(0), 'A');
+        await tester.pumpAndSettle();
+        await tester.enterText(editableTexts.at(1), 'N');
+        await tester.pumpAndSettle();
+        await tester.enterText(editableTexts.at(2), 'S');
+        await tester.pumpAndSettle();
+        await tester.enterText(editableTexts.at(3), 'W');
+        await tester.pumpAndSettle();
+        await tester.enterText(editableTexts.at(4), 'E');
+        await tester.pumpAndSettle();
+        await tester.enterText(editableTexts.at(5), 'R');
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(l10n.submit));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => wordSelectionBloc.add(
+            const WordSolveAttempted(answer: 'ANSWER'),
+          ),
+        ).called(1);
       },
     );
   });
