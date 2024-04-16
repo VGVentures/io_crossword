@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:game_domain/game_domain.dart';
 
 part 'word_selection_event.dart';
 part 'word_selection_state.dart';
@@ -20,7 +21,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     emit(
       WordSelectionState(
         status: WordSelectionStatus.preSolving,
-        wordIdentifier: event.wordIdentifier,
+        word: event.selectedWord,
       ),
     );
   }
@@ -38,7 +39,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     WordSolveRequested event,
     Emitter<WordSelectionState> emit,
   ) {
-    if (state.wordIdentifier == null) {
+    if (state.word == null) {
       // Can't solve a word if no word is selected.
       return;
     }
@@ -46,7 +47,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     emit(
       WordSelectionState(
         status: WordSelectionStatus.solving,
-        wordIdentifier: state.wordIdentifier,
+        word: state.word,
       ),
     );
   }
