@@ -14,9 +14,11 @@ class CrosswordRepository {
 
   final DbClient _dbClient;
 
+  static const _sectionsCollection = 'boardChunks';
+
   /// Fetches all sections from the board.
   Future<List<BoardSection>> listAllSections() async {
-    final sections = await _dbClient.listAll('boardSections');
+    final sections = await _dbClient.listAll(_sectionsCollection);
 
     return sections.map((sectionDoc) {
       return BoardSection.fromJson({
@@ -29,7 +31,7 @@ class CrosswordRepository {
   /// Fetches a section by its position.
   Future<BoardSection?> findSectionByPosition(int x, int y) async {
     final result = await _dbClient.find(
-      'boardSections',
+      _sectionsCollection,
       {
         'position.x': x,
         'position.y': y,
@@ -49,7 +51,7 @@ class CrosswordRepository {
   /// Updates a section.
   Future<void> updateSection(BoardSection section) async {
     await _dbClient.update(
-      'boardSections',
+      _sectionsCollection,
       DbEntityRecord(
         id: section.id,
         data: section.toJson()..remove('id'),
