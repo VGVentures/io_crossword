@@ -8,6 +8,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
+import 'package:io_crossword/word_selection/word_selection.dart' as selection;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template word_success_view}
@@ -300,6 +301,7 @@ class KeepPlayingButton extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: () {
         context.read<CrosswordBloc>().add(const WordUnselected());
+        context.read<WordSelectionBloc>().add(const selection.WordUnselected());
       },
       icon: const Icon(
         Icons.gamepad,
