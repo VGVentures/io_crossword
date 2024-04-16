@@ -48,7 +48,7 @@ class WordSelectionLargeView extends StatelessWidget {
             // coverage:ignore-start
             final view = switch (state.status) {
               WordSelectionStatus.preSolving =>
-                WordPreSolvingLargeView(selectedWord),
+                WordPreSolvingView(selectedWord: selectedWord),
               WordSelectionStatus.validating ||
               WordSelectionStatus.incorrect ||
               WordSelectionStatus.failure ||
@@ -91,7 +91,7 @@ class WordSelectionSmallView extends StatelessWidget {
               // coverage:ignore-start
               final view = switch (status) {
                 WordSelectionStatus.preSolving =>
-                  WordPreSolvingSmallView(selectedWord),
+                  WordPreSolvingView(selectedWord: selectedWord),
                 WordSelectionStatus.validating ||
                 WordSelectionStatus.incorrect ||
                 WordSelectionStatus.failure ||
