@@ -71,26 +71,23 @@ void main() {
       );
     });
 
-    testWidgets(
-      'renders the clue text',
-      (tester) async {
-        await tester.pumpApp(widget);
+    group('renders', () {
+      testWidgets(
+        'the clue text',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
+        },
+      );
 
-        expect(find.text(selectedWord.word.clue), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'tapping the close button sends WordUnselected event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final closeButton = find.byIcon(Icons.cancel);
-        await tester.tap(closeButton);
-
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-      },
-    );
+      testWidgets(
+        'a $TopBar',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(TopBar), findsOneWidget);
+        },
+      );
+    });
 
     testWidgets(
       'tapping the submit button sends AnswerSubmitted event',
