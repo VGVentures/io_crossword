@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -12,8 +11,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
-
-class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 

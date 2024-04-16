@@ -57,10 +57,3 @@ class WordSolveAttempted extends WordSelectionEvent {
   @override
   List<Object?> get props => [answer];
 }
-
-class WordFocusedSuccessRequested extends WordSelectionEvent {
-  const WordFocusedSuccessRequested();
-
-  @override
-  List<Object> get props => [];
-}

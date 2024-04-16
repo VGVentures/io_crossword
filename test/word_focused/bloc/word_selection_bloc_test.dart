@@ -80,18 +80,6 @@ void main() {
       );
     });
 
-    group('$WordFocusedSuccessRequested', () {
-      blocTest<WordSelectionBloc, WordSelectionState>(
-        'emits solved status',
-        build: WordSelectionBloc.new,
-        act: (bloc) => bloc.add(WordFocusedSuccessRequested()),
-        expect: () => <WordSelectionState>[
-          WordSelectionState.initial()
-              .copyWith(status: WordSelectionStatus.solved),
-        ],
-      );
-    });
-
     group('$WordSolveAttempted', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if not solving',

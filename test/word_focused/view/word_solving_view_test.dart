@@ -107,34 +107,6 @@ void main() {
         },
       );
     });
-
-    testWidgets(
-      'adds $WordFocusedSuccessRequested event when state changes with solved '
-      'selected word',
-      (tester) async {
-        whenListen(
-          crosswordBloc,
-          Stream.value(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: wordSelection.copyWith(
-                solvedStatus: WordStatus.solved,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
-          BlocProvider(
-            create: (_) => wordSolvingBloc,
-            child: WordSolvingView(),
-          ),
-        );
-
-        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
-            .called(1);
-      },
-    );
   });
 
   group('$WordSolvingLargeView', () {

@@ -10,7 +10,6 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
-    on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
   }
 
@@ -88,14 +87,5 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
         ),
       );
     }
-  }
-
-  void _onWordFocusedSuccessRequested(
-    WordFocusedSuccessRequested event,
-    Emitter<WordSelectionState> emit,
-  ) {
-    emit(
-      state.copyWith(status: WordSelectionStatus.solved),
-    );
   }
 }
