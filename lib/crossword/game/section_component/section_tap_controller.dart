@@ -30,6 +30,10 @@ class SectionTapController extends PositionComponent
 
         if (wordRect.contains(localPosition.toOffset())) {
           gameRef.crosswordBloc.add(WordSelected(parent.index, word));
+          gameRef.wordSelectionBloc.add(
+            selection.WordSelected(wordIdentifier: word.id),
+          );
+
           final viewportWidth = gameRef.camera.visibleWorldRect.size.width;
           final newCameraPosition = gameRef.isMobile
               ? Vector2(

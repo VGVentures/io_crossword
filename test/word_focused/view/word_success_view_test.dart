@@ -9,6 +9,7 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
+import 'package:io_crossword/word_selection/word_selection.dart' as selection;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -18,6 +19,10 @@ import '../../helpers/helpers.dart';
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
@@ -189,9 +194,11 @@ void main() {
 
   group('KeepPlayingButton', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     setUp(() {
+      wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
       widget = BlocProvider.value(
         value: crosswordBloc,
@@ -202,11 +209,18 @@ void main() {
     testWidgets(
       'adds $WordUnselected event when tapping the keep playing button',
       (tester) async {
-        await tester.pumpApp(widget);
+        await tester.pumpApp(
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: widget,
+          ),
+        );
 
         await tester.tap(find.byIcon(Icons.gamepad));
 
         verify(() => crosswordBloc.add(const WordUnselected())).called(1);
+        verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
+            .called(1);
       },
     );
   });
