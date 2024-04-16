@@ -5,8 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:mocktail/mocktail.dart';
 
-class _FakeWord extends Fake implements Word {}
+class _MockWord extends Mock implements Word {}
 
 void main() {
   group('$WordSelectionBloc', () {
@@ -14,8 +15,8 @@ void main() {
 
     setUp(() {
       selectedWord = SelectedWord(
-        word: _FakeWord(),
         section: (0, 0),
+        word: _MockWord(),
       );
     });
 
@@ -81,6 +82,8 @@ void main() {
     });
 
     group('$WordSolveAttempted', () {
+      late Word answerWord;
+
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if not solving',
         build: WordSelectionBloc.new,
@@ -102,6 +105,11 @@ void main() {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'validates a valid answer',
         build: WordSelectionBloc.new,
+        setUp: () {
+          answerWord = _MockWord();
+          when(() => selectedWord.word.copyWith(answer: 'correct'))
+              .thenReturn(answerWord);
+        },
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
           word: selectedWord,
@@ -115,7 +123,10 @@ void main() {
           ),
           WordSelectionState(
             status: WordSelectionStatus.solved,
-            word: selectedWord,
+            word: SelectedWord(
+              section: selectedWord.section,
+              word: answerWord,
+            ),
             wordPoints: 10,
           ),
         ],
