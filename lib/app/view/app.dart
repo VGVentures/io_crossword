@@ -14,6 +14,8 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
 
+const _kPhoneWidth = 1000;
+
 class App extends StatelessWidget {
   const App({
     required this.apiClient,
@@ -33,11 +35,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final crosswordResource = apiClient.crosswordResource;
-
+    final mediaQueryData = MediaQuery.of(context);
 
     return RotatedBox(
-      quarterTurns:
-          MediaQuery.of(context).orientation == Orientation.landscape ? 1 : 0,
+      quarterTurns: (mediaQueryData.orientation == Orientation.landscape &&
+              mediaQueryData.size.width < _kPhoneWidth)
+          ? 1
+          : 0,
       child: MultiProvider(
         providers: [
           Provider.value(value: apiClient.leaderboardResource),
