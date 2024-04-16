@@ -106,7 +106,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           section: section,
           word: event.word,
         ),
-        answer: '',
       ),
     );
   }
