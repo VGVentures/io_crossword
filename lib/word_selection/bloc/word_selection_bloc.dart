@@ -10,7 +10,6 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
-    on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
   }
 
@@ -71,13 +70,16 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       // TODO(alesstiago): Replace with a call to the backend that validates
       // the answer.
       // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444661142
-      () => event.answer == 'correct',
+      () => event.answer.toLowerCase() == 'correct',
     );
 
     if (isCorrect) {
       emit(
         state.copyWith(
           status: WordSelectionStatus.solved,
+          word: state.word!.copyWith(
+            word: state.word!.word.copyWith(answer: event.answer),
+          ),
           wordPoints: 10,
         ),
       );
@@ -88,14 +90,5 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
         ),
       );
     }
-  }
-
-  void _onWordFocusedSuccessRequested(
-    WordFocusedSuccessRequested event,
-    Emitter<WordSelectionState> emit,
-  ) {
-    emit(
-      state.copyWith(status: WordSelectionStatus.solved),
-    );
   }
 }

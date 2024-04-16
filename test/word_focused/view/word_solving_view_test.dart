@@ -107,34 +107,6 @@ void main() {
         },
       );
     });
-
-    testWidgets(
-      'adds $WordFocusedSuccessRequested event when state changes with solved '
-      'selected word',
-      (tester) async {
-        whenListen(
-          crosswordBloc,
-          Stream.value(
-            CrosswordState(
-              sectionSize: 20,
-              selectedWord: wordSelection.copyWith(
-                solvedStatus: WordStatus.solved,
-              ),
-            ),
-          ),
-        );
-        await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
-          BlocProvider(
-            create: (_) => wordSolvingBloc,
-            child: WordSolvingView(),
-          ),
-        );
-
-        verify(() => wordSolvingBloc.add(const WordFocusedSuccessRequested()))
-            .called(1);
-      },
-    );
   });
 
   group('$WordSolvingLargeView', () {
@@ -189,18 +161,6 @@ void main() {
         },
       );
     });
-
-    testWidgets(
-      'tapping the submit button sends $AnswerSubmitted event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final submitButton = find.text(l10n.submit);
-        await tester.tap(submitButton);
-
-        verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
   });
 
   group('$WordSolvingSmallView', () {
@@ -238,32 +198,6 @@ void main() {
         ),
       );
     });
-
-    testWidgets(
-      'add AnswerUpdated event when user enters all the letters',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final input = tester.widget<IoWordInput>(find.byType(IoWordInput));
-        input.onWord!('answer');
-
-        verify(
-          () => crosswordBloc.add(const AnswerUpdated('answer')),
-        ).called(1);
-      },
-    );
-
-    testWidgets(
-      'tap the submit button sends $AnswerSubmitted event',
-      (tester) async {
-        await tester.pumpApp(widget);
-
-        final submitButton = find.text(l10n.submit);
-        await tester.tap(submitButton);
-
-        verify(() => crosswordBloc.add(const AnswerSubmitted())).called(1);
-      },
-    );
 
     testWidgets(
       'tap the submit button sends $WordSolveAttempted',

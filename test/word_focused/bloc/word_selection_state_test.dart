@@ -82,4 +82,56 @@ void main() {
       });
     });
   });
+
+  group('$SelectedWord', () {
+    test('supports value equality', () {
+      final word1 = SelectedWord(
+        word: _FakeWord(),
+        section: (0, 0),
+      );
+      final word2 = SelectedWord(
+        word: word1.word,
+        section: (0, 0),
+      );
+      final word3 = SelectedWord(
+        word: _FakeWord(),
+        section: (1, 1),
+      );
+
+      expect(word1, equals(word2));
+      expect(word1, isNot(equals(word3)));
+      expect(word2, isNot(equals(word3)));
+    });
+
+    group('copyWith', () {
+      test('does nothing when no parameters are specified', () {
+        final word = SelectedWord(
+          word: _FakeWord(),
+          section: (0, 0),
+        );
+
+        final copy = word.copyWith();
+
+        expect(copy, equals(word));
+      });
+
+      test('copies specified parameters', () {
+        final word = SelectedWord(
+          word: _FakeWord(),
+          section: (0, 0),
+        );
+        final newWord = SelectedWord(
+          word: _FakeWord(),
+          section: (1, 1),
+        );
+
+        final copy = word.copyWith(
+          word: newWord.word,
+          section: newWord.section,
+        );
+
+        expect(copy, equals(newWord));
+      });
+    });
+  });
 }

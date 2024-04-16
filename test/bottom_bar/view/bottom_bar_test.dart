@@ -4,55 +4,34 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
-import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
-
-class _FakeWord extends Fake implements Word {
-  @override
-  int? get solvedTimestamp => null;
-
-  @override
-  String get id => 'id';
-
-  @override
-  String get clue => 'clue';
-
-  @override
-  String get answer => 'answer';
-}
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
-  group('BottomBar', () {
-    late CrosswordBloc crosswordBloc;
+  group('$BottomBar', () {
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
-    final selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-
     setUp(() {
-      crosswordBloc = _MockCrosswordBloc();
-
-      widget = BlocProvider.value(
-        value: crosswordBloc,
+      wordSelectionBloc = _MockWordSelectionBloc();
+      widget = BlocProvider<WordSelectionBloc>(
+        create: (_) => wordSelectionBloc,
         child: BottomBar(),
       );
     });
 
     testWidgets(
-      'renders SizedBox.shrink when selectedWord is not null',
+      'renders SizedBox.shrink when status is not empty',
       (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            sectionSize: 20,
-            selectedWord: selectedWord,
-          ),
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(status: WordSelectionStatus.preSolving),
         );
 
         await tester.pumpApp(widget);
@@ -63,10 +42,11 @@ void main() {
     );
 
     testWidgets(
-      'renders BottomBarContent when selectedWord is null',
+      'renders $BottomBarContent when status is empty',
       (tester) async {
-        when(() => crosswordBloc.state)
-            .thenReturn(CrosswordState(sectionSize: 20));
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState.initial(),
+        );
 
         await tester.pumpApp(widget);
 

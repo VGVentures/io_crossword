@@ -101,7 +101,6 @@ extension PumpApp on WidgetTester {
                             context.read<CrosswordRepository>(),
                         boardInfoRepository:
                             context.read<BoardInfoRepository>(),
-                        crosswordResource: context.read<CrosswordResource>(),
                       ),
                 ),
                 BlocProvider(
@@ -213,7 +212,6 @@ extension PumpRoute on WidgetTester {
                   create: (context) => CrosswordBloc(
                     crosswordRepository: context.read<CrosswordRepository>(),
                     boardInfoRepository: context.read<BoardInfoRepository>(),
-                    crosswordResource: context.read<CrosswordResource>(),
                   ),
                 ),
                 BlocProvider(

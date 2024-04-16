@@ -13,23 +13,10 @@ class WordSolvingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
-    return BlocListener<CrosswordBloc, CrosswordState>(
-      listenWhen: (previous, current) {
-        return previous.selectedWord?.solvedStatus !=
-            current.selectedWord?.solvedStatus;
-      },
-      listener: (context, state) {
-        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
-          context
-              .read<WordSelectionBloc>()
-              .add(const WordFocusedSuccessRequested());
-        }
-      },
-      child: switch (layout) {
-        IoLayoutData.large => const WordSolvingLargeView(),
-        IoLayoutData.small => const WordSolvingSmallView(),
-      },
-    );
+    return switch (layout) {
+      IoLayoutData.large => const WordSolvingLargeView(),
+      IoLayoutData.small => const WordSolvingSmallView(),
+    };
   }
 }
 
@@ -99,9 +86,6 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         const SizedBox(height: 32),
         IoWordInput.alphabetic(
           length: selectedWord.word.length,
-          onWord: (value) {
-            context.read<CrosswordBloc>().add(AnswerUpdated(value));
-          },
           controller: _controller,
         ),
         const SizedBox(height: 24),
@@ -139,8 +123,6 @@ class _SubmitButton extends StatelessWidget {
   final IoWordInputController? controller;
 
   void _onSubmit(BuildContext context) {
-    context.read<CrosswordBloc>().add(const AnswerSubmitted());
-
     if (controller != null) {
       context
           .read<WordSelectionBloc>()

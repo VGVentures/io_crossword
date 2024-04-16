@@ -46,13 +46,4 @@ void main() {
       );
     });
   });
-
-  group('WordFocusedSuccessRequested', () {
-    test('supports equality', () {
-      expect(
-        WordFocusedSuccessRequested(),
-        equals(WordFocusedSuccessRequested()),
-      );
-    });
-  });
 }
