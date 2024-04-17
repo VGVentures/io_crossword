@@ -28,7 +28,7 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'ABC',
-              mascot: any(named: 'mascot'),
+              mascot: Mascots.android,
             ),
           ).thenAnswer((_) async => []);
         },
