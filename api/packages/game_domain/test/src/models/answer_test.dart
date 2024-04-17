@@ -12,7 +12,6 @@ void main() {
       expect(
         json,
         equals({
-          'id': 'id',
           'answer': 'answer',
           'section': {'x': 1, 'y': 2},
         }),
