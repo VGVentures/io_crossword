@@ -70,18 +70,25 @@ void main() {
         'returns Response with valid to true and updates score '
         'if answer is correct',
         () async {
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
           when(
-            () =>
-                crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+            () => crosswordRepository.updateSolvedWordsCount(),
+          ).thenAnswer((_) async {});
+          when(
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
           ).thenAnswer((_) async => true);
           when(
             () => leaderboardRepository.updateScore(user.id),
-          ).thenAnswer((_) async {});
+          ).thenAnswer((_) async => 10);
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '1,1',
-              'mascot': 'dash',
+              'wordId': 'id',
               'answer': 'sun',
             },
           );
@@ -89,24 +96,28 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          expect(await response.json(), equals({'valid': true}));
+          expect(await response.json(), equals({'points': 10}));
           verify(() => leaderboardRepository.updateScore(user.id)).called(1);
         },
       );
 
       test(
-        'returns Response with valid to false and does not update score '
+        'returns Response with 0 points and does not update score '
         'if answer is incorrect',
         () async {
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
           when(
-            () =>
-                crosswordRepository.answerWord(1, 1, 1, 1, Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
           ).thenAnswer((_) async => false);
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '1,1',
-              'mascot': 'dash',
+              'wordId': 'id',
               'answer': 'sun',
             },
           );
@@ -114,85 +125,37 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          expect(await response.json(), equals({'valid': false}));
+          expect(await response.json(), equals({'points': 0}));
           verifyNever(() => leaderboardRepository.updateScore(user.id));
         },
       );
 
       test(
-        'returns Response with status BadRequest if section id is invalid',
+        'returns Response with status internalServerError '
+        'if player does not exist',
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '00',
-              'wordPosition': '1,1',
-              'mascot': 'dash',
-              'answer': 'android',
+              'wordId': 'id',
+              'answer': 'sun',
             },
+          );
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => null,
           );
 
           final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
+          final body = await response.body();
+          expect(body, 'Player not found for id userId');
+          expect(response.statusCode, HttpStatus.internalServerError);
         },
       );
 
       test(
-        'returns Response with status BadRequest if word position is invalid',
+        'returns Response with status BadRequest if wordId is not provided',
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '12',
-              'mascot': 'dash',
-              'answer': 'android',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if sectionId is not provided',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'wordPosition': '12',
-              'mascot': 'dash',
-              'answer': 'android',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if wordPosition '
-        'is not provided',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'sectionId': '1,1',
-              'mascot': 'dash',
-              'answer': 'android',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if mascot is not provided',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '1,1',
               'answer': 'android',
             },
           );
@@ -207,14 +170,37 @@ void main() {
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '1,1',
-              'mascot': 'dash',
+              'wordId': 'id',
             },
           );
 
           final response = await route.onRequest(requestContext);
           expect(response.statusCode, HttpStatus.badRequest);
+        },
+      );
+
+      test(
+        'returns Response with status internalServerError if answerWord throws',
+        () async {
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'wordId': 'id',
+              'answer': 'sun',
+            },
+          );
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
+          when(
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+          ).thenThrow(Exception('Oops'));
+
+          final response = await route.onRequest(requestContext);
+          expect(response.statusCode, HttpStatus.internalServerError);
         },
       );
     });

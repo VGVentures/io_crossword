@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -7,13 +8,20 @@ import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockWord extends Mock implements Word {}
+class _MockWord extends Mock implements Word {
+  @override
+  String get id => 'id';
+}
+
+class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 void main() {
   group('$WordSelectionBloc', () {
+    late CrosswordResource crosswordResource;
     late SelectedWord selectedWord;
 
     setUp(() {
+      crosswordResource = _MockCrosswordResource();
       selectedWord = SelectedWord(
         section: (0, 0),
         word: _MockWord(),
@@ -21,14 +29,16 @@ void main() {
     });
 
     test('initial state is WordSelectionState.initial', () {
-      final bloc = WordSelectionBloc();
+      final bloc = WordSelectionBloc(
+        crosswordResource: crosswordResource,
+      );
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
 
     group('$WordSelected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits preSolving status',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         act: (bloc) => bloc.add(WordSelected(selectedWord: selectedWord)),
         expect: () => <WordSelectionState>[
           WordSelectionState(
@@ -42,7 +52,7 @@ void main() {
     group('$WordUnselected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits initial state',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
           word: selectedWord,
@@ -55,7 +65,7 @@ void main() {
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if there is no word identifier',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         act: (bloc) => bloc.add(
           WordSolveRequested(),
         ),
@@ -64,7 +74,7 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits solving status when there is a word identifier',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
           word: selectedWord,
@@ -86,14 +96,14 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if not solving',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'answer')),
         expect: () => <WordSelectionState>[],
       );
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if already solved',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solved,
           word: selectedWord,
@@ -104,17 +114,22 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'validates a valid answer',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
         setUp: () {
           answerWord = _MockWord();
           when(() => selectedWord.word.copyWith(answer: 'correct'))
               .thenReturn(answerWord);
+          when(
+            () => crosswordResource.answerWord(
+              wordId: selectedWord.word.id,
+              answer: 'correct',
+            ),
+          ).thenAnswer((_) async => 10);
         },
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
           word: selectedWord,
         ),
-        wait: Duration(seconds: 2),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
         expect: () => <WordSelectionState>[
           WordSelectionState(
@@ -134,12 +149,19 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'invalidates an invalid answer',
-        build: WordSelectionBloc.new,
+        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        setUp: () {
+          when(
+            () => crosswordResource.answerWord(
+              wordId: selectedWord.word.id,
+              answer: 'incorrect',
+            ),
+          ).thenAnswer((_) async => 0);
+        },
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
           word: selectedWord,
         ),
-        wait: Duration(seconds: 2),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'incorrect')),
         expect: () => <WordSelectionState>[
           WordSelectionState(
