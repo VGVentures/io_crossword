@@ -183,10 +183,13 @@ void main() {
         ).thenAnswer((_) async {});
 
         final answersRecord = _MockDbEntityRecord();
-        when(() => answersRecord.id).thenReturn('id1');
-        when(() => answersRecord.data).thenReturn({'answer': 'flutter'});
+        when(() => answersRecord.id).thenReturn('1');
+        when(() => answersRecord.data).thenReturn({
+          'answer': 'flutter',
+          'section': {'x': 1, 'y': 1},
+        });
         when(
-          () => dbClient.getById(answersCollection, 'id1'),
+          () => dbClient.getById(answersCollection, '1'),
         ).thenAnswer((_) async => answersRecord);
 
         repository = CrosswordRepository(dbClient: dbClient);
@@ -197,7 +200,7 @@ void main() {
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
           final valid =
-              await repository.answerWord(1, 1, '1', Mascots.dino, 'flutter');
+              await repository.answerWord('1', Mascots.dino, 'flutter');
           expect(valid, isTrue);
           final captured = verify(
             () => dbClient.update(
@@ -228,10 +231,22 @@ void main() {
       });
 
       test('returns false if answer is incorrect', () async {
-        final valid =
-            await repository.answerWord(1, 1, '1', Mascots.dino, 'android');
+        final valid = await repository.answerWord('1', Mascots.dino, 'android');
         expect(valid, isFalse);
       });
+
+      test(
+        'throws $CrosswordRepositoryException if answer is not found',
+        () async {
+          when(
+            () => dbClient.getById(answersCollection, 'fake'),
+          ).thenAnswer((_) async => null);
+          expect(
+            () => repository.answerWord('fake', Mascots.dino, 'flutter'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
 
       test(
         'throws $CrosswordRepositoryException if section does not exist',
@@ -239,12 +254,12 @@ void main() {
           when(
             () => dbClient.find(
               sectionsCollection,
-              {'position.x': 0, 'position.y': 0},
+              {'position.x': 1, 'position.y': 1},
             ),
           ).thenAnswer((_) async => []);
 
           expect(
-            () => repository.answerWord(0, 0, '1', Mascots.dino, 'flutter'),
+            () => repository.answerWord('1', Mascots.dino, 'flutter'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -253,8 +268,17 @@ void main() {
       test(
         'throws $CrosswordRepositoryException if word is not in section',
         () async {
+          final answersRecord = _MockDbEntityRecord();
+          when(() => answersRecord.id).thenReturn('fake');
+          when(() => answersRecord.data).thenReturn({
+            'answer': 'flutter',
+            'section': {'x': 1, 'y': 1},
+          });
+          when(
+            () => dbClient.getById(answersCollection, 'fake'),
+          ).thenAnswer((_) async => answersRecord);
           expect(
-            () => repository.answerWord(1, 1, 'fake', Mascots.dino, 'flutter'),
+            () => repository.answerWord('fake', Mascots.dino, 'flutter'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },

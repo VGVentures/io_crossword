@@ -63,11 +63,14 @@ class CrosswordRepository {
   }
 
   /// Fetches a word answer by its id.
-  Future<String?> findAnswerById(String id) async {
-    final result = await _dbClient.getById(_answersCollection, 'id$id');
+  Future<Answer?> findAnswerById(String id) async {
+    final result = await _dbClient.getById(_answersCollection, id);
 
     if (result != null) {
-      return result.data['answer'] as String;
+      return Answer.fromJson({
+        'id': result.id,
+        ...result.data,
+      });
     }
 
     return null;
@@ -77,12 +80,25 @@ class CrosswordRepository {
   /// Returns true if succeeds and updates the word's solvedTimestamp
   /// attribute.
   Future<bool> answerWord(
-    int sectionX,
-    int sectionY,
     String wordId,
     Mascots mascot,
     String userAnswer,
   ) async {
+    final correctAnswer = await findAnswerById(wordId);
+
+    if (correctAnswer == null) {
+      throw CrosswordRepositoryException(
+        'Answer not found for word with id $wordId',
+        StackTrace.current,
+      );
+    }
+
+    if (userAnswer.toLowerCase() != correctAnswer.answer.toLowerCase()) {
+      return false;
+    }
+
+    final sectionX = correctAnswer.section.x;
+    final sectionY = correctAnswer.section.y;
     final section = await findSectionByPosition(sectionX, sectionY);
 
     if (section == null) {
@@ -101,11 +117,9 @@ class CrosswordRepository {
       );
     }
 
-    final correctAnswer = await findAnswerById(wordId);
-
-    if (userAnswer.toLowerCase() == correctAnswer?.toLowerCase()) {
+    if (userAnswer.toLowerCase() == correctAnswer.answer.toLowerCase()) {
       final solvedWord = word.copyWith(
-        answer: correctAnswer,
+        answer: correctAnswer.answer,
         solvedTimestamp: clock.now().millisecondsSinceEpoch,
         mascot: mascot,
       );
