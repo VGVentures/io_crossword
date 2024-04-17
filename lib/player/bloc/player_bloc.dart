@@ -11,6 +11,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     required LeaderboardRepository leaderboardRepository,
   })  : _leaderboardRepository = leaderboardRepository,
         super(const PlayerState()) {
+    on<InitialsSelected>(_onInitialsSelected);
+    on<MascotSelected>(_onMascotSelected);
     on<PlayerLoaded>(_onPlayerLoaded);
   }
 
@@ -35,6 +37,33 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
           status: PlayerStatus.failure,
         );
       },
+    );
+  }
+
+  void _onMascotSelected(
+    MascotSelected event,
+    Emitter<PlayerState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        mascot: event.mascot,
+        player: state.player.copyWith(
+          mascot: event.mascot,
+        ),
+      ),
+    );
+  }
+
+  void _onInitialsSelected(
+    InitialsSelected event,
+    Emitter<PlayerState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        player: state.player.copyWith(
+          initials: event.initials,
+        ),
+      ),
     );
   }
 }

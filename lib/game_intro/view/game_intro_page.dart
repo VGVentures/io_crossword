@@ -7,6 +7,7 @@ import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
@@ -71,12 +72,12 @@ class GameIntroView extends StatelessWidget {
           state: _flowController == null ? GameIntroStatus.welcome : null,
           onGeneratePages: onGenerateGameIntroPages,
           onComplete: (state) {
-            final crosswordBloc = context.read<CrosswordBloc>().state;
+            final playerState = context.read<PlayerBloc>().state;
 
             context.read<GameIntroBloc>().add(
                   GameIntroPlayerCreated(
-                    initials: crosswordBloc.initials,
-                    mascot: crosswordBloc.mascot,
+                    initials: playerState.player.initials,
+                    mascot: playerState.mascot,
                   ),
                 );
           },
