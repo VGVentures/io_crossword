@@ -38,7 +38,6 @@ class HowToPlayView extends StatelessWidget {
 
     return Scaffold(
       body: Center(
-        // The loading design needs to get updated
         child: isCreating
             ? const CircularProgressIndicator()
             : OutlinedButton(
