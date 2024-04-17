@@ -11,13 +11,18 @@ class TeamSelectionMascot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spriteInformation = mascot.teamMascot.spriteInformation;
+
     return SpriteAnimationWidget.asset(
       path: mascot.teamMascot.idleAnimation.path,
       data: SpriteAnimationData.sequenced(
-        amount: 70,
-        stepTime: 0.042,
-        textureSize: Vector2(300, 336),
-        amountPerRow: 10,
+        amount: spriteInformation.rows * spriteInformation.columns,
+        stepTime: spriteInformation.stepTime,
+        textureSize: Vector2(
+          spriteInformation.width,
+          spriteInformation.height,
+        ),
+        amountPerRow: spriteInformation.rows,
       ),
       anchor: Anchor.bottomCenter,
     );

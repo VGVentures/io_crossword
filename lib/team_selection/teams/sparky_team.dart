@@ -1,5 +1,5 @@
 import 'package:io_crossword/assets/assets.gen.dart';
-import 'package:io_crossword/team_selection/teams/team.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 
 class SparkyTeam extends Team {
   const SparkyTeam();
@@ -8,8 +8,17 @@ class SparkyTeam extends Team {
   String get name => 'Sparky';
 
   @override
-  AssetGenImage get idleAnimation => Assets.anim.dashIdle;
+  AssetGenImage get idleAnimation => Assets.anim.sparkyIdle;
 
   @override
-  AssetGenImage get platformAnimation => Assets.anim.androidPlatform;
+  AssetGenImage get platformAnimation => Assets.anim.sparkyPlatform;
+
+  @override
+  SpriteInformation get spriteInformation => const SpriteInformation(
+        rows: 16,
+        columns: 5,
+        stepTime: 0.042,
+        width: 225,
+        height: 325,
+      );
 }
