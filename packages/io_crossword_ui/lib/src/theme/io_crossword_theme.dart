@@ -294,7 +294,7 @@ class IoCrosswordTheme {
     return FilledButtonThemeData(
       style: FilledButton.styleFrom(
         textStyle: IoCrosswordTextStyles.bodyLG,
-        minimumSize: const Size(double.infinity, 56),
+        minimumSize: const Size(140, 56),
         backgroundColor: const Color(0XFF393B40),
         foregroundColor: Colors.white,
       ),

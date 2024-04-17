@@ -13,10 +13,16 @@ class StreakAtRiskView extends StatelessWidget {
         child: SizedBox(
           width: 340,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const _Title(),
+                const Row(
+                  children: [
+                    Expanded(child: _Title()),
+                    CloseButton(),
+                  ],
+                ),
                 const SizedBox(height: 8),
                 Text(
                   context.l10n.streakAtRiskMessage,
@@ -74,7 +80,7 @@ class _Title extends StatelessWidget {
 class _BottomActions extends StatelessWidget {
   const _BottomActions();
 
-  void _onLeave(BuildContext context) {}
+  void _onLeave(BuildContext context) {} // coverage:ignore-line
 
   void _onSolveIt(BuildContext context) {
     Navigator.pop(context);
@@ -85,12 +91,16 @@ class _BottomActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        LeaveButton(
-          onPressed: () => _onLeave(context),
+        Expanded(
+          child: LeaveButton(
+            onPressed: () => _onLeave(context),
+          ),
         ),
         const SizedBox(width: 8),
-        SolveItButton(
-          onPressed: () => _onSolveIt(context),
+        Expanded(
+          child: SolveItButton(
+            onPressed: () => _onSolveIt(context),
+          ),
         ),
       ],
     );

@@ -12,7 +12,7 @@ class LeaveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton.icon(
       onPressed: onPressed,
-      icon: const Icon(Icons.exit_to_app),
+      icon: const Icon(Icons.exit_to_app, size: 20),
       label: const Text('Leave'),
     );
   }

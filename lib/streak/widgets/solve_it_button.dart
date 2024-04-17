@@ -15,7 +15,7 @@ class SolveItButton extends StatelessWidget {
 
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: const Icon(Icons.edit),
+      icon: const Icon(Icons.edit, size: 20),
       label: Text(l10n.solveIt),
     );
   }
