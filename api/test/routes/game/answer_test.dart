@@ -174,8 +174,7 @@ void main() {
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'wordPosition': '12',
-              'mascot': 'dash',
+              'wordId': 'id',
               'answer': 'android',
             },
           );
@@ -186,29 +185,11 @@ void main() {
       );
 
       test(
-        'returns Response with status BadRequest if wordPosition '
-        'is not provided',
+        'returns Response with status BadRequest if wordId is not provided',
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
               'sectionId': '1,1',
-              'mascot': 'dash',
-              'answer': 'android',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if mascot is not provided',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'sectionId': '1,1',
-              'wordPosition': '1,1',
               'answer': 'android',
             },
           );
@@ -224,13 +205,39 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {
               'sectionId': '1,1',
-              'wordPosition': '1,1',
-              'mascot': 'dash',
+              'wordId': 'id',
             },
           );
 
           final response = await route.onRequest(requestContext);
           expect(response.statusCode, HttpStatus.badRequest);
+        },
+      );
+
+      test(
+        'returns Response with status internalServerError if answerWord throws',
+        () async {
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'sectionId': '1,1',
+              'wordId': 'id',
+              'answer': 'sun',
+            },
+          );
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
+          when(
+            () =>
+                crosswordRepository.answerWord(1, 1, 'id', Mascots.dash, 'sun'),
+          ).thenThrow(Exception('Oops'));
+
+          final response = await route.onRequest(requestContext);
+          expect(response.statusCode, HttpStatus.internalServerError);
         },
       );
     });

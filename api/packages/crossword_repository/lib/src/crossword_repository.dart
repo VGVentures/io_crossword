@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
+import 'package:crossword_repository/crossword_repository.dart';
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -85,13 +86,19 @@ class CrosswordRepository {
     final section = await findSectionByPosition(sectionX, sectionY);
 
     if (section == null) {
-      return false;
+      throw CrosswordRepositoryException(
+        'Section not found for position ($sectionX, $sectionY)',
+        StackTrace.current,
+      );
     }
 
     final word = section.words.firstWhereOrNull((e) => e.id == wordId);
 
     if (word == null) {
-      return false;
+      throw CrosswordRepositoryException(
+        'Word with id $wordId not found for section ($sectionX, $sectionY)',
+        StackTrace.current,
+      );
     }
 
     final correctAnswer = await findAnswerById(wordId);

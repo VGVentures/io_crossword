@@ -41,19 +41,27 @@ Future<Response> _onPost(RequestContext context) async {
   if (player == null) {
     return Response(statusCode: HttpStatus.badRequest);
   }
-  final valid = await crosswordRepository.answerWord(
-    sectionX,
-    sectionY,
-    wordId,
-    player.mascot,
-    answer,
-  );
 
-  var points = 0;
-  if (valid) {
-    await crosswordRepository.updateSolvedWordsCount();
-    points = await leaderboardRepository.updateScore(user.id);
+  try {
+    final valid = await crosswordRepository.answerWord(
+      sectionX,
+      sectionY,
+      wordId,
+      player.mascot,
+      answer,
+    );
+
+    var points = 0;
+    if (valid) {
+      await crosswordRepository.updateSolvedWordsCount();
+      points = await leaderboardRepository.updateScore(user.id);
+    }
+
+    return Response.json(body: {'points': points});
+  } catch (e) {
+    return Response(
+      body: e.toString(),
+      statusCode: HttpStatus.internalServerError,
+    );
   }
-
-  return Response.json(body: {'points': points});
 }

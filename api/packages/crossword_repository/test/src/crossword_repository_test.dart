@@ -192,7 +192,7 @@ void main() {
         repository = CrosswordRepository(dbClient: dbClient);
       });
 
-      test('answerWord returns true if answer is correct', () async {
+      test('returns true if answer is correct', () async {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
@@ -227,30 +227,38 @@ void main() {
         });
       });
 
-      test('answerWord returns false if answer is incorrect', () async {
+      test('returns false if answer is incorrect', () async {
         final valid =
             await repository.answerWord(1, 1, '1', Mascots.dino, 'android');
         expect(valid, isFalse);
       });
 
-      test('answerWord returns false if section does not exist', () async {
-        when(
-          () => dbClient.find(
-            sectionsCollection,
-            {'position.x': 0, 'position.y': 0},
-          ),
-        ).thenAnswer((_) async => []);
+      test(
+        'throws $CrosswordRepositoryException if section does not exist',
+        () async {
+          when(
+            () => dbClient.find(
+              sectionsCollection,
+              {'position.x': 0, 'position.y': 0},
+            ),
+          ).thenAnswer((_) async => []);
 
-        final valid =
-            await repository.answerWord(0, 0, '1', Mascots.dino, 'flutter');
-        expect(valid, isFalse);
-      });
+          expect(
+            () => repository.answerWord(0, 0, '1', Mascots.dino, 'flutter'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
 
-      test('answerWord returns false if word is not in section', () async {
-        final valid =
-            await repository.answerWord(1, 1, 'fake', Mascots.dino, 'flutter');
-        expect(valid, isFalse);
-      });
+      test(
+        'throws $CrosswordRepositoryException if word is not in section',
+        () async {
+          expect(
+            () => repository.answerWord(1, 1, 'fake', Mascots.dino, 'flutter'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
     });
 
     group('updateSolvedWordsCount', () {
