@@ -11,59 +11,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
-class $AssetsAnimGen {
-  const $AssetsAnimGen();
-
-  /// File path: assets/anim/android_celebrating.png
-  AssetGenImage get androidCelebrating =>
-      const AssetGenImage('assets/anim/android_celebrating.png');
-
-  /// File path: assets/anim/android_celebration.png
-  AssetGenImage get androidCelebration =>
-      const AssetGenImage('assets/anim/android_celebration.png');
-
-  /// File path: assets/anim/android_dangle.png
-  AssetGenImage get androidDangle =>
-      const AssetGenImage('assets/anim/android_dangle.png');
-
-  /// File path: assets/anim/android_drop_in.png
-  AssetGenImage get androidDropIn =>
-      const AssetGenImage('assets/anim/android_drop_in.png');
-
-  /// File path: assets/anim/android_look_up.png
-  AssetGenImage get androidLookUp =>
-      const AssetGenImage('assets/anim/android_look_up.png');
-
-  /// File path: assets/anim/android_picking_up.png
-  AssetGenImage get androidPickingUp =>
-      const AssetGenImage('assets/anim/android_picking_up.png');
-
-  /// File path: assets/anim/dash_celebration.png
-  AssetGenImage get dashCelebration =>
-      const AssetGenImage('assets/anim/dash_celebration.png');
-
-  /// File path: assets/anim/dash_dangle.png
-  AssetGenImage get dashDangle =>
-      const AssetGenImage('assets/anim/dash_dangle.png');
-
-  /// File path: assets/anim/dash_looking_up.png
-  AssetGenImage get dashLookingUp =>
-      const AssetGenImage('assets/anim/dash_looking_up.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [
-        androidCelebrating,
-        androidCelebration,
-        androidDangle,
-        androidDropIn,
-        androidLookUp,
-        androidPickingUp,
-        dashCelebration,
-        dashDangle,
-        dashLookingUp
-      ];
-}
-
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -77,13 +24,6 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/android.png
-  AssetGenImage get android => const AssetGenImage('assets/images/android.png');
-
-  /// File path: assets/images/android_idle.png
-  AssetGenImage get androidIdle =>
-      const AssetGenImage('assets/images/android_idle.png');
-
   /// File path: assets/images/android_platform.png
   AssetGenImage get androidPlatform =>
       const AssetGenImage('assets/images/android_platform.png');
@@ -94,16 +34,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/dash_idle.png
   AssetGenImage get dashIdle =>
       const AssetGenImage('assets/images/dash_idle.png');
-
-  /// File path: assets/images/dash_platform.png
-  AssetGenImage get dashPlatform =>
-      const AssetGenImage('assets/images/dash_platform.png');
-
-  /// File path: assets/images/dino.png
-  AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
-
-  /// File path: assets/images/gradient.svg
-  SvgGenImage get gradient => const SvgGenImage('assets/images/gradient.svg');
 
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
@@ -120,13 +50,6 @@ class $AssetsImagesGen {
   AssetGenImage get platformNotSelected =>
       const AssetGenImage('assets/images/platform_not_selected.png');
 
-  /// File path: assets/images/sparky.png
-  AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
-
-  /// File path: assets/images/sparky_platform.png
-  AssetGenImage get sparkyPlatform =>
-      const AssetGenImage('assets/images/sparky_platform.png');
-
   /// File path: assets/images/tile.png
   AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
 
@@ -139,21 +62,14 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<dynamic> get values => [
-        android,
-        androidIdle,
+  List<AssetGenImage> get values => [
         androidPlatform,
         dash,
         dashIdle,
-        dashPlatform,
-        dino,
-        gradient,
         letters,
         platform,
         platformLarge,
         platformNotSelected,
-        sparky,
-        sparkyPlatform,
         tile,
         tileLarge,
         welcomeBackground
@@ -163,7 +79,6 @@ class $AssetsImagesGen {
 class Assets {
   Assets._();
 
-  static const $AssetsAnimGen anim = $AssetsAnimGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
