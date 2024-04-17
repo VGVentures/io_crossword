@@ -9,9 +9,6 @@ class DinoTeam extends Team {
   String get name => 'Dino';
 
   @override
-  Mascots get mascot => Mascots.dino;
-
-  @override
   AssetGenImage get idleAnimation => Assets.anim.dashIdle;
 
   @override

@@ -9,9 +9,6 @@ class DashTeam extends Team {
   String get name => 'Dash';
 
   @override
-  Mascots get mascot => Mascots.dash;
-
-  @override
   AssetGenImage get idleAnimation => Assets.anim.dashIdle;
 
   @override

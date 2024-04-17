@@ -9,9 +9,6 @@ class SparkyTeam extends Team {
   String get name => 'Sparky';
 
   @override
-  Mascots get mascot => Mascots.sparky;
-
-  @override
   AssetGenImage get idleAnimation => Assets.anim.dashIdle;
 
   @override

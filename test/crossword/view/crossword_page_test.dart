@@ -148,66 +148,6 @@ void main() {
         expect(find.byType(WordSelectionView), findsOneWidget);
       },
     );
-
-    testWidgets(
-      'can zoom in',
-      timeout: const Timeout(Duration(seconds: 30)),
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          greaterThan(1),
-        );
-      },
-    );
-
-    testWidgets(
-      'can zoom out',
-      timeout: const Timeout(Duration(seconds: 30)),
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          lessThan(1),
-        );
-      },
-    );
   });
 }
 

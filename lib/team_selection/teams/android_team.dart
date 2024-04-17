@@ -9,9 +9,6 @@ class AndroidTeam extends Team {
   String get name => 'Android';
 
   @override
-  Mascots get mascot => Mascots.android;
-
-  @override
   AssetGenImage get idleAnimation => Assets.anim.dashIdle;
 
   @override
