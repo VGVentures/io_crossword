@@ -1,6 +1,3 @@
-import 'package:flame/cache.dart';
-import 'package:flame/components.dart';
-import 'package:flame/widgets.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +21,7 @@ class TeamSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamSelectionCubit(),
+      create: (_) => TeamSelectionCubit()..load(),
       child: const TeamSelectionView(),
     );
   }
@@ -39,67 +36,32 @@ class TeamSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final mascots = [
-      Mascot(
-        mascot: Mascots.dash,
-        name: 'Dash',
-        image: Assets.images.dash.path,
-        gradientColors: const [
-          Color(0xFF00A947),
-          Color(0xFF1F85FA),
-          Color(0xFF00A947),
-        ],
-      ),
-      Mascot(
-        mascot: Mascots.sparky,
-        name: 'Sparky',
-        image: Assets.images.sparky.path,
-        gradientColors: const [
-          Color(0xFFFFC700),
-          Color(0xFFFD2B25),
-          Color(0xFFFFC700),
-        ],
-      ),
-      Mascot(
-        mascot: Mascots.android,
-        name: 'Android',
-        image: Assets.images.android.path,
-        gradientColors: const [
-          Color(0xFFFFC700),
-          Color(0xFF00A947),
-          Color(0xFFFFC700),
-        ],
-      ),
-      Mascot(
-        mascot: Mascots.dino,
-        name: 'Dino',
-        image: Assets.images.dino.path,
-        gradientColors: const [
-          Color(0xFF4383F2),
-          Color(0xFFFD2B25),
-          Color(0xFF4383F2),
-        ],
-      ),
-    ];
-
     final layout = IoLayout.of(context);
 
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
       ),
-      body: switch (layout) {
-        IoLayoutData.small => _TeamSelectorSmall(mascots),
-        IoLayoutData.large => _TeamSelectorLarge(mascots),
-      },
+      body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
+        builder: (context, state) {
+          // TODO(marwfair): Loading will be done in the initial loading screen.
+          // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6457898516
+          if (state.status == TeamSelectionStatus.loading) {
+            return const Text('Loading');
+          } else {
+            return switch (layout) {
+              IoLayoutData.small => const _TeamSelectorSmall(),
+              IoLayoutData.large => const _TeamSelectorLarge(),
+            };
+          }
+        },
+      ),
     );
   }
 }
 
 class _TeamSelectorLarge extends StatelessWidget {
-  const _TeamSelectorLarge(this.mascots);
-
-  final List<Mascot> mascots;
+  const _TeamSelectorLarge();
 
   static const tileWidth = 208.0;
   static const tileHeight = 119.0;
@@ -118,7 +80,7 @@ class _TeamSelectorLarge extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = context.l10n;
 
-    return BlocBuilder<TeamSelectionCubit, int>(
+    return BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
       builder: (context, state) {
         return Stack(
           children: [
@@ -136,121 +98,96 @@ class _TeamSelectorLarge extends StatelessWidget {
                   children: [
                     Positioned(
                       top: bottomPlatformTileTopPosition,
-                      left: 0,
-                      child: state == Mascots.dash.index
-                          ? SizedBox(
-                              width: tileWidth,
-                              height: platformTileHeight,
-                              child: SpriteAnimationWidget.asset(
-                                images: Images(prefix: ''),
-                                anchor: Anchor.bottomCenter,
-                                path: Assets.anim.dashPlatform.path,
-                                data: SpriteAnimationData.sequenced(
-                                  amount: 60,
-                                  stepTime: 0.042,
-                                  textureSize: Vector2(958, 605),
-                                  amountPerRow: 6,
-                                ),
-                              ),
-                            )
-                          : Assets.images.platform.image(),
+                      child: SizedBox(
+                        width: tileWidth,
+                        height: platformTileHeight,
+                        child: TeamSelectionMascotPlatform(
+                          mascot: Mascots.dash,
+                          selected: state.index == Mascots.dash.index,
+                        ),
+                      ),
                     ),
                     Positioned(
                       top: platformTileHeight,
                       left: tileWidth,
-                      child: state == Mascots.sparky.index
-                          ? GradientAnimation(
-                              mascot: mascots[state],
-                              width: tileWidth,
-                              height: platformTileHeight,
-                            )
-                          : Assets.images.platform.image(),
+                      child: SizedBox(
+                        width: tileWidth,
+                        height: platformTileHeight,
+                        child: TeamSelectionMascotPlatform(
+                          mascot: Mascots.sparky,
+                          selected: state.index == Mascots.sparky.index,
+                        ),
+                      ),
                     ),
                     Positioned(
                       top: platformTileHeight,
                       left: tileWidth * 3,
-                      child: state == Mascots.android.index
-                          ? GradientAnimation(
-                              mascot: mascots[state],
-                              width: tileWidth,
-                              height: platformTileHeight,
-                            )
-                          : Assets.images.platform.image(),
+                      child: SizedBox(
+                        width: tileWidth,
+                        height: platformTileHeight,
+                        child: TeamSelectionMascotPlatform(
+                          mascot: Mascots.android,
+                          selected: state.index == Mascots.android.index,
+                        ),
+                      ),
                     ),
                     Positioned(
                       top: bottomPlatformTileTopPosition,
                       left: tileWidth * 4,
-                      child: state == Mascots.dino.index
-                          ? GradientAnimation(
-                              mascot: mascots[state],
-                              width: tileWidth,
-                              height: platformTileHeight,
-                            )
-                          : Assets.images.platform.image(),
+                      child: SizedBox(
+                        width: tileWidth,
+                        height: platformTileHeight,
+                        child: TeamSelectionMascotPlatform(
+                          mascot: Mascots.dino,
+                          selected: state.index == Mascots.dino.index,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            Align(
+            const Align(
               child: SizedBox(
-                // Width:
-                // 5 tiles wide (208 * 5)
-                // Center moscots by subtacting a half a tile.
+                // Width of the mascots is 5 tiles. Subtract half a tile to
+                // center the mascots.
                 width: (tileWidth * 5) - (tileWidth * .5),
                 height: tileHeight * 3,
                 child: Stack(
                   children: [
-                    ...mascots.map(
-                      (mascot) => Positioned(
-                        left: mascots.indexOf(mascot) == 2 ||
-                                mascots.indexOf(mascot) == 3
-                            ? ((mascots.indexOf(mascot).toDouble()) *
-                                    tileWidth) +
-                                tileWidth
-                            : (mascots.indexOf(mascot).toDouble()) * tileWidth,
-                        bottom: mascots.indexOf(mascot) == 1 ||
-                                mascots.indexOf(mascot) == 2
-                            ? tileHeight + (tileHeight / 2)
-                            : 0 + (tileHeight / 2),
-                        child: mascot.mascot == Mascots.dash
-                            ? SizedBox(
-                                width: mascotWidth,
-                                height: mascotHeight,
-                                child: SpriteAnimationWidget.asset(
-                                  images: Images(prefix: ''),
-                                  anchor: Anchor.bottomCenter,
-                                  path: Assets.anim.dashIdle.path,
-                                  data: SpriteAnimationData.sequenced(
-                                    amount: 70,
-                                    stepTime: 0.042,
-                                    textureSize: Vector2(300, 336),
-                                    amountPerRow: 10,
-                                  ),
-                                ),
-                              )
-                            : mascot.mascot == Mascots.android
-                                ? SizedBox(
-                                    width: mascotWidth,
-                                    height: mascotHeight,
-                                    child: SpriteAnimationWidget.asset(
-                                      images: Images(prefix: ''),
-                                      anchor: Anchor.bottomCenter,
-                                      path: Assets.anim.androidIdle.path,
-                                      data: SpriteAnimationData.sequenced(
-                                        amount: 28,
-                                        stepTime: 0.042,
-                                        textureSize: Vector2(250, 360),
-                                        amountPerRow: 7,
-                                      ),
-                                    ),
-                                  )
-                                : Image.asset(
-                                    mascot.image,
-                                    alignment: Alignment.bottomCenter,
-                                    width: mascotWidth,
-                                    height: mascotHeight,
-                                  ),
+                    Positioned(
+                      bottom: tileHeight / 2,
+                      child: SizedBox(
+                        width: mascotWidth,
+                        height: mascotHeight,
+                        child: TeamSelectionMascot(Mascots.dash),
+                      ),
+                    ),
+                    Positioned(
+                      left: tileWidth,
+                      bottom: tileHeight + (tileHeight / 2),
+                      child: SizedBox(
+                        width: mascotWidth,
+                        height: mascotHeight,
+                        child: TeamSelectionMascot(Mascots.sparky),
+                      ),
+                    ),
+                    Positioned(
+                      left: tileWidth * 3,
+                      bottom: tileHeight + (tileHeight / 2),
+                      child: SizedBox(
+                        width: mascotWidth,
+                        height: mascotHeight,
+                        child: TeamSelectionMascot(Mascots.android),
+                      ),
+                    ),
+                    Positioned(
+                      left: tileWidth * 4,
+                      bottom: tileHeight / 2,
+                      child: SizedBox(
+                        width: mascotWidth,
+                        height: mascotHeight,
+                        child: TeamSelectionMascot(Mascots.dino),
                       ),
                     ),
                   ],
@@ -264,16 +201,14 @@ class _TeamSelectorLarge extends StatelessWidget {
                 style: theme.textTheme.headlineLarge,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(45),
+            const Padding(
+              padding: EdgeInsets.all(45),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _TeamSelector(
-                      mascots: mascots,
-                    ),
+                    _TeamSelector(),
                   ],
                 ),
               ),
@@ -286,9 +221,7 @@ class _TeamSelectorLarge extends StatelessWidget {
 }
 
 class _TeamSelectorSmall extends StatefulWidget {
-  const _TeamSelectorSmall(this.mascots);
-
-  final List<Mascot> mascots;
+  const _TeamSelectorSmall();
 
   @override
   State<_TeamSelectorSmall> createState() => _TeamSelectorSmallState();
@@ -296,8 +229,7 @@ class _TeamSelectorSmall extends StatefulWidget {
 
 class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
     with SingleTickerProviderStateMixin {
-  // late TabController _tabController;
-  late ScrollController _scrollController;
+  final ScrollController _scrollController = ScrollController();
 
   static const tileWidth = 366.0;
   static const tileHeight = 209.0;
@@ -308,30 +240,30 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
   void initState() {
     super.initState();
 
-    // _tabController = TabController(
-    //   length: widget.mascots.length,
-    //   vsync: this,
-    //   initialIndex: context.read<TeamSelectionCubit>().state,
-    // );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(
+          context.read<TeamSelectionCubit>().state.index.toDouble() *
+              (tileWidth * 2),
+        );
+      }
+    });
+  }
 
-    _scrollController = ScrollController();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final halfScreenWidth = MediaQuery.of(context).size.width / 2;
-    // -100;
 
-    return BlocConsumer<TeamSelectionCubit, int>(
+    return BlocConsumer<TeamSelectionCubit, TeamSelectionState>(
       listener: (context, state) {
-        // _tabController.animateTo(
-        //   state,
-        //   duration: const Duration(milliseconds: 400),
-        //   curve: Curves.easeInOut,
-        // );
-
         _scrollController.animateTo(
-          state.toDouble() * (tileWidth * 2),
+          state.index * (tileWidth * 2),
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
@@ -343,10 +275,11 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
             SingleChildScrollView(
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
               child: SizedBox(
                 // The width of the background board is 15x12 tiles. This is
                 // a little bigger than we need to make sure the grid shows
-                // when the mascots are the end are selected and when the
+                // when the mascots at the ends are selected and when the
                 // user is zoomed out.
                 width: tileWidth * 15,
                 height: tileHeight * 12,
@@ -379,70 +312,49 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                           child: Stack(
                             children: [
                               Positioned(
-                                child: state == Mascots.dash.index
-                                    // ? GradientAnimation(
-                                    //     mascot: widget.mascots[state],
-                                    //     width: tileWidth,
-                                    //     height: platformTileHeight,
-                                    //   )
-                                    ? SizedBox(
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                        child: SpriteAnimationWidget.asset(
-                                          images: Images(prefix: ''),
-                                          anchor: Anchor.bottomCenter,
-                                          path: Assets.anim.dashPlatform.path,
-                                          data: SpriteAnimationData.sequenced(
-                                            amount: 60,
-                                            stepTime: 0.042,
-                                            textureSize: Vector2(958, 605),
-                                            amountPerRow: 6,
-                                          ),
-                                        ),
-                                      )
-                                    : Assets.images.platformLarge.image(
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      ),
+                                child: SizedBox(
+                                  width: tileWidth,
+                                  height: platformTileHeight,
+                                  child: TeamSelectionMascotPlatform(
+                                    mascot: Mascots.dash,
+                                    selected: state.index == Mascots.dash.index,
+                                  ),
+                                ),
                               ),
                               Positioned(
                                 left: tileWidth * 2,
-                                child: state == Mascots.sparky.index
-                                    ? GradientAnimation(
-                                        mascot: widget.mascots[state],
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      )
-                                    : Assets.images.platformLarge.image(
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      ),
+                                child: SizedBox(
+                                  width: tileWidth,
+                                  height: platformTileHeight,
+                                  child: TeamSelectionMascotPlatform(
+                                    mascot: Mascots.sparky,
+                                    selected:
+                                        state.index == Mascots.sparky.index,
+                                  ),
+                                ),
                               ),
                               Positioned(
                                 left: tileWidth * 4,
-                                child: state == Mascots.android.index
-                                    ? GradientAnimation(
-                                        mascot: widget.mascots[state],
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      )
-                                    : Assets.images.platformLarge.image(
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      ),
+                                child: SizedBox(
+                                  width: tileWidth,
+                                  height: platformTileHeight,
+                                  child: TeamSelectionMascotPlatform(
+                                    mascot: Mascots.android,
+                                    selected:
+                                        state.index == Mascots.android.index,
+                                  ),
+                                ),
                               ),
                               Positioned(
                                 left: tileWidth * 6,
-                                child: state == Mascots.dino.index
-                                    ? GradientAnimation(
-                                        mascot: widget.mascots[state],
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      )
-                                    : Assets.images.platformLarge.image(
-                                        width: tileWidth,
-                                        height: platformTileHeight,
-                                      ),
+                                child: SizedBox(
+                                  width: tileWidth,
+                                  height: platformTileHeight,
+                                  child: TeamSelectionMascotPlatform(
+                                    mascot: Mascots.dino,
+                                    selected: state.index == Mascots.dino.index,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -451,63 +363,43 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                     ),
                     Positioned.fill(
                       left: halfScreenWidth - 100,
-                      top: -tileHeight,
-                      child: Align(
+                      top: -tileHeight - (tileHeight / 2),
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: SizedBox(
                           width: tileWidth * 7,
                           height: 400,
                           child: Stack(
                             children: [
-                              ...widget.mascots.map(
-                                (mascot) => Positioned(
-                                  left: (2 *
-                                          widget.mascots
-                                              .indexOf(mascot)
-                                              .toDouble()) *
-                                      tileWidth,
-                                  child: mascot.mascot == Mascots.dash
-                                      ? SizedBox(
-                                          width: 200,
-                                          height: 400,
-                                          child: SpriteAnimationWidget.asset(
-                                            images: Images(prefix: ''),
-                                            anchor: Anchor.bottomCenter,
-                                            path: Assets.anim.dashIdle.path,
-                                            data: SpriteAnimationData.sequenced(
-                                              amount: 70,
-                                              stepTime: 0.042,
-                                              textureSize: Vector2(300, 336),
-                                              amountPerRow: 10,
-                                            ),
-                                          ),
-                                        )
-                                      : mascot.mascot == Mascots.android
-                                          ? SizedBox(
-                                              width: 200,
-                                              height: 400,
-                                              child:
-                                                  SpriteAnimationWidget.asset(
-                                                images: Images(prefix: ''),
-                                                anchor: Anchor.bottomCenter,
-                                                path: Assets
-                                                    .anim.androidIdle.path,
-                                                data: SpriteAnimationData
-                                                    .sequenced(
-                                                  amount: 28,
-                                                  stepTime: 0.042,
-                                                  textureSize:
-                                                      Vector2(250, 360),
-                                                  amountPerRow: 7,
-                                                ),
-                                              ),
-                                            )
-                                          : Image.asset(
-                                              mascot.image,
-                                              alignment: Alignment.bottomCenter,
-                                              width: 200,
-                                              height: 400,
-                                            ),
+                              Positioned(
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 400,
+                                  child: TeamSelectionMascot(Mascots.dash),
+                                ),
+                              ),
+                              Positioned(
+                                left: tileWidth * 2,
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 400,
+                                  child: TeamSelectionMascot(Mascots.sparky),
+                                ),
+                              ),
+                              Positioned(
+                                left: tileWidth * 4,
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 400,
+                                  child: TeamSelectionMascot(Mascots.android),
+                                ),
+                              ),
+                              Positioned(
+                                left: tileWidth * 6,
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 400,
+                                  child: TeamSelectionMascot(Mascots.dino),
                                 ),
                               ),
                             ],
@@ -520,8 +412,8 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
               ),
               // ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(45),
+            const Padding(
+              padding: EdgeInsets.all(45),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Column(
@@ -532,9 +424,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                     // TabPageSelector(
                     //   controller: _tabController,
                     // ),
-                    _TeamSelector(
-                      mascots: widget.mascots,
-                    ),
+                    _TeamSelector(),
                   ],
                 ),
               ),
@@ -547,16 +437,13 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
 }
 
 class _TeamSelector extends StatelessWidget {
-  const _TeamSelector({
-    required this.mascots,
-  });
-
-  final List<Mascot> mascots;
+  const _TeamSelector();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final index = context.select((TeamSelectionCubit cubit) => cubit.state);
+    final index =
+        context.select((TeamSelectionCubit cubit) => cubit.state.index);
 
     return Column(
       children: [
@@ -578,12 +465,12 @@ class _TeamSelector extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  mascots[index].name,
+                  Mascots.values[index].name,
                   style: theme.textTheme.headlineLarge,
                 ),
               ),
               IconButton(
-                onPressed: index < mascots.length - 1
+                onPressed: index < Mascots.values.length - 1
                     ? () {
                         context
                             .read<TeamSelectionCubit>()
@@ -602,7 +489,7 @@ class _TeamSelector extends StatelessWidget {
         const SizedBox(
           height: 32,
         ),
-        _SubmitButton(mascots[index]),
+        _SubmitButton(Mascots.values[index]),
       ],
     );
   }
@@ -611,7 +498,7 @@ class _TeamSelector extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton(this.mascot);
 
-  final Mascot mascot;
+  final Mascots mascot;
 
   @override
   Widget build(BuildContext context) {
@@ -623,109 +510,12 @@ class _SubmitButton extends StatelessWidget {
         context
             .flow<GameIntroStatus>()
             .update((state) => GameIntroStatus.enterInitials);
-        context.read<CrosswordBloc>().add(MascotSelected(mascot.mascot));
+        context.read<CrosswordBloc>().add(MascotSelected(mascot));
       },
       child: Text(
         l10n.joinTeam(mascot.name),
         style: theme.textTheme.bodyMedium,
       ),
     );
-  }
-}
-
-class Mascot {
-  const Mascot({
-    required this.mascot,
-    required this.name,
-    required this.image,
-    required this.gradientColors,
-  });
-
-  final Mascots mascot;
-  final String name;
-  final String image;
-  final List<Color> gradientColors;
-}
-
-class GradientAnimation extends StatefulWidget {
-  const GradientAnimation({
-    required this.mascot,
-    required this.width,
-    required this.height,
-    super.key,
-  });
-
-  final Mascot mascot;
-  final double width;
-  final double height;
-
-  @override
-  State<GradientAnimation> createState() => _GradientAnimationState();
-}
-
-class _GradientAnimationState extends State<GradientAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat();
-    _animation = TweenSequence<double>(
-      <TweenSequenceItem<double>>[
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: .3, end: 1.3),
-          weight: 1,
-        ),
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: -.3, end: .3),
-          weight: 1,
-        ),
-      ],
-    ).animate(_controller);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            return ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  colors: widget.mascot.gradientColors,
-                  stops: [
-                    _animation.value - .3,
-                    _animation.value,
-                    _animation.value + .3,
-                  ],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcIn,
-              child: Assets.images.gradient.svg(
-                width: widget.width,
-                height: widget.height,
-              ),
-            );
-          },
-        ),
-        Assets.images.platformLarge.image(
-          width: widget.width,
-          height: widget.height,
-        ),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
