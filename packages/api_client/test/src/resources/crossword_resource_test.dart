@@ -13,14 +13,9 @@ class _MockApiClient extends Mock implements ApiClient {}
 
 class _MockResponse extends Mock implements http.Response {}
 
-class _FakeBoardSection extends Fake implements BoardSection {
-  @override
-  Point<int> get position => Point(0, 0);
-}
-
 class _FakeWord extends Fake implements Word {
   @override
-  Point<int> get position => Point(0, 0);
+  String get id => 'wordId';
 }
 
 void main() {
@@ -45,58 +40,52 @@ void main() {
 
       test('calls correct api endpoint', () async {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(
-          jsonEncode({'valid': true}),
-        );
+        when(() => response.body).thenReturn(jsonEncode({'points': 10}));
 
         await resource.answerWord(
-          section: _FakeBoardSection(),
+          section: (1, 1),
           word: _FakeWord(),
           answer: 'correctAnswer',
-          mascot: Mascots.android,
         );
 
         verify(
           () => apiClient.post(
             '/game/answer',
             body: jsonEncode({
-              'sectionId': '0,0',
-              'wordPosition': '0,0',
+              'sectionId': '1,1',
+              'wordId': 'wordId',
               'answer': 'correctAnswer',
-              'mascot': 'android',
             }),
           ),
         ).called(1);
       });
 
-      test('returns true when succeeds with correct answer', () async {
+      test('returns the points when succeeds with correct answer', () async {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(
-          jsonEncode({'valid': true}),
+          jsonEncode({'points': 10}),
         );
 
         final result = await resource.answerWord(
-          section: _FakeBoardSection(),
+          section: (1, 1),
           word: _FakeWord(),
           answer: 'correctAnswer',
-          mascot: Mascots.android,
         );
-        expect(result, isTrue);
+        expect(result, 10);
       });
 
-      test('returns false when succeeds with incorrect answer', () async {
+      test('returns 0 points when succeeds with incorrect answer', () async {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(
-          jsonEncode({'valid': false}),
+          jsonEncode({'points': 0}),
         );
 
         final result = await resource.answerWord(
-          section: _FakeBoardSection(),
+          section: (1, 1),
           word: _FakeWord(),
           answer: 'incorrectAnswer',
-          mascot: Mascots.android,
         );
-        expect(result, isFalse);
+        expect(result, 0);
       });
 
       test('throws ApiClientError when request fails', () async {
@@ -106,10 +95,9 @@ void main() {
 
         await expectLater(
           resource.answerWord(
-            section: _FakeBoardSection(),
+            section: (1, 1),
             word: _FakeWord(),
             answer: 'incorrectAnswer',
-            mascot: Mascots.android,
           ),
           throwsA(
             isA<ApiClientError>().having(
@@ -122,16 +110,16 @@ void main() {
           ),
         );
       });
+
       test('throws ApiClientError when response is invalid', () async {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn('Oops');
 
         await expectLater(
           resource.answerWord(
-            section: _FakeBoardSection(),
+            section: (1, 1),
             word: _FakeWord(),
             answer: 'incorrectAnswer',
-            mascot: Mascots.android,
           ),
           throwsA(
             isA<ApiClientError>().having(

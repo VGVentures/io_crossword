@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:clock/clock.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:db_client/db_client.dart';
@@ -15,6 +17,7 @@ void main() {
     late DbClient dbClient;
 
     const sectionsCollection = 'boardChunks';
+    const answersCollection = 'answers';
 
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
@@ -160,10 +163,7 @@ void main() {
             'position': {'x': 1, 'y': 1},
             'size': 300,
             'words': [
-              {
-                'id': '1',
-                ...word.toJson(),
-              },
+              {'id': '1', ...word.toJson()},
             ],
             'borderWords': const <dynamic>[],
           },
@@ -171,27 +171,33 @@ void main() {
         when(
           () => dbClient.find(
             sectionsCollection,
-            {
-              'position.x': 1,
-              'position.y': 1,
-            },
+            {'position.x': 1, 'position.y': 1},
           ),
         ).thenAnswer((_) async => [record]);
+
         when(
           () => dbClient.update(
             sectionsCollection,
             any(that: isA<DbEntityRecord>()),
           ),
         ).thenAnswer((_) async {});
+
+        final answersRecord = _MockDbEntityRecord();
+        when(() => answersRecord.id).thenReturn('id1');
+        when(() => answersRecord.data).thenReturn({'answer': 'flutter'});
+        when(
+          () => dbClient.getById(answersCollection, 'id1'),
+        ).thenAnswer((_) async => answersRecord);
+
         repository = CrosswordRepository(dbClient: dbClient);
       });
 
-      test('answerWord returns true if answer is correct', () async {
+      test('returns true if answer is correct', () async {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
           final valid =
-              await repository.answerWord(1, 1, 1, 1, Mascots.dino, 'flutter');
+              await repository.answerWord(1, 1, '1', Mascots.dino, 'flutter');
           expect(valid, isTrue);
           final captured = verify(
             () => dbClient.update(
@@ -221,32 +227,76 @@ void main() {
         });
       });
 
-      test('answerWord returns false if answer is incorrect', () async {
+      test('returns false if answer is incorrect', () async {
         final valid =
-            await repository.answerWord(1, 1, 1, 1, Mascots.dino, 'android');
+            await repository.answerWord(1, 1, '1', Mascots.dino, 'android');
         expect(valid, isFalse);
       });
 
-      test('answerWord returns false if section does not exist', () async {
+      test(
+        'throws $CrosswordRepositoryException if section does not exist',
+        () async {
+          when(
+            () => dbClient.find(
+              sectionsCollection,
+              {'position.x': 0, 'position.y': 0},
+            ),
+          ).thenAnswer((_) async => []);
+
+          expect(
+            () => repository.answerWord(0, 0, '1', Mascots.dino, 'flutter'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
+
+      test(
+        'throws $CrosswordRepositoryException if word is not in section',
+        () async {
+          expect(
+            () => repository.answerWord(1, 1, 'fake', Mascots.dino, 'flutter'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
+    });
+
+    group('updateSolvedWordsCount', () {
+      late CrosswordRepository repository;
+
+      setUp(() {
+        repository = CrosswordRepository(dbClient: dbClient);
+
         when(
-          () => dbClient.find(
+          () => dbClient.update(
             sectionsCollection,
-            {
-              'position.x': 0,
-              'position.y': 0,
-            },
+            any(),
           ),
-        ).thenAnswer((_) async => []);
-
-        final valid =
-            await repository.answerWord(0, 0, 1, 1, Mascots.dino, 'flutter');
-        expect(valid, isFalse);
+        ).thenAnswer((_) async {});
       });
 
-      test('answerWord returns false if word is not in section', () async {
-        final valid =
-            await repository.answerWord(1, 1, -1, -1, Mascots.dino, 'flutter');
-        expect(valid, isFalse);
+      test('updates the document in the database', () async {
+        final record = _MockDbEntityRecord();
+        when(() => record.id).thenReturn('id');
+        when(() => record.data).thenReturn({'value': 80});
+        when(
+          () => dbClient.find('boardInfo', {'type': 'solved_words_count'}),
+        ).thenAnswer((_) async => [record]);
+        when(
+          () => dbClient.update('boardInfo', any()),
+        ).thenAnswer((_) async {});
+
+        await repository.updateSolvedWordsCount();
+
+        verify(
+          () => dbClient.update(
+            'boardInfo',
+            DbEntityRecord(
+              id: 'id',
+              data: {'value': 81},
+            ),
+          ),
+        ).called(1);
       });
     });
   });
