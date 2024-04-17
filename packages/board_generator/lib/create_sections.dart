@@ -43,12 +43,12 @@ void main(List<String> args) async {
   });
 
   final words = <Word>[];
-  final answers = <String, String>{};
+  final answersMap = <String, String>{};
 
   for (final (i, row) in rows.indexed) {
-    final id = 'id${i + 1}';
+    final id = '${i + 1}';
     final answer = row[2] as String;
-    answers[id] = answer;
+    answersMap[id] = answer;
     words.add(
       Word(
         id: id,
@@ -87,6 +87,8 @@ void main(List<String> args) async {
   final minSectionY = (minY / sectionSize).floor();
   final maxSectionY = (maxY / sectionSize).ceil();
 
+  final answers = <Answer>[];
+
   for (var i = minSectionX; i < maxSectionX; i++) {
     for (var j = minSectionY; j < maxSectionY; j++) {
       final sectionX = i * sectionSize;
@@ -103,6 +105,16 @@ void main(List<String> args) async {
         return !isStartInSection && isInSection;
       }).toList();
 
+      answers.addAll(
+        sectionWords.map((word) {
+          return Answer(
+            id: word.id,
+            answer: answersMap[word.id]!,
+            section: Point(i, j),
+          );
+        }),
+      );
+
       final section = BoardSection(
         id: '',
         position: Point(i, j),
@@ -117,6 +129,9 @@ void main(List<String> args) async {
       }
     }
   }
+
+  print('Answers: ${answers.length}');
+  print('AnswersMap: ${answersMap.length}');
 
   print('Uploading answers...');
   await crosswordRepository.addAnswers(answers);

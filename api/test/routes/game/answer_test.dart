@@ -81,15 +81,13 @@ void main() {
             () => crosswordRepository.updateSolvedWordsCount(),
           ).thenAnswer((_) async {});
           when(
-            () =>
-                crosswordRepository.answerWord(1, 1, 'id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
           ).thenAnswer((_) async => true);
           when(
             () => leaderboardRepository.updateScore(user.id),
           ).thenAnswer((_) async => 10);
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
               'wordId': 'id',
               'answer': 'sun',
             },
@@ -115,12 +113,10 @@ void main() {
             ),
           );
           when(
-            () =>
-                crosswordRepository.answerWord(1, 1, 'id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
           ).thenAnswer((_) async => false);
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
               'wordId': 'id',
               'answer': 'sun',
             },
@@ -135,27 +131,11 @@ void main() {
       );
 
       test(
-        'returns Response with status BadRequest if section id is invalid',
+        'returns Response with status internalServerError '
+        'if player does not exist',
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '00',
-              'wordId': 'id',
-              'answer': 'sun',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if player does not exist',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'sectionId': '1,1',
               'wordId': 'id',
               'answer': 'sun',
             },
@@ -165,22 +145,9 @@ void main() {
           );
 
           final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
-        },
-      );
-
-      test(
-        'returns Response with status BadRequest if sectionId is not provided',
-        () async {
-          when(() => request.json()).thenAnswer(
-            (_) async => {
-              'wordId': 'id',
-              'answer': 'android',
-            },
-          );
-
-          final response = await route.onRequest(requestContext);
-          expect(response.statusCode, HttpStatus.badRequest);
+          final body = await response.body();
+          expect(body, 'Player not found for id userId');
+          expect(response.statusCode, HttpStatus.internalServerError);
         },
       );
 
@@ -189,7 +156,6 @@ void main() {
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
               'answer': 'android',
             },
           );
@@ -204,7 +170,6 @@ void main() {
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
               'wordId': 'id',
             },
           );
@@ -219,7 +184,6 @@ void main() {
         () async {
           when(() => request.json()).thenAnswer(
             (_) async => {
-              'sectionId': '1,1',
               'wordId': 'id',
               'answer': 'sun',
             },
@@ -232,8 +196,7 @@ void main() {
             ),
           );
           when(
-            () =>
-                crosswordRepository.answerWord(1, 1, 'id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
           ).thenThrow(Exception('Oops'));
 
           final response = await route.onRequest(requestContext);
