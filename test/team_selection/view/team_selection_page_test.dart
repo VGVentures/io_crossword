@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,8 +18,8 @@ import '../../helpers/helpers.dart';
 class _MockTeamSelectionCubit extends MockCubit<int>
     implements TeamSelectionCubit {}
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 void main() {
   group('$TeamSelectionPage', () {
@@ -133,13 +133,13 @@ void main() {
     });
 
     group('joining a team', () {
-      late CrosswordBloc crosswordBloc;
+      late PlayerBloc playerBloc;
       late FlowController<GameIntroStatus> flowController;
 
       setUp(() {
         when(() => teamSelectionCubit.state).thenReturn(2);
 
-        crosswordBloc = _MockCrosswordBloc();
+        playerBloc = _MockPlayerBloc();
         flowController = FlowController<GameIntroStatus>(
           GameIntroStatus.teamSelection,
         );
@@ -148,7 +148,7 @@ void main() {
 
       testWidgets('adds MascotSelected', (tester) async {
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
             child: FlowBuilder<GameIntroStatus>(
@@ -165,15 +165,13 @@ void main() {
         await tester.tap(submitButtonFinder);
         await tester.pumpAndSettle();
 
-        verify(() => crosswordBloc.add(MascotSelected(Mascots.android)))
-            .called(1);
+        verify(() => playerBloc.add(MascotSelected(Mascots.android))).called(1);
       });
 
       testWidgets(
         'flows into enterInitials',
         (tester) async {
           await tester.pumpApp(
-            crosswordBloc: crosswordBloc,
             BlocProvider(
               create: (_) => teamSelectionCubit,
               child: FlowBuilder<GameIntroStatus>(

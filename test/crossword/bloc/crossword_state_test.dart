@@ -241,22 +241,6 @@ void main() {
         );
       });
 
-      test('returns an instance with new mascot', () {
-        final state = CrosswordState(
-          sectionSize: 400,
-        );
-        final newState = state.copyWith(mascot: Mascots.dino);
-        expect(newState.mascot, equals(Mascots.dino));
-      });
-
-      test('returns an instance with new initials', () {
-        final state = CrosswordState(
-          sectionSize: 400,
-        );
-        final newState = state.copyWith(initials: 'GIO');
-        expect(newState.initials, equals('GIO'));
-      });
-
       test('returns an instance with new selected word', () {
         final state = CrosswordState(
           sectionSize: 400,

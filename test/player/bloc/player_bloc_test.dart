@@ -63,5 +63,48 @@ void main() {
         ],
       );
     });
+
+    group('MascotSelected', () {
+      blocTest<PlayerBloc, PlayerState>(
+        'emits [playing] state with the selected mascot '
+        'when MascotSelected is added',
+        build: () => bloc,
+        seed: () => PlayerState(
+          status: PlayerStatus.playing,
+          rank: 50,
+        ),
+        act: (bloc) => bloc.add(MascotSelected(Mascots.android)),
+        expect: () => <PlayerState>[
+          PlayerState(
+            status: PlayerStatus.playing,
+            rank: 50,
+            mascot: Mascots.android,
+            player: Player.empty.copyWith(
+              mascot: Mascots.android,
+            ),
+          ),
+        ],
+      );
+    });
+
+    group('InitialsSelected', () {
+      blocTest<PlayerBloc, PlayerState>(
+        'emits crossword loaded state with the initials entered '
+        'when InitialsSelected is added',
+        build: () => bloc,
+        seed: () => PlayerState(
+          status: PlayerStatus.playing,
+        ),
+        act: (bloc) => bloc.add(InitialsSelected('ABC')),
+        expect: () => <PlayerState>[
+          PlayerState(
+            status: PlayerStatus.playing,
+            player: Player.empty.copyWith(
+              initials: 'ABC',
+            ),
+          ),
+        ],
+      );
+    });
   });
 }

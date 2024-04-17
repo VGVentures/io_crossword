@@ -25,7 +25,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     return emit.forEach(
       _leaderboardRepository.getPlayerRanked(event.userId),
       onData: (data) {
-        return PlayerState(
+        return state.copyWith(
           status: PlayerStatus.playing,
           player: data.$1,
           rank: data.$2,
