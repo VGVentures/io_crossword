@@ -2,9 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crossword_repository/src/extensions/board_section_from_snapshot.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 
 class _MockQuerySnapshot<T> extends Mock implements QuerySnapshot<T> {}
 
@@ -12,21 +12,22 @@ class _MockQueryDocumentSnapshot<T> extends Mock
     implements QueryDocumentSnapshot<T> {}
 
 void main() {
-  final word = Word(
-    position: const Point(0, 1),
+  const word = Word(
+    id: '1',
+    position: Point(0, 1),
     axis: Axis.horizontal,
     answer: 'answer',
+    length: 6,
     clue: 'clue',
-    solvedTimestamp: null,
   );
-  final boardSection1 = BoardSection(
+  const boardSection1 = BoardSection(
     id: 'id',
-    position: const Point(1, 1),
+    position: Point(1, 1),
     size: 9,
     words: [
       word,
     ],
-    borderWords: const [],
+    borderWords: [],
   );
 
   group('BoardSectionFromSnapshot', () {

@@ -10,13 +10,13 @@ enum PlayerStatus {
 class PlayerState extends Equatable {
   const PlayerState({
     this.status = PlayerStatus.onboarding,
-    this.player = LeaderboardPlayer.empty,
+    this.player = Player.empty,
     this.rank = 0,
   });
 
   PlayerState copyWith({
     PlayerStatus? status,
-    LeaderboardPlayer? player,
+    Player? player,
     int? rank,
   }) {
     return PlayerState(
@@ -27,7 +27,7 @@ class PlayerState extends Equatable {
   }
 
   final PlayerStatus status;
-  final LeaderboardPlayer player;
+  final Player player;
   final int rank;
 
   @override

@@ -14,6 +14,8 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
+    const sectionsCollection = 'boardChunks';
+
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
     });
@@ -37,7 +39,7 @@ void main() {
           'borderWords': const <dynamic>[],
         },
       );
-      when(() => dbClient.listAll('boardSections'))
+      when(() => dbClient.listAll(sectionsCollection))
           .thenAnswer((_) async => [record]);
       final repository = CrosswordRepository(dbClient: dbClient);
       final sections = await repository.listAllSections();
@@ -65,7 +67,7 @@ void main() {
       );
       when(
         () => dbClient.find(
-          'boardSections',
+          sectionsCollection,
           {
             'position.x': 1,
             'position.y': 1,
@@ -90,7 +92,7 @@ void main() {
     test('findSectionByPosition returns null when empty', () async {
       when(
         () => dbClient.find(
-          'boardSections',
+          sectionsCollection,
           {
             'position.x': 1,
             'position.y': 1,
@@ -106,7 +108,7 @@ void main() {
     test('updateSection updates the section in the db', () async {
       when(
         () => dbClient.update(
-          'boardSections',
+          sectionsCollection,
           any(that: isA<DbEntityRecord>()),
         ),
       ).thenAnswer((_) async {});
@@ -121,7 +123,7 @@ void main() {
       await repository.updateSection(section);
       final captured = verify(
         () => dbClient.update(
-          'boardSections',
+          sectionsCollection,
           captureAny(),
         ),
       ).captured.single as DbEntityRecord;
@@ -142,11 +144,12 @@ void main() {
     group('answerWord', () {
       late CrosswordRepository repository;
       final word = Word(
+        id: '1',
         position: const Point(1, 1),
         axis: Axis.vertical,
         answer: 'flutter',
+        length: 7,
         clue: '',
-        solvedTimestamp: null,
       );
 
       setUp(() {
@@ -157,14 +160,17 @@ void main() {
             'position': {'x': 1, 'y': 1},
             'size': 300,
             'words': [
-              word.toJson(),
+              {
+                'id': '1',
+                ...word.toJson(),
+              },
             ],
             'borderWords': const <dynamic>[],
           },
         );
         when(
           () => dbClient.find(
-            'boardSections',
+            sectionsCollection,
             {
               'position.x': 1,
               'position.y': 1,
@@ -173,7 +179,7 @@ void main() {
         ).thenAnswer((_) async => [record]);
         when(
           () => dbClient.update(
-            'boardSections',
+            sectionsCollection,
             any(that: isA<DbEntityRecord>()),
           ),
         ).thenAnswer((_) async {});
@@ -189,7 +195,7 @@ void main() {
           expect(valid, isTrue);
           final captured = verify(
             () => dbClient.update(
-              'boardSections',
+              sectionsCollection,
               captureAny(),
             ),
           ).captured.single as DbEntityRecord;
@@ -224,7 +230,7 @@ void main() {
       test('answerWord returns false if section does not exist', () async {
         when(
           () => dbClient.find(
-            'boardSections',
+            sectionsCollection,
             {
               'position.x': 0,
               'position.y': 0,

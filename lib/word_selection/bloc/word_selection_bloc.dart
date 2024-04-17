@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:game_domain/game_domain.dart';
 
 part 'word_selection_event.dart';
 part 'word_selection_state.dart';
@@ -7,8 +8,8 @@ part 'word_selection_state.dart';
 class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   WordSelectionBloc() : super(const WordSelectionState.initial()) {
     on<WordSelected>(_onWordSelected);
+    on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
-    on<WordFocusedSuccessRequested>(_onWordFocusedSuccessRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
   }
 
@@ -19,8 +20,17 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     emit(
       WordSelectionState(
         status: WordSelectionStatus.preSolving,
-        wordIdentifier: event.wordIdentifier,
+        word: event.selectedWord,
       ),
+    );
+  }
+
+  void _onWordUnselected(
+    WordUnselected event,
+    Emitter<WordSelectionState> emit,
+  ) {
+    emit(
+      const WordSelectionState.initial(),
     );
   }
 
@@ -28,7 +38,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     WordSolveRequested event,
     Emitter<WordSelectionState> emit,
   ) {
-    if (state.wordIdentifier == null) {
+    if (state.word == null) {
       // Can't solve a word if no word is selected.
       return;
     }
@@ -36,7 +46,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     emit(
       WordSelectionState(
         status: WordSelectionStatus.solving,
-        wordIdentifier: state.wordIdentifier,
+        word: state.word,
       ),
     );
   }
@@ -60,13 +70,16 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       // TODO(alesstiago): Replace with a call to the backend that validates
       // the answer.
       // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6444661142
-      () => event.answer == 'correct',
+      () => event.answer.toLowerCase() == 'correct',
     );
 
     if (isCorrect) {
       emit(
         state.copyWith(
           status: WordSelectionStatus.solved,
+          word: state.word!.copyWith(
+            word: state.word!.word.copyWith(answer: event.answer),
+          ),
           wordPoints: 10,
         ),
       );
@@ -77,14 +90,5 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
         ),
       );
     }
-  }
-
-  void _onWordFocusedSuccessRequested(
-    WordFocusedSuccessRequested event,
-    Emitter<WordSelectionState> emit,
-  ) {
-    emit(
-      state.copyWith(status: WordSelectionStatus.solved),
-    );
   }
 }

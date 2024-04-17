@@ -6,6 +6,9 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword/word_selection/word_selection.dart'
+    hide WordUnselected;
+import 'package:io_crossword/word_selection/word_selection.dart' as selection;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template word_success_view}
@@ -13,16 +16,14 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 /// {@endtemplate}
 class WordSuccessView extends StatelessWidget {
   /// {@macro word_success_view}
-  const WordSuccessView({required this.selectedWord, super.key});
-
-  final WordSelection selectedWord;
+  const WordSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
     return switch (layout) {
-      IoLayoutData.large => WordSelectionSuccessLargeView(selectedWord),
-      IoLayoutData.small => WordSelectionSuccessSmallView(selectedWord),
+      IoLayoutData.large => const WordSelectionSuccessLargeView(),
+      IoLayoutData.small => const WordSelectionSuccessSmallView(),
     };
   }
 }
@@ -30,12 +31,14 @@ class WordSuccessView extends StatelessWidget {
 @visibleForTesting
 class WordSelectionSuccessLargeView extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSuccessLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionSuccessLargeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     final l10n = context.l10n;
     final themeData = Theme.of(context);
 
@@ -50,7 +53,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
           const SuccessTopBar(),
           const SizedBox(height: 32),
           IoWord(
-            selectedWord.word.answer.toUpperCase(),
+            selectedWord.word.answer!.toUpperCase(),
             style: themeData.io.wordTheme.big,
           ),
           const SizedBox(height: 40),
@@ -97,12 +100,14 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
 @visibleForTesting
 class WordSelectionSuccessSmallView extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSuccessSmallView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionSuccessSmallView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
     final l10n = context.l10n;
     final themeData = Theme.of(context);
 
@@ -123,7 +128,7 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                 child: Column(
                   children: [
                     IoWord(
-                      selectedWord.word.answer.toUpperCase(),
+                      selectedWord.word.answer!.toUpperCase(),
                       style: themeData.io.wordTheme.big,
                     ),
                     const SizedBox(height: 40),
@@ -182,13 +187,7 @@ class SuccessTopBar extends StatelessWidget {
           l10n.wordSolved,
           style: IoCrosswordTextStyles.headlineSM,
         ),
-        IconButton(
-          onPressed: () {
-            context.read<CrosswordBloc>().add(const WordUnselected());
-          },
-          icon: const Icon(Icons.cancel),
-          style: themeData.io.iconButtonTheme.filled,
-        ),
+        const CloseWordSelectionIconButton(),
       ],
     );
   }
@@ -305,6 +304,7 @@ class KeepPlayingButton extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: () {
         context.read<CrosswordBloc>().add(const WordUnselected());
+        context.read<WordSelectionBloc>().add(const selection.WordUnselected());
       },
       icon: const Icon(
         Icons.gamepad,

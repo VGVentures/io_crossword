@@ -9,7 +9,7 @@ class CrosswordRepository {
   CrosswordRepository({
     required this.db,
   }) {
-    sectionCollection = db.collection('boardSections');
+    sectionCollection = db.collection('boardChunks');
   }
 
   /// The [FirebaseFirestore] instance.

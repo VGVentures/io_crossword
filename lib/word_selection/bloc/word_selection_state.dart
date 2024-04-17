@@ -1,6 +1,9 @@
 part of 'word_selection_bloc.dart';
 
 enum WordSelectionStatus {
+  /// No word has been selected by the user.
+  empty,
+
   /// The word has not yet been solved, but it is being considered
   /// by the user.
   preSolving,
@@ -26,25 +29,48 @@ enum WordSelectionStatus {
   failure;
 }
 
+class SelectedWord extends Equatable {
+  const SelectedWord({
+    required this.section,
+    required this.word,
+  });
+
+  final (int, int) section;
+  final Word word;
+
+  SelectedWord copyWith({
+    (int, int)? section,
+    Word? word,
+  }) {
+    return SelectedWord(
+      section: section ?? this.section,
+      word: word ?? this.word,
+    );
+  }
+
+  @override
+  List<Object> get props => [section, word];
+}
+
 class WordSelectionState extends Equatable {
   const WordSelectionState({
     required this.status,
-    this.wordIdentifier,
+    this.word,
     this.wordPoints,
   });
 
   const WordSelectionState.initial()
-      : status = WordSelectionStatus.preSolving,
-        wordIdentifier = null,
+      : status = WordSelectionStatus.empty,
+        word = null,
         wordPoints = null;
 
   final WordSelectionStatus status;
 
-  /// The unique identifier of the word.
+  /// The word that is currently selected by the user.
   ///
   /// Is `null` if there is no word that is currently selected by
   /// the user.
-  final String? wordIdentifier;
+  final SelectedWord? word;
 
   /// The amount of points that will be awarded to the user if the
   /// word is correctly solved.
@@ -54,16 +80,16 @@ class WordSelectionState extends Equatable {
 
   WordSelectionState copyWith({
     WordSelectionStatus? status,
-    String? wordIdentifier,
+    SelectedWord? word,
     int? wordPoints,
   }) {
     return WordSelectionState(
       status: status ?? this.status,
-      wordIdentifier: wordIdentifier ?? this.wordIdentifier,
+      word: word ?? this.word,
       wordPoints: wordPoints ?? this.wordPoints,
     );
   }
 
   @override
-  List<Object?> get props => [wordIdentifier, status, wordPoints];
+  List<Object?> get props => [word, status, wordPoints];
 }

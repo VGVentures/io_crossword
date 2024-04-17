@@ -26,6 +26,13 @@ Future<Response> _onPost(RequestContext context) async {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
+  final unwantedInitials = await leaderboardRepository.getInitialsBlacklist();
+
+  if (unwantedInitials.contains(initials.toUpperCase()) ||
+      initials.length != 3) {
+    return Response(statusCode: HttpStatus.badRequest);
+  }
+
   try {
     await leaderboardRepository.createScore(user.id, initials, mascot);
   } catch (e, s) {

@@ -15,8 +15,8 @@ void main() {
     late LeaderboardRepository leaderboardRepository;
     late PlayerBloc bloc;
 
-    const player = LeaderboardPlayer(
-      userId: 'user-id',
+    const player = Player(
+      id: 'user-id',
       mascot: Mascots.android,
       streak: 5,
       initials: 'ABC',
