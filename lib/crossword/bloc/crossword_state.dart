@@ -47,7 +47,6 @@ class CrosswordState extends Equatable {
     this.zoomLimit = 0.35,
     this.mascot,
     this.initials = '',
-    this.answer = '',
   });
 
   final CrosswordStatus status;
@@ -57,7 +56,6 @@ class CrosswordState extends Equatable {
   final double zoomLimit;
   final Mascots? mascot;
   final String initials;
-  final String answer;
 
   CrosswordState copyWith({
     CrosswordStatus? status,
@@ -67,7 +65,6 @@ class CrosswordState extends Equatable {
     double? zoomLimit,
     Mascots? mascot,
     String? initials,
-    String? answer,
   }) {
     return CrosswordState(
       status: status ?? this.status,
@@ -77,7 +74,6 @@ class CrosswordState extends Equatable {
       zoomLimit: zoomLimit ?? this.zoomLimit,
       mascot: mascot ?? this.mascot,
       initials: initials ?? this.initials,
-      answer: answer ?? this.answer,
     );
   }
 
@@ -101,6 +97,5 @@ class CrosswordState extends Equatable {
         zoomLimit,
         mascot,
         initials,
-        answer,
       ];
 }

@@ -149,7 +149,7 @@ void main() {
     );
 
     testWithGame(
-      'add AnswerUpdated event when user enters all the letters',
+      'add $WordSolveAttempted event when user enters all the letters',
       createGame,
       (game) async {
         await game.ready();
@@ -190,8 +190,11 @@ void main() {
           buffer.write('f');
         }
         await game.ready();
-        verify(() => crosswordBloc.add(AnswerUpdated(buffer.toString())))
-            .called(1);
+
+        verify(
+          () => wordSelectionBloc
+              .add(WordSolveAttempted(answer: buffer.toString())),
+        ).called(1);
       },
     );
   });

@@ -49,18 +49,27 @@ void main() {
   });
 
   group('$WordSuccessView', () {
+    late WordSelectionBloc wordSelectionBloc;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordSelectionBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solved,
+          word: SelectedWord(section: (0, 0), word: _FakeWord()),
+        ),
+      );
+    });
+
     group('renders', () {
-      late WordSelection selectedWord;
-
-      setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-      });
-
       testWidgets('$WordSelectionSuccessLargeView when layout is large',
           (tester) async {
         await tester.pumpApp(
           layout: IoLayoutData.large,
-          WordSuccessView(selectedWord: selectedWord),
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSuccessView(),
+          ),
         );
 
         expect(find.byType(WordSelectionSuccessLargeView), findsOneWidget);
@@ -70,7 +79,10 @@ void main() {
           (tester) async {
         await tester.pumpApp(
           layout: IoLayoutData.small,
-          WordSuccessView(selectedWord: selectedWord),
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: WordSuccessView(),
+          ),
         );
 
         expect(find.byType(WordSelectionSuccessSmallView), findsOneWidget);
@@ -82,9 +94,18 @@ void main() {
     late Widget widget;
 
     setUp(() {
-      final wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
+      final wordSelectionBloc = _MockWordSelectionBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solved,
+          word: SelectedWord(section: (0, 0), word: _FakeWord()),
+        ),
+      );
 
-      widget = WordSelectionSuccessLargeView(wordSelection);
+      widget = BlocProvider<WordSelectionBloc>(
+        create: (_) => wordSelectionBloc,
+        child: WordSelectionSuccessLargeView(),
+      );
     });
 
     testWidgets('renders word solved text', (tester) async {
@@ -128,9 +149,18 @@ void main() {
     late Widget widget;
 
     setUp(() {
-      final wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
+      final wordSelectionBloc = _MockWordSelectionBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solved,
+          word: SelectedWord(section: (0, 0), word: _FakeWord()),
+        ),
+      );
 
-      widget = WordSelectionSuccessSmallView(wordSelection);
+      widget = BlocProvider<WordSelectionBloc>(
+        create: (_) => wordSelectionBloc,
+        child: WordSelectionSuccessLargeView(),
+      );
     });
 
     testWidgets('renders word solved text', (tester) async {

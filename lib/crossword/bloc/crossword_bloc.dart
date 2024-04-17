@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -14,10 +13,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
     required BoardInfoRepository boardInfoRepository,
-    required CrosswordResource crosswordResource,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
-        _crosswordResource = crosswordResource,
         super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
@@ -25,13 +22,10 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
     on<InitialsSelected>(_onInitialsSelected);
-    on<AnswerUpdated>(_onAnswerUpdated);
-    on<AnswerSubmitted>(_onAnswerSubmitted);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
-  final CrosswordResource _crosswordResource;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
@@ -112,7 +106,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           section: section,
           word: event.word,
         ),
-        answer: '',
       ),
     );
   }
@@ -162,57 +155,5 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     emit(
       state.copyWith(initials: event.initials),
     );
-  }
-
-  void _onAnswerUpdated(
-    AnswerUpdated event,
-    Emitter<CrosswordState> emit,
-  ) {
-    emit(
-      state.copyWith(answer: event.answer),
-    );
-  }
-
-  Future<void> _onAnswerSubmitted(
-    AnswerSubmitted event,
-    Emitter<CrosswordState> emit,
-  ) async {
-    final loadedState = state;
-    final selectedWord = loadedState.selectedWord;
-    if (selectedWord == null) return;
-
-    final userAnswer = loadedState.answer.toLowerCase();
-
-    if (userAnswer.length != selectedWord.word.length) {
-      emit(
-        loadedState.copyWith(
-          selectedWord: selectedWord.copyWith(solvedStatus: WordStatus.invalid),
-        ),
-      );
-      return;
-    }
-
-    try {
-      final isValidAnswer = await _crosswordResource.answerWord(
-        section: loadedState.sections[selectedWord.section]!,
-        word: selectedWord.word,
-        answer: userAnswer,
-        mascot: loadedState.mascot!,
-      );
-
-      emit(
-        loadedState.copyWith(
-          selectedWord: selectedWord.copyWith(
-            solvedStatus:
-                isValidAnswer ? WordStatus.solved : WordStatus.invalid,
-          ),
-        ),
-      );
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      // On answer we don't need to make the page fail complete.
-      // This will change in next refactor.
-      emit(state.copyWith(status: CrosswordStatus.failure));
-    }
   }
 }

@@ -11,14 +11,14 @@ sealed class WordSelectionEvent extends Equatable {
 /// {@endtemplate}
 class WordSelected extends WordSelectionEvent {
   const WordSelected({
-    required this.wordIdentifier,
+    required this.selectedWord,
   });
 
   /// The unique identifier of the word that the user has selected.
-  final String wordIdentifier;
+  final SelectedWord selectedWord;
 
   @override
-  List<Object> get props => [wordIdentifier];
+  List<Object> get props => [selectedWord];
 }
 
 /// {@template word_unselected}
@@ -56,11 +56,4 @@ class WordSolveAttempted extends WordSelectionEvent {
 
   @override
   List<Object?> get props => [answer];
-}
-
-class WordFocusedSuccessRequested extends WordSelectionEvent {
-  const WordFocusedSuccessRequested();
-
-  @override
-  List<Object> get props => [];
 }

@@ -25,7 +25,7 @@ void main() {
       ],
       borderWords: const [],
     );
-    const sectionsCollection = 'boardSections';
+    const sectionsCollection = 'boardChunks';
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;
