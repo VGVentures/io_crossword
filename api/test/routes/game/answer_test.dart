@@ -78,6 +78,9 @@ void main() {
             ),
           );
           when(
+            () => crosswordRepository.updateSolvedWordsCount(),
+          ).thenAnswer((_) async {});
+          when(
             () =>
                 crosswordRepository.answerWord(1, 1, 'id', Mascots.dash, 'sun'),
           ).thenAnswer((_) async => true);
