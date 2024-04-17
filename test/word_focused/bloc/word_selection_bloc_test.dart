@@ -8,7 +8,10 @@ import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockWord extends Mock implements Word {}
+class _MockWord extends Mock implements Word {
+  @override
+  String get id => 'id';
+}
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
@@ -118,8 +121,7 @@ void main() {
               .thenReturn(answerWord);
           when(
             () => crosswordResource.answerWord(
-              section: selectedWord.section,
-              word: selectedWord.word,
+              wordId: selectedWord.word.id,
               answer: 'correct',
             ),
           ).thenAnswer((_) async => 10);
@@ -151,8 +153,7 @@ void main() {
         setUp: () {
           when(
             () => crosswordResource.answerWord(
-              section: selectedWord.section,
-              word: selectedWord.word,
+              wordId: selectedWord.word.id,
               answer: 'incorrect',
             ),
           ).thenAnswer((_) async => 0);
