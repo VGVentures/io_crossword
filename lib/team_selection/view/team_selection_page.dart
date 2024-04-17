@@ -465,7 +465,7 @@ class _TeamSelector extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  Mascots.values[index].name,
+                  Mascots.values[index].displayName,
                   style: theme.textTheme.headlineLarge,
                 ),
               ),
@@ -513,7 +513,7 @@ class _SubmitButton extends StatelessWidget {
         context.read<CrosswordBloc>().add(MascotSelected(mascot));
       },
       child: Text(
-        l10n.joinTeam(mascot.name),
+        l10n.joinTeam(mascot.displayName),
         style: theme.textTheme.bodyMedium,
       ),
     );

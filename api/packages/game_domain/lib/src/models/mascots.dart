@@ -4,40 +4,40 @@
 enum Mascots {
   /// Flutter Dash mascot.
   dash(
-    name: 'Dash',
+    displayName: 'Dash',
     idleAnimation: 'dash_idle.png',
     platformAnimation: 'android_platform.png',
   ),
 
   /// Firebase Sparky mascot.
   sparky(
-    name: 'Sparky',
+    displayName: 'Sparky',
     idleAnimation: 'dash_idle.png',
     platformAnimation: 'android_platform.png',
   ),
 
   /// Android mascot.
   android(
-    name: 'Android',
+    displayName: 'Android',
     idleAnimation: 'dash_idle.png',
     platformAnimation: 'android_platform.png',
   ),
 
   /// Chrome Dino mascot.
   dino(
-    name: 'Dino',
+    displayName: 'Dino',
     idleAnimation: 'dash_idle.png',
     platformAnimation: 'android_platform.png',
   );
 
   const Mascots({
-    required this.name,
+    required this.displayName,
     required this.idleAnimation,
     required this.platformAnimation,
   });
 
-  /// The name of the mascot.
-  final String name;
+  /// The display name of the mascot.
+  final String displayName;
 
   /// The file name of the idle animation.
   final String idleAnimation;
