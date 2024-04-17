@@ -85,10 +85,7 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: ColoredBox(
-              color: Theme.of(context).colorScheme.background,
-              child: const GameIntroPage(),
-            ),
+            home: const GameIntroPage(),
           );
         },
       ),
