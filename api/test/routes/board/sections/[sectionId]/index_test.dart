@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -28,6 +31,15 @@ void main() {
     late CrosswordRepository crosswordRepository;
     late BoardRenderer boardRenderer;
     late FirebaseCloudStorage firebaseCloudStorage;
+
+    final word = Word(
+      id: '1',
+      position: const Point(1, 1),
+      axis: Axis.vertical,
+      answer: 'flutter',
+      length: 7,
+      clue: '',
+    );
 
     setUpAll(() {
       registerFallbackValue(
@@ -84,11 +96,12 @@ void main() {
           size: 100,
           words: [
             Word(
+              id: '1',
               position: const Point(1, 1),
               axis: Axis.vertical,
               answer: 'flutter',
+              length: 7,
               clue: '',
-              solvedTimestamp: null,
             ),
           ],
           borderWords: const [],
@@ -134,15 +147,7 @@ void main() {
           id: '1',
           position: const Point(1, 1),
           size: 100,
-          words: [
-            Word(
-              position: const Point(1, 1),
-              axis: Axis.vertical,
-              answer: 'flutter',
-              clue: '',
-              solvedTimestamp: null,
-            ),
-          ],
+          words: [word],
           borderWords: const [],
         );
 
@@ -150,15 +155,7 @@ void main() {
           id: '2',
           position: const Point(2, 1),
           size: 100,
-          words: [
-            Word(
-              position: const Point(1, 1),
-              axis: Axis.vertical,
-              answer: 'flutter',
-              clue: '',
-              solvedTimestamp: null,
-            ),
-          ],
+          words: [word],
           borderWords: const [],
         );
 
@@ -208,15 +205,7 @@ void main() {
             id: '1',
             position: const Point(1, 1),
             size: 100,
-            words: [
-              Word(
-                position: const Point(1, 1),
-                axis: Axis.vertical,
-                answer: 'flutter',
-                clue: '',
-                solvedTimestamp: null,
-              ),
-            ],
+            words: [word],
             borderWords: const [],
           );
 
@@ -224,15 +213,7 @@ void main() {
             id: '2',
             position: const Point(2, 1),
             size: 100,
-            words: [
-              Word(
-                position: const Point(1, 1),
-                axis: Axis.vertical,
-                answer: 'flutter',
-                clue: '',
-                solvedTimestamp: null,
-              ),
-            ],
+            words: [word],
             borderWords: const [],
           );
 
@@ -322,15 +303,7 @@ void main() {
           id: '1',
           position: const Point(1, 1),
           size: 100,
-          words: [
-            Word(
-              position: const Point(1, 1),
-              axis: Axis.vertical,
-              answer: 'flutter',
-              clue: '',
-              solvedTimestamp: null,
-            ),
-          ],
+          words: [word],
           borderWords: const [],
           snapshotUrl: 'https://example.com/image.png',
         );

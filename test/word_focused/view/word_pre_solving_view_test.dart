@@ -5,96 +5,161 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _FakeWord extends Fake implements Word {
-  @override
-  String get id => 'id';
-
-  @override
-  String get clue => 'clue';
-
-  @override
-  int? get solvedTimestamp => null;
-}
+class _MockWord extends Mock implements Word {}
 
 class _MockWordFocusedBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
 void main() {
-  late AppLocalizations l10n;
+  late SelectedWord selectedWord;
 
-  setUpAll(() async {
-    l10n = await AppLocalizations.delegate.load(Locale('en'));
+  setUp(() async {
+    final word = _MockWord();
+    when(() => word.clue).thenReturn('clue');
+    when(() => word.id).thenReturn('1');
+    when(() => word.solvedTimestamp).thenReturn(null);
+
+    selectedWord = SelectedWord(section: (0, 0), word: word);
   });
 
-  group('$WordPreSolvingLargeView', () {
-    late WordSelection selectedWord;
-    late Widget widget;
-    late WordSelectionBloc wordFocusedBloc;
+  group('$WordPreSolvingView', () {
+    group('renders', () {
+      late WordSelectionBloc wordSelectionBloc;
 
-    group('with unsolved word', () {
       setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-        wordFocusedBloc = _MockWordFocusedBloc();
-
-        widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
-          child: WordPreSolvingLargeView(selectedWord),
+        wordSelectionBloc = _MockWordFocusedBloc();
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            word: selectedWord,
+          ),
         );
       });
 
       testWidgets(
-        'renders the selected word clue with solved button',
+        '$WordPreSolvingLargeView when layout is large',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordPreSolvingView(),
+            ),
+          );
+
+          expect(find.byType(WordPreSolvingLargeView), findsOneWidget);
+          expect(find.byType(WordPreSolvingSmallView), findsNothing);
+        },
+      );
+
+      testWidgets(
+        '$WordPreSolvingSmallView when layout is small',
+        (tester) async {
+          await tester.pumpApp(
+            layout: IoLayoutData.small,
+            BlocProvider(
+              create: (_) => wordSelectionBloc,
+              child: WordPreSolvingView(),
+            ),
+          );
+
+          expect(find.byType(WordPreSolvingSmallView), findsOneWidget);
+          expect(find.byType(WordPreSolvingLargeView), findsNothing);
+        },
+      );
+    });
+  });
+
+  group('$WordPreSolvingLargeView', () {
+    late Widget widget;
+    late WordSelectionBloc wordSelectionBloc;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordFocusedBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          word: selectedWord,
+        ),
+      );
+
+      widget = BlocProvider(
+        create: (_) => wordSelectionBloc,
+        child: WordPreSolvingLargeView(),
+      );
+    });
+
+    testWidgets(
+      'tapping the solve button dispatches a $WordSolveRequested event',
+      (tester) async {
+        late AppLocalizations l10n;
+        await tester.pumpApp(
+          Builder(
+            builder: (context) {
+              l10n = context.l10n;
+              return widget;
+            },
+          ),
+        );
+
+        await tester.tap(find.text(l10n.solveIt));
+
+        verify(
+          () => wordSelectionBloc.add(WordSolveRequested()),
+        ).called(1);
+      },
+    );
+
+    group('renders', () {
+      testWidgets(
+        'the selected word clue with solved button',
         (tester) async {
           await tester.pumpApp(widget);
 
           expect(find.text(selectedWord.word.clue), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'the solve button when the word is not solved',
+        (tester) async {
+          late AppLocalizations l10n;
+          await tester.pumpApp(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return widget;
+              },
+            ),
+          );
+
           expect(find.text(l10n.solveIt), findsOneWidget);
         },
       );
 
       testWidgets(
-        'tapping the solve button dispatches a $WordSolveRequested event',
+        'no solve button when the word is solved',
         (tester) async {
-          await tester.pumpApp(widget);
+          when(() => selectedWord.word.solvedTimestamp).thenReturn(1);
 
-          await tester.tap(find.text(l10n.solveIt));
+          late AppLocalizations l10n;
+          await tester.pumpApp(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return widget;
+              },
+            ),
+          );
 
-          verify(
-            () => wordFocusedBloc.add(WordSolveRequested()),
-          ).called(1);
-        },
-      );
-    });
-
-    group('with solved word', () {
-      setUp(() {
-        selectedWord = WordSelection(
-          section: (0, 0),
-          word: _FakeWord(),
-          solvedStatus: WordStatus.solved,
-        );
-        wordFocusedBloc = _MockWordFocusedBloc();
-
-        widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
-          child: WordPreSolvingLargeView(selectedWord),
-        );
-      });
-
-      testWidgets(
-        'renders the selected word clue with solved button',
-        (tester) async {
-          await tester.pumpApp(widget);
-
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
           expect(find.text(l10n.solveIt), findsNothing);
         },
       );
@@ -102,65 +167,66 @@ void main() {
   });
 
   group('$WordPreSolvingSmallView', () {
-    late WordSelection selectedWord;
     late Widget widget;
-    late WordSelectionBloc wordFocusedBloc;
+    late WordSelectionBloc wordSelectionBloc;
 
-    group('with unsolved word', () {
-      setUp(() {
-        selectedWord = WordSelection(section: (0, 0), word: _FakeWord());
-        wordFocusedBloc = _MockWordFocusedBloc();
-
-        widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
-          child: WordPreSolvingSmallView(selectedWord),
-        );
-      });
-
-      testWidgets(
-        'renders the selected word clue',
-        (tester) async {
-          await tester.pumpApp(widget);
-
-          expect(find.text(selectedWord.word.clue), findsOneWidget);
-        },
+    setUp(() {
+      wordSelectionBloc = _MockWordFocusedBloc();
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          word: selectedWord,
+        ),
       );
 
-      testWidgets(
-        'tapping the solve button dispatches a $WordSolveRequested event',
-        (tester) async {
-          await tester.pumpApp(widget);
-
-          await tester.tap(find.text(l10n.solveIt));
-
-          verify(
-            () => wordFocusedBloc.add(WordSolveRequested()),
-          ).called(1);
-        },
+      widget = BlocProvider(
+        create: (_) => wordSelectionBloc,
+        child: WordPreSolvingSmallView(),
       );
     });
 
-    group('with solved word', () {
-      setUp(() {
-        selectedWord = WordSelection(
-          section: (0, 0),
-          word: _FakeWord(),
-          solvedStatus: WordStatus.solved,
-        );
-        wordFocusedBloc = _MockWordFocusedBloc();
-
-        widget = BlocProvider(
-          create: (context) => wordFocusedBloc,
-          child: WordPreSolvingSmallView(selectedWord),
-        );
-      });
-
+    group('renders', () {
       testWidgets(
-        'renders the selected word clue with solved button',
+        'the selected word clue with solved button',
         (tester) async {
           await tester.pumpApp(widget);
 
           expect(find.text(selectedWord.word.clue), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'the solve button when the word is not solved',
+        (tester) async {
+          late AppLocalizations l10n;
+          await tester.pumpApp(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return widget;
+              },
+            ),
+          );
+
+          expect(find.text(l10n.solveIt), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'no solve button when the word is solved',
+        (tester) async {
+          when(() => selectedWord.word.solvedTimestamp).thenReturn(1);
+
+          late AppLocalizations l10n;
+          await tester.pumpApp(
+            Builder(
+              builder: (context) {
+                l10n = context.l10n;
+                return widget;
+              },
+            ),
+          );
+
           expect(find.text(l10n.solveIt), findsNothing);
         },
       );

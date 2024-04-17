@@ -104,8 +104,8 @@ void main() {
       'renders CurrentUserPosition with one CurrentUserPosition '
       'with the user in the top 10',
       (tester) async {
-        final currentPlayer = LeaderboardPlayer(
-          userId: user.id,
+        final currentPlayer = Player(
+          id: user.id,
           initials: 'BBB',
           score: 500,
           streak: 2,
@@ -116,8 +116,8 @@ void main() {
           LeaderboardState(
             players: List.generate(
               9,
-              (index) => LeaderboardPlayer(
-                userId: '',
+              (index) => Player(
+                id: '',
                 initials: 'AAA',
                 score: 50,
                 streak: 2,
@@ -152,8 +152,8 @@ void main() {
           LeaderboardState(
             players: List.generate(
               numberOfPlayers,
-              (index) => LeaderboardPlayer(
-                userId: '',
+              (index) => Player(
+                id: '',
                 initials: 'AAA',
                 score: 50,
                 streak: 20,
@@ -238,8 +238,8 @@ void main() {
         testWidgets(
           'does not render CurrentUserPosition with player in $i position',
           (tester) async {
-            final player = LeaderboardPlayer(
-              userId: '1234',
+            final player = Player(
+              id: '1234',
               initials: 'AAA',
               score: 50,
               streak: 2,
@@ -263,8 +263,8 @@ void main() {
       testWidgets(
         'renders CurrentUserPosition with the players information',
         (tester) async {
-          final player = LeaderboardPlayer(
-            userId: '1234',
+          final player = Player(
+            id: '1234',
             initials: 'AAA',
             score: 50,
             streak: 2,
@@ -314,8 +314,8 @@ void main() {
 
   group('CurrentUserPosition', () {
     late AppLocalizations l10n;
-    const player = LeaderboardPlayer(
-      userId: '123',
+    const player = Player(
+      id: '123',
       initials: 'ABC',
       score: 200,
       streak: 2,
@@ -353,8 +353,8 @@ void main() {
   });
 
   group('UserLeaderboardRanking', () {
-    const player = LeaderboardPlayer(
-      userId: '123',
+    const player = Player(
+      id: '123',
       initials: 'ABC',
       score: 200,
       streak: 25,
@@ -400,8 +400,8 @@ void main() {
     testWidgets(
       'displays score with k(1000)',
       (tester) async {
-        const player = LeaderboardPlayer(
-          userId: '123',
+        const player = Player(
+          id: '123',
           initials: 'ABC',
           score: 23700,
           streak: 2,
@@ -446,8 +446,8 @@ void main() {
       testWidgets(
         'displays color for ${mascot.mascot}',
         (tester) async {
-          final player = LeaderboardPlayer(
-            userId: '123',
+          final player = Player(
+            id: '123',
             initials: 'ABC',
             score: 23700,
             streak: 2,

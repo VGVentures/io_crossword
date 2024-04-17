@@ -13,11 +13,11 @@ class LeaderboardState extends Equatable {
   });
 
   final LeaderboardStatus status;
-  final List<LeaderboardPlayer> players;
+  final List<Player> players;
 
   LeaderboardState copyWith({
     LeaderboardStatus? status,
-    List<LeaderboardPlayer>? players,
+    List<Player>? players,
   }) {
     return LeaderboardState(
       status: status ?? this.status,

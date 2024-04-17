@@ -4,21 +4,33 @@ sealed class WordSelectionEvent extends Equatable {
   const WordSelectionEvent();
 }
 
-/// {@template word_selected_event}
+/// {@template word_selected}
 /// The user has selected a word.
 ///
 /// The user is yet to decide if they want to solve the word or not.
 /// {@endtemplate}
 class WordSelected extends WordSelectionEvent {
   const WordSelected({
-    required this.wordIdentifier,
+    required this.selectedWord,
   });
 
   /// The unique identifier of the word that the user has selected.
-  final String wordIdentifier;
+  final SelectedWord selectedWord;
 
   @override
-  List<Object> get props => [wordIdentifier];
+  List<Object> get props => [selectedWord];
+}
+
+/// {@template word_unselected}
+/// The user has unselected a word.
+///
+/// This means that the user is no longer interested in solving the word.
+/// {@endtemplate}
+class WordUnselected extends WordSelectionEvent {
+  const WordUnselected();
+
+  @override
+  List<Object> get props => [];
 }
 
 /// {@template word_solve_requested}
@@ -44,11 +56,4 @@ class WordSolveAttempted extends WordSelectionEvent {
 
   @override
   List<Object?> get props => [answer];
-}
-
-class WordFocusedSuccessRequested extends WordSelectionEvent {
-  const WordFocusedSuccessRequested();
-
-  @override
-  List<Object> get props => [];
 }

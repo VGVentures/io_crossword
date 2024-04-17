@@ -15,14 +15,14 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.16.1
+  cloud_firestore: ^4.17.0
   collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
   firebase_app_check: ^0.2.2
-  firebase_auth: ^4.19.1
-  firebase_core: ^2.29.0
+  firebase_auth: ^4.19.2
+  firebase_core: ^2.30.0
   flame: ^1.16.0
   flame_audio: ^2.10.1
   flame_behaviors: ^1.0.0
@@ -61,13 +61,13 @@ dev_dependencies:
   very_good_analysis: ^5.1.0
 
 dependency_overrides:
+  # Adds support for wasm while flame_audio does not update this dependency
+  audioplayers: 6.0.0
   flame:
     git:
       url: https://github.com/flame-engine/flame.git
       ref: main
       path: packages/flame
-  # Adds support for wasm while flame_audio does not update this dependency
-  audioplayers: 6.0.0
 
 flutter:
   uses-material-design: true

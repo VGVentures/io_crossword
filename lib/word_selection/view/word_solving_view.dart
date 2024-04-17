@@ -6,106 +6,128 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WordSolvingLargeView extends StatelessWidget {
-  const WordSolvingLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+class WordSolvingView extends StatelessWidget {
+  const WordSolvingView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CrosswordBloc, CrosswordState>(
-      listenWhen: (previous, current) {
-        return previous.selectedWord?.solvedStatus !=
-            current.selectedWord?.solvedStatus;
-      },
-      listener: (context, state) {
-        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
-          context
-              .read<WordSelectionBloc>()
-              .add(const WordFocusedSuccessRequested());
-        }
-      },
-      child: Column(
-        children: [
-          TopBar(wordId: selectedWord.word.id),
-          const SizedBox(height: 8),
-          const Spacer(),
-          Text(
-            selectedWord.word.clue,
-            style: IoCrosswordTextStyles.titleMD,
-            textAlign: TextAlign.center,
-          ),
-          const Spacer(),
-          const SizedBox(height: 8),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: GeminiHintButton()),
-              SizedBox(width: 8),
-              Expanded(child: _SubmitButton()),
-            ],
-          ),
-        ],
-      ),
+    final layout = IoLayout.of(context);
+
+    return switch (layout) {
+      IoLayoutData.large => const WordSolvingLargeView(),
+      IoLayoutData.small => const WordSolvingSmallView(),
+    };
+  }
+}
+
+@visibleForTesting
+class WordSolvingLargeView extends StatelessWidget {
+  @visibleForTesting
+  const WordSolvingLargeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
+    return Column(
+      children: [
+        const WordSelectionTopBar(),
+        const SizedBox(height: 8),
+        const Spacer(),
+        Text(
+          selectedWord.word.clue,
+          style: IoCrosswordTextStyles.titleMD,
+          textAlign: TextAlign.center,
+        ),
+        const Spacer(),
+        const SizedBox(height: 8),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: GeminiHintButton()),
+            SizedBox(width: 8),
+            Expanded(child: _SubmitButton()),
+          ],
+        ),
+      ],
     );
   }
 }
 
-class WordSolvingSmallView extends StatelessWidget {
-  const WordSolvingSmallView(this.selectedWord, {super.key});
+@visibleForTesting
+class WordSolvingSmallView extends StatefulWidget {
+  @visibleForTesting
+  const WordSolvingSmallView({super.key});
 
-  final WordSelection selectedWord;
+  @override
+  State<WordSolvingSmallView> createState() => _WordSolvingSmallViewState();
+}
+
+class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
+  final _controller = IoWordInputController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CrosswordBloc, CrosswordState>(
-      listenWhen: (previous, current) {
-        return previous.selectedWord?.solvedStatus !=
-            current.selectedWord?.solvedStatus;
-      },
-      listener: (context, state) {
-        if (state.selectedWord?.solvedStatus == WordStatus.solved) {
-          context
-              .read<WordSelectionBloc>()
-              .add(const WordFocusedSuccessRequested());
-        }
-      },
-      child: Column(
-        children: [
-          TopBar(wordId: selectedWord.word.id),
-          const SizedBox(height: 32),
-          IoWordInput.alphabetic(
-            length: selectedWord.word.answer.length,
-            onWord: (value) {
-              context.read<CrosswordBloc>().add(AnswerUpdated(value));
-            },
-          ),
-          const SizedBox(height: 24),
-          Text(
-            selectedWord.word.clue,
-            style: IoCrosswordTextStyles.titleMD,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: GeminiHintButton()),
-              SizedBox(width: 8),
-              Expanded(child: _SubmitButton()),
-            ],
-          ),
-        ],
-      ),
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
+
+    return Column(
+      children: [
+        const WordSelectionTopBar(),
+        const SizedBox(height: 32),
+        IoWordInput.alphabetic(
+          length: selectedWord.word.length,
+          controller: _controller,
+        ),
+        const SizedBox(height: 24),
+        Text(
+          selectedWord.word.clue,
+          style: IoCrosswordTextStyles.titleMD,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Expanded(child: GeminiHintButton()),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _SubmitButton(controller: _controller),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
 
 class _SubmitButton extends StatelessWidget {
-  const _SubmitButton();
+  const _SubmitButton({this.controller});
+
+  /// The controller that holds the user's input.
+  ///
+  /// Is `null` on large layout since the input is currently being handled by
+  /// the [CrosswordGame].
+  // TODO(alestiago): Make non-nullable when the input is handled by the
+  // [IoWordInput] even on large layout.
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6463469220
+  final IoWordInputController? controller;
 
   void _onSubmit(BuildContext context) {
-    context.read<CrosswordBloc>().add(const AnswerSubmitted());
+    if (controller != null) {
+      context
+          .read<WordSelectionBloc>()
+          .add(WordSolveAttempted(answer: controller!.word));
+    }
   }
 
   @override

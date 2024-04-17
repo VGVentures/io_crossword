@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -52,11 +55,12 @@ void main() {
       size: 100,
       words: [
         Word(
+          id: '1',
           position: const Point(1, 1),
           axis: Axis.vertical,
           answer: 'flutter',
+          length: 7,
           clue: '',
-          solvedTimestamp: null,
         ),
       ],
       borderWords: const [],
@@ -68,11 +72,12 @@ void main() {
       size: 100,
       words: [
         Word(
+          id: '2',
           position: const Point(2, 1),
           axis: Axis.vertical,
           answer: 'firebase',
+          length: 8,
           clue: '',
-          solvedTimestamp: null,
         ),
       ],
       borderWords: const [],

@@ -233,7 +233,7 @@ void main() {
               targetWord.height / 2,
         ).translated(
           game.camera.visibleWorldRect.size.width *
-              WordSelectionLargeView.widthRatio /
+              WordSelectionLargeContainer.widthRatio /
               2,
           0,
         );

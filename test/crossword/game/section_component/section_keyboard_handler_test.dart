@@ -149,7 +149,7 @@ void main() {
     );
 
     testWithGame(
-      'add AnswerUpdated event when user enters all the letters',
+      'add $WordSolveAttempted event when user enters all the letters',
       createGame,
       (game) async {
         await game.ready();
@@ -177,7 +177,7 @@ void main() {
             targetSection.children.whereType<SectionKeyboardHandler>();
 
         final buffer = StringBuffer();
-        for (var i = 0; i < targetWord.answer.length; i++) {
+        for (var i = 0; i < targetWord.length; i++) {
           listeners.first.onKeyEvent(
             KeyDownEvent(
               logicalKey: LogicalKeyboardKey.keyF,
@@ -190,8 +190,11 @@ void main() {
           buffer.write('f');
         }
         await game.ready();
-        verify(() => crosswordBloc.add(AnswerUpdated(buffer.toString())))
-            .called(1);
+
+        verify(
+          () => wordSelectionBloc
+              .add(WordSolveAttempted(answer: buffer.toString())),
+        ).called(1);
       },
     );
   });

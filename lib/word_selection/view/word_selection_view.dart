@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -10,27 +9,28 @@ class WordSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedWord =
-        context.select((CrosswordBloc bloc) => bloc.state.selectedWord);
-    if (selectedWord == null) {
-      return const SizedBox.shrink();
-    }
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+    if (selectedWord == null) return const SizedBox.shrink();
 
     final layout = IoLayout.of(context);
-
+    const body = _WordSelectionBody();
     return switch (layout) {
-      IoLayoutData.large => WordSelectionLargeView(selectedWord),
-      IoLayoutData.small => WordSelectionSmallView(selectedWord),
+      IoLayoutData.large => const WordSelectionLargeContainer(child: body),
+      IoLayoutData.small => const WordSelectionSmallContainer(child: body),
     };
   }
 }
 
-class WordSelectionLargeView extends StatelessWidget {
+class WordSelectionLargeContainer extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionLargeView(this.selectedWord, {super.key});
-
-  final WordSelection selectedWord;
+  const WordSelectionLargeContainer({
+    required this.child,
+    super.key,
+  });
 
   static const widthRatio = 0.35;
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -43,35 +43,21 @@ class WordSelectionLargeView extends StatelessWidget {
         width: size.width * widthRatio,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
         color: IoCrosswordColors.darkGray,
-        child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-          builder: (context, state) {
-            // coverage:ignore-start
-            final view = switch (state.status) {
-              WordSelectionStatus.preSolving =>
-                WordPreSolvingLargeView(selectedWord),
-              WordSelectionStatus.validating ||
-              WordSelectionStatus.incorrect ||
-              WordSelectionStatus.failure ||
-              WordSelectionStatus.solving =>
-                WordSolvingLargeView(selectedWord),
-              WordSelectionStatus.solved =>
-                WordSuccessView(selectedWord: selectedWord),
-            };
-            // coverage:ignore-end
-            return view;
-          },
-        ),
+        child: child,
       ),
     );
   }
 }
 
 @visibleForTesting
-class WordSelectionSmallView extends StatelessWidget {
+class WordSelectionSmallContainer extends StatelessWidget {
   @visibleForTesting
-  const WordSelectionSmallView(this.selectedWord, {super.key});
+  const WordSelectionSmallContainer({
+    required this.child,
+    super.key,
+  });
 
-  final WordSelection selectedWord;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -84,28 +70,36 @@ class WordSelectionSmallView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-          child: BlocSelector<WordSelectionBloc, WordSelectionState,
-              WordSelectionStatus>(
-            selector: (state) => state.status,
-            builder: (context, status) {
-              // coverage:ignore-start
-              final view = switch (status) {
-                WordSelectionStatus.preSolving =>
-                  WordPreSolvingSmallView(selectedWord),
-                WordSelectionStatus.validating ||
-                WordSelectionStatus.incorrect ||
-                WordSelectionStatus.failure ||
-                WordSelectionStatus.solving =>
-                  WordSolvingSmallView(selectedWord),
-                WordSelectionStatus.solved =>
-                  WordSuccessView(selectedWord: selectedWord),
-              };
-              // coverage:ignore-end
-              return view;
-            },
-          ),
+          child: child,
         ),
       ),
+    );
+  }
+}
+
+class _WordSelectionBody extends StatelessWidget {
+  const _WordSelectionBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<WordSelectionBloc, WordSelectionState,
+        WordSelectionStatus>(
+      selector: (state) => state.status,
+      builder: (context, status) {
+        // coverage:ignore-start
+        final view = switch (status) {
+          WordSelectionStatus.preSolving => const WordPreSolvingView(),
+          WordSelectionStatus.validating ||
+          WordSelectionStatus.incorrect ||
+          WordSelectionStatus.failure ||
+          WordSelectionStatus.solving =>
+            const WordSolvingView(),
+          WordSelectionStatus.solved => const WordSuccessView(),
+          WordSelectionStatus.empty => const SizedBox.shrink(),
+        };
+        // coverage:ignore-end
+        return view;
+      },
     );
   }
 }
