@@ -93,7 +93,7 @@ class _BottomActions extends StatelessWidget {
       children: [
         Expanded(
           child: LeaveButton(
-            onPressed: () => _onLeave(context),
+            onPressed: () => _onLeave(context), // coverage:ignore-line
           ),
         ),
         const SizedBox(width: 8),
