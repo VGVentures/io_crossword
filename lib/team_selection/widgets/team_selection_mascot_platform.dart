@@ -5,6 +5,7 @@ import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 
 class TeamSelectionMascotPlatform extends StatelessWidget {
   const TeamSelectionMascotPlatform({
@@ -21,7 +22,7 @@ class TeamSelectionMascotPlatform extends StatelessWidget {
   Widget build(BuildContext context) {
     if (selected) {
       final animation = SpriteAnimation.fromFrameData(
-        Flame.images.fromCache(mascot.platformAnimation),
+        Flame.images.fromCache(mascot.teamMascot.platformAnimation.path),
         SpriteAnimationData.sequenced(
           amount: 60,
           stepTime: 0.042,

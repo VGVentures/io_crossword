@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 
 part 'team_selection_state.dart';
 
@@ -10,15 +12,10 @@ class TeamSelectionCubit extends Cubit<TeamSelectionState> {
 
   Future<void> load() async {
     emit(state.copyWith(status: TeamSelectionStatus.loading));
+    Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      Mascots.dash.idleAnimation,
-      Mascots.dash.platformAnimation,
-      Mascots.android.idleAnimation,
-      Mascots.android.platformAnimation,
-      Mascots.sparky.idleAnimation,
-      Mascots.sparky.platformAnimation,
-      Mascots.dino.idleAnimation,
-      Mascots.dino.platformAnimation,
+      Mascots.dash.teamMascot.idleAnimation.keyName,
+      Mascots.android.teamMascot.platformAnimation.keyName,
     ]);
 
     if (!isClosed) {

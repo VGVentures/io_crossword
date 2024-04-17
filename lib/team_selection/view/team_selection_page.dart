@@ -465,7 +465,7 @@ class _TeamSelector extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  Mascots.values[index].displayName,
+                  Mascots.values[index].teamMascot.name,
                   style: theme.textTheme.headlineLarge,
                 ),
               ),
@@ -513,9 +513,24 @@ class _SubmitButton extends StatelessWidget {
         context.read<CrosswordBloc>().add(MascotSelected(mascot));
       },
       child: Text(
-        l10n.joinTeam(mascot.displayName),
+        l10n.joinTeam(mascot.teamMascot.name),
         style: theme.textTheme.bodyMedium,
       ),
     );
+  }
+}
+
+extension TeamMascot on Mascots {
+  Team get teamMascot {
+    switch (this) {
+      case Mascots.dash:
+        return const DashTeam();
+      case Mascots.sparky:
+        return const SparkyTeam();
+      case Mascots.android:
+        return const AndroidTeam();
+      case Mascots.dino:
+        return const DinoTeam();
+    }
   }
 }

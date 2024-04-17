@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,15 +12,10 @@ import '../../helpers/helpers.dart';
 void main() {
   group('TeamSelectionMascot', () {
     setUpAll(() async {
+      Flame.images = Images(prefix: '');
       await Flame.images.loadAll([
-        Mascots.dash.idleAnimation,
-        Mascots.dash.platformAnimation,
-        Mascots.android.idleAnimation,
-        Mascots.android.platformAnimation,
-        Mascots.sparky.idleAnimation,
-        Mascots.sparky.platformAnimation,
-        Mascots.dino.idleAnimation,
-        Mascots.dino.platformAnimation,
+        Mascots.dash.teamMascot.idleAnimation.keyName,
+        Mascots.android.teamMascot.platformAnimation.keyName,
       ]);
     });
 

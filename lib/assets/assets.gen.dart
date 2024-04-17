@@ -11,6 +11,21 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsAnimGen {
+  const $AssetsAnimGen();
+
+  /// File path: assets/anim/android_platform.png
+  AssetGenImage get androidPlatform =>
+      const AssetGenImage('assets/anim/android_platform.png');
+
+  /// File path: assets/anim/dash_idle.png
+  AssetGenImage get dashIdle =>
+      const AssetGenImage('assets/anim/dash_idle.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [androidPlatform, dashIdle];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -24,27 +39,8 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/android_platform.png
-  AssetGenImage get androidPlatform =>
-      const AssetGenImage('assets/images/android_platform.png');
-
-  /// File path: assets/images/dash.png
-  AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
-
-  /// File path: assets/images/dash_idle.png
-  AssetGenImage get dashIdle =>
-      const AssetGenImage('assets/images/dash_idle.png');
-
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
-
-  /// File path: assets/images/platform.png
-  AssetGenImage get platform =>
-      const AssetGenImage('assets/images/platform.png');
-
-  /// File path: assets/images/platform_large.png
-  AssetGenImage get platformLarge =>
-      const AssetGenImage('assets/images/platform_large.png');
 
   /// File path: assets/images/platform_not_selected.png
   AssetGenImage get platformNotSelected =>
@@ -62,23 +58,14 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
-        androidPlatform,
-        dash,
-        dashIdle,
-        letters,
-        platform,
-        platformLarge,
-        platformNotSelected,
-        tile,
-        tileLarge,
-        welcomeBackground
-      ];
+  List<AssetGenImage> get values =>
+      [letters, platformNotSelected, tile, tileLarge, welcomeBackground];
 }
 
 class Assets {
   Assets._();
 
+  static const $AssetsAnimGen anim = $AssetsAnimGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

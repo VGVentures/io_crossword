@@ -3,45 +3,14 @@
 /// {@endtemplate}
 enum Mascots {
   /// Flutter Dash mascot.
-  dash(
-    displayName: 'Dash',
-    idleAnimation: 'dash_idle.png',
-    platformAnimation: 'android_platform.png',
-  ),
+  dash,
 
   /// Firebase Sparky mascot.
-  sparky(
-    displayName: 'Sparky',
-    idleAnimation: 'dash_idle.png',
-    platformAnimation: 'android_platform.png',
-  ),
+  sparky,
 
   /// Android mascot.
-  android(
-    displayName: 'Android',
-    idleAnimation: 'dash_idle.png',
-    platformAnimation: 'android_platform.png',
-  ),
+  android,
 
   /// Chrome Dino mascot.
-  dino(
-    displayName: 'Dino',
-    idleAnimation: 'dash_idle.png',
-    platformAnimation: 'android_platform.png',
-  );
-
-  const Mascots({
-    required this.displayName,
-    required this.idleAnimation,
-    required this.platformAnimation,
-  });
-
-  /// The display name of the mascot.
-  final String displayName;
-
-  /// The file name of the idle animation.
-  final String idleAnimation;
-
-  /// The file name of the platform animation.
-  final String platformAnimation;
+  dino;
 }
