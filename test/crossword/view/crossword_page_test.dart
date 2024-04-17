@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +47,7 @@ void main() {
     late CrosswordBloc crosswordBloc;
 
     setUp(() {
+      Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
     });
 
