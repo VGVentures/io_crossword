@@ -14,20 +14,18 @@ class CrosswordRepository {
 
   /// Adds a map of word id: answer to the database.
   Future<void> addAnswers(Map<String, String> answers) async {
-    final answersCollection = firestore.collection('answers');
+    const size = 1000;
+    final maps = answers.entries.slices(size);
 
-    // Firestore has a limit that prevents having a document with more than
-    // 20000 answers.
-    const size = 20000;
-    for (final subset in answers.entries.slices(size)) {
-      final map = subset.fold<Map<String, String>>(
-        {},
-        (previousValue, element) {
-          previousValue[element.key] = element.value;
-          return previousValue;
-        },
-      );
-      await answersCollection.add(map);
+    await Future.wait(maps.map(_addAnswers));
+  }
+
+  Future<void> _addAnswers(List<MapEntry<String, String>> map) async {
+    final answersCollection = firestore.collection('answers');
+    for (final entry in map) {
+      await answersCollection.doc(entry.key).set({
+        'answer': entry.value,
+      });
     }
   }
 

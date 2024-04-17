@@ -46,7 +46,7 @@ void main(List<String> args) async {
   final answers = <String, String>{};
 
   for (final (i, row) in rows.indexed) {
-    final id = '${i + 1}';
+    final id = 'id${i + 1}';
     final answer = row[2] as String;
     answers[id] = answer;
     words.add(

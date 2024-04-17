@@ -58,11 +58,11 @@ class LeaderboardRepository {
   }
 
   /// Updates the score for the provided user when it solves one word.
-  Future<void> updateScore(String userId) async {
+  Future<int> updateScore(String userId) async {
     final playerData = await _dbClient.getById(_playersCollection, userId);
 
     if (playerData == null) {
-      return;
+      return 0;
     }
 
     final player = Player.fromJson({
@@ -70,20 +70,23 @@ class LeaderboardRepository {
       ...playerData.data,
     });
 
-    final updatedPlayerData = increaseScore(player);
+    final points = getPointsForCorrectAnswer(player);
+    final updatedPlayerData = increaseScore(player, points);
 
-    return _dbClient.set(
+    await _dbClient.set(
       _playersCollection,
       DbEntityRecord(
         id: updatedPlayerData.id,
         data: updatedPlayerData.toJson(),
       ),
     );
+
+    return points;
   }
 
-  /// Increases the score for the provided score card.
+  /// Calculates the points for the provided player when it solves a word.
   @visibleForTesting
-  Player increaseScore(Player player) {
+  int getPointsForCorrectAnswer(Player player) {
     final streak = player.streak;
 
     // Streak multiplier would be 1 for the first answer, 2 for the second,
@@ -94,8 +97,14 @@ class LeaderboardRepository {
     const pointsPerWord = 10;
     final points = streakMultiplier * pointsPerWord;
 
+    return points.round();
+  }
+
+  /// Increases the score for the provided player.
+  @visibleForTesting
+  Player increaseScore(Player player, int points) {
     final updatedPlayerData = player.copyWith(
-      score: player.score + points.round(),
+      score: player.score + points,
       streak: player.streak + 1,
     );
 
@@ -104,16 +113,11 @@ class LeaderboardRepository {
 
   /// Resets the streak for the provided user.
   Future<void> resetStreak(String userId) async {
-    final playerData = await _dbClient.getById(_playersCollection, userId);
+    final player = await getPlayer(userId);
 
-    if (playerData == null) {
+    if (player == null) {
       return;
     }
-
-    final player = Player.fromJson({
-      'id': userId,
-      ...playerData.data,
-    });
 
     final updatedPlayerData = player.copyWith(streak: 0);
 
@@ -124,5 +128,19 @@ class LeaderboardRepository {
         data: updatedPlayerData.toJson(),
       ),
     );
+  }
+
+  /// Retrieves the player for the provided user.
+  Future<Player?> getPlayer(String userId) async {
+    final playerData = await _dbClient.getById(_playersCollection, userId);
+
+    if (playerData == null) {
+      return null;
+    }
+
+    return Player.fromJson({
+      'id': userId,
+      ...playerData.data,
+    });
   }
 }

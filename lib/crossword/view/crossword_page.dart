@@ -1,3 +1,4 @@
+import 'package:api_client/api_client.dart';
 import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,9 @@ class CrosswordPage extends StatelessWidget {
       ..add(const BoardLoadingInformationRequested());
 
     return BlocProvider(
-      create: (_) => WordSelectionBloc(),
+      create: (_) => WordSelectionBloc(
+        crosswordResource: context.read<CrosswordResource>(),
+      ),
       lazy: false,
       child: const CrosswordView(),
     );

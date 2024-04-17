@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:api/extensions/path_param_to_position.dart';
-import 'package:collection/collection.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 
@@ -23,16 +21,10 @@ Future<Response> _onPost(RequestContext context) async {
 
   final json = await context.request.json() as Map<String, dynamic>;
   final sectionId = json['sectionId'] as String?;
-  final wordPosition = json['wordPosition'] as String?;
-  final mascotName = json['mascot'] as String?;
+  final wordId = json['wordId'] as String?;
   final answer = json['answer'] as String?;
 
-  final mascot = Mascots.values.firstWhereOrNull((e) => e.name == mascotName);
-
-  if (sectionId == null ||
-      wordPosition == null ||
-      mascot == null ||
-      answer == null) {
+  if (sectionId == null || wordId == null || answer == null) {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
@@ -44,26 +36,32 @@ Future<Response> _onPost(RequestContext context) async {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
-  final posWord = wordPosition.parseToPosition();
-  final wordX = posWord?.$1;
-  final wordY = posWord?.$2;
+  final player = await leaderboardRepository.getPlayer(user.id);
 
-  if (wordX == null || wordY == null) {
+  if (player == null) {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
-  final valid = await crosswordRepository.answerWord(
-    sectionX,
-    sectionY,
-    wordX,
-    wordY,
-    mascot,
-    answer,
-  );
+  try {
+    final valid = await crosswordRepository.answerWord(
+      sectionX,
+      sectionY,
+      wordId,
+      player.mascot,
+      answer,
+    );
 
-  if (valid) {
-    await leaderboardRepository.updateScore(user.id);
+    var points = 0;
+    if (valid) {
+      await crosswordRepository.updateSolvedWordsCount();
+      points = await leaderboardRepository.updateScore(user.id);
+    }
+
+    return Response.json(body: {'points': points});
+  } catch (e) {
+    return Response(
+      body: e.toString(),
+      statusCode: HttpStatus.internalServerError,
+    );
   }
-
-  return Response.json(body: {'valid': valid});
 }
