@@ -72,8 +72,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     );
 
     final points = await _crosswordResource.answerWord(
-      section: state.word!.section,
-      word: state.word!.word,
+      wordId: state.word!.word.id,
       answer: event.answer,
     );
 

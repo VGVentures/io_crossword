@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -12,11 +11,6 @@ import 'package:test/test.dart';
 class _MockApiClient extends Mock implements ApiClient {}
 
 class _MockResponse extends Mock implements http.Response {}
-
-class _FakeWord extends Fake implements Word {
-  @override
-  String get id => 'wordId';
-}
 
 void main() {
   group('CrosswordResource', () {
@@ -43,8 +37,7 @@ void main() {
         when(() => response.body).thenReturn(jsonEncode({'points': 10}));
 
         await resource.answerWord(
-          section: (1, 1),
-          word: _FakeWord(),
+          wordId: 'wordId',
           answer: 'correctAnswer',
         );
 
@@ -52,7 +45,6 @@ void main() {
           () => apiClient.post(
             '/game/answer',
             body: jsonEncode({
-              'sectionId': '1,1',
               'wordId': 'wordId',
               'answer': 'correctAnswer',
             }),
@@ -67,8 +59,7 @@ void main() {
         );
 
         final result = await resource.answerWord(
-          section: (1, 1),
-          word: _FakeWord(),
+          wordId: 'wordId',
           answer: 'correctAnswer',
         );
         expect(result, 10);
@@ -81,8 +72,7 @@ void main() {
         );
 
         final result = await resource.answerWord(
-          section: (1, 1),
-          word: _FakeWord(),
+          wordId: 'wordId',
           answer: 'incorrectAnswer',
         );
         expect(result, 0);
@@ -95,8 +85,7 @@ void main() {
 
         await expectLater(
           resource.answerWord(
-            section: (1, 1),
-            word: _FakeWord(),
+            wordId: 'wordId',
             answer: 'incorrectAnswer',
           ),
           throwsA(
@@ -117,8 +106,7 @@ void main() {
 
         await expectLater(
           resource.answerWord(
-            section: (1, 1),
-            word: _FakeWord(),
+            wordId: 'wordId',
             answer: 'incorrectAnswer',
           ),
           throwsA(
