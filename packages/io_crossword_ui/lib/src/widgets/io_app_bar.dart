@@ -77,14 +77,18 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               IoLayoutData.large => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Stack(
                     children: [
-                      _IoCrosswordLogo(
-                        crossword: crossword,
+                      Center(child: titleWidget),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _IoCrosswordLogo(
+                            crossword: crossword,
+                          ),
+                          if (actions != null) actions(context),
+                        ],
                       ),
-                      titleWidget,
-                      if (actions != null) actions(context),
                     ],
                   ),
                 ),
