@@ -202,19 +202,22 @@ class SuccessStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final points =
+        context.select((WordSelectionBloc bloc) => bloc.state.wordPoints);
     final rank = context.select((PlayerBloc bloc) => bloc.state.rank);
-    final score = context.select((PlayerBloc bloc) => bloc.state.player.score);
+    final totalScore =
+        context.select((PlayerBloc bloc) => bloc.state.player.score);
     final streak =
         context.select((PlayerBloc bloc) => bloc.state.player.streak);
 
-    // TODO(any): update to real values
     return Column(
       children: [
-        _StatsRow(
-          title: l10n.points,
-          icon: Icons.stars,
-          value: 'value',
-        ),
+        if (points != null)
+          _StatsRow(
+            title: l10n.points,
+            icon: Icons.stars,
+            value: points.toDisplayNumber(),
+          ),
         const SizedBox(height: 12),
         _StatsRow(
           title: l10n.streak,
@@ -231,7 +234,7 @@ class SuccessStats extends StatelessWidget {
         _StatsRow(
           title: l10n.totalScore,
           icon: Icons.stars,
-          value: score.toDisplayNumber(),
+          value: totalScore.toDisplayNumber(),
         ),
       ],
     );
