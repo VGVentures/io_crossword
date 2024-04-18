@@ -25,6 +25,21 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    Flame.images = Images(prefix: '');
+    await Flame.images.loadAll([
+      Mascots.dash.teamMascot.idleAnimation.keyName,
+      Mascots.dash.teamMascot.platformAnimation.keyName,
+      Mascots.android.teamMascot.idleAnimation.keyName,
+      Mascots.android.teamMascot.platformAnimation.keyName,
+      Mascots.dino.teamMascot.idleAnimation.keyName,
+      Mascots.dino.teamMascot.platformAnimation.keyName,
+      Mascots.sparky.teamMascot.idleAnimation.keyName,
+      Mascots.sparky.teamMascot.platformAnimation.keyName,
+    ]);
+  });
+
   group('$TeamSelectionPage', () {
     testWidgets('renders a TeamSelectionView', (tester) async {
       await tester.pumpApp(TeamSelectionPage());
@@ -40,18 +55,6 @@ void main() {
 
     setUpAll(() async {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
-
-      Flame.images = Images(prefix: '');
-      await Flame.images.loadAll([
-        Mascots.dash.teamMascot.idleAnimation.keyName,
-        Mascots.dash.teamMascot.platformAnimation.keyName,
-        Mascots.android.teamMascot.idleAnimation.keyName,
-        Mascots.android.teamMascot.platformAnimation.keyName,
-        Mascots.dino.teamMascot.idleAnimation.keyName,
-        Mascots.dino.teamMascot.platformAnimation.keyName,
-        Mascots.sparky.teamMascot.idleAnimation.keyName,
-        Mascots.sparky.teamMascot.platformAnimation.keyName,
-      ]);
     });
 
     setUp(() {
@@ -67,9 +70,7 @@ void main() {
       for (final layout in IoLayoutData.values) {
         testWidgets('displays IoAppBar with $layout', (tester) async {
           when(() => teamSelectionCubit.state).thenReturn(
-            TeamSelectionState(
-              status: TeamSelectionStatus.loadingComplete,
-            ),
+            TeamSelectionState(),
           );
 
           await tester.pumpApp(
@@ -83,9 +84,7 @@ void main() {
 
       testWidgets('select Sparky when right button is tapped', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(
-          TeamSelectionState(
-            status: TeamSelectionStatus.loadingComplete,
-          ),
+          TeamSelectionState(),
         );
 
         await tester.pumpApp(
@@ -101,7 +100,6 @@ void main() {
       testWidgets('select Dash when left button is tapped', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
-            status: TeamSelectionStatus.loadingComplete,
             index: 1,
           ),
         );
@@ -122,22 +120,17 @@ void main() {
           Stream.fromIterable(
             [
               TeamSelectionState(
-                status: TeamSelectionStatus.loadingComplete,
                 index: 1,
               ),
               TeamSelectionState(
-                status: TeamSelectionStatus.loadingComplete,
                 index: 2,
               ),
               TeamSelectionState(
-                status: TeamSelectionStatus.loadingComplete,
                 index: 3,
               ),
             ],
           ),
-          initialState: TeamSelectionState(
-            status: TeamSelectionStatus.loadingComplete,
-          ),
+          initialState: TeamSelectionState(),
         );
 
         await tester.pumpApp(
@@ -170,7 +163,6 @@ void main() {
       setUp(() {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
-            status: TeamSelectionStatus.loadingComplete,
             index: 2,
           ),
         );

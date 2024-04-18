@@ -1,6 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:game_domain/game_domain.dart';
@@ -21,19 +19,15 @@ class TeamSelectionMascotPlatform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (selected) {
-      final animation = SpriteAnimation.fromFrameData(
-        Flame.images.fromCache(mascot.teamMascot.platformAnimation.path),
-        SpriteAnimationData.sequenced(
+      return SpriteAnimationWidget.asset(
+        path: mascot.teamMascot.platformAnimation.path,
+        data: SpriteAnimationData.sequenced(
           amount: 60,
           stepTime: 0.042,
           textureSize: Vector2(366, 231),
           amountPerRow: 10,
         ),
-      );
-
-      return SpriteAnimationWidget(
-        animation: animation,
-        animationTicker: SpriteAnimationTicker(animation),
+        anchor: Anchor.bottomCenter,
       );
     }
 
