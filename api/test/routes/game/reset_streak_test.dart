@@ -63,7 +63,7 @@ void main() {
             .thenAnswer((_) async {});
 
         final response = await route.onRequest(context);
-        expect(response.statusCode, equals(HttpStatus.created));
+        expect(response.statusCode, equals(HttpStatus.ok));
       },
     );
 

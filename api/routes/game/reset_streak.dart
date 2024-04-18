@@ -25,5 +25,5 @@ Future<Response> _onPost(RequestContext context) async {
     rethrow;
   }
 
-  return Response(statusCode: HttpStatus.created);
+  return Response();
 }
