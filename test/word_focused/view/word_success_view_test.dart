@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
 import 'package:io_crossword/word_selection/word_selection.dart' as selection;
@@ -23,6 +24,9 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
@@ -295,5 +299,71 @@ void main() {
         );
       },
     );
+  });
+
+  group('$SuccessStats', () {
+    late PlayerBloc playerBloc;
+    late WordSelectionBloc wordSelectionBloc;
+    late Widget widget;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordSelectionBloc();
+      playerBloc = _MockPlayerBloc();
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: playerBloc),
+          BlocProvider.value(value: wordSelectionBloc),
+        ],
+        child: SuccessStats(),
+      );
+
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solved,
+          word: SelectedWord(section: (0, 0), word: _FakeWord()),
+          wordPoints: 10,
+        ),
+      );
+      when(() => playerBloc.state).thenReturn(
+        PlayerState(
+          player: Player(
+            id: 'id',
+            initials: 'VGV',
+            mascot: Mascots.sparky,
+            score: 100,
+            streak: 5,
+          ),
+          rank: 111222333,
+        ),
+      );
+    });
+
+    testWidgets('render points', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.text(l10n.points), findsOneWidget);
+      expect(find.text('10'), findsOneWidget);
+    });
+
+    testWidgets('render streak', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.text(l10n.streak), findsOneWidget);
+      expect(find.text('5'), findsOneWidget);
+    });
+
+    testWidgets('render rank', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.text(l10n.rank), findsOneWidget);
+      expect(find.text('111.2M'), findsOneWidget);
+    });
+
+    testWidgets('render total score', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.text(l10n.totalScore), findsOneWidget);
+      expect(find.text('100'), findsOneWidget);
+    });
   });
 }
