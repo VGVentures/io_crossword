@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
-import 'package:game_domain/game_domain.dart';
 
 /// {@template crossword_resource}
 /// An api resource for interacting with the crossword.
@@ -18,19 +17,15 @@ class CrosswordResource {
   /// Post /game/answer
   ///
   /// Returns a [bool].
-  Future<bool> answerWord({
-    required BoardSection section,
-    required Word word,
+  Future<int> answerWord({
+    required String wordId,
     required String answer,
-    required Mascots mascot,
   }) async {
     final response = await _apiClient.post(
       '/game/answer',
       body: jsonEncode({
-        'sectionId': '${section.position.x},${section.position.y}',
-        'wordPosition': '${word.position.x},${word.position.y}',
+        'wordId': wordId,
         'answer': answer,
-        'mascot': mascot.name,
       }),
     );
 
@@ -45,8 +40,8 @@ class CrosswordResource {
 
     try {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final isValidAnswer = body['valid'] as bool;
-      return isValidAnswer;
+      final points = body['points'] as int;
+      return points;
     } catch (error, stackTrace) {
       throw ApiClientError(
         'POST /game/answer'

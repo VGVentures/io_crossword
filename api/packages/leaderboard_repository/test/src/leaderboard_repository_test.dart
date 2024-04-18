@@ -113,6 +113,22 @@ void main() {
       });
     });
 
+    group('getPointsForCorrectAnswer', () {
+      test('calculates the points correctly', () async {
+        final points = leaderboardRepository.getPointsForCorrectAnswer(
+          Player(
+            id: 'userId',
+            score: 10,
+            streak: 1,
+            mascot: Mascots.dash,
+            initials: 'ABC',
+          ),
+        );
+
+        expect(points, equals(20));
+      });
+    });
+
     group('increaseScore', () {
       test('updates the score correctly', () async {
         final newScoreCard = leaderboardRepository.increaseScore(
@@ -123,9 +139,10 @@ void main() {
             mascot: Mascots.dash,
             initials: 'ABC',
           ),
+          30,
         );
 
-        expect(newScoreCard.score, equals(40));
+        expect(newScoreCard.score, equals(50));
         expect(newScoreCard.streak, equals(2));
       });
     });
@@ -163,6 +180,49 @@ void main() {
             ),
           ),
         ).called(1);
+      });
+    });
+
+    group('getPlayer', () {
+      test('retrieves the player correctly', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'score': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+
+        final player = await leaderboardRepository.getPlayer('userId');
+
+        expect(
+          player,
+          equals(
+            Player(
+              id: 'userId',
+              score: 20,
+              streak: 3,
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          ),
+        );
+      });
+
+      test('returns null when the player does not exist', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async => null);
+
+        final player = await leaderboardRepository.getPlayer('userId');
+
+        expect(player, isNull);
       });
     });
   });

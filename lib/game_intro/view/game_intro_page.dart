@@ -2,10 +2,11 @@ import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
@@ -14,7 +15,12 @@ class GameIntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GameIntroView();
+    return BlocProvider<GameIntroBloc>(
+      create: (_) => GameIntroBloc(
+        leaderboardResource: context.read<LeaderboardResource>(),
+      ),
+      child: const GameIntroView(),
+    );
   }
 }
 
@@ -25,7 +31,9 @@ enum GameIntroStatus {
   howToPlay,
 }
 
+@visibleForTesting
 class GameIntroView extends StatelessWidget {
+  @visibleForTesting
   const GameIntroView({
     super.key,
     @visibleForTesting FlowController<GameIntroStatus>? flowController,
@@ -35,23 +43,44 @@ class GameIntroView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: FlowBuilder<GameIntroStatus>(
-        controller: _flowController,
-        state: _flowController == null ? GameIntroStatus.welcome : null,
-        onGeneratePages: onGenerateGameIntroPages,
-        onComplete: (state) {
-          // coverage:ignore-start
-          // TODO(alestiago): Handle this creation.
-          // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422014818
-          context.read<LeaderboardResource>().createScore(
-                initials: 'AAA',
-                mascot: Mascots.dash,
-              );
-          // coverage:ignore-end
+    final l10n = context.l10n;
 
-          Navigator.of(context).pushReplacement(CrosswordPage.route());
-        },
+    return BlocListener<GameIntroBloc, GameIntroState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        switch (state.status) {
+          case GameIntroPlayerCreationStatus.initial:
+          case GameIntroPlayerCreationStatus.inProgress:
+            break;
+          case GameIntroPlayerCreationStatus.success:
+            Navigator.of(context).pushReplacement(CrosswordPage.route());
+          case GameIntroPlayerCreationStatus.failure:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(l10n.errorPromptText),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+        }
+      },
+      child: Material(
+        child: FlowBuilder<GameIntroStatus>(
+          controller: _flowController,
+          state: _flowController == null ? GameIntroStatus.welcome : null,
+          onGeneratePages: onGenerateGameIntroPages,
+          onComplete: (state) {
+            final crosswordBloc = context.read<CrosswordBloc>().state;
+
+            context.read<GameIntroBloc>().add(
+                  GameIntroPlayerCreated(
+                    initials: crosswordBloc.initials,
+                    mascot: crosswordBloc.mascot,
+                  ),
+                );
+          },
+        ),
       ),
     );
   }
