@@ -52,6 +52,28 @@ void main() {
         );
       });
 
+      test('returns an instance with new mascot', () {
+        final state = PlayerState(
+          rank: 20,
+        );
+
+        final newState = state.copyWith(mascot: Mascots.dino);
+        expect(newState.mascot, equals(Mascots.dino));
+      });
+
+      test('returns an instance with new initials', () {
+        final state = PlayerState(
+          rank: 20,
+        );
+
+        final newState = state.copyWith(
+          player: state.player.copyWith(
+            initials: 'ABC',
+          ),
+        );
+        expect(newState.player.initials, equals('ABC'));
+      });
+
       test('updates players', () {
         expect(
           PlayerState().copyWith(

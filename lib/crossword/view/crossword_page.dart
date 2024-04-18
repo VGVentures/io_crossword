@@ -105,6 +105,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     game = CrosswordGame(
       crosswordBloc: context.read(),
       wordSelectionBloc: context.read(),
+      playerBloc: context.read(),
     );
   }
 

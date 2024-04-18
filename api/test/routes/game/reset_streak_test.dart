@@ -40,6 +40,20 @@ void main() {
         .thenReturn(AuthenticatedUser('id'));
   });
 
+  for (final method in HttpMethod.values.toList()..remove(HttpMethod.post)) {
+    test(
+      'responds with a ${HttpStatus.methodNotAllowed} status with $method',
+      () async {
+        when(() => request.method).thenReturn(method);
+        when(() => leaderboardRepository.resetStreak('id'))
+            .thenAnswer((_) async {});
+
+        final response = await route.onRequest(context);
+        expect(response.statusCode, equals(HttpStatus.methodNotAllowed));
+      },
+    );
+  }
+
   group('POST', () {
     test(
       'responds with a HttpStatus.created status when reset is correct',
@@ -49,7 +63,7 @@ void main() {
             .thenAnswer((_) async {});
 
         final response = await route.onRequest(context);
-        expect(response.statusCode, equals(HttpStatus.created));
+        expect(response.statusCode, equals(HttpStatus.ok));
       },
     );
 

@@ -3,11 +3,10 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -16,8 +15,8 @@ import '../../helpers/helpers.dart';
 class _MockInitialsBloc extends MockBloc<InitialsEvent, InitialsState>
     implements InitialsBloc {}
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 void main() {
   group('$InitialsPage', () {
@@ -46,13 +45,13 @@ void main() {
           ),
           initialState: InitialsState.initial(),
         );
-        final crosswordBloc = _MockCrosswordBloc();
+        final playerBloc = _MockPlayerBloc();
 
         final flowController = FlowController(GameIntroStatus.enterInitials);
         addTearDown(flowController.dispose);
 
         await tester.pumpSubject(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           initialsBloc: initialsBloc,
           FlowBuilder<GameIntroStatus>(
             controller: flowController,
@@ -63,7 +62,7 @@ void main() {
         );
 
         verify(
-          () => crosswordBloc.add(const InitialsSelected('ABC')),
+          () => playerBloc.add(const InitialsSelected('ABC')),
         ).called(1);
         expect(flowController.state, equals(GameIntroStatus.howToPlay));
       },
@@ -203,7 +202,7 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget child, {
     InitialsBloc? initialsBloc,
-    CrosswordBloc? crosswordBloc,
+    PlayerBloc? playerBloc,
   }) {
     final bloc = initialsBloc ?? _MockInitialsBloc();
     if (initialsBloc == null) {
@@ -216,7 +215,7 @@ extension on WidgetTester {
     }
 
     return pumpApp(
-      crosswordBloc: crosswordBloc,
+      playerBloc: playerBloc,
       BlocProvider(
         create: (_) => bloc,
         child: child,

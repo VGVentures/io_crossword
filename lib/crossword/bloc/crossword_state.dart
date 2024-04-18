@@ -45,8 +45,6 @@ class CrosswordState extends Equatable {
     this.sections = const {},
     this.selectedWord,
     this.zoomLimit = 0.35,
-    this.mascot,
-    this.initials = '',
   });
 
   final CrosswordStatus status;
@@ -54,8 +52,6 @@ class CrosswordState extends Equatable {
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
   final double zoomLimit;
-  final Mascots? mascot;
-  final String initials;
 
   CrosswordState copyWith({
     CrosswordStatus? status,
@@ -63,8 +59,6 @@ class CrosswordState extends Equatable {
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
     double? zoomLimit,
-    Mascots? mascot,
-    String? initials,
   }) {
     return CrosswordState(
       status: status ?? this.status,
@@ -72,8 +66,6 @@ class CrosswordState extends Equatable {
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
       zoomLimit: zoomLimit ?? this.zoomLimit,
-      mascot: mascot ?? this.mascot,
-      initials: initials ?? this.initials,
     );
   }
 
@@ -83,19 +75,10 @@ class CrosswordState extends Equatable {
       sectionSize: sectionSize,
       sections: sections,
       zoomLimit: zoomLimit,
-      mascot: mascot,
-      initials: initials,
     );
   }
 
   @override
-  List<Object?> get props => [
-        status,
-        sectionSize,
-        sections,
-        selectedWord,
-        zoomLimit,
-        mascot,
-        initials,
-      ];
+  List<Object?> get props =>
+      [status, sectionSize, sections, selectedWord, zoomLimit];
 }

@@ -66,23 +66,6 @@ void main() {
       });
     });
 
-    group('MascotSelected', () {
-      test('can be instantiated', () {
-        expect(MascotSelected(Mascots.sparky), isA<MascotSelected>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          MascotSelected(Mascots.sparky),
-          equals(MascotSelected(Mascots.sparky)),
-        );
-        expect(
-          MascotSelected(Mascots.sparky),
-          isNot(equals(MascotSelected(Mascots.dash))),
-        );
-      });
-    });
-
     group('BoardLoadingInfoFetched', () {
       test('can be instantiated', () {
         expect(
@@ -95,23 +78,6 @@ void main() {
         expect(
           BoardLoadingInformationRequested(),
           equals(BoardLoadingInformationRequested()),
-        );
-      });
-    });
-
-    group('InitialsSelected', () {
-      test('can be instantiated', () {
-        expect(InitialsSelected('WOW'), isA<InitialsSelected>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          InitialsSelected('WOW'),
-          equals(InitialsSelected('WOW')),
-        );
-        expect(
-          InitialsSelected('WOW'),
-          isNot(equals(InitialsSelected('GGG'))),
         );
       });
     });

@@ -2,9 +2,11 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
@@ -12,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword/extensions/extensions.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordSelected;
 import 'package:mocktail/mocktail.dart';
@@ -24,6 +27,9 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
+
 class _MockTapUpEvent extends Mock implements TapUpEvent {}
 
 void main() {
@@ -33,6 +39,7 @@ void main() {
 
   group('CrosswordGame', () {
     late CrosswordBloc crosswordBloc;
+    late PlayerBloc playerBloc;
     late WordSelectionBloc wordSelectionBloc;
 
     void mockState(CrosswordState state) {
@@ -44,7 +51,10 @@ void main() {
     }
 
     setUp(() {
+      Flame.images = Images(prefix: '');
+
       crosswordBloc = _MockCrosswordBloc();
+      playerBloc = _MockPlayerBloc();
       wordSelectionBloc = _MockWordSelectionBloc();
 
       final state = CrosswordState(
@@ -60,6 +70,7 @@ void main() {
           crosswordBloc: crosswordBloc,
           wordSelectionBloc: wordSelectionBloc,
           showDebugOverlay: showDebugOverlay,
+          playerBloc: playerBloc,
         );
 
     testWithGame(

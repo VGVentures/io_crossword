@@ -12,3 +12,21 @@ class PlayerLoaded extends PlayerEvent {
   @override
   List<Object?> get props => [userId];
 }
+
+class MascotSelected extends PlayerEvent {
+  const MascotSelected(this.mascot);
+
+  final Mascots mascot;
+
+  @override
+  List<Object> get props => [mascot];
+}
+
+class InitialsSelected extends PlayerEvent {
+  const InitialsSelected(this.initials);
+
+  final String initials;
+
+  @override
+  List<Object> get props => [initials];
+}

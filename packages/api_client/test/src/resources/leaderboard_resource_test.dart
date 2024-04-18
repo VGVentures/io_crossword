@@ -139,7 +139,7 @@ void main() {
       });
 
       test('makes the correct call', () async {
-        when(() => response.statusCode).thenReturn(HttpStatus.created);
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
         await resource.resetStreak();
 
         verify(

@@ -6,10 +6,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -25,7 +27,10 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
-class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+class _MockPlayerBloc extends Mock implements PlayerBloc {
+  @override
+  Future<void> close() async {}
+}
 
 class _MockUser extends Mock implements User {}
 
@@ -63,65 +68,68 @@ void main() {
     });
 
     testWidgets('renders AppView', (tester) async {
+      final user = _MockUser();
+
+      when(() => user.id).thenReturn('id');
+      when(() => leaderboardRepository.getPlayerRanked('id'))
+          .thenAnswer((_) => Stream.value((Player.empty, 4)));
+
       await tester.pumpWidget(
         App(
           apiClient: apiClient,
           leaderboardRepository: leaderboardRepository,
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
-          user: _MockUser(),
+          user: user,
         ),
       );
 
       expect(find.byType(AppView), findsOneWidget);
     });
+
+    testWidgets('CrosswordBloc is provided', (tester) async {
+      final user = _MockUser();
+
+      when(() => user.id).thenReturn('id');
+      when(() => leaderboardRepository.getPlayerRanked('id'))
+          .thenAnswer((_) => Stream.value((Player.empty, 4)));
+
+      await tester.pumpWidget(
+        App(
+          apiClient: apiClient,
+          leaderboardRepository: leaderboardRepository,
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          user: user,
+        ),
+      );
+
+      final context = tester.element(find.byType(AppView));
+
+      expect(context.read<CrosswordBloc>(), isNotNull);
+    });
   });
 
   group('$AppView', () {
     group('theme data', () {
-      late CrosswordBloc crosswordBloc;
+      late PlayerBloc playerBloc;
 
       setUp(() {
-        crosswordBloc = _MockCrosswordBloc();
-        when(() => crosswordBloc.close())
-            .thenAnswer((invocation) => Future.value());
+        playerBloc = _MockPlayerBloc();
       });
 
       testWidgets('is Flutter when mascot is dash', (tester) async {
         whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(
+          playerBloc,
+          Stream<PlayerState>.empty(),
+          initialState: PlayerState(
             mascot: Mascots.dash,
-            sectionSize: 20,
           ),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
           AppView(),
-        );
-
-        final themeFinder = find.byType(Theme).last;
-        expect(themeFinder, findsOneWidget);
-
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.flutterTheme);
-      });
-
-      testWidgets('is Flutter when mascot is Dash', (tester) async {
-        whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(
-            mascot: Mascots.dash,
-            sectionSize: 20,
-          ),
-        );
-
-        await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
-          AppView(),
+          playerBloc: playerBloc,
         );
 
         final themeFinder = find.byType(Theme).last;
@@ -133,16 +141,15 @@ void main() {
 
       testWidgets('is Firebase when mascot is Sparky', (tester) async {
         whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(
+          playerBloc,
+          Stream<PlayerState>.empty(),
+          initialState: PlayerState(
             mascot: Mascots.sparky,
-            sectionSize: 20,
           ),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           AppView(),
         );
 
@@ -155,16 +162,15 @@ void main() {
 
       testWidgets('is Chrome when mascot is Dino', (tester) async {
         whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(
+          playerBloc,
+          Stream<PlayerState>.empty(),
+          initialState: PlayerState(
             mascot: Mascots.dino,
-            sectionSize: 20,
           ),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           AppView(),
         );
 
@@ -177,16 +183,15 @@ void main() {
 
       testWidgets('is Android when mascot is Android', (tester) async {
         whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(
+          playerBloc,
+          Stream<PlayerState>.empty(),
+          initialState: PlayerState(
             mascot: Mascots.android,
-            sectionSize: 20,
           ),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           AppView(),
         );
 
@@ -199,13 +204,13 @@ void main() {
 
       testWidgets('is default when there is no mascot', (tester) async {
         whenListen(
-          crosswordBloc,
-          Stream<CrosswordState>.empty(),
-          initialState: CrosswordState(),
+          playerBloc,
+          Stream<PlayerState>.empty(),
+          initialState: PlayerState(),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           AppView(),
         );
 

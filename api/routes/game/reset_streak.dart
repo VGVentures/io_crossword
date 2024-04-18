@@ -21,9 +21,9 @@ Future<Response> _onPost(RequestContext context) async {
   try {
     await leaderboardRepository.resetStreak(user.id);
   } catch (e, s) {
-    context.read<Logger>().severe('Error creating a player score', e, s);
+    context.read<Logger>().severe('Error resetting the streak', e, s);
     rethrow;
   }
 
-  return Response(statusCode: HttpStatus.created);
+  return Response();
 }
