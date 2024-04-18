@@ -44,7 +44,13 @@ void main() {
       Flame.images = Images(prefix: '');
       await Flame.images.loadAll([
         Mascots.dash.teamMascot.idleAnimation.keyName,
+        Mascots.dash.teamMascot.platformAnimation.keyName,
+        Mascots.android.teamMascot.idleAnimation.keyName,
         Mascots.android.teamMascot.platformAnimation.keyName,
+        Mascots.dino.teamMascot.idleAnimation.keyName,
+        Mascots.dino.teamMascot.platformAnimation.keyName,
+        Mascots.sparky.teamMascot.idleAnimation.keyName,
+        Mascots.sparky.teamMascot.platformAnimation.keyName,
       ]);
     });
 
