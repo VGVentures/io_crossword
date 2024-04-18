@@ -41,14 +41,14 @@ class WordSolvingLargeView extends StatelessWidget {
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
-        const Spacer(),
+        const Expanded(child: Center(child: WordValidatingLoadingIndicator())),
         const SizedBox(height: 8),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(child: GeminiHintButton()),
             SizedBox(width: 8),
-            Expanded(child: _SubmitButton()),
+            Expanded(child: SubmitButton()),
           ],
         ),
       ],
@@ -94,14 +94,17 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(
+          height: 200,
+          child: Center(child: WordValidatingLoadingIndicator()),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Expanded(child: GeminiHintButton()),
             const SizedBox(width: 8),
             Expanded(
-              child: _SubmitButton(controller: _controller),
+              child: SubmitButton(controller: _controller),
             ),
           ],
         ),
@@ -110,8 +113,28 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
   }
 }
 
-class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({this.controller});
+@visibleForTesting
+class WordValidatingLoadingIndicator extends StatelessWidget {
+  @visibleForTesting
+  const WordValidatingLoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final wordSelectionStatus = context.select(
+      (WordSelectionBloc bloc) => bloc.state.status,
+    );
+    final isValidating = wordSelectionStatus == WordSelectionStatus.validating;
+
+    if (isValidating) return const CircularProgressIndicator();
+
+    return const SizedBox.shrink();
+  }
+}
+
+@visibleForTesting
+class SubmitButton extends StatelessWidget {
+  @visibleForTesting
+  const SubmitButton({super.key, this.controller});
 
   /// The controller that holds the user's input.
   ///
@@ -134,8 +157,13 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final wordSelectionStatus = context.select(
+      (WordSelectionBloc bloc) => bloc.state.status,
+    );
+    final isValidating = wordSelectionStatus == WordSelectionStatus.validating;
+
     return OutlinedButton(
-      onPressed: () => _onSubmit(context),
+      onPressed: isValidating ? null : () => _onSubmit(context),
       child: Text(l10n.submit),
     );
   }

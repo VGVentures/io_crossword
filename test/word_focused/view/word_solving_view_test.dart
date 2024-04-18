@@ -160,6 +160,14 @@ void main() {
           expect(find.byType(WordSelectionTopBar), findsOneWidget);
         },
       );
+
+      testWidgets(
+        'a $WordValidatingLoadingIndicator',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+        },
+      );
     });
   });
 
@@ -199,6 +207,32 @@ void main() {
       );
     });
 
+    group('renders', () {
+      testWidgets(
+        'the clue text',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.text(wordSelection.word.clue), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $WordSelectionTopBar',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(WordSelectionTopBar), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $WordValidatingLoadingIndicator',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+        },
+      );
+    });
+
     testWidgets(
       'tap the submit button sends $WordSolveAttempted',
       (tester) async {
@@ -226,6 +260,97 @@ void main() {
             const WordSolveAttempted(answer: 'ANSWER'),
           ),
         ).called(1);
+      },
+    );
+  });
+
+  group('$WordValidatingLoadingIndicator', () {
+    late WordSelectionBloc wordSelectionBloc;
+    late Widget widget;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordSolvingBloc();
+
+      widget = BlocProvider.value(
+        value: wordSelectionBloc,
+        child: WordValidatingLoadingIndicator(),
+      );
+    });
+
+    testWidgets(
+      'renders a circular progress indicator when the status is validating',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.validating,
+            word: selectedWord,
+          ),
+        );
+        await tester.pumpApp(widget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'dos not render a circular progress indicator '
+      'when the status is other than validating',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+            word: selectedWord,
+          ),
+        );
+        await tester.pumpApp(widget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      },
+    );
+  });
+
+  group('$SubmitButton', () {
+    late WordSelectionBloc wordSelectionBloc;
+    late Widget widget;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordSolvingBloc();
+
+      widget = BlocProvider.value(
+        value: wordSelectionBloc,
+        child: SubmitButton(),
+      );
+    });
+
+    testWidgets(
+      'onPressed is not null when the status is other than validating',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+          ),
+        );
+
+        await tester.pumpApp(widget);
+        final submitButton =
+            tester.widget<OutlinedButton>(find.byType(OutlinedButton));
+
+        expect(submitButton.onPressed, isNotNull);
+      },
+    );
+
+    testWidgets(
+      'onPressed is null when the status is validating',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.validating,
+          ),
+        );
+
+        await tester.pumpApp(widget);
+        final submitButton =
+            tester.widget<OutlinedButton>(find.byType(OutlinedButton));
+
+        expect(submitButton.onPressed, isNull);
       },
     );
   });
