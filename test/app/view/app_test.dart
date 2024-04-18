@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
-import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
