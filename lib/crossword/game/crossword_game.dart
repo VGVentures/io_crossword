@@ -8,6 +8,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -50,7 +51,7 @@ class CrosswordGame extends FlameGame
     await super.onLoad();
 
     // TODO(erickzanardo): Use the assets cubit instead
-    lettersSprite = await images.load('letters.png');
+    lettersSprite = await images.load(Assets.images.letters.path);
 
     sectionSize = state.sectionSize * cellSize;
 
