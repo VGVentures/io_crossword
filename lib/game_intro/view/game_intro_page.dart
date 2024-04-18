@@ -7,7 +7,7 @@ import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 
