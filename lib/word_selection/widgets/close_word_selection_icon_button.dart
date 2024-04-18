@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/streak/streak.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
 import 'package:io_crossword/word_selection/word_selection.dart' as selection;
@@ -17,8 +18,20 @@ class CloseWordSelectionIconButton extends StatelessWidget {
   const CloseWordSelectionIconButton({super.key});
 
   void _onClose(BuildContext context) {
-    context.read<CrosswordBloc>().add(const WordUnselected());
-    context.read<WordSelectionBloc>().add(const selection.WordUnselected());
+    final status = context.read<WordSelectionBloc>().state.status;
+
+    switch (status) {
+      case WordSelectionStatus.validating:
+      case WordSelectionStatus.incorrect:
+      case WordSelectionStatus.failure:
+      case WordSelectionStatus.solving:
+        StreakAtRiskView.showModal(context);
+      case WordSelectionStatus.empty:
+      case WordSelectionStatus.preSolving:
+      case WordSelectionStatus.solved:
+        context.read<CrosswordBloc>().add(const WordUnselected());
+        context.read<WordSelectionBloc>().add(const selection.WordUnselected());
+    }
   }
 
   @override

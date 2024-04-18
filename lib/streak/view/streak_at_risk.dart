@@ -6,36 +6,47 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class StreakAtRiskView extends StatelessWidget {
   const StreakAtRiskView({super.key});
 
+  static Future<void> showModal(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const StreakAtRiskView();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return IoPhysicalModel(
-      child: Card(
-        child: SizedBox(
-          width: 340,
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Row(
-                  children: [
-                    Expanded(child: _Title()),
-                    CloseButton(),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  context.l10n.streakAtRiskMessage,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  context.l10n.continuationConfirmation,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                const _BottomActions(),
-              ],
+    return Center(
+      child: IoPhysicalModel(
+        child: Card(
+          child: SizedBox(
+            width: 340,
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Row(
+                    children: [
+                      Expanded(child: _Title()),
+                      CloseButton(),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.l10n.streakAtRiskMessage,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  Text(
+                    context.l10n.continuationConfirmation,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  const _BottomActions(),
+                ],
+              ),
             ),
           ),
         ),
@@ -80,7 +91,7 @@ class _Title extends StatelessWidget {
 class _BottomActions extends StatelessWidget {
   const _BottomActions();
 
-  void _onLeave(BuildContext context) {} // coverage:ignore-line
+  void _onLeave(BuildContext context) {}
 
   void _onSolveIt(BuildContext context) {
     Navigator.pop(context);
@@ -93,7 +104,7 @@ class _BottomActions extends StatelessWidget {
       children: [
         Expanded(
           child: LeaveButton(
-            onPressed: () => _onLeave(context), // coverage:ignore-line
+            onPressed: () => _onLeave(context),
           ),
         ),
         const SizedBox(width: 8),
