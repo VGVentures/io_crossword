@@ -46,12 +46,10 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            // coverage:ignore-start
             create: (_) => CrosswordBloc(
               crosswordRepository: crosswordRepository,
               boardInfoRepository: boardInfoRepository,
             ),
-            // coverage:ignore-end
           ),
           BlocProvider(
             create: (_) => PlayerBloc(

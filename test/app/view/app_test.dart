@@ -6,9 +6,11 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -83,6 +85,28 @@ void main() {
       );
 
       expect(find.byType(AppView), findsOneWidget);
+    });
+
+    testWidgets('CrosswordBloc is provided', (tester) async {
+      final user = _MockUser();
+
+      when(() => user.id).thenReturn('id');
+      when(() => leaderboardRepository.getPlayerRanked('id'))
+          .thenAnswer((_) => Stream.value((Player.empty, 4)));
+
+      await tester.pumpWidget(
+        App(
+          apiClient: apiClient,
+          leaderboardRepository: leaderboardRepository,
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          user: user,
+        ),
+      );
+
+      final context = tester.element(find.byType(AppView));
+
+      expect(context.read<CrosswordBloc>(), isNotNull);
     });
   });
 
