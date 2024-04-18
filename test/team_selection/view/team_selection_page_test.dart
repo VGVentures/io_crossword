@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,16 +17,17 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockTeamSelectionCubit extends MockCubit<int>
+class _MockTeamSelectionCubit extends MockCubit<TeamSelectionState>
     implements TeamSelectionCubit {}
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('$TeamSelectionPage', () {
     testWidgets('renders a TeamSelectionView', (tester) async {
-      await tester.pumpApp(const TeamSelectionPage());
+      await tester.pumpApp(TeamSelectionPage());
 
       expect(find.byType(TeamSelectionView), findsOneWidget);
     });
@@ -37,6 +40,12 @@ void main() {
 
     setUpAll(() async {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
+
+      Flame.images = Images(prefix: '');
+      await Flame.images.loadAll([
+        Mascots.dash.teamMascot.idleAnimation.keyName,
+        Mascots.android.teamMascot.platformAnimation.keyName,
+      ]);
     });
 
     setUp(() {
@@ -51,7 +60,11 @@ void main() {
     group('TeamSelectionView', () {
       for (final layout in IoLayoutData.values) {
         testWidgets('displays IoAppBar with $layout', (tester) async {
-          when(() => teamSelectionCubit.state).thenReturn(0);
+          when(() => teamSelectionCubit.state).thenReturn(
+            TeamSelectionState(
+              status: TeamSelectionStatus.loadingComplete,
+            ),
+          );
 
           await tester.pumpApp(
             widget,
@@ -62,19 +75,12 @@ void main() {
         });
       }
 
-      testWidgets('displays TabBarView on small screen', (tester) async {
-        when(() => teamSelectionCubit.state).thenReturn(0);
-
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.small,
-        );
-
-        expect(find.byType(TabBarView), findsOneWidget);
-      });
-
       testWidgets('select Sparky when right button is tapped', (tester) async {
-        when(() => teamSelectionCubit.state).thenReturn(0);
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(
+            status: TeamSelectionStatus.loadingComplete,
+          ),
+        );
 
         await tester.pumpApp(
           widget,
@@ -87,7 +93,12 @@ void main() {
       });
 
       testWidgets('select Dash when left button is tapped', (tester) async {
-        when(() => teamSelectionCubit.state).thenReturn(1);
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(
+            status: TeamSelectionStatus.loadingComplete,
+            index: 1,
+          ),
+        );
 
         await tester.pumpApp(
           widget,
@@ -99,17 +110,28 @@ void main() {
         verify(() => teamSelectionCubit.selectTeam(0)).called(1);
       });
 
-      testWidgets('TabPageSelector shows correct position', (tester) async {
+      testWidgets('ScrollController shows correct position', (tester) async {
         whenListen(
           teamSelectionCubit,
           Stream.fromIterable(
             [
-              1,
-              2,
-              3,
+              TeamSelectionState(
+                status: TeamSelectionStatus.loadingComplete,
+                index: 1,
+              ),
+              TeamSelectionState(
+                status: TeamSelectionStatus.loadingComplete,
+                index: 2,
+              ),
+              TeamSelectionState(
+                status: TeamSelectionStatus.loadingComplete,
+                index: 3,
+              ),
             ],
           ),
-          initialState: 0,
+          initialState: TeamSelectionState(
+            status: TeamSelectionStatus.loadingComplete,
+          ),
         );
 
         await tester.pumpApp(
@@ -118,17 +140,20 @@ void main() {
         );
 
         await tester.tap(find.byIcon(Icons.chevron_right));
+        await tester.pump(Duration(milliseconds: 400));
         await tester.tap(find.byIcon(Icons.chevron_right));
+        await tester.pump(Duration(milliseconds: 400));
         await tester.tap(find.byIcon(Icons.chevron_right));
-        await tester.pumpAndSettle();
+        await tester.pump(Duration(milliseconds: 400));
 
-        final tabPageSelector = find
-            .byType(TabPageSelector)
+        final singleChildScrollView = find
+            .byType(SingleChildScrollView)
             .evaluate()
             .single
-            .widget as TabPageSelector;
+            .widget as SingleChildScrollView;
 
-        expect(tabPageSelector.controller!.index, equals(3));
+        // index * (tileWidth * 2)
+        expect(singleChildScrollView.controller!.offset, equals(3 * 366 * 2));
       });
     });
 
@@ -137,7 +162,12 @@ void main() {
       late FlowController<GameIntroStatus> flowController;
 
       setUp(() {
-        when(() => teamSelectionCubit.state).thenReturn(2);
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(
+            status: TeamSelectionStatus.loadingComplete,
+            index: 2,
+          ),
+        );
 
         playerBloc = _MockPlayerBloc();
         flowController = FlowController<GameIntroStatus>(
@@ -163,7 +193,7 @@ void main() {
         final submitButtonFinder = find.text(l10n.joinTeam('Android'));
         await tester.ensureVisible(submitButtonFinder);
         await tester.tap(submitButtonFinder);
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         verify(() => playerBloc.add(MascotSelected(Mascots.android))).called(1);
       });
@@ -186,7 +216,7 @@ void main() {
           final submitButtonFinder = find.text(l10n.joinTeam('Android'));
           await tester.ensureVisible(submitButtonFinder);
           await tester.tap(submitButtonFinder);
-          await tester.pumpAndSettle();
+          await tester.pump();
 
           expect(flowController.state, equals(GameIntroStatus.enterInitials));
         },

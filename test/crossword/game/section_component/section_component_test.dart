@@ -5,7 +5,9 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -45,6 +47,8 @@ void main() {
     );
 
     setUp(() {
+      Flame.images = Images(prefix: '');
+
       crosswordBloc = _MockCrosswordBloc();
       playerBloc = _MockPlayerBloc();
       wordSelectionBloc = _MockWordSelectionBloc();

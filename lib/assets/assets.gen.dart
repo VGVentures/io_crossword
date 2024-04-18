@@ -14,25 +14,16 @@ import 'package:flutter/services.dart';
 class $AssetsAnimGen {
   const $AssetsAnimGen();
 
-  /// File path: assets/anim/android_celebrating.png
-  AssetGenImage get androidCelebrating =>
-      const AssetGenImage('assets/anim/android_celebrating.png');
+  /// File path: assets/anim/android_platform.png
+  AssetGenImage get androidPlatform =>
+      const AssetGenImage('assets/anim/android_platform.png');
 
-  /// File path: assets/anim/android_dangle.png
-  AssetGenImage get androidDangle =>
-      const AssetGenImage('assets/anim/android_dangle.png');
-
-  /// File path: assets/anim/android_idle.png
-  AssetGenImage get androidIdle =>
-      const AssetGenImage('assets/anim/android_idle.png');
-
-  /// File path: assets/anim/android_look_up.png
-  AssetGenImage get androidLookUp =>
-      const AssetGenImage('assets/anim/android_look_up.png');
+  /// File path: assets/anim/dash_idle.png
+  AssetGenImage get dashIdle =>
+      const AssetGenImage('assets/anim/dash_idle.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [androidCelebrating, androidDangle, androidIdle, androidLookUp];
+  List<AssetGenImage> get values => [androidPlatform, dashIdle];
 }
 
 class $AssetsIconsGen {
@@ -48,20 +39,19 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/android.png
-  AssetGenImage get android => const AssetGenImage('assets/images/android.png');
-
-  /// File path: assets/images/dash.png
-  AssetGenImage get dash => const AssetGenImage('assets/images/dash.png');
-
-  /// File path: assets/images/dino.png
-  AssetGenImage get dino => const AssetGenImage('assets/images/dino.png');
-
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
 
-  /// File path: assets/images/sparky.png
-  AssetGenImage get sparky => const AssetGenImage('assets/images/sparky.png');
+  /// File path: assets/images/platform_not_selected.png
+  AssetGenImage get platformNotSelected =>
+      const AssetGenImage('assets/images/platform_not_selected.png');
+
+  /// File path: assets/images/tile.png
+  AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
+
+  /// File path: assets/images/tile_large.png
+  AssetGenImage get tileLarge =>
+      const AssetGenImage('assets/images/tile_large.png');
 
   /// File path: assets/images/welcome_background.png
   AssetGenImage get welcomeBackground =>
@@ -69,7 +59,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [android, dash, dino, letters, sparky, welcomeBackground];
+      [letters, platformNotSelected, tile, tileLarge, welcomeBackground];
 }
 
 class Assets {
