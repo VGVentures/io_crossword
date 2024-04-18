@@ -75,7 +75,7 @@ class LeaderboardResource {
       '/game/reset_streak',
     );
 
-    if (response.statusCode != HttpStatus.created) {
+    if (response.statusCode != HttpStatus.ok) {
       throw ApiClientError(
         'POST /game/reset_streak returned status '
         '${response.statusCode} with the following response: '
