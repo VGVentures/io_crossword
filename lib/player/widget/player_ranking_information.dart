@@ -20,7 +20,7 @@ class PlayerRankingInformation extends StatelessWidget {
       segments: [
         ButtonSegment(
           value: rank,
-          label: Text(rank.toString()),
+          label: Text(rank.toDisplayNumber()),
           icon: const Icon(IoIcons.trophy),
         ),
         ButtonSegment(

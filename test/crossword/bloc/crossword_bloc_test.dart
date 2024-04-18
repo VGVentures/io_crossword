@@ -704,29 +704,6 @@ void main() {
       );
     });
 
-    group('MascotSelected', () {
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits crossword loaded state with the selected mascot '
-        'when MascotSelected is added',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        seed: () => CrosswordState(
-          status: CrosswordStatus.success,
-          sectionSize: sectionSize,
-        ),
-        act: (bloc) => bloc.add(MascotSelected(Mascots.android)),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: sectionSize,
-            mascot: Mascots.android,
-          ),
-        ],
-      );
-    });
-
     group('BoardLoadingInfoFetched', () {
       blocTest<CrosswordBloc, CrosswordState>(
         'emits same state with updated size and render limits info when'
@@ -793,29 +770,6 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             status: CrosswordStatus.failure,
-          ),
-        ],
-      );
-    });
-
-    group('InitialsSelected', () {
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits crossword loaded state with the initials entered '
-        'when InitialsSelected is added',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        seed: () => CrosswordState(
-          status: CrosswordStatus.success,
-          sectionSize: sectionSize,
-        ),
-        act: (bloc) => bloc.add(InitialsSelected('ABC')),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: sectionSize,
-            initials: 'ABC',
           ),
         ],
       );

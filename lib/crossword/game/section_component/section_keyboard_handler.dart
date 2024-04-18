@@ -30,7 +30,7 @@ class SectionKeyboardHandler extends PositionComponent
     final wordCharacters = word.toUpperCase().characters;
 
     for (var c = 0; c < wordCharacters.length; c++) {
-      final mascot = parent.gameRef.state.mascot;
+      final mascot = parent.gameRef.player.mascot;
       final rect = wordCharacters.getCharacterRectangle(c, mascot);
 
       if (rect !=
