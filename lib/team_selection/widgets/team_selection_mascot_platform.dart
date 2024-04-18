@@ -26,8 +26,8 @@ class TeamSelectionMascotPlatform extends StatelessWidget {
         SpriteAnimationData.sequenced(
           amount: 60,
           stepTime: 0.042,
-          textureSize: Vector2(638, 403),
-          amountPerRow: 6,
+          textureSize: Vector2(366, 231),
+          amountPerRow: 10,
         ),
       );
 
