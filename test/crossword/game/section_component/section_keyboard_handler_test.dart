@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -5,6 +7,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -16,6 +19,9 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final sections = getTestSections();
@@ -23,6 +29,7 @@ void main() {
 
   group('SectionKeyboardHandler', () {
     late CrosswordBloc crosswordBloc;
+    late PlayerBloc playerBloc;
     late WordSelectionBloc wordSelectionBloc;
     late StreamController<CrosswordState> stateController;
     final state = CrosswordState(
@@ -35,6 +42,7 @@ void main() {
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
+      playerBloc = _MockPlayerBloc();
       wordSelectionBloc = _MockWordSelectionBloc();
       stateController = StreamController<CrosswordState>.broadcast();
       whenListen(
@@ -51,12 +59,15 @@ void main() {
           wordSelectionBloc: wordSelectionBloc,
           crosswordBloc: crosswordBloc,
           showDebugOverlay: showDebugOverlay,
+          playerBloc: playerBloc,
         );
 
     testWithGame(
       'can enter characters',
       createGame,
       (game) async {
+        when(() => playerBloc.state).thenReturn(PlayerState());
+
         await game.ready();
 
         final targetSection =
@@ -99,6 +110,8 @@ void main() {
       'can remove characters',
       createGame,
       (game) async {
+        when(() => playerBloc.state).thenReturn(PlayerState());
+
         await game.ready();
 
         final targetSection =
@@ -152,6 +165,8 @@ void main() {
       'add $WordSolveAttempted event when user enters all the letters',
       createGame,
       (game) async {
+        when(() => playerBloc.state).thenReturn(PlayerState());
+
         await game.ready();
 
         final targetSection =
