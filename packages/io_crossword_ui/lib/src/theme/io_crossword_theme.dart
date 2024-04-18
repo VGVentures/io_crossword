@@ -248,6 +248,7 @@ class IoCrosswordTheme {
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.31),
         textStyle: const TextStyle(
+          color: IoCrosswordColors.black,
           fontFamily: 'Google Sans',
           fontSize: 10.34,
           fontWeight: FontWeight.w700,
@@ -261,6 +262,7 @@ class IoCrosswordTheme {
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
         textStyle: const TextStyle(
+          color: IoCrosswordColors.black,
           fontFamily: 'Google Sans',
           fontSize: 14.61,
           fontWeight: FontWeight.w700,

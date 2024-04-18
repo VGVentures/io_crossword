@@ -7,14 +7,17 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
 class CrosswordGame extends FlameGame
     with PanDetector, HasKeyboardHandlerComponents {
   CrosswordGame({
     required this.crosswordBloc,
+    required this.playerBloc,
     required this.wordSelectionBloc,
     bool? showDebugOverlay,
   }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
@@ -25,6 +28,7 @@ class CrosswordGame extends FlameGame
   final bool showDebugOverlay;
 
   final CrosswordBloc crosswordBloc;
+  final PlayerBloc playerBloc;
 
   final WordSelectionBloc wordSelectionBloc;
 
@@ -36,6 +40,10 @@ class CrosswordGame extends FlameGame
 
   CrosswordState get state {
     return crosswordBloc.state;
+  }
+
+  Player get player {
+    return playerBloc.state.player;
   }
 
   @override

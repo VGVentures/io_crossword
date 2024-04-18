@@ -14,7 +14,7 @@ class AndroidTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.androidPlatform;
 
   @override
-  SpriteInformation get spriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 7,
         columns: 4,
         stepTime: 0.042,

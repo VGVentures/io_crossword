@@ -68,4 +68,20 @@ class LeaderboardResource {
       );
     }
   }
+
+  /// Post /game/reset_streak
+  Future<void> resetStreak() async {
+    final response = await _apiClient.post(
+      '/game/reset_streak',
+    );
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw ApiClientError(
+        'POST /game/reset_streak returned status '
+        '${response.statusCode} with the following response: '
+        '"${response.body}"',
+        StackTrace.current,
+      );
+    }
+  }
 }

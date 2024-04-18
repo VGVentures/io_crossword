@@ -185,20 +185,14 @@ class UserLeaderboardRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = IoWordStyle(
+    final themeData = Theme.of(context);
+    final style = themeData.io.wordTheme.small.copyWith(
       backgroundColor: switch (player.mascot) {
         Mascots.dash => IoCrosswordColors.flutterBlue,
         Mascots.sparky => IoCrosswordColors.sparkyYellow,
         Mascots.dino => IoCrosswordColors.chromeRed,
         Mascots.android => IoCrosswordColors.androidGreen,
       },
-      textStyle: const TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w700,
-      ),
-      borderRadius: const BorderRadius.all(Radius.circular(0.36)),
-      margin: const EdgeInsets.all(0.5),
-      boxSize: const Size.square(30),
     );
 
     return Row(

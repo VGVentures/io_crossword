@@ -52,11 +52,9 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            // coverage:ignore-start
             create: (_) => PlayerBloc(
               leaderboardRepository: leaderboardRepository,
             )..add(PlayerLoaded(userId: user.id)),
-            // coverage:ignore-end
           ),
           BlocProvider(
             create: (context) => ChallengeBloc(
@@ -76,7 +74,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IoLayout(
-      child: BlocSelector<CrosswordBloc, CrosswordState, Mascots?>(
+      child: BlocSelector<PlayerBloc, PlayerState, Mascots?>(
         selector: (state) {
           return state.mascot;
         },

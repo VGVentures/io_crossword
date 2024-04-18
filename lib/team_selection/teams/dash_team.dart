@@ -14,7 +14,7 @@ class DashTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dashPlatform;
 
   @override
-  SpriteInformation get spriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 10,
         columns: 7,
         stepTime: 0.042,

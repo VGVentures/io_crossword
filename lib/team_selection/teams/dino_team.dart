@@ -14,7 +14,7 @@ class DinoTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dinoPlatform;
 
   @override
-  SpriteInformation get spriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 14,
         columns: 2,
         stepTime: 0.042,
