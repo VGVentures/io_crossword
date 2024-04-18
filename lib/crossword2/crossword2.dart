@@ -4,6 +4,3 @@
 // soon as this Flutter-based approach reaches feature parity with the
 // existing Flame-based approach.
 library;
-
-export 'views/views.dart';
-export 'widgets/widgets.dart';
