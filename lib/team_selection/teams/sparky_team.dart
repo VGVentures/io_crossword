@@ -14,7 +14,7 @@ class SparkyTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.sparkyPlatform;
 
   @override
-  SpriteInformation get spriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 16,
         columns: 5,
         stepTime: 0.042,
