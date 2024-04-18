@@ -11,9 +11,6 @@ class LoadingCubit extends Cubit<LoadingState> {
   LoadingCubit() : super(const LoadingState.initial());
 
   Future<void> load() async {
-    // Add a pause to slow the transition between screens.
-    // await Future<void>.delayed(const Duration(seconds: 1));
-
     final loadables = [
       () => Flame.images.load(Mascots.dash.teamMascot.idleAnimation.keyName),
       () =>
