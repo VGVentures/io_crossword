@@ -125,7 +125,7 @@ class _HowMade extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                context.launchUrl(AboutLinks.github);
+                context.launchUrl(ProjectDetailsLinks.github);
               },
           ),
           const TextSpan(
