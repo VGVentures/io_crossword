@@ -85,7 +85,6 @@ void main() {
       });
 
       test('returns false if the data is the same', () {
-        final quad = _MockQuad();
         final oldWidget = QuadScope(data: quad, child: const SizedBox());
         final newWidget = QuadScope(data: quad, child: const SizedBox());
 
