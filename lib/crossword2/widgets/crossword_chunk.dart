@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 
 /// {@template crossword_chunk}
@@ -35,15 +38,30 @@ class CrosswordChunk extends StatelessWidget {
 
     final chunk = SizedBox.fromSize(
       size: crosswordLayout.chunkSize,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          if (debug)
-            Text(
-              '$index',
-              style: const TextStyle(color: Colors.red, fontSize: 12),
-            ),
-        ],
+      child: BlocSelector<CrosswordBloc, CrosswordState, BoardSection?>(
+        selector: (state) => state.sections[index],
+        builder: (context, chunk) {
+          if (chunk == null) {
+            return debug
+                ? _DebugChunkIndexText(index: index)
+                : const SizedBox();
+          }
+
+          final letters = CrosswordLetterData.fromChunk(chunk);
+
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              for (final letter in letters.values)
+                Positioned(
+                  left: letter.index.$1 * crosswordLayout.cellSize.width,
+                  top: letter.index.$2 * crosswordLayout.cellSize.height,
+                  child: CrosswordLetter(data: letter),
+                ),
+              if (debug) _DebugChunkIndexText(index: index),
+            ],
+          );
+        },
       ),
     );
 
@@ -54,5 +72,20 @@ class CrosswordChunk extends StatelessWidget {
             child: chunk,
           )
         : chunk;
+  }
+}
+
+class _DebugChunkIndexText extends StatelessWidget {
+  const _DebugChunkIndexText({required this.index});
+
+  /// {@macro crossword_chunk_index}
+  final CrosswordChunkIndex index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$index',
+      style: const TextStyle(color: Colors.red, fontSize: 12),
+    );
   }
 }
