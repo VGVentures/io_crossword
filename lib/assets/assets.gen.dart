@@ -14,6 +14,10 @@ import 'package:flutter/services.dart';
 class $AssetsAnimGen {
   const $AssetsAnimGen();
 
+  /// File path: assets/anim/android_idle.png
+  AssetGenImage get androidIdle =>
+      const AssetGenImage('assets/anim/android_idle.png');
+
   /// File path: assets/anim/android_platform.png
   AssetGenImage get androidPlatform =>
       const AssetGenImage('assets/anim/android_platform.png');
@@ -22,8 +26,37 @@ class $AssetsAnimGen {
   AssetGenImage get dashIdle =>
       const AssetGenImage('assets/anim/dash_idle.png');
 
+  /// File path: assets/anim/dash_platform.png
+  AssetGenImage get dashPlatform =>
+      const AssetGenImage('assets/anim/dash_platform.png');
+
+  /// File path: assets/anim/dino_idle.png
+  AssetGenImage get dinoIdle =>
+      const AssetGenImage('assets/anim/dino_idle.png');
+
+  /// File path: assets/anim/dino_platform.png
+  AssetGenImage get dinoPlatform =>
+      const AssetGenImage('assets/anim/dino_platform.png');
+
+  /// File path: assets/anim/sparky_idle.png
+  AssetGenImage get sparkyIdle =>
+      const AssetGenImage('assets/anim/sparky_idle.png');
+
+  /// File path: assets/anim/sparky_platform.png
+  AssetGenImage get sparkyPlatform =>
+      const AssetGenImage('assets/anim/sparky_platform.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [androidPlatform, dashIdle];
+  List<AssetGenImage> get values => [
+        androidIdle,
+        androidPlatform,
+        dashIdle,
+        dashPlatform,
+        dinoIdle,
+        dinoPlatform,
+        sparkyIdle,
+        sparkyPlatform
+      ];
 }
 
 class $AssetsIconsGen {
