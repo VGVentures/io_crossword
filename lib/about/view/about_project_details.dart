@@ -45,7 +45,7 @@ class AboutProjectDetails extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        context.launchUrl(AboutLinks.github);
+                        context.launchUrl(ProjectDetailsLinks.github);
                       },
                   ),
                   const TextSpan(
@@ -70,7 +70,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.googleIO);
+                    context.launchUrl(ProjectDetailsLinks.googleIO);
                   },
               ),
             ),
@@ -83,7 +83,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.privacyPolicy);
+                    context.launchUrl(ProjectDetailsLinks.privacyPolicy);
                   },
               ),
             ),
@@ -96,7 +96,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.termsOfService);
+                    context.launchUrl(ProjectDetailsLinks.termsOfService);
                   },
               ),
             ),
@@ -109,7 +109,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.faqs);
+                    context.launchUrl(ProjectDetailsLinks.faqs);
                   },
               ),
             ),

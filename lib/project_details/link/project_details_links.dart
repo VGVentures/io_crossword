@@ -1,4 +1,4 @@
-class AboutLinks {
+class ProjectDetailsLinks {
   static const github = 'https://github.com/VGVentures/io_crossword';
   static const googleIO = 'https://io.google/2024';
   static const privacyPolicy = 'https://policies.google.com/privacy';
