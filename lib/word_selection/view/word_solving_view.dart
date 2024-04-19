@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/hint/view/hint_view.dart';
+import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -41,16 +41,11 @@ class WordSolvingLargeView extends StatelessWidget {
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 32),
+        const HintText(),
         const Expanded(child: Center(child: WordValidatingLoadingIndicator())),
         const SizedBox(height: 8),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(child: GeminiHintButton()),
-            SizedBox(width: 8),
-            Flexible(child: SubmitButton()),
-          ],
-        ),
+        const BottomPanel(),
       ],
     );
   }
@@ -94,20 +89,13 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 32),
+        const HintText(),
         const SizedBox(
           height: 200,
           child: Center(child: WordValidatingLoadingIndicator()),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Flexible(child: GeminiHintButton()),
-            const SizedBox(width: 8),
-            Flexible(
-              child: SubmitButton(controller: _controller),
-            ),
-          ],
-        ),
+        BottomPanel(controller: _controller),
       ],
     );
   }
@@ -128,6 +116,47 @@ class WordValidatingLoadingIndicator extends StatelessWidget {
     if (isValidating) return const CircularProgressIndicator();
 
     return const SizedBox.shrink();
+  }
+}
+
+@visibleForTesting
+class BottomPanel extends StatelessWidget {
+  @visibleForTesting
+  const BottomPanel({super.key, this.controller});
+
+  final IoWordInputController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final isShowHintTextField =
+        context.select((HintBloc bloc) => bloc.state.isShowHintTextField);
+
+    if (isShowHintTextField) {
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CloseHintButton(),
+          SizedBox(width: 8),
+          Expanded(
+            child: GeminiTextField(),
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Flexible(
+          child: GeminiHintButton(),
+        ),
+        const SizedBox(width: 8),
+        Flexible(
+          child: SubmitButton(controller: controller),
+        ),
+      ],
+    );
   }
 }
 
