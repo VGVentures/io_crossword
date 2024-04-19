@@ -7,10 +7,12 @@ library;
 
 import 'package:equatable/equatable.dart';
 
+/// {@template crossword_chunk_index}
 /// Represents the position of a chunk in a crossword.
 ///
 /// The chunks are indexed by (row, column) and (0,0) lies at the top-left,
 /// hence only positive values are expected.
+/// {@endtemplate}
 typedef CrosswordChunkIndex = (int, int);
 
 /// {@template crossword_chunk_size}
