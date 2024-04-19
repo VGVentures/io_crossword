@@ -109,10 +109,17 @@ class CrosswordLetter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final crosswordData = CrosswordLayoutScope.of(context);
 
     final child = data.character != null
-        ? Center(child: Text(data.character!, textAlign: TextAlign.center))
+        ? Center(
+            child: Text(
+              data.character!,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium!.copyWith(color: Colors.black),
+            ),
+          )
         : null;
 
     return SizedBox.fromSize(

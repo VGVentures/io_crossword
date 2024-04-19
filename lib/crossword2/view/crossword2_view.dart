@@ -14,7 +14,7 @@ class Crossword2View extends StatelessWidget {
     return CrosswordLayoutScope(
       data: CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
-        cellSize: const Size.square(20),
+        cellSize: const Size.square(50),
       ),
       child: CrosswordInteractiveViewer(
         builder: (_, __) => const _CrosswordStack(configuration: configuration),
