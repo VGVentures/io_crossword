@@ -128,7 +128,7 @@ void main() {
     });
 
     testWidgets(
-      'renders $WordSelectionView when loaded',
+      'renders $WordSelectionPage when loaded',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -145,7 +145,7 @@ void main() {
           crosswordBloc: crosswordBloc,
         );
 
-        expect(find.byType(WordSelectionView), findsOneWidget);
+        expect(find.byType(WordSelectionPage), findsOneWidget);
       },
     );
   });
