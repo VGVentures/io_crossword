@@ -49,17 +49,20 @@ class GeminiHintButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return OutlinedButton.icon(
-      style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
-      onPressed: null,
-      icon: const GeminiGradient(
-        child: Icon(
-          IoIcons.gemini,
-          size: 12,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 128),
+      child: OutlinedButton.icon(
+        style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
+        onPressed: null,
+        icon: const GeminiGradient(
+          child: Icon(
+            IoIcons.gemini,
+            size: 12,
+          ),
         ),
-      ),
-      label: GeminiGradient(
-        child: Text(l10n.hint),
+        label: GeminiGradient(
+          child: Text(l10n.hint),
+        ),
       ),
     );
   }
