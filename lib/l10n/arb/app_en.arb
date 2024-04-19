@@ -288,5 +288,17 @@
   "endGame": "End game",
   "@endGame": {
     "description": "End game label."
+  },
+  "thanksForContributing": "Thanks for contributing!",
+  "@thanksForContributing": {
+    "description": "Thanks for contributing! label."
+  },
+  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "@claimBadgeContributing": {
+    "description": "Claim badge for contributing"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share label"
   }
 }

@@ -72,6 +72,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/end_image.png
+  AssetGenImage get endImage =>
+      const AssetGenImage('assets/images/end_image.png');
+
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
 
@@ -91,8 +95,14 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [letters, platformNotSelected, tile, tileLarge, welcomeBackground];
+  List<AssetGenImage> get values => [
+        endImage,
+        letters,
+        platformNotSelected,
+        tile,
+        tileLarge,
+        welcomeBackground
+      ];
 }
 
 class Assets {
