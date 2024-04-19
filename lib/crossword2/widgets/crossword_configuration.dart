@@ -27,7 +27,7 @@ typedef CrosswordChunkSize = int;
 /// Represents the configuration data of a crossword.
 ///
 /// Such configuration is specific to a crossword, since depending on its size
-/// and layout of the crossword it will have more or less chunks.
+/// and layout the crossword may have more or less chunks.
 ///
 /// The [chunkSize] is the size of each chunk in the crossword, and it is
 /// expected to be at least as big as the largest word in the crossword. So that
