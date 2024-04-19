@@ -276,5 +276,17 @@
   "leave": "Leave",
   "@leave": {
     "description": "Action to leave something behind."
+  },
+  "endingGame": "Ending the game",
+  "@endingGame": {
+    "description": "Title used to check if the user wants to end the game."
+  },
+  "sureToEndGame": "Are you sure you want to submit your score and finish the game?",
+  "@sureToEndGame": {
+    "description": "Subtitle used to check if the user wants to end the game."
+  },
+  "endGame": "End game",
+  "@endGame": {
+    "description": "End game label."
   }
 }
