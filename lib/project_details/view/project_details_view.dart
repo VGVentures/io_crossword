@@ -19,7 +19,9 @@ class ProjectDetailsView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class ProjectDetailsLargeView extends StatelessWidget {
+  @visibleForTesting
   const ProjectDetailsLargeView({super.key});
 
   @override
@@ -34,7 +36,9 @@ class ProjectDetailsLargeView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class ProjectDetailsSmallView extends StatelessWidget {
+  @visibleForTesting
   const ProjectDetailsSmallView({super.key});
 
   @override
@@ -47,6 +51,7 @@ class ProjectDetailsSmallView extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class ProjectDetailsContent extends StatelessWidget {
   @visibleForTesting
   const ProjectDetailsContent({super.key});
