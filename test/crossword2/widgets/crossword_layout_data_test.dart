@@ -3,7 +3,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
-import 'package:io_crossword/crossword2/widgets/crossword_layout.dart';
+import 'package:io_crossword/crossword2/widgets/crossword_layout_data.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordLayoutData extends Mock implements CrosswordLayoutData {}
