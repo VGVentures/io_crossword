@@ -26,7 +26,6 @@ class BottomBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -39,10 +38,7 @@ class BottomBarContent extends StatelessWidget {
           children: [
             OutlinedButton(
               onPressed: () {}, // coverage:ignore-line
-              child: Text(
-                l10n.submitScore,
-                style: theme.textTheme.bodySmall,
-              ),
+              child: Text(l10n.submitScore),
             ),
             const SizedBox(width: 16),
             OutlinedButton.icon(

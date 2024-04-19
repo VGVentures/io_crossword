@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/hint/bloc/hint_bloc.dart';
+import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
 class WordSelectionPage extends StatelessWidget {

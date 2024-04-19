@@ -141,10 +141,7 @@ class WelcomeBody extends StatelessWidget {
           const SizedBox(height: 48),
           OutlinedButton(
             onPressed: () => _onGetStarted(context),
-            child: Text(
-              l10n.getStarted,
-              style: theme.textTheme.bodyMedium,
-            ),
+            child: Text(l10n.getStarted),
           ),
           const SizedBox(height: 32),
         ],
