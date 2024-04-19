@@ -128,6 +128,35 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
+        'does nothing if already requested',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(
+            () => crosswordRepository.watchSectionFromPosition(1, 1),
+          ).thenAnswer((_) => Stream.value(section));
+        },
+        act: (bloc) => bloc
+          ..add(const BoardSectionRequested((1, 1)))
+          ..add(const BoardSectionRequested((1, 1))),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.success,
+            sectionSize: sectionSize,
+            sections: {
+              (1, 1): section,
+            },
+          ),
+        ],
+        verify: (bloc) {
+          verify(() => crosswordRepository.watchSectionFromPosition(1, 1))
+              .called(1);
+        },
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
         'emits [success] and adds new sections '
         'when BoardSectionRequested is added',
         build: () => CrosswordBloc(
