@@ -128,10 +128,10 @@ class BottomPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isShowHintTextField =
-        context.select((HintBloc bloc) => bloc.state.isShowHintTextField);
+    final isHintModeActive =
+        context.select((HintBloc bloc) => bloc.state.isHintModeActive);
 
-    if (isShowHintTextField) {
+    if (isHintModeActive) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

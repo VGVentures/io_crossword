@@ -12,10 +12,10 @@ class HintText extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
 
-    final isShowHintTextField =
-        context.select((HintBloc bloc) => bloc.state.isShowHintTextField);
+    final isHintModeActive =
+        context.select((HintBloc bloc) => bloc.state.isHintModeActive);
     final text =
-        isShowHintTextField ? l10n.askYesOrNoQuestion : l10n.askGeminiHint;
+        isHintModeActive ? l10n.askYesOrNoQuestion : l10n.askGeminiHint;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

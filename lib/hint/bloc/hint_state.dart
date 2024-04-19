@@ -34,7 +34,7 @@ class HintState extends Equatable {
     );
   }
 
-  bool get isShowHintTextField =>
+  bool get isHintModeActive =>
       status == HintStatus.asking ||
       status == HintStatus.thinking ||
       status == HintStatus.invalid;
