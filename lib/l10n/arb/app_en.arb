@@ -277,6 +277,15 @@
   "@leave": {
     "description": "Action to leave something behind."
   },
+  "percentage": "{value}%",
+  "@percentage": {
+    "description": "Value displayed as a percentage.",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
   "endingGame": "Ending the game",
   "@endingGame": {
     "description": "Title used to check if the user wants to end the game."
