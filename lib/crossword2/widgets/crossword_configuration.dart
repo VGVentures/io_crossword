@@ -17,8 +17,9 @@ typedef CrosswordChunkIndex = (int, int);
 /// Represents the size of a chunk in a crossword.
 ///
 /// A chunk is a square in the crossword grid, that in-turn contains multiple
-/// cells (squares) of the crossword. The size is represented by an int since a
-/// chunk is squared.
+/// cells (squares) of the crossword. A letter fits in a single cell.
+///
+/// The size is represented by an int since a chunk is squared.
 /// {@endtemplate}
 typedef CrosswordChunkSize = int;
 
