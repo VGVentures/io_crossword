@@ -8,10 +8,6 @@ class WordSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedWord =
-        context.select((WordSelectionBloc bloc) => bloc.state.word);
-    if (selectedWord == null) return const SizedBox.shrink();
-
     final layout = IoLayout.of(context);
     const body = _WordSelectionBody();
     return switch (layout) {
