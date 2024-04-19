@@ -122,13 +122,13 @@ class CrosswordLetter extends StatelessWidget {
           )
         : null;
 
-    return SizedBox.fromSize(
-      size: crosswordData.cellSize,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.white,
-        ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        color: Colors.white,
+      ),
+      child: SizedBox.fromSize(
+        size: crosswordData.cellSize,
         child: child,
       ),
     );
