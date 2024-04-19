@@ -502,7 +502,6 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = context.l10n;
 
     return OutlinedButton(
@@ -514,7 +513,6 @@ class _SubmitButton extends StatelessWidget {
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),
-        style: theme.textTheme.bodyMedium,
       ),
     );
   }
