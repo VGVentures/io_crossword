@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -31,6 +32,17 @@ void main() {
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
       expect(find.byType(Drawer), findsNothing);
+    });
+
+    testWidgets(
+        'navigates to ProjectDetailsView when Project Details is tapped',
+        (tester) async {
+      await tester.pumpApp(CrosswordDrawer());
+
+      await tester.tap(find.text('Project Details'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProjectDetailsView), findsOneWidget);
     });
   });
 }
