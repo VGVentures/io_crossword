@@ -7,6 +7,7 @@ import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -26,6 +27,7 @@ class GameIntroPage extends StatelessWidget {
 }
 
 enum GameIntroStatus {
+  loading,
   welcome,
   teamSelection,
   enterInitials,
@@ -69,7 +71,7 @@ class GameIntroView extends StatelessWidget {
       child: Material(
         child: FlowBuilder<GameIntroStatus>(
           controller: _flowController,
-          state: _flowController == null ? GameIntroStatus.welcome : null,
+          state: _flowController == null ? GameIntroStatus.loading : null,
           onGeneratePages: onGenerateGameIntroPages,
           onComplete: (state) {
             final playerState = context.read<PlayerBloc>().state;
@@ -92,6 +94,7 @@ List<Page<void>> onGenerateGameIntroPages(
   List<Page<void>> pages,
 ) {
   return switch (state) {
+    GameIntroStatus.loading => [LoadingPage.page()],
     GameIntroStatus.welcome => [WelcomePage.page()],
     GameIntroStatus.teamSelection => [TeamSelectionPage.page()],
     GameIntroStatus.enterInitials => [InitialsPage.page()],

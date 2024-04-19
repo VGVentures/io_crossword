@@ -21,7 +21,7 @@ class TeamSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamSelectionCubit()..load(),
+      create: (_) => TeamSelectionCubit(),
       child: const TeamSelectionView(),
     );
   }
@@ -43,17 +43,9 @@ class TeamSelectionView extends StatelessWidget {
         crossword: l10n.crossword,
       ),
       body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
-        builder: (context, state) {
-          // TODO(marwfair): Loading will be done in the initial loading screen.
-          // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6457898516
-          if (state.status == TeamSelectionStatus.loading) {
-            return const Text('Loading');
-          } else {
-            return switch (layout) {
-              IoLayoutData.small => const _TeamSelectorSmall(),
-              IoLayoutData.large => const _TeamSelectorLarge(),
-            };
-          }
+        builder: (context, state) => switch (layout) {
+          IoLayoutData.small => const _TeamSelectorSmall(),
+          IoLayoutData.large => const _TeamSelectorLarge(),
         },
       ),
     );
@@ -223,6 +215,11 @@ class _TeamSelectorLarge extends StatelessWidget {
 class _TeamSelectorSmall extends StatefulWidget {
   const _TeamSelectorSmall();
 
+  static const tileWidth = 366.0;
+  static const tileHeight = 209.0;
+
+  static const platformTileHeight = 231.0;
+
   @override
   State<_TeamSelectorSmall> createState() => _TeamSelectorSmallState();
 }
@@ -230,11 +227,6 @@ class _TeamSelectorSmall extends StatefulWidget {
 class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-
-  static const tileWidth = 366.0;
-  static const tileHeight = 209.0;
-
-  static const platformTileHeight = 231.0;
 
   @override
   void initState() {
@@ -244,7 +236,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(
           context.read<TeamSelectionCubit>().state.index.toDouble() *
-              (tileWidth * 2),
+              (_TeamSelectorSmall.tileWidth * 2),
         );
       }
     });
@@ -258,12 +250,13 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
 
   @override
   Widget build(BuildContext context) {
-    final halfScreenWidth = MediaQuery.of(context).size.width / 2;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final halfScreenWidth = screenWidth / 2;
 
     return BlocConsumer<TeamSelectionCubit, TeamSelectionState>(
       listener: (context, state) {
         _scrollController.animateTo(
-          state.index * (tileWidth * 2),
+          state.index * (_TeamSelectorSmall.tileWidth * 2),
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
@@ -281,80 +274,49 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                 // a little bigger than we need to make sure the grid shows
                 // when the mascots at the ends are selected and when the
                 // user is zoomed out.
-                width: tileWidth * 15,
-                height: tileHeight * 12,
+                width: _TeamSelectorSmall.tileWidth * 15,
+                height: _TeamSelectorSmall.tileHeight * 12,
                 child: Stack(
                   children: [
                     // If the width of the window changes, we need to
                     // caclulate the edge of the background to keep the
                     // mascots in the center.
                     Positioned.fill(
-                      left: ((MediaQuery.of(context).size.width) * 1 +
-                              (tileWidth * .001)) -
-                          (tileWidth * 8),
+                      left: (screenWidth * 1 +
+                              (_TeamSelectorSmall.tileWidth * .001)) -
+                          (_TeamSelectorSmall.tileWidth * 8),
                       // Move the board a half a tile up to align the
                       // mascots a little higher.
-                      top: -(tileHeight / 2),
+                      top: -(_TeamSelectorSmall.tileHeight / 2),
                       child: Image.asset(
                         Assets.images.tileLarge.path,
                         repeat: ImageRepeat.repeat,
                       ),
                     ),
                     Positioned.fill(
-                      left: halfScreenWidth - tileWidth / 2,
-                      bottom: -((tileHeight / 2) -
-                          (platformTileHeight - tileHeight)),
-                      child: Align(
+                      left: halfScreenWidth - _TeamSelectorSmall.tileWidth / 2,
+                      bottom: -((_TeamSelectorSmall.tileHeight / 2) -
+                          (_TeamSelectorSmall.platformTileHeight -
+                              _TeamSelectorSmall.tileHeight)),
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: SizedBox(
                           // 4 platform tiles with a tile in between.
-                          width: tileWidth * 7,
+                          width: _TeamSelectorSmall.tileWidth * 7,
                           child: Stack(
                             children: [
+                              _SmallPlatform(Mascots.dash),
                               Positioned(
-                                child: SizedBox(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                  child: TeamSelectionMascotPlatform(
-                                    mascot: Mascots.dash,
-                                    selected: state.index == Mascots.dash.index,
-                                  ),
-                                ),
+                                left: _TeamSelectorSmall.tileWidth * 2,
+                                child: _SmallPlatform(Mascots.sparky),
                               ),
                               Positioned(
-                                left: tileWidth * 2,
-                                child: SizedBox(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                  child: TeamSelectionMascotPlatform(
-                                    mascot: Mascots.sparky,
-                                    selected:
-                                        state.index == Mascots.sparky.index,
-                                  ),
-                                ),
+                                left: _TeamSelectorSmall.tileWidth * 4,
+                                child: _SmallPlatform(Mascots.android),
                               ),
                               Positioned(
-                                left: tileWidth * 4,
-                                child: SizedBox(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                  child: TeamSelectionMascotPlatform(
-                                    mascot: Mascots.android,
-                                    selected:
-                                        state.index == Mascots.android.index,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: tileWidth * 6,
-                                child: SizedBox(
-                                  width: tileWidth,
-                                  height: platformTileHeight,
-                                  child: TeamSelectionMascotPlatform(
-                                    mascot: Mascots.dino,
-                                    selected: state.index == Mascots.dino.index,
-                                  ),
-                                ),
+                                left: _TeamSelectorSmall.tileWidth * 6,
+                                child: _SmallPlatform(Mascots.dino),
                               ),
                             ],
                           ),
@@ -363,11 +325,12 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                     ),
                     Positioned.fill(
                       left: halfScreenWidth - 100,
-                      top: -tileHeight - (tileHeight / 2),
+                      top: -_TeamSelectorSmall.tileHeight -
+                          (_TeamSelectorSmall.tileHeight / 2),
                       child: const Align(
                         alignment: Alignment.centerLeft,
                         child: SizedBox(
-                          width: tileWidth * 7,
+                          width: _TeamSelectorSmall.tileWidth * 7,
                           height: 400,
                           child: Stack(
                             children: [
@@ -379,7 +342,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 ),
                               ),
                               Positioned(
-                                left: tileWidth * 2,
+                                left: _TeamSelectorSmall.tileWidth * 2,
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
@@ -387,7 +350,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 ),
                               ),
                               Positioned(
-                                left: tileWidth * 4,
+                                left: _TeamSelectorSmall.tileWidth * 4,
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
@@ -395,7 +358,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 ),
                               ),
                               Positioned(
-                                left: tileWidth * 6,
+                                left: _TeamSelectorSmall.tileWidth * 6,
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
@@ -410,7 +373,6 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                   ],
                 ),
               ),
-              // ),
             ),
             const Padding(
               padding: EdgeInsets.all(45),
@@ -530,5 +492,28 @@ extension TeamMascot on Mascots {
       case Mascots.dino:
         return const DinoTeam();
     }
+  }
+}
+
+class _SmallPlatform extends StatelessWidget {
+  const _SmallPlatform(
+    this.mascot,
+  );
+
+  final Mascots mascot;
+
+  @override
+  Widget build(BuildContext context) {
+    final index =
+        context.select((TeamSelectionCubit cubit) => cubit.state.index);
+
+    return SizedBox(
+      width: _TeamSelectorSmall.tileWidth,
+      height: _TeamSelectorSmall.platformTileHeight,
+      child: TeamSelectionMascotPlatform(
+        mascot: mascot,
+        selected: index == mascot.index,
+      ),
+    );
   }
 }

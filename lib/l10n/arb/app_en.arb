@@ -288,5 +288,14 @@
   "leave": "Leave",
   "@leave": {
     "description": "Action to leave something behind."
+  },
+  "percentage": "{value}%",
+  "@percentage": {
+    "description": "Value displayed as a percentage.",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
   }
 }
