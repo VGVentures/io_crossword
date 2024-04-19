@@ -56,13 +56,12 @@ class App extends StatelessWidget {
               leaderboardRepository: leaderboardRepository,
             )..add(PlayerLoaded(userId: user.id)),
           ),
-          // coverage:ignore-start
           BlocProvider(
+            lazy: false,
             create: (context) => ChallengeBloc(
               boardInfoRepository: context.read(),
             )..add(const ChallengeDataRequested()),
           ),
-          // coverage:ignore-end
         ],
         child: const AppView(),
       ),
