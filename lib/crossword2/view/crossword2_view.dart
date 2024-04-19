@@ -45,6 +45,9 @@ class _CrosswordStack extends StatelessWidget {
     }
 
     final visibleChunks = <CrosswordChunkIndex>{
+      // TODO(alestiago): Instead of computing the visiblity naively, we should
+      // use the points to derive the visible chunks in O(1).
+      // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6487319379
       for (var row = 0; row <= configuration.bottomLeft.$1; row++)
         for (var column = 0; column <= configuration.bottomLeft.$2; column++)
           if (isChunkVisible((row, column))) (row, column),
