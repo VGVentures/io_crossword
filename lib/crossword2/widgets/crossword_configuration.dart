@@ -1,8 +1,8 @@
 /// Data class that defines a crossword configuration.
 // NOTE: This file temporarily lives under `crossword2` until the Flutter-based
-// crossword reaches feature parity with the Flame-based crossword is reached.
-// At that point, this file should be moved to be part of the domain and, most
-// likely, retrieved from a remote source (where the crossword is fetched from).
+// crossword reaches feature parity with the Flame-based crossword. At that
+// point, this file should be moved to be part of the domain and, most likely,
+// retrieved from a remote source (where the crossword is fetched from).
 library;
 
 import 'package:equatable/equatable.dart';
