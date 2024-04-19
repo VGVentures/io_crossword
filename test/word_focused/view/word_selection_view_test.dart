@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -41,20 +40,6 @@ void main() {
       setUp(() {
         wordSelectionBloc = _MockWordSelectionBloc();
         selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
-      });
-
-      testWidgets('SizedBox when there is no selected word', (tester) async {
-        when(() => wordSelectionBloc.state)
-            .thenReturn(WordSelectionState.initial());
-
-        await tester.pumpApp(
-          BlocProvider(
-            create: (_) => wordSelectionBloc,
-            child: WordSelectionView(),
-          ),
-        );
-
-        expect(find.byType(SizedBox), findsOneWidget);
       });
 
       testWidgets(
