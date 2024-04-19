@@ -13,6 +13,7 @@ class WordSelectionPage extends StatelessWidget {
     if (selectedWord == null) return const SizedBox.shrink();
 
     return BlocProvider(
+      lazy: false,
       create: (context) => HintBloc(),
       child: const WordSelectionView(),
     );
