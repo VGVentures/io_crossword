@@ -44,11 +44,11 @@ class WordSolvingLargeView extends StatelessWidget {
         const Expanded(child: Center(child: WordValidatingLoadingIndicator())),
         const SizedBox(height: 8),
         const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: GeminiHintButton()),
+            Flexible(child: GeminiHintButton()),
             SizedBox(width: 8),
-            Expanded(child: SubmitButton()),
+            Flexible(child: SubmitButton()),
           ],
         ),
       ],
@@ -99,11 +99,11 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           child: Center(child: WordValidatingLoadingIndicator()),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Expanded(child: GeminiHintButton()),
+            const Flexible(child: GeminiHintButton()),
             const SizedBox(width: 8),
-            Expanded(
+            Flexible(
               child: SubmitButton(controller: _controller),
             ),
           ],
@@ -162,9 +162,12 @@ class SubmitButton extends StatelessWidget {
     );
     final isValidating = wordSelectionStatus == WordSelectionStatus.validating;
 
-    return OutlinedButton(
-      onPressed: isValidating ? null : () => _onSubmit(context),
-      child: Text(l10n.submit),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 162),
+      child: OutlinedButton(
+        onPressed: isValidating ? null : () => _onSubmit(context),
+        child: Text(l10n.submit),
+      ),
     );
   }
 }

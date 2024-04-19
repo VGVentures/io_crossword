@@ -29,6 +29,9 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    final wasAlreadyRequested = state.sections.containsKey(event.position);
+    if (wasAlreadyRequested) return;
+
     return emit.forEach(
       _crosswordRepository.watchSectionFromPosition(
         event.position.$1,

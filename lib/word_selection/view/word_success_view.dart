@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/link/about_links.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/project_details/link/project_details_links.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
@@ -334,7 +334,7 @@ class ClaimBadgeButton extends StatelessWidget {
     return OutlinedButton.icon(
       style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
       onPressed: () {
-        context.launchUrl(AboutLinks.claimBadge);
+        context.launchUrl(ProjectDetailsLinks.claimBadge);
       },
       icon: const Icon(
         IoIcons.google,
