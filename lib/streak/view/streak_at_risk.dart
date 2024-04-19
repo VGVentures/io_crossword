@@ -2,19 +2,49 @@ import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/streak/streak.dart';
+import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class StreakAtRiskView extends StatelessWidget {
-  const StreakAtRiskView({super.key});
+  const StreakAtRiskView({
+    required this.onLeave,
+    super.key,
+  });
 
-  static Future<void> showModal(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (context) {
-        return const StreakAtRiskView();
-      },
-    );
+  final VoidCallback onLeave;
+
+  static Future<void> check(
+    BuildContext context, {
+    required VoidCallback onLeave,
+  }) async {
+    final streak = context.read<PlayerBloc>().state.player.streak;
+
+    if (streak == 0) {
+      return onLeave();
+    }
+
+    final status = context.read<WordSelectionBloc>().state.status;
+
+    switch (status) {
+      case WordSelectionStatus.validating:
+      case WordSelectionStatus.incorrect:
+      case WordSelectionStatus.failure:
+      case WordSelectionStatus.solving:
+        return showDialog<void>(
+          context: context,
+          builder: (context) {
+            return StreakAtRiskView(
+              onLeave: onLeave,
+            );
+          },
+        );
+      case WordSelectionStatus.empty:
+      case WordSelectionStatus.preSolving:
+      case WordSelectionStatus.solved:
+        onLeave();
+    }
   }
 
   @override
@@ -46,7 +76,9 @@ class StreakAtRiskView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-                  const _BottomActions(),
+                  _BottomActions(
+                    onLeave: onLeave,
+                  ),
                 ],
               ),
             ),
@@ -91,10 +123,16 @@ class _Title extends StatelessWidget {
 }
 
 class _BottomActions extends StatelessWidget {
-  const _BottomActions();
+  const _BottomActions({
+    required this.onLeave,
+  });
+
+  final VoidCallback onLeave;
 
   void _onLeave(BuildContext context) {
     context.read<LeaderboardResource>().resetStreak();
+    Navigator.pop(context);
+    onLeave();
   }
 
   void _onSolveIt(BuildContext context) {
