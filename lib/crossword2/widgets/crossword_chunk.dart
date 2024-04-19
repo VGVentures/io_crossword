@@ -31,10 +31,10 @@ class CrosswordChunk extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final layout = CrosswordLayoutScope.of(context);
+    final crosswordLayout = CrosswordLayoutScope.of(context);
 
     final chunk = SizedBox.fromSize(
-      size: layout.chunkSize,
+      size: crosswordLayout.chunkSize,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
