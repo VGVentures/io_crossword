@@ -44,9 +44,9 @@ void main() {
       '${HintStatus.answered} after when HintRequested is added',
       setUp: () {
         when(
-          () => hintResource.getHint(wordId: 'id', question: 'is it blue?'),
+          () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
         ).thenAnswer(
-          (_) async => Hint(question: 'is it blue?', response: HintResponse.no),
+          (_) async => Hint(question: 'blue?', response: HintResponse.no),
         );
       },
       seed: () => HintState(
@@ -57,7 +57,7 @@ void main() {
       ),
       build: () => HintBloc(hintResource: hintResource),
       act: (bloc) => bloc.add(
-        HintRequested(wordId: 'id', question: 'is it blue?'),
+        HintRequested(wordId: 'id', question: 'blue?'),
       ),
       expect: () => const <HintState>[
         HintState(
@@ -70,7 +70,7 @@ void main() {
           status: HintStatus.answered,
           hints: [
             Hint(question: 'is it orange?', response: HintResponse.no),
-            Hint(question: 'is it blue?', response: HintResponse.no),
+            Hint(question: 'blue?', response: HintResponse.no),
           ],
         ),
       ],

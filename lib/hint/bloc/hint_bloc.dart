@@ -38,7 +38,7 @@ class HintBloc extends Bloc<HintEvent, HintState> {
   ) async {
     emit(state.copyWith(status: HintStatus.thinking));
 
-    final hint = await _hintResource.getHint(
+    final hint = await _hintResource.generateHint(
       wordId: event.wordId,
       question: event.question,
     );
