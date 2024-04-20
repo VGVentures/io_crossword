@@ -57,6 +57,7 @@ class App extends StatelessWidget {
             )..add(PlayerLoaded(userId: user.id)),
           ),
           BlocProvider(
+            lazy: false,
             create: (context) => ChallengeBloc(
               boardInfoRepository: context.read(),
             )..add(const ChallengeDataRequested()),

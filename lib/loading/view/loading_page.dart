@@ -2,43 +2,46 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
-import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
 
   static Page<void> page() {
-    return const MaterialPage(child: WelcomePage());
+    return const MaterialPage(child: LoadingPage());
   }
 
   @override
   Widget build(BuildContext context) {
-    return const WelcomeView();
+    return BlocProvider(
+      create: (_) => LoadingCubit()..load(),
+      child: const LoadingView(),
+    );
   }
 }
 
-class WelcomeView extends StatelessWidget {
+class LoadingView extends StatelessWidget {
   @visibleForTesting
-  const WelcomeView({super.key});
+  const LoadingView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
     return switch (layout) {
-      IoLayoutData.small => const WelcomeSmall(),
-      IoLayoutData.large => const WelcomeLarge(),
+      IoLayoutData.small => const LoadingSmall(),
+      IoLayoutData.large => const LoadingLarge(),
     };
   }
 }
 
-class WelcomeLarge extends StatelessWidget {
+class LoadingLarge extends StatelessWidget {
   @visibleForTesting
-  const WelcomeLarge({super.key});
+  const LoadingLarge({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class WelcomeLarge extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: WelcomeBody(),
+                  child: LoadingBody(),
                 ),
               ),
             ),
@@ -72,9 +75,9 @@ class WelcomeLarge extends StatelessWidget {
   }
 }
 
-class WelcomeSmall extends StatelessWidget {
+class LoadingSmall extends StatelessWidget {
   @visibleForTesting
-  const WelcomeSmall({super.key});
+  const LoadingSmall({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,7 @@ class WelcomeSmall extends StatelessWidget {
         child: SingleChildScrollView(
           child: Align(
             alignment: Alignment.topCenter,
-            child: WelcomeBody(),
+            child: LoadingBody(),
           ),
         ),
       ),
@@ -97,14 +100,12 @@ class WelcomeSmall extends StatelessWidget {
   }
 }
 
-class WelcomeBody extends StatelessWidget {
+class LoadingBody extends StatelessWidget {
   @visibleForTesting
-  const WelcomeBody({super.key});
+  const LoadingBody({super.key});
 
   void _onGetStarted(BuildContext context) {
-    context
-        .flow<GameIntroStatus>()
-        .update((status) => GameIntroStatus.teamSelection);
+    context.flow<GameIntroStatus>().update((status) => GameIntroStatus.welcome);
   }
 
   @override
@@ -129,19 +130,17 @@ class WelcomeBody extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
-          BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
-            selector: (state) => (state.solvedWords, state.totalWords),
-            builder: (context, words) {
-              return ChallengeProgress(
-                solvedWords: words.$1,
-                totalWords: words.$2,
+          BlocConsumer<LoadingCubit, LoadingState>(
+            listener: (context, state) {
+              if (state.progress == 100) {
+                _onGetStarted(context);
+              }
+            },
+            builder: (context, state) {
+              return LoadingProgress(
+                progress: state.progress,
               );
             },
-          ),
-          const SizedBox(height: 48),
-          OutlinedButton(
-            onPressed: () => _onGetStarted(context),
-            child: Text(l10n.getStarted),
           ),
           const SizedBox(height: 32),
         ],
