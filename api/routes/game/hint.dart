@@ -10,6 +10,8 @@ const _maxAllowedHints = 10;
 Future<Response> onRequest(RequestContext context) async {
   if (context.request.method == HttpMethod.post) {
     return _onPost(context);
+  } else if (context.request.method == HttpMethod.get) {
+    return _onGet(context);
   } else {
     return Response(statusCode: HttpStatus.methodNotAllowed);
   }
@@ -61,6 +63,35 @@ Future<Response> _onPost(RequestContext context) async {
     );
 
     return Response.json(body: hint.toJson());
+  } catch (e) {
+    return Response(
+      body: e.toString(),
+      statusCode: HttpStatus.internalServerError,
+    );
+  }
+}
+
+Future<Response> _onGet(RequestContext context) async {
+  final hintRepository = context.read<HintRepository>();
+  final user = context.read<AuthenticatedUser>();
+
+  final wordId = context.request.uri.queryParameters['wordId'];
+
+  if (wordId == null) {
+    return Response(statusCode: HttpStatus.badRequest);
+  }
+
+  try {
+    final hints = await hintRepository.getPreviousHints(
+      userId: user.id,
+      wordId: wordId,
+    );
+
+    return Response.json(
+      body: {
+        'hints': hints.map((hint) => hint.toJson()).toList(),
+      },
+    );
   } catch (e) {
     return Response(
       body: e.toString(),

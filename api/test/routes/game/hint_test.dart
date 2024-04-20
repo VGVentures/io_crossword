@@ -21,6 +21,8 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockHintRepository extends Mock implements HintRepository {}
 
+class _MockUri extends Mock implements Uri {}
+
 void main() {
   group('/game/hint', () {
     late RequestContext requestContext;
@@ -45,7 +47,7 @@ void main() {
     });
 
     group('other http methods', () {
-      const allowedMethods = [HttpMethod.post];
+      const allowedMethods = [HttpMethod.post, HttpMethod.get];
       final notAllowedMethods = HttpMethod.values.where(
         (e) => !allowedMethods.contains(e),
       );
@@ -234,6 +236,77 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {'wordId': 'theWordId'},
           );
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.badRequest);
+        },
+      );
+    });
+
+    group('GET', () {
+      late Uri uri;
+
+      setUp(() {
+        uri = _MockUri();
+        when(() => request.method).thenReturn(HttpMethod.get);
+        when(() => request.uri).thenReturn(uri);
+      });
+
+      test(
+        'returns Response with a list of hints',
+        () async {
+          final hintList = [
+            Hint(question: 'question1', response: HintResponse.yes),
+            Hint(question: 'question2', response: HintResponse.notApplicable),
+            Hint(question: 'question3', response: HintResponse.no),
+          ];
+          when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
+          when(
+            () => hintRepository.getPreviousHints(
+              userId: 'userId',
+              wordId: 'wordId',
+            ),
+          ).thenAnswer((_) async => hintList);
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.ok);
+          expect(
+            await response.json(),
+            equals({
+              'hints': [
+                {'question': 'question1', 'response': 'yes'},
+                {'question': 'question2', 'response': 'notApplicable'},
+                {'question': 'question3', 'response': 'no'},
+              ],
+            }),
+          );
+        },
+      );
+
+      test(
+        'returns internal server error response when getting hints fails',
+        () async {
+          when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
+          when(
+            () => hintRepository.getPreviousHints(
+              userId: 'userId',
+              wordId: 'wordId',
+            ),
+          ).thenThrow(HintException('Oops', StackTrace.empty));
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.internalServerError);
+          expect(await response.body(), contains('Oops'));
+        },
+      );
+
+      test(
+        'returns bad request response when word id not provided',
+        () async {
+          when(() => uri.queryParameters).thenReturn({});
 
           final response = await route.onRequest(requestContext);
 

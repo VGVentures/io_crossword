@@ -17,8 +17,8 @@ class HintResource {
 
   /// Post /game/hint
   ///
-  /// Returns a [Hint].
-  Future<Hint> getHint({
+  /// Generates a [Hint] for the provided word by answering to the question.
+  Future<Hint> generateHint({
     required String wordId,
     required String question,
   }) async {
@@ -46,6 +46,42 @@ class HintResource {
     } catch (error, stackTrace) {
       throw ApiClientError(
         'POST $path returned invalid response: "${response.body}"',
+        stackTrace,
+      );
+    }
+  }
+
+  /// Get /game/hint
+  ///
+  /// Fetches all the hints for the provided word.
+  Future<List<Hint>> getHints({
+    required String wordId,
+  }) async {
+    const path = '/game/hint';
+    final response = await _apiClient.get(
+      path,
+      queryParameters: {
+        'wordId': wordId,
+      },
+    );
+
+    if (response.statusCode != HttpStatus.ok) {
+      throw ApiClientError(
+        'GET $path returned status ${response.statusCode} '
+        'with the following response: "${response.body}"',
+        StackTrace.current,
+      );
+    }
+
+    try {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final hints = (body['hints'] as List)
+          .map((hint) => Hint.fromJson(hint as Map<String, dynamic>))
+          .toList();
+      return hints;
+    } catch (error, stackTrace) {
+      throw ApiClientError(
+        'GET $path returned invalid response: "${response.body}"',
         stackTrace,
       );
     }
