@@ -32,13 +32,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final crosswordResource = apiClient.crosswordResource;
-
     return MultiProvider(
       providers: [
+        Provider.value(value: apiClient.crosswordResource),
         Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: apiClient.hintResource),
         Provider.value(value: user),
-        Provider.value(value: crosswordResource),
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
         Provider.value(value: leaderboardRepository),
