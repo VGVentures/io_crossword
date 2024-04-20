@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 
 class Crossword2View extends StatelessWidget {
@@ -52,6 +54,9 @@ class _CrosswordStack extends StatelessWidget {
         for (var column = 0; column <= configuration.bottomLeft.$2; column++)
           if (isChunkVisible((row, column))) (row, column),
     };
+    for (final chunk in visibleChunks) {
+      context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
+    }
 
     return SizedBox.fromSize(
       size: crosswordLayout.crosswordSize,
@@ -60,6 +65,7 @@ class _CrosswordStack extends StatelessWidget {
         children: [
           for (final chunk in visibleChunks)
             Positioned(
+              key: ValueKey(chunk),
               left: chunk.$1 * crosswordLayout.chunkSize.width,
               top: chunk.$2 * crosswordLayout.chunkSize.height,
               child: CrosswordChunk(index: chunk),
