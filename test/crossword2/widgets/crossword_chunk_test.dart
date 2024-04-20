@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +14,33 @@ import '../../test_tag.dart';
 
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
+
+class _GoldenFileComparator extends LocalFileComparator {
+  _GoldenFileComparator()
+      : super(
+          Uri.parse('test/crossword2/widgets/crossword_chunk_test.dart'),
+        );
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+      imageBytes,
+      await getGoldenBytes(golden),
+    );
+
+    // Sufficient toleration to accommodate for host-specific rendering
+    // differences.
+    final passed = result.diffPercent <= 0.15;
+    if (passed) {
+      result.dispose();
+      return true;
+    }
+
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
 
 void main() {
   group('$CrosswordChunk', () {
@@ -46,6 +75,10 @@ void main() {
       setUp(() {
         crosswordBloc = _MockCrosswordBloc();
         chunk = chunkFixture1;
+
+        final previousComparator = goldenFileComparator;
+        goldenFileComparator = _GoldenFileComparator();
+        addTearDown(() => goldenFileComparator = previousComparator);
       });
 
       testWidgets(
