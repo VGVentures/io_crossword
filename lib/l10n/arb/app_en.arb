@@ -81,6 +81,14 @@
   "@solveIt": {
     "description": "Solve it label"
   },
+  "askGeminiHint": "Ask Gemini for a hint",
+  "@askGeminiHint": {
+    "description": "Ask Gemini for a hint label"
+  },
+  "askYesOrNoQuestion": "Ask a \"Yes or No\" question",
+  "@askYesOrNoQuestion": {
+    "description": "Ask a yes or no question text"
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
@@ -88,6 +96,10 @@
   "hint": "Hint",
   "@hint": {
     "description": "hint label"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close label"
   },
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
@@ -276,5 +288,14 @@
   "leave": "Leave",
   "@leave": {
     "description": "Action to leave something behind."
+  },
+  "percentage": "{value}%",
+  "@percentage": {
+    "description": "Value displayed as a percentage.",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -13,6 +13,7 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
@@ -56,13 +57,13 @@ void main() {
     });
 
     testWidgets(
-      'renders the $WelcomePage by default',
+      'renders the $LoadingPage by default',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WelcomePage), findsOneWidget);
+        expect(find.byType(LoadingPage), findsOneWidget);
       },
     );
 

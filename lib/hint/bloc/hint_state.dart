@@ -34,6 +34,11 @@ class HintState extends Equatable {
     );
   }
 
+  bool get isHintModeActive =>
+      status == HintStatus.asking ||
+      status == HintStatus.thinking ||
+      status == HintStatus.invalid;
+
   @override
   List<Object> get props => [status];
 }

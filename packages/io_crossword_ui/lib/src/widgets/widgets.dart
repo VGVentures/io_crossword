@@ -1,5 +1,6 @@
 export 'error_view.dart';
 export 'gemini_gradient.dart';
+export 'gemini_icon.dart';
 export 'io_app_bar.dart';
 export 'io_crossword_card.dart';
 export 'io_layout.dart';

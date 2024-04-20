@@ -187,12 +187,10 @@ class IoCrosswordTheme {
     final ioColorScheme = this.ioColorScheme;
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(171, 56),
+        minimumSize: const Size(162, 64),
         foregroundColor: IoCrosswordColors.seedWhite,
-        padding: const EdgeInsets.symmetric(
-          vertical: 17,
-          horizontal: 18,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        textStyle: IoCrosswordTextStyles.bodyLG.medium,
       ).copyWith(
         shape: MaterialStateProperty.resolveWith(
           (states) {
@@ -346,9 +344,7 @@ class IoCrosswordTheme {
   /// Gemini input decoration theme.
   static InputDecorationTheme get geminiInputDecorationTheme {
     const borderRadius = BorderRadius.all(Radius.circular(40));
-    const borderSide = BorderSide(
-      width: 2,
-    );
+    const borderSide = BorderSide(width: 2);
 
     return InputDecorationTheme(
       outlineBorder: borderSide,
@@ -359,6 +355,7 @@ class IoCrosswordTheme {
       border: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
+        borderSide: borderSide,
       ),
       disabledBorder: const OutlineInputBorder(
         borderRadius: borderRadius,
@@ -367,23 +364,24 @@ class IoCrosswordTheme {
       enabledBorder: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
+        borderSide: borderSide,
       ),
       focusedBorder: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
         borderSide: borderSide,
       ),
-      errorBorder: const OutlineInputBorder(
+      errorBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          width: 1.5,
+          width: borderSide.width,
           color: IoCrosswordColors.redError,
         ),
       ),
-      focusedErrorBorder: const OutlineInputBorder(
+      focusedErrorBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          width: 2,
+          width: borderSide.width,
           color: IoCrosswordColors.redError,
         ),
       ),
