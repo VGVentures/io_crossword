@@ -9,6 +9,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -26,6 +27,8 @@ class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
+class _MockHintResource extends Mock implements HintResource {}
+
 class _MockLeaderboardRepository extends Mock
     implements LeaderboardRepository {}
 
@@ -40,10 +43,11 @@ extension PumpApp on WidgetTester {
     IoLayoutData? layout,
     User? user,
     CrosswordRepository? crosswordRepository,
-    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
-    LeaderboardResource? leaderboardResource,
     LeaderboardRepository? leaderboardRepository,
+    CrosswordResource? crosswordResource,
+    LeaderboardResource? leaderboardResource,
+    HintResource? hintResource,
     CrosswordBloc? crosswordBloc,
     PlayerBloc? playerBloc,
     ChallengeBloc? challengeBloc,
@@ -84,6 +88,9 @@ extension PumpApp on WidgetTester {
           ),
           Provider.value(
             value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: hintResource ?? _MockHintResource(),
           ),
           Provider.value(
             value: user ?? _MockUser(),
@@ -148,10 +155,11 @@ extension PumpRoute on WidgetTester {
     Route<dynamic> route, {
     User? user,
     CrosswordRepository? crosswordRepository,
-    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
-    LeaderboardResource? leaderboardResource,
     LeaderboardRepository? leaderboardRepository,
+    CrosswordResource? crosswordResource,
+    LeaderboardResource? leaderboardResource,
+    HintResource? hintResource,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -199,6 +207,9 @@ extension PumpRoute on WidgetTester {
           ),
           Provider.value(
             value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: hintResource ?? _MockHintResource(),
           ),
           Provider.value(
             value: user ?? _MockUser(),
