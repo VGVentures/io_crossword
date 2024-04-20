@@ -17,8 +17,8 @@ class HintResource {
 
   /// Post /game/hint
   ///
-  /// Returns a [Hint].
-  Future<Hint> getHint({
+  /// Generates a [Hint] for the provided word by answering to the question.
+  Future<Hint> generateHint({
     required String wordId,
     required String question,
   }) async {

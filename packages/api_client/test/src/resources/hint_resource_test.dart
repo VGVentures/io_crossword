@@ -25,7 +25,7 @@ void main() {
       resource = HintResource(apiClient: apiClient);
     });
 
-    group('getHint', () {
+    group('generateHint', () {
       setUp(() {
         when(
           () => apiClient.post(any(), body: any(named: 'body')),
@@ -40,7 +40,7 @@ void main() {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(jsonEncode(hint.toJson()));
 
-        await resource.getHint(
+        await resource.generateHint(
           wordId: 'wordId',
           question: 'question',
         );
@@ -64,7 +64,7 @@ void main() {
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(jsonEncode(hint.toJson()));
 
-        final result = await resource.getHint(
+        final result = await resource.generateHint(
           wordId: 'wordId',
           question: 'is it a question?',
         );
@@ -78,7 +78,7 @@ void main() {
         when(() => response.body).thenReturn('Oops');
 
         await expectLater(
-          resource.getHint(wordId: 'wordId', question: 'question'),
+          resource.generateHint(wordId: 'wordId', question: 'question'),
           throwsA(
             isA<ApiClientError>().having(
               (e) => e.cause,
@@ -97,7 +97,7 @@ void main() {
             .thenReturn('This is not a well formatted hint');
 
         await expectLater(
-          resource.getHint(wordId: 'wordId', question: 'question'),
+          resource.generateHint(wordId: 'wordId', question: 'question'),
           throwsA(
             isA<ApiClientError>().having(
               (e) => e.cause,
