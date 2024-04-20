@@ -1,0 +1,9 @@
+# File used to configure Dart tests within this package.
+#
+# See also:
+#
+# * [dart_test.yaml documentation](https://github.com/dart-lang/test/blob/master/pkgs/test/doc/configuration.md)
+
+tags:
+  # Identifies those tests that rely on `matchesGoldenFile()`.
+  golden: {}
