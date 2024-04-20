@@ -1,15 +1,22 @@
+import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:game_domain/game_domain.dart';
 
 part 'hint_event.dart';
 part 'hint_state.dart';
 
 class HintBloc extends Bloc<HintEvent, HintState> {
-  HintBloc() : super(const HintState()) {
+  HintBloc({
+    required HintResource hintResource,
+  })  : _hintResource = hintResource,
+        super(const HintState()) {
     on<HintModeEntered>(_onHintModeEntered);
     on<HintModeExited>(_onHintModeExited);
     on<HintRequested>(_onHintRequested);
   }
+
+  final HintResource _hintResource;
 
   void _onHintModeEntered(
     HintModeEntered event,
@@ -22,7 +29,7 @@ class HintBloc extends Bloc<HintEvent, HintState> {
     HintModeExited event,
     Emitter<HintState> emit,
   ) {
-    emit(const HintState());
+    emit(state.copyWith(status: HintStatus.initial));
   }
 
   Future<void> _onHintRequested(
@@ -31,9 +38,17 @@ class HintBloc extends Bloc<HintEvent, HintState> {
   ) async {
     emit(state.copyWith(status: HintStatus.thinking));
 
-    // Simulate a delay in retrieving the hint.
-    await Future<void>.delayed(const Duration(seconds: 1), () {});
+    final hint = await _hintResource.getHint(
+      wordId: event.wordId,
+      question: event.question,
+    );
+    final allHints = [...state.hints, hint];
 
-    emit(state.copyWith(status: HintStatus.answered));
+    emit(
+      state.copyWith(
+        status: HintStatus.answered,
+        hints: allHints,
+      ),
+    );
   }
 }
