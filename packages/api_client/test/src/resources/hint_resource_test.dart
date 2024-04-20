@@ -56,7 +56,7 @@ void main() {
         ).called(1);
       });
 
-      test('returns the hint when succeeds ', () async {
+      test('returns the hint when succeeds', () async {
         final hint = Hint(
           question: 'is it a question?',
           response: HintResponse.yes,
@@ -105,6 +105,92 @@ void main() {
               equals(
                 'POST /game/hint returned invalid response: '
                 '"This is not a well formatted hint"',
+              ),
+            ),
+          ),
+        );
+      });
+    });
+
+    group('getHints', () {
+      setUp(() {
+        when(
+          () => apiClient.get(
+            '/game/hint',
+            queryParameters: {'wordId': 'wordId'},
+          ),
+        ).thenAnswer((_) async => response);
+      });
+
+      test('calls correct api endpoint', () async {
+        final hint = Hint(
+          question: 'question',
+          response: HintResponse.no,
+        );
+        final hintList = [hint, hint, hint];
+        final hintJson = {'hints': hintList.map((e) => e.toJson()).toList()};
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        when(() => response.body).thenReturn(jsonEncode(hintJson));
+
+        await resource.getHints(wordId: 'wordId');
+
+        verify(
+          () => apiClient.get(
+            '/game/hint',
+            queryParameters: {'wordId': 'wordId'},
+          ),
+        ).called(1);
+      });
+
+      test('returns the list of hints when succeeds', () async {
+        final hint = Hint(
+          question: 'question',
+          response: HintResponse.no,
+        );
+        final hintList = [hint, hint, hint];
+        final hintJson = {'hints': hintList.map((e) => e.toJson()).toList()};
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        when(() => response.body).thenReturn(jsonEncode(hintJson));
+
+        final hints = await resource.getHints(wordId: 'wordId');
+
+        expect(hints, equals(hintList));
+      });
+
+      test('throws ApiClientError when request fails', () async {
+        when(() => response.statusCode)
+            .thenReturn(HttpStatus.internalServerError);
+        when(() => response.body).thenReturn('Oops');
+
+        await expectLater(
+          resource.getHints(wordId: 'wordId'),
+          throwsA(
+            isA<ApiClientError>().having(
+              (e) => e.cause,
+              'cause',
+              equals(
+                'GET /game/hint returned status 500 with the following '
+                'response: "Oops"',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('throws ApiClientError when response is invalid', () async {
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        when(() => response.body)
+            .thenReturn('This is not a well formatted hint list');
+
+        await expectLater(
+          resource.getHints(wordId: 'wordId'),
+          throwsA(
+            isA<ApiClientError>().having(
+              (e) => e.cause,
+              'cause',
+              equals(
+                'GET /game/hint returned invalid response: '
+                '"This is not a well formatted hint list"',
               ),
             ),
           ),
