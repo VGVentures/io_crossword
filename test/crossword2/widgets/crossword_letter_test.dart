@@ -7,6 +7,7 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../fixtures/fixtures.dart';
 import '../../helpers/helpers.dart';
 
 class _MockWord extends Mock implements Word {}
@@ -105,20 +106,15 @@ void main() {
 
     group('fromChunk', () {
       test('derives letters as expected', () {
-        final boardSection = _boardSectionFixture;
+        final chunk = chunkFixture1;
 
-        final letters = CrosswordLetterData.fromChunk(boardSection);
+        final letters = CrosswordLetterData.fromChunk(chunk);
 
-        final hello =
-            boardSection.words.firstWhere((word) => word.answer == 'HELLO');
-        final old =
-            boardSection.words.firstWhere((word) => word.answer == 'OLD');
-        final food =
-            boardSection.words.firstWhere((word) => word.answer == 'FOOD');
-        final elf =
-            boardSection.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown =
-            boardSection.words.firstWhere((word) => word.answer == null);
+        final hello = chunk.words.firstWhere((word) => word.answer == 'HELLO');
+        final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
+        final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
+        final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
+        final unknown = chunk.words.firstWhere((word) => word.answer == null);
 
         expect(
           letters,
@@ -194,63 +190,3 @@ void main() {
     });
   });
 }
-
-/// A fixture for a [BoardSection] instance.
-///
-/// ```
-///   0 1 2 3 4
-/// 0 H E L L O
-/// 1 - L - - L
-/// 2 - F O O D
-/// 3 - - ? - -
-/// 4 - - ? - -
-/// ```
-final _boardSectionFixture = () {
-  final hello = Word(
-    id: '1',
-    answer: 'HELLO',
-    position: Point<int>(0, 0),
-    axis: Axis.horizontal,
-    length: 5,
-    clue: '',
-  );
-  final old = Word(
-    id: '2',
-    answer: 'OLD',
-    position: Point<int>(4, 0),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-  final food = Word(
-    id: '3',
-    answer: 'FOOD',
-    position: Point<int>(1, 2),
-    axis: Axis.horizontal,
-    length: 4,
-    clue: '',
-  );
-  final elf = Word(
-    id: '4',
-    answer: 'ELF',
-    position: Point<int>(1, 0),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-  final unknown = Word(
-    id: '5',
-    position: Point<int>(2, 2),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-
-  return BoardSection(
-    id: '1',
-    position: Point<int>(0, 0),
-    words: [hello, old, food, elf, unknown],
-    size: 20,
-    borderWords: const [],
-  );
-}();
