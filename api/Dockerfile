@@ -13,6 +13,7 @@ COPY packages/leaderboard_repository ./packages/leaderboard_repository
 COPY packages/board_renderer ./packages/board_renderer
 COPY packages/crossword_repository ./packages/crossword_repository
 COPY packages/firebase_cloud_storage ./packages/firebase_cloud_storage
+COPY packages/hint_repository ./packages/hint_repository
 
 # Install Dependencies
 RUN dart pub get -C packages/db_client
@@ -20,6 +21,9 @@ RUN dart pub get -C packages/encryption_middleware
 RUN dart pub get -C packages/game_domain
 RUN dart pub get -C packages/jwt_middleware
 RUN dart pub get -C packages/leaderboard_repository
+RUN dart pub get -C packages/crossword_repository
+RUN dart pub get -C packages/firebase_cloud_storage
+RUN dart pub get -C packages/hint_repository
 
 # Resolve app dependencies.
 COPY pubspec.* ./
