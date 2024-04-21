@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/hint/hint.dart';
-import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class HintText extends StatelessWidget {
-  const HintText({super.key});
+  const HintText({required this.text, super.key});
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final l10n = context.l10n;
-
-    final isHintModeActive =
-        context.select((HintBloc bloc) => bloc.state.isHintModeActive);
-    final text =
-        isHintModeActive ? l10n.askYesOrNoQuestion : l10n.askGeminiHint;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

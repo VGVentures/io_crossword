@@ -16,11 +16,17 @@ class GeminiTextField extends StatefulWidget {
 
 class _GeminiTextFieldState extends State<GeminiTextField> {
   late TextEditingController _controller;
+  late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
     _controller = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
 
   void _onAskForHint(BuildContext context, String question) {
@@ -43,6 +49,7 @@ class _GeminiTextFieldState extends State<GeminiTextField> {
         inputDecorationTheme: IoCrosswordTheme.geminiInputDecorationTheme,
       ),
       child: TextField(
+        focusNode: _focusNode,
         controller: _controller,
         decoration: InputDecoration(
           hintText: l10n.type,
