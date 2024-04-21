@@ -30,3 +30,12 @@ class HintRequested extends HintEvent {
   @override
   List<Object> get props => [wordId, question];
 }
+
+class PreviousHintsRequested extends HintEvent {
+  const PreviousHintsRequested(this.wordId);
+
+  final String wordId;
+
+  @override
+  List<Object> get props => [wordId];
+}

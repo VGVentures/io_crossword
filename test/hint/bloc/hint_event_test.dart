@@ -24,4 +24,13 @@ void main() {
       );
     });
   });
+
+  group('$PreviousHintsRequested', () {
+    test('supports equality', () {
+      expect(
+        PreviousHintsRequested('id'),
+        equals(PreviousHintsRequested('id')),
+      );
+    });
+  });
 }

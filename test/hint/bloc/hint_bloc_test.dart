@@ -76,4 +76,50 @@ void main() {
       ],
     );
   });
+
+  group('PreviousHintsRequested', () {
+    late HintResource hintResource;
+
+    setUp(() {
+      hintResource = _MockHintResource();
+    });
+
+    blocTest<HintBloc, HintState>(
+      'emits state with hints when PreviousHintsRequested is added',
+      setUp: () {
+        when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
+          (_) async => [
+            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(question: 'is it blue?', response: HintResponse.yes),
+          ],
+        );
+      },
+      build: () => HintBloc(hintResource: hintResource),
+      act: (bloc) => bloc.add(PreviousHintsRequested('id')),
+      expect: () => const <HintState>[
+        HintState(
+          hints: [
+            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(question: 'is it blue?', response: HintResponse.yes),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<HintBloc, HintState>(
+      'does not emit state when PreviousHintsRequested is added and hints '
+      'are already present',
+      seed: () => HintState(
+        hints: [
+          Hint(question: 'is it orange?', response: HintResponse.no),
+          Hint(question: 'is it blue?', response: HintResponse.yes),
+        ],
+      ),
+      build: () => HintBloc(hintResource: hintResource),
+      act: (bloc) => bloc.add(
+        PreviousHintsRequested('id'),
+      ),
+      expect: () => const <HintState>[],
+    );
+  });
 }

@@ -14,6 +14,7 @@ class HintBloc extends Bloc<HintEvent, HintState> {
     on<HintModeEntered>(_onHintModeEntered);
     on<HintModeExited>(_onHintModeExited);
     on<HintRequested>(_onHintRequested);
+    on<PreviousHintsRequested>(_onPreviousHintsRequested);
   }
 
   final HintResource _hintResource;
@@ -50,5 +51,15 @@ class HintBloc extends Bloc<HintEvent, HintState> {
         hints: allHints,
       ),
     );
+  }
+
+  Future<void> _onPreviousHintsRequested(
+    PreviousHintsRequested event,
+    Emitter<HintState> emit,
+  ) async {
+    if (state.hints.isEmpty) {
+      final hints = await _hintResource.getHints(wordId: event.wordId);
+      emit(state.copyWith(hints: hints));
+    }
   }
 }
