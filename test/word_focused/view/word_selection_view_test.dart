@@ -33,6 +33,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   int get length => 3;
+
+  @override
+  Axis get axis => Axis.horizontal;
 }
 
 void main() {

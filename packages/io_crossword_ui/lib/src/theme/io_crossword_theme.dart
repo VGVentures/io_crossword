@@ -276,6 +276,7 @@ class IoCrosswordTheme {
   IoIconButtonTheme get _iconButtonTheme {
     return const IoIconButtonTheme(
       outlined: ButtonStyle(
+        iconSize: MaterialStatePropertyAll<double>(20),
         shape: MaterialStatePropertyAll<OutlinedBorder>(
           CircleBorder(side: BorderSide(color: IoCrosswordColors.mediumGray)),
         ),
@@ -283,6 +284,7 @@ class IoCrosswordTheme {
         backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent),
       ),
       filled: ButtonStyle(
+        iconSize: MaterialStatePropertyAll<double>(20),
         iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
         backgroundColor:
             MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
