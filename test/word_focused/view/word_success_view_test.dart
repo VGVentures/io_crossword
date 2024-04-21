@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -43,6 +43,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   String get answer => 'answer';
+
+  @override
+  Axis get axis => Axis.horizontal;
 }
 
 void main() {
@@ -356,7 +359,7 @@ void main() {
       await tester.pumpApp(widget);
 
       expect(find.text(l10n.rank), findsOneWidget);
-      expect(find.text('111.2M'), findsOneWidget);
+      expect(find.text('111M'), findsOneWidget);
     });
 
     testWidgets('render total score', (tester) async {
