@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/hint/bloc/hint_bloc.dart';
 
 void main() {
@@ -23,6 +24,18 @@ void main() {
         expect(
           state.copyWith(status: HintStatus.thinking),
           equals(HintState(status: HintStatus.thinking)),
+        );
+      });
+
+      test('returns object with updated hints when hints are passed', () {
+        final state = HintState(status: HintStatus.asking);
+        final hint = Hint(
+          question: 'is it orange?',
+          response: HintResponse.notApplicable,
+        );
+        expect(
+          state.copyWith(hints: [hint, hint]),
+          equals(HintState(status: HintStatus.asking, hints: [hint, hint])),
         );
       });
     });

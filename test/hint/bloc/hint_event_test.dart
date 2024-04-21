@@ -19,8 +19,17 @@ void main() {
   group('$HintRequested', () {
     test('supports equality', () {
       expect(
-        HintRequested('is it orange?'),
-        equals(HintRequested('is it orange?')),
+        HintRequested(wordId: 'id', question: 'is it orange?'),
+        equals(HintRequested(wordId: 'id', question: 'is it orange?')),
+      );
+    });
+  });
+
+  group('$PreviousHintsRequested', () {
+    test('supports equality', () {
+      expect(
+        PreviousHintsRequested('id'),
+        equals(PreviousHintsRequested('id')),
       );
     });
   });

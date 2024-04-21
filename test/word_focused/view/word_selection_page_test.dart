@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,8 @@ import '../../helpers/helpers.dart';
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _MockHintResource extends Mock implements HintResource {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -65,6 +68,9 @@ void main() {
       testWidgets(
         '$WordSelectionView when there is a selected word',
         (tester) async {
+          final hintResource = _MockHintResource();
+          when(() => hintResource.getHints(wordId: any(named: 'wordId')))
+              .thenAnswer((_) async => []);
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
@@ -77,6 +83,7 @@ void main() {
               create: (_) => wordSelectionBloc,
               child: WordSelectionPage(),
             ),
+            hintResource: hintResource,
           );
 
           expect(find.byType(WordSelectionView), findsOneWidget);
