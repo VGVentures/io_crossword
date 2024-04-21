@@ -88,5 +88,36 @@ void main() {
         ).called(1);
       },
     );
+
+    testWidgets(
+      'sends HintRequested when text field is submitted',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+            word: SelectedWord(section: (0, 0), word: _FakeWord()),
+          ),
+        );
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: hintBloc),
+              BlocProvider.value(value: wordSelectionBloc),
+            ],
+            child: GeminiTextField(),
+          ),
+        );
+
+        await tester.enterText(find.byType(TextField), 'is it blue?');
+        await tester.pumpAndSettle();
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+
+        verify(
+          () => hintBloc.add(
+            HintRequested(wordId: 'id', question: 'is it blue?'),
+          ),
+        ).called(1);
+      },
+    );
   });
 }

@@ -60,6 +60,7 @@ class _GeminiTextFieldState extends State<GeminiTextField> {
             ),
           ),
         ),
+        onSubmitted: (_) => _onAskForHint(context, _controller.text),
       ),
     );
   }
