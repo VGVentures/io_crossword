@@ -147,18 +147,32 @@ void main() {
       );
 
       testWidgets(
-        'a $WordValidatingLoadingIndicator',
+        'the $HintsSection when the status is not validating',
         (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: selectedWord,
+            ),
+          );
           await tester.pumpApp(widget);
-          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+
+          expect(find.byType(HintsSection), findsOneWidget);
         },
       );
 
       testWidgets(
-        'a $HintText',
+        'a $CircularProgressIndicator when the status is validating',
         (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.validating,
+              word: selectedWord,
+            ),
+          );
           await tester.pumpApp(widget);
-          expect(find.byType(HintText), findsOneWidget);
+
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
         },
       );
 
@@ -219,18 +233,32 @@ void main() {
       );
 
       testWidgets(
-        'a $WordValidatingLoadingIndicator',
+        'the $HintsSection when the status is not validating',
         (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: selectedWord,
+            ),
+          );
           await tester.pumpApp(widget);
-          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+
+          expect(find.byType(HintsSection), findsOneWidget);
         },
       );
 
       testWidgets(
-        'a $HintText',
+        'a $CircularProgressIndicator when the status is validating',
         (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.validating,
+              word: selectedWord,
+            ),
+          );
           await tester.pumpApp(widget);
-          expect(find.byType(HintText), findsOneWidget);
+
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
         },
       );
 
@@ -270,49 +298,6 @@ void main() {
             const WordSolveAttempted(answer: 'ANSWER'),
           ),
         ).called(1);
-      },
-    );
-  });
-
-  group('$WordValidatingLoadingIndicator', () {
-    late WordSelectionBloc wordSelectionBloc;
-    late Widget widget;
-
-    setUp(() {
-      wordSelectionBloc = _MockWordSolvingBloc();
-
-      widget = BlocProvider.value(
-        value: wordSelectionBloc,
-        child: WordValidatingLoadingIndicator(),
-      );
-    });
-
-    testWidgets(
-      'renders a circular progress indicator when the status is validating',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.validating,
-            word: selectedWord,
-          ),
-        );
-        await tester.pumpApp(widget);
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'dos not render a circular progress indicator '
-      'when the status is other than validating',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.solving,
-            word: selectedWord,
-          ),
-        );
-        await tester.pumpApp(widget);
-        expect(find.byType(CircularProgressIndicator), findsNothing);
       },
     );
   });

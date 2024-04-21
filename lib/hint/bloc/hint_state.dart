@@ -22,15 +22,19 @@ enum HintStatus {
 class HintState extends Equatable {
   const HintState({
     this.status = HintStatus.initial,
+    this.hints = const [],
   });
 
   final HintStatus status;
+  final List<Hint> hints;
 
   HintState copyWith({
     HintStatus? status,
+    List<Hint>? hints,
   }) {
     return HintState(
       status: status ?? this.status,
+      hints: hints ?? this.hints,
     );
   }
 
@@ -40,5 +44,5 @@ class HintState extends Equatable {
       status == HintStatus.invalid;
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [status, hints];
 }

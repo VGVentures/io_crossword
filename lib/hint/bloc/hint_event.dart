@@ -19,10 +19,23 @@ class HintModeExited extends HintEvent {
 }
 
 class HintRequested extends HintEvent {
-  const HintRequested(this.message);
+  const HintRequested({
+    required this.wordId,
+    required this.question,
+  });
 
-  final String message;
+  final String wordId;
+  final String question;
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [wordId, question];
+}
+
+class PreviousHintsRequested extends HintEvent {
+  const PreviousHintsRequested(this.wordId);
+
+  final String wordId;
+
+  @override
+  List<Object> get props => [wordId];
 }
