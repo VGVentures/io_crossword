@@ -34,16 +34,33 @@ class WordSolvingLargeView extends StatelessWidget {
     return Column(
       children: [
         const WordSelectionTopBar(),
-        const SizedBox(height: 8),
-        const Spacer(),
-        Text(
-          selectedWord.word.clue,
-          style: IoCrosswordTextStyles.titleMD,
-          textAlign: TextAlign.center,
-        ),
         const SizedBox(height: 32),
-        const HintText(),
-        const Expanded(child: Center(child: WordValidatingLoadingIndicator())),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                selectedWord.word.clue,
+                style: IoCrosswordTextStyles.titleMD,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Flexible(
+                child: BlocSelector<WordSelectionBloc, WordSelectionState,
+                    WordSelectionStatus>(
+                  selector: (state) => state.status,
+                  builder: (context, status) {
+                    if (status == WordSelectionStatus.validating) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    return const SingleChildScrollView(child: HintsSection());
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 8),
         const BottomPanel(),
       ],
@@ -90,32 +107,22 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        const HintText(),
-        const SizedBox(
-          height: 200,
-          child: Center(child: WordValidatingLoadingIndicator()),
+        Expanded(
+          child: BlocSelector<WordSelectionBloc, WordSelectionState,
+              WordSelectionStatus>(
+            selector: (state) => state.status,
+            builder: (context, status) {
+              if (status == WordSelectionStatus.validating) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return const SingleChildScrollView(child: HintsSection());
+            },
+          ),
         ),
         BottomPanel(controller: _controller),
       ],
     );
-  }
-}
-
-@visibleForTesting
-class WordValidatingLoadingIndicator extends StatelessWidget {
-  @visibleForTesting
-  const WordValidatingLoadingIndicator({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final wordSelectionStatus = context.select(
-      (WordSelectionBloc bloc) => bloc.state.status,
-    );
-    final isValidating = wordSelectionStatus == WordSelectionStatus.validating;
-
-    if (isValidating) return const CircularProgressIndicator();
-
-    return const SizedBox.shrink();
   }
 }
 

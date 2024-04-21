@@ -13,11 +13,14 @@ class WordSelectionPage extends StatelessWidget {
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
 
+    final wordId = selectedWord.word.id;
+
     return BlocProvider(
       lazy: false,
+      key: Key(wordId),
       create: (context) => HintBloc(
         hintResource: context.read<HintResource>(),
-      ),
+      )..add(PreviousHintsRequested(wordId)),
       child: const WordSelectionView(),
     );
   }
