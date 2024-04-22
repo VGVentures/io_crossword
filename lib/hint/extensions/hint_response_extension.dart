@@ -21,15 +21,36 @@ extension HintResponseExtension on HintResponse {
 
 @visibleForTesting
 const yesResponses = [
+  'Yes, that is correct!',
+  "Yes, you're on the right track.",
+  'Heck yeah, yes!',
+  'A hundred percent yes!',
+  'Yes, for sure.',
+  'Yes, absolutely!',
+  'Yes, definitely!',
+  'You betcha, yes!',
+  'Yes! You got this.',
   'Yes!',
 ];
 
 @visibleForTesting
 const noResponses = [
-  'Nope',
+  'No, unfortunately.',
+  'Not really.',
+  "I'm afraid not.",
+  'Nope.',
+  "No, that's not correct.",
+  'Nope, sorry!',
+  'Not at all.',
+  'Absolutely not.',
+  'Never.',
+  'Sorry, but no!',
 ];
 
 @visibleForTesting
 const notApplicableResponses = [
-  'Try with a "Yes or No" question',
+  "I can't answer that.",
+  'Sorry but this cannot be answered.',
+  'This question is not applicable.',
+  "I'm afraid I cannot answer that.",
 ];
