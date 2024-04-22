@@ -42,29 +42,32 @@ class EndGameLargeView extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 502),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 32,
+          child: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
+                  child: LeaderboardButton(),
                 ),
-                child: LeaderboardButton(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 80,
+                SizedBox(height: 56),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 80,
+                  ),
+                  child: EndGameContent(),
                 ),
-                child: EndGameContent(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 56,
+                SizedBox(height: 56),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 56,
+                  ),
+                  child: ActionButtonsEndGame(),
                 ),
-                child: ActionButtonsEndGame(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
