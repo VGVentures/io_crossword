@@ -39,45 +39,65 @@ void main() {
       ],
     );
 
-    blocTest<HintBloc, HintState>(
-      'emits state with status ${HintStatus.thinking} immediately and '
-      '${HintStatus.answered} after when HintRequested is added',
-      setUp: () {
-        when(
-          () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
-        ).thenAnswer(
-          (_) async => Hint(question: 'blue?', response: HintResponse.no),
-        );
-      },
-      seed: () => HintState(
-        status: HintStatus.asking,
-        hints: [
-          Hint(question: 'is it orange?', response: HintResponse.no),
+    group('adding HintRequested', () {
+      blocTest<HintBloc, HintState>(
+        'emits state with status ${HintStatus.thinking} immediately and '
+        '${HintStatus.answered} after',
+        setUp: () {
+          when(
+            () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
+          ).thenAnswer(
+            (_) async =>
+                (Hint(question: 'blue?', response: HintResponse.no), 9),
+          );
+        },
+        seed: () => HintState(
+          status: HintStatus.asking,
+          hints: [
+            Hint(question: 'is it orange?', response: HintResponse.no),
+          ],
+        ),
+        build: () => HintBloc(hintResource: hintResource),
+        act: (bloc) => bloc.add(
+          HintRequested(wordId: 'id', question: 'blue?'),
+        ),
+        expect: () => const <HintState>[
+          HintState(
+            status: HintStatus.thinking,
+            hints: [
+              Hint(question: 'is it orange?', response: HintResponse.no),
+            ],
+          ),
+          HintState(
+            status: HintStatus.answered,
+            hints: [
+              Hint(question: 'is it orange?', response: HintResponse.no),
+              Hint(question: 'blue?', response: HintResponse.no),
+            ],
+            maxHints: 9,
+          ),
         ],
-      ),
-      build: () => HintBloc(hintResource: hintResource),
-      act: (bloc) => bloc.add(
-        HintRequested(wordId: 'id', question: 'blue?'),
-      ),
-      expect: () => const <HintState>[
-        HintState(
-          status: HintStatus.thinking,
+      );
+
+      blocTest<HintBloc, HintState>(
+        'does not emit state if there are no hints left',
+        seed: () => HintState(
+          status: HintStatus.asking,
           hints: [
             Hint(question: 'is it orange?', response: HintResponse.no),
           ],
+          maxHints: 1,
         ),
-        HintState(
-          status: HintStatus.answered,
-          hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
-            Hint(question: 'blue?', response: HintResponse.no),
-          ],
+        build: () => HintBloc(hintResource: hintResource),
+        act: (bloc) => bloc.add(
+          HintRequested(wordId: 'id', question: 'blue?'),
         ),
-      ],
-    );
+        expect: () => const <HintState>[],
+      );
+    });
   });
 
-  group('PreviousHintsRequested', () {
+  group('adding PreviousHintsRequested', () {
     late HintResource hintResource;
 
     setUp(() {
@@ -85,13 +105,16 @@ void main() {
     });
 
     blocTest<HintBloc, HintState>(
-      'emits state with hints when PreviousHintsRequested is added',
+      'emits state with hints',
       setUp: () {
         when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
-          (_) async => [
-            Hint(question: 'is it orange?', response: HintResponse.no),
-            Hint(question: 'is it blue?', response: HintResponse.yes),
-          ],
+          (_) async => (
+            [
+              Hint(question: 'is it orange?', response: HintResponse.no),
+              Hint(question: 'is it blue?', response: HintResponse.yes),
+            ],
+            8
+          ),
         );
       },
       build: () => HintBloc(hintResource: hintResource),
@@ -102,13 +125,13 @@ void main() {
             Hint(question: 'is it orange?', response: HintResponse.no),
             Hint(question: 'is it blue?', response: HintResponse.yes),
           ],
+          maxHints: 8,
         ),
       ],
     );
 
     blocTest<HintBloc, HintState>(
-      'does not emit state when PreviousHintsRequested is added and hints '
-      'are already present',
+      'does not emit state when hints are already present',
       seed: () => HintState(
         hints: [
           Hint(question: 'is it orange?', response: HintResponse.no),

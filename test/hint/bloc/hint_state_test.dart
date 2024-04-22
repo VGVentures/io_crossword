@@ -38,6 +38,14 @@ void main() {
           equals(HintState(status: HintStatus.asking, hints: [hint, hint])),
         );
       });
+
+      test('returns object with updated maxHints when maxHints is passed', () {
+        final state = HintState(status: HintStatus.asking);
+        expect(
+          state.copyWith(maxHints: 5),
+          equals(HintState(status: HintStatus.asking, maxHints: 5)),
+        );
+      });
     });
   });
 }
