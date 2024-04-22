@@ -1,16 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart' hide Axis;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/fixtures.dart';
 import '../../helpers/helpers.dart';
 
 class _MockWord extends Mock implements Word {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   group('$CrosswordLetter', () {
@@ -68,6 +75,32 @@ void main() {
 
       expect(find.byType(CrosswordLetter), findsOneWidget);
       expect(find.text('A'), findsNothing);
+    });
+
+    testWidgets('emits $LetterSelected when tapped', (tester) async {
+      final wordSelectionBloc = _MockWordSelectionBloc();
+
+      final letterData = CrosswordLetterData(
+        index: (0, 0),
+        chunkIndex: (0, 0),
+        character: 'A',
+        words: (ant, null),
+      );
+
+      await tester.pumpApp(
+        BlocProvider<WordSelectionBloc>(
+          create: (_) => wordSelectionBloc,
+          child: CrosswordLayoutScope(
+            data: crosswordLayoutData,
+            child: CrosswordLetter(data: letterData),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(CrosswordLetter));
+
+      verify(() => wordSelectionBloc.add(LetterSelected(letter: letterData)))
+          .called(1);
     });
   });
 
