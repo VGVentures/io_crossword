@@ -70,7 +70,7 @@ void main() {
         (tester) async {
           final hintResource = _MockHintResource();
           when(() => hintResource.getHints(wordId: any(named: 'wordId')))
-              .thenAnswer((_) async => []);
+              .thenAnswer((_) async => (<Hint>[], 4));
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
