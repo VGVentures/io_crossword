@@ -1,7 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -87,7 +86,7 @@ class _HowToPlaySmall extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Flexible(
-                    child: AboutHowToPlayContent(),
+                    child: HowToPlayContent(),
                   ),
                   OutlinedButton(
                     onPressed: () => onPlay(context),
@@ -130,25 +129,31 @@ class _HowToPlayLarge extends StatelessWidget {
             child: LookUp(mascot!),
           ),
         ),
-        Align(
-          child: isCreating
-              ? const CircularProgressIndicator()
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Flexible(
-                      child: SizedBox(
-                        width: 500,
-                        child: AboutHowToPlayContent(),
-                      ),
+        if (isCreating)
+          const Align(child: CircularProgressIndicator())
+        else
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Flexible(
+                    child: SizedBox(
+                      width: 539,
+                      child: HowToPlayContent(),
                     ),
-                    OutlinedButton(
-                      onPressed: () => onPlay(context),
-                      child: Text(l10n.playNow),
-                    ),
-                  ],
-                ),
-        ),
+                  ),
+                  const SizedBox(height: 40),
+                  OutlinedButton(
+                    onPressed: () => onPlay(context),
+                    child: Text(l10n.playNow),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

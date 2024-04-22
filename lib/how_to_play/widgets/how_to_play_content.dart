@@ -1,14 +1,18 @@
-part of 'about_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
+import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class AboutHowToPlayContent extends StatefulWidget {
-  @visibleForTesting
-  const AboutHowToPlayContent({super.key});
+class HowToPlayContent extends StatefulWidget {
+  const HowToPlayContent({super.key});
 
   @override
-  State<AboutHowToPlayContent> createState() => _AboutHowToPlayContentState();
+  State<HowToPlayContent> createState() => _AboutHowToPlayContentState();
 }
 
-class _AboutHowToPlayContentState extends State<AboutHowToPlayContent>
+class _AboutHowToPlayContentState extends State<HowToPlayContent>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
