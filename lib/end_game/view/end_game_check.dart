@@ -43,7 +43,7 @@ class EndGameCheck extends StatelessWidget {
                   OutlinedButton.icon(
                     icon: const Icon(Icons.logout),
                     label: Text(l10n.endGame),
-                    // TODO(Ayad): add with go router
+                    // TODO(Ayad): remove all previous screens
                     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6497677712
                     onPressed: () {}, // coverage:ignore-line
                   ),

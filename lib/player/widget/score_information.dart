@@ -6,7 +6,12 @@ import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ScoreInformation extends StatelessWidget {
-  const ScoreInformation({super.key});
+  const ScoreInformation({
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    super.key,
+  });
+
+  final MainAxisAlignment mainAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +21,7 @@ class ScoreInformation extends StatelessWidget {
     final rank = context.select((PlayerBloc bloc) => bloc.state.rank);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: mainAxisAlignment,
       children: [
         _InfoItem(
           label: l10n.rank,

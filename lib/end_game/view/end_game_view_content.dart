@@ -27,7 +27,9 @@ class EndGameContent extends StatelessWidget {
           child: PlayerInitials(),
         ),
         const SizedBox(height: 24),
-        const ScoreInformation(),
+        const ScoreInformation(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        ),
       ],
     );
   }
