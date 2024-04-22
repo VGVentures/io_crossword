@@ -19,6 +19,8 @@ void main() {
 
     setUp(() {
       wordSelectionBloc = _MockWordSelectionBloc();
+      when(() => wordSelectionBloc.state)
+          .thenReturn(const WordSelectionState.initial());
     });
 
     testWidgets('pumps successfully', (tester) async {
