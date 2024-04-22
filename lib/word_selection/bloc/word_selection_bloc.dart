@@ -56,7 +56,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     }
 
     if (newWord == currentWord) {
-      // The selected word is the same as the previously selected word.
+      // The new word is the same as the previous word.
       return;
     }
 
