@@ -90,8 +90,10 @@ class _CrosswordStack extends StatelessWidget {
                   top: (selectedWord.section.$2 *
                           crosswordLayout.chunkSize.height) +
                       (word.position.y * crosswordLayout.cellSize.height),
-                  child:
-                      IoWordInput.alphabetic(length: selectedWord.word.length),
+                  child: IoWordInput.alphabetic(
+                    key: ValueKey(selectedWord.word.id),
+                    length: selectedWord.word.length,
+                  ),
                 );
               },
             ),
