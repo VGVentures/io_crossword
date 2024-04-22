@@ -37,6 +37,7 @@ void main() {
     testWidgets('pumps text character is known', (tester) async {
       final knownLetterData = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (ant, null),
       );
@@ -54,6 +55,7 @@ void main() {
     testWidgets('does not pump text when character is unknown', (tester) async {
       final unknownLetterData = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: null,
         words: (ant, null),
       );
@@ -74,6 +76,7 @@ void main() {
       expect(
         CrosswordLetterData(
           index: (0, 0),
+          chunkIndex: (0, 0),
           character: 'A',
           words: (null, null),
         ),
@@ -85,16 +88,19 @@ void main() {
       final word = _MockWord();
       final letter1 = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (word, word),
       );
       final letter2 = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (word, word),
       );
       final letter3 = CrosswordLetterData(
-        index: (0, 0),
+        index: (1, 1),
+        chunkIndex: (1, 1),
         character: 'B',
         words: (null, null),
       );
@@ -107,6 +113,7 @@ void main() {
     group('fromChunk', () {
       test('derives letters as expected', () {
         final chunk = chunkFixture1;
+        final chunkIndex = (chunk.position.x, chunk.position.y);
 
         final letters = CrosswordLetterData.fromChunk(chunk);
 
@@ -121,66 +128,79 @@ void main() {
           equals({
             (0, 0): CrosswordLetterData(
               index: (0, 0),
+              chunkIndex: chunkIndex,
               character: 'H',
               words: (hello, null),
             ),
             (1, 0): CrosswordLetterData(
               index: (1, 0),
+              chunkIndex: chunkIndex,
               character: 'E',
               words: (hello, elf),
             ),
             (2, 0): CrosswordLetterData(
               index: (2, 0),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (hello, null),
             ),
             (3, 0): CrosswordLetterData(
               index: (3, 0),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (hello, null),
             ),
             (4, 0): CrosswordLetterData(
               index: (4, 0),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (hello, old),
             ),
             (1, 1): CrosswordLetterData(
               index: (1, 1),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (null, elf),
             ),
             (4, 1): CrosswordLetterData(
               index: (4, 1),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (null, old),
             ),
             (1, 2): CrosswordLetterData(
               index: (1, 2),
+              chunkIndex: chunkIndex,
               character: 'F',
               words: (food, elf),
             ),
             (2, 2): CrosswordLetterData(
               index: (2, 2),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (food, unknown),
             ),
             (3, 2): CrosswordLetterData(
               index: (3, 2),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (food, null),
             ),
             (4, 2): CrosswordLetterData(
               index: (4, 2),
+              chunkIndex: chunkIndex,
               character: 'D',
               words: (food, old),
             ),
             (2, 3): CrosswordLetterData(
               index: (2, 3),
+              chunkIndex: chunkIndex,
               character: null,
               words: (null, unknown),
             ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
+              chunkIndex: chunkIndex,
               character: null,
               words: (null, unknown),
             ),
