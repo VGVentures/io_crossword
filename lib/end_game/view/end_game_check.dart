@@ -43,7 +43,9 @@ class EndGameCheck extends StatelessWidget {
                   OutlinedButton.icon(
                     icon: const Icon(Icons.logout),
                     label: Text(l10n.endGame),
-                    onPressed: () {},
+                    // TODO(Ayad): add with go router
+                    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6497677712
+                    onPressed: () {}, // coverage:ignore-line
                   ),
                 ],
               ),

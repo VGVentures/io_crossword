@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/end_game/end_game.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -83,7 +83,7 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const EndGamePage(),
+            home: const GameIntroPage(),
           );
         },
       ),
