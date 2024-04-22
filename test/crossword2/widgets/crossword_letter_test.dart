@@ -1,15 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart' hide Axis;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../fixtures/fixtures.dart';
 import '../../helpers/helpers.dart';
 
 class _MockWord extends Mock implements Word {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 void main() {
   group('$CrosswordLetter', () {
@@ -36,6 +44,7 @@ void main() {
     testWidgets('pumps text character is known', (tester) async {
       final knownLetterData = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (ant, null),
       );
@@ -53,6 +62,7 @@ void main() {
     testWidgets('does not pump text when character is unknown', (tester) async {
       final unknownLetterData = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: null,
         words: (ant, null),
       );
@@ -66,6 +76,32 @@ void main() {
       expect(find.byType(CrosswordLetter), findsOneWidget);
       expect(find.text('A'), findsNothing);
     });
+
+    testWidgets('emits $LetterSelected when tapped', (tester) async {
+      final wordSelectionBloc = _MockWordSelectionBloc();
+
+      final letterData = CrosswordLetterData(
+        index: (0, 0),
+        chunkIndex: (0, 0),
+        character: 'A',
+        words: (ant, null),
+      );
+
+      await tester.pumpApp(
+        BlocProvider<WordSelectionBloc>(
+          create: (_) => wordSelectionBloc,
+          child: CrosswordLayoutScope(
+            data: crosswordLayoutData,
+            child: CrosswordLetter(data: letterData),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(CrosswordLetter));
+
+      verify(() => wordSelectionBloc.add(LetterSelected(letter: letterData)))
+          .called(1);
+    });
   });
 
   group('$CrosswordLetterData', () {
@@ -73,6 +109,7 @@ void main() {
       expect(
         CrosswordLetterData(
           index: (0, 0),
+          chunkIndex: (0, 0),
           character: 'A',
           words: (null, null),
         ),
@@ -84,16 +121,19 @@ void main() {
       final word = _MockWord();
       final letter1 = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (word, word),
       );
       final letter2 = CrosswordLetterData(
         index: (0, 0),
+        chunkIndex: (0, 0),
         character: 'A',
         words: (word, word),
       );
       final letter3 = CrosswordLetterData(
-        index: (0, 0),
+        index: (1, 1),
+        chunkIndex: (1, 1),
         character: 'B',
         words: (null, null),
       );
@@ -105,86 +145,95 @@ void main() {
 
     group('fromChunk', () {
       test('derives letters as expected', () {
-        final boardSection = _boardSectionFixture;
+        final chunk = chunkFixture1;
+        final chunkIndex = (chunk.position.x, chunk.position.y);
 
-        final letters = CrosswordLetterData.fromChunk(boardSection);
+        final letters = CrosswordLetterData.fromChunk(chunk);
 
-        final hello =
-            boardSection.words.firstWhere((word) => word.answer == 'HELLO');
-        final old =
-            boardSection.words.firstWhere((word) => word.answer == 'OLD');
-        final food =
-            boardSection.words.firstWhere((word) => word.answer == 'FOOD');
-        final elf =
-            boardSection.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown =
-            boardSection.words.firstWhere((word) => word.answer == null);
+        final hello = chunk.words.firstWhere((word) => word.answer == 'HELLO');
+        final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
+        final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
+        final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
+        final unknown = chunk.words.firstWhere((word) => word.answer == null);
 
         expect(
           letters,
           equals({
             (0, 0): CrosswordLetterData(
               index: (0, 0),
+              chunkIndex: chunkIndex,
               character: 'H',
               words: (hello, null),
             ),
             (1, 0): CrosswordLetterData(
               index: (1, 0),
+              chunkIndex: chunkIndex,
               character: 'E',
               words: (hello, elf),
             ),
             (2, 0): CrosswordLetterData(
               index: (2, 0),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (hello, null),
             ),
             (3, 0): CrosswordLetterData(
               index: (3, 0),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (hello, null),
             ),
             (4, 0): CrosswordLetterData(
               index: (4, 0),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (hello, old),
             ),
             (1, 1): CrosswordLetterData(
               index: (1, 1),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (null, elf),
             ),
             (4, 1): CrosswordLetterData(
               index: (4, 1),
+              chunkIndex: chunkIndex,
               character: 'L',
               words: (null, old),
             ),
             (1, 2): CrosswordLetterData(
               index: (1, 2),
+              chunkIndex: chunkIndex,
               character: 'F',
               words: (food, elf),
             ),
             (2, 2): CrosswordLetterData(
               index: (2, 2),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (food, unknown),
             ),
             (3, 2): CrosswordLetterData(
               index: (3, 2),
+              chunkIndex: chunkIndex,
               character: 'O',
               words: (food, null),
             ),
             (4, 2): CrosswordLetterData(
               index: (4, 2),
+              chunkIndex: chunkIndex,
               character: 'D',
               words: (food, old),
             ),
             (2, 3): CrosswordLetterData(
               index: (2, 3),
+              chunkIndex: chunkIndex,
               character: null,
               words: (null, unknown),
             ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
+              chunkIndex: chunkIndex,
               character: null,
               words: (null, unknown),
             ),
@@ -194,63 +243,3 @@ void main() {
     });
   });
 }
-
-/// A fixture for a [BoardSection] instance.
-///
-/// ```
-///   0 1 2 3 4
-/// 0 H E L L O
-/// 1 - L - - L
-/// 2 - F O O D
-/// 3 - - ? - -
-/// 4 - - ? - -
-/// ```
-final _boardSectionFixture = () {
-  final hello = Word(
-    id: '1',
-    answer: 'HELLO',
-    position: Point<int>(0, 0),
-    axis: Axis.horizontal,
-    length: 5,
-    clue: '',
-  );
-  final old = Word(
-    id: '2',
-    answer: 'OLD',
-    position: Point<int>(4, 0),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-  final food = Word(
-    id: '3',
-    answer: 'FOOD',
-    position: Point<int>(1, 2),
-    axis: Axis.horizontal,
-    length: 4,
-    clue: '',
-  );
-  final elf = Word(
-    id: '4',
-    answer: 'ELF',
-    position: Point<int>(1, 0),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-  final unknown = Word(
-    id: '5',
-    position: Point<int>(2, 2),
-    axis: Axis.vertical,
-    length: 3,
-    clue: '',
-  );
-
-  return BoardSection(
-    id: '1',
-    position: Point<int>(0, 0),
-    words: [hello, old, food, elf, unknown],
-    size: 20,
-    borderWords: const [],
-  );
-}();

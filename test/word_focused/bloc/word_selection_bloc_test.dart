@@ -4,6 +4,7 @@ import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
@@ -47,6 +48,111 @@ void main() {
           ),
         ],
       );
+    });
+
+    group('$LetterSelected', () {
+      /// A letter that has words in both horizontal and vertical directions.
+      late CrosswordLetterData crossedLetter;
+
+      /// A letter that only has a word in the horizontal direction.
+      late CrosswordLetterData horizontalLetter;
+
+      /// A letter that only has a word in the vertical direction.
+      late CrosswordLetterData verticalLetter;
+
+      setUp(() {
+        final horizontalWord = _MockWord();
+        final verticalWord = _MockWord();
+
+        crossedLetter = CrosswordLetterData(
+          character: 'A',
+          index: (0, 0),
+          chunkIndex: (1, 1),
+          words: (horizontalWord, verticalWord),
+        );
+
+        horizontalLetter = CrosswordLetterData(
+          character: 'A',
+          index: (0, 0),
+          chunkIndex: (1, 1),
+          words: (horizontalWord, null),
+        );
+
+        verticalLetter = CrosswordLetterData(
+          character: 'A',
+          index: (0, 0),
+          chunkIndex: (1, 1),
+          words: (null, verticalWord),
+        );
+      });
+
+      group('emits preSolving status', () {
+        blocTest<WordSelectionBloc, WordSelectionState>(
+          'toggles between words when letter is crossed',
+          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          act: (bloc) => bloc
+            ..add(LetterSelected(letter: crossedLetter))
+            ..add(LetterSelected(letter: crossedLetter))
+            ..add(LetterSelected(letter: crossedLetter)),
+          expect: () => <WordSelectionState>[
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: crossedLetter.chunkIndex,
+                word: crossedLetter.words.$1!,
+              ),
+            ),
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: crossedLetter.chunkIndex,
+                word: crossedLetter.words.$2!,
+              ),
+            ),
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: crossedLetter.chunkIndex,
+                word: crossedLetter.words.$1!,
+              ),
+            ),
+          ],
+        );
+
+        blocTest<WordSelectionBloc, WordSelectionState>(
+          'once with horizontal word when letter is vertical',
+          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          act: (bloc) => bloc
+            ..add(LetterSelected(letter: horizontalLetter))
+            ..add(LetterSelected(letter: horizontalLetter)),
+          expect: () => <WordSelectionState>[
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: crossedLetter.chunkIndex,
+                word: crossedLetter.words.$1!,
+              ),
+            ),
+          ],
+        );
+
+        blocTest<WordSelectionBloc, WordSelectionState>(
+          'once with vertical word when letter is vertical',
+          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          act: (bloc) => bloc
+            ..add(LetterSelected(letter: verticalLetter))
+            ..add(LetterSelected(letter: verticalLetter)),
+          expect: () => <WordSelectionState>[
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: crossedLetter.chunkIndex,
+                word: crossedLetter.words.$2!,
+              ),
+            ),
+          ],
+        );
+      });
     });
 
     group('$WordUnselected', () {

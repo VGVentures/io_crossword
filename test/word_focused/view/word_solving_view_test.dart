@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -13,12 +13,12 @@ import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
-
 class _MockWordSolvingBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _MockHintBloc extends MockBloc<HintEvent, HintState>
+    implements HintBloc {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -50,20 +50,11 @@ void main() {
   });
 
   group('$WordSolvingView', () {
-    late WordSelection wordSelection;
     late WordSelectionBloc wordSolvingBloc;
-    late CrosswordBloc crosswordBloc;
+    late HintBloc hintBloc;
+    late Widget widget;
 
     setUp(() {
-      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
-      crosswordBloc = _MockCrosswordBloc();
-      when(() => crosswordBloc.state).thenReturn(
-        CrosswordState(
-          sectionSize: 20,
-          selectedWord: wordSelection,
-        ),
-      );
-
       wordSolvingBloc = _MockWordSolvingBloc();
       when(() => wordSolvingBloc.state).thenReturn(
         WordSelectionState(
@@ -71,6 +62,16 @@ void main() {
           word: selectedWord,
           wordPoints: null,
         ),
+      );
+      hintBloc = _MockHintBloc();
+      when(() => hintBloc.state).thenReturn(HintState());
+
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: wordSolvingBloc),
+          BlocProvider.value(value: hintBloc),
+        ],
+        child: WordSolvingView(),
       );
     });
 
@@ -80,10 +81,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.large,
-            BlocProvider(
-              create: (_) => wordSolvingBloc,
-              child: WordSolvingView(),
-            ),
+            widget,
           );
 
           expect(find.byType(WordSolvingLargeView), findsOneWidget);
@@ -96,10 +94,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             layout: IoLayoutData.small,
-            BlocProvider(
-              create: (_) => wordSolvingBloc,
-              child: WordSolvingView(),
-            ),
+            widget,
           );
 
           expect(find.byType(WordSolvingSmallView), findsOneWidget);
@@ -111,13 +106,10 @@ void main() {
 
   group('$WordSolvingLargeView', () {
     late WordSelectionBloc wordSelectionBloc;
-    late CrosswordBloc crosswordBloc;
+    late HintBloc hintBloc;
     late Widget widget;
-    late WordSelection wordSelection;
 
     setUp(() {
-      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
-
       wordSelectionBloc = _MockWordSolvingBloc();
       when(() => wordSelectionBloc.state).thenReturn(
         WordSelectionState(
@@ -125,22 +117,15 @@ void main() {
           word: selectedWord,
         ),
       );
-
-      crosswordBloc = _MockCrosswordBloc();
+      hintBloc = _MockHintBloc();
+      when(() => hintBloc.state).thenReturn(HintState());
 
       widget = MultiBlocProvider(
         providers: [
           BlocProvider.value(value: wordSelectionBloc),
-          BlocProvider.value(value: crosswordBloc),
+          BlocProvider.value(value: hintBloc),
         ],
         child: WordSolvingLargeView(),
-      );
-
-      when(() => crosswordBloc.state).thenReturn(
-        CrosswordState(
-          sectionSize: 20,
-          selectedWord: wordSelection,
-        ),
       );
     });
 
@@ -149,7 +134,7 @@ void main() {
         'the clue text',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.text(wordSelection.word.clue), findsOneWidget);
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
         },
       );
 
@@ -162,10 +147,40 @@ void main() {
       );
 
       testWidgets(
-        'a $WordValidatingLoadingIndicator',
+        'the $HintsSection when the status is not validating',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(HintsSection), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $CircularProgressIndicator when the status is validating',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.validating,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $BottomPanel',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+          expect(find.byType(BottomPanel), findsOneWidget);
         },
       );
     });
@@ -173,21 +188,19 @@ void main() {
 
   group('$WordSolvingSmallView', () {
     late WordSelectionBloc wordSelectionBloc;
-    late WordSelection wordSelection;
-    late CrosswordBloc crosswordBloc;
+    late HintBloc hintBloc;
     late Widget widget;
 
     setUp(() {
-      wordSelection = WordSelection(section: (0, 0), word: _FakeWord());
       wordSelectionBloc = _MockWordSolvingBloc();
-      crosswordBloc = _MockCrosswordBloc();
+      hintBloc = _MockHintBloc();
 
       widget = Theme(
         data: IoCrosswordTheme().themeData,
         child: MultiBlocProvider(
           providers: [
             BlocProvider.value(value: wordSelectionBloc),
-            BlocProvider.value(value: crosswordBloc),
+            BlocProvider.value(value: hintBloc),
           ],
           child: WordSolvingSmallView(),
         ),
@@ -199,12 +212,7 @@ void main() {
           word: selectedWord,
         ),
       );
-      when(() => crosswordBloc.state).thenReturn(
-        CrosswordState(
-          sectionSize: 20,
-          selectedWord: wordSelection,
-        ),
-      );
+      when(() => hintBloc.state).thenReturn(HintState());
     });
 
     group('renders', () {
@@ -212,7 +220,7 @@ void main() {
         'the clue text',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.text(wordSelection.word.clue), findsOneWidget);
+          expect(find.text(selectedWord.word.clue), findsOneWidget);
         },
       );
 
@@ -225,10 +233,40 @@ void main() {
       );
 
       testWidgets(
-        'a $WordValidatingLoadingIndicator',
+        'the $HintsSection when the status is not validating',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(HintsSection), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $CircularProgressIndicator when the status is validating',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.validating,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $BottomPanel',
         (tester) async {
           await tester.pumpApp(widget);
-          expect(find.byType(WordValidatingLoadingIndicator), findsOneWidget);
+          expect(find.byType(BottomPanel), findsOneWidget);
         },
       );
     });
@@ -264,47 +302,61 @@ void main() {
     );
   });
 
-  group('$WordValidatingLoadingIndicator', () {
+  group('$BottomPanel', () {
     late WordSelectionBloc wordSelectionBloc;
+    late HintBloc hintBloc;
     late Widget widget;
 
     setUp(() {
       wordSelectionBloc = _MockWordSolvingBloc();
+      hintBloc = _MockHintBloc();
 
-      widget = BlocProvider.value(
-        value: wordSelectionBloc,
-        child: WordValidatingLoadingIndicator(),
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: wordSelectionBloc),
+          BlocProvider.value(value: hintBloc),
+        ],
+        child: BottomPanel(),
       );
+
+      when(() => wordSelectionBloc.state).thenReturn(
+        WordSelectionState(
+          status: WordSelectionStatus.solving,
+          word: selectedWord,
+        ),
+      );
+      when(() => hintBloc.state).thenReturn(HintState());
     });
 
-    testWidgets(
-      'renders a circular progress indicator when the status is validating',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.validating,
-            word: selectedWord,
-          ),
-        );
-        await tester.pumpApp(widget);
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      },
-    );
+    group('renders', () {
+      testWidgets(
+        'a $CloseHintButton and $GeminiTextField when the status is asking',
+        (tester) async {
+          when(() => hintBloc.state).thenReturn(
+            HintState(status: HintStatus.asking),
+          );
 
-    testWidgets(
-      'dos not render a circular progress indicator '
-      'when the status is other than validating',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.solving,
-            word: selectedWord,
-          ),
-        );
-        await tester.pumpApp(widget);
-        expect(find.byType(CircularProgressIndicator), findsNothing);
-      },
-    );
+          await tester.pumpApp(widget);
+
+          expect(find.byType(CloseHintButton), findsOneWidget);
+          expect(find.byType(GeminiTextField), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $GeminiHintButton and $SubmitButton when the status is answered',
+        (tester) async {
+          when(() => hintBloc.state).thenReturn(
+            HintState(status: HintStatus.answered),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.byType(GeminiHintButton), findsOneWidget);
+          expect(find.byType(SubmitButton), findsOneWidget);
+        },
+      );
+    });
   });
 
   group('$SubmitButton', () {

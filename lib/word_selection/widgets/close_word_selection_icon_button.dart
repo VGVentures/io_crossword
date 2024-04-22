@@ -30,7 +30,7 @@ class CloseWordSelectionIconButton extends StatelessWidget {
 
     return IconButton(
       onPressed: () => _onClose(context),
-      icon: const Icon(Icons.cancel),
+      icon: const Icon(Icons.close),
       style: themeData.io.iconButtonTheme.filled,
     );
   }

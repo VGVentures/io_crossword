@@ -81,7 +81,8 @@ class DbClient {
     }
   }
 
-  /// Updates a record with the given data.
+  /// Create or update a document. In case of an update, fields not referenced
+  /// in the payload will remain unchanged.
   Future<void> update(String entity, DbEntityRecord record) =>
       _update(entity, record, 0);
 
@@ -105,7 +106,8 @@ class DbClient {
     }
   }
 
-  /// Creates or updates a record with the given data and document id.
+  /// Create or update a document. In the case of an update, any fields not
+  /// referenced in the payload will be deleted.
   Future<void> set(String entity, DbEntityRecord record) =>
       _set(entity, record, 0);
 

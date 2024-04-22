@@ -21,6 +21,32 @@ class WordSelected extends WordSelectionEvent {
   List<Object> get props => [selectedWord];
 }
 
+/// {@template letter_selected}
+/// The user has selected a crossword letter.
+///
+/// If the letter is part of a single word, the word is selected. Hence, the
+/// behavior is analogous to [WordSelected].
+///
+/// However, a letter might be part of at most two words (horizontal and
+/// vertical). If so, the horizontal word is always preferred over the vertical
+/// word, unless it has already been selected.
+///
+/// Note that a [CrosswordLetterData] must have at least one
+/// [CrosswordLetterData.words], since a letter must be part of at least one
+/// word for it to be part of the crossword.
+/// {@endtemplate}
+class LetterSelected extends WordSelectionEvent {
+  const LetterSelected({
+    required this.letter,
+  });
+
+  /// {@macro crossword_letter_data}
+  final CrosswordLetterData letter;
+
+  @override
+  List<Object> get props => [letter];
+}
+
 /// {@template word_unselected}
 /// The user has unselected a word.
 ///

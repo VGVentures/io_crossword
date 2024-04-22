@@ -6,12 +6,14 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:db_client/db_client.dart';
 import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
+import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
 
 final gameUrl = GameUrl(_gameUrl);
 late CrosswordRepository crosswordRepository;
+late HintRepository hintRepository;
 late BoardRenderer boardRenderer;
 late LeaderboardRepository leaderboardRepository;
 late FirebaseCloudStorage firebaseCloudStorage;
@@ -21,6 +23,7 @@ Future<void> init(InternetAddress ip, int port) async {
   final dbClient = DbClient.initialize(_appId, useEmulator: _useEmulator);
 
   crosswordRepository = CrosswordRepository(dbClient: dbClient);
+  hintRepository = HintRepository(dbClient: dbClient);
   boardRenderer = const BoardRenderer();
 
   leaderboardRepository = LeaderboardRepository(

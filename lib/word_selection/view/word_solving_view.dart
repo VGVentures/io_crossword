@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/hint/view/hint_view.dart';
+import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -34,23 +34,35 @@ class WordSolvingLargeView extends StatelessWidget {
     return Column(
       children: [
         const WordSelectionTopBar(),
-        const SizedBox(height: 8),
-        const Spacer(),
-        Text(
-          selectedWord.word.clue,
-          style: IoCrosswordTextStyles.titleMD,
-          textAlign: TextAlign.center,
+        const SizedBox(height: 32),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                selectedWord.word.clue,
+                style: IoCrosswordTextStyles.titleMD,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Flexible(
+                child: BlocSelector<WordSelectionBloc, WordSelectionState,
+                    WordSelectionStatus>(
+                  selector: (state) => state.status,
+                  builder: (context, status) {
+                    if (status == WordSelectionStatus.validating) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    return const SingleChildScrollView(child: HintsSection());
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-        const Expanded(child: Center(child: WordValidatingLoadingIndicator())),
         const SizedBox(height: 8),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(child: GeminiHintButton()),
-            SizedBox(width: 8),
-            Flexible(child: SubmitButton()),
-          ],
-        ),
+        const BottomPanel(),
       ],
     );
   }
@@ -94,40 +106,64 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
-        const SizedBox(
-          height: 200,
-          child: Center(child: WordValidatingLoadingIndicator()),
+        const SizedBox(height: 32),
+        Expanded(
+          child: BlocSelector<WordSelectionBloc, WordSelectionState,
+              WordSelectionStatus>(
+            selector: (state) => state.status,
+            builder: (context, status) {
+              if (status == WordSelectionStatus.validating) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return const SingleChildScrollView(child: HintsSection());
+            },
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Flexible(child: GeminiHintButton()),
-            const SizedBox(width: 8),
-            Flexible(
-              child: SubmitButton(controller: _controller),
-            ),
-          ],
-        ),
+        BottomPanel(controller: _controller),
       ],
     );
   }
 }
 
 @visibleForTesting
-class WordValidatingLoadingIndicator extends StatelessWidget {
+class BottomPanel extends StatelessWidget {
   @visibleForTesting
-  const WordValidatingLoadingIndicator({super.key});
+  const BottomPanel({super.key, this.controller});
+
+  final IoWordInputController? controller;
 
   @override
   Widget build(BuildContext context) {
-    final wordSelectionStatus = context.select(
-      (WordSelectionBloc bloc) => bloc.state.status,
+    final isHintModeActive =
+        context.select((HintBloc bloc) => bloc.state.isHintModeActive);
+
+    if (isHintModeActive) {
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CloseHintButton(),
+          SizedBox(width: 8),
+          Expanded(
+            child: GeminiTextField(),
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Flexible(
+          child: GeminiHintButton(),
+        ),
+        const SizedBox(width: 8),
+        Flexible(
+          child: SubmitButton(controller: controller),
+        ),
+      ],
     );
-    final isValidating = wordSelectionStatus == WordSelectionStatus.validating;
-
-    if (isValidating) return const CircularProgressIndicator();
-
-    return const SizedBox.shrink();
   }
 }
 

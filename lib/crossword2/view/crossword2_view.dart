@@ -1,5 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class Crossword2View extends StatelessWidget {
   const Crossword2View({super.key});
@@ -30,6 +34,7 @@ class _CrosswordStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
@@ -52,6 +57,9 @@ class _CrosswordStack extends StatelessWidget {
         for (var column = 0; column <= configuration.bottomLeft.$2; column++)
           if (isChunkVisible((row, column))) (row, column),
     };
+    for (final chunk in visibleChunks) {
+      context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
+    }
 
     return SizedBox.fromSize(
       size: crosswordLayout.crosswordSize,
@@ -60,9 +68,34 @@ class _CrosswordStack extends StatelessWidget {
         children: [
           for (final chunk in visibleChunks)
             Positioned(
+              key: ValueKey(chunk),
               left: chunk.$1 * crosswordLayout.chunkSize.width,
               top: chunk.$2 * crosswordLayout.chunkSize.height,
               child: CrosswordChunk(index: chunk),
+            ),
+          if (layout == IoLayoutData.large)
+            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+              selector: (state) => state.word,
+              builder: (context, selectedWord) {
+                if (selectedWord == null ||
+                    selectedWord.word.solvedTimestamp != null) {
+                  return const SizedBox.shrink();
+                }
+
+                final word = selectedWord.word;
+                return Positioned(
+                  left: (selectedWord.section.$1 *
+                          crosswordLayout.chunkSize.width) +
+                      (word.position.x * crosswordLayout.cellSize.width),
+                  top: (selectedWord.section.$2 *
+                          crosswordLayout.chunkSize.height) +
+                      (word.position.y * crosswordLayout.cellSize.height),
+                  child: IoWordInput.alphabetic(
+                    key: ValueKey(selectedWord.word.id),
+                    length: selectedWord.word.length,
+                  ),
+                );
+              },
             ),
         ],
       ),

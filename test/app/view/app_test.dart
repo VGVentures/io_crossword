@@ -27,6 +27,8 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
+class _MockHintResource extends Mock implements HintResource {}
+
 class _MockPlayerBloc extends Mock implements PlayerBloc {
   @override
   Future<void> close() async {}
@@ -54,6 +56,7 @@ void main() {
           .thenReturn(_MockLeaderboardResource());
       when(() => apiClient.crosswordResource)
           .thenReturn(_MockCrosswordResource());
+      when(() => apiClient.hintResource).thenReturn(_MockHintResource());
       when(
         () => crosswordRepository.watchSectionFromPosition(0, 0),
       ).thenAnswer((_) => Stream.value(null));
