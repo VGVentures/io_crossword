@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -43,9 +44,12 @@ class EndGameCheck extends StatelessWidget {
                   OutlinedButton.icon(
                     icon: const Icon(Icons.logout),
                     label: Text(l10n.endGame),
-                    // TODO(Ayad): add navigation
-                    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6497677712
-                    onPressed: () {}, // coverage:ignore-line
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        EndGamePage.route(),
+                        (_) => false,
+                      );
+                    },
                   ),
                 ],
               ),

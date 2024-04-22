@@ -14,47 +14,63 @@ part 'end_game_view_content.dart';
 class EndGamePage extends StatelessWidget {
   const EndGamePage({super.key});
 
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const EndGamePage(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
     return switch (layout) {
-      IoLayoutData.large => const EngGameLargeView(),
+      IoLayoutData.large => const EndGameLargeView(),
       IoLayoutData.small => const EndGameSmallView(),
     };
   }
 }
 
 @visibleForTesting
-class EngGameLargeView extends StatelessWidget {
+class EndGameLargeView extends StatelessWidget {
   @visibleForTesting
-  const EngGameLargeView({super.key});
+  const EndGameLargeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 32,
+    return Scaffold(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 502),
+          child: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
+                  child: LeaderboardButton(),
+                ),
+                SizedBox(height: 56),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 80,
+                  ),
+                  child: EndGameContent(),
+                ),
+                SizedBox(height: 56),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 56,
+                  ),
+                  child: ActionButtonsEndGame(),
+                ),
+              ],
+            ),
           ),
-          child: LeaderboardButton(),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 80,
-          ),
-          child: EndGameContent(),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 56,
-          ),
-          child: ActionButtonsEndGame(),
-        ),
-      ],
+      ),
     );
   }
 }

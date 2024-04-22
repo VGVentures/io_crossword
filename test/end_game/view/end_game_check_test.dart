@@ -65,5 +65,18 @@ void main() {
         expect(find.text(l10n.endGame), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'displays EndGamePage when endGame tapped',
+      (tester) async {
+        await tester.pumpApp(EndGameCheck());
+
+        await tester.tap(find.text(l10n.endGame));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(EndGamePage), findsOneWidget);
+      },
+    );
   });
 }
