@@ -40,18 +40,21 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// The [TransformationController] used to control the [InteractiveViewer].
   final _transformationController = TransformationController();
 
-  late final _animationController = AnimationController(
+  late AnimationController? _animationController = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 250),
-  )..addListener(_onAnimate);
-  late Animation<Vector3> _translationAnimation;
+  );
+  Animation<Vector3>? _translationAnimation;
 
-  void _onAnimate() {
+  void _onAnimateTranslation() {
     _transformationController.value =
-        Matrix4.translation(_translationAnimation.value);
+        Matrix4.translation(_translationAnimation!.value);
   }
 
   void _centerSelectedWord(BuildContext context) {
+    final animationController = _animationController;
+    if (_animationController == null) return;
+
     final selectedWord = context.read<WordSelectionBloc>().state.word;
     final viewport = _viewport;
     if (selectedWord == null || viewport == null) return;
@@ -59,6 +62,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final crosswordLayout = CrosswordLayoutScope.of(context);
     final wordMiddlePosition = selectedWord.word.middlePosition();
 
+    _translationAnimation?.removeListener(_onAnimateTranslation);
     _translationAnimation = Tween(
       begin: _transformationController.value.getTranslation(),
       end: viewport.center -
@@ -71,17 +75,21 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           ),
     ).animate(
       CurvedAnimation(
-        parent: _animationController,
+        parent: animationController!,
         curve: Curves.decelerate,
       ),
-    );
-    _animationController.forward(from: 0);
+    )..addListener(_onAnimateTranslation);
+    animationController.forward(from: 0);
   }
 
   @override
   void dispose() {
+    _translationAnimation?.removeListener(_onAnimateTranslation);
+    _translationAnimation = null;
+    _animationController?.dispose();
+    _animationController = null;
     _transformationController.dispose();
-    _animationController.dispose();
+
     super.dispose();
   }
 

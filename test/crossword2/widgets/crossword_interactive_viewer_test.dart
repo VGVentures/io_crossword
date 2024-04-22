@@ -7,6 +7,8 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/helpers.dart';
+
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
@@ -24,14 +26,11 @@ void main() {
     });
 
     testWidgets('pumps successfully', (tester) async {
-      await tester.pumpWidget(
-        BlocProvider<WordSelectionBloc>(
-          create: (_) => wordSelectionBloc,
-          child: CrosswordInteractiveViewer(
-            builder: (context, position) {
-              return const SizedBox();
-            },
-          ),
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
         ),
       );
 
@@ -44,21 +43,18 @@ void main() {
         late BuildContext buildContext;
         late Quad quad;
 
-        await tester.pumpWidget(
-          BlocProvider<WordSelectionBloc>(
-            create: (_) => wordSelectionBloc,
-            child: CrosswordInteractiveViewer(
-              builder: (context, viewport) {
-                quad = viewport;
+        await tester.pumpSubject(
+          CrosswordInteractiveViewer(
+            builder: (context, viewport) {
+              quad = viewport;
 
-                return Builder(
-                  builder: (context) {
-                    buildContext = context;
-                    return const SizedBox();
-                  },
-                );
-              },
-            ),
+              return Builder(
+                builder: (context) {
+                  buildContext = context;
+                  return const SizedBox();
+                },
+              );
+            },
           ),
         );
 
@@ -76,14 +72,12 @@ void main() {
           ),
         );
 
-        await tester.pumpWidget(
-          BlocProvider<WordSelectionBloc>(
-            create: (_) => wordSelectionBloc,
-            child: CrosswordInteractiveViewer(
-              builder: (context, position) {
-                return const SizedBox();
-              },
-            ),
+        await tester.pumpSubject(
+          wordSelectionBloc: wordSelectionBloc,
+          CrosswordInteractiveViewer(
+            builder: (context, position) {
+              return const SizedBox();
+            },
           ),
         );
 
@@ -106,14 +100,12 @@ void main() {
           ),
         );
 
-        await tester.pumpWidget(
-          BlocProvider<WordSelectionBloc>(
-            create: (_) => wordSelectionBloc,
-            child: CrosswordInteractiveViewer(
-              builder: (context, position) {
-                return const SizedBox();
-              },
-            ),
+        await tester.pumpSubject(
+          wordSelectionBloc: wordSelectionBloc,
+          CrosswordInteractiveViewer(
+            builder: (context, position) {
+              return const SizedBox();
+            },
           ),
         );
 
@@ -126,4 +118,39 @@ void main() {
       });
     });
   });
+}
+
+extension on WidgetTester {
+  Future<void> pumpSubject(
+    Widget widget, {
+    WordSelectionBloc? wordSelectionBloc,
+    CrosswordLayoutData? crosswordLayoutData,
+  }) {
+    final internalWordSelectionBloc =
+        wordSelectionBloc ?? _MockWordSelectionBloc();
+
+    if (wordSelectionBloc == null) {
+      when(() => internalWordSelectionBloc.state)
+          .thenReturn(const WordSelectionState.initial());
+    }
+
+    final internalCrosswordLayoutData = crosswordLayoutData ??
+        CrosswordLayoutData.fromConfiguration(
+          configuration: const CrosswordConfiguration(
+            bottomLeft: (1, 1),
+            chunkSize: 20,
+          ),
+          cellSize: const Size.square(50),
+        );
+
+    return pumpApp(
+      BlocProvider<WordSelectionBloc>(
+        create: (_) => internalWordSelectionBloc,
+        child: CrosswordLayoutScope(
+          data: internalCrosswordLayoutData,
+          child: widget,
+        ),
+      ),
+    );
+  }
 }
