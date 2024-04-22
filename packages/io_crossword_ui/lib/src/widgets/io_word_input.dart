@@ -53,6 +53,7 @@ class IoWordInput extends StatefulWidget {
   IoWordInput._({
     required this.length,
     required this.characterValidator,
+    this.axis = Axis.horizontal,
     this.controller,
     this.onWord,
     this.onSubmit,
@@ -86,6 +87,15 @@ class IoWordInput extends StatefulWidget {
 
   /// {@macro io_word_input_controller}
   final IoWordInputController? controller;
+
+  /// The direction of the input.
+  ///
+  /// Since the input does not support [TextDirection.rtl], an [Axis.horizontal]
+  /// will allow the input to be given from left to right. Whereas an
+  /// [Axis.vertical] will allow the input to be given from top to bottom.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis axis;
 
   /// The length of the input.
   ///
@@ -374,7 +384,8 @@ class _IoWordInputState extends State<IoWordInput> {
       characters.add(character);
     }
 
-    Widget child = Row(
+    Widget child = Flex(
+      direction: widget.axis,
       mainAxisSize: MainAxisSize.min,
       children: characters,
     );
