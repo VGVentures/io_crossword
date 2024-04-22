@@ -44,18 +44,18 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     final verticalWord = event.letter.words.$2;
     final hasVerticalWord = verticalWord != null;
 
-    final selectedWord = state.word?.word;
+    final currentWord = state.word?.word;
 
-    late final Word newSelectedWord;
-    if (hasHorizontalWord && selectedWord != horizontalWord) {
-      newSelectedWord = horizontalWord;
-    } else if (hasVerticalWord && selectedWord != verticalWord) {
-      newSelectedWord = verticalWord;
+    late final Word newWord;
+    if (hasHorizontalWord && currentWord != horizontalWord) {
+      newWord = horizontalWord;
+    } else if (hasVerticalWord && currentWord != verticalWord) {
+      newWord = verticalWord;
     } else {
-      newSelectedWord = horizontalWord ?? verticalWord!;
+      newWord = horizontalWord ?? verticalWord!;
     }
 
-    if (newSelectedWord == selectedWord) {
+    if (newWord == currentWord) {
       // The selected word is the same as the previously selected word.
       return;
     }
@@ -65,7 +65,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
         status: WordSelectionStatus.preSolving,
         word: SelectedWord(
           section: event.letter.chunkIndex,
-          word: newSelectedWord,
+          word: newWord,
         ),
       ),
     );
