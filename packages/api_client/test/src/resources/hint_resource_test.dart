@@ -38,7 +38,12 @@ void main() {
           response: HintResponse.no,
         );
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(jsonEncode(hint.toJson()));
+        when(() => response.body).thenReturn(
+          jsonEncode({
+            'hint': hint.toJson(),
+            'maxHints': 4,
+          }),
+        );
 
         await resource.generateHint(
           wordId: 'wordId',
@@ -134,9 +139,12 @@ void main() {
           response: HintResponse.no,
         );
         final hintList = [hint, hint, hint];
-        final hintJson = {'hints': hintList.map((e) => e.toJson()).toList()};
+        final responseJson = {
+          'hints': hintList.map((e) => e.toJson()).toList(),
+          'maxHints': 8,
+        };
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(jsonEncode(hintJson));
+        when(() => response.body).thenReturn(jsonEncode(responseJson));
 
         await resource.getHints(wordId: 'wordId');
 
