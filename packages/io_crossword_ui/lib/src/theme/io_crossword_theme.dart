@@ -19,6 +19,7 @@ class IoCrosswordTheme {
       physicalModel: _physicalModel,
       colorScheme: ioColorScheme,
       wordInput: _textInput,
+      outlineButtonTheme: _ioOutlineButtonTheme,
     );
 
     return ThemeData(
@@ -228,6 +229,34 @@ class IoCrosswordTheme {
 
             return const GradientStadiumBorder(
               gradient: IoCrosswordColors.geminiGradient,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  IoOutlineButtonTheme get _ioOutlineButtonTheme {
+    return IoOutlineButtonTheme(
+      simpleBorder: OutlinedButton.styleFrom(
+        minimumSize: const Size(171, 56),
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(side: BorderSide(width: 2));
+            }
+
+            return const StadiumBorder(
+              side: BorderSide(
+                width: 2,
+                color: IoCrosswordColors.mediumGray,
+              ),
             );
           },
         ),

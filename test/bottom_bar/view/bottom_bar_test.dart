@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
+import 'package:io_crossword/end_game/end_game.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -51,6 +53,36 @@ void main() {
         await tester.pumpApp(widget);
 
         expect(find.byType(BottomBarContent), findsOneWidget);
+      },
+    );
+  });
+
+  group('$BottomBarContent', () {
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
+
+    testWidgets(
+      'displays endGame',
+      (tester) async {
+        await tester.pumpApp(BottomBarContent());
+
+        expect(find.text(l10n.endGame), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'displays EndGameCheck when endGame is tapped',
+      (tester) async {
+        await tester.pumpApp(BottomBarContent());
+
+        await tester.tap(find.text(l10n.endGame));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(EndGameCheck), findsOneWidget);
       },
     );
   });
