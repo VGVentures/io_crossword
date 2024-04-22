@@ -64,6 +64,7 @@ void main() {
         word = _MockWord();
         when(() => word.length).thenReturn(5);
         when(() => word.position).thenReturn(const Point(0, 0));
+        when(() => word.id).thenReturn('id');
       });
 
       testWidgets(
