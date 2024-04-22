@@ -31,13 +31,13 @@ class _GeminiTextFieldState extends State<GeminiTextField> {
 
   void _onAskForHint(BuildContext context, String question) {
     final wordId = context.read<WordSelectionBloc>().state.word?.word.id;
+    final hintBloc = context.read<HintBloc>();
 
     if (wordId == null) return;
     if (question.isEmpty) return;
+    if (hintBloc.state.status == HintStatus.thinking) return;
 
-    context.read<HintBloc>().add(
-          HintRequested(wordId: wordId, question: question),
-        );
+    hintBloc.add(HintRequested(wordId: wordId, question: question));
   }
 
   @override

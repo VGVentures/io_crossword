@@ -67,6 +67,9 @@ void main() {
             word: SelectedWord(section: (0, 0), word: _FakeWord()),
           ),
         );
+        when(() => hintBloc.state).thenReturn(
+          HintState(status: HintStatus.asking),
+        );
         await tester.pumpApp(
           MultiBlocProvider(
             providers: [
@@ -98,6 +101,9 @@ void main() {
             word: SelectedWord(section: (0, 0), word: _FakeWord()),
           ),
         );
+        when(() => hintBloc.state).thenReturn(
+          HintState(status: HintStatus.asking),
+        );
         await tester.pumpApp(
           MultiBlocProvider(
             providers: [
@@ -117,6 +123,41 @@ void main() {
             HintRequested(wordId: 'id', question: 'is it blue?'),
           ),
         ).called(1);
+      },
+    );
+
+    testWidgets(
+      'does not send HintRequested when send icon is pressed and '
+      'hint status is thinking',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+            word: SelectedWord(section: (0, 0), word: _FakeWord()),
+          ),
+        );
+        when(() => hintBloc.state).thenReturn(
+          HintState(status: HintStatus.thinking),
+        );
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: hintBloc),
+              BlocProvider.value(value: wordSelectionBloc),
+            ],
+            child: GeminiTextField(),
+          ),
+        );
+
+        await tester.enterText(find.byType(TextField), 'is it blue?');
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.send));
+
+        verifyNever(
+          () => hintBloc.add(
+            HintRequested(wordId: 'id', question: 'is it blue?'),
+          ),
+        );
       },
     );
   });
