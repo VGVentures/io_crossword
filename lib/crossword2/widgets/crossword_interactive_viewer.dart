@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 /// {@template crossword_interactive_viewer}
 /// An [InteractiveViewer] configured to show a crossword.
@@ -25,12 +27,16 @@ class CrosswordInteractiveViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedWord = context
+        .select<WordSelectionBloc, SelectedWord?>((bloc) => bloc.state.word);
+
     return InteractiveViewer.builder(
       scaleEnabled: false,
-      builder: (context, position) {
+      panEnabled: selectedWord == null,
+      builder: (context, quad) {
         return QuadScope(
-          data: position,
-          child: builder(context, position),
+          data: quad,
+          child: builder(context, quad),
         );
       },
     );
