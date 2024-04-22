@@ -6,7 +6,7 @@ import 'package:io_crossword/word_selection/word_selection.dart';
 /// {@template crossword_interactive_viewer}
 /// An [InteractiveViewer] configured to show a crossword.
 /// {@endtemplate}
-class CrosswordInteractiveViewer extends StatefulWidget {
+class CrosswordInteractiveViewer extends StatelessWidget {
   /// {@macro crossword_interactive_viewer}
   const CrosswordInteractiveViewer({
     required this.builder,
@@ -26,21 +26,6 @@ class CrosswordInteractiveViewer extends StatefulWidget {
   final InteractiveViewerWidgetBuilder builder;
 
   @override
-  State<CrosswordInteractiveViewer> createState() =>
-      _CrosswordInteractiveViewerState();
-}
-
-class _CrosswordInteractiveViewerState
-    extends State<CrosswordInteractiveViewer> {
-  final _transformationController = TransformationController();
-
-  @override
-  void dispose() {
-    _transformationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final selectedWord = context
         .select<WordSelectionBloc, SelectedWord?>((bloc) => bloc.state.word);
@@ -48,11 +33,10 @@ class _CrosswordInteractiveViewerState
     return InteractiveViewer.builder(
       scaleEnabled: false,
       panEnabled: selectedWord == null,
-      transformationController: _transformationController,
       builder: (context, quad) {
         return QuadScope(
           data: quad,
-          child: widget.builder(context, quad),
+          child: builder(context, quad),
         );
       },
     );
