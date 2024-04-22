@@ -14,11 +14,23 @@ class AndroidTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.androidPlatform;
 
   @override
+  AssetGenImage get lookUpAnimation => Assets.anim.androidLookUp;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 7,
         columns: 4,
         stepTime: 0.042,
         width: 250,
         height: 360,
+      );
+
+  @override
+  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+        rows: 15,
+        columns: 5,
+        stepTime: 0.042,
+        width: 200,
+        height: 340,
       );
 }

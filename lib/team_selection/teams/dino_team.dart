@@ -14,11 +14,23 @@ class DinoTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dinoPlatform;
 
   @override
+  AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 14,
         columns: 2,
         stepTime: 0.042,
         width: 280,
         height: 370,
+      );
+
+  @override
+  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+        rows: 15,
+        columns: 4,
+        stepTime: 0.042,
+        width: 250,
+        height: 340,
       );
 }

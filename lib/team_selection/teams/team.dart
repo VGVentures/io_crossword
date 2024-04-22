@@ -11,7 +11,11 @@ abstract class Team extends Equatable {
 
   AssetGenImage get platformAnimation;
 
+  AssetGenImage get lookUpAnimation;
+
   SpriteInformation get idleSpriteInformation;
+
+  SpriteInformation get lookUpSpriteInformation;
 
   @override
   List<Object> get props => [

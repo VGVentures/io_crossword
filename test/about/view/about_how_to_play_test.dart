@@ -21,7 +21,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(AboutHowToPlayContent());
 
-        expect(find.byType(HowToPlaySteps), findsOneWidget);
+        expect(find.byType(HowToPlayStep), findsOneWidget);
       },
     );
 

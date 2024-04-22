@@ -265,25 +265,45 @@
   "@or": {
     "description": "or label"
   },
-  "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
+  "aboutHowToPlayFirstInstructionsTitle": "Select a Word, View the Clue",
+  "@aboutHowToPlayFirstInstructionsTitle": {
+    "description": "The first step instruction title."
+  },
+  "aboutHowToPlayFirstInstructions": "Start by solving a word, explore the board to find others, or use the 'Find a word' button to get a word to solve at random.",
   "@aboutHowToPlayFirstInstructions": {
-    "description": "The first step instruction on how to play"
+    "description": "The first step instruction on how to play."
   },
-  "aboutHowToPlaySecondInstructions": "Tap an empty word on the board or the “Find a new word” button to get your clue. If you're stuck and need a hand, press the 'hint' button to get help from Google Gemini. You'll have 3 hints throughout the game.",
+  "aboutHowToPlaySecondInstructionsTitle": "Solve the Word, Earn Points",
+  "@aboutHowToPlaySecondInstructionstitle": {
+    "description": "The second step instruction title."
+  },
+  "aboutHowToPlaySecondInstructions": "Think you know the answer? Take a guess and solve it! You'll earn points for each word you solve.",
   "@aboutHowToPlaySecondInstructions": {
-    "description": "The Second step instruction on how to play"
+    "description": "The Second step instruction on how to play."
   },
-  "aboutHowToPlayThirdInstructions": "The team who solves the word first claims that spot on the board. If you’re working on a word and it’s solved by another team, keep playing; you’ll still get points for solving it.",
+  "aboutHowToPlayThirdInstructionsTitle": "Get a Streak Bonus",
+  "@aboutHowToPlayThirdInstructionsTitle": {
+    "description": "The third step instruction title."
+  },
+  "aboutHowToPlayThirdInstructions": "Solve words in a row to earn a streak multiplier for your score; skipping a word resets your streak.",
   "@aboutHowToPlayThirdInstructions": {
-    "description": "The Third step instruction on how to play"
+    "description": "The Third step instruction on how to play."
   },
-  "aboutHowToPlayFourthInstructions": "Correctly solve two or more words in a row without errors to build a streak. Streaks multiply the points you earn each time you solve a word.",
+  "aboutHowToPlayFourthInstructionsTitle": "Ask Gemini for Hints",
+  "@aboutHowToPlayFourthInstructionsTitle": {
+    "description": "The fourth step instruction title."
+  },
+  "aboutHowToPlayFourthInstructions": "Stumped? Ask Gemini Yes or No questions to get hints in real time.",
   "@aboutHowToPlayFourthInstructions": {
-    "description": "The Fourth step instruction on how to play"
+    "description": "The Fourth step instruction on how to play."
   },
-  "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
+  "aboutHowToPlayFifthInstructionsTitle": "Claim your Badge",
+  "@aboutHowToPlayFifthInstructionsTitle": {
+    "description": "The fifth step instruction on how to play."
+  },
+  "aboutHowToPlayFifthInstructions": "Get a badge for your Developer Profile to show you helped solve the World's Largest Online Crossword puzzle.",
   "@aboutHowToPlayFifthInstructions": {
-    "description": "The Fifth step instruction on how to play"
+    "description": "The Fifth step instruction on how to play."
   },
   "streakAtRiskTitle": "Your streak is at risk!",
   "@streakAtRiskTitle": {
@@ -309,5 +329,17 @@
         "type": "int"
       }
     }
+  },
+  "backButtonLabel": "Back",
+  "@backButtonLabel": {
+    "description": "The label for the back button."
+  },
+  "nextButtonLabel": "Next",
+  "@nextButtonLabel": {
+    "description": "The label for the next button."
+  },
+  "doneButtonLabel": "Done",
+  "@doneButtonLabel": {
+    "description": "The label for the done button."
   }
 }

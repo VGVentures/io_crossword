@@ -18,6 +18,10 @@ class $AssetsAnimGen {
   AssetGenImage get androidIdle =>
       const AssetGenImage('assets/anim/android_idle.png');
 
+  /// File path: assets/anim/android_look_up.png
+  AssetGenImage get androidLookUp =>
+      const AssetGenImage('assets/anim/android_look_up.png');
+
   /// File path: assets/anim/android_platform.png
   AssetGenImage get androidPlatform =>
       const AssetGenImage('assets/anim/android_platform.png');
@@ -25,6 +29,10 @@ class $AssetsAnimGen {
   /// File path: assets/anim/dash_idle.png
   AssetGenImage get dashIdle =>
       const AssetGenImage('assets/anim/dash_idle.png');
+
+  /// File path: assets/anim/dash_look_up.png
+  AssetGenImage get dashLookUp =>
+      const AssetGenImage('assets/anim/dash_look_up.png');
 
   /// File path: assets/anim/dash_platform.png
   AssetGenImage get dashPlatform =>
@@ -34,6 +42,10 @@ class $AssetsAnimGen {
   AssetGenImage get dinoIdle =>
       const AssetGenImage('assets/anim/dino_idle.png');
 
+  /// File path: assets/anim/dino_look_up.png
+  AssetGenImage get dinoLookUp =>
+      const AssetGenImage('assets/anim/dino_look_up.png');
+
   /// File path: assets/anim/dino_platform.png
   AssetGenImage get dinoPlatform =>
       const AssetGenImage('assets/anim/dino_platform.png');
@@ -42,6 +54,10 @@ class $AssetsAnimGen {
   AssetGenImage get sparkyIdle =>
       const AssetGenImage('assets/anim/sparky_idle.png');
 
+  /// File path: assets/anim/sparky_look_up.png
+  AssetGenImage get sparkyLookUp =>
+      const AssetGenImage('assets/anim/sparky_look_up.png');
+
   /// File path: assets/anim/sparky_platform.png
   AssetGenImage get sparkyPlatform =>
       const AssetGenImage('assets/anim/sparky_platform.png');
@@ -49,12 +65,16 @@ class $AssetsAnimGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         androidIdle,
+        androidLookUp,
         androidPlatform,
         dashIdle,
+        dashLookUp,
         dashPlatform,
         dinoIdle,
+        dinoLookUp,
         dinoPlatform,
         sparkyIdle,
+        sparkyLookUp,
         sparkyPlatform
       ];
 }
@@ -71,6 +91,26 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/how_to_play_answer.png
+  AssetGenImage get howToPlayAnswer =>
+      const AssetGenImage('assets/images/how_to_play_answer.png');
+
+  /// File path: assets/images/how_to_play_badge.png
+  AssetGenImage get howToPlayBadge =>
+      const AssetGenImage('assets/images/how_to_play_badge.png');
+
+  /// File path: assets/images/how_to_play_find_a_word.png
+  AssetGenImage get howToPlayFindAWord =>
+      const AssetGenImage('assets/images/how_to_play_find_a_word.png');
+
+  /// File path: assets/images/how_to_play_hints.png
+  AssetGenImage get howToPlayHints =>
+      const AssetGenImage('assets/images/how_to_play_hints.png');
+
+  /// File path: assets/images/how_to_play_streak.png
+  AssetGenImage get howToPlayStreak =>
+      const AssetGenImage('assets/images/how_to_play_streak.png');
 
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
@@ -91,8 +131,18 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/welcome_background.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [letters, platformNotSelected, tile, tileLarge, welcomeBackground];
+  List<AssetGenImage> get values => [
+        howToPlayAnswer,
+        howToPlayBadge,
+        howToPlayFindAWord,
+        howToPlayHints,
+        howToPlayStreak,
+        letters,
+        platformNotSelected,
+        tile,
+        tileLarge,
+        welcomeBackground
+      ];
 }
 
 class Assets {

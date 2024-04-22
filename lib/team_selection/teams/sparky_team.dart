@@ -14,11 +14,23 @@ class SparkyTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.sparkyPlatform;
 
   @override
+  AssetGenImage get lookUpAnimation => Assets.anim.sparkyLookUp;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 16,
         columns: 5,
         stepTime: 0.042,
         width: 225,
         height: 325,
+      );
+
+  @override
+  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+        rows: 9,
+        columns: 7,
+        stepTime: 0.042,
+        width: 200,
+        height: 340,
       );
 }
