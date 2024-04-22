@@ -26,7 +26,9 @@ Future<void> init(InternetAddress ip, int port) async {
   crosswordRepository = CrosswordRepository(dbClient: dbClient);
   hintRepository = HintRepository(
     dbClient: dbClient,
-    generativeModel: GenerativeModel(apiKey: _geminiKey, model: _geminiModel),
+    generativeModelWrapper: GenerativeModelWrapper(
+      model: GenerativeModel(apiKey: _geminiKey, model: _geminiModel),
+    ),
   );
   boardRenderer = const BoardRenderer();
 

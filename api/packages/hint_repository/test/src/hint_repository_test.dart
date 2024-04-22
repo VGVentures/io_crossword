@@ -7,9 +7,13 @@ import 'package:test/test.dart';
 
 class _MockDbClient extends Mock implements DbClient {}
 
+class _MockGenerativeModelWrapper extends Mock
+    implements GenerativeModelWrapper {}
+
 void main() {
   group('HintRepository', () {
     late DbClient dbClient;
+    late GenerativeModelWrapper generativeModelWrapper;
     late HintRepository hintRepository;
 
     setUpAll(() {
@@ -18,12 +22,19 @@ void main() {
 
     setUp(() {
       dbClient = _MockDbClient();
-      hintRepository = HintRepository(dbClient: dbClient);
+      generativeModelWrapper = _MockGenerativeModelWrapper();
+      hintRepository = HintRepository(
+        dbClient: dbClient,
+        generativeModelWrapper: generativeModelWrapper,
+      );
     });
 
     test('can be instantiated', () {
       expect(
-        HintRepository(dbClient: dbClient),
+        HintRepository(
+          dbClient: dbClient,
+          generativeModelWrapper: generativeModelWrapper,
+        ),
         isNotNull,
       );
     });
@@ -59,14 +70,57 @@ void main() {
     });
 
     group('generateHint', () {
-      test('returns a hint', () async {
+      test('returns a hint when the response is parsed correctly', () async {
+        when(() => generativeModelWrapper.generateTextContent(any()))
+            .thenAnswer((_) async => 'yes');
         final hint = await hintRepository.generateHint(
           wordAnswer: 'answer',
           question: 'question',
-          previousHints: [],
+          previousHints: [Hint(question: 'is it?', response: HintResponse.no)],
         );
 
-        expect(hint, isNotNull);
+        expect(
+          hint,
+          equals(Hint(question: 'question', response: HintResponse.yes)),
+        );
+      });
+
+      test(
+        'returns a hint with notApplicable when the response is not parsed '
+        'correctly',
+        () async {
+          when(() => generativeModelWrapper.generateTextContent(any()))
+              .thenAnswer((_) async => 'bla bla bla');
+          final hint = await hintRepository.generateHint(
+            wordAnswer: 'answer',
+            question: 'question',
+            previousHints: [],
+          );
+
+          expect(
+            hint,
+            equals(
+              Hint(
+                question: 'question',
+                response: HintResponse.notApplicable,
+              ),
+            ),
+          );
+        },
+      );
+
+      test('throws a HintException when an error occurs', () async {
+        when(() => generativeModelWrapper.generateTextContent(any()))
+            .thenThrow(Exception());
+
+        expect(
+          () => hintRepository.generateHint(
+            wordAnswer: 'answer',
+            question: 'question',
+            previousHints: [],
+          ),
+          throwsA(isA<HintException>()),
+        );
       });
     });
 

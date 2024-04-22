@@ -1,6 +1,5 @@
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hint_repository/hint_repository.dart';
 
 /// {@template hint_repository}
@@ -8,14 +7,14 @@ import 'package:hint_repository/hint_repository.dart';
 /// {@endtemplate}
 class HintRepository {
   /// {@macro hint_repository}
-  const HintRepository({
+  HintRepository({
     required DbClient dbClient,
-    required GenerativeModel generativeModel,
+    required GenerativeModelWrapper generativeModelWrapper,
   })  : _dbClient = dbClient,
-        _generativeModel = generativeModel;
+        _generativeModel = generativeModelWrapper;
 
   final DbClient _dbClient;
-  final GenerativeModel _generativeModel;
+  final GenerativeModelWrapper _generativeModel;
 
   static const _answersCollection = 'answers';
   static const _hintsCollection = 'hints';
@@ -72,11 +71,9 @@ class HintRepository {
         'and the question I\'ve been given is "$question". $contextPrompt';
 
     try {
-      final response = await _generativeModel.generateContent(
-        [Content.text(prompt)],
-      );
+      final response = await _generativeModel.generateTextContent(prompt);
       final hintResponse = HintResponse.values.firstWhere(
-        (element) => element.name == response.text,
+        (element) => element.name == response,
         orElse: () => HintResponse.notApplicable,
       );
 
