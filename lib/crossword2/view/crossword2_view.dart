@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -92,6 +93,7 @@ class _CrosswordStack extends StatelessWidget {
                       (word.position.y * crosswordLayout.cellSize.height),
                   child: IoWordInput.alphabetic(
                     key: ValueKey(selectedWord.word.id),
+                    direction: word.axis.toAxis(),
                     length: selectedWord.word.length,
                   ),
                 );
@@ -105,4 +107,9 @@ class _CrosswordStack extends StatelessWidget {
 
 extension on Quad {
   Rect toRect() => Rect.fromLTRB(point0.x, point0.y, point2.x, point2.y);
+}
+
+extension on domain.Axis {
+  Axis toAxis() =>
+      this == domain.Axis.horizontal ? Axis.horizontal : Axis.vertical;
 }
