@@ -38,14 +38,14 @@ void main() {
       (tester) async {
         when(() => playerBloc.state).thenReturn(
           PlayerState(
-            rank: 30000,
+            rank: 300,
           ),
         );
 
         await tester.pumpApp(widget);
 
         expect(find.text(l10n.rank), findsOneWidget);
-        expect(find.text('30k'), findsOneWidget);
+        expect(find.text('300'), findsOneWidget);
       },
     );
 
@@ -67,13 +67,13 @@ void main() {
       'displays points',
       (tester) async {
         when(() => playerBloc.state).thenReturn(
-          PlayerState(player: Player.empty.copyWith(streak: 5000)),
+          PlayerState(player: Player.empty.copyWith(streak: 100)),
         );
 
         await tester.pumpApp(widget);
 
         expect(find.text(l10n.points), findsOneWidget);
-        expect(find.text('5k'), findsOneWidget);
+        expect(find.text('100'), findsOneWidget);
       },
     );
   });
