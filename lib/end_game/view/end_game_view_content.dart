@@ -58,7 +58,7 @@ class ActionButtonsEndGame extends StatelessWidget {
                   onPressed: () {}, // coverage:ignore-line
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {}, // coverage:ignore-line
@@ -80,6 +80,7 @@ class ActionButtonsEndGame extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           l10n.claimBadgeContributing,
+          textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium.regular?.copyWith(
                 color: IoCrosswordColors.softGray,
               ),

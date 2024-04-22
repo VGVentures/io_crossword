@@ -38,7 +38,7 @@ class EngGameLargeView extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: 31,
+            horizontal: 32,
           ),
           child: LeaderboardButton(),
         ),
@@ -76,8 +76,8 @@ class EndGameSmallView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 35,
-            vertical: 25,
+            horizontal: 32,
+            vertical: 24,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
