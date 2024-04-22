@@ -16,7 +16,7 @@ void main() {
         layout: IoLayoutData.large,
       );
 
-      expect(find.byType(EngGameLargeView), findsOneWidget);
+      expect(find.byType(EndGameLargeView), findsOneWidget);
     });
 
     testWidgets('displays EndGameSmallView with ${IoLayoutData.small}',
@@ -30,21 +30,21 @@ void main() {
     });
   });
 
-  group('$EngGameLargeView', () {
+  group('$EndGameLargeView', () {
     testWidgets('displays LeaderboardButton', (tester) async {
-      await tester.pumpApp(EngGameLargeView());
+      await tester.pumpApp(EndGameLargeView());
 
       expect(find.byType(LeaderboardButton), findsOneWidget);
     });
 
     testWidgets('displays EndGameContent', (tester) async {
-      await tester.pumpApp(EngGameLargeView());
+      await tester.pumpApp(EndGameLargeView());
 
       expect(find.byType(EndGameContent), findsOneWidget);
     });
 
     testWidgets('displays ActionButtonsEndGame', (tester) async {
-      await tester.pumpApp(EngGameLargeView());
+      await tester.pumpApp(EndGameLargeView());
 
       expect(find.byType(ActionButtonsEndGame), findsOneWidget);
     });
