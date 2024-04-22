@@ -309,5 +309,29 @@
         "type": "int"
       }
     }
+  },
+  "endingGame": "Ending the game",
+  "@endingGame": {
+    "description": "Title used to check if the user wants to end the game."
+  },
+  "sureToEndGame": "Are you sure you want to submit your score and finish the game?",
+  "@sureToEndGame": {
+    "description": "Subtitle used to check if the user wants to end the game."
+  },
+  "endGame": "End game",
+  "@endGame": {
+    "description": "End game label."
+  },
+  "thanksForContributing": "Thanks for contributing!",
+  "@thanksForContributing": {
+    "description": "Thanks for contributing! label."
+  },
+  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "@claimBadgeContributing": {
+    "description": "Claim badge for contributing"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share label"
   }
 }
