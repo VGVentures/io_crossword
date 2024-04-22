@@ -90,6 +90,7 @@ void main() {
               wordId: 'wordId',
             ),
           ).thenAnswer((_) async => []);
+          when(() => hintRepository.getMaxHints()).thenAnswer((_) async => 10);
           when(
             () => hintRepository.generateHint(
               wordAnswer: 'answer',
@@ -112,7 +113,13 @@ void main() {
           expect(response.statusCode, HttpStatus.ok);
           expect(
             await response.json(),
-            equals({'question': 'question', 'response': 'no'}),
+            equals({
+              'hint': {
+                'question': 'question',
+                'response': 'no',
+              },
+              'maxHints': 10,
+            }),
           );
           verify(
             () => hintRepository.saveHints(
@@ -147,6 +154,7 @@ void main() {
               wordId: 'wordId',
             ),
           ).thenAnswer((_) async => []);
+          when(() => hintRepository.getMaxHints()).thenAnswer((_) async => 10);
           when(
             () => hintRepository.generateHint(
               wordAnswer: 'answer',
@@ -186,6 +194,7 @@ void main() {
               wordId: 'wordId',
             ),
           ).thenAnswer((_) async => List.filled(10, hint));
+          when(() => hintRepository.getMaxHints()).thenAnswer((_) async => 10);
 
           final response = await route.onRequest(requestContext);
 
@@ -268,6 +277,7 @@ void main() {
               wordId: 'wordId',
             ),
           ).thenAnswer((_) async => hintList);
+          when(() => hintRepository.getMaxHints()).thenAnswer((_) async => 10);
 
           final response = await route.onRequest(requestContext);
 
@@ -280,6 +290,7 @@ void main() {
                 {'question': 'question2', 'response': 'notApplicable'},
                 {'question': 'question3', 'response': 'no'},
               ],
+              'maxHints': 10,
             }),
           );
         },

@@ -5,8 +5,6 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 
-const _maxAllowedHints = 10;
-
 Future<Response> onRequest(RequestContext context) async {
   if (context.request.method == HttpMethod.post) {
     return _onPost(context);
@@ -43,7 +41,8 @@ Future<Response> _onPost(RequestContext context) async {
       userId: user.id,
       wordId: wordId,
     );
-    if (previousHints.length >= _maxAllowedHints) {
+    final maxAllowedHints = await hintRepository.getMaxHints();
+    if (previousHints.length >= maxAllowedHints) {
       return Response(
         body: 'Max hints reached for word $wordId',
         statusCode: HttpStatus.forbidden,
@@ -62,7 +61,12 @@ Future<Response> _onPost(RequestContext context) async {
       hints: [...previousHints, hint],
     );
 
-    return Response.json(body: hint.toJson());
+    return Response.json(
+      body: {
+        'hint': hint.toJson(),
+        'maxHints': maxAllowedHints,
+      },
+    );
   } catch (e) {
     return Response(
       body: e.toString(),
@@ -86,10 +90,12 @@ Future<Response> _onGet(RequestContext context) async {
       userId: user.id,
       wordId: wordId,
     );
+    final maxAllowedHints = await hintRepository.getMaxHints();
 
     return Response.json(
       body: {
         'hints': hints.map((hint) => hint.toJson()).toList(),
+        'maxHints': maxAllowedHints,
       },
     );
   } catch (e) {
