@@ -37,9 +37,11 @@ class HintBloc extends Bloc<HintEvent, HintState> {
     HintRequested event,
     Emitter<HintState> emit,
   ) async {
+    if (state.hintsLeft <= 0) return;
+
     emit(state.copyWith(status: HintStatus.thinking));
 
-    final hint = await _hintResource.generateHint(
+    final (hint, maxHints) = await _hintResource.generateHint(
       wordId: event.wordId,
       question: event.question,
     );
@@ -49,6 +51,7 @@ class HintBloc extends Bloc<HintEvent, HintState> {
       state.copyWith(
         status: HintStatus.answered,
         hints: allHints,
+        maxHints: maxHints,
       ),
     );
   }
@@ -58,8 +61,14 @@ class HintBloc extends Bloc<HintEvent, HintState> {
     Emitter<HintState> emit,
   ) async {
     if (state.hints.isEmpty) {
-      final hints = await _hintResource.getHints(wordId: event.wordId);
-      emit(state.copyWith(hints: hints));
+      final (hints, maxHints) =
+          await _hintResource.getHints(wordId: event.wordId);
+      emit(
+        state.copyWith(
+          hints: hints,
+          maxHints: maxHints,
+        ),
+      );
     }
   }
 }

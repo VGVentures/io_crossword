@@ -89,6 +89,22 @@
   "@askYesOrNoQuestion": {
     "description": "Ask a yes or no question text"
   },
+  "runOutOfHints": "You've run out of hints",
+  "@runOutOfHints": {
+    "description": "Run out of hints label"
+  },
+  "hintsRemaining": "{remaining} of {total} hints remaining",
+  "@hintsRemaining": {
+    "description": "Hints remaining label.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
@@ -228,10 +244,6 @@
   "findNewWord": "Find a new word",
   "@findNewWord": {
     "description": "Find new word label"
-  },
-  "points": "Points",
-  "@points": {
-    "description": "Points label"
   },
   "totalScore": "Total score",
   "@totalScore": {

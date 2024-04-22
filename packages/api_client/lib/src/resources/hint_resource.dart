@@ -18,7 +18,7 @@ class HintResource {
   /// Post /game/hint
   ///
   /// Generates a [Hint] for the provided word by answering to the question.
-  Future<Hint> generateHint({
+  Future<(Hint, int)> generateHint({
     required String wordId,
     required String question,
   }) async {
@@ -41,8 +41,9 @@ class HintResource {
 
     try {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final hint = Hint.fromJson(body);
-      return hint;
+      final hint = Hint.fromJson(body['hint'] as Map<String, dynamic>);
+      final maxHints = body['maxHints'] as int;
+      return (hint, maxHints);
     } catch (error, stackTrace) {
       throw ApiClientError(
         'POST $path returned invalid response: "${response.body}"',
@@ -54,7 +55,7 @@ class HintResource {
   /// Get /game/hint
   ///
   /// Fetches all the hints for the provided word.
-  Future<List<Hint>> getHints({
+  Future<(List<Hint>, int)> getHints({
     required String wordId,
   }) async {
     const path = '/game/hint';
@@ -78,7 +79,8 @@ class HintResource {
       final hints = (body['hints'] as List)
           .map((hint) => Hint.fromJson(hint as Map<String, dynamic>))
           .toList();
-      return hints;
+      final maxHints = body['maxHints'] as int;
+      return (hints, maxHints);
     } catch (error, stackTrace) {
       throw ApiClientError(
         'GET $path returned invalid response: "${response.body}"',

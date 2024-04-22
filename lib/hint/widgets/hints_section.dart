@@ -6,8 +6,8 @@ import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class HintsSection extends StatelessWidget {
-  const HintsSection({super.key});
+class HintsTitle extends StatelessWidget {
+  const HintsTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +15,35 @@ class HintsSection extends StatelessWidget {
 
     final hintState = context.watch<HintBloc>().state;
     final isHintModeActive = hintState.isHintModeActive;
-    final isThinking = hintState.status == HintStatus.thinking;
-    final allHints = hintState.hints;
+    final isOutOfHints = hintState.hintsLeft <= 0;
+
+    var title = l10n.askGeminiHint;
+    if (isOutOfHints) {
+      title = l10n.runOutOfHints;
+    } else if (isHintModeActive) {
+      if (hintState.hints.isEmpty) {
+        title = l10n.askYesOrNoQuestion;
+      } else {
+        title = l10n.hintsRemaining(hintState.hintsLeft, hintState.maxHints);
+      }
+    }
+    return HintText(text: title);
+  }
+}
+
+class HintsSection extends StatelessWidget {
+  const HintsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isThinking = context
+        .select((HintBloc bloc) => bloc.state.status == HintStatus.thinking);
+    final allHints = context.select((HintBloc bloc) => bloc.state.hints);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(
-          child: HintText(
-            text:
-                isHintModeActive ? l10n.askYesOrNoQuestion : l10n.askGeminiHint,
-          ),
-        ),
-        const SizedBox(height: 32),
         ...allHints.mapIndexed(
           (i, hint) => HintQuestionResponse(
             index: i,
@@ -38,6 +53,7 @@ class HintsSection extends StatelessWidget {
         if (isThinking) ...[
           const SizedBox(height: 24),
           const Center(child: HintLoadingIndicator()),
+          const SizedBox(height: 8),
         ],
       ],
     );
