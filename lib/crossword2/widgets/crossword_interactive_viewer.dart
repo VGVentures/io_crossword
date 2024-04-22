@@ -1,10 +1,12 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 /// {@template crossword_interactive_viewer}
 /// An [InteractiveViewer] configured to show a crossword.
 /// {@endtemplate}
-class CrosswordInteractiveViewer extends StatelessWidget {
+class CrosswordInteractiveViewer extends StatefulWidget {
   /// {@macro crossword_interactive_viewer}
   const CrosswordInteractiveViewer({
     required this.builder,
@@ -24,13 +26,33 @@ class CrosswordInteractiveViewer extends StatelessWidget {
   final InteractiveViewerWidgetBuilder builder;
 
   @override
+  State<CrosswordInteractiveViewer> createState() =>
+      _CrosswordInteractiveViewerState();
+}
+
+class _CrosswordInteractiveViewerState
+    extends State<CrosswordInteractiveViewer> {
+  final _transformationController = TransformationController();
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final selectedWord = context
+        .select<WordSelectionBloc, SelectedWord?>((bloc) => bloc.state.word);
+
     return InteractiveViewer.builder(
       scaleEnabled: false,
-      builder: (context, position) {
+      panEnabled: selectedWord == null,
+      transformationController: _transformationController,
+      builder: (context, quad) {
         return QuadScope(
-          data: position,
-          child: builder(context, position),
+          data: quad,
+          child: widget.builder(context, quad),
         );
       },
     );
