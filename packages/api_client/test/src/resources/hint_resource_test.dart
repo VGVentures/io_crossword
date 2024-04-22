@@ -38,7 +38,12 @@ void main() {
           response: HintResponse.no,
         );
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(jsonEncode(hint.toJson()));
+        when(() => response.body).thenReturn(
+          jsonEncode({
+            'hint': hint.toJson(),
+            'maxHints': 4,
+          }),
+        );
 
         await resource.generateHint(
           wordId: 'wordId',
@@ -56,20 +61,26 @@ void main() {
         ).called(1);
       });
 
-      test('returns the hint when succeeds', () async {
+      test('returns the hint and max hints when succeeds', () async {
         final hint = Hint(
           question: 'is it a question?',
           response: HintResponse.yes,
         );
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(jsonEncode(hint.toJson()));
+        when(() => response.body).thenReturn(
+          jsonEncode({
+            'hint': hint.toJson(),
+            'maxHints': 4,
+          }),
+        );
 
         final result = await resource.generateHint(
           wordId: 'wordId',
           question: 'is it a question?',
         );
 
-        expect(result, equals(hint));
+        expect(result.$1, equals(hint));
+        expect(result.$2, equals(4));
       });
 
       test('throws ApiClientError when request fails', () async {
@@ -128,9 +139,12 @@ void main() {
           response: HintResponse.no,
         );
         final hintList = [hint, hint, hint];
-        final hintJson = {'hints': hintList.map((e) => e.toJson()).toList()};
+        final responseJson = {
+          'hints': hintList.map((e) => e.toJson()).toList(),
+          'maxHints': 8,
+        };
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(jsonEncode(hintJson));
+        when(() => response.body).thenReturn(jsonEncode(responseJson));
 
         await resource.getHints(wordId: 'wordId');
 
@@ -142,19 +156,23 @@ void main() {
         ).called(1);
       });
 
-      test('returns the list of hints when succeeds', () async {
+      test('returns the list of hints and max hints when succeeds', () async {
         final hint = Hint(
           question: 'question',
           response: HintResponse.no,
         );
         final hintList = [hint, hint, hint];
-        final hintJson = {'hints': hintList.map((e) => e.toJson()).toList()};
+        final hintJson = {
+          'hints': hintList.map((e) => e.toJson()).toList(),
+          'maxHints': 8,
+        };
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(jsonEncode(hintJson));
 
-        final hints = await resource.getHints(wordId: 'wordId');
+        final result = await resource.getHints(wordId: 'wordId');
 
-        expect(hints, equals(hintList));
+        expect(result.$1, equals(hintList));
+        expect(result.$2, equals(8));
       });
 
       test('throws ApiClientError when request fails', () async {

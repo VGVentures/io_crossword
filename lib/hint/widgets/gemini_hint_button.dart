@@ -11,13 +11,16 @@ class GeminiHintButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final isOutOfHints =
+        context.select((HintBloc bloc) => bloc.state.hintsLeft <= 0);
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 128),
       child: OutlinedButton.icon(
         style: IoCrosswordTheme.geminiOutlinedButtonThemeData.style,
-        onPressed: () {
-          context.read<HintBloc>().add(const HintModeEntered());
-        },
+        onPressed: isOutOfHints
+            ? null
+            : () => context.read<HintBloc>().add(const HintModeEntered()),
         icon: const GeminiIcon(),
         label: GeminiGradient(
           child: Text(l10n.hint),

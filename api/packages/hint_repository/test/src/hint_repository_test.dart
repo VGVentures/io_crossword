@@ -28,6 +28,36 @@ void main() {
       );
     });
 
+    group('getMaxHints', () {
+      test('returns the maximum hints allowed', () async {
+        when(() => dbClient.findBy('boardInfo', 'type', 'max_hints'))
+            .thenAnswer(
+          (_) async => [
+            DbEntityRecord(
+              id: 'maxHints',
+              data: const {
+                'type': 'max_hints',
+                'value': 5,
+              },
+            ),
+          ],
+        );
+
+        final maxHints = await hintRepository.getMaxHints();
+
+        expect(maxHints, 5);
+      });
+
+      test('returns the default maximum hints when an error occurs', () async {
+        when(() => dbClient.findBy('boardInfo', 'type', 'max_hints'))
+            .thenThrow(Exception());
+
+        final maxHints = await hintRepository.getMaxHints();
+
+        expect(maxHints, 10);
+      });
+    });
+
     group('generateHint', () {
       test('returns a hint', () async {
         final hint = await hintRepository.generateHint(

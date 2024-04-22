@@ -23,18 +23,22 @@ class HintState extends Equatable {
   const HintState({
     this.status = HintStatus.initial,
     this.hints = const [],
+    this.maxHints = 10,
   });
 
   final HintStatus status;
   final List<Hint> hints;
+  final int maxHints;
 
   HintState copyWith({
     HintStatus? status,
     List<Hint>? hints,
+    int? maxHints,
   }) {
     return HintState(
       status: status ?? this.status,
       hints: hints ?? this.hints,
+      maxHints: maxHints ?? this.maxHints,
     );
   }
 
@@ -43,6 +47,8 @@ class HintState extends Equatable {
       status == HintStatus.thinking ||
       status == HintStatus.invalid;
 
+  int get hintsLeft => maxHints - hints.length;
+
   @override
-  List<Object> get props => [status, hints];
+  List<Object> get props => [status, hints, maxHints];
 }

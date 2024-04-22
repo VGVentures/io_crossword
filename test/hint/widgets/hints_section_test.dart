@@ -26,13 +26,13 @@ void main() {
     hintBloc = _MockHintBloc();
   });
 
-  group('$HintsSection', () {
+  group('$HintsTitle', () {
     late Widget widget;
 
     setUp(() {
       widget = BlocProvider(
         create: (context) => hintBloc,
-        child: HintsSection(),
+        child: HintsTitle(),
       );
     });
 
@@ -49,6 +49,23 @@ void main() {
     );
 
     testWidgets(
+      'renders "run out of hints" when there are no more hints available',
+      (tester) async {
+        final hint = Hint(question: 'Q1', response: HintResponse.yes);
+        when(() => hintBloc.state).thenReturn(
+          HintState(
+            status: HintStatus.asking,
+            hints: [hint, hint, hint],
+            maxHints: 3,
+          ),
+        );
+        await tester.pumpApp(widget);
+
+        expect(find.text(l10n.runOutOfHints), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'renders "ask yes or no question" when the hint mode is active',
       (tester) async {
         when(() => hintBloc.state).thenReturn(
@@ -59,6 +76,35 @@ void main() {
         expect(find.text(l10n.askYesOrNoQuestion), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'renders "1 of 2 hints remaining" when the hint mode is active '
+      'and there are hints available',
+      (tester) async {
+        final hint = Hint(question: 'Q1', response: HintResponse.yes);
+        when(() => hintBloc.state).thenReturn(
+          HintState(
+            status: HintStatus.asking,
+            hints: [hint, hint],
+            maxHints: 3,
+          ),
+        );
+        await tester.pumpApp(widget);
+
+        expect(find.text(l10n.hintsRemaining(1, 3)), findsOneWidget);
+      },
+    );
+  });
+
+  group('$HintsSection', () {
+    late Widget widget;
+
+    setUp(() {
+      widget = BlocProvider(
+        create: (context) => hintBloc,
+        child: HintsSection(),
+      );
+    });
 
     testWidgets(
       'renders as many $HintQuestionResponse widgets as hints are available',
