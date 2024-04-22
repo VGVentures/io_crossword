@@ -1,7 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -63,34 +65,100 @@ void main() {
       setUp(() {
         word = _MockWord();
         when(() => word.length).thenReturn(5);
+        when(() => word.axis).thenReturn(domain.Axis.horizontal);
         when(() => word.position).thenReturn(const Point(0, 0));
         when(() => word.id).thenReturn('id');
       });
 
-      testWidgets(
-        'shown when a word is to be solved',
-        (tester) async {
-          when(() => wordSelectionBloc.state).thenReturn(
-            WordSelectionState(
-              status: WordSelectionStatus.preSolving,
-              word: SelectedWord(
-                section: (0, 0),
-                word: word,
+      group('shown', () {
+        testWidgets(
+          'horizontally when an horizontal word is to be solved',
+          (tester) async {
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
               ),
-            ),
-          );
+            );
 
-          await tester.pumpApp(
-            layout: IoLayoutData.large,
-            BlocProvider<WordSelectionBloc>(
-              create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
-            ),
-          );
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
 
-          expect(find.byType(IoWordInput), findsOneWidget);
-        },
-      );
+            final wordInputFinder = find.byType(IoWordInput);
+            expect(wordInputFinder, findsOneWidget);
+
+            final wordInput = tester.widget<IoWordInput>(wordInputFinder);
+            expect(wordInput.direction, equals(Axis.horizontal));
+          },
+        );
+
+        testWidgets(
+          'vertically when a vertical word is to be solved',
+          (tester) async {
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            final wordInputFinder = find.byType(IoWordInput);
+            expect(wordInputFinder, findsOneWidget);
+
+            final wordInput = tester.widget<IoWordInput>(wordInputFinder);
+            expect(wordInput.direction, equals(Axis.horizontal));
+          },
+        );
+
+        testWidgets(
+          'horizontally when a word is to be solved',
+          (tester) async {
+            when(() => word.axis).thenReturn(domain.Axis.vertical);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            final wordInputFinder = find.byType(IoWordInput);
+            expect(wordInputFinder, findsOneWidget);
+
+            final wordInput = tester.widget<IoWordInput>(wordInputFinder);
+            expect(wordInput.direction, equals(Axis.vertical));
+          },
+        );
+      });
 
       group('not shown', () {
         testWidgets(
