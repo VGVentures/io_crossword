@@ -2,7 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
@@ -90,12 +91,18 @@ void main() {
       });
 
       testWidgets('is disabled when a word is selected', (tester) async {
+        final word = _MockWord();
+        when(() => word.id).thenReturn('id');
+        when(() => word.length).thenReturn(5);
+        when(() => word.axis).thenReturn(domain.Axis.horizontal);
+        when(() => word.position).thenReturn(const Point(0, 0));
+
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
             word: SelectedWord(
               section: (0, 0),
-              word: _MockWord(),
+              word: word,
             ),
           ),
         );
