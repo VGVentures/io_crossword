@@ -53,23 +53,25 @@ class IoWordInput extends StatefulWidget {
   IoWordInput._({
     required this.length,
     required this.characterValidator,
-    this.axis = Axis.horizontal,
     this.controller,
     this.onWord,
     this.onSubmit,
+    Axis? direction,
     Map<int, String>? characters,
     super.key,
-  }) : characters = characters != null
+  })  : characters = characters != null
             ? UnmodifiableMapView(
                 Map.from(characters)
                   ..removeWhere((key, value) => key >= length),
               )
-            : null;
+            : null,
+        direction = direction ?? Axis.horizontal;
 
   /// Creates an [IoWordInput] that only accepts alphabetic characters.
   IoWordInput.alphabetic({
     required int length,
     IoWordInputController? controller,
+    Axis? direction,
     Map<int, String>? characters,
     ValueChanged<String>? onWord,
     ValueChanged<String>? onSubmit,
@@ -78,6 +80,7 @@ class IoWordInput extends StatefulWidget {
           length: length,
           key: key,
           characters: characters,
+          direction: direction,
           controller: controller,
           onWord: onWord,
           onSubmit: onSubmit,
@@ -95,7 +98,7 @@ class IoWordInput extends StatefulWidget {
   /// [Axis.vertical] will allow the input to be given from top to bottom.
   ///
   /// Defaults to [Axis.horizontal].
-  final Axis axis;
+  final Axis direction;
 
   /// The length of the input.
   ///
@@ -385,7 +388,7 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     Widget child = Flex(
-      direction: widget.axis,
+      direction: widget.direction,
       mainAxisSize: MainAxisSize.min,
       children: characters,
     );
