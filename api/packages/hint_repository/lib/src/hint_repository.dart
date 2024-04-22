@@ -1,5 +1,6 @@
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hint_repository/hint_repository.dart';
 
 /// {@template hint_repository}
@@ -9,9 +10,12 @@ class HintRepository {
   /// {@macro hint_repository}
   const HintRepository({
     required DbClient dbClient,
-  }) : _dbClient = dbClient;
+    required GenerativeModel generativeModel,
+  })  : _dbClient = dbClient,
+        _generativeModel = generativeModel;
 
   final DbClient _dbClient;
+  final GenerativeModel _generativeModel;
 
   static const _answersCollection = 'answers';
   static const _hintsCollection = 'hints';
@@ -45,13 +49,47 @@ class HintRepository {
     required String question,
     required List<Hint> previousHints,
   }) async {
-    // TODO(jaime): Call the hint generation service.
-    final hint = Hint(
-      question: question,
-      response: HintResponse.yes,
-    );
+    final context = previousHints
+        .map((e) => '${e.question}: ${e.response.name}')
+        .join(', ');
+    final contextPrompt = previousHints.isEmpty
+        ? ''
+        : "The questions I've been asked so far with their "
+            'corresponding answers are: $context.';
 
-    return hint;
+    final prompt = 'I am solving a crossword puzzle and you are a helpful '
+        'agent that can answer only yes or no questions to assist me in '
+        'guessing what the word is I am trying to identify for a given clue. '
+        'Crossword words can be subjective and use plays on words so be '
+        'liberal with your answers meaning if you think saying "yes" will '
+        'help me guess the word even if technically the answer is "no", '
+        'say "yes". If you think saying "no" will help me guess the word even '
+        'if technically the answer is "yes", say "no". If you think saying '
+        '"yes" or "no" will not help me guess the word even if technically '
+        'the answer is "yes" or "no", say "notApplicable". If you think the '
+        'question is offensive or not appropriate for the game, '
+        'say "notApplicable".\nThe word I am trying to guess is "$wordAnswer", '
+        'and the question I\'ve been given is "$question". $contextPrompt';
+
+    try {
+      final response = await _generativeModel.generateContent(
+        [Content.text(prompt)],
+      );
+      final hintResponse = HintResponse.values.firstWhere(
+        (element) => element.name == response.text,
+        orElse: () => HintResponse.notApplicable,
+      );
+
+      final hint = Hint(
+        question: question,
+        response: hintResponse,
+      );
+      return hint;
+    } catch (e, stackTrace) {
+      final message = 'Error generating hint for word $wordAnswer '
+          'with question $question: $e';
+      throw HintException(message, stackTrace);
+    }
   }
 
   /// Fetches the previous asked hints for the given word.
