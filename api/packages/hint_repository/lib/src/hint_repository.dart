@@ -15,9 +15,28 @@ class HintRepository {
 
   static const _answersCollection = 'answers';
   static const _hintsCollection = 'hints';
+  static const _boardInfoCollection = 'boardInfo';
+
+  static const _defaultMaxHints = 10;
 
   String _hintsPath(String wordId) =>
       '$_answersCollection/$wordId/$_hintsCollection';
+
+  /// Returns the maximum hints allowed for a word.
+  Future<int> getMaxHints() async {
+    try {
+      final results = await _dbClient.findBy(
+        _boardInfoCollection,
+        'type',
+        'max_hints',
+      );
+
+      final data = results.first.data;
+      return (data['value'] as num).toInt();
+    } catch (_) {
+      return _defaultMaxHints;
+    }
+  }
 
   /// Generates a new hint for the given word, having the context from previous
   /// hints.
