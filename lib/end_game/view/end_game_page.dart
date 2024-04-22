@@ -11,8 +11,8 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 part '../widgets/leaderboard_button.dart';
 part 'end_game_view_content.dart';
 
-class EndGameView extends StatelessWidget {
-  const EndGameView({super.key});
+class EndGamePage extends StatelessWidget {
+  const EndGamePage({super.key});
 
   @override
   Widget build(BuildContext context) {

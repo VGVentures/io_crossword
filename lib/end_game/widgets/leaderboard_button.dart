@@ -1,4 +1,4 @@
-part of '../view/end_game_view.dart';
+part of '../view/end_game_page.dart';
 
 @visibleForTesting
 class LeaderboardButton extends StatelessWidget {
@@ -9,11 +9,11 @@ class LeaderboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    // todo change color border
     return OutlinedButton(
       onPressed: () {
         Navigator.push(context, LeaderboardPage.route());
       },
+      style: Theme.of(context).io.outlineButtonTheme.simpleBorder,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -1,4 +1,4 @@
-part of 'end_game_view.dart';
+part of 'end_game_page.dart';
 
 @visibleForTesting
 class EndGameContent extends StatelessWidget {
@@ -21,7 +21,7 @@ class EndGameContent extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        const _HowMade(),
+        const EndGameHowMade(),
         const SizedBox(height: 24),
         const Center(
           child: PlayerInitials(),
@@ -59,7 +59,7 @@ class ActionButtonsEndGame extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {}, // coverage:ignore-line
                   icon: const Icon(Icons.gamepad),
                   label: Text(l10n.playAgain),
                 ),
@@ -93,8 +93,10 @@ class ActionButtonsEndGame extends StatelessWidget {
   }
 }
 
-class _HowMade extends StatelessWidget {
-  const _HowMade();
+@visibleForTesting
+class EndGameHowMade extends StatelessWidget {
+  @visibleForTesting
+  const EndGameHowMade({super.key});
 
   @override
   Widget build(BuildContext context) {
