@@ -55,11 +55,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       newWord = horizontalWord ?? verticalWord!;
     }
 
-    if (newWord == currentWord) {
-      // The new word is the same as the previous word.
-      return;
-    }
-
+    if (newWord == currentWord) return;
     emit(
       state.copyWith(
         status: WordSelectionStatus.preSolving,
