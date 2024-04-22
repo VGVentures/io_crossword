@@ -39,6 +39,7 @@ class CrosswordLetterData extends Equatable {
   /// {@macro crossword_letter_data}
   const CrosswordLetterData({
     required this.index,
+    required this.chunkIndex,
     required this.character,
     required this.words,
   });
@@ -48,6 +49,7 @@ class CrosswordLetterData extends Equatable {
     BoardSection chunk,
   ) {
     final letters = <CrosswordLetterIndex, CrosswordLetterData>{};
+    final chunkIndex = (chunk.position.x, chunk.position.y);
 
     for (final word in chunk.words) {
       for (var i = 0; i < word.length; i++) {
@@ -62,6 +64,7 @@ class CrosswordLetterData extends Equatable {
             word.axis == Axis.horizontal ? (word, words.$2) : (words.$1, word);
 
         letters[index] = CrosswordLetterData(
+          chunkIndex: chunkIndex,
           character: character,
           index: index,
           words: words,
@@ -75,6 +78,9 @@ class CrosswordLetterData extends Equatable {
   /// {@macro crossword_letter_index}
   final CrosswordLetterIndex index;
 
+  /// {@macro crossword_chunk_index}
+  final CrosswordChunkIndex chunkIndex;
+
   /// The character of the letter.
   ///
   /// `null` if it is yet to be resolved.
@@ -86,7 +92,7 @@ class CrosswordLetterData extends Equatable {
   final CrosswordLetterWords words;
 
   @override
-  List<Object?> get props => [index, character, words];
+  List<Object?> get props => [index, chunkIndex, character, words];
 }
 
 /// {@template crossword_letter}
