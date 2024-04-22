@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 
 part 'word_selection_event.dart';
 part 'word_selection_state.dart';
@@ -12,6 +13,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   })  : _crosswordResource = crosswordResource,
         super(const WordSelectionState.initial()) {
     on<WordSelected>(_onWordSelected);
+    on<LetterSelected>(_onLetterSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
     on<WordSolveAttempted>(_onWordAttemptRequested);
@@ -27,6 +29,44 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       WordSelectionState(
         status: WordSelectionStatus.preSolving,
         word: event.selectedWord,
+      ),
+    );
+  }
+
+  /// {@macro letter_selected}
+  void _onLetterSelected(
+    LetterSelected event,
+    Emitter<WordSelectionState> emit,
+  ) {
+    final horizontalWord = event.letter.words.$1;
+    final hasHorizontalWord = horizontalWord != null;
+
+    final verticalWord = event.letter.words.$2;
+    final hasVerticalWord = verticalWord != null;
+
+    final selectedWord = state.word?.word;
+
+    late final Word newSelectedWord;
+    if (hasHorizontalWord && selectedWord != horizontalWord) {
+      newSelectedWord = horizontalWord;
+    } else if (hasVerticalWord && selectedWord != verticalWord) {
+      newSelectedWord = verticalWord;
+    } else {
+      newSelectedWord = horizontalWord ?? verticalWord!;
+    }
+
+    if (newSelectedWord == selectedWord) {
+      // The selected word is the same as the previously selected word.
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        status: WordSelectionStatus.preSolving,
+        word: SelectedWord(
+          section: event.letter.chunkIndex,
+          word: newSelectedWord,
+        ),
       ),
     );
   }
