@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
 
 import '../../helpers/helpers.dart';
@@ -9,11 +10,20 @@ import '../../helpers/helpers.dart';
 void main() {
   group('$ShareScorePage', () {
     testWidgets(
-      'renders correctly',
+      'renders ScoreInformation',
       (tester) async {
         await tester.pumpApp(ShareScorePage());
 
         expect(find.byType(ScoreInformation), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders PlayerInitials',
+      (tester) async {
+        await tester.pumpApp(ShareScorePage());
+
+        expect(find.byType(PlayerInitials), findsOneWidget);
       },
     );
 
