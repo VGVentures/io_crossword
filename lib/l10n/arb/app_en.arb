@@ -81,6 +81,30 @@
   "@solveIt": {
     "description": "Solve it label"
   },
+  "askGeminiHint": "Ask Gemini for a hint",
+  "@askGeminiHint": {
+    "description": "Ask Gemini for a hint label"
+  },
+  "askYesOrNoQuestion": "Ask a \"Yes or No\" question",
+  "@askYesOrNoQuestion": {
+    "description": "Ask a yes or no question text"
+  },
+  "runOutOfHints": "You've run out of hints",
+  "@runOutOfHints": {
+    "description": "Run out of hints label"
+  },
+  "hintsRemaining": "{remaining} of {total} hints remaining",
+  "@hintsRemaining": {
+    "description": "Hints remaining label.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
@@ -88,6 +112,10 @@
   "hint": "Hint",
   "@hint": {
     "description": "hint label"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close label"
   },
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
@@ -217,10 +245,6 @@
   "@findNewWord": {
     "description": "Find new word label"
   },
-  "points": "Points",
-  "@points": {
-    "description": "Points label"
-  },
   "totalScore": "Total score",
   "@totalScore": {
     "description": "Total score label"
@@ -276,5 +300,38 @@
   "leave": "Leave",
   "@leave": {
     "description": "Action to leave something behind."
+  },
+  "percentage": "{value}%",
+  "@percentage": {
+    "description": "Value displayed as a percentage.",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "endingGame": "Ending the game",
+  "@endingGame": {
+    "description": "Title used to check if the user wants to end the game."
+  },
+  "sureToEndGame": "Are you sure you want to submit your score and finish the game?",
+  "@sureToEndGame": {
+    "description": "Subtitle used to check if the user wants to end the game."
+  },
+  "endGame": "End game",
+  "@endGame": {
+    "description": "End game label."
+  },
+  "thanksForContributing": "Thanks for contributing!",
+  "@thanksForContributing": {
+    "description": "Thanks for contributing! label."
+  },
+  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "@claimBadgeContributing": {
+    "description": "Claim badge for contributing"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share label"
   }
 }

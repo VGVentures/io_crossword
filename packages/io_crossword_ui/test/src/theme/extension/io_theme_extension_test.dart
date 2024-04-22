@@ -15,6 +15,8 @@ class _MockIoWordInputStyle extends Mock implements IoWordInputStyle {}
 
 class _MockIoColorScheme extends Mock implements IoColorScheme {}
 
+class _MockIoOutlineButtonTheme extends Mock implements IoOutlineButtonTheme {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
@@ -26,6 +28,7 @@ void main() {
           physicalModel: _MockIoPhysicalModelStyle(),
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -41,6 +44,7 @@ void main() {
           physicalModel: _MockIoPhysicalModelStyle(),
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -60,6 +64,7 @@ void main() {
           physicalModel: _MockIoPhysicalModelStyle(),
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -75,6 +80,7 @@ void main() {
           physicalModel: _MockIoPhysicalModelStyle(),
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
         );
 
         when(
@@ -95,6 +101,10 @@ void main() {
         when(
           () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
         ).thenReturn(_MockIoColorScheme());
+
+        when(
+          () => theme.outlineButtonTheme.lerp(theme.outlineButtonTheme, 0.5),
+        ).thenReturn(_MockIoOutlineButtonTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -130,6 +140,7 @@ void main() {
               physicalModel: _MockIoPhysicalModelStyle(),
               wordInput: _MockIoWordInputStyle(),
               colorScheme: _MockIoColorScheme(),
+              outlineButtonTheme: _MockIoOutlineButtonTheme(),
             ),
           ],
         );

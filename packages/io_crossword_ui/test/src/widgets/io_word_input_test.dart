@@ -330,6 +330,37 @@ void main() {
       );
 
       testWidgets(
+        'with focused characters vertically',
+        tags: TestTag.golden,
+        (tester) async {
+          await tester.binding.setSurfaceSize(const Size(150, 500));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+
+          final themeData = IoCrosswordTheme().themeData;
+
+          await tester.pumpWidget(
+            _GoldenSubject(
+              themeData: themeData,
+              child: IoWordInput.alphabetic(
+                length: 5,
+                direction: Axis.vertical,
+                characters: const {0: 'A', 2: 'C'},
+              ),
+            ),
+          );
+
+          final subject = find.byType(IoWordInput);
+          await tester.tap(subject);
+          await tester.pumpAndSettle();
+
+          await expectLater(
+            subject,
+            matchesGoldenFile(goldenKey('focused_vertically')),
+          );
+        },
+      );
+
+      testWidgets(
         'with filled character',
         tags: TestTag.golden,
         (tester) async {

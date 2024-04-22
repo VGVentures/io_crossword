@@ -19,6 +19,7 @@ class IoCrosswordTheme {
       physicalModel: _physicalModel,
       colorScheme: ioColorScheme,
       wordInput: _textInput,
+      outlineButtonTheme: _ioOutlineButtonTheme,
     );
 
     return ThemeData(
@@ -187,12 +188,10 @@ class IoCrosswordTheme {
     final ioColorScheme = this.ioColorScheme;
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(171, 56),
+        minimumSize: const Size(162, 64),
         foregroundColor: IoCrosswordColors.seedWhite,
-        padding: const EdgeInsets.symmetric(
-          vertical: 17,
-          horizontal: 18,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        textStyle: IoCrosswordTextStyles.bodyLG.medium,
       ).copyWith(
         shape: MaterialStateProperty.resolveWith(
           (states) {
@@ -237,6 +236,34 @@ class IoCrosswordTheme {
     );
   }
 
+  IoOutlineButtonTheme get _ioOutlineButtonTheme {
+    return IoOutlineButtonTheme(
+      simpleBorder: OutlinedButton.styleFrom(
+        minimumSize: const Size(171, 56),
+        foregroundColor: IoCrosswordColors.seedWhite,
+        padding: const EdgeInsets.symmetric(
+          vertical: 17,
+          horizontal: 18,
+        ),
+      ).copyWith(
+        shape: MaterialStateProperty.resolveWith(
+          (states) {
+            if (states.contains(MaterialState.disabled)) {
+              return const StadiumBorder(side: BorderSide(width: 2));
+            }
+
+            return const StadiumBorder(
+              side: BorderSide(
+                width: 2,
+                color: IoCrosswordColors.mediumGray,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   IoWordTheme get _wordTheme {
     final colorScheme = this.colorScheme;
 
@@ -248,6 +275,7 @@ class IoCrosswordTheme {
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.31),
         textStyle: const TextStyle(
+          color: IoCrosswordColors.black,
           fontFamily: 'Google Sans',
           fontSize: 10.34,
           fontWeight: FontWeight.w700,
@@ -261,6 +289,7 @@ class IoCrosswordTheme {
         backgroundColor: colorScheme.primary,
         borderRadius: BorderRadius.circular(0.61),
         textStyle: const TextStyle(
+          color: IoCrosswordColors.black,
           fontFamily: 'Google Sans',
           fontSize: 14.61,
           fontWeight: FontWeight.w700,
@@ -276,6 +305,7 @@ class IoCrosswordTheme {
   IoIconButtonTheme get _iconButtonTheme {
     return const IoIconButtonTheme(
       outlined: ButtonStyle(
+        iconSize: MaterialStatePropertyAll<double>(20),
         shape: MaterialStatePropertyAll<OutlinedBorder>(
           CircleBorder(side: BorderSide(color: IoCrosswordColors.mediumGray)),
         ),
@@ -283,6 +313,7 @@ class IoCrosswordTheme {
         backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent),
       ),
       filled: ButtonStyle(
+        iconSize: MaterialStatePropertyAll<double>(20),
         iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
         backgroundColor:
             MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
@@ -344,9 +375,7 @@ class IoCrosswordTheme {
   /// Gemini input decoration theme.
   static InputDecorationTheme get geminiInputDecorationTheme {
     const borderRadius = BorderRadius.all(Radius.circular(40));
-    const borderSide = BorderSide(
-      width: 2,
-    );
+    const borderSide = BorderSide(width: 2);
 
     return InputDecorationTheme(
       outlineBorder: borderSide,
@@ -357,6 +386,7 @@ class IoCrosswordTheme {
       border: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
+        borderSide: borderSide,
       ),
       disabledBorder: const OutlineInputBorder(
         borderRadius: borderRadius,
@@ -365,23 +395,24 @@ class IoCrosswordTheme {
       enabledBorder: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
+        borderSide: borderSide,
       ),
       focusedBorder: const GradientInputBorder(
         gradient: IoCrosswordColors.geminiGradient,
         borderRadius: borderRadius,
         borderSide: borderSide,
       ),
-      errorBorder: const OutlineInputBorder(
+      errorBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          width: 1.5,
+          width: borderSide.width,
           color: IoCrosswordColors.redError,
         ),
       ),
-      focusedErrorBorder: const OutlineInputBorder(
+      focusedErrorBorder: OutlineInputBorder(
         borderRadius: borderRadius,
         borderSide: BorderSide(
-          width: 2,
+          width: borderSide.width,
           color: IoCrosswordColors.redError,
         ),
       ),

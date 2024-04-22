@@ -59,6 +59,9 @@ class ApiClient {
   late final CrosswordResource crosswordResource =
       CrosswordResource(apiClient: this);
 
+  /// {@macro hint_resource}
+  late final HintResource hintResource = HintResource(apiClient: this);
+
   Future<http.Response> _handleUnauthorized(
     Future<http.Response> Function() sendRequest,
   ) async {

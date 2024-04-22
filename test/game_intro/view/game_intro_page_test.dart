@@ -13,6 +13,8 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/view/initials_page.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:mockingjay/mockingjay.dart';
@@ -22,8 +24,8 @@ import '../../helpers/helpers.dart';
 class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
     implements GameIntroBloc {}
 
-class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
-    implements CrosswordBloc {}
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
 
 void main() {
   group('GameIntroPage', () {
@@ -36,7 +38,7 @@ void main() {
 
   group('GameIntroView', () {
     late GameIntroBloc gameIntroBloc;
-    late CrosswordBloc crosswordBloc;
+    late PlayerBloc playerBloc;
     late Widget widget;
 
     late AppLocalizations l10n;
@@ -47,7 +49,7 @@ void main() {
 
     setUp(() {
       gameIntroBloc = _MockGameIntroBloc();
-      crosswordBloc = _MockCrosswordBloc();
+      playerBloc = _MockPlayerBloc();
       widget = BlocProvider.value(
         value: gameIntroBloc,
         child: GameIntroView(),
@@ -55,13 +57,13 @@ void main() {
     });
 
     testWidgets(
-      'renders the $WelcomePage by default',
+      'renders the $LoadingPage by default',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
 
         await tester.pumpApp(widget);
 
-        expect(find.byType(WelcomePage), findsOneWidget);
+        expect(find.byType(LoadingPage), findsOneWidget);
       },
     );
 
@@ -162,15 +164,18 @@ void main() {
 
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
 
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            initials: 'ABC',
+        when(() => playerBloc.state).thenReturn(
+          PlayerState(
             mascot: Mascots.sparky,
+            player: Player.empty.copyWith(
+              initials: 'ABC',
+              mascot: Mascots.sparky,
+            ),
           ),
         );
 
         await tester.pumpApp(
-          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
           BlocProvider.value(
             value: gameIntroBloc,
             child: GameIntroView(flowController: flowController),

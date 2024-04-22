@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
-class TeamSelectionCubit extends Cubit<int> {
-  TeamSelectionCubit() : super(0);
+part 'team_selection_state.dart';
+
+class TeamSelectionCubit extends Cubit<TeamSelectionState> {
+  TeamSelectionCubit() : super(const TeamSelectionState());
 
   void selectTeam(int teamIndex) {
-    emit(teamIndex);
+    emit(state.copyWith(index: teamIndex));
   }
 }

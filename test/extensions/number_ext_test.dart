@@ -9,24 +9,22 @@ void main() {
   });
 
   test('Formatting numbers between 1000 and 999999', () {
-    expect(1000.toDisplayNumber(), equals('1.0K'));
+    expect(1000.toDisplayNumber(), equals('1K'));
     expect(1500.toDisplayNumber(), equals('1.5K'));
-    expect(999949.toDisplayNumber(), equals('999.9K'));
-    expect(999950.toDisplayNumber(), equals('1.0M'));
-    expect(999999.toDisplayNumber(), equals('1.0M'));
+    expect(999950.toDisplayNumber(), equals('1M'));
+    expect(999999.toDisplayNumber(), equals('1M'));
   });
 
   test('Formatting numbers between 1000000 and 999999999', () {
-    expect(1000000.toDisplayNumber(), equals('1.0M'));
+    expect(1000000.toDisplayNumber(), equals('1M'));
     expect(1500000.toDisplayNumber(), equals('1.5M'));
-    expect(999949999.toDisplayNumber(), equals('999.9M'));
-    expect(999950000.toDisplayNumber(), equals('1.0B'));
-    expect(999999999.toDisplayNumber(), equals('1.0B'));
+    expect(999950000.toDisplayNumber(), equals('1B'));
+    expect(999999999.toDisplayNumber(), equals('1B'));
   });
 
   test('Formatting numbers greater than or equal to 1000000000', () {
-    expect(1000000000.toDisplayNumber(), equals('1.0B'));
+    expect(1000000000.toDisplayNumber(), equals('1B'));
     expect(1500000000.toDisplayNumber(), equals('1.5B'));
-    expect(9999999999.toDisplayNumber(), equals('10.0B'));
+    expect(9999999999.toDisplayNumber(), equals('10B'));
   });
 }

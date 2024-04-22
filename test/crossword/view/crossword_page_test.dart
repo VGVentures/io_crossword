@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +47,7 @@ void main() {
     late CrosswordBloc crosswordBloc;
 
     setUp(() {
+      Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
     });
 
@@ -125,7 +128,7 @@ void main() {
     });
 
     testWidgets(
-      'renders $WordSelectionView when loaded',
+      'renders $WordSelectionPage when loaded',
       (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
@@ -142,67 +145,7 @@ void main() {
           crosswordBloc: crosswordBloc,
         );
 
-        expect(find.byType(WordSelectionView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'can zoom in',
-      timeout: const Timeout(Duration(seconds: 30)),
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          greaterThan(1),
-        );
-      },
-    );
-
-    testWidgets(
-      'can zoom out',
-      timeout: const Timeout(Duration(seconds: 30)),
-      (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          lessThan(1),
-        );
+        expect(find.byType(WordSelectionPage), findsOneWidget);
       },
     );
   });

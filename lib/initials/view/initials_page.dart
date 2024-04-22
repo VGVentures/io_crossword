@@ -2,10 +2,10 @@ import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class InitialsPage extends StatelessWidget {
@@ -42,7 +42,7 @@ class _InitialsViewState extends State<InitialsView> {
   }
 
   void _onSuccess(BuildContext context, InitialsState state) {
-    context.read<CrosswordBloc>().add(InitialsSelected(state.initials.value));
+    context.read<PlayerBloc>().add(InitialsSelected(state.initials.value));
     context.flow<GameIntroStatus>().update((_) => GameIntroStatus.howToPlay);
   }
 

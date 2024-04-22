@@ -19,9 +19,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
-    on<MascotSelected>(_onMascotSelected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
-    on<InitialsSelected>(_onInitialsSelected);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -31,6 +29,9 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    final wasAlreadyRequested = state.sections.containsKey(event.position);
+    if (wasAlreadyRequested) return;
+
     return emit.forEach(
       _crosswordRepository.watchSectionFromPosition(
         event.position.$1,
@@ -117,13 +118,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     emit(state.removeSelectedWord());
   }
 
-  void _onMascotSelected(
-    MascotSelected event,
-    Emitter<CrosswordState> emit,
-  ) {
-    emit(state.copyWith(mascot: event.mascot));
-  }
-
   FutureOr<void> _onBoardLoadingInformationRequested(
     BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
@@ -146,14 +140,5 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         ),
       );
     }
-  }
-
-  void _onInitialsSelected(
-    InitialsSelected event,
-    Emitter<CrosswordState> emit,
-  ) {
-    emit(
-      state.copyWith(initials: event.initials),
-    );
   }
 }

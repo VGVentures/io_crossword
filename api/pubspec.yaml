@@ -23,6 +23,8 @@ dependencies:
   game_domain:
     path: packages/game_domain
   google_cloud: ^0.2.0
+  hint_repository:
+    path: packages/hint_repository
   jwt_middleware:
     path: packages/jwt_middleware
   leaderboard_repository:

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/project_details/view/project_details_view.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -32,7 +33,12 @@ class CrosswordDrawer extends StatelessWidget {
       DrawerItem(
         title: l10n.projectDetails,
         icon: Icons.info,
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          showDialog<AlertDialog>(
+            context: context,
+            builder: (context) => const ProjectDetailsView(),
+          );
+        },
       ),
       DrawerItem(
         title: l10n.exploreAiStudio,

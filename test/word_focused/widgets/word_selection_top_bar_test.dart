@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -16,7 +16,10 @@ class _MockWordSelectionBloc
 
 class _FakeWord extends Fake implements Word {
   @override
-  String get id => 'wordId';
+  String get id => '11000';
+
+  @override
+  Axis get axis => Axis.horizontal;
 }
 
 void main() {
@@ -43,7 +46,7 @@ void main() {
       testWidgets('the word identifier', (tester) async {
         await tester.pumpApp(widget);
 
-        expect(find.text('wordId'), findsOneWidget);
+        expect(find.text('11,000 ACROSS'), findsOneWidget);
       });
 
       testWidgets('empty when no word is selected', (tester) async {
@@ -57,7 +60,7 @@ void main() {
 
         await tester.pumpApp(widget);
 
-        expect(find.text(''), findsOneWidget);
+        expect(find.byType(SizedBox), findsAtLeast(1));
       });
 
       testWidgets('a $CloseWordSelectionIconButton', (tester) async {

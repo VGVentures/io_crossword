@@ -56,6 +56,51 @@ void main() {
         }
       });
 
+      group('IoOutlineButtonTheme', () {
+        final outlinedBorder = IoCrosswordTheme()
+            .themeData
+            .io
+            .outlineButtonTheme
+            .simpleBorder
+            .shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays mediumGray color when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<StadiumBorder>().having(
+                (border) => border.side.color,
+                'Medium gray gradient',
+                IoCrosswordColors.mediumGray,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays mediumGray color with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<StadiumBorder>().having(
+                  (border) => border.side.color,
+                  'Medium gray gradient',
+                  IoCrosswordColors.mediumGray,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
       group('geminiOutlinedButtonThemeData', () {
         final outlinedBorder =
             IoCrosswordTheme.geminiOutlinedButtonThemeData.style!.shape!;

@@ -105,6 +105,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     game = CrosswordGame(
       crosswordBloc: context.read(),
       wordSelectionBloc: context.read(),
+      playerBloc: context.read(),
     );
   }
 
@@ -115,7 +116,7 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
     return Stack(
       children: [
         GameWidget(game: game),
-        const WordSelectionView(),
+        const WordSelectionPage(),
         if (layout == IoLayoutData.large) const BottomBar(),
         _ZoomControls(game: game),
       ],

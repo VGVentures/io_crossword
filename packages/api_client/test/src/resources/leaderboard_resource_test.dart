@@ -132,5 +132,42 @@ void main() {
         );
       });
     });
+
+    group('resetStreak', () {
+      setUp(() {
+        when(() => apiClient.post(any())).thenAnswer((_) async => response);
+      });
+
+      test('makes the correct call', () async {
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        await resource.resetStreak();
+
+        verify(
+          () => apiClient.post(
+            '/game/reset_streak',
+          ),
+        ).called(1);
+      });
+
+      test('throws ApiClientError when request fails', () async {
+        when(() => response.statusCode)
+            .thenReturn(HttpStatus.internalServerError);
+        when(() => response.body).thenReturn('Oops');
+
+        await expectLater(
+          () => resource.resetStreak(),
+          throwsA(
+            isA<ApiClientError>().having(
+              (e) => e.cause,
+              'cause',
+              equals(
+                'POST /game/reset_streak returned status 500 '
+                'with the following response: "Oops"',
+              ),
+            ),
+          ),
+        );
+      });
+    });
   });
 }

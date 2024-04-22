@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -38,9 +39,11 @@ class BottomBarContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OutlinedButton(
-              onPressed: () {}, // coverage:ignore-line
+              onPressed: () {
+                EndGameCheck.openDialog(context);
+              },
               child: Text(
-                l10n.submitScore,
+                l10n.endGame,
                 style: theme.textTheme.bodySmall,
               ),
             ),
