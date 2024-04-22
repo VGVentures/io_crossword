@@ -20,6 +20,7 @@ void main() {
   group('$GeminiHintButton', () {
     late AppLocalizations l10n;
     late HintBloc hintBloc;
+    late Widget widget;
 
     setUpAll(() async {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
@@ -28,16 +29,20 @@ void main() {
     setUp(() {
       hintBloc = _MockHintBloc();
       when(() => hintBloc.state).thenReturn(const HintState());
+      widget = BlocProvider.value(
+        value: hintBloc,
+        child: GeminiHintButton(),
+      );
     });
 
     testWidgets('displays hint text', (tester) async {
-      await tester.pumpApp(GeminiHintButton());
+      await tester.pumpApp(widget);
 
       expect(find.text(l10n.hint), findsOneWidget);
     });
 
     testWidgets('displays gemini icon', (tester) async {
-      await tester.pumpApp(GeminiHintButton());
+      await tester.pumpApp(widget);
 
       expect(find.byIcon(IoIcons.gemini), findsOneWidget);
     });
@@ -48,12 +53,7 @@ void main() {
         when(() => hintBloc.state).thenReturn(
           HintState(hints: [], maxHints: 3),
         );
-        await tester.pumpApp(
-          BlocProvider.value(
-            value: hintBloc,
-            child: GeminiHintButton(),
-          ),
-        );
+        await tester.pumpApp(widget);
 
         await tester.tap(find.byType(GeminiHintButton));
 
@@ -68,12 +68,8 @@ void main() {
         when(() => hintBloc.state).thenReturn(
           HintState(hints: [hint, hint, hint], maxHints: 3),
         );
-        await tester.pumpApp(
-          BlocProvider.value(
-            value: hintBloc,
-            child: GeminiHintButton(),
-          ),
-        );
+        await tester.pumpApp(widget);
+
         await tester.tap(find.byType(GeminiHintButton));
 
         verifyNever(() => hintBloc.add(const HintModeEntered()));
