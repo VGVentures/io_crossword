@@ -34,6 +34,7 @@ class _CrosswordStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
@@ -72,27 +73,28 @@ class _CrosswordStack extends StatelessWidget {
               top: chunk.$2 * crosswordLayout.chunkSize.height,
               child: CrosswordChunk(index: chunk),
             ),
-          BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-            selector: (state) => state.word,
-            builder: (context, selectedWord) {
-              if (selectedWord == null) return const SizedBox.shrink();
+          if (layout == IoLayoutData.large)
+            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+              selector: (state) => state.word,
+              builder: (context, selectedWord) {
+                if (selectedWord == null ||
+                    selectedWord.word.solvedTimestamp != null) {
+                  return const SizedBox.shrink();
+                }
 
-              // TODO(alestiago): Transform the interactive viewer to center the
-              // new word in the viewport:
-              // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6472452796
-
-              final word = selectedWord.word;
-              return Positioned(
-                left: (selectedWord.section.$1 *
-                        crosswordLayout.chunkSize.width) +
-                    (word.position.x * crosswordLayout.cellSize.width),
-                top: (selectedWord.section.$2 *
-                        crosswordLayout.chunkSize.height) +
-                    (word.position.y * crosswordLayout.cellSize.height),
-                child: IoWordInput.alphabetic(length: selectedWord.word.length),
-              );
-            },
-          ),
+                final word = selectedWord.word;
+                return Positioned(
+                  left: (selectedWord.section.$1 *
+                          crosswordLayout.chunkSize.width) +
+                      (word.position.x * crosswordLayout.cellSize.width),
+                  top: (selectedWord.section.$2 *
+                          crosswordLayout.chunkSize.height) +
+                      (word.position.y * crosswordLayout.cellSize.height),
+                  child:
+                      IoWordInput.alphabetic(length: selectedWord.word.length),
+                );
+              },
+            ),
         ],
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 /// {@template crossword_letter_index}
 /// Represents the position of a letter in a crossword chunk.
@@ -113,29 +115,35 @@ class CrosswordLetter extends StatelessWidget {
   /// {@macro crossword_letter_data}
   final CrosswordLetterData data;
 
+  void _onTap(BuildContext context) {
+    context.read<WordSelectionBloc>().add(LetterSelected(letter: data));
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final crosswordData = CrosswordLayoutScope.of(context);
 
-    final child = data.character != null
-        ? Center(
-            child: Text(
-              data.character!,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium!.copyWith(color: Colors.black),
-            ),
-          )
-        : null;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(),
-        color: Colors.white,
-      ),
-      child: SizedBox.fromSize(
-        size: crosswordData.cellSize,
-        child: child,
+    return GestureDetector(
+      onTap: () => _onTap(context),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          color: Colors.white,
+        ),
+        child: SizedBox.fromSize(
+          size: crosswordData.cellSize,
+          child: data.character == null
+              ? null
+              : Center(
+                  child: Text(
+                    data.character!,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                ),
+        ),
       ),
     );
   }
