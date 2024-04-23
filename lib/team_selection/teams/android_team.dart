@@ -17,6 +17,16 @@ class AndroidTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.androidLookUp;
 
   @override
+  AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerAndroid;
+
+  @override
+  AssetGenImage get howToPlayFindWord =>
+      Assets.images.howToPlayFindAWordAndroid;
+
+  @override
+  AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakAndroid;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 7,
         columns: 4,

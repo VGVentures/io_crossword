@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class HowToPlayContent extends StatefulWidget {
-  const HowToPlayContent({super.key});
+  const HowToPlayContent({
+    required this.mascot,
+    super.key,
+  });
+
+  final Mascots mascot;
 
   @override
-  State<HowToPlayContent> createState() => _AboutHowToPlayContentState();
+  State<HowToPlayContent> createState() => _HowToPlayContentState();
 }
 
-class _AboutHowToPlayContentState extends State<HowToPlayContent>
+class _HowToPlayContentState extends State<HowToPlayContent>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -32,26 +39,31 @@ class _AboutHowToPlayContentState extends State<HowToPlayContent>
 
     final howToPlaySteps = [
       HowToPlayStep(
+        key: const Key('how_to_play_step_1'),
         title: l10n.aboutHowToPlayFirstInstructionsTitle,
         message: l10n.aboutHowToPlayFirstInstructions,
-        image: Assets.images.howToPlayFindAWord.path,
+        image: widget.mascot.teamMascot.howToPlayFindWord.path,
       ),
       HowToPlayStep(
+        key: const Key('how_to_play_step_2'),
         title: l10n.aboutHowToPlaySecondInstructionsTitle,
         message: l10n.aboutHowToPlaySecondInstructions,
-        image: Assets.images.howToPlayAnswer.path,
+        image: widget.mascot.teamMascot.howToPlayAnswer.path,
       ),
       HowToPlayStep(
+        key: const Key('how_to_play_step_3'),
         title: l10n.aboutHowToPlayThirdInstructionsTitle,
         message: l10n.aboutHowToPlayThirdInstructions,
-        image: Assets.images.howToPlayStreak.path,
+        image: widget.mascot.teamMascot.howToPlayStreak.path,
       ),
       HowToPlayStep(
+        key: const Key('how_to_play_step_4'),
         title: l10n.aboutHowToPlayFourthInstructionsTitle,
         message: l10n.aboutHowToPlayFourthInstructions,
         image: Assets.images.howToPlayHints.path,
       ),
       HowToPlayStep(
+        key: const Key('how_to_play_step_5'),
         title: l10n.aboutHowToPlayFifthInstructionsTitle,
         message: l10n.aboutHowToPlayFifthInstructions,
         image: Assets.images.howToPlayBadge.path,
@@ -69,6 +81,7 @@ class _AboutHowToPlayContentState extends State<HowToPlayContent>
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
+            color: IoCrosswordColors.darkGray,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: IoCrosswordColors.black,
@@ -85,12 +98,12 @@ class _AboutHowToPlayContentState extends State<HowToPlayContent>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: howToPlaySteps,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: howToPlaySteps[state],
                   ),
                 ),
+                const SizedBox(height: 20),
                 Flexible(
                   child: _TabSelector(
                     tabController: _tabController,
@@ -175,31 +188,55 @@ class HowToPlayStep extends StatelessWidget {
 
   final String image;
 
+  static const double textHeight = 66;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Text(
+    final layout = IoLayout.of(context);
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
-        ),
-        const SizedBox(height: 24),
-        Flexible(
-          child: Image.asset(image),
-        ),
-        const SizedBox(height: 20),
-        Expanded(
-          child: Text(
-            message,
-            maxLines: 3,
-            style: Theme.of(context).textTheme.titleMedium,
+          const SizedBox(height: 24),
+          Container(
+            width: double.infinity,
+            height: layout == IoLayoutData.small ? 153 : 172,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: IoCrosswordColors.mediumGray,
+            ),
+            child: Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 64, vertical: 16),
+                child: Image.asset(
+                  image,
+                ),
+              ),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 20),
+          SizedBox(
+            height: textHeight,
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

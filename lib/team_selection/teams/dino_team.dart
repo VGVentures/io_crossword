@@ -17,6 +17,15 @@ class DinoTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
 
   @override
+  AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDino;
+
+  @override
+  AssetGenImage get howToPlayFindWord => Assets.images.howToPlayFindAWordDino;
+
+  @override
+  AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDino;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 14,
         columns: 2,

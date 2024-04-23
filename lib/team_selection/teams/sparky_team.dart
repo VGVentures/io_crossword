@@ -17,6 +17,15 @@ class SparkyTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.sparkyLookUp;
 
   @override
+  AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerSparky;
+
+  @override
+  AssetGenImage get howToPlayFindWord => Assets.images.howToPlayFindAWordSparky;
+
+  @override
+  AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakSparky;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 16,
         columns: 5,

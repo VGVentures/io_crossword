@@ -31,9 +31,13 @@ class HowToPlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final layout = IoLayout.of(context);
 
     return Scaffold(
+      appBar: IoAppBar(
+        crossword: l10n.crossword,
+      ),
       body: switch (layout) {
         IoLayoutData.small => const _HowToPlaySmall(),
         IoLayoutData.large => const _HowToPlayLarge(),
@@ -56,44 +60,43 @@ class _HowToPlaySmall extends StatelessWidget {
 
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
-    void onPlay(BuildContext context) {
-      context.flow<GameIntroStatus>().complete();
-    }
-
     return Stack(
       children: [
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
-            width: 200,
-            height: 400,
+            width: 400,
+            height: 800,
             child: LookUp(mascot!),
           ),
         ),
         if (isCreating)
           const Align(child: CircularProgressIndicator())
         else
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                16,
-                20,
-                48,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Flexible(
-                    child: HowToPlayContent(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              16,
+              20,
+              48,
+            ),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 375),
+                    child: HowToPlayContent(mascot: mascot),
                   ),
-                  OutlinedButton(
-                    onPressed: () => onPlay(context),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: OutlinedButton(
+                    onPressed: () => context.flow<GameIntroStatus>().complete(),
                     child: Text(l10n.playNow),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
       ],
@@ -115,43 +118,41 @@ class _HowToPlayLarge extends StatelessWidget {
 
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
-    void onPlay(BuildContext context) {
-      context.flow<GameIntroStatus>().complete();
-    }
-
     return Stack(
       children: [
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
-            width: 200,
-            height: 400,
+            width: 400,
+            height: 800,
             child: LookUp(mascot!),
           ),
         ),
         if (isCreating)
           const Align(child: CircularProgressIndicator())
         else
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Flexible(
-                    child: SizedBox(
-                      width: 539,
-                      child: HowToPlayContent(),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 539,
+                      maxHeight: 700,
                     ),
+                    child: HowToPlayContent(mascot: mascot),
                   ),
-                  const SizedBox(height: 40),
-                  OutlinedButton(
-                    onPressed: () => onPlay(context),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: OutlinedButton(
+                    onPressed: () => context.flow<GameIntroStatus>().complete(),
                     child: Text(l10n.playNow),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
       ],

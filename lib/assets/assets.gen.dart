@@ -92,25 +92,61 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/how_to_play_answer.png
-  AssetGenImage get howToPlayAnswer =>
-      const AssetGenImage('assets/images/how_to_play_answer.png');
+  /// File path: assets/images/how_to_play_answer_android.png
+  AssetGenImage get howToPlayAnswerAndroid =>
+      const AssetGenImage('assets/images/how_to_play_answer_android.png');
+
+  /// File path: assets/images/how_to_play_answer_dash.png
+  AssetGenImage get howToPlayAnswerDash =>
+      const AssetGenImage('assets/images/how_to_play_answer_dash.png');
+
+  /// File path: assets/images/how_to_play_answer_dino.png
+  AssetGenImage get howToPlayAnswerDino =>
+      const AssetGenImage('assets/images/how_to_play_answer_dino.png');
+
+  /// File path: assets/images/how_to_play_answer_sparky.png
+  AssetGenImage get howToPlayAnswerSparky =>
+      const AssetGenImage('assets/images/how_to_play_answer_sparky.png');
 
   /// File path: assets/images/how_to_play_badge.png
   AssetGenImage get howToPlayBadge =>
       const AssetGenImage('assets/images/how_to_play_badge.png');
 
-  /// File path: assets/images/how_to_play_find_a_word.png
-  AssetGenImage get howToPlayFindAWord =>
-      const AssetGenImage('assets/images/how_to_play_find_a_word.png');
+  /// File path: assets/images/how_to_play_find_a_word_android.png
+  AssetGenImage get howToPlayFindAWordAndroid =>
+      const AssetGenImage('assets/images/how_to_play_find_a_word_android.png');
+
+  /// File path: assets/images/how_to_play_find_a_word_dash.png
+  AssetGenImage get howToPlayFindAWordDash =>
+      const AssetGenImage('assets/images/how_to_play_find_a_word_dash.png');
+
+  /// File path: assets/images/how_to_play_find_a_word_dino.png
+  AssetGenImage get howToPlayFindAWordDino =>
+      const AssetGenImage('assets/images/how_to_play_find_a_word_dino.png');
+
+  /// File path: assets/images/how_to_play_find_a_word_sparky.png
+  AssetGenImage get howToPlayFindAWordSparky =>
+      const AssetGenImage('assets/images/how_to_play_find_a_word_sparky.png');
 
   /// File path: assets/images/how_to_play_hints.png
   AssetGenImage get howToPlayHints =>
       const AssetGenImage('assets/images/how_to_play_hints.png');
 
-  /// File path: assets/images/how_to_play_streak.png
-  AssetGenImage get howToPlayStreak =>
-      const AssetGenImage('assets/images/how_to_play_streak.png');
+  /// File path: assets/images/how_to_play_streak_android.png
+  AssetGenImage get howToPlayStreakAndroid =>
+      const AssetGenImage('assets/images/how_to_play_streak_android.png');
+
+  /// File path: assets/images/how_to_play_streak_dash.png
+  AssetGenImage get howToPlayStreakDash =>
+      const AssetGenImage('assets/images/how_to_play_streak_dash.png');
+
+  /// File path: assets/images/how_to_play_streak_dino.png
+  AssetGenImage get howToPlayStreakDino =>
+      const AssetGenImage('assets/images/how_to_play_streak_dino.png');
+
+  /// File path: assets/images/how_to_play_streak_sparky.png
+  AssetGenImage get howToPlayStreakSparky =>
+      const AssetGenImage('assets/images/how_to_play_streak_sparky.png');
 
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
@@ -132,11 +168,20 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        howToPlayAnswer,
+        howToPlayAnswerAndroid,
+        howToPlayAnswerDash,
+        howToPlayAnswerDino,
+        howToPlayAnswerSparky,
         howToPlayBadge,
-        howToPlayFindAWord,
+        howToPlayFindAWordAndroid,
+        howToPlayFindAWordDash,
+        howToPlayFindAWordDino,
+        howToPlayFindAWordSparky,
         howToPlayHints,
-        howToPlayStreak,
+        howToPlayStreakAndroid,
+        howToPlayStreakDash,
+        howToPlayStreakDino,
+        howToPlayStreakSparky,
         letters,
         platformNotSelected,
         tile,

@@ -13,6 +13,12 @@ abstract class Team extends Equatable {
 
   AssetGenImage get lookUpAnimation;
 
+  AssetGenImage get howToPlayAnswer;
+
+  AssetGenImage get howToPlayFindWord;
+
+  AssetGenImage get howToPlayStreak;
+
   SpriteInformation get idleSpriteInformation;
 
   SpriteInformation get lookUpSpriteInformation;

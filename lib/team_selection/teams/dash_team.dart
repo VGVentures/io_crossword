@@ -17,6 +17,15 @@ class DashTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.dashLookUp;
 
   @override
+  AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDash;
+
+  @override
+  AssetGenImage get howToPlayFindWord => Assets.images.howToPlayFindAWordDash;
+
+  @override
+  AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDash;
+
+  @override
   SpriteInformation get idleSpriteInformation => const SpriteInformation(
         rows: 10,
         columns: 7,
