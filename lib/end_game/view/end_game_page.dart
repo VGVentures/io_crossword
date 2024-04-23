@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/extensions/context_ext.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -43,30 +45,35 @@ class EndGameLargeView extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 502),
           child: const SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 32,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 32,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 32,
+                    ),
+                    child: LeaderboardButton(),
                   ),
-                  child: LeaderboardButton(),
-                ),
-                SizedBox(height: 56),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 80,
+                  SizedBox(height: 48),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 80,
+                    ),
+                    child: EndGameContent(),
                   ),
-                  child: EndGameContent(),
-                ),
-                SizedBox(height: 56),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 56,
+                  SizedBox(height: 48),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 56,
+                    ),
+                    child: ActionButtonsEndGame(),
                   ),
-                  child: ActionButtonsEndGame(),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -89,23 +96,18 @@ class EndGameSmallView extends StatelessWidget {
         crossword: l10n.crossword,
         title: const LeaderboardButton(),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 32,
             vertical: 24,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Assets.images.endImage.image(
-                fit: BoxFit.fitWidth,
-                height: 150,
-              ),
-              const SizedBox(height: 24),
-              const EndGameContent(),
-              const SizedBox(height: 24),
-              const ActionButtonsEndGame(),
+              EndGameContent(),
+              SizedBox(height: 24),
+              ActionButtonsEndGame(),
             ],
           ),
         ),
