@@ -22,8 +22,12 @@ class Crossword2View extends StatelessWidget {
         configuration: configuration,
         cellSize: theme.io.wordInput.secondary.empty.size,
       ),
-      child: CrosswordInteractiveViewer(
-        builder: (_, __) => const _CrosswordStack(configuration: configuration),
+      child: DefaultTransformationController(
+        child: CrosswordInteractiveViewer(
+          builder: (_, __) => const _CrosswordStack(
+            configuration: configuration,
+          ),
+        ),
       ),
     );
   }
