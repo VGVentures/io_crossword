@@ -64,7 +64,9 @@ void main() {
         ),
       );
       hintBloc = _MockHintBloc();
-      when(() => hintBloc.state).thenReturn(HintState());
+      when(() => hintBloc.state).thenReturn(
+        HintState(isHintsEnabled: true),
+      );
 
       widget = MultiBlocProvider(
         providers: [
@@ -212,7 +214,9 @@ void main() {
           word: selectedWord,
         ),
       );
-      when(() => hintBloc.state).thenReturn(HintState());
+      when(() => hintBloc.state).thenReturn(
+        HintState(isHintsEnabled: true),
+      );
     });
 
     group('renders', () {
@@ -333,7 +337,7 @@ void main() {
         'a $CloseHintButton and $GeminiTextField when the status is asking',
         (tester) async {
           when(() => hintBloc.state).thenReturn(
-            HintState(status: HintStatus.asking),
+            HintState(status: HintStatus.asking, isHintsEnabled: true),
           );
 
           await tester.pumpApp(widget);
@@ -347,7 +351,7 @@ void main() {
         'a $GeminiHintButton and $SubmitButton when the status is answered',
         (tester) async {
           when(() => hintBloc.state).thenReturn(
-            HintState(status: HintStatus.answered),
+            HintState(status: HintStatus.answered, isHintsEnabled: true),
           );
 
           await tester.pumpApp(widget);

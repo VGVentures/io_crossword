@@ -2,6 +2,7 @@
 
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,8 @@ class _MockWordSelectionBloc
     implements WordSelectionBloc {}
 
 class _MockHintResource extends Mock implements HintResource {}
+
+class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
 class _FakeWord extends Fake implements Word {
   @override
@@ -42,10 +45,12 @@ void main() {
     group('renders', () {
       late WordSelectionBloc wordSelectionBloc;
       late SelectedWord selectedWord;
+      late BoardInfoRepository boardInfoRepository;
 
       setUp(() {
         wordSelectionBloc = _MockWordSelectionBloc();
         selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
+        boardInfoRepository = _MockBoardInfoRepository();
       });
 
       testWidgets(
@@ -77,6 +82,8 @@ void main() {
               word: selectedWord,
             ),
           );
+          when(() => boardInfoRepository.isHintsEnabled())
+              .thenAnswer((_) => Stream.value(true));
 
           await tester.pumpApp(
             BlocProvider(
@@ -84,6 +91,7 @@ void main() {
               child: WordSelectionPage(),
             ),
             hintResource: hintResource,
+            boardInfoRepository: boardInfoRepository,
           );
 
           expect(find.byType(WordSelectionView), findsOneWidget);

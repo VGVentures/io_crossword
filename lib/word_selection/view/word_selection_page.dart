@@ -1,4 +1,5 @@
 import 'package:api_client/api_client.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/hint/hint.dart';
@@ -20,7 +21,10 @@ class WordSelectionPage extends StatelessWidget {
       key: Key(wordId),
       create: (context) => HintBloc(
         hintResource: context.read<HintResource>(),
-      )..add(PreviousHintsRequested(wordId)),
+        boardInfoRepository: context.read<BoardInfoRepository>(),
+      )
+        ..add(const HintEnabledRequested())
+        ..add(PreviousHintsRequested(wordId)),
       child: const WordSelectionView(),
     );
   }

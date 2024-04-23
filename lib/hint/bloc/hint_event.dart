@@ -4,6 +4,13 @@ sealed class HintEvent extends Equatable {
   const HintEvent();
 }
 
+class HintEnabledRequested extends HintEvent {
+  const HintEnabledRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
 class HintModeEntered extends HintEvent {
   const HintModeEntered();
 

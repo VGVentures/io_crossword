@@ -30,6 +30,8 @@ class WordSolvingLargeView extends StatelessWidget {
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
     return Column(
       children: [
@@ -45,8 +47,10 @@ class WordSolvingLargeView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              const HintsTitle(),
-              const SizedBox(height: 32),
+              if (isHintsEnabled) ...[
+                const HintsTitle(),
+                const SizedBox(height: 32),
+              ],
               Flexible(
                 child: BlocSelector<WordSelectionBloc, WordSelectionState,
                     WordSelectionStatus>(
@@ -56,10 +60,7 @@ class WordSolvingLargeView extends StatelessWidget {
                       return const CircularProgressIndicator();
                     }
 
-                    return const SingleChildScrollView(
-                      reverse: true,
-                      child: HintsSection(),
-                    );
+                    return const HintsSection();
                   },
                 ),
               ),
@@ -96,6 +97,8 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
     return Column(
       children: [
@@ -112,8 +115,10 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        const HintsTitle(),
-        const SizedBox(height: 32),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
         Expanded(
           child: BlocSelector<WordSelectionBloc, WordSelectionState,
               WordSelectionStatus>(
@@ -123,10 +128,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return const SingleChildScrollView(
-                reverse: true,
-                child: HintsSection(),
-              );
+              return const HintsSection();
             },
           ),
         ),
@@ -148,8 +150,10 @@ class BottomPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final isHintModeActive =
         context.select((HintBloc bloc) => bloc.state.isHintModeActive);
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
-    if (isHintModeActive) {
+    if (isHintModeActive && isHintsEnabled) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -166,10 +170,12 @@ class BottomPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Flexible(
-          child: GeminiHintButton(),
-        ),
-        const SizedBox(width: 8),
+        if (isHintsEnabled) ...[
+          const Flexible(
+            child: GeminiHintButton(),
+          ),
+          const SizedBox(width: 8),
+        ],
         Flexible(
           child: SubmitButton(controller: controller),
         ),
