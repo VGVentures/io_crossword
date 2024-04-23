@@ -14,8 +14,10 @@ class IoThemeExtension extends Equatable
     required this.iconButtonTheme,
     required this.cardTheme,
     required this.physicalModel,
+    required this.outlineButtonTheme,
     required this.wordInput,
     required this.colorScheme,
+    required this.crosswordLetterTheme,
   });
 
   /// {@macro io_word_theme}
@@ -30,11 +32,17 @@ class IoThemeExtension extends Equatable
   /// {@macro io_physical_model_style}
   final IoPhysicalModelStyle physicalModel;
 
-  /// {@macro io_word_input_style}
-  final IoWordInputStyle wordInput;
+  /// {@macro io_outline_button}
+  final IoOutlineButtonTheme outlineButtonTheme;
+
+  /// {@macro io_word_input_theme}
+  final IoWordInputTheme wordInput;
 
   /// {@macro io_color_scheme}
   final IoColorScheme colorScheme;
+
+  /// {@macro io_crossword_letter_theme}
+  final IoCrosswordLetterTheme crosswordLetterTheme;
 
   @override
   Object get type => IoThemeExtension;
@@ -45,8 +53,10 @@ class IoThemeExtension extends Equatable
     IoIconButtonTheme? iconButtonTheme,
     IoCardTheme? cardTheme,
     IoPhysicalModelStyle? physicalModel,
-    IoWordInputStyle? wordInput,
+    IoWordInputTheme? wordInput,
     IoColorScheme? colorScheme,
+    IoOutlineButtonTheme? outlineButtonTheme,
+    IoCrosswordLetterTheme? crosswordLetterTheme,
   }) {
     return IoThemeExtension(
       wordTheme: wordTheme ?? this.wordTheme,
@@ -55,6 +65,8 @@ class IoThemeExtension extends Equatable
       physicalModel: physicalModel ?? this.physicalModel,
       wordInput: wordInput ?? this.wordInput,
       colorScheme: colorScheme ?? this.colorScheme,
+      outlineButtonTheme: outlineButtonTheme ?? this.outlineButtonTheme,
+      crosswordLetterTheme: crosswordLetterTheme ?? this.crosswordLetterTheme,
     );
   }
 
@@ -74,6 +86,9 @@ class IoThemeExtension extends Equatable
       physicalModel: physicalModel.lerp(other.physicalModel, t),
       wordInput: wordInput.lerp(other.wordInput, t),
       colorScheme: colorScheme.lerp(other.colorScheme, t),
+      outlineButtonTheme: outlineButtonTheme.lerp(other.outlineButtonTheme, t),
+      crosswordLetterTheme:
+          crosswordLetterTheme.lerp(other.crosswordLetterTheme, t),
     );
   }
 
@@ -85,6 +100,8 @@ class IoThemeExtension extends Equatable
         physicalModel,
         wordInput,
         colorScheme,
+        outlineButtonTheme,
+        crosswordLetterTheme,
       ];
 }
 

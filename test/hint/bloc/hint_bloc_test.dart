@@ -3,6 +3,7 @@
 
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/hint/bloc/hint_bloc.dart';
@@ -10,18 +11,43 @@ import 'package:mocktail/mocktail.dart';
 
 class _MockHintResource extends Mock implements HintResource {}
 
+class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
+
 void main() {
   group('$HintBloc', () {
     late HintResource hintResource;
+    late BoardInfoRepository boardInfoRepository;
 
     setUp(() {
       hintResource = _MockHintResource();
+      boardInfoRepository = _MockBoardInfoRepository();
     });
+
+    blocTest<HintBloc, HintState>(
+      'emits state with updated isHintsEnabled when $HintEnabledRequested '
+      'is added',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.value(true),
+        );
+      },
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
+      act: (bloc) => bloc.add(const HintEnabledRequested()),
+      expect: () => const <HintState>[
+        HintState(isHintsEnabled: true),
+      ],
+    );
 
     blocTest<HintBloc, HintState>(
       'emits state with status ${HintStatus.asking} when HintModeEntered '
       'is added',
-      build: () => HintBloc(hintResource: hintResource),
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
       act: (bloc) => bloc.add(const HintModeEntered()),
       expect: () => const <HintState>[
         HintState(status: HintStatus.asking),
@@ -32,7 +58,10 @@ void main() {
       'emits state with status ${HintStatus.initial} when HintModeExited '
       'is added',
       seed: () => HintState(status: HintStatus.asking),
-      build: () => HintBloc(hintResource: hintResource),
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
       act: (bloc) => bloc.add(const HintModeExited()),
       expect: () => const <HintState>[
         HintState(),
@@ -57,7 +86,10 @@ void main() {
             Hint(question: 'is it orange?', response: HintResponse.no),
           ],
         ),
-        build: () => HintBloc(hintResource: hintResource),
+        build: () => HintBloc(
+          hintResource: hintResource,
+          boardInfoRepository: boardInfoRepository,
+        ),
         act: (bloc) => bloc.add(
           HintRequested(wordId: 'id', question: 'blue?'),
         ),
@@ -88,7 +120,10 @@ void main() {
           ],
           maxHints: 1,
         ),
-        build: () => HintBloc(hintResource: hintResource),
+        build: () => HintBloc(
+          hintResource: hintResource,
+          boardInfoRepository: boardInfoRepository,
+        ),
         act: (bloc) => bloc.add(
           HintRequested(wordId: 'id', question: 'blue?'),
         ),
@@ -99,14 +134,19 @@ void main() {
 
   group('adding PreviousHintsRequested', () {
     late HintResource hintResource;
+    late BoardInfoRepository boardInfoRepository;
 
     setUp(() {
       hintResource = _MockHintResource();
+      boardInfoRepository = _MockBoardInfoRepository();
     });
 
     blocTest<HintBloc, HintState>(
       'emits state with hints',
       setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.value(true),
+        );
         when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
           (_) async => (
             [
@@ -117,7 +157,10 @@ void main() {
           ),
         );
       },
-      build: () => HintBloc(hintResource: hintResource),
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
       act: (bloc) => bloc.add(PreviousHintsRequested('id')),
       expect: () => const <HintState>[
         HintState(
@@ -132,13 +175,38 @@ void main() {
 
     blocTest<HintBloc, HintState>(
       'does not emit state when hints are already present',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.value(true),
+        );
+      },
       seed: () => HintState(
         hints: [
           Hint(question: 'is it orange?', response: HintResponse.no),
           Hint(question: 'is it blue?', response: HintResponse.yes),
         ],
       ),
-      build: () => HintBloc(hintResource: hintResource),
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
+      act: (bloc) => bloc.add(
+        PreviousHintsRequested('id'),
+      ),
+      expect: () => const <HintState>[],
+    );
+
+    blocTest<HintBloc, HintState>(
+      'does not emit state when hints are disabled',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.fromIterable([true, false]),
+        );
+      },
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
       act: (bloc) => bloc.add(
         PreviousHintsRequested('id'),
       ),

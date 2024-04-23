@@ -92,6 +92,22 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/end_game_android.png
+  AssetGenImage get endGameAndroid =>
+      const AssetGenImage('assets/images/end_game_android.png');
+
+  /// File path: assets/images/end_game_dash.png
+  AssetGenImage get endGameDash =>
+      const AssetGenImage('assets/images/end_game_dash.png');
+
+  /// File path: assets/images/end_game_dino.png
+  AssetGenImage get endGameDino =>
+      const AssetGenImage('assets/images/end_game_dino.png');
+
+  /// File path: assets/images/end_game_sparky.png
+  AssetGenImage get endGameSparky =>
+      const AssetGenImage('assets/images/end_game_sparky.png');
+
   /// File path: assets/images/how_to_play_answer_android.png
   AssetGenImage get howToPlayAnswerAndroid =>
       const AssetGenImage('assets/images/how_to_play_answer_android.png');
@@ -155,6 +171,22 @@ class $AssetsImagesGen {
   AssetGenImage get platformNotSelected =>
       const AssetGenImage('assets/images/platform_not_selected.png');
 
+  /// File path: assets/images/share_android.png
+  AssetGenImage get shareAndroid =>
+      const AssetGenImage('assets/images/share_android.png');
+
+  /// File path: assets/images/share_dash.png
+  AssetGenImage get shareDash =>
+      const AssetGenImage('assets/images/share_dash.png');
+
+  /// File path: assets/images/share_dino.png
+  AssetGenImage get shareDino =>
+      const AssetGenImage('assets/images/share_dino.png');
+
+  /// File path: assets/images/share_sparky.png
+  AssetGenImage get shareSparky =>
+      const AssetGenImage('assets/images/share_sparky.png');
+
   /// File path: assets/images/tile.png
   AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
 
@@ -168,6 +200,10 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        endGameAndroid,
+        endGameDash,
+        endGameDino,
+        endGameSparky,
         howToPlayAnswerAndroid,
         howToPlayAnswerDash,
         howToPlayAnswerDino,
@@ -184,6 +220,10 @@ class $AssetsImagesGen {
         howToPlayStreakSparky,
         letters,
         platformNotSelected,
+        shareAndroid,
+        shareDash,
+        shareDino,
+        shareSparky,
         tile,
         tileLarge,
         welcomeBackground

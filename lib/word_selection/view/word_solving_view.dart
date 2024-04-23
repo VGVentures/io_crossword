@@ -27,9 +27,16 @@ class WordSolvingLargeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
+    final isIncorrectAnswer = context.select(
+      (WordSelectionBloc bloc) =>
+          bloc.state.status == WordSelectionStatus.incorrect,
+    );
 
     return Column(
       children: [
@@ -40,13 +47,21 @@ class WordSolvingLargeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
+                isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
+                style: IoCrosswordTextStyles.bodyMD.medium
+                    ?.copyWith(color: theme.colorScheme.error),
+              ),
+              const SizedBox(height: 24),
+              Text(
                 selectedWord.word.clue,
                 style: IoCrosswordTextStyles.titleMD,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              const HintsTitle(),
-              const SizedBox(height: 32),
+              if (isHintsEnabled) ...[
+                const HintsTitle(),
+                const SizedBox(height: 32),
+              ],
               Flexible(
                 child: BlocSelector<WordSelectionBloc, WordSelectionState,
                     WordSelectionStatus>(
@@ -56,10 +71,7 @@ class WordSolvingLargeView extends StatelessWidget {
                       return const CircularProgressIndicator();
                     }
 
-                    return const SingleChildScrollView(
-                      reverse: true,
-                      child: HintsSection(),
-                    );
+                    return const HintsSection();
                   },
                 ),
               ),
@@ -84,6 +96,18 @@ class WordSolvingSmallView extends StatefulWidget {
 
 class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
   final _controller = IoWordInputController();
+  String _lastWord = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_lastWord.length > _controller.word.length) {
+        context.read<WordSelectionBloc>().add(const WordSolveRequested());
+      }
+      _lastWord = _controller.word;
+    });
+  }
 
   @override
   void dispose() {
@@ -93,9 +117,16 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
+    final isIncorrectAnswer = context.select(
+      (WordSelectionBloc bloc) =>
+          bloc.state.status == WordSelectionStatus.incorrect,
+    );
 
     return Column(
       children: [
@@ -105,15 +136,23 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           length: selectedWord.word.length,
           controller: _controller,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
+        Text(
+          isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
+          style: IoCrosswordTextStyles.bodyMD.medium
+              ?.copyWith(color: theme.colorScheme.error),
+        ),
+        const SizedBox(height: 16),
         Text(
           selectedWord.word.clue,
           style: IoCrosswordTextStyles.titleMD,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        const HintsTitle(),
-        const SizedBox(height: 32),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
         Expanded(
           child: BlocSelector<WordSelectionBloc, WordSelectionState,
               WordSelectionStatus>(
@@ -123,8 +162,8 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return const SingleChildScrollView(
-                reverse: true,
+              return const Align(
+                alignment: Alignment.topCenter,
                 child: HintsSection(),
               );
             },
@@ -148,8 +187,10 @@ class BottomPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final isHintModeActive =
         context.select((HintBloc bloc) => bloc.state.isHintModeActive);
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
-    if (isHintModeActive) {
+    if (isHintModeActive && isHintsEnabled) {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -166,10 +207,12 @@ class BottomPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Flexible(
-          child: GeminiHintButton(),
-        ),
-        const SizedBox(width: 8),
+        if (isHintsEnabled) ...[
+          const Flexible(
+            child: GeminiHintButton(),
+          ),
+          const SizedBox(width: 8),
+        ],
         Flexible(
           child: SubmitButton(controller: controller),
         ),

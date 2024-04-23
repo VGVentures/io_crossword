@@ -11,9 +11,14 @@ class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
 class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
 
-class _MockIoWordInputStyle extends Mock implements IoWordInputStyle {}
+class _MockIoWordInputTheme extends Mock implements IoWordInputTheme {}
 
 class _MockIoColorScheme extends Mock implements IoColorScheme {}
+
+class _MockIoOutlineButtonTheme extends Mock implements IoOutlineButtonTheme {}
+
+class _MockIoCrosswordLetterTheme extends Mock
+    implements IoCrosswordLetterTheme {}
 
 void main() {
   group('$IoThemeExtension', () {
@@ -24,8 +29,10 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          wordInput: _MockIoWordInputStyle(),
+          wordInput: _MockIoWordInputTheme(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -39,8 +46,10 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          wordInput: _MockIoWordInputStyle(),
+          wordInput: _MockIoWordInputTheme(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -58,8 +67,10 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          wordInput: _MockIoWordInputStyle(),
+          wordInput: _MockIoWordInputTheme(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -73,8 +84,10 @@ void main() {
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
-          wordInput: _MockIoWordInputStyle(),
+          wordInput: _MockIoWordInputTheme(),
           colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         when(
@@ -91,10 +104,17 @@ void main() {
         ).thenReturn(_MockIoPhysicalModelStyle());
         when(
           () => theme.wordInput.lerp(theme.wordInput, 0.5),
-        ).thenReturn(_MockIoWordInputStyle());
+        ).thenReturn(_MockIoWordInputTheme());
         when(
           () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
         ).thenReturn(_MockIoColorScheme());
+        when(
+          () => theme.outlineButtonTheme.lerp(theme.outlineButtonTheme, 0.5),
+        ).thenReturn(_MockIoOutlineButtonTheme());
+        when(
+          () =>
+              theme.crosswordLetterTheme.lerp(theme.crosswordLetterTheme, 0.5),
+        ).thenReturn(_MockIoCrosswordLetterTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -128,8 +148,10 @@ void main() {
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
               physicalModel: _MockIoPhysicalModelStyle(),
-              wordInput: _MockIoWordInputStyle(),
+              wordInput: _MockIoWordInputTheme(),
               colorScheme: _MockIoColorScheme(),
+              outlineButtonTheme: _MockIoOutlineButtonTheme(),
+              crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
             ),
           ],
         );

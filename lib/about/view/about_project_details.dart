@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/project_details.dart';
+import 'package:io_crossword/widget/widget.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class AboutProjectDetails extends StatelessWidget {
@@ -28,36 +29,7 @@ class AboutProjectDetails extends StatelessWidget {
               child: const Icon(Icons.image, size: 50),
             ),
             const SizedBox(height: 24),
-            RichText(
-              text: TextSpan(
-                text: '${l10n.learn} ',
-                style: textTheme.titleMedium,
-                children: [
-                  TextSpan(
-                    text: l10n.howMade,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    // TODO(Ayad): add link
-                    // recognizer: TapGestureRecognizer()..onTap = () {},
-                  ),
-                  TextSpan(text: ' ${l10n.and} '),
-                  TextSpan(
-                    text: l10n.openSourceCode,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        context.launchUrl(ProjectDetailsLinks.github);
-                      },
-                  ),
-                  const TextSpan(
-                    text: '.',
-                  ),
-                ],
-              ),
-            ),
+            const HowMade(),
             const SizedBox(height: 24),
             Text(
               '${l10n.otherLinks}:',

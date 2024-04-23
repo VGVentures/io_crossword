@@ -4,6 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/hint/bloc/hint_bloc.dart';
 
 void main() {
+  group('$HintEnabledRequested', () {
+    test('supports equality', () {
+      expect(HintEnabledRequested(), equals(HintEnabledRequested()));
+    });
+  });
+
   group('$HintModeEntered', () {
     test('supports equality', () {
       expect(HintModeEntered(), equals(HintModeEntered()));

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -56,6 +57,7 @@ class IoWordInput extends StatefulWidget {
     this.controller,
     this.onWord,
     this.onSubmit,
+    this.style,
     Axis? direction,
     Map<int, String>? characters,
     super.key,
@@ -75,6 +77,7 @@ class IoWordInput extends StatefulWidget {
     Map<int, String>? characters,
     ValueChanged<String>? onWord,
     ValueChanged<String>? onSubmit,
+    IoWordInputStyle? style,
     Key? key,
   }) : this._(
           length: length,
@@ -86,6 +89,7 @@ class IoWordInput extends StatefulWidget {
           onSubmit: onSubmit,
           characterValidator: (character) =>
               RegExp('[a-zA-Z]').hasMatch(character),
+          style: style,
         );
 
   /// {@macro io_word_input_controller}
@@ -152,6 +156,11 @@ class IoWordInput extends StatefulWidget {
   /// The given value is the word that has been inputted so far. Hence, it might
   /// not be the full word if the input length has not been reached.
   final ValueChanged<String>? onSubmit;
+
+  /// {@macro io_word_input_style}
+  ///
+  /// Defaults to the inherited [IoWordInputTheme.primary].
+  final IoWordInputStyle? style;
 
   /// The character that represents an empty character field.
   static const _emptyCharacter = '_';
@@ -333,7 +342,8 @@ class _IoWordInputState extends State<IoWordInput> {
 
   @override
   Widget build(BuildContext context) {
-    final textInputStyle = Theme.of(context).io.wordInput;
+    final textInputStyle =
+        widget.style ?? Theme.of(context).io.wordInput.primary;
 
     final characters = <Widget>[];
     for (var i = 0; i < widget.length; i++) {
@@ -377,8 +387,9 @@ class _IoWordInputState extends State<IoWordInput> {
                       ? (_) => widget.onSubmit!(_word)
                       : null,
                   onSelectionChanged: (selection, cause) {
+                    final offset = math.min(1, controller.text.length);
                     controller.selection = TextSelection.fromPosition(
-                      const TextPosition(offset: 1),
+                      TextPosition(offset: offset),
                     );
                   },
                 ),
@@ -480,6 +491,39 @@ class _CharacterFieldState extends State<_CharacterField>
       },
     );
   }
+}
+
+/// {@template io_word_input_theme}
+/// The theme of the [IoWordInput].
+/// {@endtemplate}
+class IoWordInputTheme extends Equatable {
+  /// {@macro io_word_input_theme}
+  const IoWordInputTheme({
+    required this.primary,
+    required this.secondary,
+  });
+
+  /// The primary style of the [IoWordInput].
+  ///
+  /// Usually used for inputting a word, such as the initials.
+  final IoWordInputStyle primary;
+
+  /// The secondary style of the [IoWordInput].
+  ///
+  /// Usually used for inputting a crossword word. It's styling is usually
+  /// similar to the [IoCrosswordLetter].
+  final IoWordInputStyle secondary;
+
+  /// Linearly interpolate between two [IoWordInputTheme]s.
+  IoWordInputTheme lerp(IoWordInputTheme other, double t) {
+    return IoWordInputTheme(
+      primary: primary.lerp(other.primary, t),
+      secondary: secondary.lerp(other.secondary, t),
+    );
+  }
+
+  @override
+  List<Object?> get props => [primary, secondary];
 }
 
 /// {@template io_word_input_style}

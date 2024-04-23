@@ -3,6 +3,7 @@ export 'gemini_gradient.dart';
 export 'gemini_icon.dart';
 export 'io_app_bar.dart';
 export 'io_crossword_card.dart';
+export 'io_crossword_letter.dart';
 export 'io_layout.dart';
 export 'io_linear_progress_indicator.dart';
 export 'io_logo.dart';

@@ -121,6 +121,10 @@
   "@typeToAnswer": {
     "description": "Type to answer label"
   },
+  "incorrectAnswer": "Oops, wrong word!",
+  "@incorrectAnswer": {
+    "description": "Incorrect answer label"
+  },
   "wordSolved": "Word solved!",
   "@wordSolved": {
     "description": "Word solved label"
@@ -329,6 +333,34 @@
         "type": "int"
       }
     }
+  },
+  "endingGame": "Ending the game",
+  "@endingGame": {
+    "description": "Title used to check if the user wants to end the game."
+  },
+  "sureToEndGame": "Are you sure you want to submit your score and finish the game?",
+  "@sureToEndGame": {
+    "description": "Subtitle used to check if the user wants to end the game."
+  },
+  "endGame": "End game",
+  "@endGame": {
+    "description": "End game label."
+  },
+  "thanksForContributing": "Thanks for contributing!",
+  "@thanksForContributing": {
+    "description": "Thanks for contributing! label."
+  },
+  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "@claimBadgeContributing": {
+    "description": "Claim badge for contributing"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share label"
+  },
+  "rotatePhoneToPortraitMessage": "Please rotate your device to portrait mode to continue.",
+  "@rotatePhoneToPortraitMessage": {
+    "description": "Message notifying the user that they need to rotate their phone to portrait mode to continue playing."
   },
   "backButtonLabel": "Back",
   "@backButtonLabel": {

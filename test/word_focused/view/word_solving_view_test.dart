@@ -2,6 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -64,7 +65,9 @@ void main() {
         ),
       );
       hintBloc = _MockHintBloc();
-      when(() => hintBloc.state).thenReturn(HintState());
+      when(() => hintBloc.state).thenReturn(
+        HintState(isHintsEnabled: true),
+      );
 
       widget = MultiBlocProvider(
         providers: [
@@ -147,6 +150,21 @@ void main() {
       );
 
       testWidgets(
+        'incorrectAnswer text when the status is incorrect',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.text(l10n.incorrectAnswer), findsOneWidget);
+        },
+      );
+
+      testWidgets(
         'the $HintsSection when the status is not validating',
         (tester) async {
           when(() => wordSelectionBloc.state).thenReturn(
@@ -212,7 +230,9 @@ void main() {
           word: selectedWord,
         ),
       );
-      when(() => hintBloc.state).thenReturn(HintState());
+      when(() => hintBloc.state).thenReturn(
+        HintState(isHintsEnabled: true),
+      );
     });
 
     group('renders', () {
@@ -229,6 +249,21 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
           expect(find.byType(WordSelectionTopBar), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'incorrectAnswer text when the status is incorrect',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.text(l10n.incorrectAnswer), findsOneWidget);
         },
       );
 
@@ -300,6 +335,27 @@ void main() {
         ).called(1);
       },
     );
+
+    testWidgets(
+      'deleting a letter sends $WordSolveRequested',
+      (tester) async {
+        await tester.pumpApp(widget);
+        await tester.pumpAndSettle();
+
+        final editableTexts = find.byType(EditableText);
+        await tester.enterText(editableTexts.at(0), 'A');
+        await tester.enterText(editableTexts.at(1), 'N');
+        await tester.enterText(editableTexts.at(2), 'S');
+        await tester.enterText(editableTexts.at(3), '!'); // focus previous cell
+        await tester.pumpAndSettle();
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+        verify(
+          () => wordSelectionBloc.add(const WordSolveRequested()),
+        ).called(1);
+      },
+    );
   });
 
   group('$BottomPanel', () {
@@ -333,7 +389,7 @@ void main() {
         'a $CloseHintButton and $GeminiTextField when the status is asking',
         (tester) async {
           when(() => hintBloc.state).thenReturn(
-            HintState(status: HintStatus.asking),
+            HintState(status: HintStatus.asking, isHintsEnabled: true),
           );
 
           await tester.pumpApp(widget);
@@ -347,7 +403,7 @@ void main() {
         'a $GeminiHintButton and $SubmitButton when the status is answered',
         (tester) async {
           when(() => hintBloc.state).thenReturn(
-            HintState(status: HintStatus.answered),
+            HintState(status: HintStatus.answered, isHintsEnabled: true),
           );
 
           await tester.pumpApp(widget);

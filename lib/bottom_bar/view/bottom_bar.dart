@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -26,6 +27,7 @@ class BottomBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -37,8 +39,13 @@ class BottomBarContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OutlinedButton(
-              onPressed: () {}, // coverage:ignore-line
-              child: Text(l10n.submitScore),
+              onPressed: () {
+                EndGameCheck.openDialog(context);
+              },
+              child: Text(
+                l10n.endGame,
+                style: theme.textTheme.bodySmall,
+              ),
             ),
             const SizedBox(width: 16),
             OutlinedButton.icon(
