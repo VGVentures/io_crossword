@@ -327,8 +327,10 @@ class IoCrosswordTheme {
     final colorScheme = this.colorScheme;
 
     final border = Border.all(color: colorScheme.background);
-    final textStyle =
-        textTheme.bodyMedium!.copyWith(color: colorScheme.background);
+    final textStyle = textTheme.titleLarge!.copyWith(
+      color: colorScheme.background,
+      height: 1.1,
+    );
 
     return IoCrosswordLetterTheme(
       dash: IoCrosswordLetterStyle(

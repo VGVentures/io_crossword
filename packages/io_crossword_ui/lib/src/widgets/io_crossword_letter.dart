@@ -35,7 +35,6 @@ class IoCrosswordLetter extends StatelessWidget {
           : Center(
               child: Text(
                 data!,
-                textAlign: TextAlign.center,
                 style: style.textStyle,
               ),
             ),
