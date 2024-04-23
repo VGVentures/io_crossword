@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
+import 'package:io_crossword/widget/widget.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 part 'about_how_to_play.dart';

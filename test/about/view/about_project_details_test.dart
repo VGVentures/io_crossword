@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/widget/widget.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -37,41 +38,11 @@ void main() {
     });
 
     testWidgets(
-      'displays initial information how made and open source',
+      'renders HowMade',
       (tester) async {
         await tester.pumpApp(AboutProjectDetails());
 
-        final text =
-            '${l10n.learn} ${l10n.howMade} ${l10n.and} ${l10n.openSourceCode}.';
-
-        expect(find.text(text, findRichText: true), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'calls launchUrl when tapped on open source code',
-      (tester) async {
-        await tester.pumpApp(AboutProjectDetails());
-
-        final finder = find.byWidgetPredicate(
-          (widget) =>
-              widget is RichText &&
-              find.tapTextSpan(
-                widget,
-                l10n.openSourceCode,
-              ),
-        );
-
-        await tester.tap(finder);
-
-        await tester.pumpAndSettle();
-
-        verify(
-          () => urlLauncher.launchUrl(
-            'https://github.com/VGVentures/io_crossword',
-            any(),
-          ),
-        );
+        expect(find.byType(HowMade), findsOneWidget);
       },
     );
 
