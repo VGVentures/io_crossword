@@ -65,7 +65,12 @@ class ActionButtonsEndGame extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      GameIntroPage.route(),
+                    );
+                  },
                   icon: const Icon(Icons.gamepad),
                   label: Text(l10n.playAgain),
                 ),

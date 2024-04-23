@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/end_game/end_game.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
@@ -84,6 +85,16 @@ void main() {
       await tester.pumpApp(ActionButtonsEndGame());
 
       expect(find.text(l10n.playAgain), findsOneWidget);
+    });
+
+    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
+      await tester.pumpApp(ActionButtonsEndGame());
+
+      await tester.tap(find.text(l10n.playAgain));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(GameIntroPage), findsOneWidget);
     });
 
     testWidgets('displays claimBadgeContributing', (tester) async {
