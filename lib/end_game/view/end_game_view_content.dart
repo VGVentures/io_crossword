@@ -57,7 +57,9 @@ class ActionButtonsEndGame extends StatelessWidget {
                 child: FilledButton.icon(
                   icon: const Icon(Icons.ios_share_sharp, size: 20),
                   label: Text(l10n.share),
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    ShareScorePage.showModal(context);
+                  },
                 ),
               ),
               const SizedBox(width: 8),
