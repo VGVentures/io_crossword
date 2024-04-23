@@ -23,6 +23,7 @@ dependencies:
   game_domain:
     path: packages/game_domain
   google_cloud: ^0.2.0
+  google_generative_ai: ^0.3.1
   hint_repository:
     path: packages/hint_repository
   jwt_middleware:
