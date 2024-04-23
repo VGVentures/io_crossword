@@ -29,6 +29,14 @@ Future<Response> _onPost(RequestContext context) async {
   }
 
   try {
+    final isHintsEnabled = await hintRepository.isHintsEnabled();
+    if (!isHintsEnabled) {
+      return Response(
+        body: 'Hints are disabled',
+        statusCode: HttpStatus.forbidden,
+      );
+    }
+
     final wordAnswer = await crosswordRepository.findAnswerById(wordId);
     if (wordAnswer == null) {
       return Response(
@@ -86,6 +94,14 @@ Future<Response> _onGet(RequestContext context) async {
   }
 
   try {
+    final isHintsEnabled = await hintRepository.isHintsEnabled();
+    if (!isHintsEnabled) {
+      return Response(
+        body: 'Hints are disabled',
+        statusCode: HttpStatus.forbidden,
+      );
+    }
+
     final hints = await hintRepository.getPreviousHints(
       userId: user.id,
       wordId: wordId,
