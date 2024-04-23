@@ -21,21 +21,25 @@ enum HintStatus {
 
 class HintState extends Equatable {
   const HintState({
+    this.isHintsEnabled = false,
     this.status = HintStatus.initial,
     this.hints = const [],
     this.maxHints = 10,
   });
 
+  final bool isHintsEnabled;
   final HintStatus status;
   final List<Hint> hints;
   final int maxHints;
 
   HintState copyWith({
+    bool? isHintsEnabled,
     HintStatus? status,
     List<Hint>? hints,
     int? maxHints,
   }) {
     return HintState(
+      isHintsEnabled: isHintsEnabled ?? this.isHintsEnabled,
       status: status ?? this.status,
       hints: hints ?? this.hints,
       maxHints: maxHints ?? this.maxHints,
@@ -50,5 +54,5 @@ class HintState extends Equatable {
   int get hintsLeft => maxHints - hints.length;
 
   @override
-  List<Object> get props => [status, hints, maxHints];
+  List<Object> get props => [isHintsEnabled, status, hints, maxHints];
 }

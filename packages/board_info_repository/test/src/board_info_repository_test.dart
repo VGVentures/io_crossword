@@ -130,6 +130,22 @@ void main() {
         );
       });
     });
+
+    group('isHintsEnabled', () {
+      test('returns hints enabled status from firebase', () {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'is_hints_enabled'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': true});
+
+        final result = boardInfoRepository.isHintsEnabled();
+        expect(result, emits(true));
+      });
+    });
   });
 
   group('BoardInfoException', () {
