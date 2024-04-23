@@ -121,6 +121,10 @@
   "@typeToAnswer": {
     "description": "Type to answer label"
   },
+  "incorrectAnswer": "Oops, wrong word!",
+  "@incorrectAnswer": {
+    "description": "Incorrect answer label"
+  },
   "wordSolved": "Word solved!",
   "@wordSolved": {
     "description": "Word solved label"

@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword2/widgets/widgets.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -200,11 +201,13 @@ extension on WidgetTester {
         );
 
     return pumpApp(
-      BlocProvider<WordSelectionBloc>(
-        create: (_) => internalWordSelectionBloc,
-        child: CrosswordLayoutScope(
-          data: internalCrosswordLayoutData,
-          child: widget,
+      DefaultTransformationController(
+        child: BlocProvider<WordSelectionBloc>(
+          create: (_) => internalWordSelectionBloc,
+          child: CrosswordLayoutScope(
+            data: internalCrosswordLayoutData,
+            child: widget,
+          ),
         ),
       ),
     );

@@ -24,36 +24,7 @@ class AboutProjectDetails extends StatelessWidget {
               child: const Icon(Icons.image, size: 50),
             ),
             const SizedBox(height: 24),
-            RichText(
-              text: TextSpan(
-                text: '${l10n.learn} ',
-                style: textTheme.titleMedium,
-                children: [
-                  TextSpan(
-                    text: l10n.howMade,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    // TODO(Ayad): add link
-                    // recognizer: TapGestureRecognizer()..onTap = () {},
-                  ),
-                  TextSpan(text: ' ${l10n.and} '),
-                  TextSpan(
-                    text: l10n.openSourceCode,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        context.launchUrl(ProjectDetailsLinks.github);
-                      },
-                  ),
-                  const TextSpan(
-                    text: '.',
-                  ),
-                ],
-              ),
-            ),
+            const HowMade(),
             const SizedBox(height: 24),
             Text(
               '${l10n.otherLinks}:',

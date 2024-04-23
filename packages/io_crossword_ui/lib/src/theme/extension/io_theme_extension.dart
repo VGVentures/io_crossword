@@ -35,8 +35,8 @@ class IoThemeExtension extends Equatable
   /// {@macro io_outline_button}
   final IoOutlineButtonTheme outlineButtonTheme;
 
-  /// {@macro io_word_input_style}
-  final IoWordInputStyle wordInput;
+  /// {@macro io_word_input_theme}
+  final IoWordInputTheme wordInput;
 
   /// {@macro io_color_scheme}
   final IoColorScheme colorScheme;
@@ -53,7 +53,7 @@ class IoThemeExtension extends Equatable
     IoIconButtonTheme? iconButtonTheme,
     IoCardTheme? cardTheme,
     IoPhysicalModelStyle? physicalModel,
-    IoWordInputStyle? wordInput,
+    IoWordInputTheme? wordInput,
     IoColorScheme? colorScheme,
     IoOutlineButtonTheme? outlineButtonTheme,
     IoCrosswordLetterTheme? crosswordLetterTheme,

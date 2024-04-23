@@ -49,67 +49,140 @@ class IoCrosswordTheme {
     );
   }
 
-  IoWordInputStyle get _textInput {
+  IoWordInputTheme get _textInput {
     final colorScheme = this.colorScheme;
 
-    const textStyle = TextStyle(
-      color: IoCrosswordColors.seedWhite,
-      fontSize: 16,
-      fontWeight: FontWeight.w700,
-      fontFamily: 'Google Sans',
-      package: IoCrosswordTextStyles.package,
-    );
+    final primaryWordInput = () {
+      const textStyle = TextStyle(
+        color: IoCrosswordColors.seedWhite,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        fontFamily: 'Google Sans',
+        package: IoCrosswordTextStyles.package,
+      );
+      const size = Size.square(48.61);
+      const borderSide = BorderSide(
+        width: 1.8,
+        color: IoCrosswordColors.seedWhite,
+      );
 
-    const size = Size.square(48.61);
-    const borderSide = BorderSide(
-      width: 1.8,
-      color: IoCrosswordColors.seedWhite,
-    );
-
-    return IoWordInputStyle(
-      padding: const EdgeInsets.symmetric(horizontal: 1.8),
-      empty: IoWordInputCharacterFieldStyle(
-        backgroundColor: colorScheme.surface,
-        border: Border.all(width: borderSide.width, color: borderSide.color),
-        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle,
-        size: size,
-      ),
-      filled: IoWordInputCharacterFieldStyle(
-        backgroundColor: colorScheme.primary,
-        border: Border.all(width: borderSide.width, color: colorScheme.primary),
-        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle.copyWith(
-          color: IoCrosswordColors.black,
+      return IoWordInputStyle(
+        padding: const EdgeInsets.symmetric(horizontal: 1.8),
+        empty: IoWordInputCharacterFieldStyle(
+          backgroundColor: colorScheme.surface,
+          border: Border.all(width: borderSide.width, color: borderSide.color),
+          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+          textStyle: textStyle,
+          size: size,
         ),
-        size: size,
-      ),
-      focused: IoWordInputCharacterFieldStyle(
-        backgroundColor: colorScheme.surface,
-        border: Border(
-          top: borderSide,
-          left: borderSide,
-          right: borderSide,
-          bottom: BorderSide(
-            width: 10,
-            color: borderSide.color,
-            strokeAlign: BorderSide.strokeAlignOutside,
+        filled: IoWordInputCharacterFieldStyle(
+          backgroundColor: colorScheme.primary,
+          border:
+              Border.all(width: borderSide.width, color: colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+          textStyle: textStyle.copyWith(
+            color: IoCrosswordColors.black,
           ),
+          size: size,
         ),
-        elevation: 10,
-        size: size,
-        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle,
-      ),
-      disabled: IoWordInputCharacterFieldStyle(
-        backgroundColor: IoCrosswordColors.seedWhite,
-        border: Border.all(width: 0),
-        borderRadius: const BorderRadius.all(Radius.circular(0.77)),
-        textStyle: textStyle.copyWith(
-          color: IoCrosswordColors.black,
+        focused: IoWordInputCharacterFieldStyle(
+          backgroundColor: colorScheme.surface,
+          border: Border(
+            top: borderSide,
+            left: borderSide,
+            right: borderSide,
+            bottom: BorderSide(
+              width: 10,
+              color: borderSide.color,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
+          ),
+          elevation: 10,
+          size: size,
+          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+          textStyle: textStyle,
         ),
-        size: size,
-      ),
+        disabled: IoWordInputCharacterFieldStyle(
+          backgroundColor: IoCrosswordColors.seedWhite,
+          border: Border.all(width: 0),
+          borderRadius: const BorderRadius.all(Radius.circular(0.77)),
+          textStyle: textStyle.copyWith(
+            color: IoCrosswordColors.black,
+          ),
+          size: size,
+        ),
+      );
+    }();
+
+    final secondaryWordInput = () {
+      final letterTheme = _crosswordLetterTheme;
+
+      final textStyle = letterTheme.empty.textStyle;
+      final borderSide = BorderSide(
+        color: letterTheme.empty.backgroundColor,
+        width: 1.74,
+      );
+      const size = Size.square(48);
+      final backgroundColor = letterTheme.empty.backgroundColor;
+
+      return IoWordInputStyle(
+        padding: EdgeInsets.zero,
+        empty: IoWordInputCharacterFieldStyle(
+          backgroundColor: backgroundColor,
+          border: Border.all(
+            color: borderSide.color,
+            width: borderSide.width,
+          ),
+          borderRadius: BorderRadius.zero,
+          textStyle: textStyle,
+          size: size,
+        ),
+        filled: IoWordInputCharacterFieldStyle(
+          backgroundColor: backgroundColor,
+          border: Border.all(
+            color: borderSide.color,
+            width: borderSide.width,
+          ),
+          borderRadius: BorderRadius.zero,
+          textStyle: textStyle,
+          size: size,
+        ),
+        focused: IoWordInputCharacterFieldStyle(
+          backgroundColor: colorScheme.surface,
+          border: Border(
+            top: borderSide,
+            left: borderSide,
+            right: borderSide,
+            bottom: BorderSide(
+              width: 10,
+              color: borderSide.color,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
+          ),
+          elevation: 10,
+          size: size,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(0.1),
+            topRight: Radius.circular(0.1),
+          ),
+          textStyle: textStyle.copyWith(color: backgroundColor),
+        ),
+        disabled: IoWordInputCharacterFieldStyle(
+          backgroundColor: backgroundColor,
+          border: Border.all(
+            color: borderSide.color,
+            width: borderSide.width,
+          ),
+          borderRadius: BorderRadius.zero,
+          textStyle: textStyle,
+          size: size,
+        ),
+      );
+    }();
+
+    return IoWordInputTheme(
+      primary: primaryWordInput,
+      secondary: secondaryWordInput,
     );
   }
 

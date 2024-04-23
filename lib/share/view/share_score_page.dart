@@ -28,10 +28,7 @@ class ShareScorePage extends StatelessWidget {
 
     return Column(
       children: [
-        const SizedBox(
-          height: 153,
-          child: Placeholder(),
-        ),
+        const ShareImage(),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         Text(
           l10n.shareScoreContent,

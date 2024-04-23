@@ -23,7 +23,7 @@ class EndGameContent extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        const EndGameHowMade(),
+        const HowMade(),
         const SizedBox(height: 24),
         const Center(
           child: PlayerInitials(),
@@ -57,13 +57,20 @@ class ActionButtonsEndGame extends StatelessWidget {
                 child: FilledButton.icon(
                   icon: const Icon(Icons.ios_share_sharp, size: 20),
                   label: Text(l10n.share),
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    ShareScorePage.showModal(context);
+                  },
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      GameIntroPage.route(),
+                    );
+                  },
                   icon: const Icon(Icons.gamepad),
                   label: Text(l10n.playAgain),
                 ),
@@ -94,52 +101,6 @@ class ActionButtonsEndGame extends StatelessWidget {
           icon: const Icon(IoIcons.google, size: 20),
         ),
       ],
-    );
-  }
-}
-
-@visibleForTesting
-class EndGameHowMade extends StatelessWidget {
-  @visibleForTesting
-  const EndGameHowMade({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    final textTheme = Theme.of(context).textTheme;
-    const linkColor = IoCrosswordColors.linkBlue;
-
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        text: '${l10n.learn} ',
-        style: textTheme.titleMedium,
-        children: [
-          TextSpan(
-            text: l10n.howMade,
-            style: textTheme.titleMedium?.copyWith(
-              color: linkColor,
-            ),
-            // TODO(Ayad): add link
-            // recognizer: TapGestureRecognizer()..onTap = () {},
-          ),
-          TextSpan(text: ' ${l10n.and} '),
-          TextSpan(
-            text: l10n.openSourceCode,
-            style: textTheme.titleMedium?.copyWith(
-              color: linkColor,
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                context.launchUrl(ProjectDetailsLinks.github);
-              },
-          ),
-          const TextSpan(
-            text: '.',
-          ),
-        ],
-      ),
     );
   }
 }
