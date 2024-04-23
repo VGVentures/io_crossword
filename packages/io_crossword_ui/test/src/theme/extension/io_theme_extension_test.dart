@@ -17,6 +17,9 @@ class _MockIoColorScheme extends Mock implements IoColorScheme {}
 
 class _MockIoOutlineButtonTheme extends Mock implements IoOutlineButtonTheme {}
 
+class _MockIoCrosswordLetterTheme extends Mock
+    implements IoCrosswordLetterTheme {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
@@ -29,6 +32,7 @@ void main() {
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -45,6 +49,7 @@ void main() {
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith(
@@ -65,6 +70,7 @@ void main() {
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -81,6 +87,7 @@ void main() {
           wordInput: _MockIoWordInputStyle(),
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         when(
@@ -101,10 +108,13 @@ void main() {
         when(
           () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
         ).thenReturn(_MockIoColorScheme());
-
         when(
           () => theme.outlineButtonTheme.lerp(theme.outlineButtonTheme, 0.5),
         ).thenReturn(_MockIoOutlineButtonTheme());
+        when(
+          () =>
+              theme.crosswordLetterTheme.lerp(theme.crosswordLetterTheme, 0.5),
+        ).thenReturn(_MockIoCrosswordLetterTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -141,6 +151,7 @@ void main() {
               wordInput: _MockIoWordInputStyle(),
               colorScheme: _MockIoColorScheme(),
               outlineButtonTheme: _MockIoOutlineButtonTheme(),
+              crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
             ),
           ],
         );

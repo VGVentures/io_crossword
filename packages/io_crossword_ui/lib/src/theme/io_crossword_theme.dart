@@ -20,6 +20,7 @@ class IoCrosswordTheme {
       colorScheme: ioColorScheme,
       wordInput: _textInput,
       outlineButtonTheme: _ioOutlineButtonTheme,
+      crosswordLetterTheme: _crosswordLetterTheme,
     );
 
     return ThemeData(
@@ -317,6 +318,43 @@ class IoCrosswordTheme {
         iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
         backgroundColor:
             MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
+      ),
+    );
+  }
+
+  IoCrosswordLetterTheme get _crosswordLetterTheme {
+    final textTheme = _textTheme;
+    final colorScheme = this.colorScheme;
+
+    final border = Border.all(color: colorScheme.background);
+    final textStyle =
+        textTheme.bodyMedium!.copyWith(color: colorScheme.background);
+
+    return IoCrosswordLetterTheme(
+      dash: IoCrosswordLetterStyle(
+        backgroundColor: IoCrosswordColors.flutterBlue,
+        border: border,
+        textStyle: textStyle,
+      ),
+      sparky: IoCrosswordLetterStyle(
+        backgroundColor: IoCrosswordColors.sparkyYellow,
+        border: border,
+        textStyle: textStyle,
+      ),
+      android: IoCrosswordLetterStyle(
+        backgroundColor: IoCrosswordColors.androidGreen,
+        border: border,
+        textStyle: textStyle,
+      ),
+      dino: IoCrosswordLetterStyle(
+        backgroundColor: IoCrosswordColors.chromeRed,
+        border: border,
+        textStyle: textStyle,
+      ),
+      empty: IoCrosswordLetterStyle(
+        backgroundColor: IoCrosswordColors.seedWhite,
+        border: border,
+        textStyle: textStyle,
       ),
     );
   }
