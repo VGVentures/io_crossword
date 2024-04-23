@@ -270,6 +270,38 @@ void main() {
       );
 
       testWidgets(
+        'with vertical word mascot when horizontal has no timestamp',
+        (tester) async {
+          final horizontalWord = ant.copyWith(mascot: Mascots.dash);
+          final verticalWord =
+              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (horizontalWord, verticalWord),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.dino));
+        },
+      );
+
+      testWidgets(
         'with horizontal word mascot when both have the same timestamp',
         (tester) async {
           final horizontalWord =

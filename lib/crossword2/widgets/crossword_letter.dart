@@ -159,7 +159,8 @@ extension on CrosswordLetterWords {
 
 extension on IoCrosswordLetterTheme {
   IoCrosswordLetterStyle fromMascot(Mascots? mascot) {
-    return switch (mascot) {
+    return switch (mascot) // coverage:ignore-line
+        {
       Mascots.android => android,
       Mascots.dash => dash,
       Mascots.dino => dino,
