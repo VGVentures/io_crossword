@@ -99,7 +99,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _translationAnimation = null;
     _animationController?.dispose();
     _animationController = null;
-    _transformationController.dispose();
 
     super.dispose();
   }
