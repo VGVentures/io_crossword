@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
+import 'package:io_crossword/widget/widget.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class ProjectDetailsView extends StatelessWidget {
@@ -105,41 +106,7 @@ class ProjectDetailsContent extends StatelessWidget {
                       child: const Icon(Icons.image, size: 50),
                     ),
                   SizedBox(height: verticalSpacing),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: '${l10n.learn} ',
-                      style: textTheme.titleMedium,
-                      children: [
-                        TextSpan(
-                          text: l10n.howMade,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: linkColor,
-                            decoration: TextDecoration.underline,
-                            decorationColor: linkColor,
-                          ),
-                          // TODO(Ayad): add link
-                          // recognizer: TapGestureRecognizer()..onTap = () {},
-                        ),
-                        TextSpan(text: ' ${l10n.and} '),
-                        TextSpan(
-                          text: l10n.openSourceCode,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: linkColor,
-                            decoration: TextDecoration.underline,
-                            decorationColor: linkColor,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              context.launchUrl(ProjectDetailsLinks.github);
-                            },
-                        ),
-                        const TextSpan(
-                          text: '.',
-                        ),
-                      ],
-                    ),
-                  ),
+                  const HowMade(),
                   SizedBox(height: verticalSpacing),
                   Text(
                     '${l10n.otherLinks}:',
