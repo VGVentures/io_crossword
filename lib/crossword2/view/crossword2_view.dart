@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword/crossword.dart';
@@ -11,6 +11,7 @@ class Crossword2View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     const configuration = CrosswordConfiguration(
       bottomLeft: (45, 45),
       chunkSize: 20,
@@ -19,7 +20,7 @@ class Crossword2View extends StatelessWidget {
     return CrosswordLayoutScope(
       data: CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
-        cellSize: const Size.square(50),
+        cellSize: theme.io.wordInput.secondary.empty.size,
       ),
       child: CrosswordInteractiveViewer(
         builder: (_, __) => const _CrosswordStack(configuration: configuration),
@@ -93,6 +94,7 @@ class _CrosswordStack extends StatelessWidget {
                       (word.position.y * crosswordLayout.cellSize.height),
                   child: IoWordInput.alphabetic(
                     key: ValueKey(selectedWord.word.id),
+                    style: Theme.of(context).io.wordInput.secondary,
                     direction: word.axis.toAxis(),
                     length: selectedWord.word.length,
                   ),

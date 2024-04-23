@@ -9,6 +9,8 @@ import '../../test_tag.dart';
 class _MockIoWordInputCharacterFieldStyle extends Mock
     implements IoWordInputCharacterFieldStyle {}
 
+class _MockIoWordInputStyle extends Mock implements IoWordInputStyle {}
+
 class _GoldenFileComparator extends LocalFileComparator {
   _GoldenFileComparator()
       : super(
@@ -361,6 +363,37 @@ void main() {
       );
 
       testWidgets(
+        'with secondary style',
+        tags: TestTag.golden,
+        (tester) async {
+          await tester.binding.setSurfaceSize(const Size(500, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+
+          final themeData = IoCrosswordTheme().themeData;
+
+          await tester.pumpWidget(
+            _GoldenSubject(
+              themeData: themeData,
+              child: IoWordInput.alphabetic(
+                length: 5,
+                style: themeData.io.wordInput.secondary,
+                characters: const {0: 'A', 2: 'C'},
+              ),
+            ),
+          );
+
+          final subject = find.byType(IoWordInput);
+          await tester.tap(subject);
+          await tester.pumpAndSettle();
+
+          await expectLater(
+            subject,
+            matchesGoldenFile(goldenKey('secondary_style')),
+          );
+        },
+      );
+
+      testWidgets(
         'with filled character',
         tags: TestTag.golden,
         (tester) async {
@@ -393,6 +426,47 @@ void main() {
           );
         },
       );
+    });
+  });
+
+  group('$IoWordInputTheme', () {
+    test('supports value equality', () {
+      final theme1 = IoWordInputTheme(
+        primary: _MockIoWordInputStyle(),
+        secondary: _MockIoWordInputStyle(),
+      );
+      final theme2 = IoWordInputTheme(
+        primary: theme1.primary,
+        secondary: theme1.secondary,
+      );
+      final theme3 = IoWordInputTheme(
+        primary: _MockIoWordInputStyle(),
+        secondary: _MockIoWordInputStyle(),
+      );
+
+      expect(theme1, equals(theme2));
+      expect(theme1, isNot(equals(theme3)));
+      expect(theme2, isNot(equals(theme3)));
+    });
+
+    test('lerps', () {
+      const t = 0.5;
+      final from = IoWordInputTheme(
+        primary: _MockIoWordInputStyle(),
+        secondary: _MockIoWordInputStyle(),
+      );
+      final to = IoWordInputTheme(
+        primary: _MockIoWordInputStyle(),
+        secondary: _MockIoWordInputStyle(),
+      );
+
+      when(() => from.primary.lerp(to.primary, t)).thenReturn(to.primary);
+      when(() => from.secondary.lerp(to.secondary, t)).thenReturn(to.secondary);
+
+      final lerp = from.lerp(to, t);
+
+      expect(lerp.primary, equals(to.primary));
+      expect(lerp.secondary, equals(to.secondary));
     });
   });
 
