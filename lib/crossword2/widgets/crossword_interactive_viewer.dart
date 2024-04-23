@@ -38,7 +38,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   Quad? _viewport;
 
   /// The [TransformationController] used to control the [InteractiveViewer].
-  final _transformationController = TransformationController();
+  ///
+  /// See also:
+  ///
+  /// * [DefaultTransformationController], which provides the
+  /// [TransformationController] to its descendants.
+  late TransformationController _transformationController;
 
   late AnimationController? _animationController = AnimationController(
     vsync: this,
@@ -80,6 +85,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       ),
     )..addListener(_onAnimateTranslation);
     animationController.forward(from: 0);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _transformationController = DefaultTransformationController.of(context);
   }
 
   @override
