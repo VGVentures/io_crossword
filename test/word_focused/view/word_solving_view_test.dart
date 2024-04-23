@@ -2,6 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -149,6 +150,21 @@ void main() {
       );
 
       testWidgets(
+        'incorrectAnswer text when the status is incorrect',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.text(l10n.incorrectAnswer), findsOneWidget);
+        },
+      );
+
+      testWidgets(
         'the $HintsSection when the status is not validating',
         (tester) async {
           when(() => wordSelectionBloc.state).thenReturn(
@@ -237,6 +253,21 @@ void main() {
       );
 
       testWidgets(
+        'incorrectAnswer text when the status is incorrect',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+            ),
+          );
+          await tester.pumpApp(widget);
+
+          expect(find.text(l10n.incorrectAnswer), findsOneWidget);
+        },
+      );
+
+      testWidgets(
         'the $HintsSection when the status is not validating',
         (tester) async {
           when(() => wordSelectionBloc.state).thenReturn(
@@ -301,6 +332,27 @@ void main() {
           () => wordSelectionBloc.add(
             const WordSolveAttempted(answer: 'ANSWER'),
           ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'deleting a letter sends $WordSolveRequested',
+      (tester) async {
+        await tester.pumpApp(widget);
+        await tester.pumpAndSettle();
+
+        final editableTexts = find.byType(EditableText);
+        await tester.enterText(editableTexts.at(0), 'A');
+        await tester.enterText(editableTexts.at(1), 'N');
+        await tester.enterText(editableTexts.at(2), 'S');
+        await tester.enterText(editableTexts.at(3), '!'); // focus previous cell
+        await tester.pumpAndSettle();
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+        verify(
+          () => wordSelectionBloc.add(const WordSolveRequested()),
         ).called(1);
       },
     );

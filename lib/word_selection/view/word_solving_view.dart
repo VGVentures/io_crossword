@@ -27,11 +27,16 @@ class WordSolvingLargeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
+    final isIncorrectAnswer = context.select(
+      (WordSelectionBloc bloc) =>
+          bloc.state.status == WordSelectionStatus.incorrect,
+    );
 
     return Column(
       children: [
@@ -41,6 +46,12 @@ class WordSolvingLargeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
+                style: IoCrosswordTextStyles.bodyMD.medium
+                    ?.copyWith(color: theme.colorScheme.error),
+              ),
+              const SizedBox(height: 24),
               Text(
                 selectedWord.word.clue,
                 style: IoCrosswordTextStyles.titleMD,
@@ -85,6 +96,18 @@ class WordSolvingSmallView extends StatefulWidget {
 
 class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
   final _controller = IoWordInputController();
+  String _lastWord = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_lastWord.length > _controller.word.length) {
+        context.read<WordSelectionBloc>().add(const WordSolveRequested());
+      }
+      _lastWord = _controller.word;
+    });
+  }
 
   @override
   void dispose() {
@@ -94,11 +117,16 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
+    final isIncorrectAnswer = context.select(
+      (WordSelectionBloc bloc) =>
+          bloc.state.status == WordSelectionStatus.incorrect,
+    );
 
     return Column(
       children: [
@@ -108,7 +136,13 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           length: selectedWord.word.length,
           controller: _controller,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
+        Text(
+          isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
+          style: IoCrosswordTextStyles.bodyMD.medium
+              ?.copyWith(color: theme.colorScheme.error),
+        ),
+        const SizedBox(height: 16),
         Text(
           selectedWord.word.clue,
           style: IoCrosswordTextStyles.titleMD,
@@ -128,7 +162,10 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return const HintsSection();
+              return const Align(
+                alignment: Alignment.topCenter,
+                child: HintsSection(),
+              );
             },
           ),
         ),
