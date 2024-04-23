@@ -1,5 +1,6 @@
 import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -9,8 +10,11 @@ part 'hint_state.dart';
 class HintBloc extends Bloc<HintEvent, HintState> {
   HintBloc({
     required HintResource hintResource,
+    required BoardInfoRepository boardInfoRepository,
   })  : _hintResource = hintResource,
+        _boardInfoRepository = boardInfoRepository,
         super(const HintState()) {
+    on<HintEnabledRequested>(_onHintEnabledRequested);
     on<HintModeEntered>(_onHintModeEntered);
     on<HintModeExited>(_onHintModeExited);
     on<HintRequested>(_onHintRequested);
@@ -18,6 +22,19 @@ class HintBloc extends Bloc<HintEvent, HintState> {
   }
 
   final HintResource _hintResource;
+  final BoardInfoRepository _boardInfoRepository;
+
+  Future<void> _onHintEnabledRequested(
+    HintEnabledRequested event,
+    Emitter<HintState> emit,
+  ) async {
+    await emit.forEach(
+      _boardInfoRepository.isHintsEnabled(),
+      onData: (isHintsEnabled) {
+        return state.copyWith(isHintsEnabled: isHintsEnabled);
+      },
+    );
+  }
 
   void _onHintModeEntered(
     HintModeEntered event,
