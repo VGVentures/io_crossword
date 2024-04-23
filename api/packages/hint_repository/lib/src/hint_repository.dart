@@ -25,6 +25,22 @@ class HintRepository {
   String _hintsPath(String wordId) =>
       '$_answersCollection/$wordId/$_hintsCollection';
 
+  /// Returns whether the hint feature is enabled.
+  Future<bool> isHintsEnabled() async {
+    try {
+      final results = await _dbClient.findBy(
+        _boardInfoCollection,
+        'type',
+        'is_hints_enabled',
+      );
+
+      final data = results.first.data;
+      return data['value'] as bool;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Returns the maximum hints allowed for a word.
   Future<int> getMaxHints() async {
     try {

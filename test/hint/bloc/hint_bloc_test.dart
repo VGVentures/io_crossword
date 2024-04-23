@@ -144,6 +144,9 @@ void main() {
     blocTest<HintBloc, HintState>(
       'emits state with hints',
       setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.value(true),
+        );
         when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
           (_) async => (
             [
@@ -172,12 +175,34 @@ void main() {
 
     blocTest<HintBloc, HintState>(
       'does not emit state when hints are already present',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.value(true),
+        );
+      },
       seed: () => HintState(
         hints: [
           Hint(question: 'is it orange?', response: HintResponse.no),
           Hint(question: 'is it blue?', response: HintResponse.yes),
         ],
       ),
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
+      act: (bloc) => bloc.add(
+        PreviousHintsRequested('id'),
+      ),
+      expect: () => const <HintState>[],
+    );
+
+    blocTest<HintBloc, HintState>(
+      'does not emit state when hints are disabled',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.fromIterable([true, false]),
+        );
+      },
       build: () => HintBloc(
         hintResource: hintResource,
         boardInfoRepository: boardInfoRepository,
