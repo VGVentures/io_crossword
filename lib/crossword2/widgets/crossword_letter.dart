@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template crossword_letter_index}
 /// Represents the position of a letter in a crossword chunk.
@@ -104,8 +105,6 @@ class CrosswordLetterData extends Equatable {
 /// empty cell. Whereas if the letter is known, it will display the character
 /// themed by the first team that resolved it.
 /// {@endtemplate}
-// TODO(alestiago): Style the letter based on the team that resolved it:
-// https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6472452796
 class CrosswordLetter extends StatelessWidget {
   const CrosswordLetter({
     required this.data,
@@ -124,27 +123,48 @@ class CrosswordLetter extends StatelessWidget {
     final theme = Theme.of(context);
     final crosswordData = CrosswordLayoutScope.of(context);
 
+    final mascot = data.words.mascot();
+    final style = theme.io.crosswordLetterTheme.fromMascot(mascot);
+
     return GestureDetector(
       onTap: () => _onTap(context),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.white,
-        ),
-        child: SizedBox.fromSize(
-          size: crosswordData.cellSize,
-          child: data.character == null
-              ? null
-              : Center(
-                  child: Text(
-                    data.character!,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-        ),
+      child: SizedBox.fromSize(
+        size: crosswordData.cellSize,
+        child: IoCrosswordLetter(data.character, style: style),
       ),
     );
+  }
+}
+
+extension on CrosswordLetterWords {
+  /// Returns the mascot of the first team that resolved the letter.
+  Mascots? mascot() {
+    if ($1 != null && $2 == null) return $1!.mascot;
+    if ($1 == null && $2 != null) return $2!.mascot;
+
+    if ($1 != null && $2 != null) {
+      return switch (($1!.solvedTimestamp, $2!.solvedTimestamp)) {
+        (null, null) => $1!.mascot,
+        (final int _, null) => $1!.mascot,
+        (null, final int _) => $2!.mascot,
+        (final int h, final int v) when h <= v => $1!.mascot,
+        (final int h, final int v) when v < h => $2!.mascot,
+        (_, _) => null,
+      };
+    }
+
+    return null;
+  }
+}
+
+extension on IoCrosswordLetterTheme {
+  IoCrosswordLetterStyle fromMascot(Mascots? mascot) {
+    return switch (mascot) {
+      Mascots.android => android,
+      Mascots.dash => dash,
+      Mascots.dino => dino,
+      Mascots.sparky => sparky,
+      _ => empty,
+    };
   }
 }

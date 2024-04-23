@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/widgets.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/fixtures.dart';
@@ -24,7 +26,7 @@ void main() {
     const ant = Word(
       id: '1',
       position: Point<int>(0, 0),
-      axis: Axis.horizontal,
+      axis: domain.Axis.horizontal,
       length: 3,
       clue: '',
     );
@@ -41,7 +43,7 @@ void main() {
       );
     });
 
-    testWidgets('pumps text character is known', (tester) async {
+    testWidgets('pumps text character if known', (tester) async {
       final knownLetterData = CrosswordLetterData(
         index: (0, 0),
         chunkIndex: (0, 0),
@@ -101,6 +103,204 @@ void main() {
 
       verify(() => wordSelectionBloc.add(LetterSelected(letter: letterData)))
           .called(1);
+    });
+
+    group('styles', () {
+      late ThemeData themeData;
+
+      setUp(() {
+        themeData = IoCrosswordTheme().themeData;
+      });
+
+      testWidgets(
+        'with horizontal word mascot when vertical is null',
+        (tester) async {
+          final word = ant.copyWith(mascot: Mascots.android);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (word, null),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.android));
+        },
+      );
+
+      testWidgets(
+        'with vertical word mascot when horizontal is null',
+        (tester) async {
+          final word = ant.copyWith(mascot: Mascots.dash);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (null, word),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.dash));
+        },
+      );
+
+      testWidgets(
+        'with horizontal word mascot when solved before vertical word',
+        (tester) async {
+          final horizontalWord =
+              ant.copyWith(mascot: Mascots.sparky, solvedTimestamp: 1);
+          final verticalWord =
+              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 2);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (horizontalWord, verticalWord),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.sparky));
+        },
+      );
+
+      testWidgets(
+        'with vertical word mascot when solved before horizontal word',
+        (tester) async {
+          final horizontalWord =
+              ant.copyWith(mascot: Mascots.sparky, solvedTimestamp: 2);
+          final verticalWord =
+              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (horizontalWord, verticalWord),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.dino));
+        },
+      );
+
+      testWidgets(
+        'with horizontal word mascot when both have no timestamp',
+        (tester) async {
+          final horizontalWord = ant.copyWith(mascot: Mascots.dash);
+          final verticalWord = ant.copyWith(mascot: Mascots.dino);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (horizontalWord, verticalWord),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.dash));
+        },
+      );
+
+      testWidgets(
+        'with horizontal word mascot when both have the same timestamp',
+        (tester) async {
+          final horizontalWord =
+              ant.copyWith(mascot: Mascots.dash, solvedTimestamp: 1);
+          final verticalWord =
+              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
+          final letterData = CrosswordLetterData(
+            index: (0, 0),
+            chunkIndex: (0, 0),
+            character: 'A',
+            words: (horizontalWord, verticalWord),
+          );
+
+          await tester.pumpApp(
+            Theme(
+              data: themeData,
+              child: CrosswordLayoutScope(
+                data: crosswordLayoutData,
+                child: CrosswordLetter(data: letterData),
+              ),
+            ),
+          );
+
+          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
+          final ioCrosswordLetter =
+              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
+          final style = ioCrosswordLetter.style;
+
+          expect(style, equals(themeData.io.crosswordLetterTheme.dash));
+        },
+      );
     });
   });
 
