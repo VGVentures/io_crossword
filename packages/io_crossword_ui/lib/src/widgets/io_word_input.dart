@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -377,8 +378,9 @@ class _IoWordInputState extends State<IoWordInput> {
                       ? (_) => widget.onSubmit!(_word)
                       : null,
                   onSelectionChanged: (selection, cause) {
+                    final offset = math.min(1, controller.text.length);
                     controller.selection = TextSelection.fromPosition(
-                      const TextPosition(offset: 1),
+                      TextPosition(offset: offset),
                     );
                   },
                 ),

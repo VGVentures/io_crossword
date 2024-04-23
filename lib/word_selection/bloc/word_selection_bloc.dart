@@ -85,8 +85,15 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       return;
     }
 
+    if (state.status == WordSelectionStatus.solving ||
+        state.status == WordSelectionStatus.solved ||
+        state.status == WordSelectionStatus.validating) {
+      // Can't solve a word if it's already being solved, solved, or validating.
+      return;
+    }
+
     emit(
-      WordSelectionState(
+      state.copyWith(
         status: WordSelectionStatus.solving,
         word: state.word,
       ),
