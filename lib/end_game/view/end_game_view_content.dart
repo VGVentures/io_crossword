@@ -57,13 +57,20 @@ class ActionButtonsEndGame extends StatelessWidget {
                 child: FilledButton.icon(
                   icon: const Icon(Icons.ios_share_sharp, size: 20),
                   label: Text(l10n.share),
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    ShareScorePage.showModal(context);
+                  },
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {}, // coverage:ignore-line
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      GameIntroPage.route(),
+                    );
+                  },
                   icon: const Icon(Icons.gamepad),
                   label: Text(l10n.playAgain),
                 ),
