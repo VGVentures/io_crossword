@@ -72,9 +72,21 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/end_image.png
-  AssetGenImage get endImage =>
-      const AssetGenImage('assets/images/end_image.png');
+  /// File path: assets/images/end_game_android.png
+  AssetGenImage get endGameAndroid =>
+      const AssetGenImage('assets/images/end_game_android.png');
+
+  /// File path: assets/images/end_game_dash.png
+  AssetGenImage get endGameDash =>
+      const AssetGenImage('assets/images/end_game_dash.png');
+
+  /// File path: assets/images/end_game_dino.png
+  AssetGenImage get endGameDino =>
+      const AssetGenImage('assets/images/end_game_dino.png');
+
+  /// File path: assets/images/end_game_sparky.png
+  AssetGenImage get endGameSparky =>
+      const AssetGenImage('assets/images/end_game_sparky.png');
 
   /// File path: assets/images/letters.png
   AssetGenImage get letters => const AssetGenImage('assets/images/letters.png');
@@ -96,7 +108,10 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        endImage,
+        endGameAndroid,
+        endGameDash,
+        endGameDino,
+        endGameSparky,
         letters,
         platformNotSelected,
         tile,
