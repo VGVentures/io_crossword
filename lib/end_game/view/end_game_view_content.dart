@@ -15,6 +15,8 @@ class EndGameContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const EndGameImage(),
+        const SizedBox(height: 24),
         Text(
           l10n.thanksForContributing,
           style: textTheme.headlineSmall,
@@ -138,6 +140,29 @@ class EndGameHowMade extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+@visibleForTesting
+class EndGameImage extends StatelessWidget {
+  @visibleForTesting
+  const EndGameImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final mascot =
+        context.select((PlayerBloc bloc) => bloc.state.player.mascot);
+
+    final image = switch (mascot) {
+      Mascots.dash => Assets.images.endGameDash,
+      Mascots.android => Assets.images.endGameAndroid,
+      Mascots.dino => Assets.images.endGameDino,
+      Mascots.sparky => Assets.images.endGameSparky,
+    };
+
+    return image.image(
+      fit: BoxFit.fitWidth,
     );
   }
 }
