@@ -333,5 +333,9 @@
   "share": "Share",
   "@share": {
     "description": "Share label"
+  },
+  "rotatePhoneToPortraitMessage": "Please rotate your device to portrait mode to continue.",
+  "@rotatePhoneToPortraitMessage": {
+    "description": "Message notifying the user that they need to rotate their phone to portrait mode to continue playing."
   }
 }
