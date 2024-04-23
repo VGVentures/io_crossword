@@ -39,6 +39,36 @@ void main() {
       );
     });
 
+    group('isHintsEnabled', () {
+      test('returns the value fetched from the database', () async {
+        when(() => dbClient.findBy('boardInfo', 'type', 'is_hints_enabled'))
+            .thenAnswer(
+          (_) async => [
+            DbEntityRecord(
+              id: 'isHintsEnabled',
+              data: const {
+                'type': 'is_hints_enabled',
+                'value': true,
+              },
+            ),
+          ],
+        );
+
+        final isHintsEnabled = await hintRepository.isHintsEnabled();
+
+        expect(isHintsEnabled, isTrue);
+      });
+
+      test('returns false when an error occurs', () async {
+        when(() => dbClient.findBy('boardInfo', 'type', 'is_hints_enabled'))
+            .thenThrow(Exception());
+
+        final isHintsEnabled = await hintRepository.isHintsEnabled();
+
+        expect(isHintsEnabled, isFalse);
+      });
+    });
+
     group('getMaxHints', () {
       test('returns the maximum hints allowed', () async {
         when(() => dbClient.findBy('boardInfo', 'type', 'max_hints'))

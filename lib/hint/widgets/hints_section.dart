@@ -39,23 +39,30 @@ class HintsSection extends StatelessWidget {
     final isThinking = context
         .select((HintBloc bloc) => bloc.state.status == HintStatus.thinking);
     final allHints = context.select((HintBloc bloc) => bloc.state.hints);
+    final isHintsEnabled =
+        context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ...allHints.mapIndexed(
-          (i, hint) => HintQuestionResponse(
-            index: i,
-            hint: hint,
+    if (!isHintsEnabled) return const SizedBox.shrink();
+
+    return SingleChildScrollView(
+      reverse: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ...allHints.mapIndexed(
+            (i, hint) => HintQuestionResponse(
+              index: i,
+              hint: hint,
+            ),
           ),
-        ),
-        if (isThinking) ...[
-          const SizedBox(height: 24),
-          const Center(child: HintLoadingIndicator()),
-          const SizedBox(height: 8),
+          if (isThinking) ...[
+            const SizedBox(height: 24),
+            const Center(child: HintLoadingIndicator()),
+            const SizedBox(height: 8),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

@@ -19,6 +19,18 @@ void main() {
         expect(state.copyWith(), equals(state));
       });
 
+      test(
+        'returns object with updated isHintsEnabled when isHintsEnabled '
+        'is passed',
+        () {
+          final state = HintState(status: HintStatus.asking);
+          expect(
+            state.copyWith(isHintsEnabled: true),
+            equals(HintState(status: HintStatus.asking, isHintsEnabled: true)),
+          );
+        },
+      );
+
       test('returns object with updated status when status is passed', () {
         final state = HintState(status: HintStatus.asking);
         expect(

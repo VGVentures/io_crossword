@@ -73,6 +73,8 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {'wordId': 'wordId', 'question': 'question'},
           );
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => crosswordRepository.findAnswerById('wordId'),
           ).thenAnswer(
@@ -137,6 +139,8 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {'wordId': 'wordId', 'question': 'question'},
           );
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => crosswordRepository.findAnswerById('wordId'),
           ).thenAnswer(
@@ -176,6 +180,8 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {'wordId': 'wordId', 'question': 'question'},
           );
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => crosswordRepository.findAnswerById('wordId'),
           ).thenAnswer(
@@ -212,6 +218,8 @@ void main() {
           when(() => request.json()).thenAnswer(
             (_) async => {'wordId': 'wordId', 'question': 'question'},
           );
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => crosswordRepository.findAnswerById('wordId'),
           ).thenAnswer((_) async => null);
@@ -223,6 +231,22 @@ void main() {
             await response.body(),
             equals('Word not found for id wordId'),
           );
+        },
+      );
+
+      test(
+        'returns forbidden response when hints are disabled',
+        () async {
+          when(() => request.json()).thenAnswer(
+            (_) async => {'wordId': 'wordId', 'question': 'question'},
+          );
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => false);
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.forbidden);
+          expect(await response.body(), equals('Hints are disabled'));
         },
       );
 
@@ -271,6 +295,8 @@ void main() {
             Hint(question: 'question3', response: HintResponse.no),
           ];
           when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => hintRepository.getPreviousHints(
               userId: 'userId',
@@ -300,6 +326,8 @@ void main() {
         'returns internal server error response when getting hints fails',
         () async {
           when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => true);
           when(
             () => hintRepository.getPreviousHints(
               userId: 'userId',
@@ -311,6 +339,20 @@ void main() {
 
           expect(response.statusCode, HttpStatus.internalServerError);
           expect(await response.body(), contains('Oops'));
+        },
+      );
+
+      test(
+        'returns forbidden response when hints are disabled',
+        () async {
+          when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
+          when(() => hintRepository.isHintsEnabled())
+              .thenAnswer((_) async => false);
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.forbidden);
+          expect(await response.body(), equals('Hints are disabled'));
         },
       );
 

@@ -107,6 +107,18 @@ void main() {
     });
 
     testWidgets(
+      'renders a SizedBox when hints are not enabled',
+      (tester) async {
+        when(() => hintBloc.state).thenReturn(
+          HintState(isHintsEnabled: false),
+        );
+        await tester.pumpApp(widget);
+
+        expect(find.byType(SizedBox), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'renders as many $HintQuestionResponse widgets as hints are available',
       (tester) async {
         final hints = [
@@ -115,7 +127,9 @@ void main() {
           Hint(question: 'Q3', response: HintResponse.notApplicable),
           Hint(question: 'Q4', response: HintResponse.no),
         ];
-        when(() => hintBloc.state).thenReturn(HintState(hints: hints));
+        when(() => hintBloc.state).thenReturn(
+          HintState(hints: hints, isHintsEnabled: true),
+        );
         await tester.pumpApp(widget);
 
         expect(find.byType(HintQuestionResponse), findsNWidgets(hints.length));
@@ -126,7 +140,7 @@ void main() {
       'renders a hint loading indicator when the hint status is thinking',
       (tester) async {
         when(() => hintBloc.state).thenReturn(
-          HintState(status: HintStatus.thinking),
+          HintState(status: HintStatus.thinking, isHintsEnabled: true),
         );
         await tester.pumpApp(widget);
 
