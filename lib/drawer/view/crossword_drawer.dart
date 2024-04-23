@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
+import 'package:io_crossword/end_game/end_game.dart';
+import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/project_details/view/project_details_view.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -16,19 +19,21 @@ class CrosswordDrawer extends StatelessWidget {
     final l10n = context.l10n;
     final items = [
       DrawerItem(
-        title: l10n.settings,
-        icon: Icons.settings,
-        onPressed: () {}, // coverage:ignore-line
+        title: l10n.finishAndSubmitScore,
+        icon: Icons.sports_score,
+        onPressed: () {
+          EndGameCheck.openDialog(context);
+        },
       ),
       DrawerItem(
         title: l10n.howToPlay,
         icon: Icons.games,
-        onPressed: () {}, // coverage:ignore-line
-      ),
-      DrawerItem(
-        title: l10n.submitScore,
-        icon: Icons.sports_score,
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          showDialog<AlertDialog>(
+            context: context,
+            builder: (context) => const AboutView(),
+          );
+        },
       ),
       DrawerItem(
         title: l10n.projectDetails,
@@ -41,34 +46,46 @@ class CrosswordDrawer extends StatelessWidget {
         },
       ),
       DrawerItem(
-        title: l10n.exploreAiStudio,
-        icon: IoIcons.gemini,
-        onPressed: () {}, // coverage:ignore-line
+        title: l10n.claimBadge,
+        icon: IoIcons.google,
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.claimBadge);
+        },
       ),
       DrawerItem(
         title: l10n.googleIO,
         svgIcon: Assets.icons.io.svg(),
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.googleIO);
+        },
       ),
       DrawerItem(
-        title: l10n.developerProfile,
-        icon: IoIcons.google,
-        onPressed: () {}, // coverage:ignore-line
+        title: l10n.exploreAiStudio,
+        icon: IoIcons.gemini,
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.googleAI);
+        },
       ),
       DrawerItem(
         title: l10n.privacyPolicy,
         icon: Icons.text_snippet,
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.privacyPolicy);
+        },
       ),
       DrawerItem(
         title: l10n.termsOfService,
         icon: Icons.note_alt,
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.termsOfService);
+        },
       ),
       DrawerItem(
         title: l10n.faqs,
         icon: Icons.chat,
-        onPressed: () {}, // coverage:ignore-line
+        onPressed: () {
+          context.launchUrl(ProjectDetailsLinks.faqs);
+        },
       ),
     ];
 

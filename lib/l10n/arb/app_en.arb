@@ -249,9 +249,13 @@
   "@totalScore": {
     "description": "Total score label"
   },
-  "claimBadge": "Claim my badge",
+  "claimBadge": "Claim your badge",
   "@claimBadge": {
     "description": "Claim badge label"
+  },
+   "finishAndSubmitScore": "Finish & submit score",
+  "@finishAndSubmitScore": {
+    "description": "Finish & submit score for menu label"
   },
   "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
   "@claimBadgeDescription": {
