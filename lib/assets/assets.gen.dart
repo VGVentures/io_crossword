@@ -95,6 +95,22 @@ class $AssetsImagesGen {
   AssetGenImage get platformNotSelected =>
       const AssetGenImage('assets/images/platform_not_selected.png');
 
+  /// File path: assets/images/share_android.png
+  AssetGenImage get shareAndroid =>
+      const AssetGenImage('assets/images/share_android.png');
+
+  /// File path: assets/images/share_dash.png
+  AssetGenImage get shareDash =>
+      const AssetGenImage('assets/images/share_dash.png');
+
+  /// File path: assets/images/share_dino.png
+  AssetGenImage get shareDino =>
+      const AssetGenImage('assets/images/share_dino.png');
+
+  /// File path: assets/images/share_sparky.png
+  AssetGenImage get shareSparky =>
+      const AssetGenImage('assets/images/share_sparky.png');
+
   /// File path: assets/images/tile.png
   AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
 
@@ -114,6 +130,10 @@ class $AssetsImagesGen {
         endGameSparky,
         letters,
         platformNotSelected,
+        shareAndroid,
+        shareDash,
+        shareDino,
+        shareSparky,
         tile,
         tileLarge,
         welcomeBackground

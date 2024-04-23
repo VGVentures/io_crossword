@@ -9,6 +9,7 @@ import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -68,6 +69,16 @@ void main() {
       await tester.pumpApp(ActionButtonsEndGame());
 
       expect(find.text(l10n.share), findsOneWidget);
+    });
+
+    testWidgets('displays ShareScorePage when share is tapped', (tester) async {
+      await tester.pumpApp(ActionButtonsEndGame());
+
+      await tester.tap(find.text(l10n.share));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ShareScorePage), findsOneWidget);
     });
 
     testWidgets('displays playAgain', (tester) async {
