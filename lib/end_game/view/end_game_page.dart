@@ -8,6 +8,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/leaderboard/view/leaderboard_page.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 part '../widgets/leaderboard_button.dart';
