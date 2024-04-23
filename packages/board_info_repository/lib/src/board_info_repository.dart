@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// {@template board_info_exception}
 /// An exception to throw when there is an error fetching the board info.
@@ -33,6 +34,8 @@ class BoardInfoRepository {
 
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
+
+  BehaviorSubject<bool>? _hintsEnabled;
 
   /// Returns the total words count available in the crossword.
   Stream<int> getTotalWordsCount() {
@@ -84,5 +87,28 @@ class BoardInfoRepository {
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
+  }
+
+  /// Returns the hints enabled status.
+  Stream<bool> isHintsEnabled() {
+    if (_hintsEnabled != null) return _hintsEnabled!.stream;
+
+    _hintsEnabled = BehaviorSubject<bool>();
+
+    boardInfoCollection
+        .where('type', isEqualTo: 'is_hints_enabled')
+        .snapshots()
+        .map((snapshot) {
+          final docs = snapshot.docs;
+          // If the flag is not found, we assume it is disabled.
+          if (docs.isEmpty) return false;
+
+          final isHintsEnabled = docs.first.data()['value'] as bool;
+          return isHintsEnabled;
+        })
+        .listen(_hintsEnabled!.add)
+        .onError(_hintsEnabled!.addError);
+
+    return _hintsEnabled!.stream;
   }
 }
