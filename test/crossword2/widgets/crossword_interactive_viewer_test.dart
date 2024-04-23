@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +66,16 @@ void main() {
     );
 
     group('panning', () {
+      late _MockWord word;
+
+      setUp(() {
+        word = _MockWord();
+        when(() => word.id).thenReturn('id');
+        when(() => word.length).thenReturn(5);
+        when(() => word.axis).thenReturn(domain.Axis.horizontal);
+        when(() => word.position).thenReturn(const Point(0, 0));
+      });
+
       testWidgets('is enabled when no word is selected', (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           const WordSelectionState(
@@ -91,12 +103,6 @@ void main() {
       });
 
       testWidgets('is disabled when a word is selected', (tester) async {
-        final word = _MockWord();
-        when(() => word.id).thenReturn('id');
-        when(() => word.length).thenReturn(5);
-        when(() => word.axis).thenReturn(domain.Axis.horizontal);
-        when(() => word.position).thenReturn(const Point(0, 0));
-
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
@@ -122,6 +128,49 @@ void main() {
         final interactiveViewer =
             tester.widget<InteractiveViewer>(interactiveViewerFinder);
         expect(interactiveViewer.panEnabled, isFalse);
+      });
+
+      testWidgets('updates when selected word changes', (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState(
+            status: WordSelectionStatus.empty,
+            // ignore: avoid_redundant_argument_values
+            word: null,
+          ),
+        );
+        final streamController = StreamController<WordSelectionState>();
+        addTearDown(streamController.close);
+        final stream = streamController.stream.asBroadcastStream();
+
+        whenListen<WordSelectionState>(wordSelectionBloc, stream);
+
+        await tester.pumpSubject(
+          wordSelectionBloc: wordSelectionBloc,
+          CrosswordInteractiveViewer(
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
+
+        final interactiveViewerFinder = find.byType(InteractiveViewer);
+        expect(
+          tester.widget<InteractiveViewer>(interactiveViewerFinder).panEnabled,
+          isTrue,
+        );
+
+        final newState = WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          word: SelectedWord(section: (0, 0), word: word),
+        );
+        when(() => wordSelectionBloc.state).thenReturn(newState);
+        streamController.add(newState);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.widget<InteractiveViewer>(interactiveViewerFinder).panEnabled,
+          isFalse,
+        );
       });
     });
   });
