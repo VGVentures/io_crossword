@@ -195,5 +195,22 @@ void main() {
       ),
       expect: () => const <HintState>[],
     );
+
+    blocTest<HintBloc, HintState>(
+      'does not emit state when hints are disabled',
+      setUp: () {
+        when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
+          (_) => Stream.fromIterable([true, false]),
+        );
+      },
+      build: () => HintBloc(
+        hintResource: hintResource,
+        boardInfoRepository: boardInfoRepository,
+      ),
+      act: (bloc) => bloc.add(
+        PreviousHintsRequested('id'),
+      ),
+      expect: () => const <HintState>[],
+    );
   });
 }
