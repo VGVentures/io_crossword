@@ -39,9 +39,7 @@ void main() {
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          twitterShareUrl: 'https://twitter',
-          linkedInShareUrl: 'https://linkedin',
-          facebookShareUrl: 'https://facebook',
+          url: 'https://crossword.withgoogle.com',
         ),
       );
 
@@ -53,9 +51,7 @@ void main() {
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          twitterShareUrl: 'https://twitter',
-          linkedInShareUrl: 'https://linkedin',
-          facebookShareUrl: 'https://facebook',
+          url: 'https://crossword.withgoogle.com',
         ),
       );
 
@@ -64,13 +60,13 @@ void main() {
 
     testWidgets('launches linkedIn url when linkedin icon is tapped',
         (tester) async {
+      const url = 'https://crossword.withgoogle.com';
+
       await tester.pumpApp(
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          twitterShareUrl: 'https://twitter',
-          linkedInShareUrl: 'https://linkedin',
-          facebookShareUrl: 'https://facebook',
+          url: url,
         ),
       );
 
@@ -78,7 +74,7 @@ void main() {
 
       verify(
         () => urlLauncher.launchUrl(
-          'https://linkedin',
+          'https://www.linkedin.com/sharing/share-offsite/?url=$url',
           any(),
         ),
       ).called(1);
@@ -86,13 +82,13 @@ void main() {
 
     testWidgets('launches twitter url when twitter icon is tapped',
         (tester) async {
+      const url = 'https://crossword.withgoogle.com';
+
       await tester.pumpApp(
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          twitterShareUrl: 'https://twitter',
-          linkedInShareUrl: 'https://linkedin',
-          facebookShareUrl: 'https://facebook',
+          url: url,
         ),
       );
 
@@ -100,7 +96,7 @@ void main() {
 
       verify(
         () => urlLauncher.launchUrl(
-          'https://twitter',
+          'https://twitter.com/intent/tweet?text=Check%20out%20IOCrossword%20%23GoogleIO!%0A$url',
           any(),
         ),
       ).called(1);
@@ -108,13 +104,13 @@ void main() {
 
     testWidgets('launches facebook url when facebook icon is tapped',
         (tester) async {
+      const url = 'https://crossword.withgoogle.com';
+
       await tester.pumpApp(
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          twitterShareUrl: 'https://twitter',
-          linkedInShareUrl: 'https://linkedin',
-          facebookShareUrl: 'https://facebook',
+          url: url,
         ),
       );
 
@@ -122,7 +118,7 @@ void main() {
 
       verify(
         () => urlLauncher.launchUrl(
-          'https://facebook',
+          'https://www.facebook.com/sharer.php?u=$url',
           any(),
         ),
       ).called(1);

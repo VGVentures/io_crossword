@@ -27,8 +27,6 @@ class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
-class _MockShareResource extends Mock implements ShareResource {}
-
 class _MockHintResource extends Mock implements HintResource {}
 
 class _MockPlayerBloc extends Mock implements PlayerBloc {
@@ -58,7 +56,6 @@ void main() {
           .thenReturn(_MockLeaderboardResource());
       when(() => apiClient.crosswordResource)
           .thenReturn(_MockCrosswordResource());
-      when(() => apiClient.shareResource).thenReturn(_MockShareResource());
       when(() => apiClient.hintResource).thenReturn(_MockHintResource());
       when(
         () => crosswordRepository.watchSectionFromPosition(0, 0),

@@ -7,17 +7,13 @@ class ShareDialog extends StatelessWidget {
   const ShareDialog({
     required this.title,
     required this.content,
-    required this.facebookShareUrl,
-    required this.twitterShareUrl,
-    required this.linkedInShareUrl,
+    required this.url,
     super.key,
   });
 
   final Widget content;
   final String title;
-  final String facebookShareUrl;
-  final String twitterShareUrl;
-  final String linkedInShareUrl;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +43,19 @@ class ShareDialog extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {
-                        context.launchUrl(linkedInShareUrl);
+                        context.shareLinkedIn(shareUrl: url);
                       },
                       icon: const Icon(IoIcons.linkedin),
                     ),
                     IconButton(
                       onPressed: () {
-                        context.launchUrl(twitterShareUrl);
+                        context.shareTwitter(shareUrl: url);
                       },
                       icon: const Icon(IoIcons.twitter),
                     ),
                     IconButton(
                       onPressed: () {
-                        context.launchUrl(facebookShareUrl);
+                        context.shareFacebook(shareUrl: url);
                       },
                       icon: const Icon(IoIcons.facebook),
                     ),
