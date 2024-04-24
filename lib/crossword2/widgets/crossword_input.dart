@@ -21,19 +21,29 @@ class CrosswordInput extends StatefulWidget {
 }
 
 class _CrosswordInputState extends State<CrosswordInput> {
-  late IoWordInputController _controller;
+  IoWordInputController? _controller;
   String _lastWord = '';
+
+  void _onDelete() {
+    if (_lastWord.length > _controller!.word.length) {
+      context.read<WordSelectionBloc>().add(const WordSolveRequested());
+    }
+    _lastWord = _controller!.word;
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    _controller?.removeListener(_onDelete);
     _controller = DefaultWordInputController.of(context);
-    _controller.addListener(() {
-      if (_lastWord.length > _controller.word.length) {
-        context.read<WordSelectionBloc>().add(const WordSolveRequested());
-      }
-      _lastWord = _controller.word;
-    });
+    _controller!.addListener(_onDelete);
+  }
+
+  @override
+  void dispose() {
+    _controller!.removeListener(_onDelete);
+    super.dispose();
   }
 
   @override
