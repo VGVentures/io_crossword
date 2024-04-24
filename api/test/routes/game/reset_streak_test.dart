@@ -37,7 +37,7 @@ void main() {
         .thenReturn(leaderboardRepository);
     when(() => context.read<Logger>()).thenReturn(logger);
     when(() => context.read<AuthenticatedUser>())
-        .thenReturn(AuthenticatedUser('id'));
+        .thenReturn(AuthenticatedUser('id', 'token'));
   });
 
   for (final method in HttpMethod.values.toList()..remove(HttpMethod.post)) {

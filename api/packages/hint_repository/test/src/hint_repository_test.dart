@@ -2,30 +2,31 @@
 import 'package:db_client/db_client.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
+import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class _MockDbClient extends Mock implements DbClient {}
 
-class _MockGenerativeModelWrapper extends Mock
-    implements GenerativeModelWrapper {}
+class _MockHttpClient extends Mock implements http.Client {}
 
 void main() {
   group('HintRepository', () {
     late DbClient dbClient;
-    late GenerativeModelWrapper generativeModelWrapper;
+    late http.Client httpClient;
     late HintRepository hintRepository;
 
     setUpAll(() {
       registerFallbackValue(DbEntityRecord(id: ''));
+      registerFallbackValue(Uri());
     });
 
     setUp(() {
       dbClient = _MockDbClient();
-      generativeModelWrapper = _MockGenerativeModelWrapper();
+      httpClient = _MockHttpClient();
       hintRepository = HintRepository(
         dbClient: dbClient,
-        generativeModelWrapper: generativeModelWrapper,
+        httpClient: httpClient,
       );
     });
 
@@ -33,7 +34,6 @@ void main() {
       expect(
         HintRepository(
           dbClient: dbClient,
-          generativeModelWrapper: generativeModelWrapper,
         ),
         isNotNull,
       );
@@ -101,12 +101,20 @@ void main() {
 
     group('generateHint', () {
       test('returns a hint when the response is parsed correctly', () async {
-        when(() => generativeModelWrapper.generateTextContent(any()))
-            .thenAnswer((_) async => 'yes');
+        when(
+          () => httpClient.post(
+            any(),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response('yes', 200),
+        );
         final hint = await hintRepository.generateHint(
           wordAnswer: 'answer',
           question: 'question',
           previousHints: [Hint(question: 'is it?', response: HintResponse.no)],
+          userToken: 'token',
         );
 
         expect(
@@ -119,12 +127,20 @@ void main() {
         'returns a hint with notApplicable when the response is not parsed '
         'correctly',
         () async {
-          when(() => generativeModelWrapper.generateTextContent(any()))
-              .thenAnswer((_) async => 'bla bla bla');
+          when(
+            () => httpClient.post(
+              any(),
+              body: any(named: 'body'),
+              headers: any(named: 'headers'),
+            ),
+          ).thenAnswer(
+            (_) async => http.Response('random things', 200),
+          );
           final hint = await hintRepository.generateHint(
             wordAnswer: 'answer',
             question: 'question',
             previousHints: [],
+            userToken: 'token',
           );
 
           expect(
@@ -140,14 +156,19 @@ void main() {
       );
 
       test('throws a HintException when an error occurs', () async {
-        when(() => generativeModelWrapper.generateTextContent(any()))
-            .thenThrow(Exception());
-
+        when(
+          () => httpClient.post(
+            any(),
+            body: any(named: 'body'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenThrow(Exception('Oops'));
         expect(
           () => hintRepository.generateHint(
             wordAnswer: 'answer',
             question: 'question',
             previousHints: [],
+            userToken: 'token',
           ),
           throwsA(isA<HintException>()),
         );

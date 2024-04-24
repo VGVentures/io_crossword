@@ -6,7 +6,6 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:db_client/db_client.dart';
 import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
@@ -26,9 +25,6 @@ Future<void> init(InternetAddress ip, int port) async {
   crosswordRepository = CrosswordRepository(dbClient: dbClient);
   hintRepository = HintRepository(
     dbClient: dbClient,
-    generativeModelWrapper: GenerativeModelWrapper(
-      model: GenerativeModel(apiKey: _geminiKey, model: _geminiModel),
-    ),
   );
   boardRenderer = const BoardRenderer();
 

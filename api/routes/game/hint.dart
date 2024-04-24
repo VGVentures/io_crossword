@@ -61,6 +61,7 @@ Future<Response> _onPost(RequestContext context) async {
       wordAnswer: wordAnswer.answer,
       question: userQuestion,
       previousHints: previousHints,
+      userToken: user.token,
     );
 
     await hintRepository.saveHints(

@@ -36,7 +36,7 @@ void main() {
       request = _MockRequest();
       crosswordRepository = _MockCrosswordRepository();
       hintRepository = _MockHintRepository();
-      user = AuthenticatedUser('userId');
+      user = AuthenticatedUser('userId', 'token');
 
       when(() => requestContext.request).thenReturn(request);
       when(() => requestContext.read<CrosswordRepository>())
@@ -98,6 +98,7 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenAnswer(
             (_) async => Hint(question: 'question', response: HintResponse.no),
@@ -164,6 +165,7 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenThrow(HintException('Oops', StackTrace.empty));
 
