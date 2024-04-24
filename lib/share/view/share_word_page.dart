@@ -31,6 +31,7 @@ class ShareWordPage extends StatelessWidget {
     final themeData = Theme.of(context);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(
           l10n.shareWordTitle,
@@ -43,7 +44,7 @@ class ShareWordPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: themeData.textTheme.bodySmall.regular,
         ),
-        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        const SizedBox(height: IoCrosswordSpacing.xxlg),
         // TODO(any): Replace with the actual word from the
         // SelectedWordBloc:
         // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6443977120
@@ -51,7 +52,7 @@ class ShareWordPage extends StatelessWidget {
           '_' * word.length,
           style: themeData.io.wordTheme.big,
         ),
-        const SizedBox(height: IoCrosswordSpacing.xlgsm),
+        const SizedBox(height: IoCrosswordSpacing.xlg),
         Text(
           word.clue,
           style: themeData.textTheme.bodySmall.regular
