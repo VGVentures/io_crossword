@@ -33,32 +33,62 @@ void main() {
         expect(find.text(word.clue), findsOneWidget);
       },
     );
-
-    testWidgets(
-      'showModal opens the $ShareWordPage in a $ShareDialog',
-      (tester) async {
-        await tester.pumpApp(
-          Scaffold(
-            body: Builder(
-              builder: (BuildContext context) {
-                return ElevatedButton(
-                  onPressed: () => ShareWordPage.showModal(
-                    context,
-                    _FakeWord(),
-                  ),
-                  child: Text('Show ShareWordPage'),
-                );
-              },
+    group('showModal', () {
+      testWidgets(
+        'opens the $ShareWordPage in a $ShareDialog',
+        (tester) async {
+          await tester.pumpApp(
+            Scaffold(
+              body: Builder(
+                builder: (BuildContext context) {
+                  return ElevatedButton(
+                    onPressed: () => ShareWordPage.showModal(
+                      context,
+                      _FakeWord(),
+                    ),
+                    child: Text('Show ShareWordPage'),
+                  );
+                },
+              ),
             ),
-          ),
-        );
+          );
 
-        await tester.tap(find.byType(ElevatedButton));
-        await tester.pumpAndSettle();
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pumpAndSettle();
 
-        expect(find.byType(ShareDialog), findsOneWidget);
-        expect(find.byType(ShareWordPage), findsOneWidget);
-      },
-    );
+          expect(find.byType(ShareDialog), findsOneWidget);
+          expect(find.byType(ShareWordPage), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'uses correct facebook url',
+        (tester) async {
+          await tester.pumpApp(
+            Scaffold(
+              body: Builder(
+                builder: (BuildContext context) {
+                  return ElevatedButton(
+                    onPressed: () => ShareWordPage.showModal(
+                      context,
+                      _FakeWord(),
+                    ),
+                    child: Text('open share score'),
+                  );
+                },
+              ),
+            ),
+          );
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pumpAndSettle();
+
+          expect(
+            tester.widget<ShareDialog>(find.byType(ShareDialog)).url,
+            equals('https://crossword.withgoogle.com'),
+          );
+        },
+      );
+    });
   });
 }
