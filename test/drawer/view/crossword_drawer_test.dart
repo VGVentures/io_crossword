@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/project_details/project_details.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -15,6 +17,8 @@ import '../../helpers/helpers.dart';
 class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
+
+class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
 
 class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
@@ -69,10 +73,18 @@ void main() {
 
     testWidgets('navigates to HowToPlay when How To Play is tapped',
         (tester) async {
-      await tester.pumpApp(CrosswordDrawer());
+      final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
+
+      when(() => howToPlayCubit.state).thenReturn(0);
+      await tester.pumpApp(
+        CrosswordDrawer(),
+        howToPlayCubit: howToPlayCubit,
+      );
 
       await tester.tap(find.text('How to play'));
       await tester.pumpAndSettle();
+
+      expect(find.byType(HowToPlayContent), findsOneWidget);
     });
   });
 

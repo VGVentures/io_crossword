@@ -10,10 +10,12 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class HowToPlayContent extends StatefulWidget {
   const HowToPlayContent({
     required this.mascot,
+    required this.onDonePressed,
     super.key,
   });
 
   final Mascots mascot;
+  final void Function() onDonePressed;
 
   @override
   State<HowToPlayContent> createState() => _HowToPlayContentState();
@@ -107,6 +109,7 @@ class _HowToPlayContentState extends State<HowToPlayContent>
                 Flexible(
                   child: _TabSelector(
                     tabController: _tabController,
+                    onDonePressed: widget.onDonePressed,
                   ),
                 ),
               ],
@@ -121,9 +124,11 @@ class _HowToPlayContentState extends State<HowToPlayContent>
 class _TabSelector extends StatelessWidget {
   const _TabSelector({
     required this.tabController,
+    required this.onDonePressed,
   });
 
   final TabController tabController;
+  final void Function() onDonePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -152,23 +157,40 @@ class _TabSelector extends StatelessWidget {
         TabPageSelector(
           controller: tabController,
         ),
-        GestureDetector(
-          onTap: index < tabController.length - 1
-              ? () {
-                  context.read<HowToPlayCubit>().updateIndex(index + 1);
-                }
-              : null,
+        TextButton(
+          onPressed: () {
+            if (index == tabController.length - 1) {
+              onDonePressed();
+            } else {
+              context.read<HowToPlayCubit>().updateIndex(index + 1);
+            }
+          },
           child: Text(
             index < tabController.length - 1
                 ? l10n.nextButtonLabel
                 : l10n.doneButtonLabel,
-            style: TextStyle(
-              color: index < tabController.length - 1
-                  ? IoCrosswordColors.seedWhite
-                  : IoCrosswordColors.softGray,
-            ),
+            style: const TextStyle(color: IoCrosswordColors.seedWhite),
           ),
-        ),
+        )
+        // GestureDetector(
+        //   onTap: () {
+        //     context.read<HowToPlayCubit>().updateIndex(index + 1);
+        //     if (index == tabController.length - 1) {
+
+        //       Navigator.of(context, rootNavigator: true).pop();
+        //     }
+        //   },
+        //   child: Text(
+        //     index < tabController.length - 1
+        //         ? l10n.nextButtonLabel
+        //         : l10n.doneButtonLabel,
+        //     style: TextStyle(
+        //       color: index < tabController.length - 1
+        //           ? IoCrosswordColors.seedWhite
+        //           : IoCrosswordColors.softGray,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -191,7 +213,6 @@ class HowToPlayStep extends StatelessWidget {
   static const double smallTextHeight = 88;
 
   static const double largeTextHeight = 66;
-
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
