@@ -7,25 +7,25 @@ void main() {
   group('$CrosswordConfiguration', () {
     test('can be instantiated', () {
       final configuration = CrosswordConfiguration(
-        bottomLeft: (2, 2),
+        bottomRight: (2, 2),
         chunkSize: 5,
       );
 
-      expect(configuration.bottomLeft, equals((2, 2)));
+      expect(configuration.bottomRight, equals((2, 2)));
       expect(configuration.chunkSize, equals(5));
     });
 
     test('supports value equality', () {
       final configuration1 = CrosswordConfiguration(
-        bottomLeft: (2, 2),
+        bottomRight: (2, 2),
         chunkSize: 5,
       );
       final configuration2 = CrosswordConfiguration(
-        bottomLeft: (2, 2),
+        bottomRight: (2, 2),
         chunkSize: 5,
       );
       final configuration3 = CrosswordConfiguration(
-        bottomLeft: (5, 5),
+        bottomRight: (5, 5),
         chunkSize: 10,
       );
 
