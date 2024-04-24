@@ -130,7 +130,10 @@ class CrosswordLetter extends StatelessWidget {
       onTap: () => _onTap(context),
       child: SizedBox.fromSize(
         size: crosswordData.cellSize,
-        child: IoCrosswordLetter(data.character, style: style),
+        child: Padding(
+          padding: theme.io.wordInput.secondary.padding,
+          child: IoCrosswordLetter(data.character, style: style),
+        ),
       ),
     );
   }

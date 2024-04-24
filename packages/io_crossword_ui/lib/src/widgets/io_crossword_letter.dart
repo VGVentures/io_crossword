@@ -27,8 +27,8 @@ class IoCrosswordLetter extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: style.border,
         color: style.backgroundColor,
+        backgroundBlendMode: BlendMode.clear,
       ),
       child: data == null
           ? null

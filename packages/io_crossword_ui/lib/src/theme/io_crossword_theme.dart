@@ -122,11 +122,11 @@ class IoCrosswordTheme {
         color: letterTheme.empty.backgroundColor,
         width: 1.74,
       );
-      const size = Size.square(48);
+      const size = Size.square(53);
       final backgroundColor = letterTheme.empty.backgroundColor;
 
       return IoWordInputStyle(
-        padding: const EdgeInsets.all(1.8),
+        padding: const EdgeInsets.all(1.4),
         empty: IoWordInputCharacterFieldStyle(
           backgroundColor: backgroundColor,
           border: Border.all(
