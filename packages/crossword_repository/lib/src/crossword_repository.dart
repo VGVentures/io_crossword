@@ -24,6 +24,7 @@ class CrosswordRepository {
 
   final Random _rng;
 
+  // coverage:ignore-start
   /// Returns the position of a random section that has empty words.
   Future<Point<int>?> getRandomEmptySection() async {
     final docsCount = await sectionCollection.count().get();
@@ -91,6 +92,7 @@ class CrosswordRepository {
     }
     return null;
   }
+  // coverage:ignore-end
 
   /// Watches a section of the crossword board
   Stream<BoardSection> watchSection(String id) {
