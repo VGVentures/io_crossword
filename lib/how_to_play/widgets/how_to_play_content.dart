@@ -188,7 +188,9 @@ class HowToPlayStep extends StatelessWidget {
 
   final String image;
 
-  static const double textHeight = 66;
+  static const double smallTextHeight = 88;
+
+  static const double largeTextHeight = 66;
 
   @override
   Widget build(BuildContext context) {
@@ -214,19 +216,15 @@ class HowToPlayStep extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               color: IoCrosswordColors.mediumGray,
             ),
-            child: Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 64, vertical: 16),
-                child: Image.asset(
-                  image,
-                ),
-              ),
+            child: Image.asset(
+              image,
             ),
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: textHeight,
+            height: layout == IoLayoutData.small
+                ? smallTextHeight
+                : largeTextHeight,
             child: Text(
               message,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(

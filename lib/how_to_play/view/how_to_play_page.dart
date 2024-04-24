@@ -80,23 +80,25 @@ class _HowToPlaySmall extends StatelessWidget {
               20,
               48,
             ),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 375),
-                    child: HowToPlayContent(mascot: mascot),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 375),
+                      child: SingleChildScrollView(
+                        child: HowToPlayContent(mascot: mascot),
+                      ),
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: OutlinedButton(
+                  OutlinedButton(
                     onPressed: () => context.flow<GameIntroStatus>().complete(),
                     child: Text(l10n.playNow),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
       ],
@@ -120,12 +122,15 @@ class _HowToPlayLarge extends StatelessWidget {
 
     return Stack(
       children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 400,
-            height: 800,
-            child: LookUp(mascot!),
+        Positioned.fill(
+          bottom: -100,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              width: 400,
+              height: 800,
+              child: LookUp(mascot!),
+            ),
           ),
         ),
         if (isCreating)
@@ -133,26 +138,26 @@ class _HowToPlayLarge extends StatelessWidget {
         else
           Padding(
             padding: const EdgeInsets.all(24),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 539,
-                      maxHeight: 700,
-                    ),
-                    child: HowToPlayContent(mascot: mascot),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 539,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      HowToPlayContent(mascot: mascot),
+                      const SizedBox(height: 40),
+                      OutlinedButton(
+                        onPressed: () =>
+                            context.flow<GameIntroStatus>().complete(),
+                        child: Text(l10n.playNow),
+                      ),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: OutlinedButton(
-                    onPressed: () => context.flow<GameIntroStatus>().complete(),
-                    child: Text(l10n.playNow),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
       ],
