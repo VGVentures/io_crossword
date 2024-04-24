@@ -20,7 +20,22 @@ void main() {
           ),
         ),
       );
+
       expect(find.byType(IoCrosswordLetter), findsOneWidget);
+    });
+
+    testWidgets('upper-cases the letter', (tester) async {
+      await tester.pumpWidget(
+        Theme(
+          data: IoCrosswordTheme().themeData,
+          child: const Directionality(
+            textDirection: TextDirection.ltr,
+            child: IoCrosswordLetter('a'),
+          ),
+        ),
+      );
+
+      expect(find.text('A'), findsOneWidget);
     });
 
     group('renders as expected', () {
