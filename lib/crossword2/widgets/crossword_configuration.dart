@@ -47,7 +47,7 @@ class CrosswordConfiguration extends Equatable {
 
   /// The index of the bottom-left chunk of the crossword.
   ///
-  /// Since the [topLeft] is (0,0), the bottom-left may be used to easily derive
+  /// Since the [topLeft] is (0,0), the bottom-right may be used to easily derive
   /// the number of chunks in the crossword.
   final CrosswordChunkIndex bottomRight;
 
