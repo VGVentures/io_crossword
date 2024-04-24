@@ -32,8 +32,8 @@ class CrosswordLayoutData extends Equatable {
       cellSize.height * configuration.chunkSize,
     );
     final crosswordSize = Size(
-      chunkSize.width * (configuration.bottomLeft.$1 + 1),
-      chunkSize.height * (configuration.bottomLeft.$2 + 1),
+      chunkSize.width * (configuration.bottomRight.$1 + 1),
+      chunkSize.height * (configuration.bottomRight.$2 + 1),
     );
 
     return CrosswordLayoutData(

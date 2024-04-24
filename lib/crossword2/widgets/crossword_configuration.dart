@@ -38,7 +38,7 @@ typedef CrosswordChunkSize = int;
 class CrosswordConfiguration extends Equatable {
   /// {@macro crossword_configuration}
   const CrosswordConfiguration({
-    required this.bottomLeft,
+    required this.bottomRight,
     required this.chunkSize,
   });
 
@@ -49,11 +49,11 @@ class CrosswordConfiguration extends Equatable {
   ///
   /// Since the [topLeft] is (0,0), the bottom-left may be used to easily derive
   /// the number of chunks in the crossword.
-  final CrosswordChunkIndex bottomLeft;
+  final CrosswordChunkIndex bottomRight;
 
   /// {@macro crossword_chunk_size}
   final CrosswordChunkSize chunkSize;
 
   @override
-  List<Object?> get props => [bottomLeft, chunkSize];
+  List<Object?> get props => [bottomRight, chunkSize];
 }
