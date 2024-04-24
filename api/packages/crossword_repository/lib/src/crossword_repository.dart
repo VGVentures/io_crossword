@@ -15,7 +15,7 @@ class CrosswordRepository {
 
   final DbClient _dbClient;
 
-  static const _sectionsCollection = 'boardChunks';
+  static const _sectionsCollection = 'boardChunks2';
   static const _answersCollection = 'answers';
   static const _boardInfoCollection = 'boardInfo';
 

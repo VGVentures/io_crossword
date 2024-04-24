@@ -38,7 +38,7 @@ class CrosswordRepository {
   /// Adds a list of sections to the database.
   Future<void> _addSections(List<BoardSection> sections) async {
     for (final section in sections) {
-      await firestore.collection('boardChunks').add(section.toJson());
+      await firestore.collection('boardChunks2').add(section.toJson());
     }
   }
 

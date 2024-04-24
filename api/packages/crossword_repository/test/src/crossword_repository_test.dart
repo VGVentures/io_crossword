@@ -16,7 +16,7 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
-    const sectionsCollection = 'boardChunks';
+    const sectionsCollection = 'boardChunks2';
     const answersCollection = 'answers';
 
     setUpAll(() {
