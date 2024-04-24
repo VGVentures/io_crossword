@@ -110,7 +110,7 @@ class _CrosswordStack extends StatelessWidget {
                   top: (selectedWord.section.$2 *
                           crosswordLayout.chunkSize.height) +
                       (word.position.y * crosswordLayout.cellSize.height),
-                  child: IoWordInput.alphabetic(
+                  child: CrosswordInput(
                     key: ValueKey(selectedWord.word.id),
                     style: Theme.of(context).io.wordInput.secondary,
                     direction: word.axis.toAxis(),
