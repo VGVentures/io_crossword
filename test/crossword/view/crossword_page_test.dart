@@ -3,12 +3,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
@@ -28,11 +27,6 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
-class _FakeBoardSection extends Fake implements BoardSection {
-  @override
-  List<Word> get words => [];
-}
-
 void main() {
   group('$CrosswordPage', () {
     testWidgets('renders $CrosswordView', (tester) async {
@@ -49,6 +43,12 @@ void main() {
     setUp(() {
       Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
+      when(() => crosswordBloc.state).thenReturn(
+        CrosswordState(
+          status: CrosswordStatus.success,
+          sectionSize: 40,
+        ),
+      );
     });
 
     testWidgets('renders $IoAppBar', (tester) async {
@@ -108,38 +108,19 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders game with ${CrosswordStatus.success}', (tester) async {
-      when(() => crosswordBloc.state).thenReturn(
-        CrosswordState(
-          status: CrosswordStatus.success,
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
-
+    testWidgets('renders $Crossword2View with ${CrosswordStatus.success}',
+        (tester) async {
       await tester.pumpSubject(
-        CrosswordView(),
         crosswordBloc: crosswordBloc,
+        CrosswordView(),
       );
 
-      expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
+      expect(find.byType(Crossword2View), findsOneWidget);
     });
 
     testWidgets(
       'renders $WordSelectionPage when loaded',
       (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-            sections: {
-              (0, 0): _FakeBoardSection(),
-            },
-          ),
-        );
-
         await tester.pumpSubject(
           CrosswordView(),
           crosswordBloc: crosswordBloc,
