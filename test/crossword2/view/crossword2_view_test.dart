@@ -81,6 +81,7 @@ void main() {
           );
 
           await tester.pumpApp(
+            layout: IoLayoutData.large,
             BlocProvider<WordSelectionBloc>(
               create: (_) => wordSelectionBloc,
               child: const Crossword2View(),
@@ -103,6 +104,7 @@ void main() {
           );
 
           await tester.pumpApp(
+            layout: IoLayoutData.large,
             BlocProvider<WordSelectionBloc>(
               create: (_) => wordSelectionBloc,
               child: const Crossword2View(),
@@ -113,23 +115,81 @@ void main() {
         });
       });
 
-      testWidgets('not shown when no word is selected', (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          const WordSelectionState(
-            status: WordSelectionStatus.empty,
-            // ignore: avoid_redundant_argument_values
-            word: null,
-          ),
+      group('not shown', () {
+        testWidgets(
+          'when a solved word is selected with a small layout',
+          (tester) async {
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.small,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            expect(find.byType(CrosswordBackdrop), findsNothing);
+          },
         );
 
-        await tester.pumpApp(
-          BlocProvider<WordSelectionBloc>(
-            create: (_) => wordSelectionBloc,
-            child: const Crossword2View(),
-          ),
+        testWidgets(
+          'when an unsolved word is selected with a small layout',
+          (tester) async {
+            when(() => word.solvedTimestamp).thenReturn(null);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.small,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            expect(find.byType(CrosswordBackdrop), findsNothing);
+          },
         );
 
-        expect(find.byType(CrosswordBackdrop), findsNothing);
+        testWidgets(
+          'when no word is selected with a large layout',
+          (tester) async {
+            when(() => wordSelectionBloc.state).thenReturn(
+              const WordSelectionState(
+                status: WordSelectionStatus.empty,
+                // ignore: avoid_redundant_argument_values
+                word: null,
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            expect(find.byType(CrosswordBackdrop), findsNothing);
+          },
+        );
       });
     });
 
