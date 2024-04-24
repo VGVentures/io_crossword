@@ -25,10 +25,10 @@ class CrosswordDrawer extends StatelessWidget {
         },
       ),
       DrawerItem(
-          title: l10n.howToPlay,
-          icon: Icons.games,
-          onPressed: () {} // coverage:ignore-line,
-          ),
+        title: l10n.howToPlay,
+        icon: Icons.games,
+        onPressed: () {}, // coverage:ignore-line,
+      ),
       DrawerItem(
         title: l10n.projectDetails,
         icon: Icons.info,
