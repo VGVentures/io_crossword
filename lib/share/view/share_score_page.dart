@@ -35,7 +35,7 @@ class ShareScorePage extends StatelessWidget {
         Text(
           l10n.shareScoreContent,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodyLarge.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const PlayerInitials(),

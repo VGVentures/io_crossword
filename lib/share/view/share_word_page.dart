@@ -12,8 +12,22 @@ class ShareWordPage extends StatelessWidget {
 
   final Word word;
 
-  static Future<void> showModal(BuildContext context) {
-    final word = context.read<WordSelectionBloc>().state.word!.word;
+  static Future<void> showModal(BuildContext context) async {
+    final word = context.read<WordSelectionBloc>().state.word;
+    final l10n = context.l10n;
+
+    // If there are no words selected will display error message.
+    if (word == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(l10n.errorPromptText),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      return;
+    }
 
     return showDialog<void>(
       context: context,
@@ -23,7 +37,7 @@ class ShareWordPage extends StatelessWidget {
         return ShareDialog(
           title: l10n.shareThisWord,
           content: ShareWordPage(
-            word: word,
+            word: word.word,
           ),
           url: ProjectDetailsLinks.crossword,
         );
@@ -42,18 +56,17 @@ class ShareWordPage extends StatelessWidget {
         Text(
           l10n.shareWordTitle,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodyLarge.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         Text(
           l10n.shareWordSubtitle,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodySmall.regular,
+          style: themeData.textTheme.bodyLarge.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xxlg),
-        // TODO(any): Replace with the actual word from the
-        // SelectedWordBloc:
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6443977120
+        // TODO(any): Display parts of the word completed
+        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6517409519
         IoWord(
           '_' * word.length,
           style: themeData.io.wordTheme.big,
@@ -61,7 +74,7 @@ class ShareWordPage extends StatelessWidget {
         const SizedBox(height: IoCrosswordSpacing.xlg),
         Text(
           word.clue,
-          style: themeData.textTheme.bodySmall.regular
+          style: themeData.textTheme.bodyLarge.regular
               ?.copyWith(color: themeData.colorScheme.primary),
         ),
       ],
