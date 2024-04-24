@@ -17,7 +17,7 @@ void main() {
     late DbClient dbClient;
 
     const sectionsCollection = 'boardChunks2';
-    const answersCollection = 'answers';
+    const answersCollection = 'answers2';
 
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
