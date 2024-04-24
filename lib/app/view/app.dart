@@ -87,7 +87,7 @@ class AppView extends StatelessWidget {
             builder: (context, child) {
               return Stack(
                 children: [
-                  child!,
+                  if (child != null) child,
                   if (context.isMobileLandscape) const RotatePhonePage(),
                 ],
               );
