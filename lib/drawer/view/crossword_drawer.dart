@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/end_game/end_game.dart';
@@ -26,15 +25,10 @@ class CrosswordDrawer extends StatelessWidget {
         },
       ),
       DrawerItem(
-        title: l10n.howToPlay,
-        icon: Icons.games,
-        onPressed: () {
-          showDialog<AlertDialog>(
-            context: context,
-            builder: (context) => const AboutView(),
-          );
-        },
-      ),
+          title: l10n.howToPlay,
+          icon: Icons.games,
+          onPressed: () {} // coverage:ignore-line,
+          ),
       DrawerItem(
         title: l10n.projectDetails,
         icon: Icons.info,

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
@@ -74,8 +73,6 @@ void main() {
 
       await tester.tap(find.text('How to play'));
       await tester.pumpAndSettle();
-
-      expect(find.byType(AboutView), findsOneWidget);
     });
   });
 
