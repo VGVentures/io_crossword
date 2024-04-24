@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -20,6 +21,12 @@ class _FakeWord extends Fake implements Word {
 
   @override
   Axis get axis => Axis.horizontal;
+
+  @override
+  int get length => 4;
+
+  @override
+  String get clue => 'clue';
 }
 
 void main() {
@@ -67,6 +74,35 @@ void main() {
         await tester.pumpApp(widget);
         expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
       });
+
+      testWidgets(
+        'icon ios_share',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          expect(find.byIcon(Icons.ios_share), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'ShareWordPage when icon ios_share tapped',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solved,
+              word: SelectedWord(section: (0, 0), word: _FakeWord()),
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          await tester.tap(find.byIcon(Icons.ios_share));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(ShareWordPage), findsOneWidget);
+        },
+      );
     });
   });
 }
