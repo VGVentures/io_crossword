@@ -83,6 +83,15 @@ class _CrosswordStack extends StatelessWidget {
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
               selector: (state) => state.word,
               builder: (context, selectedWord) {
+                return selectedWord != null
+                    ? const CrosswordBackdrop()
+                    : const SizedBox.shrink();
+              },
+            ),
+          if (layout == IoLayoutData.large)
+            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+              selector: (state) => state.word,
+              builder: (context, selectedWord) {
                 if (selectedWord == null ||
                     selectedWord.word.solvedTimestamp != null) {
                   return const SizedBox.shrink();

@@ -1,9 +1,9 @@
 import 'package:api_client/api_client.dart';
-import 'package:flame/game.dart' hide Route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
@@ -81,33 +81,10 @@ class CrosswordView extends StatelessWidget {
   }
 }
 
-class LoadedBoardView extends StatefulWidget {
+@visibleForTesting
+class LoadedBoardView extends StatelessWidget {
   @visibleForTesting
   const LoadedBoardView({super.key});
-
-  @visibleForTesting
-  static const zoomInKey = Key('game_zoomIn');
-
-  @visibleForTesting
-  static const zoomOutKey = Key('game_zoomOut');
-
-  @override
-  State<LoadedBoardView> createState() => LoadedBoardViewState();
-}
-
-@visibleForTesting
-class LoadedBoardViewState extends State<LoadedBoardView> {
-  late final CrosswordGame game;
-
-  @override
-  void initState() {
-    super.initState();
-    game = CrosswordGame(
-      crosswordBloc: context.read(),
-      wordSelectionBloc: context.read(),
-      playerBloc: context.read(),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,42 +92,10 @@ class LoadedBoardViewState extends State<LoadedBoardView> {
 
     return Stack(
       children: [
-        GameWidget(game: game),
+        const Crossword2View(),
         const WordSelectionPage(),
         if (layout == IoLayoutData.large) const BottomBar(),
-        _ZoomControls(game: game),
       ],
-    );
-  }
-}
-
-class _ZoomControls extends StatelessWidget {
-  const _ZoomControls({
-    required this.game,
-  });
-
-  final CrosswordGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 16,
-      bottom: 16,
-      child: Column(
-        children: [
-          ElevatedButton(
-            key: LoadedBoardView.zoomInKey,
-            onPressed: game.zoomIn,
-            child: const Icon(Icons.zoom_in),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            key: LoadedBoardView.zoomOutKey,
-            onPressed: game.zoomOut,
-            child: const Icon(Icons.zoom_out),
-          ),
-        ],
-      ),
     );
   }
 }

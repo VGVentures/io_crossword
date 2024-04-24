@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/about/view/about_view.dart';
+import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/widget/widget.dart';
 import 'package:mocktail/mocktail.dart';
