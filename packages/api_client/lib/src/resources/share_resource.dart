@@ -11,7 +11,9 @@ class ShareResource {
 
   final ApiClient _apiClient;
 
-  final _tweetContent = 'Check out my score at IOCrossword #GoogleIO!';
+  final _tweetScoreContent = 'Check out my score at IOCrossword #GoogleIO!';
+
+  final _tweetContent = 'Check out IOCrossword #GoogleIO!';
 
   String _twitterShareUrl(String text) =>
       'https://twitter.com/intent/tweet?text=$text';
@@ -40,7 +42,7 @@ class ShareResource {
   String twitterShareScoreUrl(String userId) {
     final shareUrl = _apiClient.shareScoreUrl(userId);
     final content = [
-      _tweetContent,
+      _tweetScoreContent,
       shareUrl,
     ];
     return _twitterShareUrl(_encode(content));
@@ -83,6 +85,27 @@ class ShareResource {
   /// Returns the url to share a linkedin post for a word.
   String linkedinShareWordUrl(String sectionId, String wordId) {
     final shareUrl = _apiClient.shareWordUrl(sectionId, wordId);
+    return _linkedinShareUrl(shareUrl);
+  }
+
+  /// Returns the url to share a facebook post.
+  String facebookShareBaseUrl() {
+    return _facebookShareUrl(_apiClient.baseUrl);
+  }
+
+  /// Returns the url to share a twitter post.
+  String twitterShareBaseUrl() {
+    final shareUrl = _apiClient.baseUrl;
+    final content = [
+      _tweetContent,
+      shareUrl,
+    ];
+    return _twitterShareUrl(_encode(content));
+  }
+
+  /// Returns the url to share a linkedin post.
+  String linkedinShareBaseUrl() {
+    final shareUrl = _apiClient.baseUrl;
     return _linkedinShareUrl(shareUrl);
   }
 }

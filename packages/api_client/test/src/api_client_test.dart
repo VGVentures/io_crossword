@@ -127,6 +127,15 @@ void main() {
     group('shareScoreUrl', () {
       test('returns the correct url', () {
         expect(
+          subject.baseUrl,
+          equals('http://baseurl.com'),
+        );
+      });
+    });
+
+    group('shareScoreUrl', () {
+      test('returns the correct url', () {
+        expect(
           subject.shareScoreUrl('id'),
           equals('http://baseurl.com/public/share/score?userId=id'),
         );

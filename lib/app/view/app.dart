@@ -37,6 +37,7 @@ class App extends StatelessWidget {
       providers: [
         Provider.value(value: apiClient.crosswordResource),
         Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: apiClient.shareResource),
         Provider.value(value: apiClient.hintResource),
         Provider.value(value: user),
         Provider.value(value: crosswordRepository),

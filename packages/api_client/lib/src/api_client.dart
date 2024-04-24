@@ -59,6 +59,9 @@ class ApiClient {
   late final CrosswordResource crosswordResource =
       CrosswordResource(apiClient: this);
 
+  /// {@macro share_resource}
+  late final ShareResource shareResource = ShareResource(apiClient: this);
+
   /// {@macro hint_resource}
   late final HintResource hintResource = HintResource(apiClient: this);
 
@@ -98,6 +101,11 @@ class ApiClient {
 
       return response;
     });
+  }
+
+  /// Returns the base url.
+  String get baseUrl {
+    return _base.toString();
   }
 
   /// Returns the score share url for the score for the specified [userId].

@@ -1,4 +1,6 @@
+import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
@@ -12,10 +14,14 @@ class ShareScorePage extends StatelessWidget {
       context: context,
       builder: (context) {
         final l10n = context.l10n;
+        final shareResource = context.read<ShareResource>();
 
         return ShareDialog(
           title: l10n.shareYourScore,
           content: const ShareScorePage(),
+          facebookShareUrl: shareResource.facebookShareBaseUrl(),
+          linkedInShareUrl: shareResource.linkedinShareBaseUrl(),
+          twitterShareUrl: shareResource.twitterShareBaseUrl(),
         );
       },
     );

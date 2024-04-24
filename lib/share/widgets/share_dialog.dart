@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword/extensions/context_ext.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -6,11 +7,17 @@ class ShareDialog extends StatelessWidget {
   const ShareDialog({
     required this.title,
     required this.content,
+    required this.facebookShareUrl,
+    required this.twitterShareUrl,
+    required this.linkedInShareUrl,
     super.key,
   });
 
   final Widget content;
   final String title;
+  final String facebookShareUrl;
+  final String twitterShareUrl;
+  final String linkedInShareUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +42,26 @@ class ShareDialog extends StatelessWidget {
                   l10n.shareOn,
                 ),
                 const SizedBox(height: IoCrosswordSpacing.xlgsm),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.linkedin),
+                      onPressed: () {
+                        context.launchUrl(linkedInShareUrl);
+                      },
+                      icon: const Icon(IoIcons.linkedin),
                     ),
                     IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.instagram),
+                      onPressed: () {
+                        context.launchUrl(twitterShareUrl);
+                      },
+                      icon: const Icon(IoIcons.twitter),
                     ),
                     IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.twitter),
-                    ),
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.facebook),
+                      onPressed: () {
+                        context.launchUrl(facebookShareUrl);
+                      },
+                      icon: const Icon(IoIcons.facebook),
                     ),
                   ],
                 ),

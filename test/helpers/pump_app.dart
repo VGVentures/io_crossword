@@ -37,6 +37,23 @@ class _MockUser extends Mock implements User {
   String get id => '';
 }
 
+class _MockShareResource extends Mock implements ShareResource {
+  @override
+  String facebookShareBaseUrl() {
+    return 'https://facebook';
+  }
+
+  @override
+  String linkedinShareBaseUrl() {
+    return 'https://linkedin';
+  }
+
+  @override
+  String twitterShareBaseUrl() {
+    return 'https://twitter';
+  }
+}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
@@ -47,6 +64,7 @@ extension PumpApp on WidgetTester {
     LeaderboardRepository? leaderboardRepository,
     CrosswordResource? crosswordResource,
     LeaderboardResource? leaderboardResource,
+    ShareResource? shareResource,
     HintResource? hintResource,
     CrosswordBloc? crosswordBloc,
     PlayerBloc? playerBloc,
@@ -76,6 +94,9 @@ extension PumpApp on WidgetTester {
         providers: [
           Provider.value(
             value: crosswordResource ?? mockedCrosswordResource,
+          ),
+          Provider.value(
+            value: shareResource ?? _MockShareResource(),
           ),
           Provider.value(
             value: crosswordRepository ?? mockedCrosswordRepository,

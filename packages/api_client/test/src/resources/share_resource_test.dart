@@ -82,5 +82,38 @@ void main() {
         contains('wordUrl'),
       );
     });
+
+    test('facebookShareBaseUrl returns the correct url', () {
+      when(() => apiClient.baseUrl).thenReturn('https://baseurl');
+
+      expect(
+        resource.facebookShareBaseUrl(),
+        equals('https://www.facebook.com/sharer.php?u=https://baseurl'),
+      );
+    });
+
+    test('twitterShareBaseUrl returns the correct url', () {
+      when(() => apiClient.baseUrl).thenReturn('https://baseurl');
+
+      expect(
+        resource.twitterShareBaseUrl(),
+        equals(
+          'https://twitter.com/intent/tweet?text=Check%20out'
+          '%20IOCrossword%20%23GoogleIO!%0ahttps://baseurl',
+        ),
+      );
+    });
+
+    test('linkedinShareBaseUrl returns the correct url', () {
+      when(() => apiClient.baseUrl).thenReturn('https://baseurl');
+
+      expect(
+        resource.linkedinShareBaseUrl(),
+        equals(
+          'https://www.linkedin.com/sharing/share-offsite/'
+          '?url=https://baseurl',
+        ),
+      );
+    });
   });
 }
