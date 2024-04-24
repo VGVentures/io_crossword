@@ -206,11 +206,6 @@ class CrosswordGame extends FlameGame
     _updateVisibleSections();
   }
 
-  @override
-  Color backgroundColor() {
-    return const Color(0xFF212123);
-  }
-
   bool get isMobile {
     return defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
