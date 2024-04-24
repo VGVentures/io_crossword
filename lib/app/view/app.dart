@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
@@ -129,6 +130,6 @@ extension MobileLandscapeHelper on BuildContext {
   bool get isMobileLandscape =>
       MediaQuery.of(this).orientation == Orientation.landscape &&
       IoLayout.of(this) == IoLayoutData.small &&
-      (Theme.of(this).platform == TargetPlatform.android ||
-          Theme.of(this).platform == TargetPlatform.iOS);
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 }
