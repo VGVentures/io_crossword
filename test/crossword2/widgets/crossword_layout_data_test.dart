@@ -33,7 +33,7 @@ void main() {
 
     test('fromConfiguration derives as expected', () {
       final configuration = CrosswordConfiguration(
-        bottomLeft: (2, 2),
+        bottomRight: (2, 2),
         chunkSize: 10,
       );
       const cellSize = Size(10, 10);

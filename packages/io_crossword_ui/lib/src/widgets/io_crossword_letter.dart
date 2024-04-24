@@ -14,6 +14,8 @@ class IoCrosswordLetter extends StatelessWidget {
   });
 
   /// The letter to display.
+  ///
+  /// It will always be upper-cased.
   final String? data;
 
   /// {@macro io_crossword_letter_style}
@@ -34,7 +36,7 @@ class IoCrosswordLetter extends StatelessWidget {
           ? null
           : Center(
               child: Text(
-                data!,
+                data!.toUpperCase(),
                 style: style.textStyle,
               ),
             ),

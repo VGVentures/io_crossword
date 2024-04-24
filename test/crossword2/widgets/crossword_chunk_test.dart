@@ -49,7 +49,7 @@ void main() {
     setUp(() {
       layoutData = CrosswordLayoutData.fromConfiguration(
         configuration: const CrosswordConfiguration(
-          bottomLeft: (40, 40),
+          bottomRight: (40, 40),
           chunkSize: 20,
         ),
         cellSize: const Size.square(20),
