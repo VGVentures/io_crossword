@@ -36,6 +36,7 @@ void main() {
       );
 
       expect(find.text('A'), findsOneWidget);
+      expect(find.text('a'), findsNothing);
     });
 
     group('renders as expected', () {
