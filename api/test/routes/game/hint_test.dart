@@ -8,6 +8,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart' hide Answer;
 import 'package:test/test.dart';
 
@@ -23,6 +24,8 @@ class _MockHintRepository extends Mock implements HintRepository {}
 
 class _MockUri extends Mock implements Uri {}
 
+class _MockLogger extends Mock implements Logger {}
+
 void main() {
   group('/game/hint', () {
     late RequestContext requestContext;
@@ -30,13 +33,15 @@ void main() {
     late CrosswordRepository crosswordRepository;
     late HintRepository hintRepository;
     late AuthenticatedUser user;
+    late Logger logger;
 
     setUp(() {
       requestContext = _MockRequestContext();
       request = _MockRequest();
       crosswordRepository = _MockCrosswordRepository();
       hintRepository = _MockHintRepository();
-      user = AuthenticatedUser('userId');
+      user = AuthenticatedUser('userId', 'token');
+      logger = _MockLogger();
 
       when(() => requestContext.request).thenReturn(request);
       when(() => requestContext.read<CrosswordRepository>())
@@ -44,6 +49,7 @@ void main() {
       when(() => requestContext.read<HintRepository>())
           .thenReturn(hintRepository);
       when(() => requestContext.read<AuthenticatedUser>()).thenReturn(user);
+      when(() => requestContext.read<Logger>()).thenReturn(logger);
     });
 
     group('other http methods', () {
@@ -98,6 +104,7 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenAnswer(
             (_) async => Hint(question: 'question', response: HintResponse.no),
@@ -164,6 +171,7 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenThrow(HintException('Oops', StackTrace.empty));
 

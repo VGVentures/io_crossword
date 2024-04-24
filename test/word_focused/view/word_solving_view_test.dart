@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -69,12 +70,14 @@ void main() {
         HintState(isHintsEnabled: true),
       );
 
-      widget = MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: wordSolvingBloc),
-          BlocProvider.value(value: hintBloc),
-        ],
-        child: WordSolvingView(),
+      widget = DefaultWordInputController(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: wordSolvingBloc),
+            BlocProvider.value(value: hintBloc),
+          ],
+          child: WordSolvingView(),
+        ),
       );
     });
 
@@ -215,12 +218,14 @@ void main() {
 
       widget = Theme(
         data: IoCrosswordTheme().themeData,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: wordSelectionBloc),
-            BlocProvider.value(value: hintBloc),
-          ],
-          child: WordSolvingSmallView(),
+        child: DefaultWordInputController(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: wordSelectionBloc),
+              BlocProvider.value(value: hintBloc),
+            ],
+            child: WordSolvingSmallView(),
+          ),
         ),
       );
 
