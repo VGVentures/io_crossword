@@ -86,20 +86,4 @@ String get _gameUrl {
   return value;
 }
 
-String get _geminiKey {
-  final value = Platform.environment['GEMINI_API_KEY'];
-  if (value == null) {
-    throw ArgumentError('GEMINI_API_KEY is required to run the API');
-  }
-  return value;
-}
-
-String get _geminiModel {
-  final value = Platform.environment['GEMINI_MODEL'];
-  if (value == null) {
-    throw ArgumentError('GEMINI_MODEL is required to run the API');
-  }
-  return value;
-}
-
 String get projectId => _appId;
