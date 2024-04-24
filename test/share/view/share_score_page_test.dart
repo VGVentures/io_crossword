@@ -12,7 +12,7 @@ void main() {
     testWidgets(
       'renders ScoreInformation',
       (tester) async {
-        await tester.pumpApp(ShareScorePage());
+        await tester.pumpApp(SingleChildScrollView(child: ShareScorePage()));
 
         expect(find.byType(ScoreInformation), findsOneWidget);
       },
