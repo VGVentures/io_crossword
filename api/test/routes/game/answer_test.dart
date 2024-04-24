@@ -35,7 +35,7 @@ void main() {
       request = _MockRequest();
       crosswordRepository = _MockCrosswordRepository();
       leaderboardRepository = _MockLeaderboardRepository();
-      user = AuthenticatedUser('userId');
+      user = AuthenticatedUser('userId', 'token');
 
       when(() => requestContext.request).thenReturn(request);
       when(() => requestContext.read<CrosswordRepository>())

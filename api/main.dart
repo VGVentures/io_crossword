@@ -6,7 +6,6 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:db_client/db_client.dart';
 import 'package:firebase_cloud_storage/firebase_cloud_storage.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
@@ -26,9 +25,6 @@ Future<void> init(InternetAddress ip, int port) async {
   crosswordRepository = CrosswordRepository(dbClient: dbClient);
   hintRepository = HintRepository(
     dbClient: dbClient,
-    generativeModelWrapper: GenerativeModelWrapper(
-      model: GenerativeModel(apiKey: _geminiKey, model: _geminiModel),
-    ),
   );
   boardRenderer = const BoardRenderer();
 
@@ -86,22 +82,6 @@ String get _gameUrl {
   final value = Platform.environment['GAME_URL'];
   if (value == null) {
     throw ArgumentError('GAME_URL is required to run the API');
-  }
-  return value;
-}
-
-String get _geminiKey {
-  final value = Platform.environment['GEMINI_API_KEY'];
-  if (value == null) {
-    throw ArgumentError('GEMINI_API_KEY is required to run the API');
-  }
-  return value;
-}
-
-String get _geminiModel {
-  final value = Platform.environment['GEMINI_MODEL'];
-  if (value == null) {
-    throw ArgumentError('GEMINI_MODEL is required to run the API');
   }
   return value;
 }
