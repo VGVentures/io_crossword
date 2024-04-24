@@ -89,9 +89,7 @@ void main() {
 
           expect(find.byType(CrosswordBackdrop), findsOneWidget);
         });
-      });
 
-      group('now shown', () {
         testWidgets('when a solved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(1);
           when(() => wordSelectionBloc.state).thenReturn(
@@ -111,9 +109,11 @@ void main() {
             ),
           );
 
-          expect(find.byType(CrosswordBackdrop), findsNothing);
+          expect(find.byType(CrosswordBackdrop), findsOneWidget);
         });
+      });
 
+      group('now shown', () {
         testWidgets('when no word is selected', (tester) async {
           when(() => wordSelectionBloc.state).thenReturn(
             const WordSelectionState(
