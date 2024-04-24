@@ -51,7 +51,7 @@ class BottomBarContent extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => context
                   .read<WordSelectionBloc>()
-                  .add(const RandomWordSelected()), // coverage:ignore-line
+                  .add(const RandomWordSelected()),
               icon: const Icon(Icons.location_searching),
               label: Text(l10n.findNewWord),
             ),

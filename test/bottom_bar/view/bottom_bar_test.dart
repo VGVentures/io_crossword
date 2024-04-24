@@ -20,6 +20,11 @@ void main() {
   group('$BottomBar', () {
     late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       wordSelectionBloc = _MockWordSelectionBloc();
@@ -55,35 +60,45 @@ void main() {
         expect(find.byType(BottomBarContent), findsOneWidget);
       },
     );
-  });
-
-  group('$BottomBarContent', () {
-    late AppLocalizations l10n;
-
-    setUpAll(() async {
-      l10n = await AppLocalizations.delegate.load(Locale('en'));
-    });
 
     testWidgets(
-      'displays endGame',
+      'adds $RandomWordSelected event when find new word button is tapped',
       (tester) async {
-        await tester.pumpApp(BottomBarContent());
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState.initial(),
+        );
+        await tester.pumpApp(widget);
 
-        expect(find.text(l10n.endGame), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'displays EndGameCheck when endGame is tapped',
-      (tester) async {
-        await tester.pumpApp(BottomBarContent());
-
-        await tester.tap(find.text(l10n.endGame));
+        await tester.tap(find.text(l10n.findNewWord));
 
         await tester.pumpAndSettle();
 
-        expect(find.byType(EndGameCheck), findsOneWidget);
+        verify(() => wordSelectionBloc.add(RandomWordSelected())).called(1);
       },
     );
+
+    group('$BottomBarContent', () {
+      testWidgets(
+        'displays endGame',
+        (tester) async {
+          await tester.pumpApp(BottomBarContent());
+
+          expect(find.text(l10n.endGame), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays EndGameCheck when endGame is tapped',
+        (tester) async {
+          await tester.pumpApp(BottomBarContent());
+
+          await tester.tap(find.text(l10n.endGame));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(EndGameCheck), findsOneWidget);
+        },
+      );
+    });
   });
 }
