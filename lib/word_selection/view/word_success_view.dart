@@ -181,8 +181,7 @@ class SuccessTopBar extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () {
-            final word = context.read<WordSelectionBloc>().state.word;
-            ShareWordPage.showModal(context, word!.word);
+            ShareWordPage.showModal(context);
           },
           icon: const Icon(Icons.ios_share),
           style: themeData.io.iconButtonTheme.filled,

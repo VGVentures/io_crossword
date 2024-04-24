@@ -39,6 +39,7 @@ class ShareScorePage extends StatelessWidget {
         const PlayerInitials(),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const ScoreInformation(),
+        const SizedBox(height: IoCrosswordSpacing.xxlg),
       ],
     );
   }

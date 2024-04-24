@@ -17,46 +17,53 @@ class ShareDialog extends StatelessWidget {
     final l10n = context.l10n;
 
     return Center(
-      child: IoCrosswordCard(
-        maxWidth: 340,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ShareDialogHeader(title: title),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: IoCrosswordSpacing.xlgsm,
-                  ),
-                  child: content,
+      child: IoPhysicalModel(
+        child: Card(
+          child: SizedBox(
+            width: 340,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 11,
                 ),
-                Text(
-                  l10n.shareOn,
-                ),
-                const SizedBox(height: IoCrosswordSpacing.xlgsm),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.linkedin),
+                    ShareDialogHeader(title: title),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: IoCrosswordSpacing.xlgsm,
+                      ),
+                      child: content,
                     ),
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.instagram),
+                    Text(
+                      l10n.shareOn,
                     ),
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.twitter),
-                    ),
-                    IconButton(
-                      onPressed: null,
-                      icon: Icon(IoIcons.facebook),
+                    const SizedBox(height: IoCrosswordSpacing.xlgsm),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          onPressed: null,
+                          icon: Icon(IoIcons.linkedin),
+                        ),
+                        IconButton(
+                          onPressed: null,
+                          icon: Icon(IoIcons.instagram),
+                        ),
+                        IconButton(
+                          onPressed: null,
+                          icon: Icon(IoIcons.twitter),
+                        ),
+                        IconButton(
+                          onPressed: null,
+                          icon: Icon(IoIcons.facebook),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
