@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword/extensions/context_ext.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -6,11 +7,13 @@ class ShareDialog extends StatelessWidget {
   const ShareDialog({
     required this.title,
     required this.content,
+    required this.url,
     super.key,
   });
 
   final Widget content;
   final String title;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -40,24 +43,27 @@ class ShareDialog extends StatelessWidget {
                       l10n.shareOn,
                     ),
                     const SizedBox(height: IoCrosswordSpacing.xlgsm),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          onPressed: null,
-                          icon: Icon(IoIcons.linkedin),
+                          onPressed: () {
+                        context.shareLinkedIn(shareUrl: url);
+                      },
+                          icon: constIcon(IoIcons.linkedin),
                         ),
                         IconButton(
-                          onPressed: null,
-                          icon: Icon(IoIcons.instagram),
+                          onPressed: () {
+                          context.shareTwitter(shareUrl: url);
+                        },
+
+                          icon: constIcon(IoIcons.twitter),
                         ),
                         IconButton(
-                          onPressed: null,
-                          icon: Icon(IoIcons.twitter),
-                        ),
-                        IconButton(
-                          onPressed: null,
-                          icon: Icon(IoIcons.facebook),
+                          onPressed: () {
+                        context.shareFacebook(shareUrl: url);
+                      },
+                          icon: constIcon(IoIcons.facebook),
                         ),
                       ],
                     ),
