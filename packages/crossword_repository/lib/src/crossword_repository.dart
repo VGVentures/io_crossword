@@ -25,6 +25,8 @@ class CrosswordRepository {
   final Random _rng;
 
   // coverage:ignore-start
+  // Ignore coverage due to unhandled case in the fake_cloud_firestore package
+  // Expected tests are still created and commented in corresponding test file
   /// Returns the position of a random section that has empty words.
   Future<Point<int>?> getRandomEmptySection() async {
     final docsCount = await sectionCollection.count().get();
