@@ -13,7 +13,7 @@ class CrosswordRepository {
     required this.db,
     Random? rng,
   }) : _rng = rng ?? Random(DateTime.now().millisecondsSinceEpoch) {
-    sectionCollection = db.collection('boardChunks');
+    sectionCollection = db.collection('boardChunks2');
   }
 
   /// The [FirebaseFirestore] instance.
@@ -28,7 +28,7 @@ class CrosswordRepository {
   // Ignore coverage due to unhandled case in the fake_cloud_firestore package
   // Expected tests are still created and commented in corresponding test file
   /// Returns the position of a random section that has empty words.
-  Future<Point<int>?> getRandomEmptySection() async {
+  Future<BoardSection?> getRandomUncompletedSection() async {
     final docsCount = await sectionCollection.count().get();
     final sectionCount = docsCount.count;
     if (sectionCount == null) {
@@ -89,8 +89,7 @@ class CrosswordRepository {
       );
 
       if (section != null) {
-        print('random section ${section.position}');
-        return section.position;
+        return section;
       }
     }
     return null;

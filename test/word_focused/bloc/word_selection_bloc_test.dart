@@ -2,6 +2,7 @@
 
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -16,13 +17,22 @@ class _MockWord extends Mock implements Word {
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
+class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
+
+class _FakeUnsolvedWord extends Fake implements Word {
+  @override
+  int? get solvedTimestamp => null;
+}
+
 void main() {
   group('$WordSelectionBloc', () {
     late CrosswordResource crosswordResource;
+    late CrosswordRepository crosswordRepository;
     late SelectedWord selectedWord;
 
     setUp(() {
       crosswordResource = _MockCrosswordResource();
+      crosswordRepository = _MockCrosswordRepository();
       selectedWord = SelectedWord(
         section: (0, 0),
         word: _MockWord(),
@@ -32,6 +42,7 @@ void main() {
     test('initial state is WordSelectionState.initial', () {
       final bloc = WordSelectionBloc(
         crosswordResource: crosswordResource,
+        crosswordRepository: crosswordRepository,
       );
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
@@ -39,7 +50,10 @@ void main() {
     group('$WordSelected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits preSolving status',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         act: (bloc) => bloc.add(WordSelected(selectedWord: selectedWord)),
         expect: () => <WordSelectionState>[
           WordSelectionState(
@@ -89,7 +103,10 @@ void main() {
       group('emits preSolving status', () {
         blocTest<WordSelectionBloc, WordSelectionState>(
           'toggles between words when letter is crossed',
-          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          build: () => WordSelectionBloc(
+            crosswordResource: crosswordResource,
+            crosswordRepository: crosswordRepository,
+          ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: crossedLetter))
             ..add(LetterSelected(letter: crossedLetter))
@@ -121,7 +138,10 @@ void main() {
 
         blocTest<WordSelectionBloc, WordSelectionState>(
           'once with horizontal word when letter is vertical',
-          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          build: () => WordSelectionBloc(
+            crosswordResource: crosswordResource,
+            crosswordRepository: crosswordRepository,
+          ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: horizontalLetter))
             ..add(LetterSelected(letter: horizontalLetter)),
@@ -138,7 +158,10 @@ void main() {
 
         blocTest<WordSelectionBloc, WordSelectionState>(
           'once with vertical word when letter is vertical',
-          build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+          build: () => WordSelectionBloc(
+            crosswordResource: crosswordResource,
+            crosswordRepository: crosswordRepository,
+          ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: verticalLetter))
             ..add(LetterSelected(letter: verticalLetter)),
@@ -158,7 +181,10 @@ void main() {
     group('$WordUnselected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits initial state',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
           word: selectedWord,
@@ -168,10 +194,47 @@ void main() {
       );
     });
 
+    group('$RandomWordSelected', () {
+      final word = _FakeUnsolvedWord();
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits state with new selected word if a section is found',
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
+        setUp: () => {
+          when(crosswordRepository.getRandomUncompletedSection).thenAnswer(
+            (_) => Future.value(
+              BoardSection(
+                id: '',
+                position: Point(1, 1),
+                size: 10,
+                words: [word],
+                borderWords: const [],
+              ),
+            ),
+          ),
+        },
+        act: (bloc) => bloc.add(RandomWordSelected()),
+        expect: () => <WordSelectionState>[
+          WordSelectionState(
+            status: WordSelectionStatus.preSolving,
+            word: SelectedWord(
+              word: word,
+              section: (1, 1),
+            ),
+          ),
+        ],
+      );
+    });
+
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if there is no word identifier',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         act: (bloc) => bloc.add(
           WordSolveRequested(),
         ),
@@ -180,7 +243,10 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits solving status when there is a word identifier',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
           word: selectedWord,
@@ -202,14 +268,20 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if not solving',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'answer')),
         expect: () => <WordSelectionState>[],
       );
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if already solved',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solved,
           word: selectedWord,
@@ -220,7 +292,10 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'validates a valid answer',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         setUp: () {
           answerWord = _MockWord();
           when(() => selectedWord.word.copyWith(answer: 'correct'))
@@ -255,7 +330,10 @@ void main() {
 
       blocTest<WordSelectionBloc, WordSelectionState>(
         'invalidates an invalid answer',
-        build: () => WordSelectionBloc(crosswordResource: crosswordResource),
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+          crosswordRepository: crosswordRepository,
+        ),
         setUp: () {
           when(
             () => crosswordResource.answerWord(

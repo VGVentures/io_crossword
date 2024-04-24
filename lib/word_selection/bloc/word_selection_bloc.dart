@@ -1,5 +1,6 @@
 import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
+import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -10,9 +11,12 @@ part 'word_selection_state.dart';
 class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   WordSelectionBloc({
     required CrosswordResource crosswordResource,
+    required CrosswordRepository crosswordRepository,
   })  : _crosswordResource = crosswordResource,
+        _crosswordRepository = crosswordRepository,
         super(const WordSelectionState.initial()) {
     on<WordSelected>(_onWordSelected);
+    on<RandomWordSelected>(_onRandomWordSelected);
     on<LetterSelected>(_onLetterSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
@@ -20,6 +24,30 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
   }
 
   final CrosswordResource _crosswordResource;
+  final CrosswordRepository _crosswordRepository;
+
+  Future<void> _onRandomWordSelected(
+    RandomWordSelected event,
+    Emitter<WordSelectionState> emit,
+  ) async {
+    final randomSection =
+        await _crosswordRepository.getRandomUncompletedSection();
+    if (randomSection != null) {
+      final selectedWord = randomSection.words.firstWhere(
+        (element) => element.solvedTimestamp == null,
+      );
+
+      emit(
+        WordSelectionState(
+          status: WordSelectionStatus.preSolving,
+          word: SelectedWord(
+            section: (randomSection.position.x, randomSection.position.y),
+            word: selectedWord,
+          ),
+        ),
+      );
+    }
+  }
 
   void _onWordSelected(
     WordSelected event,

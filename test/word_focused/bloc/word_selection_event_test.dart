@@ -37,6 +37,15 @@ void main() {
     });
   });
 
+  group('$RandomWordSelected', () {
+    test('supports equality', () {
+      expect(
+        RandomWordSelected(),
+        equals(RandomWordSelected()),
+      );
+    });
+  });
+
   group('$WordUnselected', () {
     test('supports equality', () {
       expect(

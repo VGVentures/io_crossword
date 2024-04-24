@@ -49,7 +49,9 @@ class BottomBarContent extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             OutlinedButton.icon(
-              onPressed: () {}, // coverage:ignore-line
+              onPressed: () => context
+                  .read<WordSelectionBloc>()
+                  .add(const RandomWordSelected()), // coverage:ignore-line
               icon: const Icon(Icons.location_searching),
               label: Text(l10n.findNewWord),
             ),

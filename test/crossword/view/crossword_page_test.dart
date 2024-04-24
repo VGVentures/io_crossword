@@ -3,12 +3,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
@@ -28,9 +28,9 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
-class _FakeBoardSection extends Fake implements BoardSection {
+class _FakeUnsolvedWord extends Fake implements Word {
   @override
-  List<Word> get words => [];
+  int? get solvedTimestamp => null;
 }
 
 void main() {
@@ -49,6 +49,37 @@ void main() {
     setUp(() {
       Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
+      when(() => crosswordBloc.state).thenReturn(
+        CrosswordState(
+          status: CrosswordStatus.success,
+          sectionSize: 40,
+        ),
+      );
+    });
+
+    testWidgets('adds $BoardSectionRequested event when first word is selected',
+        (tester) async {
+      when(() => crosswordBloc.state).thenReturn(const CrosswordState());
+      final wordSelectionBloc = _MockWordSelectionBloc();
+      whenListen(
+        wordSelectionBloc,
+        Stream.fromIterable(
+          [
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(section: (1, 1), word: _FakeUnsolvedWord()),
+            ),
+          ],
+        ),
+        initialState: WordSelectionState.initial(),
+      );
+      await tester.pumpSubject(
+        CrosswordView(),
+        wordSelectionBloc: wordSelectionBloc,
+        crosswordBloc: crosswordBloc,
+      );
+      await tester.pump();
+      verify(() => crosswordBloc.add(BoardSectionRequested((1, 1)))).called(1);
     });
 
     testWidgets('renders $IoAppBar', (tester) async {
@@ -108,38 +139,19 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders game with ${CrosswordStatus.success}', (tester) async {
-      when(() => crosswordBloc.state).thenReturn(
-        CrosswordState(
-          status: CrosswordStatus.success,
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
-
+    testWidgets('renders $Crossword2View with ${CrosswordStatus.success}',
+        (tester) async {
       await tester.pumpSubject(
-        CrosswordView(),
         crosswordBloc: crosswordBloc,
+        CrosswordView(),
       );
 
-      expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
+      expect(find.byType(Crossword2View), findsOneWidget);
     });
 
     testWidgets(
       'renders $WordSelectionPage when loaded',
       (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: 40,
-            sections: {
-              (0, 0): _FakeBoardSection(),
-            },
-          ),
-        );
-
         await tester.pumpSubject(
           CrosswordView(),
           crosswordBloc: crosswordBloc,
@@ -156,6 +168,7 @@ extension on WidgetTester {
     Widget child, {
     CrosswordBloc? crosswordBloc,
     PlayerBloc? playerBloc,
+    WordSelectionBloc? wordSelectionBloc,
   }) {
     final bloc = crosswordBloc ?? _MockCrosswordBloc();
     if (crosswordBloc == null) {
@@ -167,10 +180,13 @@ extension on WidgetTester {
       when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
     }
 
-    final wordSelectionBloc = _MockWordSelectionBloc();
-    when(() => wordSelectionBloc.state).thenReturn(
-      const WordSelectionState.initial(),
-    );
+    final wordSelectionBlocUpdate =
+        wordSelectionBloc ?? _MockWordSelectionBloc();
+    if (wordSelectionBloc == null) {
+      when(() => wordSelectionBlocUpdate.state).thenReturn(
+        const WordSelectionState.initial(),
+      );
+    }
 
     return pumpApp(
       MultiBlocProvider(
@@ -182,7 +198,7 @@ extension on WidgetTester {
             create: (_) => playerBlocUpdate,
           ),
           BlocProvider<WordSelectionBloc>(
-            create: (_) => wordSelectionBloc,
+            create: (_) => wordSelectionBlocUpdate,
           ),
         ],
         child: child,
