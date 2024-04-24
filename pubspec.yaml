@@ -15,7 +15,7 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.17.0
+  cloud_firestore: ^4.17.1
   collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
