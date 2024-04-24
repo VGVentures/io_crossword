@@ -12,7 +12,7 @@ class CrosswordRepository {
   CrosswordRepository({
     required this.db,
     Random? rng,
-  }) : _rng = rng ?? Random() {
+  }) : _rng = rng ?? Random(DateTime.now().millisecondsSinceEpoch) {
     sectionCollection = db.collection('boardChunks');
   }
 
@@ -89,6 +89,7 @@ class CrosswordRepository {
       );
 
       if (section != null) {
+        print('random section ${section.position}');
         return section.position;
       }
     }
