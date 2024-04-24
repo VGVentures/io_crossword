@@ -20,27 +20,18 @@ class CrosswordBackdrop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final quad = QuadScope.of(context);
+    final crosswordLayout = CrosswordLayoutScope.of(context);
 
     return GestureDetector(
       onTap: () => _onTap(context),
       child: SizedBox.fromSize(
-        size: quad.toSize(),
+        size: crosswordLayout.crosswordSize,
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: IoCrosswordColors.black.withOpacity(0.8),
           ),
         ),
       ),
-    );
-  }
-}
-
-extension on Quad {
-  Size toSize() {
-    return Size(
-      point2.x - point0.x,
-      point2.y - point0.y,
     );
   }
 }

@@ -88,6 +88,18 @@ class _CrosswordStack extends StatelessWidget {
                   return const SizedBox.shrink();
                 }
 
+                return const CrosswordBackdrop();
+              },
+            ),
+          if (layout == IoLayoutData.large)
+            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+              selector: (state) => state.word,
+              builder: (context, selectedWord) {
+                if (selectedWord == null ||
+                    selectedWord.word.solvedTimestamp != null) {
+                  return const SizedBox.shrink();
+                }
+
                 final word = selectedWord.word;
                 return Positioned(
                   left: (selectedWord.section.$1 *
