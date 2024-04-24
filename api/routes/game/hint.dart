@@ -4,6 +4,7 @@ import 'package:crossword_repository/crossword_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
+import 'package:logging/logging.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   if (context.request.method == HttpMethod.post) {
@@ -76,7 +77,8 @@ Future<Response> _onPost(RequestContext context) async {
         'maxHints': maxAllowedHints,
       },
     );
-  } catch (e) {
+  } catch (e, s) {
+    context.read<Logger>().severe('Error generating a hint', e, s);
     return Response(
       body: e.toString(),
       statusCode: HttpStatus.internalServerError,

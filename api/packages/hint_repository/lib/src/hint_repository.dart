@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:db_client/db_client.dart';
+import 'package:dio/dio.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
-import 'package:http/http.dart' as http;
 
 /// {@template hint_repository}
 /// A repository to handle the hints.
@@ -13,12 +12,12 @@ class HintRepository {
   /// {@macro hint_repository}
   HintRepository({
     required DbClient dbClient,
-    http.Client? httpClient,
+    Dio? httpClient,
   })  : _dbClient = dbClient,
-        _httpClient = httpClient ?? http.Client();
+        _httpClient = httpClient ?? Dio();
 
   final DbClient _dbClient;
-  final http.Client _httpClient;
+  final Dio _httpClient;
 
   static const _answersCollection = 'answers2';
   static const _hintsCollection = 'hints';
@@ -71,24 +70,30 @@ class HintRepository {
   }) async {
     try {
       final url = Uri.https('gethintkit-sea6y22h5q-uc.a.run.app');
-      final body = jsonEncode({
-        'word': wordAnswer,
-        'question': question,
-        'context': previousHints
-            .map((e) => {'question': e.question, 'answer': e.response.name})
-            .toList(),
-      });
+      final body = {
+        'data': {
+          'word': wordAnswer,
+          'question': question,
+          'context': previousHints
+              .map((e) => {'question': e.question, 'answer': e.response.name})
+              .toList(),
+        },
+      };
       final headers = {
         HttpHeaders.authorizationHeader: 'Bearer $userToken',
+        HttpHeaders.contentTypeHeader: 'application/json',
       };
 
-      final response = await _httpClient.post(
-        url,
-        body: body,
-        headers: headers,
+      final response = await _httpClient.post<Map<String, dynamic>>(
+        url.toString(),
+        data: body,
+        options: Options(
+          headers: headers,
+        ),
       );
 
-      final textResponse = response.body;
+      final result = response.data!['result'] as Map<String, dynamic>;
+      final textResponse = result['answer'];
       final hintResponse = HintResponse.values.firstWhere(
         (element) => element.name == textResponse,
         orElse: () => HintResponse.notApplicable,

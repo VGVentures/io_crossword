@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:db_client/db_client.dart';
+import 'package:dio/dio.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class _MockDbClient extends Mock implements DbClient {}
 
-class _MockHttpClient extends Mock implements http.Client {}
+class _MockHttpClient extends Mock implements Dio {}
 
 void main() {
   group('HintRepository', () {
     late DbClient dbClient;
-    late http.Client httpClient;
+    late Dio httpClient;
     late HintRepository hintRepository;
 
     setUpAll(() {
@@ -102,13 +102,18 @@ void main() {
     group('generateHint', () {
       test('returns a hint when the response is parsed correctly', () async {
         when(
-          () => httpClient.post(
+          () => httpClient.post<Map<String, dynamic>>(
             any(),
-            body: any(named: 'body'),
-            headers: any(named: 'headers'),
+            data: any(named: 'data'),
+            options: any(named: 'options'),
           ),
         ).thenAnswer(
-          (_) async => http.Response('yes', 200),
+          (_) async => Response(
+            requestOptions: RequestOptions(),
+            data: {
+              'result': {'answer': 'yes'},
+            },
+          ),
         );
         final hint = await hintRepository.generateHint(
           wordAnswer: 'answer',
@@ -128,13 +133,18 @@ void main() {
         'correctly',
         () async {
           when(
-            () => httpClient.post(
+            () => httpClient.post<Map<String, dynamic>>(
               any(),
-              body: any(named: 'body'),
-              headers: any(named: 'headers'),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
             ),
           ).thenAnswer(
-            (_) async => http.Response('random things', 200),
+            (_) async => Response(
+              requestOptions: RequestOptions(),
+              data: {
+                'result': {'answer': 'random things'},
+              },
+            ),
           );
           final hint = await hintRepository.generateHint(
             wordAnswer: 'answer',
@@ -157,12 +167,12 @@ void main() {
 
       test('throws a HintException when an error occurs', () async {
         when(
-          () => httpClient.post(
+          () => httpClient.post<Map<String, dynamic>>(
             any(),
-            body: any(named: 'body'),
-            headers: any(named: 'headers'),
+            data: any(named: 'data'),
+            options: any(named: 'options'),
           ),
-        ).thenThrow(Exception('Oops'));
+        ).thenThrow(Exception());
         expect(
           () => hintRepository.generateHint(
             wordAnswer: 'answer',
@@ -177,7 +187,7 @@ void main() {
 
     group('getPreviousHints', () {
       test('returns an empty list when no hints are found', () async {
-        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
             .thenAnswer((_) async => null);
 
         final hints = await hintRepository.getPreviousHints(
@@ -189,7 +199,7 @@ void main() {
       });
 
       test('returns a list of hints', () async {
-        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
             .thenAnswer(
           (_) async => DbEntityRecord(
             id: 'userId',
@@ -240,7 +250,7 @@ void main() {
 
         verify(
           () => dbClient.set(
-            'answers/wordId/hints',
+            'answers2/wordId/hints',
             DbEntityRecord(
               id: 'userId',
               data: const {
