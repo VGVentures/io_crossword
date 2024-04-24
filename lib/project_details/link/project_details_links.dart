@@ -5,5 +5,6 @@ class ProjectDetailsLinks {
   static const termsOfService = 'https://policies.google.com/terms';
   static const faqs = 'https://flutter.dev/crossword';
   static const claimBadge = 'https://io.google/2024';
+  static const googleAI = 'https://ai.google.dev/';
   static const crossword = 'https://crossword.withgoogle.com';
 }
