@@ -58,7 +58,7 @@ void main() {
     final uri = Uri.parse('https://example.com/api/endpoint');
     const projectId = 'PROJECT_ID';
     const keyId = '1e973ee0e16f7eef4f921d50dc61d70b2efefc19';
-    const user = AuthenticatedUser('USER_ID');
+    const user = AuthenticatedUser('USER_ID', 'myToken');
     final returnsUser = isA<_UserGetter>().having(
       (f) => f(),
       'returns',

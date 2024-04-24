@@ -16,7 +16,6 @@ env:
   GAME_URL: "*"
   INITIALS_BLACKLIST_ID: T1ilfCwjDpLS7iaFzenA
   FB_STORAGE_BUCKET: io-crossword-dev.appspot.com
-  GEMINI_MODEL: gemini-pro
 
 jobs:
   deploy:
@@ -62,8 +61,6 @@ jobs:
             GAME_URL=${{ env.GAME_URL }}
             INITIALS_BLACKLIST_ID=${{ env.INITIALS_BLACKLIST_ID }}
             FB_STORAGE_BUCKET=${{ env.FB_STORAGE_BUCKET }}
-            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY_DEV }}
-            GEMINI_MODEL=${{ env.GEMINI_MODEL }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
