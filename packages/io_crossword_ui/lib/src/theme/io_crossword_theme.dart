@@ -126,7 +126,7 @@ class IoCrosswordTheme {
       final backgroundColor = letterTheme.empty.backgroundColor;
 
       return IoWordInputStyle(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.all(1.8),
         empty: IoWordInputCharacterFieldStyle(
           backgroundColor: backgroundColor,
           border: Border.all(
