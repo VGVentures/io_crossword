@@ -84,9 +84,15 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: context.isSmallLandscape
-                ? const RotatePhonePage()
-                : const GameIntroPage(),
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  child!,
+                  if (context.isMobileLandscape) const RotatePhonePage(),
+                ],
+              );
+            },
+            home: const GameIntroPage(),
           );
         },
       ),
@@ -118,9 +124,11 @@ extension MascotTheme on Mascots? {
   }
 }
 
-extension SmallLandscapeHelper on BuildContext {
+extension MobileLandscapeHelper on BuildContext {
   /// True if running in landscape mode on a small device
-  bool get isSmallLandscape =>
+  bool get isMobileLandscape =>
       MediaQuery.of(this).orientation == Orientation.landscape &&
-      IoLayout.of(this) == IoLayoutData.small;
+      IoLayout.of(this) == IoLayoutData.small &&
+      (Theme.of(this).platform == TargetPlatform.android ||
+          Theme.of(this).platform == TargetPlatform.iOS);
 }
