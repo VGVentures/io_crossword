@@ -20,7 +20,12 @@ class Crossword2View extends StatelessWidget {
     return CrosswordLayoutScope(
       data: CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
-        cellSize: theme.io.wordInput.secondary.empty.size,
+        cellSize: Size(
+          theme.io.wordInput.secondary.empty.size.width +
+              theme.io.wordInput.secondary.padding.horizontal,
+          theme.io.wordInput.secondary.empty.size.height +
+              theme.io.wordInput.secondary.padding.vertical,
+        ),
       ),
       child: DefaultTransformationController(
         child: CrosswordInteractiveViewer(
