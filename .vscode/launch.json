@@ -25,12 +25,6 @@
         "--target",
         "lib/main_development.dart"
       ],
-      "toolArgs": [
-        "--dart-define",
-        "RECAPTCHA_KEY=6LfYBKwpAAAAAM8vTuBW33_x8Xff3ekMqYyf-fzh",
-        "--dart-define",
-        "APPCHECK_DEBUG_TOKEN=EA85D3EA-85F6-4C2E-BC68-AC57385B6B9F"
-      ]
     },
     {
       "name": "Launch development",

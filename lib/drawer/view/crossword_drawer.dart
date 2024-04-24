@@ -20,6 +20,7 @@ class CrosswordDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
     final l10n = context.l10n;
+    final layout = IoLayout.of(context);
     final items = [
       DrawerItem(
         title: l10n.finishAndSubmitScore,
@@ -38,8 +39,8 @@ class CrosswordDrawer extends StatelessWidget {
               create: (_) => HowToPlayCubit(),
               child: Align(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 539,
+                  constraints: BoxConstraints(
+                    maxWidth: layout == IoLayoutData.small ? 375 : 539,
                   ),
                   child: SingleChildScrollView(
                     child: HowToPlayContent(
