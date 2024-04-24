@@ -122,11 +122,11 @@ class IoCrosswordTheme {
         color: letterTheme.empty.backgroundColor,
         width: 1.74,
       );
-      const size = Size.square(48);
+      const size = Size.square(53);
       final backgroundColor = letterTheme.empty.backgroundColor;
 
       return IoWordInputStyle(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.all(1.4),
         empty: IoWordInputCharacterFieldStyle(
           backgroundColor: backgroundColor,
           border: Border.all(
@@ -263,6 +263,7 @@ class IoCrosswordTheme {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(162, 64),
+        backgroundColor: IoCrosswordColors.darkGray,
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(horizontal: 24),
         textStyle: IoCrosswordTextStyles.bodyLG.medium,

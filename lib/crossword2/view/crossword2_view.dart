@@ -20,7 +20,12 @@ class Crossword2View extends StatelessWidget {
     return CrosswordLayoutScope(
       data: CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
-        cellSize: theme.io.wordInput.secondary.empty.size,
+        cellSize: Size(
+          theme.io.wordInput.secondary.empty.size.width +
+              theme.io.wordInput.secondary.padding.horizontal,
+          theme.io.wordInput.secondary.empty.size.height +
+              theme.io.wordInput.secondary.padding.vertical,
+        ),
       ),
       child: DefaultTransformationController(
         child: CrosswordInteractiveViewer(
@@ -78,6 +83,15 @@ class _CrosswordStack extends StatelessWidget {
               left: chunk.$1 * crosswordLayout.chunkSize.width,
               top: chunk.$2 * crosswordLayout.chunkSize.height,
               child: CrosswordChunk(index: chunk),
+            ),
+          if (layout == IoLayoutData.large)
+            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+              selector: (state) => state.word,
+              builder: (context, selectedWord) {
+                return selectedWord != null
+                    ? const CrosswordBackdrop()
+                    : const SizedBox.shrink();
+              },
             ),
           if (layout == IoLayoutData.large)
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
