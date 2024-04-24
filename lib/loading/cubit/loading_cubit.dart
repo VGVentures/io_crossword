@@ -15,15 +15,21 @@ class LoadingCubit extends Cubit<LoadingState> {
       () => Flame.images.load(Mascots.dash.teamMascot.idleAnimation.keyName),
       () =>
           Flame.images.load(Mascots.dash.teamMascot.platformAnimation.keyName),
+      () => Flame.images.load(Mascots.dash.teamMascot.lookUpAnimation.keyName),
       () => Flame.images.load(Mascots.android.teamMascot.idleAnimation.keyName),
       () => Flame.images
           .load(Mascots.android.teamMascot.platformAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.android.teamMascot.lookUpAnimation.keyName),
       () => Flame.images.load(Mascots.dino.teamMascot.idleAnimation.keyName),
       () =>
           Flame.images.load(Mascots.dino.teamMascot.platformAnimation.keyName),
+      () => Flame.images.load(Mascots.dino.teamMascot.lookUpAnimation.keyName),
       () => Flame.images.load(Mascots.sparky.teamMascot.idleAnimation.keyName),
       () => Flame.images
           .load(Mascots.sparky.teamMascot.platformAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.sparky.teamMascot.lookUpAnimation.keyName),
     ];
 
     emit(state.copyWith(assetsCount: loadables.length));

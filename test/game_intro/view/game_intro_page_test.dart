@@ -2,6 +2,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +47,11 @@ void main() {
 
     setUpAll(() async {
       l10n = await AppLocalizations.delegate.load(Locale('en'));
+
+      Flame.images = Images(prefix: '');
+      await Flame.images.loadAll([
+        Mascots.dash.teamMascot.lookUpAnimation.keyName,
+      ]);
     });
 
     setUp(() {
@@ -137,6 +144,8 @@ void main() {
       'renders the $HowToPlayPage when the status is howToPlay',
       (tester) async {
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+        when(() => playerBloc.state)
+            .thenReturn(PlayerState(mascot: Mascots.dash));
 
         final flowController =
             FlowController<GameIntroStatus>(GameIntroStatus.howToPlay);
@@ -149,6 +158,7 @@ void main() {
               flowController: flowController,
             ),
           ),
+          playerBloc: playerBloc,
         );
 
         expect(find.byType(HowToPlayPage), findsOneWidget);

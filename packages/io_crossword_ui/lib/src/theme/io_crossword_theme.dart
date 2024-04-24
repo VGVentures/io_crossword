@@ -263,6 +263,7 @@ class IoCrosswordTheme {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(162, 64),
+        backgroundColor: IoCrosswordColors.darkGray,
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(horizontal: 24),
         textStyle: IoCrosswordTextStyles.bodyLG.medium,

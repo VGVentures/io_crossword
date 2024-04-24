@@ -1,1 +1,1 @@
-export 'view/about_view.dart';
+export 'view/about_project_details.dart';
