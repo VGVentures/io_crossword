@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -14,29 +13,25 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
     required BoardInfoRepository boardInfoRepository,
-    required CrosswordResource crosswordResource,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
-        _crosswordResource = crosswordResource,
-        super(const CrosswordInitial()) {
+        super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
-    on<MascotSelected>(_onMascotSelected);
-    on<BoardLoadingInfoFetched>(_onBoardLoadingInfoFetched);
-    on<InitialsSelected>(_onInitialsSelected);
-    on<AnswerUpdated>(_onAnswerUpdated);
-    on<AnswerSubmitted>(_onAnswerSubmitted);
+    on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
-  final CrosswordResource _crosswordResource;
 
   Future<void> _onBoardSectionRequested(
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    final wasAlreadyRequested = state.sections.containsKey(event.position);
+    if (wasAlreadyRequested) return;
+
     return emit.forEach(
       _crosswordRepository.watchSectionFromPosition(
         event.position.$1,
@@ -44,30 +39,29 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       ),
       onData: (section) {
         if (section == null) return state;
-        final newSection = {
-          (section.position.x, section.position.y): section,
-        };
 
-        if (state is CrosswordLoaded) {
-          final loadedState = state as CrosswordLoaded;
-          return loadedState.copyWith(
-            sections: {
-              ...loadedState.sections,
-              ...newSection,
-            },
-          );
-        }
+        final newSectionKey = (section.position.x, section.position.y);
 
-        return CrosswordLoaded(
+        return state.copyWith(
+          status: CrosswordStatus.success,
           sectionSize: section.size,
-          sections: newSection,
+          sections: {
+            ...state.sections,
+            newSectionKey: section,
+          },
+        );
+      },
+      onError: (error, stackTrace) {
+        addError(error, stackTrace);
+        return state.copyWith(
+          status: CrosswordStatus.failure,
         );
       },
     );
   }
 
   (int, int) _findWordInSection(
-    CrosswordLoaded state,
+    CrosswordState state,
     Word word,
     (int, int) section, {
     int attempt = 1,
@@ -97,139 +91,54 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     );
   }
 
-  FutureOr<void> _onWordSelected(
+  void _onWordSelected(
     WordSelected event,
     Emitter<CrosswordState> emit,
   ) {
-    final currentState = state;
-    if (currentState is CrosswordLoaded) {
-      final section = _findWordInSection(
-        currentState,
-        event.word,
-        event.section,
-      );
+    final section = _findWordInSection(
+      state,
+      event.word,
+      event.section,
+    );
 
-      emit(
-        currentState.copyWith(
-          selectedWord: WordSelection(
-            section: section,
-            word: event.word,
-          ),
-          answer: '',
+    emit(
+      state.copyWith(
+        selectedWord: WordSelection(
+          section: section,
+          word: event.word,
         ),
-      );
-    }
+      ),
+    );
   }
 
-  Future<void> _onWordUnselected(
+  void _onWordUnselected(
     WordUnselected event,
     Emitter<CrosswordState> emit,
-  ) async {
-    if (state is CrosswordLoaded) {
-      emit(
-        (state as CrosswordLoaded).removeSelectedWord(),
-      );
-    }
+  ) {
+    emit(state.removeSelectedWord());
   }
 
-  Future<void> _onMascotSelected(
-    MascotSelected event,
-    Emitter<CrosswordState> emit,
-  ) async {
-    if (state is CrosswordLoaded) {
-      emit(
-        (state as CrosswordLoaded).copyWith(mascot: event.mascot),
-      );
-    }
-  }
-
-  FutureOr<void> _onBoardLoadingInfoFetched(
-    BoardLoadingInfoFetched event,
+  FutureOr<void> _onBoardLoadingInformationRequested(
+    BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
   ) async {
     try {
       final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();
 
-      if (state is CrosswordLoaded) {
-        emit(
-          (state as CrosswordLoaded).copyWith(
-            zoomLimit: zoomLimit,
-            sectionSize: sectionSize,
-          ),
-        );
-      } else {
-        emit(
-          CrosswordLoaded(
-            sectionSize: sectionSize,
-            zoomLimit: zoomLimit,
-          ),
-        );
-        add(const BoardSectionRequested((0, 0)));
-      }
-    } catch (e) {
-      emit(CrosswordError(e.toString()));
-    }
-  }
-
-  Future<void> _onInitialsSelected(
-    InitialsSelected event,
-    Emitter<CrosswordState> emit,
-  ) async {
-    if (state is CrosswordLoaded) {
       emit(
-        (state as CrosswordLoaded).copyWith(initials: event.initials.join()),
+        state.copyWith(
+          zoomLimit: zoomLimit,
+          sectionSize: sectionSize,
+        ),
       );
-    }
-  }
-
-  void _onAnswerUpdated(AnswerUpdated event, Emitter<CrosswordState> emit) {
-    if (state is CrosswordLoaded) {
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
       emit(
-        (state as CrosswordLoaded).copyWith(answer: event.answer),
+        const CrosswordState(
+          status: CrosswordStatus.failure,
+        ),
       );
-    }
-  }
-
-  Future<void> _onAnswerSubmitted(
-    AnswerSubmitted event,
-    Emitter<CrosswordState> emit,
-  ) async {
-    if (state is CrosswordLoaded) {
-      final loadedState = state as CrosswordLoaded;
-      final selectedWord = loadedState.selectedWord;
-      if (selectedWord == null) return;
-
-      if (loadedState.answer != selectedWord.word.answer) {
-        emit(
-          loadedState.copyWith(
-            selectedWord:
-                selectedWord.copyWith(solvedStatus: SolvedStatus.invalid),
-          ),
-        );
-        return;
-      }
-
-      try {
-        final isValidAnswer = await _crosswordResource.answerWord(
-          section: loadedState.sections[selectedWord.section]!,
-          word: selectedWord.word,
-          answer: loadedState.answer,
-          mascot: loadedState.mascot,
-        );
-
-        emit(
-          loadedState.copyWith(
-            selectedWord: selectedWord.copyWith(
-              solvedStatus:
-                  isValidAnswer ? SolvedStatus.solved : SolvedStatus.invalid,
-            ),
-          ),
-        );
-      } catch (error, stackTrace) {
-        addError(error, stackTrace);
-        emit(CrosswordError(error.toString()));
-      }
     }
   }
 }

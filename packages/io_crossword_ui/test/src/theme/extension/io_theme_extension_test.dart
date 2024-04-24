@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockIoPlayerAliasTheme extends Mock implements IoPlayerAliasTheme {}
+class _MockIoWordTheme extends Mock implements IoWordTheme {}
 
 class _MockIoIconButtonTheme extends Mock implements IoIconButtonTheme {}
 
@@ -11,15 +11,28 @@ class _MockIoCardTheme extends Mock implements IoCardTheme {}
 
 class _MockIoPhysicalModelStyle extends Mock implements IoPhysicalModelStyle {}
 
+class _MockIoWordInputTheme extends Mock implements IoWordInputTheme {}
+
+class _MockIoColorScheme extends Mock implements IoColorScheme {}
+
+class _MockIoOutlineButtonTheme extends Mock implements IoOutlineButtonTheme {}
+
+class _MockIoCrosswordLetterTheme extends Mock
+    implements IoCrosswordLetterTheme {}
+
 void main() {
   group('$IoThemeExtension', () {
     group('copyWith', () {
       test('remains the same when no arguments are give', () {
         final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+          wordTheme: _MockIoWordTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputTheme(),
+          colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith();
@@ -29,14 +42,18 @@ void main() {
 
       test('changes when arguments are give', () {
         final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+          wordTheme: _MockIoWordTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputTheme(),
+          colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.copyWith(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+          wordTheme: _MockIoWordTheme(),
         );
 
         expect(newTheme, isNot(equals(theme)));
@@ -46,10 +63,14 @@ void main() {
     group('lerp', () {
       test('returns itself when other is null', () {
         final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+          wordTheme: _MockIoWordTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputTheme(),
+          colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -59,15 +80,19 @@ void main() {
 
       test('returns a lerp of the two themes', () {
         final theme = IoThemeExtension(
-          playerAliasTheme: _MockIoPlayerAliasTheme(),
+          wordTheme: _MockIoWordTheme(),
           iconButtonTheme: _MockIoIconButtonTheme(),
           cardTheme: _MockIoCardTheme(),
           physicalModel: _MockIoPhysicalModelStyle(),
+          wordInput: _MockIoWordInputTheme(),
+          colorScheme: _MockIoColorScheme(),
+          outlineButtonTheme: _MockIoOutlineButtonTheme(),
+          crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
         );
 
         when(
-          () => theme.playerAliasTheme.lerp(theme.playerAliasTheme, 0.5),
-        ).thenReturn(_MockIoPlayerAliasTheme());
+          () => theme.wordTheme.lerp(theme.wordTheme, 0.5),
+        ).thenReturn(_MockIoWordTheme());
         when(
           () => theme.iconButtonTheme.lerp(theme.iconButtonTheme, 0.5),
         ).thenReturn(_MockIoIconButtonTheme());
@@ -77,6 +102,19 @@ void main() {
         when(
           () => theme.physicalModel.lerp(theme.physicalModel, 0.5),
         ).thenReturn(_MockIoPhysicalModelStyle());
+        when(
+          () => theme.wordInput.lerp(theme.wordInput, 0.5),
+        ).thenReturn(_MockIoWordInputTheme());
+        when(
+          () => theme.colorScheme.lerp(theme.colorScheme, 0.5),
+        ).thenReturn(_MockIoColorScheme());
+        when(
+          () => theme.outlineButtonTheme.lerp(theme.outlineButtonTheme, 0.5),
+        ).thenReturn(_MockIoOutlineButtonTheme());
+        when(
+          () =>
+              theme.crosswordLetterTheme.lerp(theme.crosswordLetterTheme, 0.5),
+        ).thenReturn(_MockIoCrosswordLetterTheme());
 
         final newTheme = theme.lerp(theme, 0.5);
 
@@ -106,10 +144,14 @@ void main() {
         final themeData = ThemeData(
           extensions: [
             IoThemeExtension(
-              playerAliasTheme: _MockIoPlayerAliasTheme(),
+              wordTheme: _MockIoWordTheme(),
               iconButtonTheme: _MockIoIconButtonTheme(),
               cardTheme: _MockIoCardTheme(),
               physicalModel: _MockIoPhysicalModelStyle(),
+              wordInput: _MockIoWordInputTheme(),
+              colorScheme: _MockIoColorScheme(),
+              outlineButtonTheme: _MockIoOutlineButtonTheme(),
+              crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
             ),
           ],
         );

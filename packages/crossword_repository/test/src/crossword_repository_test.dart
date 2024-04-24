@@ -4,20 +4,21 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 
 class _MockRandom extends Mock implements Random {}
 
 void main() {
   group('CrosswordRepository', () {
     final word = Word(
+      id: '1',
       position: Point(0, 1),
       axis: Axis.horizontal,
       answer: 'answer',
+      length: 6,
       clue: 'clue',
-      solvedTimestamp: null,
     );
     final boardSection = BoardSection(
       id: 'id',
@@ -28,7 +29,7 @@ void main() {
       ],
       borderWords: const [],
     );
-    const sectionsCollection = 'boardSections';
+    const sectionsCollection = 'boardChunks';
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;

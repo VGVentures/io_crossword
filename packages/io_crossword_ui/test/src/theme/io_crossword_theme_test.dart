@@ -15,6 +15,133 @@ void main() {
         expect(IoCrosswordTheme().themeData.useMaterial3, isTrue);
       });
 
+      group('OutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme().themeData.outlinedButtonTheme.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<GradientStadiumBorder>().having(
+                (border) => border.gradient,
+                'Google gradient',
+                IoCrosswordColors.googleGradient,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientStadiumBorder>().having(
+                  (border) => border.gradient,
+                  'Google gradient',
+                  IoCrosswordColors.googleGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
+      group('IoOutlineButtonTheme', () {
+        final outlinedBorder = IoCrosswordTheme()
+            .themeData
+            .io
+            .outlineButtonTheme
+            .simpleBorder
+            .shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays mediumGray color when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<StadiumBorder>().having(
+                (border) => border.side.color,
+                'Medium gray gradient',
+                IoCrosswordColors.mediumGray,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays mediumGray color with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<StadiumBorder>().having(
+                  (border) => border.side.color,
+                  'Medium gray gradient',
+                  IoCrosswordColors.mediumGray,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
+      group('geminiOutlinedButtonThemeData', () {
+        final outlinedBorder =
+            IoCrosswordTheme.geminiOutlinedButtonThemeData.style!.shape!;
+
+        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+          expect(
+            outlinedBorder.resolve({MaterialState.disabled}),
+            equals(isA<StadiumBorder>()),
+          );
+        });
+
+        test('displays GradientOutlinedBorder when there are no states', () {
+          expect(
+            outlinedBorder.resolve({}),
+            equals(
+              isA<GradientStadiumBorder>().having(
+                (border) => border.gradient,
+                'Gemini gradient',
+                IoCrosswordColors.geminiGradient,
+              ),
+            ),
+          );
+        });
+
+        for (final state in MaterialState.values.toList()
+          ..remove(MaterialState.disabled)) {
+          test('displays GradientOutlinedBorder with $state', () {
+            expect(
+              outlinedBorder.resolve({state}),
+              equals(
+                isA<GradientStadiumBorder>().having(
+                  (border) => border.gradient,
+                  'Gemini gradient',
+                  IoCrosswordColors.geminiGradient,
+                ),
+              ),
+            );
+          });
+        }
+      });
+
       group('ActionIconThemeData', () {
         final actionIconTheme = IoCrosswordTheme().themeData.actionIconTheme!;
 
@@ -172,6 +299,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size.square(200));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             await tester.pumpWidget(
               MaterialApp(
@@ -196,6 +324,7 @@ void main() {
           tags: TestTag.golden,
           (tester) async {
             await tester.binding.setSurfaceSize(const Size.square(200));
+            addTearDown(() => tester.binding.setSurfaceSize(null));
 
             final themeData = IoCrosswordTheme().themeData;
             final cardTheme = themeData.io.cardTheme.highlight;

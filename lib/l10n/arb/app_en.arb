@@ -1,8 +1,28 @@
 {
   "@@locale": "en",
+  "crossword": "Crossword",
+  "@crossword": {
+    "description": "Crossword title"
+  },
   "welcome": "Welcome!",
   "@welcome": {
     "description": "Welcome label"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings label"
+  },
+  "shareThisWord": "Share this word",
+  "@shareThisWord": {
+    "description": "Share this word label"
+  },
+  "shareWordTitle": "Hey, I need your help!",
+  "@shareWordTitle": {
+    "description": "Title of the share word modal"
+  },
+  "shareWordSubtitle": "Join me on I/O Crossword to help me solve this word and break a world record.",
+  "@shareWordSubtitle": {
+    "description": "Subtitle of the share word modal"
   },
   "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
   "@welcomeSubtitle": {
@@ -20,9 +40,18 @@
   "@continueLabel": {
     "description": "Continue label"
   },
-  "chooseTeam": "Choose a team",
-  "@chooseTeam": {
-    "description": "Label displayed in the team selection modal"
+  "chooseYourTeam": "Choose your team",
+  "@chooseYourTeam": {
+    "description": "The title for the team selection page"
+  },
+  "joinTeam": "Join {team} team",
+  "@joinTeam": {
+    "description": "Text for which team you are choosing",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
   },
   "enterInitials": "Enter your initials for the leaderboard",
   "@enterInitials": {
@@ -48,13 +77,57 @@
   "@submit": {
     "description": "Submit label"
   },
+  "solveIt": "Solve it",
+  "@solveIt": {
+    "description": "Solve it label"
+  },
+  "askGeminiHint": "Ask Gemini for a hint",
+  "@askGeminiHint": {
+    "description": "Ask Gemini for a hint label"
+  },
+  "askYesOrNoQuestion": "Ask a \"Yes or No\" question",
+  "@askYesOrNoQuestion": {
+    "description": "Ask a yes or no question text"
+  },
+  "runOutOfHints": "You've run out of hints",
+  "@runOutOfHints": {
+    "description": "Run out of hints label"
+  },
+  "hintsRemaining": "{remaining} of {total} hints remaining",
+  "@hintsRemaining": {
+    "description": "Hints remaining label.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "getHint": "Get Hint",
   "@getHint": {
     "description": "Get hint label"
   },
+  "hint": "Hint",
+  "@hint": {
+    "description": "hint label"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close label"
+  },
   "typeToAnswer": "Type to answer",
   "@typeToAnswer": {
     "description": "Type to answer label"
+  },
+  "incorrectAnswer": "Oops, wrong word!",
+  "@incorrectAnswer": {
+    "description": "Incorrect answer label"
+  },
+  "wordSolved": "Word solved!",
+  "@wordSolved": {
+    "description": "Word solved label"
   },
   "aboutCrossword": "About I/O Crossword",
   "@aboutCrossword": {
@@ -71,6 +144,18 @@
   "playNow": "Play now",
   "@playNow": {
     "description": "Play now label"
+  },
+  "shareOn": "Share on:",
+  "@shareOn": {
+    "description": "Share on label"
+  },
+  "shareYourScore": "Share your score",
+  "@shareYourScore": {
+    "description": "Share your score label"
+  },
+  "shareScoreContent": "Check my score in I/O Crosswords and join to break the world record!",
+  "@shareScoreContent": {
+    "description": "Sentence sent when sharing score"
   },
   "couldNotOpenUrl": "Could not open url",
   "@couldNotOpenUrl": {
@@ -112,24 +197,181 @@
   "@type": {
     "description": "Type word."
   },
-  "aboutHowToPlayFirstInstructions": "I/O Crossword is like a regular crossword puzzle, but multiplayer and big—Guinness Book of World Records big. Solve words to climb the leaderboard and help your team rule this world record puzzle.",
+  "rank": "Rank",
+  "@rank": {
+    "description": "Rank label"
+  },
+  "streak": "Streak",
+  "@streak": {
+    "description": "Streak label"
+  },
+  "points": "Points",
+  "@points": {
+    "description": "Points label"
+  },
+  "score": "Score",
+  "@score": {
+    "description": "Score label"
+  },
+  "playAgain": "Play again",
+  "@playAgain": {
+    "description": "Play again label"
+  },
+  "you": "You",
+  "@you": {
+    "description": "You label"
+  },
+  "leaderboard": "Leaderboard",
+  "@leaderboard": {
+    "description": "Leaderboard label"
+  },
+  "errorPromptText": "Something went wrong",
+  "@errorPromptText": {
+    "description": "Error message"
+  },
+  "submitScore": "Submit Score",
+  "@submitScore": {
+    "description": "Submit Score label."
+  },
+  "exploreAiStudio": "Explore in AI Studio",
+  "@exploreAiStudio": {
+    "description": "Explore in AI Studio label."
+  },
+  "googleIO": "Google I/O",
+  "@googleIO": {
+    "description": "Google I/O label."
+  },
+  "developerProfile": "Developer Profile",
+  "@developerProfile": {
+    "description": "Developer Profile label."
+  },
+  "findNewWord": "Find a new word",
+  "@findNewWord": {
+    "description": "Find new word label"
+  },
+  "totalScore": "Total score",
+  "@totalScore": {
+    "description": "Total score label"
+  },
+  "claimBadge": "Claim my badge",
+  "@claimBadge": {
+    "description": "Claim badge label"
+  },
+  "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
+  "@claimBadgeDescription": {
+    "description": "Developer Profile label"
+  },
+  "keepPlaying": "Keep playing",
+  "@keepPlaying": {
+    "description": "Keep playing label"
+  },
+  "or": "or",
+  "@or": {
+    "description": "or label"
+  },
+  "aboutHowToPlayFirstInstructionsTitle": "Select a Word, View the Clue",
+  "@aboutHowToPlayFirstInstructionsTitle": {
+    "description": "The first step instruction title."
+  },
+  "aboutHowToPlayFirstInstructions": "Start by solving a word, explore the board to find others, or use the 'Find a word' button to get a word to solve at random.",
   "@aboutHowToPlayFirstInstructions": {
-    "description": "The first step instruction on how to play"
+    "description": "The first step instruction on how to play."
   },
-  "aboutHowToPlaySecondInstructions": "Tap an empty word on the board or the “Find a new word” button to get your clue. If you're stuck and need a hand, press the 'hint' button to get help from Google Gemini. You'll have 3 hints throughout the game.",
+  "aboutHowToPlaySecondInstructionsTitle": "Solve the Word, Earn Points",
+  "@aboutHowToPlaySecondInstructionstitle": {
+    "description": "The second step instruction title."
+  },
+  "aboutHowToPlaySecondInstructions": "Think you know the answer? Take a guess and solve it! You'll earn points for each word you solve.",
   "@aboutHowToPlaySecondInstructions": {
-    "description": "The Second step instruction on how to play"
+    "description": "The Second step instruction on how to play."
   },
-  "aboutHowToPlayThirdInstructions": "The team who solves the word first claims that spot on the board. If you’re working on a word and it’s solved by another team, keep playing; you’ll still get points for solving it.",
+  "aboutHowToPlayThirdInstructionsTitle": "Get a Streak Bonus",
+  "@aboutHowToPlayThirdInstructionsTitle": {
+    "description": "The third step instruction title."
+  },
+  "aboutHowToPlayThirdInstructions": "Solve words in a row to earn a streak multiplier for your score; skipping a word resets your streak.",
   "@aboutHowToPlayThirdInstructions": {
-    "description": "The Third step instruction on how to play"
+    "description": "The Third step instruction on how to play."
   },
-  "aboutHowToPlayFourthInstructions": "Correctly solve two or more words in a row without errors to build a streak. Streaks multiply the points you earn each time you solve a word.",
+  "aboutHowToPlayFourthInstructionsTitle": "Ask Gemini for Hints",
+  "@aboutHowToPlayFourthInstructionsTitle": {
+    "description": "The fourth step instruction title."
+  },
+  "aboutHowToPlayFourthInstructions": "Stumped? Ask Gemini Yes or No questions to get hints in real time.",
   "@aboutHowToPlayFourthInstructions": {
-    "description": "The Fourth step instruction on how to play"
+    "description": "The Fourth step instruction on how to play."
   },
-  "aboutHowToPlayFifthInstructions": "TODO... Guinness Book info",
+  "aboutHowToPlayFifthInstructionsTitle": "Claim your Badge",
+  "@aboutHowToPlayFifthInstructionsTitle": {
+    "description": "The fifth step instruction on how to play."
+  },
+  "aboutHowToPlayFifthInstructions": "Get a badge for your Developer Profile to show you helped solve the World's Largest Online Crossword puzzle.",
   "@aboutHowToPlayFifthInstructions": {
-    "description": "The Fifth step instruction on how to play"
+    "description": "The Fifth step instruction on how to play."
+  },
+  "streakAtRiskTitle": "Your streak is at risk!",
+  "@streakAtRiskTitle": {
+    "description": "Title for alerting the streak is at risk."
+  },
+  "streakAtRiskMessage": "If you close the window without solving the word, you will lose your streak.\nIf you need a hand, you can ask Gemini for a hint.",
+  "@streakAtRiskMessage": {
+    "description": "Message for clarifying why the streak is at risk."
+  },
+  "continuationConfirmation": "Are you sure you want to continue?",
+  "@continuationConfirmation": {
+    "description": "Asks for confirmation before continuing."
+  },
+  "leave": "Leave",
+  "@leave": {
+    "description": "Action to leave something behind."
+  },
+  "percentage": "{value}%",
+  "@percentage": {
+    "description": "Value displayed as a percentage.",
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "endingGame": "Ending the game",
+  "@endingGame": {
+    "description": "Title used to check if the user wants to end the game."
+  },
+  "sureToEndGame": "Are you sure you want to submit your score and finish the game?",
+  "@sureToEndGame": {
+    "description": "Subtitle used to check if the user wants to end the game."
+  },
+  "endGame": "End game",
+  "@endGame": {
+    "description": "End game label."
+  },
+  "thanksForContributing": "Thanks for contributing!",
+  "@thanksForContributing": {
+    "description": "Thanks for contributing! label."
+  },
+  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "@claimBadgeContributing": {
+    "description": "Claim badge for contributing"
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share label"
+  },
+  "rotatePhoneToPortraitMessage": "Please rotate your device to portrait mode to continue.",
+  "@rotatePhoneToPortraitMessage": {
+    "description": "Message notifying the user that they need to rotate their phone to portrait mode to continue playing."
+  },
+  "backButtonLabel": "Back",
+  "@backButtonLabel": {
+    "description": "The label for the back button."
+  },
+  "nextButtonLabel": "Next",
+  "@nextButtonLabel": {
+    "description": "The label for the next button."
+  },
+  "doneButtonLabel": "Done",
+  "@doneButtonLabel": {
+    "description": "The label for the done button."
   }
 }

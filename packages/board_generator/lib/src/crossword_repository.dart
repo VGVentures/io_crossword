@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dart_firebase_admin/firestore.dart';
 import 'package:game_domain/game_domain.dart';
 
@@ -11,10 +12,33 @@ class CrosswordRepository {
   /// The firestore instance.
   final Firestore firestore;
 
+  /// Adds a map of word id: answer to the database.
+  Future<void> addAnswers(List<Answer> answers) async {
+    const size = 1000;
+    final maps = answers.slices(size);
+
+    await Future.wait(maps.map(_addAnswers));
+  }
+
+  Future<void> _addAnswers(List<Answer> answers) async {
+    final answersCollection = firestore.collection('answers');
+    for (final answer in answers) {
+      await answersCollection.doc(answer.id).set(answer.toJson());
+    }
+  }
+
   /// Adds a list of sections to the database.
   Future<void> addSections(List<BoardSection> sections) async {
+    const size = 200;
+    final maps = sections.slices(size);
+
+    await Future.wait(maps.map(_addSections));
+  }
+
+  /// Adds a list of sections to the database.
+  Future<void> _addSections(List<BoardSection> sections) async {
     for (final section in sections) {
-      await firestore.collection('boardSections').add(section.toJson());
+      await firestore.collection('boardChunks').add(section.toJson());
     }
   }
 

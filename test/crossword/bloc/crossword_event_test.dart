@@ -66,79 +66,18 @@ void main() {
       });
     });
 
-    group('MascotSelected', () {
-      test('can be instantiated', () {
-        expect(MascotSelected(Mascots.sparky), isA<MascotSelected>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          MascotSelected(Mascots.sparky),
-          equals(MascotSelected(Mascots.sparky)),
-        );
-        expect(
-          MascotSelected(Mascots.sparky),
-          isNot(equals(MascotSelected(Mascots.dash))),
-        );
-      });
-    });
-
     group('BoardLoadingInfoFetched', () {
       test('can be instantiated', () {
-        expect(BoardLoadingInfoFetched(), isA<BoardLoadingInfoFetched>());
+        expect(
+          BoardLoadingInformationRequested(),
+          isA<BoardLoadingInformationRequested>(),
+        );
       });
 
       test('supports value comparisons', () {
         expect(
-          BoardLoadingInfoFetched(),
-          equals(BoardLoadingInfoFetched()),
-        );
-      });
-    });
-
-    group('InitialsSelected', () {
-      test('can be instantiated', () {
-        expect(InitialsSelected(['W', 'O', 'W']), isA<InitialsSelected>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          InitialsSelected(['W', 'O', 'W']),
-          equals(InitialsSelected(['W', 'O', 'W'])),
-        );
-        expect(
-          InitialsSelected(['W', 'O', 'W']),
-          isNot(equals(InitialsSelected(['G', 'G', 'G']))),
-        );
-      });
-    });
-
-    group('AnswerUpdated', () {
-      test('can be instantiated', () {
-        expect(AnswerUpdated('answer'), isA<AnswerUpdated>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          AnswerUpdated('answer'),
-          equals(AnswerUpdated('answer')),
-        );
-        expect(
-          AnswerUpdated('answer'),
-          isNot(equals(AnswerUpdated('word'))),
-        );
-      });
-    });
-
-    group('AnswerSubmitted', () {
-      test('can be instantiated', () {
-        expect(AnswerSubmitted(), isA<AnswerSubmitted>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          AnswerSubmitted(),
-          equals(AnswerSubmitted()),
+          BoardLoadingInformationRequested(),
+          equals(BoardLoadingInformationRequested()),
         );
       });
     });

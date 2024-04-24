@@ -14,6 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/bootstrap.dart';
 import 'package:io_crossword/firebase_options_development.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 void main() async {
   if (kDebugMode) {
@@ -52,10 +53,16 @@ void main() async {
           appCheckToken: await appCheck.getToken(),
         );
 
+        final leaderboardRepository = LeaderboardRepository(
+          firestore: firestore,
+        );
+
         return App(
           apiClient: apiClient,
+          leaderboardRepository: leaderboardRepository,
           crosswordRepository: CrosswordRepository(db: firestore),
           boardInfoRepository: BoardInfoRepository(firestore: firestore),
+          user: await authenticationRepository.user.first,
         );
       },
     ),

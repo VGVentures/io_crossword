@@ -16,6 +16,10 @@ void main() {
 
     const blacklistDocumentId = 'id';
 
+    setUpAll(() {
+      registerFallbackValue(DbEntityRecord(id: '', data: {}));
+    });
+
     setUp(() {
       dbClient = _MockDbClient();
       leaderboardRepository = LeaderboardRepository(
@@ -32,82 +36,6 @@ void main() {
         ),
         isNotNull,
       );
-    });
-
-    group('getLeaderboard', () {
-      test('returns list of leaderboard players', () async {
-        const playerOne = LeaderboardPlayer(
-          userId: 'id',
-          initials: 'AAA',
-          score: 20,
-        );
-        const playerTwo = LeaderboardPlayer(
-          userId: 'id2',
-          initials: 'BBB',
-          score: 10,
-        );
-
-        when(() => dbClient.orderBy('leaderboard', 'score'))
-            .thenAnswer((_) async {
-          return [
-            DbEntityRecord(
-              id: 'id',
-              data: {
-                'initials': playerOne.initials,
-                'score': 20,
-              },
-            ),
-            DbEntityRecord(
-              id: 'id2',
-              data: {
-                'initials': playerTwo.initials,
-                'score': 10,
-              },
-            ),
-          ];
-        });
-
-        final result = await leaderboardRepository.getLeaderboard();
-
-        expect(result, equals([playerOne, playerTwo]));
-      });
-
-      test('returns empty list if results are empty', () async {
-        when(() => dbClient.orderBy('leaderboard', 'score'))
-            .thenAnswer((_) async {
-          return [];
-        });
-
-        final response = await leaderboardRepository.getLeaderboard();
-        expect(response, isEmpty);
-      });
-    });
-
-    group('addPlayerToLeaderboard', () {
-      test('calls set with correct entity and record', () async {
-        final leaderboardPlayer = LeaderboardPlayer(
-          userId: 'user-id',
-          initials: 'initials',
-          score: 40,
-        );
-
-        final record = DbEntityRecord(
-          id: 'user-id',
-          data: {
-            'initials': 'initials',
-            'score': 40,
-          },
-        );
-
-        when(() => dbClient.set('leaderboard', record))
-            .thenAnswer((_) async {});
-
-        await leaderboardRepository.addPlayerToLeaderboard(
-          leaderboardPlayer: leaderboardPlayer,
-        );
-
-        verify(() => dbClient.set('leaderboard', record)).called(1);
-      });
     });
 
     group('getInitialsBlacklist', () {
@@ -142,11 +70,11 @@ void main() {
       test('completes when writing in the db is successful', () async {
         when(
           () => dbClient.set(
-            'scoreCards',
+            'players',
             DbEntityRecord(
               id: 'userId',
               data: {
-                'totalScore': 0,
+                'score': 0,
                 'streak': 0,
                 'mascot': 'dash',
                 'initials': 'ABC',
@@ -159,6 +87,142 @@ void main() {
           leaderboardRepository.createScore('userId', 'ABC', 'dash'),
           completes,
         );
+      });
+    });
+
+    group('updateScore', () {
+      test('updates the score card in the database', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'score': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+        when(() => dbClient.set('players', any())).thenAnswer((_) async {});
+
+        await leaderboardRepository.updateScore('userId');
+
+        verify(() => dbClient.set('players', any())).called(1);
+      });
+    });
+
+    group('getPointsForCorrectAnswer', () {
+      test('calculates the points correctly', () async {
+        final points = leaderboardRepository.getPointsForCorrectAnswer(
+          Player(
+            id: 'userId',
+            score: 10,
+            streak: 1,
+            mascot: Mascots.dash,
+            initials: 'ABC',
+          ),
+        );
+
+        expect(points, equals(20));
+      });
+    });
+
+    group('increaseScore', () {
+      test('updates the score correctly', () async {
+        final newScoreCard = leaderboardRepository.increaseScore(
+          Player(
+            id: 'userId',
+            score: 20,
+            streak: 1,
+            mascot: Mascots.dash,
+            initials: 'ABC',
+          ),
+          30,
+        );
+
+        expect(newScoreCard.score, equals(50));
+        expect(newScoreCard.streak, equals(2));
+      });
+    });
+
+    group('resetStreak', () {
+      test('saves the streak as 0 in the database', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'score': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+        when(() => dbClient.set('players', any())).thenAnswer((_) async {});
+
+        await leaderboardRepository.resetStreak('userId');
+
+        verify(
+          () => dbClient.set(
+            'players',
+            DbEntityRecord(
+              id: 'userId',
+              data: {
+                'score': 20,
+                'streak': 0,
+                'mascot': 'dash',
+                'initials': 'ABC',
+              },
+            ),
+          ),
+        ).called(1);
+      });
+    });
+
+    group('getPlayer', () {
+      test('retrieves the player correctly', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async {
+          return DbEntityRecord(
+            id: 'userId',
+            data: {
+              'score': 20,
+              'streak': 3,
+              'mascot': 'dash',
+              'initials': 'ABC',
+            },
+          );
+        });
+
+        final player = await leaderboardRepository.getPlayer('userId');
+
+        expect(
+          player,
+          equals(
+            Player(
+              id: 'userId',
+              score: 20,
+              streak: 3,
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          ),
+        );
+      });
+
+      test('returns null when the player does not exist', () async {
+        when(
+          () => dbClient.getById('players', 'userId'),
+        ).thenAnswer((_) async => null);
+
+        final player = await leaderboardRepository.getPlayer('userId');
+
+        expect(player, isNull);
       });
     });
   });

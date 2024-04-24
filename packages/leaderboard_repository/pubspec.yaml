@@ -1,0 +1,20 @@
+name: leaderboard_repository
+description: Leaderboard repository
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: "^3.3.0"
+
+dependencies:
+  cloud_firestore: ^4.16.1
+  game_domain:
+    path: ../../api/packages/game_domain
+  meta: ^1.11.0
+  rxdart: ^0.27.7
+
+dev_dependencies:
+  fake_cloud_firestore: ^2.4.9
+  mocktail: ^1.0.3
+  test: ^1.15.1
+  very_good_analysis: ^5.1.0

@@ -14,7 +14,7 @@ class _MockApiClient extends Mock implements ApiClient {}
 class _MockResponse extends Mock implements http.Response {}
 
 void main() {
-  group('LeaderboardResource', () {
+  group('$LeaderboardResource', () {
     late ApiClient apiClient;
     late http.Response response;
     late LeaderboardResource resource;
@@ -24,70 +24,6 @@ void main() {
       response = _MockResponse();
 
       resource = LeaderboardResource(apiClient: apiClient);
-    });
-
-    group('getLeaderboardResults', () {
-      setUp(() {
-        when(() => apiClient.get(any())).thenAnswer((_) async => response);
-      });
-
-      test('makes the correct call ', () async {
-        final leaderboardPlayer = LeaderboardPlayer(
-          userId: 'id',
-          score: 10,
-          initials: 'TST',
-        );
-
-        when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn(
-          jsonEncode(
-            {
-              'leaderboardPlayers': [leaderboardPlayer.toJson()],
-            },
-          ),
-        );
-
-        final results = await resource.getLeaderboardResults();
-
-        expect(results, equals([leaderboardPlayer]));
-      });
-
-      test('throws ApiClientError when request fails', () async {
-        when(() => response.statusCode)
-            .thenReturn(HttpStatus.internalServerError);
-        when(() => response.body).thenReturn('Oops');
-
-        await expectLater(
-          resource.getLeaderboardResults,
-          throwsA(
-            isA<ApiClientError>().having(
-              (e) => e.cause,
-              'cause',
-              equals(
-                'GET /leaderboard/results returned status 500 with the following response: "Oops"',
-              ),
-            ),
-          ),
-        );
-      });
-
-      test('throws ApiClientError when request response is invalid', () async {
-        when(() => response.statusCode).thenReturn(HttpStatus.ok);
-        when(() => response.body).thenReturn('Oops');
-
-        await expectLater(
-          resource.getLeaderboardResults,
-          throwsA(
-            isA<ApiClientError>().having(
-              (e) => e.cause,
-              'cause',
-              equals(
-                'GET /leaderboard/results returned invalid response "Oops"',
-              ),
-            ),
-          ),
-        );
-      });
     });
 
     group('getInitialsBlacklist', () {
@@ -152,54 +88,6 @@ void main() {
       });
     });
 
-    group('addLeaderboardPlayer', () {
-      final leaderboardPlayer = LeaderboardPlayer(
-        userId: 'id',
-        score: 10,
-        initials: 'TST',
-      );
-
-      setUp(() {
-        when(() => apiClient.post(any(), body: any(named: 'body')))
-            .thenAnswer((_) async => response);
-      });
-
-      test('makes the correct call', () async {
-        when(() => response.statusCode).thenReturn(HttpStatus.noContent);
-        await resource.addLeaderboardPlayer(
-          leaderboardPlayer: leaderboardPlayer,
-        );
-
-        verify(
-          () => apiClient.post(
-            '/game/leaderboard/initials',
-            body: jsonEncode(leaderboardPlayer.toJson()),
-          ),
-        ).called(1);
-      });
-
-      test('throws ApiClientError when request fails', () async {
-        when(() => response.statusCode)
-            .thenReturn(HttpStatus.internalServerError);
-        when(() => response.body).thenReturn('Oops');
-
-        await expectLater(
-          () => resource.addLeaderboardPlayer(
-            leaderboardPlayer: leaderboardPlayer,
-          ),
-          throwsA(
-            isA<ApiClientError>().having(
-              (e) => e.cause,
-              'cause',
-              equals(
-                'POST /leaderboard/initials returned status 500 with the following response: "Oops"',
-              ),
-            ),
-          ),
-        );
-      });
-    });
-
     group('createScore', () {
       setUp(() {
         when(() => apiClient.post(any(), body: any(named: 'body')))
@@ -237,6 +125,43 @@ void main() {
               'cause',
               equals(
                 'POST /game/create_score returned status 500 '
+                'with the following response: "Oops"',
+              ),
+            ),
+          ),
+        );
+      });
+    });
+
+    group('resetStreak', () {
+      setUp(() {
+        when(() => apiClient.post(any())).thenAnswer((_) async => response);
+      });
+
+      test('makes the correct call', () async {
+        when(() => response.statusCode).thenReturn(HttpStatus.ok);
+        await resource.resetStreak();
+
+        verify(
+          () => apiClient.post(
+            '/game/reset_streak',
+          ),
+        ).called(1);
+      });
+
+      test('throws ApiClientError when request fails', () async {
+        when(() => response.statusCode)
+            .thenReturn(HttpStatus.internalServerError);
+        when(() => response.body).thenReturn('Oops');
+
+        await expectLater(
+          () => resource.resetStreak(),
+          throwsA(
+            isA<ApiClientError>().having(
+              (e) => e.cause,
+              'cause',
+              equals(
+                'POST /game/reset_streak returned status 500 '
                 'with the following response: "Oops"',
               ),
             ),

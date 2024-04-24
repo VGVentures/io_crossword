@@ -3,12 +3,19 @@
 import 'dart:math';
 
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/challenge/challenge.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +27,30 @@ class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
+class _MockHintResource extends Mock implements HintResource {}
+
+class _MockLeaderboardRepository extends Mock
+    implements LeaderboardRepository {}
+
+class _MockUser extends Mock implements User {
+  @override
+  String get id => '';
+}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
+    IoLayoutData? layout,
+    User? user,
     CrosswordRepository? crosswordRepository,
-    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
+    LeaderboardRepository? leaderboardRepository,
+    CrosswordResource? crosswordResource,
     LeaderboardResource? leaderboardResource,
+    HintResource? hintResource,
+    CrosswordBloc? crosswordBloc,
+    PlayerBloc? playerBloc,
+    ChallengeBloc? challengeBloc,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordResource = _MockCrosswordResource();
@@ -37,17 +61,15 @@ extension PumpApp on WidgetTester {
     ).thenAnswer((_) => Stream.value(null));
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
 
-    final scaffold = Scaffold(
-      body: widget,
-    );
+    final child = Scaffold(body: widget);
 
     return pumpWidget(
       MultiProvider(
@@ -64,13 +86,64 @@ extension PumpApp on WidgetTester {
           Provider.value(
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
+          Provider.value(
+            value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: hintResource ?? _MockHintResource(),
+          ),
+          Provider.value(
+            value: user ?? _MockUser(),
+          ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: scaffold)
-              : scaffold,
+        child: Builder(
+          builder: (context) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>
+                      crosswordBloc ??
+                      CrosswordBloc(
+                        crosswordRepository:
+                            context.read<CrosswordRepository>(),
+                        boardInfoRepository:
+                            context.read<BoardInfoRepository>(),
+                      ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      playerBloc ??
+                      PlayerBloc(
+                        leaderboardRepository:
+                            context.read<LeaderboardRepository>(),
+                      ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      challengeBloc ??
+                      ChallengeBloc(
+                        boardInfoRepository:
+                            context.read<BoardInfoRepository>(),
+                      ),
+                ),
+              ],
+              child: IoLayout(
+                data: layout,
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  theme: IoCrosswordTheme().themeData,
+                  home: navigator != null
+                      ? MockNavigatorProvider(
+                          navigator: navigator,
+                          child: child,
+                        )
+                      : child,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -80,10 +153,13 @@ extension PumpApp on WidgetTester {
 extension PumpRoute on WidgetTester {
   Future<void> pumpRoute(
     Route<dynamic> route, {
+    User? user,
     CrosswordRepository? crosswordRepository,
-    CrosswordResource? crosswordResource,
     BoardInfoRepository? boardInfoRepository,
+    LeaderboardRepository? leaderboardRepository,
+    CrosswordResource? crosswordResource,
     LeaderboardResource? leaderboardResource,
+    HintResource? hintResource,
     MockNavigator? navigator,
   }) async {
     final widget = Center(
@@ -106,9 +182,9 @@ extension PumpRoute on WidgetTester {
 
     final mockedBoardInfoRepository = _MockBoardInfoRepository();
     when(mockedBoardInfoRepository.getSolvedWordsCount)
-        .thenAnswer((_) => Future.value(123));
+        .thenAnswer((_) => Stream.value(123));
     when(mockedBoardInfoRepository.getTotalWordsCount)
-        .thenAnswer((_) => Future.value(8900));
+        .thenAnswer((_) => Stream.value(8900));
     when(mockedBoardInfoRepository.getSectionSize)
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
@@ -129,13 +205,48 @@ extension PumpRoute on WidgetTester {
           Provider.value(
             value: leaderboardResource ?? _MockLeaderboardResource(),
           ),
+          Provider.value(
+            value: leaderboardRepository ?? _MockLeaderboardRepository(),
+          ),
+          Provider.value(
+            value: hintResource ?? _MockHintResource(),
+          ),
+          Provider.value(
+            value: user ?? _MockUser(),
+          ),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: navigator != null
-              ? MockNavigatorProvider(navigator: navigator, child: widget)
-              : widget,
+        child: Builder(
+          builder: (context) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => CrosswordBloc(
+                    crosswordRepository: context.read<CrosswordRepository>(),
+                    boardInfoRepository: context.read<BoardInfoRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => PlayerBloc(
+                    leaderboardRepository:
+                        leaderboardRepository ?? _MockLeaderboardRepository(),
+                  ),
+                ),
+              ],
+              child: IoLayout(
+                child: MaterialApp(
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  home: navigator != null
+                      ? MockNavigatorProvider(
+                          navigator: navigator,
+                          child: widget,
+                        )
+                      : widget,
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -6,12 +6,19 @@ import 'package:flame/debug.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 class CrosswordGame extends FlameGame
     with PanDetector, HasKeyboardHandlerComponents {
-  CrosswordGame(
-    this.bloc, {
+  CrosswordGame({
+    required this.crosswordBloc,
+    required this.playerBloc,
+    required this.wordSelectionBloc,
     bool? showDebugOverlay,
   }) : showDebugOverlay = showDebugOverlay ?? debugOverlay;
 
@@ -20,7 +27,10 @@ class CrosswordGame extends FlameGame
   static bool debugOverlay = false;
   final bool showDebugOverlay;
 
-  final CrosswordBloc bloc;
+  final CrosswordBloc crosswordBloc;
+  final PlayerBloc playerBloc;
+
+  final WordSelectionBloc wordSelectionBloc;
 
   late final int sectionSize;
 
@@ -28,12 +38,12 @@ class CrosswordGame extends FlameGame
 
   var _visibleSections = <(double, double)>[];
 
-  CrosswordLoaded get state {
-    final state = bloc.state;
-    if (state is! CrosswordLoaded) {
-      throw ArgumentError('Cannot load game without a loaded state.');
-    }
-    return state;
+  CrosswordState get state {
+    return crosswordBloc.state;
+  }
+
+  Player get player {
+    return playerBloc.state.player;
   }
 
   @override
@@ -41,7 +51,7 @@ class CrosswordGame extends FlameGame
     await super.onLoad();
 
     // TODO(erickzanardo): Use the assets cubit instead
-    lettersSprite = await images.load('letters.png');
+    lettersSprite = await images.load(Assets.images.letters.path);
 
     sectionSize = state.sectionSize * cellSize;
 
@@ -199,5 +209,10 @@ class CrosswordGame extends FlameGame
   @override
   Color backgroundColor() {
     return const Color(0xFF212123);
+  }
+
+  bool get isMobile {
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
   }
 }

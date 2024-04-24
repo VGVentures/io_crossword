@@ -1,57 +1,94 @@
 import 'package:api_client/api_client.dart';
-import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/about/about.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
-import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
+import 'package:io_crossword/initials/view/initials_page.dart';
+import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
+import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword/welcome/welcome.dart';
 
 class GameIntroPage extends StatelessWidget {
   const GameIntroPage({super.key});
 
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const GameIntroPage(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GameIntroBloc(
-        boardInfoRepository: context.read<BoardInfoRepository>(),
+    return BlocProvider<GameIntroBloc>(
+      create: (_) => GameIntroBloc(
         leaderboardResource: context.read<LeaderboardResource>(),
-      )
-        ..add(const BoardProgressRequested())
-        ..add(const BlacklistRequested()),
+      ),
       child: const GameIntroView(),
     );
   }
 }
 
+enum GameIntroStatus {
+  loading,
+  welcome,
+  teamSelection,
+  enterInitials,
+  howToPlay,
+}
+
+@visibleForTesting
 class GameIntroView extends StatelessWidget {
-  const GameIntroView({super.key});
+  @visibleForTesting
+  const GameIntroView({
+    super.key,
+    @visibleForTesting FlowController<GameIntroStatus>? flowController,
+  }) : _flowController = flowController;
+
+  final FlowController<GameIntroStatus>? _flowController;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<GameIntroBloc, GameIntroState>(
-      listenWhen: (previous, current) =>
-          (previous.status != current.status) || current.isIntroCompleted,
-      listener: (context, state) {
-        if (state.status == GameIntroStatus.initialsInput) {
-          context
-              .read<CrosswordBloc>()
-              .add(MascotSelected(state.selectedMascot));
-        }
-        if (state.isIntroCompleted) {
-          context.read<CrosswordBloc>().add(InitialsSelected(state.initials));
+    final l10n = context.l10n;
 
-          Navigator.of(context).pop();
-          AboutView.showModal(context);
+    return BlocListener<GameIntroBloc, GameIntroState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        switch (state.status) {
+          case GameIntroPlayerCreationStatus.initial:
+          case GameIntroPlayerCreationStatus.inProgress:
+            break;
+          case GameIntroPlayerCreationStatus.success:
+            Navigator.of(context).pushReplacement(CrosswordPage.route());
+          case GameIntroPlayerCreationStatus.failure:
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(l10n.errorPromptText),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
         }
       },
-      child: Center(
-        child: IoCrosswordCard(
-          child: FlowBuilder<GameIntroState>(
-            state: context.select((GameIntroBloc bloc) => bloc.state),
-            onGeneratePages: onGenerateGameIntroPages,
-          ),
+      child: Material(
+        child: FlowBuilder<GameIntroStatus>(
+          controller: _flowController,
+          state: _flowController == null ? GameIntroStatus.loading : null,
+          onGeneratePages: onGenerateGameIntroPages,
+          onComplete: (state) {
+            final playerState = context.read<PlayerBloc>().state;
+
+            context.read<GameIntroBloc>().add(
+                  GameIntroPlayerCreated(
+                    initials: playerState.player.initials,
+                    mascot: playerState.mascot,
+                  ),
+                );
+          },
         ),
       ),
     );
@@ -59,12 +96,14 @@ class GameIntroView extends StatelessWidget {
 }
 
 List<Page<void>> onGenerateGameIntroPages(
-  GameIntroState state,
+  GameIntroStatus state,
   List<Page<void>> pages,
 ) {
-  return switch (state.status) {
-    GameIntroStatus.welcome => [WelcomeView.page()],
-    GameIntroStatus.mascotSelection => [MascotSelectionView.page()],
-    GameIntroStatus.initialsInput => [InitialsInputView.page()],
+  return switch (state) {
+    GameIntroStatus.loading => [LoadingPage.page()],
+    GameIntroStatus.welcome => [WelcomePage.page()],
+    GameIntroStatus.teamSelection => [TeamSelectionPage.page()],
+    GameIntroStatus.enterInitials => [InitialsPage.page()],
+    GameIntroStatus.howToPlay => [HowToPlayPage.page()],
   };
 }

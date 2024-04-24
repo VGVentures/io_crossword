@@ -1,56 +1,41 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/about/view/about_view.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword/view/word_focused_view.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/music/widget/mute_button.dart';
+import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
-import '../../helpers/set_display_size.dart';
 
-class _MockCrosswordBloc extends Mock implements CrosswordBloc {}
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
+class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
+    implements PlayerBloc {}
+
+class _MockWordSelectionBloc
+    extends MockBloc<WordSelectionEvent, WordSelectionState>
+    implements WordSelectionBloc {}
 
 class _FakeBoardSection extends Fake implements BoardSection {
   @override
   List<Word> get words => [];
 }
 
-extension on WidgetTester {
-  Future<void> pumpCrosswordView(CrosswordBloc bloc) {
-    return pumpApp(
-      BlocProvider.value(
-        value: bloc,
-        child: CrosswordView(),
-      ),
-    );
-  }
-}
-
-class _FakeWord extends Fake implements Word {
-  @override
-  String get id => 'id';
-
-  @override
-  String get clue => 'clue';
-
-  @override
-  Axis get axis => Axis.horizontal;
-
-  @override
-  int? get solvedTimestamp => 1;
-}
-
 void main() {
-  group('CrosswordPage', () {
-    testWidgets('renders CrosswordView', (tester) async {
+  group('$CrosswordPage', () {
+    testWidgets('renders $CrosswordView', (tester) async {
       await tester.pumpRoute(CrosswordPage.route());
       await tester.pump();
 
@@ -58,44 +43,75 @@ void main() {
     });
   });
 
-  group('CrosswordView', () {
-    late CrosswordBloc bloc;
+  group('$CrosswordView', () {
+    late CrosswordBloc crosswordBloc;
 
     setUp(() {
-      bloc = _MockCrosswordBloc();
-
-      whenListen(
-        bloc,
-        Stream.fromIterable(const <CrosswordState>[]),
-        initialState: const CrosswordInitial(),
-      );
+      Flame.images = Images(prefix: '');
+      crosswordBloc = _MockCrosswordBloc();
     });
 
-    testWidgets('shows the game intro page dialog', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordInitial());
+    testWidgets('renders $IoAppBar', (tester) async {
+      await tester.pumpSubject(CrosswordView());
+      expect(find.byType(IoAppBar), findsOneWidget);
+    });
 
-      await tester.pumpCrosswordView(bloc);
+    testWidgets('renders $PlayerRankingInformation', (tester) async {
+      await tester.pumpSubject(CrosswordView());
+      expect(find.byType(PlayerRankingInformation), findsOneWidget);
+    });
+
+    testWidgets('renders $MuteButton', (tester) async {
+      await tester.pumpSubject(CrosswordView());
+
+      expect(find.byType(MuteButton), findsOneWidget);
+    });
+
+    testWidgets('renders $EndDrawerButton', (tester) async {
+      await tester.pumpSubject(CrosswordView());
+
+      expect(find.byType(EndDrawerButton), findsOneWidget);
+    });
+
+    testWidgets('opens $CrosswordDrawer when $EndDrawerButton is tapped',
+        (tester) async {
+      await tester.pumpSubject(CrosswordView());
+
+      await tester.tap(find.byType(EndDrawerButton));
+
       await tester.pump();
-      expect(find.byType(GameIntroPage), findsOneWidget);
+
+      expect(find.byType(CrosswordDrawer), findsOneWidget);
     });
 
-    testWidgets('renders loading when is initial', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordInitial());
+    testWidgets(
+        'renders $CircularProgressIndicator with ${CrosswordStatus.initial}',
+        (tester) async {
+      await tester.pumpSubject(CrosswordView());
 
-      await tester.pumpCrosswordView(bloc);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('renders error when is error', (tester) async {
-      when(() => bloc.state).thenReturn(const CrosswordError(''));
+    testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
+        (tester) async {
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(
+          status: CrosswordStatus.failure,
+        ),
+      );
 
-      await tester.pumpCrosswordView(bloc);
-      expect(find.text('Error loading crossword'), findsOneWidget);
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+      );
+
+      expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders game when is loaded', (tester) async {
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
+    testWidgets('renders game with ${CrosswordStatus.success}', (tester) async {
+      when(() => crosswordBloc.state).thenReturn(
+        CrosswordState(
+          status: CrosswordStatus.success,
           sectionSize: 40,
           sections: {
             (0, 0): _FakeBoardSection(),
@@ -103,213 +119,74 @@ void main() {
         ),
       );
 
-      await tester.pumpCrosswordView(bloc);
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+      );
+
       expect(find.byType(GameWidget<CrosswordGame>), findsOneWidget);
     });
 
     testWidgets(
-        'renders WordFocusedDesktopView when'
-        ' is loaded with desktop size', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium, 800));
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
-
-      await tester.pumpCrosswordView(bloc);
-
-      expect(find.byType(WordFocusedDesktopView), findsOneWidget);
-    });
-
-    testWidgets(
-        'does not render WordFocusedDesktopView when'
-        ' is loaded with mobile size', (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
-      when(() => bloc.state).thenReturn(
-        CrosswordLoaded(
-          sectionSize: 40,
-          sections: {
-            (0, 0): _FakeBoardSection(),
-          },
-        ),
-      );
-
-      await tester.pumpCrosswordView(bloc);
-
-      expect(find.byType(WordFocusedDesktopView), findsNothing);
-    });
-
-    testWidgets(
-        'renders WordFocusedMobileView when selects a word in mobile size',
-        (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
-      final initialState = CrosswordLoaded(
-        sectionSize: 40,
-        sections: {
-          (0, 0): _FakeBoardSection(),
-        },
-      );
-      whenListen(
-        bloc,
-        Stream.value(
-          initialState.copyWith(
-            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
-          ),
-        ),
-        initialState: initialState,
-      );
-
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-      expect(find.byType(WordFocusedMobileView), findsOneWidget);
-    });
-
-    testWidgets('renders WordFocusedMobileView and pops when tapping cancel',
-        (tester) async {
-      tester.setDisplaySize(const Size(IoCrosswordBreakpoints.medium - 1, 800));
-      final initialState = CrosswordLoaded(
-        sectionSize: 40,
-        sections: {
-          (0, 0): _FakeBoardSection(),
-        },
-      );
-      whenListen(
-        bloc,
-        Stream.value(
-          initialState.copyWith(
-            selectedWord: WordSelection(section: (1, 1), word: _FakeWord()),
-          ),
-        ),
-        initialState: initialState,
-      );
-
-      await tester.pumpCrosswordView(bloc);
-      await tester.pump();
-      final iconButton = tester.widget<IconButton>(
-        find.ancestor(
-          of: find.byIcon(Icons.cancel),
-          matching: find.byType(IconButton),
-        ),
-      );
-      iconButton.onPressed?.call();
-      await tester.pump();
-      expect(find.byType(WordFocusedMobileView), findsNothing);
-      verify(() => bloc.add(const WordUnselected())).called(1);
-    });
-
-    testWidgets(
-      'displays AboutButton when status is CrosswordLoaded',
+      'renders $WordSelectionPage when loaded',
       (tester) async {
-        when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordState(
+            status: CrosswordStatus.success,
             sectionSize: 40,
+            sections: {
+              (0, 0): _FakeBoardSection(),
+            },
           ),
         );
 
-        await tester.pumpCrosswordView(bloc);
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
 
-        expect(find.byType(AboutButton), findsOneWidget);
+        expect(find.byType(WordSelectionPage), findsOneWidget);
       },
     );
-
-    testWidgets(
-      'can zoom in',
-      (tester) async {
-        when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpCrosswordView(bloc);
-
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomInKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          greaterThan(1),
-        );
-      },
-      timeout: const Timeout(Duration(seconds: 30)),
-    );
-
-    testWidgets(
-      'can zoom out',
-      (tester) async {
-        when(() => bloc.state).thenReturn(
-          CrosswordLoaded(
-            sectionSize: 40,
-          ),
-        );
-
-        await tester.pumpCrosswordView(bloc);
-        final crosswordViewState = tester.state<LoadedBoardViewState>(
-          find.byType(LoadedBoardView),
-        );
-        await crosswordViewState.game.loaded;
-
-        await tester.tap(find.byKey(LoadedBoardView.zoomOutKey));
-
-        expect(
-          crosswordViewState.game.camera.viewfinder.zoom,
-          lessThan(1),
-        );
-      },
-      timeout: const Timeout(Duration(seconds: 30)),
-    );
-
-    group('AboutButton', () {
-      late Widget widget;
-
-      setUp(() {
-        widget = BlocProvider.value(
-          value: bloc,
-          child: AboutButton(),
-        );
-      });
-
-      testWidgets(
-        'displays question_mark_rounded icon',
-        (tester) async {
-          when(() => bloc.state).thenReturn(
-            CrosswordLoaded(
-              sectionSize: 40,
-            ),
-          );
-
-          await tester.pumpApp(widget);
-
-          expect(find.byIcon(Icons.question_mark_rounded), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'displays AboutView when button is pressed',
-        (tester) async {
-          when(() => bloc.state).thenReturn(
-            CrosswordLoaded(
-              sectionSize: 40,
-            ),
-          );
-
-          await tester.pumpApp(widget);
-
-          await tester.tap(find.byIcon(Icons.question_mark_rounded));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(AboutView), findsOneWidget);
-        },
-      );
-    });
   });
+}
+
+extension on WidgetTester {
+  Future<void> pumpSubject(
+    Widget child, {
+    CrosswordBloc? crosswordBloc,
+    PlayerBloc? playerBloc,
+  }) {
+    final bloc = crosswordBloc ?? _MockCrosswordBloc();
+    if (crosswordBloc == null) {
+      when(() => bloc.state).thenReturn(const CrosswordState());
+    }
+
+    final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
+    if (playerBloc == null) {
+      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
+    }
+
+    final wordSelectionBloc = _MockWordSelectionBloc();
+    when(() => wordSelectionBloc.state).thenReturn(
+      const WordSelectionState.initial(),
+    );
+
+    return pumpApp(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<CrosswordBloc>(
+            create: (_) => bloc,
+          ),
+          BlocProvider<PlayerBloc>(
+            create: (_) => playerBlocUpdate,
+          ),
+          BlocProvider<WordSelectionBloc>(
+            create: (_) => wordSelectionBloc,
+          ),
+        ],
+        child: child,
+      ),
+    );
+  }
 }

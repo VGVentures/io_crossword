@@ -26,16 +26,39 @@ void main(List<String> args) async {
   final fileString = File('assets/board.txt').readAsStringSync();
   final rows = const CsvToListConverter(eol: '\n').convert(fileString);
 
-  // Convert to custom object
-  final words = rows.map((row) {
-    return Word(
-      position: Point(row[0] as int, row[1] as int),
-      answer: row[2] as String,
-      clue: 'The answer is: ${row[2]}',
-      axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
-      solvedTimestamp: null,
+  // Sort words by position to assign an ordered index
+  // From left to right, top to bottom
+  // ignore: cascade_invocations
+  rows.sort((a, b) {
+    final aX = a[0] as int;
+    final aY = a[1] as int;
+    final bX = b[0] as int;
+    final bY = b[1] as int;
+
+    if (aX == bX) {
+      return aY.compareTo(bY);
+    }
+
+    return aX.compareTo(bX);
+  });
+
+  final words = <Word>[];
+  final answersMap = <String, String>{};
+
+  for (final (i, row) in rows.indexed) {
+    final id = '${i + 1}';
+    final answer = row[2] as String;
+    answersMap[id] = answer;
+    words.add(
+      Word(
+        id: id,
+        position: Point(row[0] as int, row[1] as int),
+        length: answer.length,
+        clue: 'The answer is: $answer',
+        axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
+      ),
     );
-  }).toList();
+  }
 
   // Get crossword size
   final maxX = words
@@ -64,6 +87,8 @@ void main(List<String> args) async {
   final minSectionY = (minY / sectionSize).floor();
   final maxSectionY = (maxY / sectionSize).ceil();
 
+  final answers = <Answer>[];
+
   for (var i = minSectionX; i < maxSectionX; i++) {
     for (var j = minSectionY; j < maxSectionY; j++) {
       final sectionX = i * sectionSize;
@@ -80,6 +105,16 @@ void main(List<String> args) async {
         return !isStartInSection && isInSection;
       }).toList();
 
+      answers.addAll(
+        sectionWords.map((word) {
+          return Answer(
+            id: word.id,
+            answer: answersMap[word.id]!,
+            section: Point(i, j),
+          );
+        }),
+      );
+
       final section = BoardSection(
         id: '',
         position: Point(i, j),
@@ -95,8 +130,15 @@ void main(List<String> args) async {
     }
   }
 
-  await crosswordRepository.addSections(sections);
+  print('Answers: ${answers.length}');
+  print('AnswersMap: ${answersMap.length}');
 
+  print('Uploading answers...');
+  await crosswordRepository.addAnswers(answers);
+  print('Added all answers to the database.');
+
+  print('Uploading sections...');
+  await crosswordRepository.addSections(sections);
   print('Added all ${sections.length} section to the database.');
 }
 
@@ -113,8 +155,8 @@ extension SectionBelonging on Word {
   /// Returns true if the word ending letter is in the section.
   bool isEndInSection(int sectionX, int sectionY, int sectionSize) {
     final (endX, endY) = axis == Axis.horizontal
-        ? (position.x + answer.length - 1, position.y)
-        : (position.x, position.y + answer.length - 1);
+        ? (position.x + length - 1, position.y)
+        : (position.x, position.y + length - 1);
     return endX >= sectionX &&
         endX < sectionX + sectionSize &&
         endY >= sectionY &&
@@ -131,12 +173,10 @@ extension SectionBelonging on Word {
   List<(int, int)> get allLetters {
     return axis == Axis.horizontal
         ? [
-            for (var i = 0; i < answer.length; i++)
-              (position.x + i, position.y),
+            for (var i = 0; i < length; i++) (position.x + i, position.y),
           ]
         : [
-            for (var j = 0; j < answer.length; j++)
-              (position.x, position.y + j),
+            for (var j = 0; j < length; j++) (position.x, position.y + j),
           ];
   }
 

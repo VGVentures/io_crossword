@@ -59,6 +59,9 @@ class ApiClient {
   late final CrosswordResource crosswordResource =
       CrosswordResource(apiClient: this);
 
+  /// {@macro hint_resource}
+  late final HintResource hintResource = HintResource(apiClient: this);
+
   Future<http.Response> _handleUnauthorized(
     Future<http.Response> Function() sendRequest,
   ) async {
@@ -95,6 +98,27 @@ class ApiClient {
 
       return response;
     });
+  }
+
+  /// Returns the score share url for the score for the specified [userId].
+  String shareScoreUrl(String userId) {
+    return _base.replace(
+      path: '/public/share/score',
+      queryParameters: {
+        'userId': userId,
+      },
+    ).toString();
+  }
+
+  /// Returns the word share url for the specified [sectionId] and [wordId].
+  String shareWordUrl(String sectionId, String wordId) {
+    return _base.replace(
+      path: '/public/share/word',
+      queryParameters: {
+        'sectionId': sectionId,
+        'wordId': wordId,
+      },
+    ).toString();
   }
 
   /// Sends a PATCH request to the specified [path] with the given [body].

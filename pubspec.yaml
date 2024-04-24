@@ -15,13 +15,14 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.16.0
+  cloud_firestore: ^4.17.0
+  collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
   firebase_app_check: ^0.2.2
-  firebase_auth: ^4.19.0
-  firebase_core: ^2.28.0
+  firebase_auth: ^4.19.2
+  firebase_core: ^2.30.0
   flame: ^1.16.0
   flame_audio: ^2.10.1
   flame_behaviors: ^1.0.0
@@ -33,24 +34,36 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_localizations:
     sdk: flutter
+  flutter_svg: ^2.0.5
+  formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
   http: ^1.2.1
   intl: ^0.18.1
   io_crossword_ui:
     path: packages/io_crossword_ui
+  leaderboard_repository:
+    path: packages/leaderboard_repository
   provider: ^6.1.2
-  url_launcher: ^6.2.5
+  rxdart: ^0.27.7
+  url_launcher: ^6.2.6
+  vector_math: ^2.1.4
 
 dev_dependencies:
   bloc_test: ^9.1.7
+  build_runner: ^2.4.9
+  flutter_gen_runner: ^5.4.0
   flutter_test:
     sdk: flutter
   mockingjay: ^0.5.0
   mocktail: ^1.0.3
+  plugin_platform_interface: ^2.1.8
+  url_launcher_platform_interface: ^2.3.2
   very_good_analysis: ^5.1.0
 
 dependency_overrides:
+  # Adds support for wasm while flame_audio does not update this dependency
+  audioplayers: 6.0.0
   flame:
     git:
       url: https://github.com/flame-engine/flame.git
@@ -61,4 +74,11 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/anim/
+    - assets/icons/
     - assets/images/
+
+flutter_gen:
+  output: lib/assets/
+  integrations:
+    flutter_svg: true

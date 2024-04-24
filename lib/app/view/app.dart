@@ -1,10 +1,18 @@
 import 'package:api_client/api_client.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/rotate_phone/rotate_phone.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -12,23 +20,51 @@ class App extends StatelessWidget {
     required this.apiClient,
     required this.crosswordRepository,
     required this.boardInfoRepository,
+    required this.leaderboardRepository,
+    required this.user,
     super.key,
   });
 
   final ApiClient apiClient;
+  final User user;
   final CrosswordRepository crosswordRepository;
   final BoardInfoRepository boardInfoRepository;
+  final LeaderboardRepository leaderboardRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider.value(value: apiClient.leaderboardResource),
         Provider.value(value: apiClient.crosswordResource),
+        Provider.value(value: apiClient.leaderboardResource),
+        Provider.value(value: apiClient.hintResource),
+        Provider.value(value: user),
         Provider.value(value: crosswordRepository),
         Provider.value(value: boardInfoRepository),
+        Provider.value(value: leaderboardRepository),
       ],
-      child: const AppView(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => CrosswordBloc(
+              crosswordRepository: crosswordRepository,
+              boardInfoRepository: boardInfoRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (_) => PlayerBloc(
+              leaderboardRepository: leaderboardRepository,
+            )..add(PlayerLoaded(userId: user.id)),
+          ),
+          BlocProvider(
+            lazy: false,
+            create: (context) => ChallengeBloc(
+              boardInfoRepository: context.read(),
+            )..add(const ChallengeDataRequested()),
+          ),
+        ],
+        child: const AppView(),
+      ),
     );
   }
 }
@@ -38,13 +74,53 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = IoCrosswordTheme().themeData;
-
-    return MaterialApp(
-      theme: themeData,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const CrosswordPage(),
+    return IoLayout(
+      child: BlocSelector<PlayerBloc, PlayerState, Mascots?>(
+        selector: (state) {
+          return state.mascot;
+        },
+        builder: (context, mascot) {
+          return MaterialApp(
+            theme: mascot.theme(),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: context.isSmallLandscape
+                ? const RotatePhonePage()
+                : const GameIntroPage(),
+          );
+        },
+      ),
     );
   }
+}
+
+@visibleForTesting
+extension MascotTheme on Mascots? {
+  static final flutterTheme = IoFlutterTheme().themeData;
+  static final firebaseTheme = IoFirebaseTheme().themeData;
+  static final chromeTheme = IoChromeTheme().themeData;
+  static final androidTheme = IoAndroidTheme().themeData;
+  static final defaultTheme = IoCrosswordTheme().themeData;
+
+  ThemeData theme() {
+    switch (this) {
+      case Mascots.dash:
+        return flutterTheme;
+      case Mascots.sparky:
+        return firebaseTheme;
+      case Mascots.dino:
+        return chromeTheme;
+      case Mascots.android:
+        return androidTheme;
+      case null:
+        return defaultTheme;
+    }
+  }
+}
+
+extension SmallLandscapeHelper on BuildContext {
+  /// True if running in landscape mode on a small device
+  bool get isSmallLandscape =>
+      MediaQuery.of(this).orientation == Orientation.landscape &&
+      IoLayout.of(this) == IoLayoutData.small;
 }

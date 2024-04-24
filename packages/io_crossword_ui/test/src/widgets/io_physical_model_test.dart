@@ -28,6 +28,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoCrosswordTheme().themeData;
 
@@ -56,6 +57,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoAndroidTheme().themeData;
 
@@ -84,6 +86,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoChromeTheme().themeData;
 
@@ -112,6 +115,7 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
           final themeData = IoFirebaseTheme().themeData;
 
@@ -140,8 +144,9 @@ void main() {
         tags: TestTag.golden,
         (tester) async {
           await tester.binding.setSurfaceSize(const Size(200, 150));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
 
-          final themeData = IoFirebaseTheme().themeData;
+          final themeData = IoFlutterTheme().themeData;
 
           await tester.pumpWidget(
             _GoldenSubject(

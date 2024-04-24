@@ -17,90 +17,11 @@ class _FakeWord extends Fake implements Word {
 
 void main() {
   group('CrosswordState', () {
-    group('CrosswordInitial', () {
-      test('can be instantiated', () {
-        expect(CrosswordInitial(), isA<CrosswordInitial>());
-      });
-      test('supports value comparisons', () {
-        expect(CrosswordInitial(), CrosswordInitial());
-      });
-    });
+    final fakeWord = _FakeWord();
 
-    group('CrosswordLoaded', () {
-      final fakeWord = _FakeWord();
-
-      test('can be instantiated', () {
-        expect(
-          CrosswordLoaded(
-            sectionSize: 400,
-            sections: {
-              (0, 0): BoardSection(
-                id: '1',
-                position: Point(0, 0),
-                size: 40,
-                words: [
-                  Word(
-                    axis: Axis.horizontal,
-                    position: Point(0, 0),
-                    answer: 'flutter',
-                    clue: 'flutter',
-                    solvedTimestamp: null,
-                  ),
-                ],
-                borderWords: const [],
-              ),
-            },
-          ),
-          isA<CrosswordLoaded>(),
-        );
-      });
-      test('supports value comparisons', () {
-        expect(
-          CrosswordLoaded(
-            sectionSize: 400,
-            sections: {
-              (0, 0): BoardSection(
-                id: '1',
-                position: Point(0, 0),
-                size: 40,
-                words: [
-                  Word(
-                    axis: Axis.horizontal,
-                    position: Point(0, 0),
-                    answer: 'flutter',
-                    clue: 'flutter',
-                    solvedTimestamp: null,
-                  ),
-                ],
-                borderWords: const [],
-              ),
-            },
-          ),
-          CrosswordLoaded(
-            sectionSize: 400,
-            sections: {
-              (0, 0): BoardSection(
-                id: '1',
-                position: Point(0, 0),
-                size: 40,
-                words: [
-                  Word(
-                    axis: Axis.horizontal,
-                    position: Point(0, 0),
-                    answer: 'flutter',
-                    clue: 'flutter',
-                    solvedTimestamp: null,
-                  ),
-                ],
-                borderWords: const [],
-              ),
-            },
-          ),
-        );
-      });
-
-      test('copyWith returns same object', () {
-        final state = CrosswordLoaded(
+    test('can be instantiated', () {
+      expect(
+        CrosswordState(
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -109,11 +30,85 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
+                ),
+              ],
+              borderWords: const [],
+            ),
+          },
+        ),
+        isA<CrosswordState>(),
+      );
+    });
+    test('supports value comparisons', () {
+      expect(
+        CrosswordState(
+          sectionSize: 400,
+          sections: {
+            (0, 0): BoardSection(
+              id: '1',
+              position: Point(0, 0),
+              size: 40,
+              words: [
+                Word(
+                  id: '1',
+                  axis: Axis.horizontal,
+                  position: Point(0, 0),
+                  answer: 'flutter',
+                  length: 7,
+                  clue: 'flutter',
+                ),
+              ],
+              borderWords: const [],
+            ),
+          },
+        ),
+        CrosswordState(
+          sectionSize: 400,
+          sections: {
+            (0, 0): BoardSection(
+              id: '1',
+              position: Point(0, 0),
+              size: 40,
+              words: [
+                Word(
+                  id: '1',
+                  axis: Axis.horizontal,
+                  position: Point(0, 0),
+                  answer: 'flutter',
+                  length: 7,
+                  clue: 'flutter',
+                ),
+              ],
+              borderWords: const [],
+            ),
+          },
+        ),
+      );
+    });
+
+    group('copyWith', () {
+      test('returns same object when no parameters are specified', () {
+        final state = CrosswordState(
+          sectionSize: 400,
+          sections: {
+            (0, 0): BoardSection(
+              id: '1',
+              position: Point(0, 0),
+              size: 40,
+              words: [
+                Word(
+                  id: '1',
+                  axis: Axis.horizontal,
+                  position: Point(0, 0),
+                  answer: 'flutter',
+                  length: 7,
+                  clue: 'flutter',
                 ),
               ],
               borderWords: const [],
@@ -123,8 +118,8 @@ void main() {
         expect(state.copyWith(), state);
       });
 
-      test('copyWith returns an instance with new sectionSize', () {
-        final state = CrosswordLoaded(
+      test('returns an instance with new sectionSize', () {
+        final state = CrosswordState(
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -133,11 +128,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -148,8 +144,8 @@ void main() {
         expect(newState.sectionSize, 800);
       });
 
-      test('copyWith returns an instance with new sections', () {
-        final state = CrosswordLoaded(
+      test('returns an instance with new sections', () {
+        final state = CrosswordState(
           sectionSize: 400,
           sections: {
             (0, 0): BoardSection(
@@ -158,11 +154,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -177,11 +174,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -192,11 +190,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -212,11 +211,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -227,11 +227,12 @@ void main() {
               size: 40,
               words: [
                 Word(
+                  id: '1',
                   axis: Axis.horizontal,
                   position: Point(0, 0),
                   answer: 'flutter',
+                  length: 7,
                   clue: 'flutter',
-                  solvedTimestamp: null,
                 ),
               ],
               borderWords: const [],
@@ -240,24 +241,8 @@ void main() {
         );
       });
 
-      test('copyWith returns an instance with new mascot', () {
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-        );
-        final newState = state.copyWith(mascot: Mascots.dino);
-        expect(newState.mascot, equals(Mascots.dino));
-      });
-
-      test('copyWith returns an instance with new initials', () {
-        final state = CrosswordLoaded(
-          sectionSize: 400,
-        );
-        final newState = state.copyWith(initials: 'GIO');
-        expect(newState.initials, equals('GIO'));
-      });
-
-      test('copyWith returns an instance with new selected word', () {
-        final state = CrosswordLoaded(
+      test('returns an instance with new selected word', () {
+        final state = CrosswordState(
           sectionSize: 400,
         );
         final newState = state.copyWith(
@@ -274,83 +259,74 @@ void main() {
           ),
         );
       });
+    });
 
-      group('WordSelection', () {
-        test('can be instantiated', () {
-          expect(
+    group('WordSelection', () {
+      test('can be instantiated', () {
+        expect(
+          WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          ),
+          isA<WordSelection>(),
+        );
+      });
+
+      test('copyWith returns same object', () {
+        final wordSelection = WordSelection(
+          section: (0, 0),
+          word: fakeWord,
+        );
+        expect(
+          wordSelection.copyWith(),
+          equals(wordSelection),
+        );
+      });
+
+      test('copyWith updates solvedStatus', () {
+        final wordSelection = WordSelection(
+          section: (0, 0),
+          word: fakeWord,
+        );
+        final solvedWordSelection = WordSelection(
+          section: (0, 0),
+          word: fakeWord,
+          solvedStatus: WordStatus.solved,
+        );
+        expect(
+          wordSelection.copyWith(solvedStatus: WordStatus.solved),
+          equals(solvedWordSelection),
+        );
+      });
+
+      test('supports value comparisons', () {
+        expect(
+          WordSelection(
+            section: (0, 0),
+            word: fakeWord,
+          ),
+          equals(
             WordSelection(
               section: (0, 0),
               word: fakeWord,
             ),
-            isA<WordSelection>(),
-          );
-        });
+          ),
+        );
 
-        test('copyWith returns same object', () {
-          final wordSelection = WordSelection(
+        expect(
+          WordSelection(
             section: (0, 0),
-            word: fakeWord,
-          );
-          expect(
-            wordSelection.copyWith(),
-            equals(wordSelection),
-          );
-        });
-
-        test('copyWith updates solvedStatus', () {
-          final wordSelection = WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-          );
-          final solvedWordSelection = WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-            solvedStatus: SolvedStatus.solved,
-          );
-          expect(
-            wordSelection.copyWith(solvedStatus: SolvedStatus.solved),
-            equals(solvedWordSelection),
-          );
-        });
-
-        test('supports value comparisons', () {
-          expect(
-            WordSelection(
-              section: (0, 0),
-              word: fakeWord,
-            ),
+            word: _FakeWord(answer: 'flutter'),
+          ),
+          isNot(
             equals(
               WordSelection(
                 section: (0, 0),
-                word: fakeWord,
+                word: _FakeWord(answer: 'dart'),
               ),
             ),
-          );
-
-          expect(
-            WordSelection(
-              section: (0, 0),
-              word: _FakeWord(answer: 'flutter'),
-            ),
-            isNot(
-              equals(
-                WordSelection(
-                  section: (0, 0),
-                  word: _FakeWord(answer: 'dart'),
-                ),
-              ),
-            ),
-          );
-        });
-      });
-    });
-
-    group('CrosswordError', () {
-      test('can be instantiated', () {
-        expect(CrosswordError('error'), isA<CrosswordError>());
-      });
-      test('supports value comparisons', () {
-        expect(CrosswordError('error'), CrosswordError('error'));
+          ),
+        );
       });
     });
   });

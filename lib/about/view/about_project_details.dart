@@ -1,7 +1,12 @@
-part of 'about_view.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:io_crossword/extensions/extensions.dart';
+import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/project_details/project_details.dart';
+import 'package:io_crossword/widget/widget.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class AboutProjectDetails extends StatelessWidget {
-  @visibleForTesting
   const AboutProjectDetails({super.key});
 
   @override
@@ -24,36 +29,7 @@ class AboutProjectDetails extends StatelessWidget {
               child: const Icon(Icons.image, size: 50),
             ),
             const SizedBox(height: 24),
-            RichText(
-              text: TextSpan(
-                text: '${l10n.learn} ',
-                style: textTheme.titleMedium,
-                children: [
-                  TextSpan(
-                    text: l10n.howMade,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    // TODO(Ayad): add link
-                    // recognizer: TapGestureRecognizer()..onTap = () {},
-                  ),
-                  TextSpan(text: ' ${l10n.and} '),
-                  TextSpan(
-                    text: l10n.openSourceCode,
-                    style: textTheme.titleMedium?.copyWith(
-                      color: linkColor,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        context.launchUrl(AboutLinks.github);
-                      },
-                  ),
-                  const TextSpan(
-                    text: '.',
-                  ),
-                ],
-              ),
-            ),
+            const HowMade(),
             const SizedBox(height: 24),
             Text(
               '${l10n.otherLinks}:',
@@ -70,7 +46,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.googleIO);
+                    context.launchUrl(ProjectDetailsLinks.googleIO);
                   },
               ),
             ),
@@ -83,7 +59,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.privacyPolicy);
+                    context.launchUrl(ProjectDetailsLinks.privacyPolicy);
                   },
               ),
             ),
@@ -96,7 +72,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.termsOfService);
+                    context.launchUrl(ProjectDetailsLinks.termsOfService);
                   },
               ),
             ),
@@ -109,7 +85,7 @@ class AboutProjectDetails extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    context.launchUrl(AboutLinks.faqs);
+                    context.launchUrl(ProjectDetailsLinks.faqs);
                   },
               ),
             ),
