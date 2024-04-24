@@ -113,25 +113,23 @@ void main() {
         });
       });
 
-      group('now shown', () {
-        testWidgets('when no word is selected', (tester) async {
-          when(() => wordSelectionBloc.state).thenReturn(
-            const WordSelectionState(
-              status: WordSelectionStatus.empty,
-              // ignore: avoid_redundant_argument_values
-              word: null,
-            ),
-          );
+      testWidgets('not shown when no word is selected', (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState(
+            status: WordSelectionStatus.empty,
+            // ignore: avoid_redundant_argument_values
+            word: null,
+          ),
+        );
 
-          await tester.pumpApp(
-            BlocProvider<WordSelectionBloc>(
-              create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
-            ),
-          );
+        await tester.pumpApp(
+          BlocProvider<WordSelectionBloc>(
+            create: (_) => wordSelectionBloc,
+            child: const Crossword2View(),
+          ),
+        );
 
-          expect(find.byType(CrosswordBackdrop), findsNothing);
-        });
+        expect(find.byType(CrosswordBackdrop), findsNothing);
       });
     });
 
