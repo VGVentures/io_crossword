@@ -157,8 +157,8 @@ class _TabSelector extends StatelessWidget {
         TabPageSelector(
           controller: tabController,
         ),
-        TextButton(
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             if (index == tabController.length - 1) {
               onDonePressed();
             } else {
@@ -171,26 +171,7 @@ class _TabSelector extends StatelessWidget {
                 : l10n.doneButtonLabel,
             style: const TextStyle(color: IoCrosswordColors.seedWhite),
           ),
-        )
-        // GestureDetector(
-        //   onTap: () {
-        //     context.read<HowToPlayCubit>().updateIndex(index + 1);
-        //     if (index == tabController.length - 1) {
-
-        //       Navigator.of(context, rootNavigator: true).pop();
-        //     }
-        //   },
-        //   child: Text(
-        //     index < tabController.length - 1
-        //         ? l10n.nextButtonLabel
-        //         : l10n.doneButtonLabel,
-        //     style: TextStyle(
-        //       color: index < tabController.length - 1
-        //           ? IoCrosswordColors.seedWhite
-        //           : IoCrosswordColors.softGray,
-        //     ),
-        //   ),
-        // ),
+        ),
       ],
     );
   }

@@ -2,13 +2,15 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/project_details.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
@@ -77,14 +79,41 @@ void main() {
 
       when(() => howToPlayCubit.state).thenReturn(0);
       await tester.pumpApp(
-        CrosswordDrawer(),
-        howToPlayCubit: howToPlayCubit,
+        BlocProvider(
+          create: (_) => howToPlayCubit,
+          child: CrosswordDrawer(),
+        ),
       );
 
       await tester.tap(find.text('How to play'));
       await tester.pumpAndSettle();
 
       expect(find.byType(HowToPlayContent), findsOneWidget);
+    });
+    testWidgets('Pops HowToPlay widget when Done is tapped', (tester) async {
+      final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
+      final l10n = await AppLocalizations.delegate.load(Locale('en'));
+      final mockNavigator = MockNavigator();
+      when(mockNavigator.canPop).thenReturn(true);
+      when(() => howToPlayCubit.state).thenReturn(0);
+      await tester.pumpApp(
+        BlocProvider(
+          create: (_) => howToPlayCubit,
+          child: CrosswordDrawer(),
+        ),
+        navigator: mockNavigator,
+      );
+
+      await tester.tap(find.text('How to play'));
+      await tester.pumpAndSettle();
+
+      for (var i = 0; i < 4; i++) {
+        await tester.tap(find.text(l10n.nextButtonLabel));
+        await tester.pumpAndSettle();
+      }
+      await tester.tap(find.text(l10n.doneButtonLabel));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
     });
   });
 

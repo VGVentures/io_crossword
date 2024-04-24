@@ -44,8 +44,7 @@ class CrosswordDrawer extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: HowToPlayContent(
                       mascot: mascot ?? Mascots.dash,
-                      onDonePressed: () =>
-                          Navigator.of(context, rootNavigator: true).pop(),
+                      onDonePressed: () => Navigator.pop(context),
                     ),
                   ),
                 ),
