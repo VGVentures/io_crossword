@@ -69,7 +69,9 @@ class JwtMiddleware {
 
             final userId = await verifyToken(token);
             if (userId != null && await verifyAppCheckToken(context)) {
-              return handler(context.provide(() => AuthenticatedUser(userId)));
+              return handler(
+                context.provide(() => AuthenticatedUser(userId, token)),
+              );
             }
           }
 

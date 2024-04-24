@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:db_client/db_client.dart';
+import 'package:dio/dio.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -7,25 +8,25 @@ import 'package:test/test.dart';
 
 class _MockDbClient extends Mock implements DbClient {}
 
-class _MockGenerativeModelWrapper extends Mock
-    implements GenerativeModelWrapper {}
+class _MockHttpClient extends Mock implements Dio {}
 
 void main() {
   group('HintRepository', () {
     late DbClient dbClient;
-    late GenerativeModelWrapper generativeModelWrapper;
+    late Dio httpClient;
     late HintRepository hintRepository;
 
     setUpAll(() {
       registerFallbackValue(DbEntityRecord(id: ''));
+      registerFallbackValue(Uri());
     });
 
     setUp(() {
       dbClient = _MockDbClient();
-      generativeModelWrapper = _MockGenerativeModelWrapper();
+      httpClient = _MockHttpClient();
       hintRepository = HintRepository(
         dbClient: dbClient,
-        generativeModelWrapper: generativeModelWrapper,
+        httpClient: httpClient,
       );
     });
 
@@ -33,7 +34,6 @@ void main() {
       expect(
         HintRepository(
           dbClient: dbClient,
-          generativeModelWrapper: generativeModelWrapper,
         ),
         isNotNull,
       );
@@ -101,12 +101,25 @@ void main() {
 
     group('generateHint', () {
       test('returns a hint when the response is parsed correctly', () async {
-        when(() => generativeModelWrapper.generateTextContent(any()))
-            .thenAnswer((_) async => 'yes');
+        when(
+          () => httpClient.post<Map<String, dynamic>>(
+            any(),
+            data: any(named: 'data'),
+            options: any(named: 'options'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(),
+            data: {
+              'result': {'answer': 'yes'},
+            },
+          ),
+        );
         final hint = await hintRepository.generateHint(
           wordAnswer: 'answer',
           question: 'question',
           previousHints: [Hint(question: 'is it?', response: HintResponse.no)],
+          userToken: 'token',
         );
 
         expect(
@@ -119,12 +132,25 @@ void main() {
         'returns a hint with notApplicable when the response is not parsed '
         'correctly',
         () async {
-          when(() => generativeModelWrapper.generateTextContent(any()))
-              .thenAnswer((_) async => 'bla bla bla');
+          when(
+            () => httpClient.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            ),
+          ).thenAnswer(
+            (_) async => Response(
+              requestOptions: RequestOptions(),
+              data: {
+                'result': {'answer': 'random things'},
+              },
+            ),
+          );
           final hint = await hintRepository.generateHint(
             wordAnswer: 'answer',
             question: 'question',
             previousHints: [],
+            userToken: 'token',
           );
 
           expect(
@@ -140,14 +166,19 @@ void main() {
       );
 
       test('throws a HintException when an error occurs', () async {
-        when(() => generativeModelWrapper.generateTextContent(any()))
-            .thenThrow(Exception());
-
+        when(
+          () => httpClient.post<Map<String, dynamic>>(
+            any(),
+            data: any(named: 'data'),
+            options: any(named: 'options'),
+          ),
+        ).thenThrow(Exception());
         expect(
           () => hintRepository.generateHint(
             wordAnswer: 'answer',
             question: 'question',
             previousHints: [],
+            userToken: 'token',
           ),
           throwsA(isA<HintException>()),
         );
@@ -156,7 +187,7 @@ void main() {
 
     group('getPreviousHints', () {
       test('returns an empty list when no hints are found', () async {
-        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
             .thenAnswer((_) async => null);
 
         final hints = await hintRepository.getPreviousHints(
@@ -168,7 +199,7 @@ void main() {
       });
 
       test('returns a list of hints', () async {
-        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
             .thenAnswer(
           (_) async => DbEntityRecord(
             id: 'userId',
@@ -219,7 +250,7 @@ void main() {
 
         verify(
           () => dbClient.set(
-            'answers/wordId/hints',
+            'answers2/wordId/hints',
             DbEntityRecord(
               id: 'userId',
               data: const {

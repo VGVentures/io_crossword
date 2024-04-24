@@ -4,8 +4,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -36,7 +36,7 @@ void main() {
     setUp(() {
       crosswordLayoutData = CrosswordLayoutData.fromConfiguration(
         configuration: const CrosswordConfiguration(
-          bottomLeft: (40, 40),
+          bottomRight: (40, 40),
           chunkSize: 20,
         ),
         cellSize: const Size.square(20),
