@@ -29,7 +29,7 @@ void main() {
       ],
       borderWords: const [],
     );
-    const sectionsCollection = 'boardChunks';
+    const sectionsCollection = 'boardChunks2';
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;

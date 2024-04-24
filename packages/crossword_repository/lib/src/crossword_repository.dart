@@ -13,7 +13,7 @@ class CrosswordRepository {
     required this.db,
     Random? rng,
   }) : _rng = rng ?? Random() {
-    sectionCollection = db.collection('boardChunks');
+    sectionCollection = db.collection('boardChunks2');
   }
 
   /// The [FirebaseFirestore] instance.
