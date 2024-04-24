@@ -124,26 +124,6 @@ void main() {
       });
     });
 
-    group('shareScoreUrl', () {
-      test('returns the correct url', () {
-        expect(
-          subject.shareScoreUrl('id'),
-          equals('http://baseurl.com/public/share/score?userId=id'),
-        );
-      });
-    });
-
-    group('shareScoreUrl', () {
-      test('returns the correct url', () {
-        expect(
-          subject.shareWordUrl('id', 'wordId'),
-          equals(
-            'http://baseurl.com/public/share/word?sectionId=id&wordId=wordId',
-          ),
-        );
-      });
-    });
-
     group('get', () {
       test('returns the response', () async {
         final response = await subject.get('/');
