@@ -10,8 +10,8 @@ Player _$PlayerFromJson(Map<String, dynamic> json) => Player(
       id: json['id'] as String,
       initials: json['initials'] as String,
       mascot: $enumDecode(_$MascotsEnumMap, json['mascot']),
-      score: json['score'] as int? ?? 0,
-      streak: json['streak'] as int? ?? 0,
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      streak: (json['streak'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
@@ -24,6 +24,6 @@ Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
 const _$MascotsEnumMap = {
   Mascots.dash: 'dash',
   Mascots.sparky: 'sparky',
-  Mascots.dino: 'dino',
   Mascots.android: 'android',
+  Mascots.dino: 'dino',
 };

@@ -10,7 +10,7 @@ BoardSection _$BoardSectionFromJson(Map<String, dynamic> json) => BoardSection(
       id: json['id'] as String,
       position: const PointConverter()
           .fromJson(json['position'] as Map<String, dynamic>),
-      size: json['size'] as int,
+      size: (json['size'] as num).toInt(),
       words: (json['words'] as List<dynamic>)
           .map((e) => Word.fromJson(e as Map<String, dynamic>))
           .toList(),
