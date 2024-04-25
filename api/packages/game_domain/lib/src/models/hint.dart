@@ -9,7 +9,11 @@ part 'hint.g.dart';
 @JsonSerializable(ignoreUnannotated: true)
 class Hint extends Equatable {
   /// {@macro hint}
-  const Hint({required this.question, required this.response});
+  const Hint({
+    required this.question,
+    required this.response,
+    required this.readableResponse,
+  });
 
   /// {@macro hint}
   factory Hint.fromJson(Map<String, dynamic> json) => _$HintFromJson(json);
@@ -22,11 +26,15 @@ class Hint extends Equatable {
   @JsonKey()
   final HintResponse response;
 
+  /// Readable `response`.
+  @JsonKey()
+  final String readableResponse;
+
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$HintToJson(this);
 
   @override
-  List<Object?> get props => [question, response];
+  List<Object?> get props => [question, response, readableResponse];
 }
 
 /// Enum representing the possible responses to a hint question.
