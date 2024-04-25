@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
@@ -51,6 +53,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   );
   Animation<Vector3>? _translationAnimation;
 
+  /// The top left corner of the crossword, including the padding.
+  final _topLeft = Vector3.zero();
+
+  /// The bottom right corner of the crossword, including the padding.
+  final _bottomRight = Vector3.zero();
+
   void _onAnimateTranslation() {
     _transformationController.value =
         Matrix4.translation(_translationAnimation!.value);
@@ -58,27 +66,49 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
-    if (_animationController == null) return;
+    if (_animationController == null || _animationController!.isAnimating) {
+      return;
+    }
 
     final selectedWord = context.read<WordSelectionBloc>().state.word;
     final viewport = _viewport;
     if (selectedWord == null || viewport == null) return;
 
     final crosswordLayout = CrosswordLayoutScope.of(context);
+
+    _bottomRight.setValues(
+      -(crosswordLayout.crosswordSize.width +
+              crosswordLayout.padding.horizontal) +
+          viewport.width,
+      -(crosswordLayout.crosswordSize.height +
+              crosswordLayout.padding.vertical) +
+          viewport.height,
+      0,
+    );
+
     final wordMiddlePosition = selectedWord.word.middlePosition();
 
+    final begin = _transformationController.value.getTranslation();
+    final end = viewport.center -
+        Vector3(
+          (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
+              (wordMiddlePosition.$1 * crosswordLayout.cellSize.width) +
+              crosswordLayout.padding.left,
+          (selectedWord.section.$2 * crosswordLayout.chunkSize.height) +
+              (wordMiddlePosition.$2 * crosswordLayout.cellSize.height) +
+              crosswordLayout.padding.top,
+          0,
+        );
+    end
+      ..x = math.max(math.min(end.x, _topLeft.x), _bottomRight.x)
+      ..y = math.max(math.min(end.y, _topLeft.y), _bottomRight.y);
+    if (begin == end) return;
+
+    // if (end.x < _bottomRight.x) end.x = _bottomRight.x;
+    // if (end.y < _bottomRight.y) end.y = _bottomRight.y;
+
     _translationAnimation?.removeListener(_onAnimateTranslation);
-    _translationAnimation = Tween(
-      begin: _transformationController.value.getTranslation(),
-      end: viewport.center -
-          Vector3(
-            (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
-                (wordMiddlePosition.$1 * crosswordLayout.cellSize.width),
-            (selectedWord.section.$2 * crosswordLayout.chunkSize.height) +
-                (wordMiddlePosition.$2 * crosswordLayout.cellSize.height),
-            0,
-          ),
-    ).animate(
+    _translationAnimation = Tween(begin: begin, end: end).animate(
       CurvedAnimation(
         parent: animationController!,
         curve: Curves.decelerate,
@@ -136,6 +166,10 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
 extension on Quad {
   Vector3 get center => (point2 - point0) / 2;
+
+  double get width => point2.x - point0.x;
+
+  double get height => point2.y - point0.y;
 }
 
 extension on domain.Word {

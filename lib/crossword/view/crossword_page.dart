@@ -94,8 +94,8 @@ class LoadedBoardView extends StatelessWidget {
       child: Stack(
         children: [
           const Crossword2View(),
-          const WordSelectionPage(),
-          if (layout == IoLayoutData.large) const BottomBar(),
+          // const WordSelectionPage(),
+          // if (layout == IoLayoutData.large) const BottomBar(),
         ],
       ),
     );
