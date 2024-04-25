@@ -64,7 +64,11 @@ void main() {
     testWidgets(
       'is disabled when there are no hints left',
       (tester) async {
-        final hint = Hint(question: 'is it orange?', response: HintResponse.no);
+        final hint = Hint(
+          question: 'is it orange?',
+          response: HintResponse.no,
+          readableResponse: 'Nope!',
+        );
         when(() => hintBloc.state).thenReturn(
           HintState(hints: [hint, hint, hint], maxHints: 3),
         );

@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/hint/hint.dart';
+import 'package:hint_repository/src/hint_response_extension.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('HintResponseExtension', () {

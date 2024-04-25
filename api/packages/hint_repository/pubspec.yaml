@@ -13,6 +13,7 @@ dependencies:
   game_domain:
     path: ../game_domain
   http: ^1.2.1
+  meta: ^1.14.0
 
 dev_dependencies:
   mocktail: ^1.0.3

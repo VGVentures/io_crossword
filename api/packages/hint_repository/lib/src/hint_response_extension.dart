@@ -1,9 +1,11 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:meta/meta.dart';
 
+/// An extension on [HintResponse] to provide readable responses.
 extension HintResponseExtension on HintResponse {
+  /// Returns a readable response for the hint.
   String get readable {
     final random = Random();
 
@@ -19,6 +21,7 @@ extension HintResponseExtension on HintResponse {
   }
 }
 
+/// Response alternatives to [HintResponse.yes].
 @visibleForTesting
 const yesResponses = [
   'Yes, that is correct!',
@@ -33,6 +36,7 @@ const yesResponses = [
   'Yes!',
 ];
 
+/// Response alternatives to [HintResponse.no].
 @visibleForTesting
 const noResponses = [
   'No, unfortunately.',
@@ -47,6 +51,7 @@ const noResponses = [
   'Sorry, but no!',
 ];
 
+/// Response alternatives to [HintResponse.notApplicable].
 @visibleForTesting
 const notApplicableResponses = [
   "I can't answer that.",

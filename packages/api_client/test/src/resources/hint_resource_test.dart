@@ -36,6 +36,7 @@ void main() {
         final hint = Hint(
           question: 'question',
           response: HintResponse.no,
+          readableResponse: 'Nope!',
         );
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(
@@ -65,6 +66,7 @@ void main() {
         final hint = Hint(
           question: 'is it a question?',
           response: HintResponse.yes,
+          readableResponse: 'Yes, that is correct!',
         );
         when(() => response.statusCode).thenReturn(HttpStatus.ok);
         when(() => response.body).thenReturn(
@@ -137,6 +139,7 @@ void main() {
         final hint = Hint(
           question: 'question',
           response: HintResponse.no,
+          readableResponse: 'Nope!',
         );
         final hintList = [hint, hint, hint];
         final responseJson = {
@@ -160,6 +163,7 @@ void main() {
         final hint = Hint(
           question: 'question',
           response: HintResponse.no,
+          readableResponse: 'Nope!',
         );
         final hintList = [hint, hint, hint];
         final hintJson = {
