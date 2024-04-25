@@ -17,6 +17,15 @@ class AndroidTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.androidLookUp;
 
   @override
+  AssetGenImage get pickUpAnimation => Assets.anim.androidPickUp;
+
+  @override
+  AssetGenImage get dangleAnimation => Assets.anim.androidDangle;
+
+  @override
+  AssetGenImage get dropInAnimation => Assets.anim.androidDropIn;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerAndroid;
 
   @override
@@ -42,5 +51,32 @@ class AndroidTeam extends Team {
         stepTime: 0.042,
         width: 200,
         height: 340,
+      );
+
+  @override
+  SpriteInformation get pickUpSpriteInformation => const SpriteInformation(
+        rows: 17,
+        columns: 4,
+        stepTime: 0.042,
+        width: 200,
+        height: 340,
+      );
+
+  @override
+  SpriteInformation get dangleSpriteInformation => const SpriteInformation(
+        rows: 17,
+        columns: 2,
+        stepTime: 0.042,
+        width: 150,
+        height: 300,
+      );
+
+  @override
+  SpriteInformation get dropInSpriteInformation => const SpriteInformation(
+        rows: 22,
+        columns: 2,
+        stepTime: 0.042,
+        width: 150,
+        height: 300,
       );
 }

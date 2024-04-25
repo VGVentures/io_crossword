@@ -20,6 +20,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
+    on<MascotDropped>(_onMascotDropped);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -140,5 +141,16 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         ),
       );
     }
+  }
+
+  void _onMascotDropped(
+    MascotDropped event,
+    Emitter<CrosswordState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        mascotVisible: false,
+      ),
+    );
   }
 }

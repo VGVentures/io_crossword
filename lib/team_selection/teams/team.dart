@@ -13,6 +13,12 @@ abstract class Team extends Equatable {
 
   AssetGenImage get lookUpAnimation;
 
+  AssetGenImage get pickUpAnimation;
+
+  AssetGenImage get dangleAnimation;
+
+  AssetGenImage get dropInAnimation;
+
   AssetGenImage get howToPlayAnswer;
 
   AssetGenImage get howToPlayFindWord;
@@ -23,11 +29,28 @@ abstract class Team extends Equatable {
 
   SpriteInformation get lookUpSpriteInformation;
 
+  SpriteInformation get pickUpSpriteInformation;
+
+  SpriteInformation get dangleSpriteInformation;
+
+  SpriteInformation get dropInSpriteInformation;
+
   @override
   List<Object> get props => [
         name,
         idleAnimation,
         platformAnimation,
+        lookUpAnimation,
+        pickUpAnimation,
+        dangleAnimation,
+        dropInAnimation,
+        howToPlayAnswer,
+        howToPlayFindWord,
+        howToPlayStreak,
         idleSpriteInformation,
+        lookUpSpriteInformation,
+        pickUpSpriteInformation,
+        dangleSpriteInformation,
+        dropInSpriteInformation,
       ];
 }

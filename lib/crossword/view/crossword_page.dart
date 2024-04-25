@@ -2,14 +2,17 @@ import 'package:api_client/api_client.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -17,8 +20,9 @@ class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const CrosswordPage(),
+    return PageRouteBuilder(
+      transitionDuration: const Duration(seconds: 3),
+      pageBuilder: (_, __, ___) => const CrosswordPage(),
     );
   }
 
@@ -100,20 +104,26 @@ class CrosswordView extends StatelessWidget {
           },
         ),
         body: BlocBuilder<CrosswordBloc, CrosswordState>(
-          buildWhen: (previous, current) => previous.status != current.status,
+          buildWhen: (previous, current) =>
+              previous.status != current.status ||
+              previous.mascotVisible != current.mascotVisible,
           builder: (context, state) {
-            switch (state.status) {
-              case CrosswordStatus.initial:
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              case CrosswordStatus.success:
-                return const LoadedBoardView();
-              case CrosswordStatus.failure:
-                return ErrorView(
-                  title: l10n.errorPromptText,
-                );
-            }
+            return Stack(
+              children: [
+                switch (state.status) {
+                  CrosswordStatus.initial => const SizedBox.shrink(),
+                  CrosswordStatus.success => const LoadedBoardView(),
+                  CrosswordStatus.failure => ErrorView(
+                      title: l10n.errorPromptText,
+                    ),
+                },
+                if (state.mascotVisible)
+                  Hero(
+                    tag: 'dangle_mascot',
+                    child: _Dangle(context.read<PlayerBloc>().state.mascot!),
+                  ),
+              ],
+            );
           },
         ),
       ),
@@ -137,6 +147,69 @@ class LoadedBoardView extends StatelessWidget {
           const WordSelectionPage(),
           if (layout == IoLayoutData.large) const BottomBar(),
         ],
+      ),
+    );
+  }
+}
+
+class _Dangle extends StatefulWidget {
+  const _Dangle(this.mascot);
+
+  final Mascots mascot;
+
+  @override
+  State<_Dangle> createState() => _DangleState();
+}
+
+class _DangleState extends State<_Dangle> {
+  final _controller = SpriteListController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.changeAnimation(widget.mascot.teamMascot.dangleAnimation.path);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Align(
+        child: SizedBox(
+          width: widget.mascot.teamMascot.dangleSpriteInformation.width,
+          height: widget.mascot.teamMascot.dangleSpriteInformation.height,
+          child: GestureDetector(
+            onTap: () {
+              _controller.changeAnimation(
+                widget.mascot.teamMascot.dropInAnimation.path,
+              );
+            },
+            child: SpriteAnimationList(
+              animationListItems: [
+                AnimationListItem(
+                  path: widget.mascot.teamMascot.dangleAnimation.path,
+                  spriteInformation:
+                      widget.mascot.teamMascot.dangleSpriteInformation,
+                ),
+                AnimationListItem(
+                  path: widget.mascot.teamMascot.dropInAnimation.path,
+                  spriteInformation:
+                      widget.mascot.teamMascot.dropInSpriteInformation,
+                  loop: false,
+                  onComplete: () =>
+                      context.read<CrosswordBloc>().add(const MascotDropped()),
+                ),
+              ],
+              controller: _controller,
+            ),
+          ),
+        ),
       ),
     );
   }

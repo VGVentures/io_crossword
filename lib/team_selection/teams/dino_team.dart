@@ -17,6 +17,15 @@ class DinoTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
 
   @override
+  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUp;
+
+  @override
+  AssetGenImage get dangleAnimation => Assets.anim.dinoDangle;
+
+  @override
+  AssetGenImage get dropInAnimation => Assets.anim.dinoDropIn;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDino;
 
   @override
@@ -41,5 +50,32 @@ class DinoTeam extends Team {
         stepTime: 0.042,
         width: 250,
         height: 340,
+      );
+
+  @override
+  SpriteInformation get pickUpSpriteInformation => const SpriteInformation(
+        rows: 15,
+        columns: 5,
+        stepTime: 0.042,
+        width: 200,
+        height: 272,
+      );
+
+  @override
+  SpriteInformation get dangleSpriteInformation => const SpriteInformation(
+        rows: 17,
+        columns: 2,
+        stepTime: 0.042,
+        width: 150,
+        height: 300,
+      );
+
+  @override
+  SpriteInformation get dropInSpriteInformation => const SpriteInformation(
+        rows: 22,
+        columns: 2,
+        stepTime: 0.042,
+        width: 150,
+        height: 300,
       );
 }

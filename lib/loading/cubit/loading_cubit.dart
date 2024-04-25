@@ -16,20 +16,38 @@ class LoadingCubit extends Cubit<LoadingState> {
       () =>
           Flame.images.load(Mascots.dash.teamMascot.platformAnimation.keyName),
       () => Flame.images.load(Mascots.dash.teamMascot.lookUpAnimation.keyName),
+      () => Flame.images.load(Mascots.dash.teamMascot.pickUpAnimation.keyName),
+      () => Flame.images.load(Mascots.dash.teamMascot.dangleAnimation.keyName),
+      () => Flame.images.load(Mascots.dash.teamMascot.dropInAnimation.keyName),
       () => Flame.images.load(Mascots.android.teamMascot.idleAnimation.keyName),
       () => Flame.images
           .load(Mascots.android.teamMascot.platformAnimation.keyName),
       () =>
           Flame.images.load(Mascots.android.teamMascot.lookUpAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.android.teamMascot.pickUpAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.android.teamMascot.dangleAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.android.teamMascot.dropInAnimation.keyName),
       () => Flame.images.load(Mascots.dino.teamMascot.idleAnimation.keyName),
       () =>
           Flame.images.load(Mascots.dino.teamMascot.platformAnimation.keyName),
       () => Flame.images.load(Mascots.dino.teamMascot.lookUpAnimation.keyName),
+      () => Flame.images.load(Mascots.dino.teamMascot.pickUpAnimation.keyName),
+      () => Flame.images.load(Mascots.dino.teamMascot.dangleAnimation.keyName),
+      () => Flame.images.load(Mascots.dino.teamMascot.dropInAnimation.keyName),
       () => Flame.images.load(Mascots.sparky.teamMascot.idleAnimation.keyName),
       () => Flame.images
           .load(Mascots.sparky.teamMascot.platformAnimation.keyName),
       () =>
           Flame.images.load(Mascots.sparky.teamMascot.lookUpAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.sparky.teamMascot.pickUpAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.sparky.teamMascot.dangleAnimation.keyName),
+      () =>
+          Flame.images.load(Mascots.sparky.teamMascot.dropInAnimation.keyName),
     ];
 
     emit(state.copyWith(assetsCount: loadables.length));
