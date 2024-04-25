@@ -37,6 +37,6 @@ const _$AxisEnumMap = {
 const _$MascotsEnumMap = {
   Mascots.dash: 'dash',
   Mascots.sparky: 'sparky',
-  Mascots.android: 'android',
   Mascots.dino: 'dino',
+  Mascots.android: 'android',
 };

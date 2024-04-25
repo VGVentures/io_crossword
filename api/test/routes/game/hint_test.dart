@@ -136,6 +136,7 @@ void main() {
               'hint': {
                 'question': 'question',
                 'response': 'no',
+                'readableResponse': 'Nope!',
               },
               'maxHints': 10,
             }),
@@ -352,9 +353,21 @@ void main() {
             await response.json(),
             equals({
               'hints': [
-                {'question': 'question1', 'response': 'yes'},
-                {'question': 'question2', 'response': 'notApplicable'},
-                {'question': 'question3', 'response': 'no'},
+                {
+                  'question': 'question1',
+                  'response': 'yes',
+                  'readableResponse': 'yes',
+                },
+                {
+                  'question': 'question2',
+                  'response': 'notApplicable',
+                  'readableResponse': 'nah',
+                },
+                {
+                  'question': 'question3',
+                  'response': 'no',
+                  'readableResponse': 'nope',
+                },
               ],
               'maxHints': 10,
             }),
