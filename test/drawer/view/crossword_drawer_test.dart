@@ -104,7 +104,7 @@ void main() {
         navigator: mockNavigator,
       );
 
-      await tester.tap(find.text('How to play'));
+      await tester.tap(find.text(l10n.howToPlay));
       await tester.pumpAndSettle();
 
       for (var i = 0; i < 4; i++) {

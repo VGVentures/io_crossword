@@ -33,7 +33,7 @@ class CrosswordDrawer extends StatelessWidget {
         title: l10n.howToPlay,
         icon: Icons.games,
         onPressed: () {
-          showDialog<AlertDialog>(
+          showDialog<void>(
             context: context,
             builder: (context) => BlocProvider(
               create: (_) => HowToPlayCubit(),

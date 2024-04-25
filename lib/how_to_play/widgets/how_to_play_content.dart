@@ -15,7 +15,7 @@ class HowToPlayContent extends StatefulWidget {
   });
 
   final Mascots mascot;
-  final void Function() onDonePressed;
+  final VoidCallback onDonePressed;
 
   @override
   State<HowToPlayContent> createState() => _HowToPlayContentState();

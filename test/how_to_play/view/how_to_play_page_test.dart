@@ -157,8 +157,7 @@ void main() {
 
         expect(flowController.completed, isTrue);
       });
-      testWidgets('completes flow when done buttons is pressed',
-          (tester) async {
+      testWidgets('completes flow when done button is pressed', (tester) async {
         final flowController = FlowController(GameIntroStatus.howToPlay);
         final l10n = await AppLocalizations.delegate.load(Locale('en'));
         addTearDown(flowController.dispose);
