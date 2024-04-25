@@ -58,10 +58,6 @@ class WordSolvingLargeView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              if (isHintsEnabled) ...[
-                const HintsTitle(),
-                const SizedBox(height: 32),
-              ],
               Flexible(
                 child: BlocSelector<WordSelectionBloc, WordSelectionState,
                     WordSelectionStatus>(
@@ -78,7 +74,11 @@ class WordSolvingLargeView extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
         const BottomPanel(),
       ],
     );
@@ -128,10 +128,6 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        if (isHintsEnabled) ...[
-          const HintsTitle(),
-          const SizedBox(height: 32),
-        ],
         Expanded(
           child: BlocSelector<WordSelectionBloc, WordSelectionState,
               WordSelectionStatus>(
@@ -148,7 +144,11 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
             },
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
         const BottomPanel(),
       ],
     );

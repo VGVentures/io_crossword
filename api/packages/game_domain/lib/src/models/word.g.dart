@@ -11,10 +11,10 @@ Word _$WordFromJson(Map<String, dynamic> json) => Word(
       position: const PointConverter()
           .fromJson(json['position'] as Map<String, dynamic>),
       axis: $enumDecode(_$AxisEnumMap, json['axis']),
-      length: json['length'] as int,
+      length: (json['length'] as num).toInt(),
       clue: json['clue'] as String,
       answer: json['answer'] as String?,
-      solvedTimestamp: json['solvedTimestamp'] as int?,
+      solvedTimestamp: (json['solvedTimestamp'] as num?)?.toInt(),
       mascot: $enumDecodeNullable(_$MascotsEnumMap, json['mascot']),
     );
 
@@ -37,6 +37,6 @@ const _$AxisEnumMap = {
 const _$MascotsEnumMap = {
   Mascots.dash: 'dash',
   Mascots.sparky: 'sparky',
-  Mascots.dino: 'dino',
   Mascots.android: 'android',
+  Mascots.dino: 'dino',
 };

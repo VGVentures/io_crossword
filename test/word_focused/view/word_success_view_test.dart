@@ -8,6 +8,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
 import 'package:io_crossword/word_selection/word_selection.dart' as selection;
@@ -46,6 +47,12 @@ class _FakeWord extends Fake implements Word {
 
   @override
   Axis get axis => Axis.horizontal;
+
+  @override
+  int get length => 4;
+
+  @override
+  String get clue => 'clue';
 }
 
 void main() {
@@ -209,12 +216,21 @@ void main() {
 
   group('SuccessTopBar', () {
     late CrosswordBloc crosswordBloc;
+    late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     setUp(() {
       crosswordBloc = _MockCrosswordBloc();
-      widget = BlocProvider.value(
-        value: crosswordBloc,
+      wordSelectionBloc = _MockWordSelectionBloc();
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: crosswordBloc,
+          ),
+          BlocProvider<WordSelectionBloc>(
+            create: (context) => wordSelectionBloc,
+          ),
+        ],
         child: SuccessTopBar(),
       );
     });
@@ -225,6 +241,35 @@ void main() {
         await tester.pumpApp(widget);
 
         expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders icon ios_share',
+      (tester) async {
+        await tester.pumpApp(widget);
+
+        expect(find.byIcon(Icons.ios_share), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders ShareWordPage when icon ios_share tapped',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solved,
+            word: SelectedWord(section: (0, 0), word: _FakeWord()),
+          ),
+        );
+
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.byIcon(Icons.ios_share));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(ShareWordPage), findsOneWidget);
       },
     );
   });

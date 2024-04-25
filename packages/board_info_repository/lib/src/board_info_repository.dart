@@ -43,7 +43,7 @@ class BoardInfoRepository {
       return boardInfoCollection
           .where('type', isEqualTo: 'total_words_count')
           .snapshots()
-          .map((event) => event.docs.first.data()['value'] as int);
+          .map((event) => (event.docs.first.data()['value'] as num).toInt());
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
@@ -55,7 +55,7 @@ class BoardInfoRepository {
       return boardInfoCollection
           .where('type', isEqualTo: 'solved_words_count')
           .snapshots()
-          .map((event) => event.docs.first.data()['value'] as int);
+          .map((event) => (event.docs.first.data()['value'] as num).toInt());
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
@@ -69,7 +69,7 @@ class BoardInfoRepository {
           .get();
 
       final data = results.docs.first.data();
-      return data['value'] as int;
+      return (data['value'] as num).toInt();
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
@@ -83,7 +83,7 @@ class BoardInfoRepository {
           .get();
 
       final data = results.docs.first.data();
-      return data['value'] as double;
+      return (data['value'] as num).toDouble();
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }

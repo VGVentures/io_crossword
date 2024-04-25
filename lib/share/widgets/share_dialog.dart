@@ -20,48 +20,54 @@ class ShareDialog extends StatelessWidget {
     final l10n = context.l10n;
 
     return Center(
-      child: IoCrosswordCard(
-        maxWidth: 340,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 11),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                ShareDialogHeader(title: title),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: IoCrosswordSpacing.xlgsm,
-                  ),
-                  child: content,
+      child: IoPhysicalModel(
+        child: Card(
+          child: SizedBox(
+            width: 340,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  bottom: 56,
+                  top: 16,
                 ),
-                Text(
-                  l10n.shareOn,
-                ),
-                const SizedBox(height: IoCrosswordSpacing.xlgsm),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        context.shareLinkedIn(shareUrl: url);
-                      },
-                      icon: const Icon(IoIcons.linkedin),
+                    ShareDialogHeader(title: title),
+                    const SizedBox(height: IoCrosswordSpacing.xlgsm),
+                    content,
+                    const SizedBox(height: IoCrosswordSpacing.xlg),
+                    Text(
+                      l10n.shareOn,
                     ),
-                    IconButton(
-                      onPressed: () {
-                        context.shareTwitter(shareUrl: url);
-                      },
-                      icon: const Icon(IoIcons.twitter),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        context.shareFacebook(shareUrl: url);
-                      },
-                      icon: const Icon(IoIcons.facebook),
+                    const SizedBox(height: IoCrosswordSpacing.xlgsm),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            context.shareLinkedIn(shareUrl: url);
+                          },
+                          icon: const Icon(IoIcons.linkedin),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            context.shareTwitter(shareUrl: url);
+                          },
+                          icon: const Icon(IoIcons.twitter),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            context.shareFacebook(shareUrl: url);
+                          },
+                          icon: const Icon(IoIcons.facebook),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -91,12 +97,13 @@ class ShareDialogHeader extends StatelessWidget {
           size: 20,
         ),
         const SizedBox(width: 10),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: textTheme.bodySmall.medium,
+        Expanded(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: textTheme.bodyLarge.medium,
+          ),
         ),
-        const Spacer(),
         const CloseButton(),
       ],
     );

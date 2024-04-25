@@ -76,12 +76,12 @@ class JWT {
       return false;
     }
     final nowSeconds = clock.now().millisecondsSinceEpoch ~/ 1000;
-    final exp = _payload['exp'] as int?;
-    final iat = _payload['iat'] as int?;
+    final exp = (_payload['exp'] as num?)?.toInt();
+    final iat = (_payload['iat'] as num?)?.toInt();
     final aud = _payload['aud'] as String?;
     final iss = _payload['iss'] as String?;
     final sub = _payload['sub'] as String?;
-    final authTime = _payload['auth_time'] as int?;
+    final authTime = (_payload['auth_time'] as num?)?.toInt();
     final userId = _payload['user_id'] as String?;
 
     if (exp == null ||

@@ -4,6 +4,7 @@ import 'package:db_client/db_client.dart';
 import 'package:dio/dio.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
+import 'package:hint_repository/src/hint_response_extension.dart';
 
 /// {@template hint_repository}
 /// A repository to handle the hints.
@@ -102,6 +103,7 @@ class HintRepository {
       final hint = Hint(
         question: question,
         response: hintResponse,
+        readableResponse: hintResponse.readable,
       );
       return hint;
     } catch (e, stackTrace) {

@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
@@ -84,9 +85,15 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: context.isSmallLandscape
-                ? const RotatePhonePage()
-                : const GameIntroPage(),
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  if (child != null) child,
+                  if (context.isMobileLandscape) const RotatePhonePage(),
+                ],
+              );
+            },
+            home: const GameIntroPage(),
           );
         },
       ),
@@ -118,9 +125,11 @@ extension MascotTheme on Mascots? {
   }
 }
 
-extension SmallLandscapeHelper on BuildContext {
+extension MobileLandscapeHelper on BuildContext {
   /// True if running in landscape mode on a small device
-  bool get isSmallLandscape =>
+  bool get isMobileLandscape =>
       MediaQuery.of(this).orientation == Orientation.landscape &&
-      IoLayout.of(this) == IoLayoutData.small;
+      IoLayout.of(this) == IoLayoutData.small &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 }

@@ -142,7 +142,7 @@ class CrosswordRepository {
     );
 
     final document = snapshot.first;
-    final solvedWordsCount = document.data['value'] as int;
+    final solvedWordsCount = (document.data['value'] as num).toInt();
     final newValue = solvedWordsCount + 1;
 
     await _dbClient.update(

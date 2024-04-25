@@ -66,7 +66,7 @@ Future<Response> _onGroupPost(RequestContext request) async {
     final sections = body['sections'] as List;
     positions = sections
         .cast<Map<String, dynamic>>()
-        .map((e) => (e['x'] as int, e['y'] as int))
+        .map((e) => ((e['x'] as num).toInt(), (e['y'] as num).toInt()))
         .toList();
   } catch (e) {
     return Response(
