@@ -14,6 +14,7 @@ class Answer extends Equatable {
     required this.id,
     required this.answer,
     required this.section,
+    required this.collisionWords,
   });
 
   /// {@macro answer}
@@ -34,9 +35,14 @@ class Answer extends Equatable {
   @PointConverter()
   final Point<int> section;
 
+  /// The words that collide with the current [answer].
+  @JsonKey()
+  @PointConverter()
+  final Map<Point<int>, List<Word>> collidedWords;
+
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$AnswerToJson(this);
 
   @override
-  List<Object?> get props => [id, answer, section];
+  List<Object?> get props => [id, answer, section, collidedWords];
 }
