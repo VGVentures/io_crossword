@@ -63,7 +63,7 @@ class CrosswordLayoutData extends Equatable {
   final EdgeInsets padding;
 
   @override
-  List<Object?> get props => [cellSize, chunkSize, crosswordSize];
+  List<Object?> get props => [cellSize, chunkSize, crosswordSize, padding];
 }
 
 /// {@template crossword_layout_scope}
