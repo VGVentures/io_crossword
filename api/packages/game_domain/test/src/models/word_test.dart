@@ -109,5 +109,62 @@ void main() {
       );
       expect(firstWord, equals(firstWord.copyWith()));
     });
+
+    test('returns the length of the answer', () {
+      final word = Word(
+        id: '1',
+        position: Point(1, 2),
+        axis: Axis.horizontal,
+        answer: 'test',
+        clue: 'clue',
+      );
+
+      expect(
+        word.length,
+        equals(4),
+      );
+
+      expect(
+        word.copyWith(answer: 'testing').length,
+        equals(7),
+      );
+
+      expect(
+        word.copyWith(answer: '   ').length,
+        equals(3),
+      );
+    });
+
+    group('isAnswered', () {
+      test(' true', () {
+        final word = Word(
+          id: '1',
+          position: Point(1, 2),
+          axis: Axis.horizontal,
+          answer: 'test',
+          clue: 'clue',
+        );
+
+        expect(word.isAnswered, isTrue);
+      });
+
+      test(' false', () {
+        final word = Word(
+          id: '1',
+          position: Point(1, 2),
+          axis: Axis.horizontal,
+          answer: '',
+          clue: 'clue',
+        );
+
+        expect(word.copyWith(answer: ' ').isAnswered, isFalse);
+        expect(word.copyWith(answer: 'HEL O').isAnswered, isFalse);
+        expect(word.copyWith(answer: 'HE LO').isAnswered, isFalse);
+        expect(word.copyWith(answer: 'HELL ').isAnswered, isFalse);
+        expect(word.copyWith(answer: ' ELLO').isAnswered, isFalse);
+        expect(word.copyWith(answer: ' EL  ').isAnswered, isFalse);
+        expect(word.copyWith(answer: ' E').isAnswered, isFalse);
+      });
+    });
   });
 }
