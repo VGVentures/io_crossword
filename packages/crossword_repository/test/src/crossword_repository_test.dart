@@ -108,12 +108,12 @@ void main() {
         await setUpSections(solveUntil: totalSections);
         when(() => rng.nextInt(any())).thenReturn(3);
 
-        final pos = await crosswordRepository.getRandomEmptySection();
+        final pos = await crosswordRepository.getRandomUncompletedSection();
         expect(pos, isNull);
       });
 
       test('returns null if no section found', () async {
-        final pos = await crosswordRepository.getRandomEmptySection();
+        final pos = await crosswordRepository.getRandomUncompletedSection();
         expect(pos, isNull);
       });
     });
