@@ -14,16 +14,19 @@ void main() {
         cellSize: const Size(1, 1),
         chunkSize: const Size(2, 2),
         crosswordSize: const Size(3, 3),
+        padding: EdgeInsets.zero,
       );
       final data2 = CrosswordLayoutData(
         cellSize: const Size(1, 1),
         chunkSize: const Size(2, 2),
         crosswordSize: const Size(3, 3),
+        padding: EdgeInsets.zero,
       );
       final data3 = CrosswordLayoutData(
         cellSize: const Size(3, 3),
         chunkSize: const Size(2, 2),
         crosswordSize: const Size(1, 1),
+        padding: EdgeInsets.all(1),
       );
 
       expect(data1, equals(data2));
@@ -50,6 +53,7 @@ void main() {
             cellSize: cellSize,
             chunkSize: const Size(100, 100),
             crosswordSize: const Size(300, 300),
+            padding: EdgeInsets.all(100 / 3),
           ),
         ),
       );
