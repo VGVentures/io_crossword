@@ -200,7 +200,7 @@ void main() {
       'does not emit state when hints are disabled',
       setUp: () {
         when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
-          (_) => Stream.fromIterable([true, false]),
+          (_) => Stream.value(false),
         );
       },
       build: () => HintBloc(

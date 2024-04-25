@@ -77,7 +77,7 @@ class HintBloc extends Bloc<HintEvent, HintState> {
     PreviousHintsRequested event,
     Emitter<HintState> emit,
   ) async {
-    final isHintsEnabled = await _boardInfoRepository.isHintsEnabled().last;
+    final isHintsEnabled = await _boardInfoRepository.isHintsEnabled().first;
     if (state.hints.isEmpty && isHintsEnabled) {
       final (hints, maxHints) =
           await _hintResource.getHints(wordId: event.wordId);
