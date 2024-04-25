@@ -79,13 +79,22 @@ void main(List<String> args) async {
 
   print('Crossword size: $boardWidth x $boardHeight.');
 
+  final wordsWithTopLeftOrigin = words.map((word) {
+    final x = word.position.x - minX;
+    final y = word.position.y - minY;
+    return word.copyWith(position: Point(x, y));
+  }).toList();
+
   final sections = <BoardSection>[];
   const sectionSize = 20;
 
-  final minSectionX = (minX / sectionSize).floor();
-  final maxSectionX = (maxX / sectionSize).ceil();
-  final minSectionY = (minY / sectionSize).floor();
-  final maxSectionY = (maxY / sectionSize).ceil();
+  const minSectionX = 0;
+  const minSectionY = 0;
+  final maxSectionX = (boardWidth / sectionSize).ceil();
+  final maxSectionY = (boardHeight / sectionSize).ceil();
+
+  print('maxSectionX: $maxSectionX');
+  print('maxSectionY: $maxSectionY');
 
   final answers = <Answer>[];
 
@@ -93,17 +102,18 @@ void main(List<String> args) async {
     for (var j = minSectionY; j < maxSectionY; j++) {
       final sectionX = i * sectionSize;
       final sectionY = j * sectionSize;
-      final sectionWords = words.where((word) {
-        return word.isStartInSection(sectionX, sectionY, sectionSize);
-      }).toList();
+      final sectionWords = wordsWithTopLeftOrigin
+          .where((word) {
+            return word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
+          })
+          .map(
+            (e) => e.copyWith(
+              position: Point(e.position.x - sectionX, e.position.y - sectionY),
+            ),
+          )
+          .toList();
 
-      final borderWords = words.where((word) {
-        final isStartInSection =
-            word.isStartInSection(sectionX, sectionY, sectionSize);
-        final isInSection =
-            word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
-        return !isStartInSection && isInSection;
-      }).toList();
+      // TODO(ayad): add to [Answer] object the other words that are crossing it
 
       answers.addAll(
         sectionWords.map((word) {
@@ -118,15 +128,14 @@ void main(List<String> args) async {
       final section = BoardSection(
         id: '',
         position: Point(i, j),
+        // remove this field from model (size)
         size: sectionSize,
         words: sectionWords,
-        borderWords: borderWords,
+        // remove this field from model (border words)
+        borderWords: const [],
       );
 
-      // Add only sections that have words
-      if (section.words.isNotEmpty || section.borderWords.isNotEmpty) {
-        sections.add(section);
-      }
+      sections.add(section);
     }
   }
 
