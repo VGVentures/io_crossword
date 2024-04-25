@@ -24,7 +24,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// The title of the app bar.
   ///
-  /// If null will always display [_IoCrosswordLogo].
+  /// If null will always display the [logo].
   final Widget? title;
 
   /// This widget appears across the bottom of the app bar.
