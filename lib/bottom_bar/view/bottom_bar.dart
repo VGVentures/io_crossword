@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -50,8 +51,8 @@ class BottomBarContent extends StatelessWidget {
             const SizedBox(width: 16),
             OutlinedButton.icon(
               onPressed: () => context
-                  .read<WordSelectionBloc>()
-                  .add(const RandomWordSelected()),
+                  .read<RandomWordSelectionBloc>()
+                  .add(const RandomWordRequested()),
               icon: const Icon(Icons.location_searching),
               label: Text(l10n.findNewWord),
             ),

@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -16,9 +17,14 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
+class _MockRandomWordSelectionBloc
+    extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
+    implements RandomWordSelectionBloc {}
+
 void main() {
   group('$BottomBar', () {
     late WordSelectionBloc wordSelectionBloc;
+    late RandomWordSelectionBloc randomWordSelectionBloc;
     late Widget widget;
     late AppLocalizations l10n;
 
@@ -28,8 +34,16 @@ void main() {
 
     setUp(() {
       wordSelectionBloc = _MockWordSelectionBloc();
-      widget = BlocProvider<WordSelectionBloc>(
-        create: (_) => wordSelectionBloc,
+      randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider<WordSelectionBloc>(
+            create: (_) => wordSelectionBloc,
+          ),
+          BlocProvider<RandomWordSelectionBloc>(
+            create: (_) => randomWordSelectionBloc,
+          ),
+        ],
         child: BottomBar(),
       );
     });
@@ -62,7 +76,7 @@ void main() {
     );
 
     testWidgets(
-      'adds $RandomWordSelected event when find new word button is tapped',
+      'adds $RandomWordRequested event when find new word button is tapped',
       (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           const WordSelectionState.initial(),
@@ -73,7 +87,9 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        verify(() => wordSelectionBloc.add(RandomWordSelected())).called(1);
+        verify(
+          () => randomWordSelectionBloc.add(RandomWordRequested()),
+        ).called(1);
       },
     );
 

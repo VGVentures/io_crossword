@@ -12,6 +12,7 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -27,6 +28,10 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _MockRandomWordSelectionBloc
+    extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
+    implements RandomWordSelectionBloc {}
 
 class _FakeUnsolvedWord extends Fake implements Word {
   @override
@@ -169,6 +174,7 @@ extension on WidgetTester {
     CrosswordBloc? crosswordBloc,
     PlayerBloc? playerBloc,
     WordSelectionBloc? wordSelectionBloc,
+    RandomWordSelectionBloc? randomWordSelectionBloc,
   }) {
     final bloc = crosswordBloc ?? _MockCrosswordBloc();
     if (crosswordBloc == null) {
@@ -188,6 +194,13 @@ extension on WidgetTester {
       );
     }
 
+    final randomWordSelectionBlocUpdate =
+        randomWordSelectionBloc ?? _MockRandomWordSelectionBloc();
+    if (randomWordSelectionBloc == null) {
+      when(() => randomWordSelectionBlocUpdate.state).thenReturn(
+        const RandomWordSelectionState(),
+      );
+    }
     return pumpApp(
       MultiBlocProvider(
         providers: [
@@ -199,6 +212,9 @@ extension on WidgetTester {
           ),
           BlocProvider<WordSelectionBloc>(
             create: (_) => wordSelectionBlocUpdate,
+          ),
+          BlocProvider<RandomWordSelectionBloc>(
+            create: (_) => randomWordSelectionBlocUpdate,
           ),
         ],
         child: child,

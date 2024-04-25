@@ -48,17 +48,6 @@ class LetterSelected extends WordSelectionEvent {
 }
 
 /// {@template word_unselected}
-/// The user has asked for a random word or just entered the game.
-///
-/// {@endtemplate}
-class RandomWordSelected extends WordSelectionEvent {
-  const RandomWordSelected();
-
-  @override
-  List<Object> get props => [];
-}
-
-/// {@template word_unselected}
 /// The user has unselected a word.
 ///
 /// This means that the user is no longer interested in solving the word.

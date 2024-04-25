@@ -2,7 +2,6 @@
 
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -17,22 +16,13 @@ class _MockWord extends Mock implements Word {
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
-class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
-
-class _FakeUnsolvedWord extends Fake implements Word {
-  @override
-  int? get solvedTimestamp => null;
-}
-
 void main() {
   group('$WordSelectionBloc', () {
     late CrosswordResource crosswordResource;
-    late CrosswordRepository crosswordRepository;
     late SelectedWord selectedWord;
 
     setUp(() {
       crosswordResource = _MockCrosswordResource();
-      crosswordRepository = _MockCrosswordRepository();
       selectedWord = SelectedWord(
         section: (0, 0),
         word: _MockWord(),
@@ -42,7 +32,6 @@ void main() {
     test('initial state is WordSelectionState.initial', () {
       final bloc = WordSelectionBloc(
         crosswordResource: crosswordResource,
-        crosswordRepository: crosswordRepository,
       );
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
@@ -52,7 +41,6 @@ void main() {
         'emits preSolving status',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         act: (bloc) => bloc.add(WordSelected(selectedWord: selectedWord)),
         expect: () => <WordSelectionState>[
@@ -105,7 +93,6 @@ void main() {
           'toggles between words when letter is crossed',
           build: () => WordSelectionBloc(
             crosswordResource: crosswordResource,
-            crosswordRepository: crosswordRepository,
           ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: crossedLetter))
@@ -140,7 +127,6 @@ void main() {
           'once with horizontal word when letter is vertical',
           build: () => WordSelectionBloc(
             crosswordResource: crosswordResource,
-            crosswordRepository: crosswordRepository,
           ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: horizontalLetter))
@@ -160,7 +146,6 @@ void main() {
           'once with vertical word when letter is vertical',
           build: () => WordSelectionBloc(
             crosswordResource: crosswordResource,
-            crosswordRepository: crosswordRepository,
           ),
           act: (bloc) => bloc
             ..add(LetterSelected(letter: verticalLetter))
@@ -183,7 +168,6 @@ void main() {
         'emits initial state',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
@@ -194,46 +178,11 @@ void main() {
       );
     });
 
-    group('$RandomWordSelected', () {
-      final word = _FakeUnsolvedWord();
-      blocTest<WordSelectionBloc, WordSelectionState>(
-        'emits state with new selected word if a section is found',
-        build: () => WordSelectionBloc(
-          crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
-        ),
-        setUp: () => {
-          when(crosswordRepository.getRandomUncompletedSection).thenAnswer(
-            (_) => Future.value(
-              BoardSection(
-                id: '',
-                position: Point(1, 1),
-                size: 10,
-                words: [word],
-                borderWords: const [],
-              ),
-            ),
-          ),
-        },
-        act: (bloc) => bloc.add(RandomWordSelected()),
-        expect: () => <WordSelectionState>[
-          WordSelectionState(
-            status: WordSelectionStatus.preSolving,
-            word: SelectedWord(
-              word: word,
-              section: (1, 1),
-            ),
-          ),
-        ],
-      );
-    });
-
     group('$WordSolveRequested', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'does nothing if there is no word identifier',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         act: (bloc) => bloc.add(
           WordSolveRequested(),
@@ -245,7 +194,6 @@ void main() {
         'emits solving status when there is a word identifier',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.preSolving,
@@ -270,7 +218,6 @@ void main() {
         'does nothing if not solving',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'answer')),
         expect: () => <WordSelectionState>[],
@@ -280,7 +227,6 @@ void main() {
         'does nothing if already solved',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solved,
@@ -294,7 +240,6 @@ void main() {
         'validates a valid answer',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         setUp: () {
           answerWord = _MockWord();
@@ -332,7 +277,6 @@ void main() {
         'invalidates an invalid answer',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
-          crosswordRepository: crosswordRepository,
         ),
         setUp: () {
           when(
