@@ -16,8 +16,8 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
-    const sectionsCollection = 'boardChunks2';
-    const answersCollection = 'answers2';
+    const sectionsCollection = 'boardChunks';
+    const answersCollection = 'answers';
 
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
