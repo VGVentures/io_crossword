@@ -96,7 +96,7 @@ class HintQuestionResponse extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
-        HintText(text: hint.response.readable),
+        HintText(text: hint.readableResponse),
         const SizedBox(height: 8),
       ],
     );

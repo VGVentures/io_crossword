@@ -16,6 +16,7 @@ class CrosswordLayoutData extends Equatable {
     required this.cellSize,
     required this.chunkSize,
     required this.crosswordSize,
+    required this.padding,
   });
 
   /// Derives a [CrosswordLayoutData] from a [CrosswordConfiguration] and a cell
@@ -40,6 +41,10 @@ class CrosswordLayoutData extends Equatable {
       cellSize: cellSize,
       chunkSize: chunkSize,
       crosswordSize: crosswordSize,
+      padding: EdgeInsets.symmetric(
+        horizontal: chunkSize.width / 3,
+        vertical: chunkSize.height / 3,
+      ),
     );
   }
 
@@ -50,10 +55,15 @@ class CrosswordLayoutData extends Equatable {
   final Size chunkSize;
 
   /// The total size of the crossword grid.
+  ///
+  /// This size doesn't include the [padding] around the crossword grid.
   final Size crosswordSize;
 
+  /// The padding around the crossword grid.
+  final EdgeInsets padding;
+
   @override
-  List<Object?> get props => [cellSize, chunkSize, crosswordSize];
+  List<Object?> get props => [cellSize, chunkSize, crosswordSize, padding];
 }
 
 /// {@template crossword_layout_scope}

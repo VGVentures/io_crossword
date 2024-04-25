@@ -76,14 +76,24 @@ void main() {
           when(
             () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
           ).thenAnswer(
-            (_) async =>
-                (Hint(question: 'blue?', response: HintResponse.no), 9),
+            (_) async => (
+              Hint(
+                question: 'blue?',
+                response: HintResponse.no,
+                readableResponse: 'Nope!',
+              ),
+              9
+            ),
           );
         },
         seed: () => HintState(
           status: HintStatus.asking,
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
           ],
         ),
         build: () => HintBloc(
@@ -97,14 +107,26 @@ void main() {
           HintState(
             status: HintStatus.thinking,
             hints: [
-              Hint(question: 'is it orange?', response: HintResponse.no),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
             ],
           ),
           HintState(
             status: HintStatus.answered,
             hints: [
-              Hint(question: 'is it orange?', response: HintResponse.no),
-              Hint(question: 'blue?', response: HintResponse.no),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
+              Hint(
+                question: 'blue?',
+                response: HintResponse.no,
+                readableResponse: 'Nope!',
+              ),
             ],
             maxHints: 9,
           ),
@@ -116,7 +138,11 @@ void main() {
         seed: () => HintState(
           status: HintStatus.asking,
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
           ],
           maxHints: 1,
         ),
@@ -150,8 +176,16 @@ void main() {
         when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
           (_) async => (
             [
-              Hint(question: 'is it orange?', response: HintResponse.no),
-              Hint(question: 'is it blue?', response: HintResponse.yes),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
+              Hint(
+                question: 'is it blue?',
+                response: HintResponse.yes,
+                readableResponse: 'Yes!',
+              ),
             ],
             8
           ),
@@ -165,8 +199,16 @@ void main() {
       expect: () => const <HintState>[
         HintState(
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
-            Hint(question: 'is it blue?', response: HintResponse.yes),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
+            Hint(
+              question: 'is it blue?',
+              response: HintResponse.yes,
+              readableResponse: 'Yes!',
+            ),
           ],
           maxHints: 8,
         ),
@@ -182,8 +224,16 @@ void main() {
       },
       seed: () => HintState(
         hints: [
-          Hint(question: 'is it orange?', response: HintResponse.no),
-          Hint(question: 'is it blue?', response: HintResponse.yes),
+          Hint(
+            question: 'is it orange?',
+            response: HintResponse.no,
+            readableResponse: 'No!',
+          ),
+          Hint(
+            question: 'is it blue?',
+            response: HintResponse.yes,
+            readableResponse: 'Yes!',
+          ),
         ],
       ),
       build: () => HintBloc(
@@ -200,7 +250,7 @@ void main() {
       'does not emit state when hints are disabled',
       setUp: () {
         when(() => boardInfoRepository.isHintsEnabled()).thenAnswer(
-          (_) => Stream.fromIterable([true, false]),
+          (_) => Stream.value(false),
         );
       },
       build: () => HintBloc(

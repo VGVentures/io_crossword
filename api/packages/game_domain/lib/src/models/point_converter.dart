@@ -11,8 +11,8 @@ class PointConverter extends JsonConverter<Point<int>, Map<String, dynamic>> {
   @override
   Point<int> fromJson(Map<String, dynamic> json) {
     return Point<int>(
-      json['x'] as int,
-      json['y'] as int,
+      (json['x'] as num).toInt(),
+      (json['y'] as num).toInt(),
     );
   }
 

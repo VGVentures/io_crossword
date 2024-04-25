@@ -51,7 +51,11 @@ void main() {
     testWidgets(
       'renders "run out of hints" when there are no more hints available',
       (tester) async {
-        final hint = Hint(question: 'Q1', response: HintResponse.yes);
+        final hint = Hint(
+          question: 'Q1',
+          response: HintResponse.yes,
+          readableResponse: 'Yes',
+        );
         when(() => hintBloc.state).thenReturn(
           HintState(
             status: HintStatus.asking,
@@ -81,7 +85,11 @@ void main() {
       'renders "1 of 2 hints remaining" when the hint mode is active '
       'and there are hints available',
       (tester) async {
-        final hint = Hint(question: 'Q1', response: HintResponse.yes);
+        final hint = Hint(
+          question: 'Q1',
+          response: HintResponse.yes,
+          readableResponse: 'Yes',
+        );
         when(() => hintBloc.state).thenReturn(
           HintState(
             status: HintStatus.asking,
@@ -122,10 +130,26 @@ void main() {
       'renders as many $HintQuestionResponse widgets as hints are available',
       (tester) async {
         final hints = [
-          Hint(question: 'Q1', response: HintResponse.yes),
-          Hint(question: 'Q2', response: HintResponse.no),
-          Hint(question: 'Q3', response: HintResponse.notApplicable),
-          Hint(question: 'Q4', response: HintResponse.no),
+          Hint(
+            question: 'Q1',
+            response: HintResponse.yes,
+            readableResponse: 'Yes',
+          ),
+          Hint(
+            question: 'Q2',
+            response: HintResponse.no,
+            readableResponse: 'No',
+          ),
+          Hint(
+            question: 'Q3',
+            response: HintResponse.notApplicable,
+            readableResponse: 'N/A',
+          ),
+          Hint(
+            question: 'Q4',
+            response: HintResponse.no,
+            readableResponse: 'No',
+          ),
         ];
         when(() => hintBloc.state).thenReturn(
           HintState(hints: hints, isHintsEnabled: true),

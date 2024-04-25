@@ -6,6 +6,7 @@ import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
@@ -179,8 +180,9 @@ class SuccessTopBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          // TODO(any): Open share page
-          onPressed: () {}, // coverage:ignore-line
+          onPressed: () {
+            ShareWordPage.showModal(context);
+          },
           icon: const Icon(Icons.ios_share),
           style: themeData.io.iconButtonTheme.filled,
         ),

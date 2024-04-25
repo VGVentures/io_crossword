@@ -8,6 +8,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart' hide Answer;
 import 'package:test/test.dart';
 
@@ -23,6 +24,8 @@ class _MockHintRepository extends Mock implements HintRepository {}
 
 class _MockUri extends Mock implements Uri {}
 
+class _MockLogger extends Mock implements Logger {}
+
 void main() {
   group('/game/hint', () {
     late RequestContext requestContext;
@@ -30,13 +33,15 @@ void main() {
     late CrosswordRepository crosswordRepository;
     late HintRepository hintRepository;
     late AuthenticatedUser user;
+    late Logger logger;
 
     setUp(() {
       requestContext = _MockRequestContext();
       request = _MockRequest();
       crosswordRepository = _MockCrosswordRepository();
       hintRepository = _MockHintRepository();
-      user = AuthenticatedUser('userId');
+      user = AuthenticatedUser('userId', 'token');
+      logger = _MockLogger();
 
       when(() => requestContext.request).thenReturn(request);
       when(() => requestContext.read<CrosswordRepository>())
@@ -44,6 +49,7 @@ void main() {
       when(() => requestContext.read<HintRepository>())
           .thenReturn(hintRepository);
       when(() => requestContext.read<AuthenticatedUser>()).thenReturn(user);
+      when(() => requestContext.read<Logger>()).thenReturn(logger);
     });
 
     group('other http methods', () {
@@ -98,15 +104,26 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenAnswer(
-            (_) async => Hint(question: 'question', response: HintResponse.no),
+            (_) async => Hint(
+              question: 'question',
+              response: HintResponse.no,
+              readableResponse: 'Nope!',
+            ),
           );
           when(
             () => hintRepository.saveHints(
               userId: 'userId',
               wordId: 'wordId',
-              hints: [Hint(question: 'question', response: HintResponse.no)],
+              hints: [
+                Hint(
+                  question: 'question',
+                  response: HintResponse.no,
+                  readableResponse: 'Nope!',
+                ),
+              ],
             ),
           ).thenAnswer((_) async {});
 
@@ -119,6 +136,7 @@ void main() {
               'hint': {
                 'question': 'question',
                 'response': 'no',
+                'readableResponse': 'Nope!',
               },
               'maxHints': 10,
             }),
@@ -127,7 +145,13 @@ void main() {
             () => hintRepository.saveHints(
               userId: 'userId',
               wordId: 'wordId',
-              hints: [Hint(question: 'question', response: HintResponse.no)],
+              hints: [
+                Hint(
+                  question: 'question',
+                  response: HintResponse.no,
+                  readableResponse: 'Nope!',
+                ),
+              ],
             ),
           ).called(1);
         },
@@ -164,6 +188,7 @@ void main() {
               wordAnswer: 'answer',
               question: 'question',
               previousHints: [],
+              userToken: 'token',
             ),
           ).thenThrow(HintException('Oops', StackTrace.empty));
 
@@ -193,7 +218,11 @@ void main() {
               );
             },
           );
-          final hint = Hint(question: 'question', response: HintResponse.yes);
+          final hint = Hint(
+            question: 'question',
+            response: HintResponse.yes,
+            readableResponse: 'Yes, that is correct!',
+          );
           when(
             () => hintRepository.getPreviousHints(
               userId: 'userId',
@@ -290,9 +319,21 @@ void main() {
         'returns Response with a list of hints',
         () async {
           final hintList = [
-            Hint(question: 'question1', response: HintResponse.yes),
-            Hint(question: 'question2', response: HintResponse.notApplicable),
-            Hint(question: 'question3', response: HintResponse.no),
+            Hint(
+              question: 'question1',
+              response: HintResponse.yes,
+              readableResponse: 'yes',
+            ),
+            Hint(
+              question: 'question2',
+              response: HintResponse.notApplicable,
+              readableResponse: 'nah',
+            ),
+            Hint(
+              question: 'question3',
+              response: HintResponse.no,
+              readableResponse: 'nope',
+            ),
           ];
           when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
           when(() => hintRepository.isHintsEnabled())
@@ -312,9 +353,21 @@ void main() {
             await response.json(),
             equals({
               'hints': [
-                {'question': 'question1', 'response': 'yes'},
-                {'question': 'question2', 'response': 'notApplicable'},
-                {'question': 'question3', 'response': 'no'},
+                {
+                  'question': 'question1',
+                  'response': 'yes',
+                  'readableResponse': 'yes',
+                },
+                {
+                  'question': 'question2',
+                  'response': 'notApplicable',
+                  'readableResponse': 'nah',
+                },
+                {
+                  'question': 'question3',
+                  'response': 'no',
+                  'readableResponse': 'nope',
+                },
               ],
               'maxHints': 10,
             }),

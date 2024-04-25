@@ -5,6 +5,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +13,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/rotate_phone/rotate_phone.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -114,6 +116,30 @@ void main() {
   });
 
   group('$AppView', () {
+    group('renders', () {
+      testWidgets('RotatePhonePage when device is android and landscape',
+          (tester) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+        tester.setDisplaySize(Size(800, 400));
+        await tester.pumpApp(
+          AppView(),
+        );
+
+        expect(find.byType(RotatePhonePage), findsOneWidget);
+        debugDefaultTargetPlatformOverride = null;
+      });
+      testWidgets('RotatePhonePage when device is ios and landscape',
+          (tester) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+        tester.setDisplaySize(Size(800, 400));
+        await tester.pumpApp(
+          AppView(),
+        );
+
+        expect(find.byType(RotatePhonePage), findsOneWidget);
+        debugDefaultTargetPlatformOverride = null;
+      });
+    });
     group('theme data', () {
       late PlayerBloc playerBloc;
 

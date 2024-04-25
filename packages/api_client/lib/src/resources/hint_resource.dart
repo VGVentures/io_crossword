@@ -42,7 +42,7 @@ class HintResource {
     try {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
       final hint = Hint.fromJson(body['hint'] as Map<String, dynamic>);
-      final maxHints = body['maxHints'] as int;
+      final maxHints = (body['maxHints'] as num).toInt();
       return (hint, maxHints);
     } catch (error, stackTrace) {
       throw ApiClientError(
@@ -79,7 +79,7 @@ class HintResource {
       final hints = (body['hints'] as List)
           .map((hint) => Hint.fromJson(hint as Map<String, dynamic>))
           .toList();
-      final maxHints = body['maxHints'] as int;
+      final maxHints = (body['maxHints'] as num).toInt();
       return (hints, maxHints);
     } catch (error, stackTrace) {
       throw ApiClientError(

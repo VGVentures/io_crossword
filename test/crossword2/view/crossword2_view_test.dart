@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -82,9 +82,11 @@ void main() {
 
           await tester.pumpApp(
             layout: IoLayoutData.large,
-            BlocProvider<WordSelectionBloc>(
-              create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
+            DefaultWordInputController(
+              child: BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
             ),
           );
 
@@ -210,9 +212,11 @@ void main() {
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
-              BlocProvider<WordSelectionBloc>(
-                create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+              DefaultWordInputController(
+                child: BlocProvider<WordSelectionBloc>(
+                  create: (_) => wordSelectionBloc,
+                  child: const Crossword2View(),
+                ),
               ),
             );
 
@@ -239,9 +243,11 @@ void main() {
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
-              BlocProvider<WordSelectionBloc>(
-                create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+              DefaultWordInputController(
+                child: BlocProvider<WordSelectionBloc>(
+                  create: (_) => wordSelectionBloc,
+                  child: const Crossword2View(),
+                ),
               ),
             );
 
@@ -269,9 +275,11 @@ void main() {
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
-              BlocProvider<WordSelectionBloc>(
-                create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+              DefaultWordInputController(
+                child: BlocProvider<WordSelectionBloc>(
+                  create: (_) => wordSelectionBloc,
+                  child: const Crossword2View(),
+                ),
               ),
             );
 

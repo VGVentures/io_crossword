@@ -52,8 +52,10 @@ class _CrosswordStack extends StatelessWidget {
 
     bool isChunkVisible(CrosswordChunkIndex index) {
       final chunkRect = Rect.fromLTWH(
-        index.$1 * crosswordLayout.chunkSize.width,
-        index.$2 * crosswordLayout.chunkSize.height,
+        (index.$1 * crosswordLayout.chunkSize.width) +
+            crosswordLayout.padding.left,
+        (index.$2 * crosswordLayout.chunkSize.height) +
+            crosswordLayout.padding.top,
         crosswordLayout.chunkSize.width,
         crosswordLayout.chunkSize.height,
       );
@@ -73,15 +75,17 @@ class _CrosswordStack extends StatelessWidget {
     }
 
     return SizedBox.fromSize(
-      size: crosswordLayout.crosswordSize,
+      size: crosswordLayout.padding.inflateSize(crosswordLayout.crosswordSize),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           for (final chunk in visibleChunks)
             Positioned(
               key: ValueKey(chunk),
-              left: chunk.$1 * crosswordLayout.chunkSize.width,
-              top: chunk.$2 * crosswordLayout.chunkSize.height,
+              left: (chunk.$1 * crosswordLayout.chunkSize.width) +
+                  crosswordLayout.padding.left,
+              top: (chunk.$2 * crosswordLayout.chunkSize.height) +
+                  crosswordLayout.padding.top,
               child: CrosswordChunk(index: chunk),
             ),
           if (layout == IoLayoutData.large)
@@ -106,11 +110,13 @@ class _CrosswordStack extends StatelessWidget {
                 return Positioned(
                   left: (selectedWord.section.$1 *
                           crosswordLayout.chunkSize.width) +
-                      (word.position.x * crosswordLayout.cellSize.width),
+                      (word.position.x * crosswordLayout.cellSize.width) +
+                      crosswordLayout.padding.left,
                   top: (selectedWord.section.$2 *
                           crosswordLayout.chunkSize.height) +
-                      (word.position.y * crosswordLayout.cellSize.height),
-                  child: IoWordInput.alphabetic(
+                      (word.position.y * crosswordLayout.cellSize.height) +
+                      crosswordLayout.padding.top,
+                  child: CrosswordInput(
                     key: ValueKey(selectedWord.word.id),
                     style: Theme.of(context).io.wordInput.secondary,
                     direction: word.axis.toAxis(),

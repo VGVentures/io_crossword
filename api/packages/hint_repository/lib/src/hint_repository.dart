@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:db_client/db_client.dart';
+import 'package:dio/dio.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:hint_repository/hint_repository.dart';
+import 'package:hint_repository/src/hint_response_extension.dart';
 
 /// {@template hint_repository}
 /// A repository to handle the hints.
@@ -9,12 +13,12 @@ class HintRepository {
   /// {@macro hint_repository}
   HintRepository({
     required DbClient dbClient,
-    required GenerativeModelWrapper generativeModelWrapper,
+    Dio? httpClient,
   })  : _dbClient = dbClient,
-        _generativeModel = generativeModelWrapper;
+        _httpClient = httpClient ?? Dio();
 
   final DbClient _dbClient;
-  final GenerativeModelWrapper _generativeModel;
+  final Dio _httpClient;
 
   static const _answersCollection = 'answers2';
   static const _hintsCollection = 'hints';
@@ -63,39 +67,43 @@ class HintRepository {
     required String wordAnswer,
     required String question,
     required List<Hint> previousHints,
+    required String userToken,
   }) async {
-    final context = previousHints
-        .map((e) => '${e.question}: ${e.response.name}')
-        .join(', ');
-    final contextPrompt = previousHints.isEmpty
-        ? ''
-        : "The questions I've been asked so far with their "
-            'corresponding answers are: $context.';
-
-    final prompt = 'I am solving a crossword puzzle and you are a helpful '
-        'agent that can answer only yes or no questions to assist me in '
-        'guessing what the word is I am trying to identify for a given clue. '
-        'Crossword words can be subjective and use plays on words so be '
-        'liberal with your answers meaning if you think saying "yes" will '
-        'help me guess the word even if technically the answer is "no", '
-        'say "yes". If you think saying "no" will help me guess the word even '
-        'if technically the answer is "yes", say "no". If you think saying '
-        '"yes" or "no" will not help me guess the word even if technically '
-        'the answer is "yes" or "no", say "notApplicable". If you think the '
-        'question is offensive or not appropriate for the game, '
-        'say "notApplicable".\nThe word I am trying to guess is "$wordAnswer", '
-        'and the question I\'ve been given is "$question". $contextPrompt';
-
     try {
-      final response = await _generativeModel.generateTextContent(prompt);
+      final url = Uri.https('gethintkit-sea6y22h5q-uc.a.run.app');
+      final body = {
+        'data': {
+          'word': wordAnswer,
+          'question': question,
+          'context': previousHints
+              .map((e) => {'question': e.question, 'answer': e.response.name})
+              .toList(),
+        },
+      };
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $userToken',
+        HttpHeaders.contentTypeHeader: 'application/json',
+      };
+
+      final response = await _httpClient.post<Map<String, dynamic>>(
+        url.toString(),
+        data: body,
+        options: Options(
+          headers: headers,
+        ),
+      );
+
+      final result = response.data!['result'] as Map<String, dynamic>;
+      final textResponse = result['answer'];
       final hintResponse = HintResponse.values.firstWhere(
-        (element) => element.name == response,
+        (element) => element.name == textResponse,
         orElse: () => HintResponse.notApplicable,
       );
 
       final hint = Hint(
         question: question,
         response: hintResponse,
+        readableResponse: hintResponse.readable,
       );
       return hint;
     } catch (e, stackTrace) {

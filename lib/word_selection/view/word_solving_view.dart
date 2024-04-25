@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -58,10 +58,6 @@ class WordSolvingLargeView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              if (isHintsEnabled) ...[
-                const HintsTitle(),
-                const SizedBox(height: 32),
-              ],
               Flexible(
                 child: BlocSelector<WordSelectionBloc, WordSelectionState,
                     WordSelectionStatus>(
@@ -78,7 +74,11 @@ class WordSolvingLargeView extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
         const BottomPanel(),
       ],
     );
@@ -95,26 +95,6 @@ class WordSolvingSmallView extends StatefulWidget {
 }
 
 class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
-  final _controller = IoWordInputController();
-  String _lastWord = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(() {
-      if (_lastWord.length > _controller.word.length) {
-        context.read<WordSelectionBloc>().add(const WordSolveRequested());
-      }
-      _lastWord = _controller.word;
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -132,9 +112,8 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
       children: [
         const WordSelectionTopBar(),
         const SizedBox(height: 32),
-        IoWordInput.alphabetic(
+        CrosswordInput(
           length: selectedWord.word.length,
-          controller: _controller,
         ),
         const SizedBox(height: 16),
         Text(
@@ -149,10 +128,6 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        if (isHintsEnabled) ...[
-          const HintsTitle(),
-          const SizedBox(height: 32),
-        ],
         Expanded(
           child: BlocSelector<WordSelectionBloc, WordSelectionState,
               WordSelectionStatus>(
@@ -169,8 +144,12 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
             },
           ),
         ),
-        const SizedBox(height: 16),
-        BottomPanel(controller: _controller),
+        const SizedBox(height: 24),
+        if (isHintsEnabled) ...[
+          const HintsTitle(),
+          const SizedBox(height: 32),
+        ],
+        const BottomPanel(),
       ],
     );
   }
@@ -213,8 +192,8 @@ class BottomPanel extends StatelessWidget {
           ),
           const SizedBox(width: 8),
         ],
-        Flexible(
-          child: SubmitButton(controller: controller),
+        const Flexible(
+          child: SubmitButton(),
         ),
       ],
     );
@@ -224,23 +203,13 @@ class BottomPanel extends StatelessWidget {
 @visibleForTesting
 class SubmitButton extends StatelessWidget {
   @visibleForTesting
-  const SubmitButton({super.key, this.controller});
-
-  /// The controller that holds the user's input.
-  ///
-  /// Is `null` on large layout since the input is currently being handled by
-  /// the [CrosswordGame].
-  // TODO(alestiago): Make non-nullable when the input is handled by the
-  // [IoWordInput] even on large layout.
-  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6463469220
-  final IoWordInputController? controller;
+  const SubmitButton({super.key});
 
   void _onSubmit(BuildContext context) {
-    if (controller != null) {
-      context
-          .read<WordSelectionBloc>()
-          .add(WordSolveAttempted(answer: controller!.word));
-    }
+    final wordInputController = DefaultWordInputController.of(context);
+    context
+        .read<WordSelectionBloc>()
+        .add(WordSolveAttempted(answer: wordInputController.word));
   }
 
   @override
