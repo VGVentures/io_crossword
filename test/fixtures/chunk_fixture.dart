@@ -18,6 +18,7 @@ BoardSection get chunkFixture1 {
     position: Point<int>(0, 0),
     axis: Axis.horizontal,
     clue: '',
+    solvedTimestamp: 123,
   );
   const old = Word(
     id: '2',
@@ -25,6 +26,7 @@ BoardSection get chunkFixture1 {
     position: Point<int>(4, 0),
     axis: Axis.vertical,
     clue: '',
+    solvedTimestamp: 123,
   );
   const food = Word(
     id: '3',
@@ -32,6 +34,7 @@ BoardSection get chunkFixture1 {
     position: Point<int>(1, 2),
     axis: Axis.horizontal,
     clue: '',
+    solvedTimestamp: 123,
   );
   const elf = Word(
     id: '4',
@@ -39,6 +42,7 @@ BoardSection get chunkFixture1 {
     position: Point<int>(1, 0),
     axis: Axis.vertical,
     clue: '',
+    solvedTimestamp: 123,
   );
   final unknown = Word(
     id: '5',
