@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:intl/intl.dart';
+import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -16,8 +17,9 @@ class WordSelectionTopBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          // TODO(any): Open share page
-          onPressed: () {}, // coverage:ignore-line
+          onPressed: () {
+            ShareWordPage.showModal(context);
+          },
           icon: const Icon(Icons.ios_share),
           style: themeData.io.iconButtonTheme.filled,
         ),
