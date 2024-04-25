@@ -81,6 +81,10 @@
   "@solveIt": {
     "description": "Solve it label"
   },
+  "hintError": "An error occurred while asking for a hint.\nPlease try again.",
+  "@hintError": {
+    "description": "Error message when asking for a hint"
+  },
   "askGeminiHint": "Ask Gemini for a hint",
   "@askGeminiHint": {
     "description": "Ask Gemini for a hint label"
