@@ -58,19 +58,24 @@ class HintBloc extends Bloc<HintEvent, HintState> {
 
     emit(state.copyWith(status: HintStatus.thinking));
 
-    final (hint, maxHints) = await _hintResource.generateHint(
-      wordId: event.wordId,
-      question: event.question,
-    );
-    final allHints = [...state.hints, hint];
+    try {
+      final (hint, maxHints) = await _hintResource.generateHint(
+        wordId: event.wordId,
+        question: event.question,
+      );
+      final allHints = [...state.hints, hint];
 
-    emit(
-      state.copyWith(
-        status: HintStatus.answered,
-        hints: allHints,
-        maxHints: maxHints,
-      ),
-    );
+      emit(
+        state.copyWith(
+          status: HintStatus.answered,
+          hints: allHints,
+          maxHints: maxHints,
+        ),
+      );
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+      emit(state.copyWith(status: HintStatus.invalid));
+    }
   }
 
   Future<void> _onPreviousHintsRequested(
