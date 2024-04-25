@@ -53,11 +53,11 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   );
   Animation<Vector3>? _translationAnimation;
 
-  /// The top left corner of the crossword, including the padding.
-  final _topLeft = Vector3.zero();
+  /// The minimum amount of translation allowed.
+  final _minTranslation = Vector3.zero();
 
-  /// The bottom right corner of the crossword, including the padding.
-  final _bottomRight = Vector3.zero();
+  /// The maximum amount of translation allowed.
+  final _maxTranslation = Vector3.zero();
 
   void _onAnimateTranslation() {
     _transformationController.value =
@@ -76,7 +76,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final crosswordLayout = CrosswordLayoutScope.of(context);
 
-    _bottomRight.setValues(
+    _maxTranslation.setValues(
       -(crosswordLayout.crosswordSize.width +
               crosswordLayout.padding.horizontal) +
           viewport.width,
@@ -100,8 +100,14 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           0,
         );
     end
-      ..x = math.max(math.min(end.x, _topLeft.x), _bottomRight.x)
-      ..y = math.max(math.min(end.y, _topLeft.y), _bottomRight.y);
+      ..x = math.max(
+        math.min(end.x, _minTranslation.x),
+        _maxTranslation.x,
+      )
+      ..y = math.max(
+        math.min(end.y, _minTranslation.y),
+        _maxTranslation.y,
+      );
     if (begin == end) return;
 
     // if (end.x < _bottomRight.x) end.x = _bottomRight.x;
