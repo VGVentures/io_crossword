@@ -171,5 +171,18 @@ void main() {
         expect(find.byType(HintLoadingIndicator), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'renders an error message when the hint status is invalid',
+      (tester) async {
+        when(() => hintBloc.state).thenReturn(
+          HintState(status: HintStatus.invalid, isHintsEnabled: true),
+        );
+        await tester.pumpApp(widget);
+
+        expect(find.text(l10n.hintError), findsOneWidget);
+        expect(find.byIcon(Icons.warning_rounded), findsOneWidget);
+      },
+    );
   });
 }

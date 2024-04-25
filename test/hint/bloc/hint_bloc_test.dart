@@ -134,6 +134,28 @@ void main() {
       );
 
       blocTest<HintBloc, HintState>(
+        'emits state with status ${HintStatus.invalid} if an error occurs '
+        'generating the hint',
+        setUp: () {
+          when(
+            () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
+          ).thenThrow(Exception());
+        },
+        seed: () => HintState(status: HintStatus.asking),
+        build: () => HintBloc(
+          hintResource: hintResource,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(
+          HintRequested(wordId: 'id', question: 'blue?'),
+        ),
+        expect: () => const <HintState>[
+          HintState(status: HintStatus.thinking),
+          HintState(status: HintStatus.invalid),
+        ],
+      );
+
+      blocTest<HintBloc, HintState>(
         'does not emit state if there are no hints left',
         seed: () => HintState(
           status: HintStatus.asking,

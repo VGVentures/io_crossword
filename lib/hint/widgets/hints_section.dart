@@ -38,6 +38,8 @@ class HintsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final isThinking = context
         .select((HintBloc bloc) => bloc.state.status == HintStatus.thinking);
+    final isInvalid = context
+        .select((HintBloc bloc) => bloc.state.status == HintStatus.invalid);
     final allHints = context.select((HintBloc bloc) => bloc.state.hints);
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
@@ -59,6 +61,19 @@ class HintsSection extends StatelessWidget {
           if (isThinking) ...[
             const SizedBox(height: 24),
             const Center(child: HintLoadingIndicator()),
+            const SizedBox(height: 8),
+          ],
+          if (isInvalid) ...[
+            const SizedBox(height: 24),
+            Icon(
+              Icons.warning_rounded,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              context.l10n.hintError,
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 8),
           ],
         ],
