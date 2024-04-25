@@ -1,6 +1,7 @@
 import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -49,7 +50,7 @@ class CrosswordView extends StatelessWidget {
       endDrawer: const CrosswordDrawer(),
       appBar: IoAppBar(
         title: const PlayerRankingInformation(),
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
         actions: (context) {
           return const Row(
             children: [

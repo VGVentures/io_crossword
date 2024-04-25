@@ -89,11 +89,9 @@ class EndGameSmallView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return Scaffold(
       appBar: IoAppBar(
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
         title: const LeaderboardButton(),
       ),
       body: const SingleChildScrollView(

@@ -82,11 +82,15 @@ class $AssetsAnimGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/crossword_logo.png
+  AssetGenImage get crosswordLogo =>
+      const AssetGenImage('assets/icons/crossword_logo.png');
+
   /// File path: assets/icons/io.svg
   SvgGenImage get io => const SvgGenImage('assets/icons/io.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [io];
+  List<dynamic> get values => [crosswordLogo, io];
 }
 
 class $AssetsImagesGen {

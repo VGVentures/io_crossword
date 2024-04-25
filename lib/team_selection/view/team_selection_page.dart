@@ -34,13 +34,11 @@ class TeamSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     final layout = IoLayout.of(context);
 
     return Scaffold(
       appBar: IoAppBar(
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
       ),
       body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
         builder: (context, state) => switch (layout) {

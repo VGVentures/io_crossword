@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -31,12 +32,11 @@ class HowToPlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final layout = IoLayout.of(context);
 
     return Scaffold(
       appBar: IoAppBar(
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
       ),
       body: switch (layout) {
         IoLayoutData.small => const _HowToPlaySmall(),

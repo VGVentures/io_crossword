@@ -25,7 +25,7 @@ void main() {
       (tester) async {
         expect(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (_) => SizedBox(),
             title: Text('Title'),
           ).preferredSize,
@@ -39,7 +39,7 @@ void main() {
       (tester) async {
         expect(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (_) => SizedBox(),
             bottom: _BottomWidget(),
             title: Text('Title'),
@@ -54,7 +54,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (_) => SizedBox(),
             title: Text('Title'),
           ),
@@ -70,7 +70,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (_) => SizedBox(),
             title: null,
           ),
@@ -86,7 +86,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (_) => SizedBox(),
             title: Text('Title'),
           ),
@@ -103,7 +103,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             IoAppBar(
-              crossword: 'Crossword',
+              logo: Text('Crossword'),
               actions: (_) => SizedBox(),
               title: Text('Title'),
             ),
@@ -121,7 +121,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             IoAppBar(
-              crossword: 'Crossword',
+              logo: Text('Crossword'),
               actions: (_) => SizedBox(),
               title: Text('Title'),
               bottom: _BottomWidget(),
@@ -139,7 +139,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (context) {
               final layout = IoLayout.of(context);
 
@@ -163,7 +163,7 @@ void main() {
       (tester) async {
         await tester.pumpApp(
           IoAppBar(
-            crossword: 'Crossword',
+            logo: Text('Crossword'),
             actions: (context) {
               final layout = IoLayout.of(context);
 

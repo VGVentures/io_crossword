@@ -45,11 +45,9 @@ class LoadingLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return Scaffold(
       appBar: IoAppBar(
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
       ),
       body: SelectionArea(
         child: Container(
@@ -81,11 +79,9 @@ class LoadingSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return Scaffold(
       appBar: IoAppBar(
-        crossword: l10n.crossword,
+        logo: Assets.icons.crosswordLogo.image(),
         bottom: const WelcomeHeaderImage(),
       ),
       body: const SelectionArea(

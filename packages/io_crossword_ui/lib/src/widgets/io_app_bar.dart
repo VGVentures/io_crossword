@@ -9,7 +9,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// {@macro io_app_bar}
   const IoAppBar({
-    required this.crossword,
+    required this.logo,
     this.actions,
     this.title,
     this.bottom,
@@ -17,7 +17,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   /// The crossword title used for desktop to show the leading icon.
-  final String crossword;
+  final Widget logo;
 
   /// Display actions based on the [IoLayoutData] layout.
   final WidgetBuilder? actions;
@@ -65,12 +65,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (title == null)
-                        _IoCrosswordLogo(
-                          crossword: crossword,
-                        )
-                      else
-                        titleWidget,
+                      if (title == null) logo else titleWidget,
                       if (actions != null) actions(context),
                     ],
                   ),
@@ -83,9 +78,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _IoCrosswordLogo(
-                            crossword: crossword,
-                          ),
+                          logo,
                           if (actions != null) actions(context),
                         ],
                       ),
@@ -112,30 +105,6 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: widget,
         ),
         bottom,
-      ],
-    );
-  }
-}
-
-class _IoCrosswordLogo extends StatelessWidget {
-  const _IoCrosswordLogo({
-    required this.crossword,
-  });
-
-  final String crossword;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const IoLogo(),
-        const SizedBox(width: 5),
-        Text(
-          crossword,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-        ),
       ],
     );
   }
