@@ -118,13 +118,34 @@ void main() {
         final hint = await hintRepository.generateHint(
           wordAnswer: 'answer',
           question: 'question',
-          previousHints: [Hint(question: 'is it?', response: HintResponse.no)],
+          previousHints: [
+            Hint(
+              question: 'is it?',
+              response: HintResponse.no,
+              readableResponse: 'Nope!',
+            ),
+          ],
           userToken: 'token',
         );
 
         expect(
           hint,
-          equals(Hint(question: 'question', response: HintResponse.yes)),
+          isA<Hint>()
+              .having(
+                (hint) => hint.question,
+                'the question field',
+                'question',
+              )
+              .having(
+                (hint) => hint.response,
+                'the response field',
+                HintResponse.yes,
+              )
+              .having(
+                (hint) => hint.readableResponse,
+                'the readableResponse field',
+                isA<String>(),
+              ),
         );
       });
 
@@ -155,12 +176,22 @@ void main() {
 
           expect(
             hint,
-            equals(
-              Hint(
-                question: 'question',
-                response: HintResponse.notApplicable,
-              ),
-            ),
+            isA<Hint>()
+                .having(
+                  (hint) => hint.question,
+                  'the question field',
+                  'question',
+                )
+                .having(
+                  (hint) => hint.response,
+                  'the response field',
+                  HintResponse.notApplicable,
+                )
+                .having(
+                  (hint) => hint.readableResponse,
+                  'the readableResponse field',
+                  isA<String>(),
+                ),
           );
         },
       );
@@ -244,7 +275,11 @@ void main() {
           userId: 'userId',
           wordId: 'wordId',
           hints: [
-            Hint(question: 'question', response: HintResponse.yes),
+            Hint(
+              question: 'question',
+              response: HintResponse.yes,
+              readableResponse: 'Yeah!',
+            ),
           ],
         );
 
@@ -258,6 +293,7 @@ void main() {
                   {
                     'question': 'question',
                     'response': 'yes',
+                    'readableResponse': 'Yeah!',
                   },
                 ],
               },
@@ -277,6 +313,7 @@ void main() {
               Hint(
                 question: 'question',
                 response: HintResponse.yes,
+                readableResponse: 'Yeah!',
               ),
             ],
           ),
