@@ -44,6 +44,7 @@ void main() {
         final hint = Hint(
           question: 'is it orange?',
           response: HintResponse.notApplicable,
+          readableResponse: 'N/A',
         );
         expect(
           state.copyWith(hints: [hint, hint]),
