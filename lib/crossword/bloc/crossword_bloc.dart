@@ -41,7 +41,9 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         if (section == null) return state;
 
         final newSectionKey = (section.position.x, section.position.y);
-
+        final newSections = {...state.sections};
+        newSections[newSectionKey] = section;
+        print(newSections[newSectionKey]);
         return state.copyWith(
           status: CrosswordStatus.success,
           sectionSize: section.size,
