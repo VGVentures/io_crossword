@@ -386,7 +386,7 @@ void main() {
         final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
         final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
         final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown = chunk.words.firstWhere((word) => !word.isAnswered);
+        final unknown = chunk.words.firstWhere((word) => !word.isSolved);
 
         expect(
           letters,

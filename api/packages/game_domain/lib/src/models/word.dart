@@ -29,8 +29,8 @@ class Word extends Equatable {
   /// Returns the length of the [answer].
   int get length => answer.length;
 
-  /// Checks if [Word] is answered.
-  bool get isAnswered => !answer.contains(emptyCharacter);
+  /// Checks if [Word] has been solved.
+  bool get isSolved => solvedTimestamp != null;
 
   /// Unique identifier of the word.
   @JsonKey()

@@ -154,7 +154,7 @@ class SectionComponent extends Component with HasGameRef<CrosswordGame> {
       final wordIndexStart = spriteBatch.length;
       for (var c = 0; c < word.length; c++) {
         late Rect rect;
-        if (word.isAnswered) {
+        if (word.isSolved) {
           // A bug in coverage is preventing this block from being covered
           // coverage:ignore-start
           final wordCharacters = word.answer.toUpperCase().characters;

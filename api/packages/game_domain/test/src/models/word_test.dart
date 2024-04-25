@@ -135,7 +135,7 @@ void main() {
       );
     });
 
-    group('isAnswered', () {
+    group('isSolved', () {
       test(' true', () {
         final word = Word(
           id: '1',
@@ -143,9 +143,10 @@ void main() {
           axis: Axis.horizontal,
           answer: 'test',
           clue: 'clue',
+          solvedTimestamp: 1234,
         );
 
-        expect(word.isAnswered, isTrue);
+        expect(word.isSolved, isTrue);
       });
 
       test(' false', () {
@@ -157,13 +158,7 @@ void main() {
           clue: 'clue',
         );
 
-        expect(word.copyWith(answer: ' ').isAnswered, isFalse);
-        expect(word.copyWith(answer: 'HEL O').isAnswered, isFalse);
-        expect(word.copyWith(answer: 'HE LO').isAnswered, isFalse);
-        expect(word.copyWith(answer: 'HELL ').isAnswered, isFalse);
-        expect(word.copyWith(answer: ' ELLO').isAnswered, isFalse);
-        expect(word.copyWith(answer: ' EL  ').isAnswered, isFalse);
-        expect(word.copyWith(answer: ' E').isAnswered, isFalse);
+        expect(word.isSolved, isFalse);
       });
     });
   });
