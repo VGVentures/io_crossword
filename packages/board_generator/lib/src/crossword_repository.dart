@@ -14,7 +14,7 @@ class CrosswordRepository {
 
   /// Adds a map of word id: answer to the database.
   Future<void> addAnswers(List<Answer> answers) async {
-    const size = 1000;
+    const size = 100;
     final maps = answers.slices(size);
 
     await Future.wait(maps.map(_addAnswers));
@@ -29,7 +29,7 @@ class CrosswordRepository {
 
   /// Adds a list of sections to the database.
   Future<void> addSections(List<BoardSection> sections) async {
-    const size = 200;
+    const size = 50;
     final maps = sections.slices(size);
 
     await Future.wait(maps.map(_addSections));

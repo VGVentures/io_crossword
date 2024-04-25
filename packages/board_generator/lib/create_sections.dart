@@ -24,7 +24,7 @@ void main(List<String> args) async {
 
   // Read the file
   final fileString = File('assets/board.txt').readAsStringSync();
-  final rows = const CsvToListConverter(eol: '\n').convert(fileString);
+  final rows = const CsvToListConverter().convert(fileString);
 
   // Sort words by position to assign an ordered index
   // From left to right, top to bottom
