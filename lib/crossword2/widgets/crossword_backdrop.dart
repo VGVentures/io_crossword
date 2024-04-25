@@ -25,7 +25,8 @@ class CrosswordBackdrop extends StatelessWidget {
     return GestureDetector(
       onTap: () => _onTap(context),
       child: SizedBox.fromSize(
-        size: crosswordLayout.crosswordSize,
+        size:
+            crosswordLayout.padding.inflateSize(crosswordLayout.crosswordSize),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: IoCrosswordColors.black.withOpacity(0.8),

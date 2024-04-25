@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:math';
-
 import 'package:api_client/api_client.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:board_info_repository/board_info_repository.dart';
@@ -37,6 +35,16 @@ class _MockUser extends Mock implements User {
   String get id => '';
 }
 
+class _FakeSolvedWord extends Fake implements Word {
+  @override
+  int? get solvedTimestamp => 1;
+}
+
+class _FakeUnsolvedWord extends Fake implements Word {
+  @override
+  int? get solvedTimestamp => null;
+}
+
 extension PumpApp on WidgetTester {
   Future<void> pumpApp(
     Widget widget, {
@@ -56,6 +64,17 @@ extension PumpApp on WidgetTester {
     final mockedCrosswordResource = _MockCrosswordResource();
     final mockedCrosswordRepository = _MockCrosswordRepository();
     registerFallbackValue(Point(0, 0));
+    when(mockedCrosswordRepository.getRandomUncompletedSection).thenAnswer(
+      (_) => Future.value(
+        BoardSection(
+          id: '',
+          position: Point(1, 1),
+          size: 10,
+          words: [_FakeUnsolvedWord(), _FakeSolvedWord()],
+          borderWords: [_FakeUnsolvedWord(), _FakeSolvedWord()],
+        ),
+      ),
+    );
     when(
       () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
@@ -175,6 +194,17 @@ extension PumpRoute on WidgetTester {
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
+    when(mockedCrosswordRepository.getRandomUncompletedSection).thenAnswer(
+      (_) => Future.value(
+        BoardSection(
+          id: '',
+          position: Point(1, 1),
+          size: 10,
+          words: [_FakeUnsolvedWord(), _FakeSolvedWord()],
+          borderWords: [_FakeUnsolvedWord(), _FakeSolvedWord()],
+        ),
+      ),
+    );
     when(
       () => mockedCrosswordRepository.watchSectionFromPosition(any(), any()),
     ).thenAnswer((_) => Stream.value(null));
