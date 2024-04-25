@@ -11,7 +11,6 @@ void main() {
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
-        length: 4,
         clue: 'clue',
         solvedTimestamp: 0,
         mascot: Mascots.sparky,
@@ -25,7 +24,6 @@ void main() {
           'position': {'x': 1, 'y': 2},
           'axis': 'horizontal',
           'answer': 'test',
-          'length': 4,
           'clue': 'clue',
           'solvedTimestamp': 0,
           'mascot': 'sparky',
@@ -40,7 +38,6 @@ void main() {
         'axis': 'horizontal',
         'mascot': 'sparky',
         'answer': 'test',
-        'length': 4,
         'clue': 'clue',
       };
       final word = Word.fromJson(json);
@@ -52,7 +49,6 @@ void main() {
             position: Point(1, 2),
             axis: Axis.horizontal,
             answer: 'test',
-            length: 4,
             clue: 'clue',
             mascot: Mascots.sparky,
           ),
@@ -66,7 +62,6 @@ void main() {
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
-        length: 4,
         clue: 'clue',
         solvedTimestamp: 0,
       );
@@ -75,7 +70,27 @@ void main() {
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
-        length: 4,
+        clue: 'clue',
+        solvedTimestamp: 0,
+      );
+
+      expect(firstWord, equals(secondWord));
+    });
+
+    test('supports equality', () {
+      final firstWord = Word(
+        id: '1',
+        position: Point(1, 2),
+        axis: Axis.horizontal,
+        answer: 'test',
+        clue: 'clue',
+        solvedTimestamp: 0,
+      );
+      final secondWord = Word(
+        id: '1',
+        position: Point(1, 2),
+        axis: Axis.horizontal,
+        answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
       );
@@ -89,7 +104,6 @@ void main() {
         position: Point(1, 2),
         axis: Axis.horizontal,
         answer: 'test',
-        length: 4,
         clue: 'clue',
         solvedTimestamp: 0,
       );

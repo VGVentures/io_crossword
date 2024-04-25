@@ -12,7 +12,6 @@ void main() {
       position: Point(2, 7),
       axis: Axis.vertical,
       answer: 'hello',
-      length: 5,
       clue: '',
     );
     final horizontalWord = Word(
@@ -20,7 +19,6 @@ void main() {
       position: Point(3, 7),
       axis: Axis.horizontal,
       answer: 'exactly',
-      length: 7,
       clue: '',
     );
 

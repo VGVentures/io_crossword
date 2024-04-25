@@ -48,7 +48,6 @@ void main(List<String> args) async {
         position: Point(x, y),
         axis: axis,
         answer: answer,
-        length: answer.length,
         clue: '',
       );
 

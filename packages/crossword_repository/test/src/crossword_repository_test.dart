@@ -17,7 +17,6 @@ void main() {
       position: Point(0, 1),
       axis: Axis.horizontal,
       answer: 'answer',
-      length: 6,
       clue: 'clue',
     );
     final boardSection = BoardSection(

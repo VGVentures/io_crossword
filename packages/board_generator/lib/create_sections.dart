@@ -53,7 +53,7 @@ void main(List<String> args) async {
       Word(
         id: id,
         position: Point(row[0] as int, row[1] as int),
-        length: answer.length,
+        answer: Word.emptyCharacter * answer.length,
         clue: 'The answer is: $answer',
         axis: row[3] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
       ),

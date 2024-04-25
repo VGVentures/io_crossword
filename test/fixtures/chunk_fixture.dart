@@ -17,7 +17,6 @@ BoardSection get chunkFixture1 {
     answer: 'HELLO',
     position: Point<int>(0, 0),
     axis: Axis.horizontal,
-    length: 5,
     clue: '',
   );
   const old = Word(
@@ -25,7 +24,6 @@ BoardSection get chunkFixture1 {
     answer: 'OLD',
     position: Point<int>(4, 0),
     axis: Axis.vertical,
-    length: 3,
     clue: '',
   );
   const food = Word(
@@ -33,7 +31,6 @@ BoardSection get chunkFixture1 {
     answer: 'FOOD',
     position: Point<int>(1, 2),
     axis: Axis.horizontal,
-    length: 4,
     clue: '',
   );
   const elf = Word(
@@ -41,22 +38,21 @@ BoardSection get chunkFixture1 {
     answer: 'ELF',
     position: Point<int>(1, 0),
     axis: Axis.vertical,
-    length: 3,
     clue: '',
   );
-  const unknown = Word(
+  final unknown = Word(
     id: '5',
-    position: Point<int>(2, 2),
+    answer: Word.emptyCharacter * 3,
+    position: const Point<int>(2, 2),
     axis: Axis.vertical,
-    length: 3,
     clue: '',
   );
 
-  return const BoardSection(
+  return BoardSection(
     id: '1',
-    position: Point<int>(0, 0),
+    position: const Point<int>(0, 0),
     words: [hello, old, food, elf, unknown],
     size: 20,
-    borderWords: [],
+    borderWords: const [],
   );
 }

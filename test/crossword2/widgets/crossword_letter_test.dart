@@ -23,11 +23,11 @@ class _MockWordSelectionBloc
 
 void main() {
   group('$CrosswordLetter', () {
-    const ant = Word(
+    final ant = Word(
       id: '1',
       position: Point<int>(0, 0),
+      answer: Word.emptyCharacter * 3,
       axis: domain.Axis.horizontal,
-      length: 3,
       clue: '',
     );
 
@@ -386,7 +386,7 @@ void main() {
         final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
         final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
         final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown = chunk.words.firstWhere((word) => word.answer == null);
+        final unknown = chunk.words.firstWhere((word) => !word.isAnswered);
 
         expect(
           letters,
@@ -460,13 +460,13 @@ void main() {
             (2, 3): CrosswordLetterData(
               index: (2, 3),
               chunkIndex: chunkIndex,
-              character: null,
+              character: ' ',
               words: (null, unknown),
             ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
               chunkIndex: chunkIndex,
-              character: null,
+              character: ' ',
               words: (null, unknown),
             ),
           }),
