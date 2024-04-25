@@ -110,9 +110,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       );
     if (begin == end) return;
 
-    // if (end.x < _bottomRight.x) end.x = _bottomRight.x;
-    // if (end.y < _bottomRight.y) end.y = _bottomRight.y;
-
     _translationAnimation?.removeListener(_onAnimateTranslation);
     _translationAnimation = Tween(begin: begin, end: end).animate(
       CurvedAnimation(
