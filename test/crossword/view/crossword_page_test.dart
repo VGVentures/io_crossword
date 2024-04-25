@@ -7,7 +7,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
@@ -62,29 +62,49 @@ void main() {
       );
     });
 
-    testWidgets('adds $BoardSectionRequested event when first word is selected',
-        (tester) async {
-      when(() => crosswordBloc.state).thenReturn(const CrosswordState());
-      final wordSelectionBloc = _MockWordSelectionBloc();
-      whenListen(
-        wordSelectionBloc,
-        Stream.fromIterable(
-          [
-            WordSelectionState(
-              status: WordSelectionStatus.preSolving,
-              word: SelectedWord(section: (1, 1), word: _FakeUnsolvedWord()),
+    group('when RandomWordSelectionStatus is', () {
+      final word = _FakeUnsolvedWord();
+      final section = BoardSection(
+        id: '',
+        position: Point(1, 1),
+        size: 10,
+        words: [word],
+        borderWords: const [],
+      );
+
+      testWidgets('success, adds $BoardSectionRequested event', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(const CrosswordState());
+        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+        whenListen(
+          randomWordSelectionBloc,
+          Stream.fromIterable([
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.success,
+              uncompletedSection: section,
             ),
-          ],
-        ),
-        initialState: WordSelectionState.initial(),
-      );
-      await tester.pumpSubject(
-        CrosswordView(),
-        wordSelectionBloc: wordSelectionBloc,
-        crosswordBloc: crosswordBloc,
-      );
-      await tester.pump();
-      verify(() => crosswordBloc.add(BoardSectionRequested((1, 1)))).called(1);
+          ]),
+          initialState: RandomWordSelectionState(),
+        );
+        final wordSelectionBloc = _MockWordSelectionBloc();
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          wordSelectionBloc: wordSelectionBloc,
+          crosswordBloc: crosswordBloc,
+          randomWordSelectionBloc: randomWordSelectionBloc,
+        );
+
+        await tester.pump();
+        verify(() => crosswordBloc.add(BoardSectionRequested((1, 1))))
+            .called(1);
+        verify(
+          () => wordSelectionBloc.add(
+            WordSelected(
+              selectedWord: SelectedWord(section: (1, 1), word: word),
+            ),
+          ),
+        ).called(1);
+      });
     });
 
     testWidgets('renders $IoAppBar', (tester) async {

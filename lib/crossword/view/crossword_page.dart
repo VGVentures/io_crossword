@@ -58,14 +58,13 @@ class CrosswordView extends StatelessWidget {
         switch (state.status) {
           case RandomWordSelectionStatus.initial:
           case RandomWordSelectionStatus.loading:
-          // TODO: Handle this case.
+          // TODO(hugo): Show loading state.
           case RandomWordSelectionStatus.failure:
-          // TODO: Handle this case.
+          // TODO(hugo): Show error modal.
           case RandomWordSelectionStatus.notFound:
-            // TODO: Show popup notifying that the crossword is complete.
+            // TODO(hugo): Show popup notifying that the crossword is complete.
             break;
           case RandomWordSelectionStatus.success:
-            print(state.uncompletedSection);
             final position = (
               state.uncompletedSection!.position.x,
               state.uncompletedSection!.position.y
