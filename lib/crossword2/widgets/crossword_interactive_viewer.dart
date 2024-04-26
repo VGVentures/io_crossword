@@ -175,12 +175,14 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
 extension on Quad {
   /// The center of the visible viewport for small layout.
+  ///
   /// Makes the assumption that the height of the [WordSelectionSmallContainer]
   /// is always the same.
   Vector3 get centerForSmallLayout => Vector3(width / 2, height * 0.3, 0);
 
-  /// The center of the visible viewport for large layout, taking into account
-  /// the width of the [WordSelectionLargeContainer].
+  /// The center of the visible viewport for large layout.
+  ///
+  /// Takes into account the width of the [WordSelectionLargeContainer].
   Vector3 get centerForLargeLayout => Vector3(
         width * (1 - WordSelectionLargeContainer.widthRatio) / 2,
         height / 2,
