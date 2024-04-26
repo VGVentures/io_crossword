@@ -53,6 +53,8 @@ class Word extends Equatable {
   /// The word answer to display in the crossword when solved.
   /// If the word is not solved, this value contains [emptyCharacter] with the
   /// value of the length of the word.
+  /// If parts of the word is solved it will contain the solved character with
+  /// [emptyCharacter] where not solved.
   @JsonKey()
   final String answer;
 
