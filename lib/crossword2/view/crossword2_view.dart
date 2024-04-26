@@ -12,6 +12,10 @@ class Crossword2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
+    // hard-coding it:
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
     const configuration = CrosswordConfiguration(
       bottomRight: (45, 45),
       chunkSize: 20,
@@ -101,12 +105,13 @@ class _CrosswordStack extends StatelessWidget {
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
               selector: (state) => state.word,
               builder: (context, selectedWord) {
-                if (selectedWord == null ||
-                    selectedWord.word.solvedTimestamp != null) {
+                if (selectedWord == null) {
                   return const SizedBox.shrink();
                 }
 
                 final word = selectedWord.word;
+                final theme = Theme.of(context);
+
                 return Positioned(
                   left: (selectedWord.section.$1 *
                           crosswordLayout.chunkSize.width) +
@@ -116,12 +121,17 @@ class _CrosswordStack extends StatelessWidget {
                           crosswordLayout.chunkSize.height) +
                       (word.position.y * crosswordLayout.cellSize.height) +
                       crosswordLayout.padding.top,
-                  child: CrosswordInput(
-                    key: ValueKey(selectedWord.word.id),
-                    style: Theme.of(context).io.wordInput.secondary,
-                    direction: word.axis.toAxis(),
-                    length: selectedWord.word.length,
-                  ),
+                  child: selectedWord.word.isSolved
+                      ? IoWord(
+                          selectedWord.word.answer,
+                          style: theme.io.wordTheme.big,
+                        )
+                      : CrosswordInput(
+                          key: ValueKey(selectedWord.word.id),
+                          style: theme.io.wordInput.secondary,
+                          direction: word.axis.toAxis(),
+                          length: selectedWord.word.length,
+                        ),
                 );
               },
             ),
