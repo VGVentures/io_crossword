@@ -89,6 +89,7 @@ void main() {
                 id: 'wordId',
                 answer: 'answer',
                 section: Point(1, 1),
+                collidedWords: [],
               );
             },
           );
@@ -173,6 +174,7 @@ void main() {
                 id: 'wordId',
                 answer: 'answer',
                 section: Point(1, 1),
+                collidedWords: [],
               );
             },
           );
@@ -215,6 +217,7 @@ void main() {
                 id: 'wordId',
                 answer: 'answer',
                 section: Point(1, 1),
+                collidedWords: [],
               );
             },
           );
