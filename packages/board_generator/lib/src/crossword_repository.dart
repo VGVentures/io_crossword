@@ -14,14 +14,14 @@ class CrosswordRepository {
 
   /// Adds a map of word id: answer to the database.
   Future<void> addAnswers(List<Answer> answers) async {
-    const size = 1000;
+    const size = 100;
     final maps = answers.slices(size);
 
     await Future.wait(maps.map(_addAnswers));
   }
 
   Future<void> _addAnswers(List<Answer> answers) async {
-    final answersCollection = firestore.collection('answers2');
+    final answersCollection = firestore.collection('answers');
     for (final answer in answers) {
       await answersCollection.doc(answer.id).set(answer.toJson());
     }
@@ -29,7 +29,7 @@ class CrosswordRepository {
 
   /// Adds a list of sections to the database.
   Future<void> addSections(List<BoardSection> sections) async {
-    const size = 200;
+    const size = 50;
     final maps = sections.slices(size);
 
     await Future.wait(maps.map(_addSections));
@@ -38,7 +38,7 @@ class CrosswordRepository {
   /// Adds a list of sections to the database.
   Future<void> _addSections(List<BoardSection> sections) async {
     for (final section in sections) {
-      await firestore.collection('boardChunks2').add(section.toJson());
+      await firestore.collection('boardChunks').add(section.toJson());
     }
   }
 

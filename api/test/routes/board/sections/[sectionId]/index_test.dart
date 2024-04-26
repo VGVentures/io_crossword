@@ -37,7 +37,6 @@ void main() {
       position: const Point(1, 1),
       axis: Axis.vertical,
       answer: 'flutter',
-      length: 7,
       clue: '',
     );
 
@@ -100,7 +99,6 @@ void main() {
               position: const Point(1, 1),
               axis: Axis.vertical,
               answer: 'flutter',
-              length: 7,
               clue: '',
             ),
           ],
