@@ -9,15 +9,19 @@ import 'package:dart_firebase_admin/firestore.dart';
 import 'package:game_domain/game_domain.dart';
 
 void main(List<String> args) async {
-  final serviceAccountPath =
-      Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
-  if (serviceAccountPath == null) {
-    throw Exception('Service account path not found');
-  }
+  // final serviceAccountPath =
+  //     Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+  // if (serviceAccountPath == null) {
+  //   throw Exception('Service account path not found');
+  // }
+  // final admin = FirebaseAdminApp.initializeApp(
+  //   'io-crossword-dev',
+  //   Credential.fromServiceAccount(File(serviceAccountPath)),
+  // );
 
   final admin = FirebaseAdminApp.initializeApp(
     'io-crossword-dev',
-    Credential.fromServiceAccount(File(serviceAccountPath)),
+    Credential.fromServiceAccount(File('assets/dev_crossword_key.json')),
   );
   final firestore = Firestore(admin);
   final crosswordRepository = CrosswordRepository(firestore: firestore);
@@ -107,10 +111,20 @@ void main(List<String> args) async {
 
       answers.addAll(
         sectionWords.map((word) {
+          final allLetters = word.allLetters;
+
+          final wordsInSection = sectionWords.toList()..remove(word);
+
           return Answer(
             id: word.id,
             answer: answersMap[word.id]!,
             section: Point(i, j),
+            collidedWords: [
+              CollidedWords(
+                words: [word.id],
+                section: const Point(10, 20),
+              ),
+            ],
           );
         }),
       );
@@ -134,16 +148,17 @@ void main(List<String> args) async {
   print('AnswersMap: ${answersMap.length}');
 
   print('Uploading answers...');
-  await crosswordRepository.addAnswers(answers);
+  await crosswordRepository.addAnswers([answers.first]);
   print('Added all answers to the database.');
 
   print('Uploading sections...');
-  await crosswordRepository.addSections(sections);
+  // await crosswordRepository.addSections(sections);
   print('Added all ${sections.length} section to the database.');
 }
 
-/// An extension on [Word] to check if it is in a section.
-extension SectionBelonging on Word {
+/// An extension on [Word] to check if it is in a section or collision
+/// of characters of words.
+extension WordExtension on Word {
   /// Returns true if the word starting letter is in the section.
   bool isStartInSection(int sectionX, int sectionY, int sectionSize) {
     return position.x >= sectionX &&
@@ -186,5 +201,26 @@ extension SectionBelonging on Word {
         x < sectionX + sectionSize &&
         y >= sectionY &&
         y < sectionY + sectionSize;
+  }
+
+  /// Returns the index position of the collision.
+  /// If there are no collisions returns null.
+  int? getCollision(List<(int, int)> letters) {
+    switch (axis) {
+      case Axis.horizontal:
+        for (var i = 0; i < length; i++) {
+          if (letters.contains((position.x + i, position.y))) {
+            return i;
+          }
+        }
+      case Axis.vertical:
+        for (var i = 0; i < length; i++) {
+          if (letters.contains((position.x, position.y + i))) {
+            return i;
+          }
+        }
+    }
+
+    return null;
   }
 }
