@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:intl/intl.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -29,16 +30,21 @@ class WordSelectionTopBar extends StatelessWidget {
           builder: (context, word) {
             if (word?.word == null) return const SizedBox.shrink();
 
-            final solvedByOther = context.select<CrosswordBloc, bool>(
+            final l10n = context.l10n;
+            final mascot = context.select<CrosswordBloc, Mascots?>(
               (bloc) {
                 final currentWord = bloc.state.sections[word!.section]!.words
                     .firstWhere((element) => element.id == word.word.id);
-                return currentWord.solvedTimestamp != null;
+                return currentWord.mascot;
               },
             );
 
+            final title = mascot != null
+                ? l10n.alreadySolvedTitle(mascot.name)
+                : wordIdentifier(word!.word);
+
             return Text(
-              solvedByOther ? 'SOLVED BY OTHER' : wordIdentifier(word!.word),
+              title,
               style: themeData.textTheme.labelLarge,
             );
           },
