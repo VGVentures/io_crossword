@@ -102,22 +102,17 @@ void main(List<String> args) async {
     for (var j = minSectionY; j < maxSectionY; j++) {
       final sectionX = i * sectionSize;
       final sectionY = j * sectionSize;
-      final sectionWords = wordsWithTopLeftOrigin
-          .where((word) {
-            return word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
-          })
-          .map(
-            (e) => e.copyWith(
-              position: Point(e.position.x - sectionX, e.position.y - sectionY),
-            ),
-          )
-          .toList();
+      final sectionWords = wordsWithTopLeftOrigin.where((word) {
+        return word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
+      });
 
       answers.addAll(
         sectionWords.map((word) {
           final allLetters = word.allLetters;
 
-          final wordsInSection = sectionWords.toList()..remove(word);
+          final wordsInSection = [...sectionWords]..remove(word);
+
+          final sections = word.getSections(sectionX, sectionY, sectionSize);
 
           final collidedWords = <CollidedWord>[];
 
@@ -140,7 +135,7 @@ void main(List<String> args) async {
           return Answer(
             id: word.id,
             answer: answersMap[word.id]!,
-            section: Point(i, j),
+            sections: sections,
             collidedWords: collidedWords,
           );
         }),
@@ -151,7 +146,14 @@ void main(List<String> args) async {
         position: Point(i, j),
         // remove this field from model (size)
         size: sectionSize,
-        words: sectionWords,
+        words: sectionWords
+            .map(
+              (e) => e.copyWith(
+                position:
+                    Point(e.position.x - sectionX, e.position.y - sectionY),
+              ),
+            )
+            .toList(),
         // remove this field from model (border words)
         borderWords: const [],
       );
@@ -175,29 +177,63 @@ void main(List<String> args) async {
 /// An extension on [Word] to check if it is in a section or collision
 /// of characters of words.
 extension WordExtension on Word {
-  /// Returns true if the word starting letter is in the section.
-  bool isStartInSection(int sectionX, int sectionY, int sectionSize) {
-    return position.x >= sectionX &&
-        position.x < sectionX + sectionSize &&
-        position.y >= sectionY &&
-        position.y < sectionY + sectionSize;
-  }
-
-  /// Returns true if the word ending letter is in the section.
-  bool isEndInSection(int sectionX, int sectionY, int sectionSize) {
-    final (endX, endY) = axis == Axis.horizontal
-        ? (position.x + length - 1, position.y)
-        : (position.x, position.y + length - 1);
-    return endX >= sectionX &&
-        endX < sectionX + sectionSize &&
-        endY >= sectionY &&
-        endY < sectionY + sectionSize;
-  }
-
   /// Returns true if any of its letters is in the section.
+  ///
+  /// The [sectionX] and [sectionY] value is the absolute position in the board.
   bool isAnyLetterInSection(int sectionX, int sectionY, int sectionSize) {
     return allLetters
         .any((e) => _isInSection(e.$1, e.$2, sectionX, sectionY, sectionSize));
+  }
+
+  /// Returns all the sections that the word crosses with the relative index of
+  /// the section based on the [sectionSize].
+  ///
+  /// The [sectionX] and [sectionY] value is the absolute position in the board.
+  List<Point<int>> getSections(int sectionX, int sectionY, int sectionSize) {
+    final sections = <Point<int>>[];
+
+    switch (axis) {
+      case Axis.horizontal:
+        var i = 0;
+
+        while (true) {
+          final x = sectionX + (sectionSize * i);
+
+          if (isAnyLetterInSection(x, sectionY, sectionSize)) {
+            sections.add(
+              Point(
+                (x / sectionSize).floor(),
+                (sectionY / sectionSize).floor(),
+              ),
+            );
+          } else {
+            break;
+          }
+
+          i++;
+        }
+      case Axis.vertical:
+        var i = 0;
+
+        while (true) {
+          final y = sectionY + (sectionSize * i);
+
+          if (isAnyLetterInSection(sectionX, y, sectionSize)) {
+            sections.add(
+              Point(
+                (sectionX / sectionSize).floor(),
+                (y / sectionSize).floor(),
+              ),
+            );
+          } else {
+            break;
+          }
+
+          i++;
+        }
+    }
+
+    return sections;
   }
 
   /// Returns all the letter positions of the word.
@@ -212,6 +248,9 @@ extension WordExtension on Word {
   }
 
   /// Returns true if the point is in the section.
+  ///
+  /// The [x], [y], [sectionX] and [sectionY] value is the absolute
+  /// position in the board.
   bool _isInSection(int x, int y, int sectionX, int sectionY, int sectionSize) {
     return x >= sectionX &&
         x < sectionX + sectionSize &&

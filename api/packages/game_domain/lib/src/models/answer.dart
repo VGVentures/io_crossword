@@ -13,7 +13,7 @@ class Answer extends Equatable {
   const Answer({
     required this.id,
     required this.answer,
-    required this.section,
+    required this.sections,
     required this.collidedWords,
   });
 
@@ -30,10 +30,10 @@ class Answer extends Equatable {
   @JsonKey()
   final String answer;
 
-  /// The section of the board where the word is located.
+  /// The sections of the board where the word is located.
   @JsonKey()
-  @PointConverter()
-  final Point<int> section;
+  @ListPointConverter()
+  final List<Point<int>> sections;
 
   /// The words that collide with the current [Answer].
   @JsonKey()
@@ -43,5 +43,5 @@ class Answer extends Equatable {
   Map<String, dynamic> toJson() => _$AnswerToJson(this);
 
   @override
-  List<Object?> get props => [id, answer, section, collidedWords];
+  List<Object?> get props => [id, answer, sections, collidedWords];
 }

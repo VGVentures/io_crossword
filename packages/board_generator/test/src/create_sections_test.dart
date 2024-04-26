@@ -6,6 +6,136 @@ import 'package:test/test.dart';
 
 void main() {
   group('WordExtension', () {
+    group('getSections', () {
+      group('horizontal', () {
+        test('finds only the first section starting on 0, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.horizontal,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 5),
+            equals([Point(0, 0)]),
+          );
+        });
+
+        test(
+            'finds two sections with just by one character on the next section',
+            () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.horizontal,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 4),
+            equals([Point(0, 0), Point(1, 0)]),
+          );
+        });
+
+        test('finds three sections of small size starting on 0, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.horizontal,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 2),
+            equals([Point(0, 0), Point(1, 0), Point(2, 0)]),
+          );
+        });
+
+        test('finds two sections of small size starting on section 25, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(100, 0),
+            axis: Axis.horizontal,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(100, 0, 4),
+            equals([Point(25, 0), Point(26, 0)]),
+          );
+        });
+      });
+
+      group('vertical', () {
+        test('finds only the first section starting on 0, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.vertical,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 5),
+            equals([Point(0, 0)]),
+          );
+        });
+
+        test(
+            'finds two sections with just by one character on the next section',
+            () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.vertical,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 4),
+            equals([Point(0, 0), Point(0, 1)]),
+          );
+        });
+
+        test('finds three sections of small size starting on 0, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 0),
+            axis: Axis.vertical,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(0, 0, 2),
+            equals([Point(0, 0), Point(0, 1), Point(0, 2)]),
+          );
+        });
+
+        test('finds two sections of small size starting on section 25, 0', () {
+          final word = Word(
+            id: 'id',
+            position: Point(0, 100),
+            axis: Axis.vertical,
+            clue: '',
+            answer: 'HELLO',
+          );
+
+          expect(
+            word.getSections(100, 0, 4),
+            equals([Point(0, 25), Point(0, 26)]),
+          );
+        });
+      });
+    });
+
     group('getCollision', () {
       group('vertical', () {
         test('finds the first character position', () {

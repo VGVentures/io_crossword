@@ -88,7 +88,7 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: Point(1, 1),
                 collidedWords: [],
               );
             },
@@ -173,7 +173,7 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: Point(1, 1),
                 collidedWords: [],
               );
             },
@@ -216,7 +216,7 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: Point(1, 1),
                 collidedWords: [],
               );
             },

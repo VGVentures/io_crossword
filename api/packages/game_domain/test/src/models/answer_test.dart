@@ -9,7 +9,7 @@ void main() {
       final answer = Answer(
         id: 'id',
         answer: 'answer',
-        section: Point(1, 2),
+        sections: const [Point(1, 2)],
         collidedWords: const [
           CollidedWord(
             wordId: 'word-id',
@@ -24,7 +24,9 @@ void main() {
         json,
         equals({
           'answer': 'answer',
-          'section': {'x': 1, 'y': 2},
+          'section': [
+            {'x': 1, 'y': 2},
+          ],
           'collidedWords': [
             {
               'wordId': 'word-id',
@@ -40,7 +42,9 @@ void main() {
       final json = {
         'id': 'id',
         'answer': 'answer',
-        'section': {'x': 1, 'y': 2},
+        'section': [
+          {'x': 1, 'y': 2},
+        ],
         'collidedWords': [
           {
             'wordId': 'word-id',
@@ -56,7 +60,7 @@ void main() {
           Answer(
             id: 'id',
             answer: 'answer',
-            section: Point(1, 2),
+            sections: const [Point(1, 2)],
             collidedWords: const [
               CollidedWord(
                 wordId: 'word-id',
@@ -73,7 +77,7 @@ void main() {
       final firstAnswer = Answer(
         id: 'id',
         answer: 'answer',
-        section: Point(1, 2),
+        sections: const [Point(1, 2)],
         collidedWords: const [
           CollidedWord(
             wordId: 'word-id',
@@ -85,7 +89,7 @@ void main() {
       final secondAnswer = Answer(
         id: 'id',
         answer: 'answer',
-        section: Point(1, 2),
+        sections: const [Point(1, 2)],
         collidedWords: const [
           CollidedWord(
             wordId: 'word-id',
