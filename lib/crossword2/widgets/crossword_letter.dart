@@ -142,21 +142,13 @@ class CrosswordLetter extends StatelessWidget {
 extension on CrosswordLetterWords {
   /// Returns the mascot of the first team that resolved the letter.
   Mascots? mascot() {
-    if ($1 != null && $2 == null) return $1!.mascot;
-    if ($1 == null && $2 != null) return $2!.mascot;
-
-    if ($1 != null && $2 != null) {
-      return switch (($1!.solvedTimestamp, $2!.solvedTimestamp)) {
-        (null, null) => $1!.mascot,
-        (final int _, null) => $1!.mascot,
-        (null, final int _) => $2!.mascot,
-        (final int h, final int v) when h <= v => $1!.mascot,
-        (final int h, final int v) when v < h => $2!.mascot,
-        (_, _) => null,
-      };
-    }
-
-    return null;
+    return switch (($1?.isSolved ?? false, $2?.isSolved ?? false)) {
+      (false, false) => null,
+      (true, false) => $1!.mascot,
+      (false, true) => $2!.mascot,
+      (true, true) =>
+        $1!.solvedTimestamp! <= $2!.solvedTimestamp! ? $1!.mascot : $2!.mascot,
+    };
   }
 }
 

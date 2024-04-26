@@ -113,9 +113,12 @@ void main() {
       });
 
       testWidgets(
-        'with horizontal word mascot when vertical is null',
+        'with horizontal solved word mascot when vertical is null',
         (tester) async {
-          final word = ant.copyWith(mascot: Mascots.android);
+          final word = ant.copyWith(
+            mascot: Mascots.android,
+            solvedTimestamp: 1,
+          );
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -143,9 +146,12 @@ void main() {
       );
 
       testWidgets(
-        'with vertical word mascot when horizontal is null',
+        'with vertical solved word mascot when horizontal is null',
         (tester) async {
-          final word = ant.copyWith(mascot: Mascots.dash);
+          final word = ant.copyWith(
+            mascot: Mascots.dash,
+            solvedTimestamp: 1,
+          );
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -239,7 +245,7 @@ void main() {
       );
 
       testWidgets(
-        'with horizontal word mascot when both have no timestamp',
+        'with empty style when both have not been solved',
         (tester) async {
           final horizontalWord = ant.copyWith(mascot: Mascots.dash);
           final verticalWord = ant.copyWith(mascot: Mascots.dino);
@@ -265,39 +271,7 @@ void main() {
               tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
           final style = ioCrosswordLetter.style;
 
-          expect(style, equals(themeData.io.crosswordLetterTheme.dash));
-        },
-      );
-
-      testWidgets(
-        'with vertical word mascot when horizontal has no timestamp',
-        (tester) async {
-          final horizontalWord = ant.copyWith(mascot: Mascots.dash);
-          final verticalWord =
-              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
-          final letterData = CrosswordLetterData(
-            index: (0, 0),
-            chunkIndex: (0, 0),
-            character: 'A',
-            words: (horizontalWord, verticalWord),
-          );
-
-          await tester.pumpApp(
-            Theme(
-              data: themeData,
-              child: CrosswordLayoutScope(
-                data: crosswordLayoutData,
-                child: CrosswordLetter(data: letterData),
-              ),
-            ),
-          );
-
-          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
-          final ioCrosswordLetter =
-              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
-          final style = ioCrosswordLetter.style;
-
-          expect(style, equals(themeData.io.crosswordLetterTheme.dino));
+          expect(style, equals(themeData.io.crosswordLetterTheme.empty));
         },
       );
 
