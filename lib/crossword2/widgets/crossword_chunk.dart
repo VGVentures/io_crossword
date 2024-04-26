@@ -55,10 +55,8 @@ class CrosswordChunk extends StatelessWidget {
 
           final letters = CrosswordLetterData.fromChunk(chunk)
             ..removeWhere((position, letter) {
-              return position.$1 < 0 ||
-                  position.$2 < 0 ||
-                  position.$1 >= _chunkSize ||
-                  position.$2 >= _chunkSize;
+              return (position.$1 < 0 || position.$1 >= _chunkSize) ||
+                  (position.$2 < 0 || position.$2 >= _chunkSize);
             });
 
           return Stack(

@@ -387,6 +387,7 @@ void main() {
         final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
         final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
         final unknown = chunk.words.firstWhere((word) => word.answer == null);
+        final polo = chunk.words.firstWhere((word) => word.answer == 'POLO');
 
         expect(
           letters,
@@ -463,11 +464,29 @@ void main() {
               character: null,
               words: (null, unknown),
             ),
+            (-1, 4): CrosswordLetterData(
+              index: (-1, 4),
+              chunkIndex: chunkIndex,
+              character: 'P',
+              words: (polo, null),
+            ),
+            (0, 4): CrosswordLetterData(
+              index: (0, 4),
+              chunkIndex: chunkIndex,
+              character: 'O',
+              words: (polo, null),
+            ),
+            (1, 4): CrosswordLetterData(
+              index: (1, 4),
+              chunkIndex: chunkIndex,
+              character: 'L',
+              words: (polo, null),
+            ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
               chunkIndex: chunkIndex,
-              character: null,
-              words: (null, unknown),
+              character: 'O',
+              words: (polo, unknown),
             ),
           }),
         );
