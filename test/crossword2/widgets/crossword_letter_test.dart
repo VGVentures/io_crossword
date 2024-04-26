@@ -113,7 +113,7 @@ void main() {
       });
 
       testWidgets(
-        'with horizontal solved word mascot when vertical is null',
+        'with horizontal word mascot when solved and vertical is null',
         (tester) async {
           final word = ant.copyWith(
             mascot: Mascots.android,
@@ -146,7 +146,7 @@ void main() {
       );
 
       testWidgets(
-        'with vertical solved word mascot when horizontal is null',
+        'with vertical word mascot when solved and horizontal is null',
         (tester) async {
           final word = ant.copyWith(
             mascot: Mascots.dash,
