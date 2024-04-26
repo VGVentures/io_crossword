@@ -33,9 +33,9 @@ class WordSelectionTopBar extends StatelessWidget {
             final l10n = context.l10n;
             final mascot = context.select<CrosswordBloc, Mascots?>(
               (bloc) {
-                final currentWord = bloc.state.sections[word!.section]!.words
+                final currentWord = bloc.state.sections[word!.section]?.words
                     .firstWhere((element) => element.id == word.word.id);
-                return currentWord.mascot;
+                return currentWord?.mascot;
               },
             );
 
