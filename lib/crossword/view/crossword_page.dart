@@ -118,9 +118,11 @@ class CrosswordView extends StatelessWidget {
                     ),
                 },
                 if (state.mascotVisible)
-                  Hero(
-                    tag: 'dangle_mascot',
-                    child: _Dangle(context.read<PlayerBloc>().state.mascot!),
+                  Align(
+                    child: Hero(
+                      tag: 'dangle_mascot',
+                      child: _Dangle(context.read<PlayerBloc>().state.mascot!),
+                    ),
                   ),
               ],
             );
@@ -179,36 +181,32 @@ class _DangleState extends State<_Dangle> {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Align(
-        child: SizedBox(
-          width: widget.mascot.teamMascot.dangleSpriteInformation.width,
-          height: widget.mascot.teamMascot.dangleSpriteInformation.height,
-          child: GestureDetector(
-            onTap: () {
-              _controller.changeAnimation(
-                widget.mascot.teamMascot.dropInAnimation.path,
-              );
-            },
-            child: SpriteAnimationList(
-              animationListItems: [
-                AnimationListItem(
-                  path: widget.mascot.teamMascot.dangleAnimation.path,
-                  spriteInformation:
-                      widget.mascot.teamMascot.dangleSpriteInformation,
-                ),
-                AnimationListItem(
-                  path: widget.mascot.teamMascot.dropInAnimation.path,
-                  spriteInformation:
-                      widget.mascot.teamMascot.dropInSpriteInformation,
-                  loop: false,
-                  onComplete: () =>
-                      context.read<CrosswordBloc>().add(const MascotDropped()),
-                ),
-              ],
-              controller: _controller,
+    return SizedBox(
+      width: widget.mascot.teamMascot.dangleSpriteInformation.width,
+      height: widget.mascot.teamMascot.dangleSpriteInformation.height,
+      child: GestureDetector(
+        onTap: () {
+          _controller.changeAnimation(
+            widget.mascot.teamMascot.dropInAnimation.path,
+          );
+        },
+        child: SpriteAnimationList(
+          animationListItems: [
+            AnimationListItem(
+              path: widget.mascot.teamMascot.dangleAnimation.path,
+              spriteInformation:
+                  widget.mascot.teamMascot.dangleSpriteInformation,
             ),
-          ),
+            AnimationListItem(
+              path: widget.mascot.teamMascot.dropInAnimation.path,
+              spriteInformation:
+                  widget.mascot.teamMascot.dropInSpriteInformation,
+              loop: false,
+              onComplete: () =>
+                  context.read<CrosswordBloc>().add(const MascotDropped()),
+            ),
+          ],
+          controller: _controller,
         ),
       ),
     );
