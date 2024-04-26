@@ -123,5 +123,24 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
       expect(find.text(l10n.findRandomWordError), findsOneWidget);
     });
+
+    testWidgets('pops when status is failure and close button is tapped',
+        (tester) async {
+      when(() => randomWordSelectionBloc.state).thenReturn(
+        RandomWordSelectionState(
+          status: RandomWordSelectionStatus.failure,
+        ),
+      );
+      await tester.pumpApp(
+        BlocProvider(
+          create: (_) => randomWordSelectionBloc,
+          child: RandomWordLoadingDialog(),
+        ),
+        navigator: mockNavigator,
+      );
+
+      await tester.tap(find.text(l10n.close));
+      verify(mockNavigator.pop).called(1);
+    });
   });
 }
