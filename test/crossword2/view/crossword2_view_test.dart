@@ -37,6 +37,9 @@ void main() {
       when(() => word.axis).thenReturn(domain.Axis.horizontal);
       when(() => word.position).thenReturn(const Point(0, 0));
       when(() => word.id).thenReturn('id');
+      when(() => word.answer).thenReturn('word');
+      when(() => word.isSolved).thenReturn(false);
+      when(() => word.solvedTimestamp).thenReturn(null);
     });
 
     testWidgets('requests chunk', (tester) async {
@@ -70,6 +73,8 @@ void main() {
       group('shown', () {
         testWidgets('when an unsolved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(null);
+          when(() => word.isSolved).thenReturn(false);
+
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
@@ -95,6 +100,8 @@ void main() {
 
         testWidgets('when a solved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(1);
+          when(() => word.isSolved).thenReturn(true);
+
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
               status: WordSelectionStatus.preSolving,
@@ -200,6 +207,9 @@ void main() {
         testWidgets(
           'horizontally when an horizontal word is to be solved',
           (tester) async {
+            when(() => word.isSolved).thenReturn(false);
+            when(() => word.axis).thenReturn(domain.Axis.horizontal);
+
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
                 status: WordSelectionStatus.preSolving,
@@ -231,38 +241,9 @@ void main() {
         testWidgets(
           'vertically when a vertical word is to be solved',
           (tester) async {
-            when(() => wordSelectionBloc.state).thenReturn(
-              WordSelectionState(
-                status: WordSelectionStatus.preSolving,
-                word: SelectedWord(
-                  section: (0, 0),
-                  word: word,
-                ),
-              ),
-            );
-
-            await tester.pumpApp(
-              layout: IoLayoutData.large,
-              DefaultWordInputController(
-                child: BlocProvider<WordSelectionBloc>(
-                  create: (_) => wordSelectionBloc,
-                  child: const Crossword2View(),
-                ),
-              ),
-            );
-
-            final wordInputFinder = find.byType(IoWordInput);
-            expect(wordInputFinder, findsOneWidget);
-
-            final wordInput = tester.widget<IoWordInput>(wordInputFinder);
-            expect(wordInput.direction, equals(Axis.horizontal));
-          },
-        );
-
-        testWidgets(
-          'horizontally when a word is to be solved',
-          (tester) async {
+            when(() => word.isSolved).thenReturn(false);
             when(() => word.axis).thenReturn(domain.Axis.vertical);
+
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
                 status: WordSelectionStatus.preSolving,
@@ -296,6 +277,8 @@ void main() {
         testWidgets(
           'when word is not solved with a small layout',
           (tester) async {
+            when(() => word.isSolved).thenReturn(false);
+
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
                 status: WordSelectionStatus.preSolving,
@@ -321,6 +304,8 @@ void main() {
         testWidgets(
           'when word is solved',
           (tester) async {
+            when(() => word.isSolved).thenReturn(true);
+
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
@@ -367,6 +352,70 @@ void main() {
           },
         );
       });
+    });
+
+    group('$IoWord', () {
+      testWidgets(
+        'shown with answer when word is solved',
+        (tester) async {
+          when(() => word.isSolved).thenReturn(true);
+
+          when(() => word.solvedTimestamp).thenReturn(1);
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: (0, 0),
+                word: word,
+              ),
+            ),
+          );
+
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            BlocProvider<WordSelectionBloc>(
+              create: (_) => wordSelectionBloc,
+              child: const Crossword2View(),
+            ),
+          );
+
+          final ioWordFinder = find.byType(IoWord);
+          expect(ioWordFinder, findsOneWidget);
+
+          final ioWord = tester.widget<IoWord>(ioWordFinder);
+          expect(ioWord.data, equals(word.answer));
+        },
+      );
+
+      testWidgets(
+        'not shown when word is not solved',
+        (tester) async {
+          when(() => word.isSolved).thenReturn(false);
+
+          when(() => word.solvedTimestamp).thenReturn(1);
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: (0, 0),
+                word: word,
+              ),
+            ),
+          );
+
+          await tester.pumpApp(
+            layout: IoLayoutData.large,
+            DefaultWordInputController(
+              child: BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            ),
+          );
+
+          expect(find.byType(IoWord), findsNothing);
+        },
+      );
     });
   });
 }
