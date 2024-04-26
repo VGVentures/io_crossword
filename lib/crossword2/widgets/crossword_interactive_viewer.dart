@@ -91,11 +91,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final begin = _transformationController.value.getTranslation();
 
-    final target = switch (IoLayout.of(context)) {
-      IoLayoutData.small => viewport.centerForSmallLayout,
-      IoLayoutData.large => viewport.centerForLargeLayout,
-    };
-    final end = target -
+    final layout = IoLayout.of(context);
+    final end = viewport.center(layout) -
         Vector3(
           (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
               (wordMiddlePosition.$1 * crosswordLayout.cellSize.width) +
@@ -174,20 +171,30 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 }
 
 extension on Quad {
-  /// The center of the visible viewport for small layout.
+  /// The visible center of the quad.
   ///
-  /// Makes the assumption that the height of the [WordSelectionSmallContainer]
-  /// is always the same.
-  Vector3 get centerForSmallLayout => Vector3(width / 2, height * 0.3, 0);
-
-  /// The center of the visible viewport for large layout.
+  /// This is not the actual center of the quad, but the center of the area that
+  /// is not-obscured by other widgets that overlay the quad.
   ///
-  /// Takes into account the width of the [WordSelectionLargeContainer].
-  Vector3 get centerForLargeLayout => Vector3(
-        width * (1 - WordSelectionLargeContainer.widthRatio) / 2,
-        height / 2,
-        0,
-      );
+  /// In a small layout, the [WordSelectionSmallContainer] obscured the quad,
+  /// once a word is selected. We assume it's height is always the same.
+  ///
+  /// Whereas, in a large layout, the [WordSelectionLargeContainer] obscures the
+  /// quad, once a word is selected.
+  Vector3 center(IoLayoutData data) {
+    return switch (data) {
+      IoLayoutData.small => Vector3(
+          width / 2,
+          height * 0.3,
+          0,
+        ),
+      IoLayoutData.large => Vector3(
+          width * (1 - WordSelectionLargeContainer.widthRatio) / 2,
+          height / 2,
+          0,
+        ),
+    };
+  }
 
   double get width => point2.x - point0.x;
 
