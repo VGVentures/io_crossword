@@ -41,19 +41,22 @@ class WordSelectionTopBar extends StatelessWidget {
             );
 
             if (mascot != null) {
-              return Column(
-                children: [
-                  Text(
-                    l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
-                    style: themeData.textTheme.labelLarge?.copyWith(
-                      color: mascot.color,
+              return Padding(
+                padding: const EdgeInsets.all(11),
+                child: Column(
+                  children: [
+                    Text(
+                      l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
+                      style: themeData.textTheme.labelLarge?.copyWith(
+                        color: mascot.color,
+                      ),
                     ),
-                  ),
-                  Text(
-                    l10n.alreadySolvedSubtitle.toUpperCase(),
-                    style: themeData.textTheme.labelLarge,
-                  ),
-                ],
+                    Text(
+                      l10n.alreadySolvedSubtitle.toUpperCase(),
+                      style: themeData.textTheme.labelLarge,
+                    ),
+                  ],
+                ),
               );
             }
 
