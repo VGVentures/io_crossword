@@ -26,7 +26,7 @@ class RandomWordLoadingDialog extends StatelessWidget {
 
     return BlocConsumer<RandomWordSelectionBloc, RandomWordSelectionState>(
       listenWhen: (previous, current) =>
-          current.status != RandomWordSelectionStatus.loading ||
+          current.status != RandomWordSelectionStatus.loading &&
           current.status != RandomWordSelectionStatus.failure,
       listener: (context, state) => Navigator.pop(context),
       builder: (context, state) {
