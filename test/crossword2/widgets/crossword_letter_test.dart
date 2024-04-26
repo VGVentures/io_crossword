@@ -381,7 +381,7 @@ void main() {
         final chunkIndex = (chunk.position.x, chunk.position.y);
 
         final letters = CrosswordLetterData.fromChunk(chunk);
-        
+
         final polo = chunk.words.firstWhere((word) => word.id == '0');
         final hello = chunk.words.firstWhere((word) => word.id == '1');
         final old = chunk.words.firstWhere((word) => word.id == '2');
