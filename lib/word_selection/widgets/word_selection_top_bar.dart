@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:intl/intl.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
+import 'package:io_crossword/extensions/mascot_color.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -39,12 +40,25 @@ class WordSelectionTopBar extends StatelessWidget {
               },
             );
 
-            final title = mascot != null
-                ? l10n.alreadySolvedTitle(mascot.name)
-                : wordIdentifier(word!.word);
+            if (mascot != null) {
+              return Column(
+                children: [
+                  Text(
+                    l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
+                    style: themeData.textTheme.labelLarge?.copyWith(
+                      color: mascot.color,
+                    ),
+                  ),
+                  Text(
+                    l10n.alreadySolvedSubtitle.toUpperCase(),
+                    style: themeData.textTheme.labelLarge,
+                  ),
+                ],
+              );
+            }
 
             return Text(
-              title,
+              wordIdentifier(word!.word),
               style: themeData.textTheme.labelLarge,
             );
           },

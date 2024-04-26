@@ -146,7 +146,17 @@ void main() {
         expect(find.text('11,000 ACROSS'), findsOneWidget);
         await tester.pump();
         expect(
-          find.text(l10n.alreadySolvedTitle(_SolvedFakeWord().mascot!.name)),
+          find.text(
+            l10n
+                .alreadySolvedTitle(_SolvedFakeWord().mascot!.name)
+                .toUpperCase(),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text(
+            l10n.alreadySolvedSubtitle.toUpperCase(),
+          ),
           findsOneWidget,
         );
       });
