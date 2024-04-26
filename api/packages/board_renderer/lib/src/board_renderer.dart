@@ -192,7 +192,7 @@ class BoardRenderer {
       );
 
       final isHorizontal = word.axis == Axis.horizontal;
-      final wordCharacters = word.answer!.split('');
+      final wordCharacters = word.answer.split('');
 
       for (var i = 0; i < wordCharacters.length; i++) {
         final x1 =
@@ -280,7 +280,7 @@ class BoardRenderer {
 
       final position = (x, y);
 
-      final wordCharacters = word.answer!.split('');
+      final wordCharacters = word.answer.split('');
 
       for (var c = 0; c < wordCharacters.length; c++) {
         final char = wordCharacters.elementAt(c).toUpperCase();
@@ -438,7 +438,7 @@ class BoardRenderer {
 
       final position = (x, y);
 
-      final wordCharacters = word.answer!.split('');
+      final wordCharacters = word.answer.split('');
 
       for (var c = 0; c < wordCharacters.length; c++) {
         final char = wordCharacters.elementAt(c).toUpperCase();

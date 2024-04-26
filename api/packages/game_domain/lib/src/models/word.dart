@@ -14,15 +14,23 @@ class Word extends Equatable {
     required this.id,
     required this.position,
     required this.axis,
-    required this.length,
     required this.clue,
-    this.answer,
+    required this.answer,
     this.solvedTimestamp,
     this.mascot,
   });
 
   /// {@macro word}
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
+
+  /// The empty character used in [answer].
+  static const emptyCharacter = ' ';
+
+  /// Returns the length of the [answer].
+  int get length => answer.length;
+
+  /// Checks if [Word] has been solved.
+  bool get isSolved => solvedTimestamp != null;
 
   /// Unique identifier of the word.
   @JsonKey()
@@ -38,18 +46,17 @@ class Word extends Equatable {
   @JsonKey()
   final Axis axis;
 
-  /// The length of the word.
-  @JsonKey()
-  final int length;
-
   /// The clue to show users when guessing for the first time.
   @JsonKey()
   final String clue;
 
   /// The word answer to display in the crossword when solved.
-  /// If the word is not solved, this value is null.
+  /// If the word is not solved, this value contains [emptyCharacter] with the
+  /// value of the length of the word.
+  /// If parts of the word is solved it will contain the solved character with
+  /// [emptyCharacter] where not solved.
   @JsonKey()
-  final String? answer;
+  final String answer;
 
   /// The timestamp when the word was solved. In milliseconds since epoch.
   /// If the word is not solved, this value is null.
@@ -70,7 +77,6 @@ class Word extends Equatable {
     String? id,
     Point<int>? position,
     Axis? axis,
-    int? length,
     String? clue,
     String? answer,
     int? solvedTimestamp,
@@ -80,7 +86,6 @@ class Word extends Equatable {
       id: id ?? this.id,
       position: position ?? this.position,
       axis: axis ?? this.axis,
-      length: length ?? this.length,
       clue: clue ?? this.clue,
       answer: answer ?? this.answer,
       solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
@@ -93,7 +98,6 @@ class Word extends Equatable {
         id,
         position,
         axis,
-        length,
         clue,
         answer,
         solvedTimestamp,
