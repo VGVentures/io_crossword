@@ -23,11 +23,11 @@ class _MockWordSelectionBloc
 
 void main() {
   group('$CrosswordLetter', () {
-    const ant = Word(
+    final ant = Word(
       id: '1',
       position: Point<int>(0, 0),
+      answer: Word.emptyCharacter * 3,
       axis: domain.Axis.horizontal,
-      length: 3,
       clue: '',
     );
 
@@ -382,12 +382,12 @@ void main() {
 
         final letters = CrosswordLetterData.fromChunk(chunk);
 
-        final hello = chunk.words.firstWhere((word) => word.answer == 'HELLO');
-        final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
-        final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
-        final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown = chunk.words.firstWhere((word) => word.answer == null);
-        final polo = chunk.words.firstWhere((word) => word.answer == 'POLO');
+        final polo = chunk.words.firstWhere((word) => word.id == '0');
+        final hello = chunk.words.firstWhere((word) => word.id == '1');
+        final old = chunk.words.firstWhere((word) => word.id == '2');
+        final food = chunk.words.firstWhere((word) => word.id == '3');
+        final elf = chunk.words.firstWhere((word) => word.id == '4');
+        final unknown = chunk.words.firstWhere((word) => word.id == '5');
 
         expect(
           letters,
@@ -461,7 +461,7 @@ void main() {
             (2, 3): CrosswordLetterData(
               index: (2, 3),
               chunkIndex: chunkIndex,
-              character: null,
+              character: ' ',
               words: (null, unknown),
             ),
             (-1, 4): CrosswordLetterData(

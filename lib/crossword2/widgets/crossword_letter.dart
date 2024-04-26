@@ -60,7 +60,7 @@ class CrosswordLetterData extends Equatable {
             ? (word.position.x + i, word.position.y)
             : (word.position.x, word.position.y + i);
 
-        final character = letters[index]?.character ?? word.answer?[i];
+        final character = letters[index]?.character ?? word.answer[i];
 
         var words = letters[index]?.words ?? (null, null);
         words =

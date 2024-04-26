@@ -20,7 +20,7 @@ class HintRepository {
   final DbClient _dbClient;
   final Dio _httpClient;
 
-  static const _answersCollection = 'answers2';
+  static const _answersCollection = 'answers';
   static const _hintsCollection = 'hints';
   static const _boardInfoCollection = 'boardInfo';
 
