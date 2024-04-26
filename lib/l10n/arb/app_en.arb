@@ -229,6 +229,14 @@
   "@leaderboard": {
     "description": "Leaderboard label"
   },
+  "findRandomWordLoadingText": "Finding a word to solve...",
+  "@findRandomWordLoadingText": {
+    "description": "Message displayed when finding a random word"
+  },
+  "findRandomWordError": "There was an error finding you an unsolved word.\n Please try again.",
+  "@findRandomWordError": {
+    "description": "Error message when finding a random word fails"
+  },
   "errorPromptText": "Something went wrong",
   "@errorPromptText": {
     "description": "Error message"
