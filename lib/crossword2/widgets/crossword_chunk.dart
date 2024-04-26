@@ -32,6 +32,12 @@ class CrosswordChunk extends StatelessWidget {
   @visibleForTesting
   static const debugBorderKey = Key('CrosswordChunk.debugBorder');
 
+  /// The size of a chunk.
+  // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
+  // hard-coding it:
+  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
+  static const _chunkSize = 20;
+
   @override
   Widget build(BuildContext context) {
     final crosswordLayout = CrosswordLayoutScope.of(context);
@@ -47,7 +53,11 @@ class CrosswordChunk extends StatelessWidget {
                 : const SizedBox();
           }
 
-          final letters = CrosswordLetterData.fromChunk(chunk);
+          final letters = CrosswordLetterData.fromChunk(chunk)
+            ..removeWhere((position, letter) {
+              return (position.$1 < 0 || position.$1 >= _chunkSize) ||
+                  (position.$2 < 0 || position.$2 >= _chunkSize);
+            });
 
           return Stack(
             clipBehavior: Clip.none,
