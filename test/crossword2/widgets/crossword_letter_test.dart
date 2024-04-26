@@ -382,11 +382,12 @@ void main() {
 
         final letters = CrosswordLetterData.fromChunk(chunk);
 
-        final hello = chunk.words.firstWhere((word) => word.answer == 'HELLO');
-        final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
-        final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
-        final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown = chunk.words.firstWhere((word) => !word.isSolved);
+        final polo = chunk.words.firstWhere((word) => word.id == '0');
+        final hello = chunk.words.firstWhere((word) => word.id == '1');
+        final old = chunk.words.firstWhere((word) => word.id == '2');
+        final food = chunk.words.firstWhere((word) => word.id == '3');
+        final elf = chunk.words.firstWhere((word) => word.id == '4');
+        final unknown = chunk.words.firstWhere((word) => word.id == '5');
 
         expect(
           letters,
@@ -463,11 +464,29 @@ void main() {
               character: ' ',
               words: (null, unknown),
             ),
+            (-1, 4): CrosswordLetterData(
+              index: (-1, 4),
+              chunkIndex: chunkIndex,
+              character: 'P',
+              words: (polo, null),
+            ),
+            (0, 4): CrosswordLetterData(
+              index: (0, 4),
+              chunkIndex: chunkIndex,
+              character: 'O',
+              words: (polo, null),
+            ),
+            (1, 4): CrosswordLetterData(
+              index: (1, 4),
+              chunkIndex: chunkIndex,
+              character: 'L',
+              words: (polo, null),
+            ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
               chunkIndex: chunkIndex,
-              character: ' ',
-              words: (null, unknown),
+              character: 'O',
+              words: (polo, unknown),
             ),
           }),
         );

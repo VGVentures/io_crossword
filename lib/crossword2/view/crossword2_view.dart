@@ -12,6 +12,10 @@ class Crossword2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
+    // hard-coding it:
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
     const configuration = CrosswordConfiguration(
       bottomRight: (45, 45),
       chunkSize: 20,

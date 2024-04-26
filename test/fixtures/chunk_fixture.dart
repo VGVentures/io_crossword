@@ -3,15 +3,22 @@ import 'package:game_domain/game_domain.dart';
 /// A fixture for a [BoardSection] instance.
 ///
 /// ```
-///   0 1 2 3 4
-/// 0 H E L L O
-/// 1 - L - - L
-/// 2 - F O O D
-/// 3 - - ? - -
-/// 4 - - ? - -
+///   -1 0 1 2 3 4
+///  0 - H E L L O
+///  1 - - L - - L
+///  2 - - F O O D
+///  3 - - - ? - -
+///  4 P O L O - -
 /// ```
 ///
 BoardSection get chunkFixture1 {
+  const polo = Word(
+    id: '0',
+    answer: 'POLO',
+    position: Point<int>(-1, 4),
+    axis: Axis.horizontal,
+    clue: '',
+  );
   const hello = Word(
     id: '1',
     answer: 'HELLO',
@@ -55,7 +62,7 @@ BoardSection get chunkFixture1 {
   return BoardSection(
     id: '1',
     position: const Point<int>(0, 0),
-    words: [hello, old, food, elf, unknown],
+    words: [polo, hello, old, food, elf, unknown],
     size: 20,
     borderWords: const [],
   );
