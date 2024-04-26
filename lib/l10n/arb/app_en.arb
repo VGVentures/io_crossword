@@ -161,7 +161,7 @@
   "@couldNotOpenUrl": {
     "description": "Could not open url error message when trying to open link"
   },
-  "alreadySolvedTitle": "{team} team won this word!.",
+  "alreadySolvedTitle": "{team} team won this word!",
   "@alreadySolvedTitle": {
     "description": "Title when a word gets solved while solving it.",
     "placeholders": {
