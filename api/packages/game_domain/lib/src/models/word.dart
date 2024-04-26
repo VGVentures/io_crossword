@@ -51,7 +51,8 @@ class Word extends Equatable {
   final String clue;
 
   /// The word answer to display in the crossword when solved.
-  /// If the word is not solved, this value is null.
+  /// If the word is not solved, this value contains [emptyCharacter] with the
+  /// value of the length of the word.
   @JsonKey()
   final String answer;
 
