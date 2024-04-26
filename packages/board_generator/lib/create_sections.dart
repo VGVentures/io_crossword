@@ -9,19 +9,15 @@ import 'package:dart_firebase_admin/firestore.dart';
 import 'package:game_domain/game_domain.dart';
 
 void main(List<String> args) async {
-  // final serviceAccountPath =
-  //     Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
-  // if (serviceAccountPath == null) {
-  //   throw Exception('Service account path not found');
-  // }
-  // final admin = FirebaseAdminApp.initializeApp(
-  //   'io-crossword-dev',
-  //   Credential.fromServiceAccount(File(serviceAccountPath)),
-  // );
+  final serviceAccountPath =
+      Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+  if (serviceAccountPath == null) {
+    throw Exception('Service account path not found');
+  }
 
   final admin = FirebaseAdminApp.initializeApp(
     'io-crossword-dev',
-    Credential.fromServiceAccount(File('assets/dev_crossword_key.json')),
+    Credential.fromServiceAccount(File(serviceAccountPath)),
   );
   final firestore = Firestore(admin);
   final crosswordRepository = CrosswordRepository(firestore: firestore);
