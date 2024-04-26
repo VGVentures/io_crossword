@@ -105,12 +105,13 @@ class _CrosswordStack extends StatelessWidget {
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
               selector: (state) => state.word,
               builder: (context, selectedWord) {
-                if (selectedWord == null ||
-                    selectedWord.word.solvedTimestamp != null) {
+                if (selectedWord == null) {
                   return const SizedBox.shrink();
                 }
 
                 final word = selectedWord.word;
+                final theme = Theme.of(context);
+
                 return Positioned(
                   left: (selectedWord.section.$1 *
                           crosswordLayout.chunkSize.width) +
@@ -120,12 +121,17 @@ class _CrosswordStack extends StatelessWidget {
                           crosswordLayout.chunkSize.height) +
                       (word.position.y * crosswordLayout.cellSize.height) +
                       crosswordLayout.padding.top,
-                  child: CrosswordInput(
-                    key: ValueKey(selectedWord.word.id),
-                    style: Theme.of(context).io.wordInput.secondary,
-                    direction: word.axis.toAxis(),
-                    length: selectedWord.word.length,
-                  ),
+                  child: selectedWord.word.isSolved
+                      ? IoWord(
+                          selectedWord.word.answer,
+                          style: theme.io.wordTheme.big,
+                        )
+                      : CrosswordInput(
+                          key: ValueKey(selectedWord.word.id),
+                          style: theme.io.wordInput.secondary,
+                          direction: word.axis.toAxis(),
+                          length: selectedWord.word.length,
+                        ),
                 );
               },
             ),
