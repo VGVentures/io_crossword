@@ -176,7 +176,7 @@ extension on Quad {
   /// This is not the actual center of the quad, but the center of the area that
   /// is not-obscured by other widgets that overlay the quad.
   ///
-  /// In a small layout, the [WordSelectionSmallContainer] obscured the quad,
+  /// In a small layout, the [WordSelectionSmallContainer] obscures the quad,
   /// once a word is selected. We assume it's height is always the same.
   ///
   /// Whereas, in a large layout, the [WordSelectionLargeContainer] obscures the
