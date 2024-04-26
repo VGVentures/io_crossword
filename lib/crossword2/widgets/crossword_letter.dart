@@ -141,6 +141,8 @@ class CrosswordLetter extends StatelessWidget {
 
 extension on CrosswordLetterWords {
   /// Returns the mascot of the first team that resolved the letter.
+  ///
+  /// If `null`, no team has yet resolved the letter.
   Mascots? mascot() {
     return switch (($1?.isSolved ?? false, $2?.isSolved ?? false)) {
       (false, false) => null,
