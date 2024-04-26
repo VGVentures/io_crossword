@@ -4,11 +4,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
-import 'package:io_crossword/widget/widget.dart';
+import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
-import '../helpers/helpers.dart';
+import '../../helpers/helpers.dart';
 
 class _MockRandomWordSelectionBloc
     extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
@@ -18,6 +19,11 @@ void main() {
   group('RandomWordLoadingDialog', () {
     late RandomWordSelectionBloc randomWordSelectionBloc;
     late MockNavigator mockNavigator;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       mockNavigator = MockNavigator();
@@ -57,7 +63,6 @@ void main() {
     );
 
     for (final status in [
-      RandomWordSelectionStatus.failure,
       RandomWordSelectionStatus.success,
       RandomWordSelectionStatus.notFound,
       RandomWordSelectionStatus.initial,
@@ -81,5 +86,42 @@ void main() {
         verify(mockNavigator.pop).called(1);
       });
     }
+
+    testWidgets('displays loading message when status is loading',
+        (tester) async {
+      when(() => randomWordSelectionBloc.state).thenReturn(
+        RandomWordSelectionState(
+          status: RandomWordSelectionStatus.loading,
+        ),
+      );
+      await tester.pumpApp(
+        BlocProvider(
+          create: (_) => randomWordSelectionBloc,
+          child: RandomWordLoadingDialog(),
+        ),
+        navigator: mockNavigator,
+      );
+
+      expect(find.byType(LoadingView), findsOneWidget);
+    });
+
+    testWidgets('displays error message when status is failure',
+        (tester) async {
+      when(() => randomWordSelectionBloc.state).thenReturn(
+        RandomWordSelectionState(
+          status: RandomWordSelectionStatus.failure,
+        ),
+      );
+      await tester.pumpApp(
+        BlocProvider(
+          create: (_) => randomWordSelectionBloc,
+          child: RandomWordLoadingDialog(),
+        ),
+        navigator: mockNavigator,
+      );
+
+      expect(find.byType(ErrorView), findsOneWidget);
+      expect(find.text(l10n.findRandomWordError), findsOneWidget);
+    });
   });
 }

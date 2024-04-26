@@ -9,8 +9,7 @@ import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
-import 'package:io_crossword/widget/widget.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -57,18 +56,12 @@ class CrosswordView extends StatelessWidget {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         switch (state.status) {
-          case RandomWordSelectionStatus.failure:
-            showDialog<void>(
-              context: context,
-              builder: (context) => ErrorView(
-                title: l10n.findRandomWordError,
-              ),
-            );
           case RandomWordSelectionStatus.loading:
             RandomWordLoadingDialog.openDialog(context);
-          case RandomWordSelectionStatus.initial:
           case RandomWordSelectionStatus.notFound:
-            // TODO(hugo): Show popup notifying that the crossword is complete.
+          // TODO(hugo): Show popup notifying that the crossword is complete.
+          case RandomWordSelectionStatus.initial:
+          case RandomWordSelectionStatus.failure:
             break;
           case RandomWordSelectionStatus.success:
             final position = (

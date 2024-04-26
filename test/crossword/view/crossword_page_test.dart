@@ -13,8 +13,7 @@ import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
-import 'package:io_crossword/widget/widget.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -117,26 +116,6 @@ void main() {
         ).called(1);
       });
 
-      testWidgets('failure, opens error dialog', (tester) async {
-        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
-        whenListen(
-          randomWordSelectionBloc,
-          Stream.fromIterable([
-            RandomWordSelectionState(
-              status: RandomWordSelectionStatus.failure,
-            ),
-          ]),
-          initialState: RandomWordSelectionState(),
-        );
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-          randomWordSelectionBloc: randomWordSelectionBloc,
-        );
-        await tester.pump();
-        expect(find.text(l10n.findRandomWordError), findsOneWidget);
-      });
-
       testWidgets('loading, opens $RandomWordLoadingDialog', (tester) async {
         final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
         whenListen(
@@ -155,6 +134,29 @@ void main() {
         );
         await tester.pump();
         expect(find.byType(RandomWordLoadingDialog), findsOneWidget);
+      });
+
+      testWidgets('failure, opens error dialog', (tester) async {
+        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+        whenListen(
+          randomWordSelectionBloc,
+          Stream.fromIterable([
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.loading,
+            ),
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.failure,
+            ),
+          ]),
+          initialState: RandomWordSelectionState(),
+        );
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          randomWordSelectionBloc: randomWordSelectionBloc,
+        );
+        await tester.pump();
+        expect(find.text(l10n.findRandomWordError), findsOneWidget);
       });
     });
 
