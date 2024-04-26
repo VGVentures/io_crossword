@@ -12,7 +12,7 @@ class PlayerInitials extends StatelessWidget {
         context.select((PlayerBloc bloc) => bloc.state.player.initials);
 
     return IoWord(
-      initials.toUpperCase(),
+      initials,
       style: Theme.of(context).io.wordTheme.big,
     );
   }
