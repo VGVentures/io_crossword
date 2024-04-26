@@ -21,7 +21,7 @@ class CrosswordRepository {
   }
 
   Future<void> _addAnswers(List<Answer> answers) async {
-    final answersCollection = firestore.collection('answers');
+    final answersCollection = firestore.collection('answerstest');
     for (final answer in answers) {
       await answersCollection.doc(answer.id).set(answer.toJson());
     }

@@ -12,7 +12,7 @@ Answer _$AnswerFromJson(Map<String, dynamic> json) => Answer(
       section: const PointConverter()
           .fromJson(json['section'] as Map<String, dynamic>),
       collidedWords: (json['collidedWords'] as List<dynamic>)
-          .map((e) => CollidedWords.fromJson(e as Map<String, dynamic>))
+          .map((e) => CollidedWord.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

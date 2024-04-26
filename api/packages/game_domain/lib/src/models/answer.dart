@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:game_domain/src/models/collided_words.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'answer.g.dart';
@@ -38,7 +37,7 @@ class Answer extends Equatable {
 
   /// The words that collide with the current [Answer].
   @JsonKey()
-  final List<CollidedWords> collidedWords;
+  final List<CollidedWord> collidedWords;
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$AnswerToJson(this);

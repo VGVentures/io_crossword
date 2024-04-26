@@ -117,24 +117,35 @@ void main(List<String> args) async {
           )
           .toList();
 
-      // TODO(ayad): add to [Answer] object the other words that are crossing it
-
       answers.addAll(
         sectionWords.map((word) {
           final allLetters = word.allLetters;
 
           final wordsInSection = sectionWords.toList()..remove(word);
 
+          final collidedWords = <CollidedWord>[];
+
+          for (final word in wordsInSection) {
+            final collision = word
+                .copyWith(answer: answersMap[word.id])
+                .getCollision(allLetters);
+
+            if (collision != null) {
+              collidedWords.add(
+                CollidedWord(
+                  character: collision.$2,
+                  position: collision.$1,
+                  wordId: word.id,
+                ),
+              );
+            }
+          }
+
           return Answer(
             id: word.id,
             answer: answersMap[word.id]!,
             section: Point(i, j),
-            collidedWords: [
-              CollidedWords(
-                words: [word.id],
-                section: const Point(10, 20),
-              ),
-            ],
+            collidedWords: collidedWords,
           );
         }),
       );
@@ -214,18 +225,18 @@ extension WordExtension on Word {
 
   /// Returns the index position of the collision.
   /// If there are no collisions returns null.
-  int? getCollision(List<(int, int)> letters) {
+  (int, String)? getCollision(List<(int, int)> letters) {
     switch (axis) {
       case Axis.horizontal:
         for (var i = 0; i < length; i++) {
           if (letters.contains((position.x + i, position.y))) {
-            return i;
+            return (i, answer[i]);
           }
         }
       case Axis.vertical:
         for (var i = 0; i < length; i++) {
           if (letters.contains((position.x, position.y + i))) {
-            return i;
+            return (i, answer[i]);
           }
         }
     }
