@@ -128,14 +128,12 @@ class LoadedBoardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final layout = IoLayout.of(context);
-
-    return DefaultWordInputController(
+    return const DefaultWordInputController(
       child: Stack(
         children: [
-          const Crossword2View(),
-          const WordSelectionPage(),
-          if (layout == IoLayoutData.large) const BottomBar(),
+          Crossword2View(),
+          WordSelectionPage(),
+          BottomBar(),
         ],
       ),
     );

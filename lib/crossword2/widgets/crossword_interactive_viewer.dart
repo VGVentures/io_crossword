@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// {@template crossword_interactive_viewer}
@@ -89,7 +90,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final wordMiddlePosition = selectedWord.word.middlePosition();
 
     final begin = _transformationController.value.getTranslation();
-    final end = viewport.center -
+
+    final target = switch (IoLayout.of(context)) {
+      IoLayoutData.small => viewport.centerForSmallLayout,
+      IoLayoutData.large => viewport.centerForLargeLayout,
+    };
+    final end = target -
         Vector3(
           (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
               (wordMiddlePosition.$1 * crosswordLayout.cellSize.width) +
@@ -168,7 +174,13 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 }
 
 extension on Quad {
-  Vector3 get center => (point2 - point0) / 2;
+  Vector3 get centerForSmallLayout => Vector3(width / 2, height * 0.3, 0);
+
+  Vector3 get centerForLargeLayout => Vector3(
+        width * (1 - WordSelectionLargeContainer.widthRatio) / 2,
+        height / 2,
+        0,
+      );
 
   double get width => point2.x - point0.x;
 
@@ -178,8 +190,8 @@ extension on Quad {
 extension on domain.Word {
   (num, num) middlePosition() {
     return switch (axis) {
-      domain.Axis.horizontal => (position.x + (length / 2), position.y),
-      domain.Axis.vertical => (position.x, position.y + (length / 2)),
+      domain.Axis.horizontal => (position.x + (length / 2), position.y + .5),
+      domain.Axis.vertical => (position.x + .5, position.y + (length / 2)),
     };
   }
 }
