@@ -7,6 +7,7 @@ void main() {
   group('SpriteInformation', () {
     test('supports equality', () {
       final spriteInformation1 = SpriteInformation(
+        path: 'path',
         rows: 16,
         columns: 5,
         stepTime: 0.042,
@@ -15,6 +16,7 @@ void main() {
       );
 
       final spriteInformation2 = SpriteInformation(
+        path: 'path',
         rows: 16,
         columns: 5,
         stepTime: 0.042,

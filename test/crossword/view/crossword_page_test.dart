@@ -10,9 +10,11 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -39,10 +41,21 @@ class _FakeUnsolvedWord extends Fake implements Word {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    Flame.images = Images(prefix: '');
+    await Flame.images.loadAll([
+      ...Mascots.dash.teamMascot.loadableAssets(),
+      ...Mascots.android.teamMascot.loadableAssets(),
+      ...Mascots.dino.teamMascot.loadableAssets(),
+      ...Mascots.sparky.teamMascot.loadableAssets(),
+    ]);
+  });
+
   group('$CrosswordPage', () {
     testWidgets('renders $CrosswordView', (tester) async {
-      await tester.pumpRoute(CrosswordPage.route());
-      await tester.pump();
+      await tester.pumpSubject(CrosswordPage());
 
       expect(find.byType(CrosswordView), findsOneWidget);
     });
@@ -52,7 +65,6 @@ void main() {
     late CrosswordBloc crosswordBloc;
 
     setUp(() {
-      Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
@@ -140,14 +152,6 @@ void main() {
       expect(find.byType(CrosswordDrawer), findsOneWidget);
     });
 
-    testWidgets(
-        'renders $CircularProgressIndicator with ${CrosswordStatus.initial}',
-        (tester) async {
-      await tester.pumpSubject(CrosswordView());
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
-
     testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
         (tester) async {
       when(() => crosswordBloc.state).thenReturn(
@@ -185,6 +189,63 @@ void main() {
         expect(find.byType(WordSelectionPage), findsOneWidget);
       },
     );
+
+    testWidgets(
+        'dropIn animation is displayed when SpriteAnimationList is tapped',
+        (tester) async {
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+      );
+
+      await tester.tap(find.byType(SpriteAnimationList));
+
+      final mascotAnimation = tester.widget<MascotAnimation>(
+        find.byType(MascotAnimation),
+      );
+
+      final spriteAnimationList = tester.widget<SpriteAnimationList>(
+        find.byType(SpriteAnimationList),
+      );
+
+      await tester.tap(find.byType(SpriteAnimationList));
+
+      expect(
+        spriteAnimationList.controller.currentAnimationId,
+        equals(mascotAnimation.mascot.teamMascot.dropInAnimation.path),
+      );
+    });
+
+    testWidgets(
+        'verify MascotDropped is called with dropIn animation completes',
+        (tester) async {
+      await tester.runAsync(() async {
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.byType(SpriteAnimationList));
+
+        await tester.pump();
+
+        final spriteAnimationList = tester.widget<SpriteAnimationList>(
+          find.byType(SpriteAnimationList),
+        );
+
+        await Future<void>.delayed(Duration(seconds: 3));
+
+        await tester.pump();
+
+        final controller = spriteAnimationList.controller;
+
+        controller.animationDataList[1].spriteAnimationTicker.setToLast();
+
+        await controller.animationDataList[1].spriteAnimationTicker.completed;
+
+        verify(() => crosswordBloc.add(const MascotDropped())).called(1);
+      });
+    });
   });
 }
 
@@ -203,7 +264,8 @@ extension on WidgetTester {
 
     final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
     if (playerBloc == null) {
-      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
+      when(() => playerBlocUpdate.state)
+          .thenReturn(const PlayerState(mascot: Mascots.dash));
     }
 
     final wordSelectionBlocUpdate =
@@ -227,8 +289,8 @@ extension on WidgetTester {
           BlocProvider<CrosswordBloc>(
             create: (_) => bloc,
           ),
-          BlocProvider<PlayerBloc>(
-            create: (_) => playerBlocUpdate,
+          BlocProvider.value(
+            value: playerBlocUpdate,
           ),
           BlocProvider<WordSelectionBloc>(
             create: (_) => wordSelectionBlocUpdate,

@@ -81,5 +81,15 @@ void main() {
         );
       });
     });
+
+    group('MascotDropped', () {
+      test('can be instantiated', () {
+        expect(MascotDropped(), isA<MascotDropped>());
+      });
+
+      test('supports value comparisons', () {
+        expect(MascotDropped(), equals(MascotDropped()));
+      });
+    });
   });
 }

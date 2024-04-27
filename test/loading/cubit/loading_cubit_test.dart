@@ -16,19 +16,10 @@ void main() {
         final cubit = LoadingCubit();
 
         final expectedStates = [
-          LoadingState(assetsCount: 12, loaded: 0),
-          LoadingState(assetsCount: 12, loaded: 1),
-          LoadingState(assetsCount: 12, loaded: 2),
-          LoadingState(assetsCount: 12, loaded: 3),
-          LoadingState(assetsCount: 12, loaded: 4),
-          LoadingState(assetsCount: 12, loaded: 5),
-          LoadingState(assetsCount: 12, loaded: 6),
-          LoadingState(assetsCount: 12, loaded: 7),
-          LoadingState(assetsCount: 12, loaded: 8),
-          LoadingState(assetsCount: 12, loaded: 9),
-          LoadingState(assetsCount: 12, loaded: 10),
-          LoadingState(assetsCount: 12, loaded: 11),
-          LoadingState(assetsCount: 12, loaded: 12),
+          LoadingState(assetsCount: 4, loaded: 0),
+          LoadingState(assetsCount: 4, loaded: 1),
+          LoadingState(assetsCount: 4, loaded: 2),
+          LoadingState(assetsCount: 4, loaded: 3),
         ];
 
         expectLater(cubit.stream, emitsInOrder(expectedStates));

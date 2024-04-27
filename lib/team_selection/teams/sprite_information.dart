@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class SpriteInformation extends Equatable {
   const SpriteInformation({
+    required this.path,
     required this.rows,
     required this.columns,
     required this.width,
@@ -9,6 +10,7 @@ class SpriteInformation extends Equatable {
     required this.stepTime,
   });
 
+  final String path;
   final int rows;
   final int columns;
   final double width;
@@ -17,6 +19,7 @@ class SpriteInformation extends Equatable {
 
   @override
   List<Object> get props => [
+        path,
         rows,
         columns,
         width,

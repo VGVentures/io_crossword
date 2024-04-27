@@ -35,7 +35,8 @@ class SparkyTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakSparky;
 
   @override
-  SpriteInformation get idleSpriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => SpriteInformation(
+        path: idleAnimation.path,
         rows: 16,
         columns: 5,
         stepTime: 0.042,
@@ -44,7 +45,8 @@ class SparkyTeam extends Team {
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+        path: lookUpAnimation.path,
         rows: 9,
         columns: 7,
         stepTime: 0.042,
@@ -53,7 +55,8 @@ class SparkyTeam extends Team {
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+        path: pickUpAnimation.path,
         rows: 7,
         columns: 9,
         stepTime: 0.042,
@@ -62,7 +65,8 @@ class SparkyTeam extends Team {
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => const SpriteInformation(
+  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+        path: dangleAnimation.path,
         rows: 6,
         columns: 6,
         stepTime: 0.042,
@@ -71,7 +75,8 @@ class SparkyTeam extends Team {
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => const SpriteInformation(
+  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+        path: dropInAnimation.path,
         rows: 11,
         columns: 4,
         stepTime: 0.042,

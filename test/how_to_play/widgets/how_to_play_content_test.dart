@@ -12,7 +12,8 @@ import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
 
 void main() {
   group('HowToPlayContent', () {
@@ -28,7 +29,7 @@ void main() {
         child: HowToPlayContent(mascot: Mascots.dash),
       );
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
     });
 
     setUpAll(() async {
@@ -59,8 +60,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.value(1),
-          initialState: 0,
+          Stream.value(HowToPlayState(index: 1)),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -84,8 +85,11 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -109,8 +113,12 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2, 3]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+            HowToPlayState(index: 3),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -136,8 +144,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([0]),
-          initialState: 1,
+          Stream.fromIterable([HowToPlayState()]),
+          initialState: HowToPlayState(index: 1),
         );
 
         await tester.pumpApp(widget);
@@ -159,8 +167,13 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2, 1, 0]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+            HowToPlayState(index: 1),
+            HowToPlayState(),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -195,8 +208,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([4]),
-          initialState: 3,
+          Stream.fromIterable([HowToPlayState(index: 4)]),
+          initialState: HowToPlayState(index: 3),
         );
 
         await tester.pumpApp(widget);
@@ -214,7 +227,7 @@ void main() {
     testWidgets(
       'renders correct step 1 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(0);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(
@@ -235,7 +248,7 @@ void main() {
     testWidgets(
       'renders correct step 2 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(1);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 1));
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(
@@ -256,7 +269,7 @@ void main() {
     testWidgets(
       'renders correct step 3 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(2);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 2));
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(

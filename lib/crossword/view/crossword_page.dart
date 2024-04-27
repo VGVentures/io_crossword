@@ -121,7 +121,9 @@ class CrosswordView extends StatelessWidget {
                   Align(
                     child: Hero(
                       tag: 'dangle_mascot',
-                      child: _Dangle(context.read<PlayerBloc>().state.mascot!),
+                      child: MascotAnimation(
+                        context.read<PlayerBloc>().state.mascot!,
+                      ),
                     ),
                   ),
               ],
@@ -154,16 +156,17 @@ class LoadedBoardView extends StatelessWidget {
   }
 }
 
-class _Dangle extends StatefulWidget {
-  const _Dangle(this.mascot);
+class MascotAnimation extends StatefulWidget {
+  @visibleForTesting
+  const MascotAnimation(this.mascot, {super.key});
 
   final Mascots mascot;
 
   @override
-  State<_Dangle> createState() => _DangleState();
+  State<MascotAnimation> createState() => _MascotAnimationState();
 }
 
-class _DangleState extends State<_Dangle> {
+class _MascotAnimationState extends State<MascotAnimation> {
   final _controller = SpriteListController();
 
   @override
@@ -193,12 +196,10 @@ class _DangleState extends State<_Dangle> {
         child: SpriteAnimationList(
           animationListItems: [
             AnimationListItem(
-              path: widget.mascot.teamMascot.dangleAnimation.path,
               spriteInformation:
                   widget.mascot.teamMascot.dangleSpriteInformation,
             ),
             AnimationListItem(
-              path: widget.mascot.teamMascot.dropInAnimation.path,
               spriteInformation:
                   widget.mascot.teamMascot.dropInSpriteInformation,
               loop: false,

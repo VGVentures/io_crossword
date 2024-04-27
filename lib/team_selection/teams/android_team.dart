@@ -36,7 +36,8 @@ class AndroidTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakAndroid;
 
   @override
-  SpriteInformation get idleSpriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => SpriteInformation(
+        path: idleAnimation.path,
         rows: 7,
         columns: 4,
         stepTime: 0.042,
@@ -45,7 +46,8 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+        path: lookUpAnimation.path,
         rows: 15,
         columns: 5,
         stepTime: 0.042,
@@ -54,7 +56,8 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+        path: pickUpAnimation.path,
         rows: 17,
         columns: 4,
         stepTime: 0.042,
@@ -63,7 +66,8 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => const SpriteInformation(
+  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+        path: dangleAnimation.path,
         rows: 17,
         columns: 2,
         stepTime: 0.042,
@@ -72,7 +76,8 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => const SpriteInformation(
+  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+        path: dropInAnimation.path,
         rows: 22,
         columns: 2,
         stepTime: 0.042,

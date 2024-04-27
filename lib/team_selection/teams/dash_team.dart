@@ -35,7 +35,8 @@ class DashTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDash;
 
   @override
-  SpriteInformation get idleSpriteInformation => const SpriteInformation(
+  SpriteInformation get idleSpriteInformation => SpriteInformation(
+        path: idleAnimation.path,
         rows: 10,
         columns: 7,
         stepTime: 0.042,
@@ -44,7 +45,8 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+        path: lookUpAnimation.path,
         rows: 20,
         columns: 3,
         stepTime: 0.042,
@@ -53,7 +55,8 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => const SpriteInformation(
+  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+        path: pickUpAnimation.path,
         rows: 11,
         columns: 6,
         stepTime: 0.042,
@@ -62,7 +65,8 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => const SpriteInformation(
+  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+        path: dangleAnimation.path,
         rows: 23,
         columns: 2,
         stepTime: 0.042,
@@ -71,7 +75,8 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => const SpriteInformation(
+  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+        path: dropInAnimation.path,
         rows: 11,
         columns: 4,
         stepTime: 0.042,

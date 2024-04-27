@@ -68,11 +68,11 @@ class _HowToPlaySmall extends StatelessWidget {
             height: mascot.teamMascot.dangleSpriteInformation.height,
             child: const Hero(
               tag: 'dangle_mascot',
-              child: _LookUp(),
+              child: _MascotAnimation(),
             ),
           ),
         ),
-        if (status != HowToPlayStatus.pickingUp)
+        if (status == HowToPlayStatus.idle)
           Padding(
             padding: const EdgeInsets.fromLTRB(
               20,
@@ -133,12 +133,12 @@ class _HowToPlayLarge extends StatelessWidget {
                   height: mascot.teamMascot.dangleSpriteInformation.height,
                   child: const Hero(
                     tag: 'dangle_mascot',
-                    child: _LookUp(),
+                    child: _MascotAnimation(),
                   ),
                 ),
               ),
             ),
-            if (status != HowToPlayStatus.pickingUp)
+            if (status == HowToPlayStatus.idle)
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: Align(
@@ -173,21 +173,15 @@ class _HowToPlayLarge extends StatelessWidget {
   }
 }
 
-class _LookUp extends StatefulWidget {
-  const _LookUp();
+class _MascotAnimation extends StatefulWidget {
+  const _MascotAnimation();
 
   @override
-  State<_LookUp> createState() => __LookUpState();
+  State<_MascotAnimation> createState() => _MascotAnimationState();
 }
 
-class __LookUpState extends State<_LookUp> {
-  late SpriteListController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = SpriteListController();
-  }
+class _MascotAnimationState extends State<_MascotAnimation> {
+  late SpriteListController controller = SpriteListController();
 
   @override
   Widget build(BuildContext context) {
@@ -199,23 +193,26 @@ class __LookUpState extends State<_LookUp> {
         if (state.status == HowToPlayStatus.pickingUp) {
           controller.changeAnimation(mascot.teamMascot.pickUpAnimation.path);
         }
+
+        if (state.status == HowToPlayStatus.complete) {
+          context.flow<GameIntroStatus>().complete();
+        }
       },
       child: SpriteAnimationList(
         animationListItems: [
           AnimationListItem(
-            path: mascot!.teamMascot.lookUpAnimation.path,
-            spriteInformation: mascot.teamMascot.lookUpSpriteInformation,
+            spriteInformation: mascot!.teamMascot.lookUpSpriteInformation,
           ),
           AnimationListItem(
-            path: mascot.teamMascot.pickUpAnimation.path,
             spriteInformation: mascot.teamMascot.pickUpSpriteInformation,
             loop: false,
             onComplete: () {
-              context.flow<GameIntroStatus>().complete();
+              context
+                  .read<HowToPlayCubit>()
+                  .updateStatus(HowToPlayStatus.complete);
             },
           ),
           AnimationListItem(
-            path: mascot.teamMascot.dangleAnimation.path,
             spriteInformation: mascot.teamMascot.dangleSpriteInformation,
           ),
         ],

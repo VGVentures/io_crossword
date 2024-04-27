@@ -35,6 +35,15 @@ abstract class Team extends Equatable {
 
   SpriteInformation get dropInSpriteInformation;
 
+  List<String> loadableAssets() => [
+        idleAnimation.path,
+        platformAnimation.path,
+        lookUpAnimation.path,
+        pickUpAnimation.path,
+        dangleAnimation.path,
+        dropInAnimation.path,
+      ];
+
   @override
   List<Object> get props => [
         name,

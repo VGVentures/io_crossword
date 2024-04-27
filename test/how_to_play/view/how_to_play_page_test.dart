@@ -22,7 +22,8 @@ import '../../helpers/helpers.dart';
 class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
     implements GameIntroBloc {}
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
@@ -33,10 +34,10 @@ void main() {
   setUpAll(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      Mascots.dash.teamMascot.lookUpAnimation.keyName,
-      Mascots.android.teamMascot.lookUpAnimation.keyName,
-      Mascots.dino.teamMascot.lookUpAnimation.keyName,
-      Mascots.sparky.teamMascot.lookUpAnimation.keyName,
+      ...Mascots.dash.teamMascot.loadableAssets(),
+      ...Mascots.android.teamMascot.loadableAssets(),
+      ...Mascots.dino.teamMascot.loadableAssets(),
+      ...Mascots.sparky.teamMascot.loadableAssets(),
     ]);
   });
 
@@ -84,7 +85,7 @@ void main() {
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
 
       when(() => playerBloc.state)
           .thenReturn(PlayerState(mascot: Mascots.dash));
@@ -123,11 +124,24 @@ void main() {
     }
 
     for (final layout in IoLayoutData.values) {
-      testWidgets('completes flow when button is pressed', (tester) async {
+      testWidgets(
+          'completes flow when pickup '
+          'animation compeletes', (tester) async {
         final flowController = FlowController(GameIntroStatus.howToPlay);
         addTearDown(flowController.dispose);
 
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable(
+            [
+              HowToPlayState(status: HowToPlayStatus.pickingUp),
+              HowToPlayState(status: HowToPlayStatus.complete),
+            ],
+          ),
+          initialState: HowToPlayState(),
+        );
 
         await tester.pumpApp(
           MultiBlocProvider(
@@ -153,7 +167,6 @@ void main() {
         );
 
         await tester.tap(find.byType(OutlinedButton));
-        await tester.pumpAndSettle();
 
         expect(flowController.completed, isTrue);
       });
@@ -212,27 +225,8 @@ void main() {
         expect(find.text(l10n.playNow), findsOneWidget);
       });
 
-      testWidgets(
-        'an $CircularProgressIndicator '
-        'with ${GameIntroPlayerCreationStatus.inProgress}',
-        (tester) async {
-          when(() => gameIntroBloc.state).thenReturn(
-            GameIntroState(
-              status: GameIntroPlayerCreationStatus.inProgress,
-            ),
-          );
-
-          await tester.pumpApp(
-            widget,
-            layout: IoLayoutData.small,
-          );
-
-          expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        },
-      );
-
       for (final mascot in Mascots.values) {
-        testWidgets('renders LookUp animation for each mascot', (tester) async {
+        testWidgets('renders LookUp animation for $mascot', (tester) async {
           when(() => playerBloc.state).thenReturn(PlayerState(mascot: mascot));
 
           when(() => gameIntroBloc.state).thenReturn(GameIntroState());
@@ -255,14 +249,83 @@ void main() {
             layout: IoLayoutData.small,
           );
 
-          final widget = find.byType(LookUp).evaluate().single.widget as LookUp;
+          final widget = find
+              .byType(SpriteAnimationList)
+              .evaluate()
+              .single
+              .widget as SpriteAnimationList;
 
           expect(
-            widget.mascot,
-            equals(mascot),
+            widget.animationListItems.contains(
+              AnimationListItem(
+                spriteInformation: mascot.teamMascot.lookUpSpriteInformation,
+              ),
+            ),
+            isTrue,
           );
         });
       }
+
+      for (final layout in IoLayoutData.values) {
+        testWidgets(
+            'verify pickingUpStatus is called when '
+            'OutlinedButton is tapped in $layout', (tester) async {
+          when(() => gameIntroBloc.state).thenReturn(
+            GameIntroState(
+              status: GameIntroPlayerCreationStatus.inProgress,
+            ),
+          );
+
+          await tester.pumpApp(
+            widget,
+            layout: layout,
+          );
+
+          await tester.tap(find.byType(OutlinedButton));
+
+          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
+              .called(1);
+        });
+      }
+
+      testWidgets('complete status is called when pickUp animation is done',
+          (tester) async {
+        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable(
+            [
+              HowToPlayState(status: HowToPlayStatus.pickingUp),
+            ],
+          ),
+          initialState: HowToPlayState(),
+        );
+
+        await tester.runAsync(() async {
+          await tester.pumpApp(
+            widget,
+            layout: IoLayoutData.large,
+          );
+
+          await Future<void>.delayed(Duration(seconds: 3));
+
+          await tester.pump();
+
+          final spriteAnimationList = tester.widget<SpriteAnimationList>(
+            find.byType(SpriteAnimationList),
+          );
+
+          final controller = spriteAnimationList.controller;
+
+          controller.animationDataList[1].spriteAnimationTicker.setToLast();
+
+          await controller.animationDataList[1].spriteAnimationTicker.completed;
+
+          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.complete))
+              .called(1);
+        });
+      });
     });
   });
 }
