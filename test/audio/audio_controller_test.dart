@@ -377,6 +377,36 @@ void main() {
 
         verify(musicPlayer.pause).called(1);
       });
+
+      test('resumes the music when unmuting', () async {
+        final playerFactory = _MockAudioPlayerFactory();
+
+        final musicOn = ValueNotifier(false);
+        when(() => settingsController.musicOn).thenReturn(musicOn);
+
+        when(() => soundsOn.value).thenReturn(true);
+        when(() => muted.value).thenReturn(false);
+
+        AudioController(
+          createPlayer: playerFactory.createPlayer,
+          polyphony: 1,
+        ).attachSettings(
+          settingsController,
+        );
+
+        final musicPlayer = playerFactory.players.entries
+            .firstWhere((entry) => entry.key.startsWith('music'))
+            .value;
+
+        when(() => musicPlayer.state).thenReturn(PlayerState.paused);
+
+        musicOn.value = true;
+
+        await Future.microtask(() {});
+
+        verify(musicPlayer.resume).called(1);
+      });
+      ;
     });
 
     group('soundsOn', () {
@@ -677,6 +707,68 @@ void main() {
             .value;
 
         when(() => musicPlayer.state).thenReturn(PlayerState.playing);
+
+        lifecycleNotifier.value = AppLifecycleState.resumed;
+
+        await Future.microtask(() {});
+
+        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
+            .called(1);
+      });
+
+      test('when resuming, and player is stopped, play music', () async {
+        final lifecycleNotifier = ValueNotifier(AppLifecycleState.paused);
+        final playerFactory = _MockAudioPlayerFactory();
+
+        when(() => soundsOn.value).thenReturn(true);
+        when(() => musicOn.value).thenReturn(true);
+        when(() => muted.value).thenReturn(false);
+
+        AudioController(
+          createPlayer: playerFactory.createPlayer,
+          polyphony: 1,
+        )
+          ..attachSettings(
+            settingsController,
+          )
+          ..attachLifecycleNotifier(lifecycleNotifier);
+
+        final musicPlayer = playerFactory.players.entries
+            .firstWhere((entry) => entry.key.startsWith('music'))
+            .value;
+
+        when(() => musicPlayer.state).thenReturn(PlayerState.stopped);
+
+        lifecycleNotifier.value = AppLifecycleState.resumed;
+
+        await Future.microtask(() {});
+
+        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
+            .called(2);
+      });
+
+      test('when resuming, and player is disposed, do nothing', () async {
+        final lifecycleNotifier = ValueNotifier(AppLifecycleState.paused);
+        final playerFactory = _MockAudioPlayerFactory();
+
+        when(() => soundsOn.value).thenReturn(true);
+        when(() => musicOn.value).thenReturn(true);
+        when(() => muted.value).thenReturn(false);
+
+        AudioController(
+          createPlayer: playerFactory.createPlayer,
+          polyphony: 1,
+        )
+          ..attachSettings(
+            settingsController,
+          )
+          ..attachLifecycleNotifier(lifecycleNotifier);
+
+        final musicPlayer = playerFactory.players.entries
+            .firstWhere((entry) => entry.key.startsWith('music'))
+            .value;
+
+        when(() => musicPlayer.state).thenReturn(PlayerState.disposed);
 
         lifecycleNotifier.value = AppLifecycleState.resumed;
 

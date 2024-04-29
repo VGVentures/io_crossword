@@ -168,6 +168,34 @@ void main() {
 
         expect(find.byType(WordSuccessView), findsOneWidget);
       });
+
+      testWidgets(
+        'Plays wrong sound when ${WordSelectionStatus.incorrect}',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+              wordPoints: 0,
+            ),
+          );
+          when(() => hintBloc.state).thenReturn(HintState());
+
+          await tester.pumpApp(
+            DefaultWordInputController(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (_) => wordSelectionBloc),
+                  BlocProvider(create: (context) => hintBloc),
+                ],
+                child: WordSelectionView(),
+              ),
+            ),
+          );
+
+          expect(find.byType(WordSolvingView), findsOneWidget);
+        },
+      );
     });
   });
 }

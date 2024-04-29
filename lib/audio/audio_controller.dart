@@ -7,7 +7,6 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/settings/settings.dart';
-import 'package:logging/logging.dart';
 
 typedef CreateAudioPlayer = AudioPlayer Function({required String playerId});
 
@@ -33,7 +32,6 @@ class AudioController {
         ).toList(growable: false) {
     _musicPlayer.onPlayerComplete.listen(_loopSound);
   }
-  static final _log = Logger('AudioController');
 
   final AudioPlayer _musicPlayer;
 
@@ -100,7 +98,6 @@ class AudioController {
 
   /// Preloads all sound effects.
   Future<void> initialize() async {
-    _log.info('Preloading sound effects');
     // This assumes there is only a limited number of sound effects in the game.
     // If there are hundreds of long sound effect files, it's better
     // to be more selective when preloading.
@@ -130,18 +127,12 @@ class AudioController {
 
     final muted = _settings?.muted.value ?? true;
     if (muted) {
-      _log.info(() => 'Ignoring playing sound ($sfx) because audio is muted.');
       return;
     }
     final soundsOn = _settings?.soundsOn.value ?? false;
     if (!soundsOn) {
-      _log.info(
-        () => 'Ignoring playing sound ($sfx) because sounds are turned off.',
-      );
       return;
     }
-
-    _log.info(() => 'Playing sound: $sfx');
 
     _sfxPlayers[_currentSfxPlayer].play(
       AssetSource(_replaceUrl(sfx)),
@@ -150,7 +141,6 @@ class AudioController {
   }
 
   Future<void> _loopSound(void _) async {
-    _log.info('Last song finished playing.');
     //Loop the sound forever.
 
     await _musicPlayer.play(
@@ -201,7 +191,6 @@ class AudioController {
   }
 
   Future<void> _playBackgroundSound(String sound) async {
-    _log.info(() => 'Playing background music now.');
     await _musicPlayer.play(
       AssetSource(_replaceUrl(sound)),
       volume: 0.3,
@@ -209,34 +198,20 @@ class AudioController {
   }
 
   Future<void> _resumeMusic() async {
-    _log.info('Resuming music');
     switch (_musicPlayer.state) {
       case PlayerState.paused:
-        _log.info('Calling _musicPlayer.resume()');
         try {
           await _musicPlayer.resume();
         } catch (e) {
-          // Sometimes, resuming fails with an "Unexpected" error.
-          _log.severe(e);
           await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
         }
       case PlayerState.stopped:
-        _log.info('resumeMusic() called when music is stopped. '
-            "This probably means we haven't yet started the music. "
-            'For example, the game was started with sound off.');
+        await _musicPlayer.stop();
         await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
 
       case PlayerState.playing:
-        _log.warning(
-          'resumeMusic() called when music is playing. '
-          'Nothing to do.',
-        );
+        break;
       case PlayerState.completed:
-        _log.warning(
-          'resumeMusic() called when music is completed. '
-          "Music should never be 'completed' as it's either not playing "
-          'or looping forever.',
-        );
         await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
       case PlayerState.disposed:
         break;
@@ -252,7 +227,6 @@ class AudioController {
   }
 
   void _startMusic() {
-    _log.info('starting music');
     _playBackgroundSound(Assets.music.backgroundMusicCrossword);
   }
 
@@ -266,7 +240,6 @@ class AudioController {
   }
 
   void _stopMusic() {
-    _log.info('Stopping music');
     if (_musicPlayer.state == PlayerState.playing) {
       _musicPlayer.pause();
     }
