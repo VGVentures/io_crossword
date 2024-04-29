@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'collided_word.g.dart';
 
 /// {@template collided_word}
-/// A model that represents collision of a word incating the [wordId], the
+/// A model that represents collision of a word indicating the [wordId], the
 /// [position] of the character and the [character].
 /// {@endtemplate}
 @JsonSerializable()
