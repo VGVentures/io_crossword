@@ -119,6 +119,13 @@ void main() {
     });
 
     group('BoardSectionRequested', () {
+      late StreamSubscription<BoardSection?> subscription;
+
+      setUp(() {
+        subscription = _MockStream();
+        when(() => subscription.cancel()).thenAnswer((_) async => {});
+      });
+
       blocTest<CrosswordBloc, CrosswordState>(
         'emits [failure] when watchSectionFromPosition returns error',
         build: () => CrosswordBloc(
@@ -136,6 +143,22 @@ void main() {
             status: CrosswordStatus.failure,
           ),
         ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'resumes subscription if is paused',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          subscriptionsMap: {(1, 1): subscription},
+        ),
+        setUp: () {
+          when(() => subscription.isPaused).thenReturn(true);
+        },
+        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
+        verify: (_) {
+          verify(() => subscription.resume()).called(1);
+        },
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
