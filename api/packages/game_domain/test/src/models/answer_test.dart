@@ -6,14 +6,34 @@ import 'package:test/test.dart';
 void main() {
   group('Answer', () {
     test('creates correct json object from Answer object', () {
-      final answer = Answer(id: 'id', answer: 'answer', section: Point(1, 2));
+      final answer = Answer(
+        id: 'id',
+        answer: 'answer',
+        sections: const [Point(1, 2)],
+        collidedWords: const [
+          CollidedWord(
+            wordId: 'word-id',
+            position: 3,
+            character: 'b',
+          ),
+        ],
+      );
       final json = answer.toJson();
 
       expect(
         json,
         equals({
           'answer': 'answer',
-          'section': {'x': 1, 'y': 2},
+          'sections': [
+            {'x': 1, 'y': 2},
+          ],
+          'collidedWords': [
+            {
+              'wordId': 'word-id',
+              'position': 3,
+              'character': 'b',
+            },
+          ],
         }),
       );
     });
@@ -22,13 +42,33 @@ void main() {
       final json = {
         'id': 'id',
         'answer': 'answer',
-        'section': {'x': 1, 'y': 2},
+        'sections': [
+          {'x': 1, 'y': 2},
+        ],
+        'collidedWords': [
+          {
+            'wordId': 'word-id',
+            'position': 3,
+            'character': 'b',
+          },
+        ],
       };
       final answer = Answer.fromJson(json);
       expect(
         answer,
         equals(
-          Answer(id: 'id', answer: 'answer', section: Point(1, 2)),
+          Answer(
+            id: 'id',
+            answer: 'answer',
+            sections: const [Point(1, 2)],
+            collidedWords: const [
+              CollidedWord(
+                wordId: 'word-id',
+                position: 3,
+                character: 'b',
+              ),
+            ],
+          ),
         ),
       );
     });
@@ -37,12 +77,26 @@ void main() {
       final firstAnswer = Answer(
         id: 'id',
         answer: 'answer',
-        section: Point(1, 2),
+        sections: const [Point(1, 2)],
+        collidedWords: const [
+          CollidedWord(
+            wordId: 'word-id',
+            position: 3,
+            character: 'b',
+          ),
+        ],
       );
       final secondAnswer = Answer(
         id: 'id',
         answer: 'answer',
-        section: Point(1, 2),
+        sections: const [Point(1, 2)],
+        collidedWords: const [
+          CollidedWord(
+            wordId: 'word-id',
+            position: 3,
+            character: 'b',
+          ),
+        ],
       );
       expect(firstAnswer, equals(secondAnswer));
     });
