@@ -106,41 +106,6 @@ void main(List<String> args) async {
         return word.isAnyLetterInSection(sectionX, sectionY, sectionSize);
       });
 
-      answers.addAll(
-        sectionWords.map((word) {
-          final allLetters = word.allLetters;
-
-          final wordsInSection = [...sectionWords]..remove(word);
-
-          final sections = word.getSections(sectionX, sectionY, sectionSize);
-
-          final collidedWords = <CollidedWord>[];
-
-          for (final word in wordsInSection) {
-            final collision = word
-                .copyWith(answer: answersMap[word.id])
-                .getCollision(allLetters);
-
-            if (collision != null) {
-              collidedWords.add(
-                CollidedWord(
-                  character: collision.$2,
-                  position: collision.$1,
-                  wordId: word.id,
-                ),
-              );
-            }
-          }
-
-          return Answer(
-            id: word.id,
-            answer: answersMap[word.id]!,
-            sections: sections,
-            collidedWords: collidedWords,
-          );
-        }),
-      );
-
       final section = BoardSection(
         id: '',
         position: Point(i, j),
@@ -159,6 +124,63 @@ void main(List<String> args) async {
       );
 
       sections.add(section);
+
+      // Answers
+      for (final word in sectionWords) {
+        // The word is already added
+        if (answers.indexWhere((answer) => answer.answer == word.answer) > -1) {
+          continue;
+        }
+
+        final allLetters = word.allLetters;
+
+        final sectionsPoint = word.getSections(sectionX, sectionY, sectionSize);
+
+        final allWordsSections = <Word>{}
+          ..addAll(
+            [
+              for (final section in sections
+                  .where((section) => sectionsPoint.contains(section.position)))
+                ...wordsWithTopLeftOrigin.where(
+                  (word) {
+                    return word.isAnyLetterInSection(
+                      section.position.x * sectionSize,
+                      section.position.y * sectionSize,
+                      sectionSize,
+                    );
+                  },
+                ),
+            ],
+          )
+          ..remove(word);
+
+        final collidedWords = <CollidedWord>[];
+
+        for (final word in allWordsSections) {
+          final collision = word
+              .copyWith(answer: answersMap[word.id])
+              .getCollision(allLetters);
+
+          if (collision != null) {
+            collidedWords.add(
+              CollidedWord(
+                character: collision.$2,
+                position: collision.$1,
+                wordId: word.id,
+              ),
+            );
+          }
+        }
+
+        answers.add(
+          Answer(
+            id: word.id,
+            answer: answersMap[word.id]!,
+            sections: sectionsPoint,
+            collidedWords: collidedWords,
+          ),
+        );
+      }
     }
   }
 
