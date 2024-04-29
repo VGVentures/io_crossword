@@ -57,7 +57,7 @@ void main() {
 
     group('VisibleSectionsCleaned', () {
       test('can be instantiated', () {
-        expect(VisibleSectionsCleaned({(1, 1)}), isA<BoardSectionRequested>());
+        expect(VisibleSectionsCleaned({(1, 1)}), isA<VisibleSectionsCleaned>());
       });
       test('supports value comparisons', () {
         expect(
