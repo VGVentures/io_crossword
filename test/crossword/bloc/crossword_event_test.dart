@@ -28,6 +28,53 @@ void main() {
       });
     });
 
+    group('BoardSectionLoaded', () {
+      final boardSection = BoardSection(
+        id: 'id',
+        position: Point(1, 1),
+        size: 20,
+        words: [],
+        borderWords: [],
+      );
+      test('can be instantiated', () {
+        expect(BoardSectionLoaded(boardSection), isA<BoardSectionLoaded>());
+      });
+      test('supports value comparisons', () {
+        expect(
+          BoardSectionLoaded(boardSection),
+          BoardSectionLoaded(boardSection),
+        );
+        expect(
+          BoardSectionLoaded(boardSection),
+          isNot(
+            BoardSectionLoaded(
+              boardSection.copyWith(id: 'differentId'),
+            ),
+          ),
+        );
+      });
+    });
+
+    group('VisibleSectionsCleaned', () {
+      test('can be instantiated', () {
+        expect(VisibleSectionsCleaned({(1, 1)}), isA<BoardSectionRequested>());
+      });
+      test('supports value comparisons', () {
+        expect(
+          VisibleSectionsCleaned({(1, 1)}),
+          VisibleSectionsCleaned({(1, 1)}),
+        );
+        expect(
+          VisibleSectionsCleaned({(1, 1)}),
+          isNot(
+            VisibleSectionsCleaned(
+              {(1, 2)},
+            ),
+          ),
+        );
+      });
+    });
+
     group('WordSelected', () {
       test('can be instantiated', () {
         expect(WordSelected((0, 0), _MockWord()), isA<WordSelected>());

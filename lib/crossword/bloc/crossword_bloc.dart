@@ -4,18 +4,24 @@ import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
 
+typedef SubscriptionsMap
+    = Map<CrosswordChunkIndex, StreamSubscription<BoardSection?>>;
+
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
     required BoardInfoRepository boardInfoRepository,
+    @visibleForTesting SubscriptionsMap? subscriptionsMap,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
+        subscriptions = subscriptionsMap ?? {},
         super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
@@ -28,25 +34,22 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
 
-  final Map<CrosswordChunkIndex, StreamSubscription<BoardSection?>> subs = {};
+  final SubscriptionsMap subscriptions;
 
-  Future<void> _onVisibleSectionsCleaned(
+  void _onVisibleSectionsCleaned(
     VisibleSectionsCleaned event,
     Emitter<CrosswordState> emit,
-  ) async {
-    for (final key in subs.keys) {
+  ) {
+    for (final key in subscriptions.keys) {
       if (!event.visibleSections.contains(key)) {
-        final sub = subs[key];
-        if (sub != null && !sub.isPaused) {
-          sub.pause();
-        }
+        subscriptions[key]?.pause();
       }
     }
   }
 
   @override
   Future<void> close() {
-    for (final sub in subs.values) {
+    for (final sub in subscriptions.values) {
       sub.cancel();
     }
     return super.close();
@@ -74,12 +77,12 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) {
     final index = (event.position.$1, event.position.$2);
 
-    if (subs[index] != null) {
-      if (subs[index]!.isPaused) {
-        subs[index]!.resume();
+    if (subscriptions[index] != null) {
+      if (subscriptions[index]!.isPaused) {
+        subscriptions[index]!.resume();
       }
     } else {
-      subs[index] = _crosswordRepository
+      subscriptions[index] = _crosswordRepository
           .watchSectionFromPosition(index.$1, index.$2)
           .listen(
         (section) {
@@ -89,8 +92,10 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         },
         onError: (Object error, StackTrace stackTrace) {
           addError(error, stackTrace);
-          return state.copyWith(
-            status: CrosswordStatus.failure,
+          emit(
+            state.copyWith(
+              status: CrosswordStatus.failure,
+            ),
           );
         },
       );

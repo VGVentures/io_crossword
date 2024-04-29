@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
@@ -15,6 +17,8 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
 class _MockWord extends Mock implements Word {}
+
+class _MockStream extends Mock implements StreamSubscription<BoardSection?> {}
 
 void main() {
   group('CrosswordBloc', () {
@@ -76,6 +80,41 @@ void main() {
           boardInfoRepository: boardInfoRepository,
         ),
         isA<CrosswordBloc>(),
+      );
+    });
+
+    group('VisibleSectionsCleaned', () {
+      late StreamSubscription<BoardSection?> subscription;
+
+      setUp(() {
+        subscription = _MockStream();
+        when(() => subscription.cancel()).thenAnswer((_) async => {});
+      });
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'pauses subscriptions for sections that are not visible',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          subscriptionsMap: {(0, 0): subscription},
+        ),
+        act: (bloc) => bloc.add(const VisibleSectionsCleaned({(1, 1)})),
+        verify: (bloc) {
+          verify(() => subscription.pause()).called(1);
+        },
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'does nothing for sections that are visible',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+          subscriptionsMap: {(0, 0): subscription},
+        ),
+        act: (bloc) => bloc.add(const VisibleSectionsCleaned({(0, 0)})),
+        verify: (bloc) {
+          verifyNever(() => subscription.pause());
+        },
       );
     });
 
