@@ -129,7 +129,7 @@ void main() {
           );
 
           expect(
-            word.getSections(100, 0, 4),
+            word.getSections(0, 100, 4),
             equals([Point(0, 25), Point(0, 26)]),
           );
         });
