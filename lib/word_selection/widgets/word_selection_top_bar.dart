@@ -62,7 +62,7 @@ class WordSelectionTopBar extends StatelessWidget {
             }
 
             return Text(
-              wordIdentifier(word!.word),
+              wordIdentifier(word.word),
               style: themeData.textTheme.labelLarge,
             );
           },
