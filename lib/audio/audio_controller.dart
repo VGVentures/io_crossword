@@ -143,9 +143,7 @@ class AudioController {
   Future<void> _loopSound(void _) async {
     //Loop the sound forever.
 
-    await _musicPlayer.play(
-      AssetSource(Assets.music.backgroundMusicCrossword),
-    );
+    await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
   }
 
   void _handleAppLifecycle() {
