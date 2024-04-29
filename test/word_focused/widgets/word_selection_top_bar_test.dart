@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
