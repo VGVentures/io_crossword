@@ -72,26 +72,15 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardSectionRequested event,
     Emitter<CrosswordState> emit,
   ) {
-    final wasAlreadyRequested = state.sections.containsKey(event.position) ||
-        subs.containsKey(event.position);
-    if (wasAlreadyRequested) {
-      //  print('wasAlreadyRequested');
-      return;
-    }
+    final index = (event.position.$1, event.position.$2);
 
-    if (subs[(event.position.$1, event.position.$2)] != null) {
-      if (subs[(event.position.$1, event.position.$2)]!.isPaused) {
-        print('IS PAUSED');
+    if (subs[index] != null) {
+      if (subs[index]!.isPaused) {
+        subs[index]!.resume();
       }
-      // print("RESUME ${(event.position.$1, event.position.$2)}");
-      //   subs[(event.position.$1, event.position.$2)]!.resume();
     } else {
-      print("CREATED ${(event.position.$1, event.position.$2)}");
-      subs[(
-        event.position.$1,
-        event.position.$2,
-      )] = _crosswordRepository
-          .watchSectionFromPosition(event.position.$1, event.position.$2)
+      subs[index] = _crosswordRepository
+          .watchSectionFromPosition(index.$1, index.$2)
           .listen(
         (section) {
           if (section == null) return;
