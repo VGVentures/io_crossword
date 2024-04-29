@@ -23,11 +23,11 @@ class _MockWordSelectionBloc
 
 void main() {
   group('$CrosswordLetter', () {
-    const ant = Word(
+    final ant = Word(
       id: '1',
       position: Point<int>(0, 0),
+      answer: Word.emptyCharacter * 3,
       axis: domain.Axis.horizontal,
-      length: 3,
       clue: '',
     );
 
@@ -113,9 +113,12 @@ void main() {
       });
 
       testWidgets(
-        'with horizontal word mascot when vertical is null',
+        'with horizontal word mascot when solved and vertical is null',
         (tester) async {
-          final word = ant.copyWith(mascot: Mascots.android);
+          final word = ant.copyWith(
+            mascot: Mascots.android,
+            solvedTimestamp: 1,
+          );
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -143,9 +146,12 @@ void main() {
       );
 
       testWidgets(
-        'with vertical word mascot when horizontal is null',
+        'with vertical word mascot when solved and horizontal is null',
         (tester) async {
-          final word = ant.copyWith(mascot: Mascots.dash);
+          final word = ant.copyWith(
+            mascot: Mascots.dash,
+            solvedTimestamp: 1,
+          );
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -239,7 +245,7 @@ void main() {
       );
 
       testWidgets(
-        'with horizontal word mascot when both have no timestamp',
+        'with empty style when both have not been solved',
         (tester) async {
           final horizontalWord = ant.copyWith(mascot: Mascots.dash);
           final verticalWord = ant.copyWith(mascot: Mascots.dino);
@@ -265,39 +271,7 @@ void main() {
               tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
           final style = ioCrosswordLetter.style;
 
-          expect(style, equals(themeData.io.crosswordLetterTheme.dash));
-        },
-      );
-
-      testWidgets(
-        'with vertical word mascot when horizontal has no timestamp',
-        (tester) async {
-          final horizontalWord = ant.copyWith(mascot: Mascots.dash);
-          final verticalWord =
-              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
-          final letterData = CrosswordLetterData(
-            index: (0, 0),
-            chunkIndex: (0, 0),
-            character: 'A',
-            words: (horizontalWord, verticalWord),
-          );
-
-          await tester.pumpApp(
-            Theme(
-              data: themeData,
-              child: CrosswordLayoutScope(
-                data: crosswordLayoutData,
-                child: CrosswordLetter(data: letterData),
-              ),
-            ),
-          );
-
-          final ioCrosswordLetterFinder = find.byType(IoCrosswordLetter);
-          final ioCrosswordLetter =
-              tester.widget<IoCrosswordLetter>(ioCrosswordLetterFinder);
-          final style = ioCrosswordLetter.style;
-
-          expect(style, equals(themeData.io.crosswordLetterTheme.dino));
+          expect(style, equals(themeData.io.crosswordLetterTheme.empty));
         },
       );
 
@@ -382,11 +356,12 @@ void main() {
 
         final letters = CrosswordLetterData.fromChunk(chunk);
 
-        final hello = chunk.words.firstWhere((word) => word.answer == 'HELLO');
-        final old = chunk.words.firstWhere((word) => word.answer == 'OLD');
-        final food = chunk.words.firstWhere((word) => word.answer == 'FOOD');
-        final elf = chunk.words.firstWhere((word) => word.answer == 'ELF');
-        final unknown = chunk.words.firstWhere((word) => word.answer == null);
+        final polo = chunk.words.firstWhere((word) => word.id == '0');
+        final hello = chunk.words.firstWhere((word) => word.id == '1');
+        final old = chunk.words.firstWhere((word) => word.id == '2');
+        final food = chunk.words.firstWhere((word) => word.id == '3');
+        final elf = chunk.words.firstWhere((word) => word.id == '4');
+        final unknown = chunk.words.firstWhere((word) => word.id == '5');
 
         expect(
           letters,
@@ -460,14 +435,32 @@ void main() {
             (2, 3): CrosswordLetterData(
               index: (2, 3),
               chunkIndex: chunkIndex,
-              character: null,
+              character: ' ',
               words: (null, unknown),
+            ),
+            (-1, 4): CrosswordLetterData(
+              index: (-1, 4),
+              chunkIndex: chunkIndex,
+              character: 'P',
+              words: (polo, null),
+            ),
+            (0, 4): CrosswordLetterData(
+              index: (0, 4),
+              chunkIndex: chunkIndex,
+              character: 'O',
+              words: (polo, null),
+            ),
+            (1, 4): CrosswordLetterData(
+              index: (1, 4),
+              chunkIndex: chunkIndex,
+              character: 'L',
+              words: (polo, null),
             ),
             (2, 4): CrosswordLetterData(
               index: (2, 4),
               chunkIndex: chunkIndex,
-              character: null,
-              words: (null, unknown),
+              character: 'O',
+              words: (polo, unknown),
             ),
           }),
         );

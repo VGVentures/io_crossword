@@ -13,7 +13,7 @@ class CrosswordRepository {
     required this.db,
     Random? rng,
   }) : _rng = rng ?? Random(DateTime.now().millisecondsSinceEpoch) {
-    sectionCollection = db.collection('boardChunks2');
+    sectionCollection = db.collection('boardChunks');
   }
 
   /// The [FirebaseFirestore] instance.

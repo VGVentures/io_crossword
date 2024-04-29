@@ -28,7 +28,8 @@ void main({
       word: (row[0] as String).replaceAll(' ', '').trim().toLowerCase(),
       clue: row[2] as String,
     );
-  }).toList();
+  }).toList()
+    ..removeWhere((element) => !RegExp(r'^[a-zA-Z]*$').hasMatch(element.word));
 
   final pool = wordsList.map((word) => word.word);
 
@@ -57,16 +58,15 @@ void main({
       .writeAsStringSync(crossword.toPrettyString());
 
   // Creates CSV file representing the crossword.
-  final buffer = StringBuffer();
+  final list = <List<dynamic>>[];
+
   for (final word in crossword.words) {
     final axis = word.direction == Direction.across ? 'horizontal' : 'vertical';
 
     final clue = wordsList.firstWhere((w) => w.word == word.word).clue;
 
-    buffer.writeln(
-      '${word.start.x},${word.start.y},${word.word},$clue,$axis',
-    );
+    list.add([word.start.x, word.start.y, word.word, clue, axis]);
   }
 
-  File('board.txt').writeAsStringSync(buffer.toString());
+  File('board.txt').writeAsStringSync(const ListToCsvConverter().convert(list));
 }

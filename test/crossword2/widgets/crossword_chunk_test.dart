@@ -99,7 +99,7 @@ void main() {
             ),
           );
 
-          expect(find.byType(CrosswordLetter), findsNWidgets(13));
+          expect(find.byType(CrosswordLetter), findsNWidgets(15));
           await expectLater(
             find.byType(CrosswordChunk),
             matchesGoldenFile(goldenKey('chunk_fixture1')),

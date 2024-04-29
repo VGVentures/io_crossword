@@ -104,9 +104,11 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     WordSolveAttempted event,
     Emitter<WordSelectionState> emit,
   ) async {
-    if (state.status != WordSelectionStatus.solving ||
-        state.status == WordSelectionStatus.solved) {
-      // Can't solve a word if it's not being solved or if it's already solved.
+    final isSolvingOrIncorrect = state.status == WordSelectionStatus.solving ||
+        state.status == WordSelectionStatus.incorrect;
+    if (!isSolvingOrIncorrect || state.status == WordSelectionStatus.solved) {
+      // Can't solve a word if it's not being solved, has made an incorrect
+      // attempt or if it's already solved.
       return;
     }
 

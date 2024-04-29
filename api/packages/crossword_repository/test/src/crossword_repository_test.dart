@@ -16,8 +16,8 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
-    const sectionsCollection = 'boardChunks2';
-    const answersCollection = 'answers2';
+    const sectionsCollection = 'boardChunks';
+    const answersCollection = 'answers';
 
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
@@ -151,7 +151,6 @@ void main() {
         position: const Point(1, 1),
         axis: Axis.vertical,
         answer: 'flutter',
-        length: 7,
         clue: '',
       );
 
