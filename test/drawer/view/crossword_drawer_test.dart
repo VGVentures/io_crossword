@@ -10,6 +10,7 @@ import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/project_details.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -73,7 +74,8 @@ void main() {
       expect(find.byType(ProjectDetailsView), findsOneWidget);
     });
 
-    testWidgets('navigates to HowToPlay when How To Play is tapped',
+    testWidgets(
+        'navigates to HowToPlay when button is tapped ${IoLayoutData.small}',
         (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
 
@@ -83,6 +85,7 @@ void main() {
           create: (_) => howToPlayCubit,
           child: CrosswordDrawer(),
         ),
+        layout: IoLayoutData.small,
       );
 
       await tester.tap(find.text('How to play'));
@@ -90,6 +93,27 @@ void main() {
 
       expect(find.byType(HowToPlayContent), findsOneWidget);
     });
+
+    testWidgets(
+        'navigates to HowToPlay when button is tapped ${IoLayoutData.large}',
+        (tester) async {
+      final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
+
+      when(() => howToPlayCubit.state).thenReturn(0);
+      await tester.pumpApp(
+        BlocProvider(
+          create: (_) => howToPlayCubit,
+          child: CrosswordDrawer(),
+        ),
+        layout: IoLayoutData.large,
+      );
+
+      await tester.tap(find.text('How to play'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(HowToPlayContent), findsOneWidget);
+    });
+
     testWidgets('Pops HowToPlay widget when Done is tapped', (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
       final l10n = await AppLocalizations.delegate.load(Locale('en'));
