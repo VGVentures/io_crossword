@@ -101,6 +101,7 @@ void main() {
         testWidgets('when a solved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(1);
           when(() => word.isSolved).thenReturn(true);
+          when(() => word.mascot).thenReturn(Mascots.dash);
 
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
@@ -305,6 +306,7 @@ void main() {
           'when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
 
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => wordSelectionBloc.state).thenReturn(
@@ -360,6 +362,7 @@ void main() {
           'with answer when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
 
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => wordSelectionBloc.state).thenReturn(
