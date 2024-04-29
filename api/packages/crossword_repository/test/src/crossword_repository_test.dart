@@ -185,7 +185,10 @@ void main() {
         when(() => answersRecord.id).thenReturn('1');
         when(() => answersRecord.data).thenReturn({
           'answer': 'flutter',
-          'section': {'x': 1, 'y': 1},
+          'sections': [
+            {'x': 1, 'y': 1},
+          ],
+          'collidedWords': <Map<String, dynamic>>[],
         });
         when(
           () => dbClient.getById(answersCollection, '1'),
@@ -271,7 +274,10 @@ void main() {
           when(() => answersRecord.id).thenReturn('fake');
           when(() => answersRecord.data).thenReturn({
             'answer': 'flutter',
-            'section': {'x': 1, 'y': 1},
+            'sections': [
+              {'x': 1, 'y': 1},
+            ],
+            'collidedWords': <Map<String, dynamic>>[],
           });
           when(
             () => dbClient.getById(answersCollection, 'fake'),

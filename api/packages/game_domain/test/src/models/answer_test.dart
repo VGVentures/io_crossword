@@ -24,7 +24,7 @@ void main() {
         json,
         equals({
           'answer': 'answer',
-          'section': [
+          'sections': [
             {'x': 1, 'y': 2},
           ],
           'collidedWords': [
@@ -42,7 +42,7 @@ void main() {
       final json = {
         'id': 'id',
         'answer': 'answer',
-        'section': [
+        'sections': [
           {'x': 1, 'y': 2},
         ],
         'collidedWords': [
