@@ -126,7 +126,7 @@ void main() {
     for (final layout in IoLayoutData.values) {
       testWidgets(
           'completes flow when pickup '
-          'animation compeletes', (tester) async {
+          'animation compeletes for $layout', (tester) async {
         final flowController = FlowController(GameIntroStatus.howToPlay);
         addTearDown(flowController.dispose);
 
@@ -159,14 +159,14 @@ void main() {
             child: FlowBuilder<GameIntroStatus>(
               controller: flowController,
               onGeneratePages: (_, __) => [
-                const MaterialPage(child: HowToPlayView()),
+                MaterialPage(child: HowToPlayView()),
               ],
             ),
           ),
           layout: layout,
         );
 
-        await tester.tap(find.byType(OutlinedButton));
+        await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
 
         expect(flowController.completed, isTrue);
       });
