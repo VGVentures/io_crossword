@@ -55,11 +55,11 @@ void main() {
       expect(find.byType(IoWord), findsOneWidget);
     });
 
-    testWidgets('renders characters', (tester) async {
+    testWidgets('renders upper-cased characters', (tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: IoWord('ABC', style: style),
+          child: IoWord('abc', style: style),
         ),
       );
 
