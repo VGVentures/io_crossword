@@ -15,8 +15,8 @@ class CrosswordRepository {
 
   final DbClient _dbClient;
 
-  static const _sectionsCollection = 'boardChunks2';
-  static const _answersCollection = 'answers2';
+  static const _sectionsCollection = 'boardChunks';
+  static const _answersCollection = 'answers';
   static const _boardInfoCollection = 'boardInfo';
 
   /// Fetches all sections from the board.
@@ -97,8 +97,10 @@ class CrosswordRepository {
       return false;
     }
 
-    final sectionX = correctAnswer.section.x;
-    final sectionY = correctAnswer.section.y;
+    // TODO(Ayad): update all the sections
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6530206382
+    final sectionX = correctAnswer.sections.first.x;
+    final sectionY = correctAnswer.sections.first.y;
     final section = await findSectionByPosition(sectionX, sectionY);
 
     if (section == null) {
@@ -142,7 +144,7 @@ class CrosswordRepository {
     );
 
     final document = snapshot.first;
-    final solvedWordsCount = document.data['value'] as int;
+    final solvedWordsCount = (document.data['value'] as num).toInt();
     final newValue = solvedWordsCount + 1;
 
     await _dbClient.update(

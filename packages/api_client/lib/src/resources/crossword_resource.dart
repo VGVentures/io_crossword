@@ -40,7 +40,7 @@ class CrosswordResource {
 
     try {
       final body = jsonDecode(response.body) as Map<String, dynamic>;
-      final points = body['points'] as int;
+      final points = (body['points'] as num).toInt();
       return points;
     } catch (error, stackTrace) {
       throw ApiClientError(

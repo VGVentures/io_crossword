@@ -88,7 +88,8 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: [Point(1, 1)],
+                collidedWords: [],
               );
             },
           );
@@ -107,13 +108,23 @@ void main() {
               userToken: 'token',
             ),
           ).thenAnswer(
-            (_) async => Hint(question: 'question', response: HintResponse.no),
+            (_) async => Hint(
+              question: 'question',
+              response: HintResponse.no,
+              readableResponse: 'Nope!',
+            ),
           );
           when(
             () => hintRepository.saveHints(
               userId: 'userId',
               wordId: 'wordId',
-              hints: [Hint(question: 'question', response: HintResponse.no)],
+              hints: [
+                Hint(
+                  question: 'question',
+                  response: HintResponse.no,
+                  readableResponse: 'Nope!',
+                ),
+              ],
             ),
           ).thenAnswer((_) async {});
 
@@ -126,6 +137,7 @@ void main() {
               'hint': {
                 'question': 'question',
                 'response': 'no',
+                'readableResponse': 'Nope!',
               },
               'maxHints': 10,
             }),
@@ -134,7 +146,13 @@ void main() {
             () => hintRepository.saveHints(
               userId: 'userId',
               wordId: 'wordId',
-              hints: [Hint(question: 'question', response: HintResponse.no)],
+              hints: [
+                Hint(
+                  question: 'question',
+                  response: HintResponse.no,
+                  readableResponse: 'Nope!',
+                ),
+              ],
             ),
           ).called(1);
         },
@@ -155,7 +173,8 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: [Point(1, 1)],
+                collidedWords: [],
               );
             },
           );
@@ -197,11 +216,16 @@ void main() {
               return Answer(
                 id: 'wordId',
                 answer: 'answer',
-                section: Point(1, 1),
+                sections: [Point(1, 1)],
+                collidedWords: [],
               );
             },
           );
-          final hint = Hint(question: 'question', response: HintResponse.yes);
+          final hint = Hint(
+            question: 'question',
+            response: HintResponse.yes,
+            readableResponse: 'Yes, that is correct!',
+          );
           when(
             () => hintRepository.getPreviousHints(
               userId: 'userId',
@@ -298,9 +322,21 @@ void main() {
         'returns Response with a list of hints',
         () async {
           final hintList = [
-            Hint(question: 'question1', response: HintResponse.yes),
-            Hint(question: 'question2', response: HintResponse.notApplicable),
-            Hint(question: 'question3', response: HintResponse.no),
+            Hint(
+              question: 'question1',
+              response: HintResponse.yes,
+              readableResponse: 'yes',
+            ),
+            Hint(
+              question: 'question2',
+              response: HintResponse.notApplicable,
+              readableResponse: 'nah',
+            ),
+            Hint(
+              question: 'question3',
+              response: HintResponse.no,
+              readableResponse: 'nope',
+            ),
           ];
           when(() => uri.queryParameters).thenReturn({'wordId': 'wordId'});
           when(() => hintRepository.isHintsEnabled())
@@ -320,9 +356,21 @@ void main() {
             await response.json(),
             equals({
               'hints': [
-                {'question': 'question1', 'response': 'yes'},
-                {'question': 'question2', 'response': 'notApplicable'},
-                {'question': 'question3', 'response': 'no'},
+                {
+                  'question': 'question1',
+                  'response': 'yes',
+                  'readableResponse': 'yes',
+                },
+                {
+                  'question': 'question2',
+                  'response': 'notApplicable',
+                  'readableResponse': 'nah',
+                },
+                {
+                  'question': 'question3',
+                  'response': 'no',
+                  'readableResponse': 'nope',
+                },
               ],
               'maxHints': 10,
             }),

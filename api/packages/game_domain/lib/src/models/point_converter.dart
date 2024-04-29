@@ -11,8 +11,8 @@ class PointConverter extends JsonConverter<Point<int>, Map<String, dynamic>> {
   @override
   Point<int> fromJson(Map<String, dynamic> json) {
     return Point<int>(
-      json['x'] as int,
-      json['y'] as int,
+      (json['x'] as num).toInt(),
+      (json['y'] as num).toInt(),
     );
   }
 
@@ -22,5 +22,39 @@ class PointConverter extends JsonConverter<Point<int>, Map<String, dynamic>> {
       'x': object.x,
       'y': object.y,
     };
+  }
+}
+
+/// {@template point_converter}
+/// A converter that converts a [List] of [Point] to a [List] of [Map]
+/// and vice versa.
+/// {@endtemplate}
+class ListPointConverter
+    extends JsonConverter<List<Point<int>>, List<Map<String, dynamic>>> {
+  /// {@macro point_converter}
+  const ListPointConverter();
+
+  @override
+  List<Point<int>> fromJson(List<Map<String, dynamic>> json) {
+    return json
+        .map(
+          (j) => Point<int>(
+            (j['x'] as num).toInt(),
+            (j['y'] as num).toInt(),
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  List<Map<String, dynamic>> toJson(List<Point<int>> object) {
+    return object
+        .map(
+          (o) => {
+            'x': o.x,
+            'y': o.y,
+          },
+        )
+        .toList();
   }
 }

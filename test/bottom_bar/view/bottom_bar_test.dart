@@ -4,9 +4,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
+import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -16,15 +17,33 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
+class _MockRandomWordSelectionBloc
+    extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
+    implements RandomWordSelectionBloc {}
+
 void main() {
   group('$BottomBar', () {
     late WordSelectionBloc wordSelectionBloc;
+    late RandomWordSelectionBloc randomWordSelectionBloc;
     late Widget widget;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       wordSelectionBloc = _MockWordSelectionBloc();
-      widget = BlocProvider<WordSelectionBloc>(
-        create: (_) => wordSelectionBloc,
+      randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider<WordSelectionBloc>(
+            create: (_) => wordSelectionBloc,
+          ),
+          BlocProvider<RandomWordSelectionBloc>(
+            create: (_) => randomWordSelectionBloc,
+          ),
+        ],
         child: BottomBar(),
       );
     });
@@ -55,35 +74,47 @@ void main() {
         expect(find.byType(BottomBarContent), findsOneWidget);
       },
     );
-  });
-
-  group('$BottomBarContent', () {
-    late AppLocalizations l10n;
-
-    setUpAll(() async {
-      l10n = await AppLocalizations.delegate.load(Locale('en'));
-    });
 
     testWidgets(
-      'displays endGame',
+      'adds $RandomWordRequested event when find new word button is tapped',
       (tester) async {
-        await tester.pumpApp(BottomBarContent());
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState.initial(),
+        );
+        await tester.pumpApp(widget);
 
-        expect(find.text(l10n.endGame), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'displays EndGameCheck when endGame is tapped',
-      (tester) async {
-        await tester.pumpApp(BottomBarContent());
-
-        await tester.tap(find.text(l10n.endGame));
+        await tester.tap(find.text(l10n.findNewWord));
 
         await tester.pumpAndSettle();
 
-        expect(find.byType(EndGameCheck), findsOneWidget);
+        verify(
+          () => randomWordSelectionBloc.add(RandomWordRequested()),
+        ).called(1);
       },
     );
+
+    group('$BottomBarContent', () {
+      testWidgets(
+        'displays endGame',
+        (tester) async {
+          await tester.pumpApp(BottomBarContent());
+
+          expect(find.text(l10n.endGame), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'displays EndGameCheck when endGame is tapped',
+        (tester) async {
+          await tester.pumpApp(BottomBarContent());
+
+          await tester.tap(find.text(l10n.endGame));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(EndGameCheck), findsOneWidget);
+        },
+      );
+    });
   });
 }

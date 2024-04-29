@@ -76,14 +76,24 @@ void main() {
           when(
             () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
           ).thenAnswer(
-            (_) async =>
-                (Hint(question: 'blue?', response: HintResponse.no), 9),
+            (_) async => (
+              Hint(
+                question: 'blue?',
+                response: HintResponse.no,
+                readableResponse: 'Nope!',
+              ),
+              9
+            ),
           );
         },
         seed: () => HintState(
           status: HintStatus.asking,
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
           ],
         ),
         build: () => HintBloc(
@@ -97,17 +107,51 @@ void main() {
           HintState(
             status: HintStatus.thinking,
             hints: [
-              Hint(question: 'is it orange?', response: HintResponse.no),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
             ],
           ),
           HintState(
             status: HintStatus.answered,
             hints: [
-              Hint(question: 'is it orange?', response: HintResponse.no),
-              Hint(question: 'blue?', response: HintResponse.no),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
+              Hint(
+                question: 'blue?',
+                response: HintResponse.no,
+                readableResponse: 'Nope!',
+              ),
             ],
             maxHints: 9,
           ),
+        ],
+      );
+
+      blocTest<HintBloc, HintState>(
+        'emits state with status ${HintStatus.invalid} if an error occurs '
+        'generating the hint',
+        setUp: () {
+          when(
+            () => hintResource.generateHint(wordId: 'id', question: 'blue?'),
+          ).thenThrow(Exception());
+        },
+        seed: () => HintState(status: HintStatus.asking),
+        build: () => HintBloc(
+          hintResource: hintResource,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(
+          HintRequested(wordId: 'id', question: 'blue?'),
+        ),
+        expect: () => const <HintState>[
+          HintState(status: HintStatus.thinking),
+          HintState(status: HintStatus.invalid),
         ],
       );
 
@@ -116,7 +160,11 @@ void main() {
         seed: () => HintState(
           status: HintStatus.asking,
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
           ],
           maxHints: 1,
         ),
@@ -150,8 +198,16 @@ void main() {
         when(() => hintResource.getHints(wordId: 'id')).thenAnswer(
           (_) async => (
             [
-              Hint(question: 'is it orange?', response: HintResponse.no),
-              Hint(question: 'is it blue?', response: HintResponse.yes),
+              Hint(
+                question: 'is it orange?',
+                response: HintResponse.no,
+                readableResponse: 'No!',
+              ),
+              Hint(
+                question: 'is it blue?',
+                response: HintResponse.yes,
+                readableResponse: 'Yes!',
+              ),
             ],
             8
           ),
@@ -165,8 +221,16 @@ void main() {
       expect: () => const <HintState>[
         HintState(
           hints: [
-            Hint(question: 'is it orange?', response: HintResponse.no),
-            Hint(question: 'is it blue?', response: HintResponse.yes),
+            Hint(
+              question: 'is it orange?',
+              response: HintResponse.no,
+              readableResponse: 'No!',
+            ),
+            Hint(
+              question: 'is it blue?',
+              response: HintResponse.yes,
+              readableResponse: 'Yes!',
+            ),
           ],
           maxHints: 8,
         ),
@@ -182,8 +246,16 @@ void main() {
       },
       seed: () => HintState(
         hints: [
-          Hint(question: 'is it orange?', response: HintResponse.no),
-          Hint(question: 'is it blue?', response: HintResponse.yes),
+          Hint(
+            question: 'is it orange?',
+            response: HintResponse.no,
+            readableResponse: 'No!',
+          ),
+          Hint(
+            question: 'is it blue?',
+            response: HintResponse.yes,
+            readableResponse: 'Yes!',
+          ),
         ],
       ),
       build: () => HintBloc(
