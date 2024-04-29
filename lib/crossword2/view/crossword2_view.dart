@@ -153,6 +153,7 @@ extension on domain.Axis {
 extension on domain.Mascots {
   IoWordStyle toIoWordStyle(ThemeData theme) {
     return theme.io.wordTheme.big.copyWith(
+      borderRadius: BorderRadius.zero,
       margin: theme.io.wordInput.secondary.padding,
       boxSize: theme.io.wordInput.secondary.filled.size,
       textStyle: switch (this) {
