@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -54,6 +55,13 @@ class _CrosswordStack extends StatelessWidget {
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
 
+    final enlargedViewport = Rect.fromLTWH(
+      viewport.left - viewport.width / 2,
+      viewport.top - viewport.height / 2,
+      viewport.width * 2,
+      viewport.height * 2,
+    );
+
     bool isChunkVisible(CrosswordChunkIndex index) {
       final chunkRect = Rect.fromLTWH(
         (index.$1 * crosswordLayout.chunkSize.width) +
@@ -63,7 +71,8 @@ class _CrosswordStack extends StatelessWidget {
         crosswordLayout.chunkSize.width,
         crosswordLayout.chunkSize.height,
       );
-      return chunkRect.overlaps(viewport);
+
+      return chunkRect.overlaps(enlargedViewport);
     }
 
     final visibleChunks = <CrosswordChunkIndex>{
@@ -74,6 +83,9 @@ class _CrosswordStack extends StatelessWidget {
         for (var column = 0; column <= configuration.bottomRight.$2; column++)
           if (isChunkVisible((row, column))) (row, column),
     };
+
+    context.read<CrosswordBloc>().add(VisibleSectionsCleaned(visibleChunks));
+
     for (final chunk in visibleChunks) {
       context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
     }

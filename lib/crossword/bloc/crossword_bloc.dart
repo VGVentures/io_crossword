@@ -5,6 +5,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
@@ -20,44 +21,91 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
+    on<VisibleSectionsCleaned>(_onVisibleSectionsCleaned);
+    on<BoardSectionLoaded>(_onBoardSectionLoaded);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
 
-  Future<void> _onBoardSectionRequested(
-    BoardSectionRequested event,
+  final Map<CrosswordChunkIndex, StreamSubscription<BoardSection?>> subs = {};
+
+  Future<void> _onVisibleSectionsCleaned(
+    VisibleSectionsCleaned event,
     Emitter<CrosswordState> emit,
   ) async {
-    final wasAlreadyRequested = state.sections.containsKey(event.position);
-    if (wasAlreadyRequested) return;
+    for (final key in subs.keys) {
+      if (!event.visibleSections.contains(key)) {
+        final sub = subs[key];
+        if (sub != null && !sub.isPaused) {
+          sub.pause();
+        }
+      }
+    }
+  }
 
-    return emit.forEach(
-      _crosswordRepository.watchSectionFromPosition(
+  @override
+  Future<void> close() {
+    for (final sub in subs.values) {
+      sub.cancel();
+    }
+    return super.close();
+  }
+
+  void _onBoardSectionLoaded(
+    BoardSectionLoaded event,
+    Emitter<CrosswordState> emit,
+  ) {
+    final newSectionKey = (event.section.position.x, event.section.position.y);
+    final sections = {...state.sections};
+    sections[newSectionKey] = event.section;
+    emit(
+      state.copyWith(
+        status: CrosswordStatus.success,
+        sectionSize: event.section.size,
+        sections: sections,
+      ),
+    );
+  }
+
+  void _onBoardSectionRequested(
+    BoardSectionRequested event,
+    Emitter<CrosswordState> emit,
+  ) {
+    final wasAlreadyRequested = state.sections.containsKey(event.position) ||
+        subs.containsKey(event.position);
+    if (wasAlreadyRequested) {
+      //  print('wasAlreadyRequested');
+      return;
+    }
+
+    if (subs[(event.position.$1, event.position.$2)] != null) {
+      if (subs[(event.position.$1, event.position.$2)]!.isPaused) {
+        print('IS PAUSED');
+      }
+      // print("RESUME ${(event.position.$1, event.position.$2)}");
+      //   subs[(event.position.$1, event.position.$2)]!.resume();
+    } else {
+      print("CREATED ${(event.position.$1, event.position.$2)}");
+      subs[(
         event.position.$1,
         event.position.$2,
-      ),
-      onData: (section) {
-        if (section == null) return state;
+      )] = _crosswordRepository
+          .watchSectionFromPosition(event.position.$1, event.position.$2)
+          .listen(
+        (section) {
+          if (section == null) return;
 
-        final newSectionKey = (section.position.x, section.position.y);
-
-        return state.copyWith(
-          status: CrosswordStatus.success,
-          sectionSize: section.size,
-          sections: {
-            ...state.sections,
-            newSectionKey: section,
-          },
-        );
-      },
-      onError: (error, stackTrace) {
-        addError(error, stackTrace);
-        return state.copyWith(
-          status: CrosswordStatus.failure,
-        );
-      },
-    );
+          add(BoardSectionLoaded(section));
+        },
+        onError: (Object error, StackTrace stackTrace) {
+          addError(error, stackTrace);
+          return state.copyWith(
+            status: CrosswordStatus.failure,
+          );
+        },
+      );
+    }
   }
 
   (int, int) _findWordInSection(

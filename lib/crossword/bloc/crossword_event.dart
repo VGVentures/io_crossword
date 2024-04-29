@@ -22,6 +22,24 @@ class BoardSectionRequested extends CrosswordEvent {
   List<Object> get props => [position];
 }
 
+class BoardSectionLoaded extends CrosswordEvent {
+  const BoardSectionLoaded(this.section);
+
+  final BoardSection section;
+
+  @override
+  List<Object> get props => [section];
+}
+
+class VisibleSectionsCleaned extends CrosswordEvent {
+  const VisibleSectionsCleaned(this.visibleSections);
+
+  final Set<(int, int)> visibleSections;
+
+  @override
+  List<Object> get props => [visibleSections];
+}
+
 class WordSelected extends CrosswordEvent {
   const WordSelected(this.section, this.word);
 
