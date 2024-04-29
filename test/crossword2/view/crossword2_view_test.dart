@@ -1,5 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis;
@@ -101,6 +101,7 @@ void main() {
         testWidgets('when a solved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(1);
           when(() => word.isSolved).thenReturn(true);
+          when(() => word.mascot).thenReturn(Mascots.dash);
 
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
@@ -328,6 +329,7 @@ void main() {
           'when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
 
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => wordSelectionBloc.state).thenReturn(
@@ -378,37 +380,200 @@ void main() {
     });
 
     group('$IoWord', () {
-      testWidgets(
-        'shown with answer when word is solved',
-        (tester) async {
-          when(() => word.isSolved).thenReturn(true);
+      group('shown', () {
+        testWidgets(
+          'with answer when word is solved',
+          (tester) async {
+            when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
 
-          when(() => word.solvedTimestamp).thenReturn(1);
-          when(() => wordSelectionBloc.state).thenReturn(
-            WordSelectionState(
-              status: WordSelectionStatus.preSolving,
-              word: SelectedWord(
-                section: (0, 0),
-                word: word,
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
               ),
-            ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            final ioWordFinder = find.byType(IoWord);
+            expect(ioWordFinder, findsOneWidget);
+
+            final ioWord = tester.widget<IoWord>(ioWordFinder);
+            expect(ioWord.data, equals(word.answer));
+          },
+        );
+
+        group('with mascot styling', () {
+          late ThemeData themeData;
+
+          setUp(() {
+            themeData = IoCrosswordTheme().themeData;
+
+            when(() => word.isSolved).thenReturn(true);
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+          });
+
+          testWidgets(
+            'when word is solved by Dash',
+            (tester) async {
+              when(() => word.mascot).thenReturn(Mascots.dash);
+
+              await tester.pumpApp(
+                layout: IoLayoutData.large,
+                Theme(
+                  data: themeData,
+                  child: BlocProvider<WordSelectionBloc>(
+                    create: (_) => wordSelectionBloc,
+                    child: const Crossword2View(),
+                  ),
+                ),
+              );
+
+              final ioWordFinder = find.byType(IoWord);
+              expect(ioWordFinder, findsOneWidget);
+
+              final ioWord = tester.widget<IoWord>(ioWordFinder);
+              final actualStyle = ioWord.style;
+
+              final expectedStyle = IoWordStyle(
+                margin: themeData.io.wordInput.secondary.padding,
+                boxSize: themeData.io.wordInput.secondary.filled.size,
+                borderRadius: BorderRadius.zero,
+                backgroundColor:
+                    themeData.io.crosswordLetterTheme.dash.backgroundColor,
+                textStyle: themeData.io.crosswordLetterTheme.dash.textStyle,
+              );
+
+              expect(actualStyle, equals(expectedStyle));
+            },
           );
 
-          await tester.pumpApp(
-            layout: IoLayoutData.large,
-            BlocProvider<WordSelectionBloc>(
-              create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
-            ),
+          testWidgets(
+            'when word is solved by Sparky',
+            (tester) async {
+              when(() => word.mascot).thenReturn(Mascots.sparky);
+
+              await tester.pumpApp(
+                layout: IoLayoutData.large,
+                Theme(
+                  data: themeData,
+                  child: BlocProvider<WordSelectionBloc>(
+                    create: (_) => wordSelectionBloc,
+                    child: const Crossword2View(),
+                  ),
+                ),
+              );
+
+              final ioWordFinder = find.byType(IoWord);
+              expect(ioWordFinder, findsOneWidget);
+
+              final ioWord = tester.widget<IoWord>(ioWordFinder);
+              final actualStyle = ioWord.style;
+
+              final expectedStyle = IoWordStyle(
+                margin: themeData.io.wordInput.secondary.padding,
+                boxSize: themeData.io.wordInput.secondary.filled.size,
+                borderRadius: BorderRadius.zero,
+                backgroundColor:
+                    themeData.io.crosswordLetterTheme.sparky.backgroundColor,
+                textStyle: themeData.io.crosswordLetterTheme.sparky.textStyle,
+              );
+
+              expect(actualStyle, equals(expectedStyle));
+            },
           );
 
-          final ioWordFinder = find.byType(IoWord);
-          expect(ioWordFinder, findsOneWidget);
+          testWidgets(
+            'when word is solved by Dino',
+            (tester) async {
+              when(() => word.mascot).thenReturn(Mascots.dino);
 
-          final ioWord = tester.widget<IoWord>(ioWordFinder);
-          expect(ioWord.data, equals(word.answer));
-        },
-      );
+              await tester.pumpApp(
+                layout: IoLayoutData.large,
+                Theme(
+                  data: themeData,
+                  child: BlocProvider<WordSelectionBloc>(
+                    create: (_) => wordSelectionBloc,
+                    child: const Crossword2View(),
+                  ),
+                ),
+              );
+
+              final ioWordFinder = find.byType(IoWord);
+              expect(ioWordFinder, findsOneWidget);
+
+              final ioWord = tester.widget<IoWord>(ioWordFinder);
+              final actualStyle = ioWord.style;
+
+              final expectedStyle = IoWordStyle(
+                margin: themeData.io.wordInput.secondary.padding,
+                boxSize: themeData.io.wordInput.secondary.filled.size,
+                borderRadius: BorderRadius.zero,
+                backgroundColor:
+                    themeData.io.crosswordLetterTheme.dino.backgroundColor,
+                textStyle: themeData.io.crosswordLetterTheme.dino.textStyle,
+              );
+
+              expect(actualStyle, equals(expectedStyle));
+            },
+          );
+
+          testWidgets(
+            'when word is solved by Android',
+            (tester) async {
+              when(() => word.mascot).thenReturn(Mascots.android);
+
+              await tester.pumpApp(
+                layout: IoLayoutData.large,
+                Theme(
+                  data: themeData,
+                  child: BlocProvider<WordSelectionBloc>(
+                    create: (_) => wordSelectionBloc,
+                    child: const Crossword2View(),
+                  ),
+                ),
+              );
+
+              final ioWordFinder = find.byType(IoWord);
+              expect(ioWordFinder, findsOneWidget);
+
+              final ioWord = tester.widget<IoWord>(ioWordFinder);
+              final actualStyle = ioWord.style;
+
+              final expectedStyle = IoWordStyle(
+                margin: themeData.io.wordInput.secondary.padding,
+                boxSize: themeData.io.wordInput.secondary.filled.size,
+                borderRadius: BorderRadius.zero,
+                backgroundColor:
+                    themeData.io.crosswordLetterTheme.android.backgroundColor,
+                textStyle: themeData.io.crosswordLetterTheme.android.textStyle,
+              );
+
+              expect(actualStyle, equals(expectedStyle));
+            },
+          );
+        });
+      });
 
       testWidgets(
         'not shown when word is not solved',
