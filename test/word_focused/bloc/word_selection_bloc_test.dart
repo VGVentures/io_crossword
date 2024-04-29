@@ -237,7 +237,8 @@ void main() {
       );
 
       blocTest<WordSelectionBloc, WordSelectionState>(
-        'validates a valid answer',
+        'validates a valid answer when in an ${WordSelectionStatus.solving} '
+        'status',
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
         ),
@@ -254,6 +255,44 @@ void main() {
         },
         seed: () => WordSelectionState(
           status: WordSelectionStatus.solving,
+          word: selectedWord,
+        ),
+        act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
+        expect: () => <WordSelectionState>[
+          WordSelectionState(
+            status: WordSelectionStatus.validating,
+            word: selectedWord,
+          ),
+          WordSelectionState(
+            status: WordSelectionStatus.solved,
+            word: SelectedWord(
+              section: selectedWord.section,
+              word: answerWord,
+            ),
+            wordPoints: 10,
+          ),
+        ],
+      );
+
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'validates a valid answer when in an ${WordSelectionStatus.incorrect} '
+        'status',
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+        ),
+        setUp: () {
+          answerWord = _MockWord();
+          when(() => selectedWord.word.copyWith(answer: 'correct'))
+              .thenReturn(answerWord);
+          when(
+            () => crosswordResource.answerWord(
+              wordId: selectedWord.word.id,
+              answer: 'correct',
+            ),
+          ).thenAnswer((_) async => 10);
+        },
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.incorrect,
           word: selectedWord,
         ),
         act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
