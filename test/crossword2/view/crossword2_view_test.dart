@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -355,37 +356,88 @@ void main() {
     });
 
     group('$IoWord', () {
-      testWidgets(
-        'shown with answer when word is solved',
-        (tester) async {
-          when(() => word.isSolved).thenReturn(true);
+      group('shown', () {
+        testWidgets(
+          'with answer when word is solved',
+          (tester) async {
+            when(() => word.isSolved).thenReturn(true);
 
-          when(() => word.solvedTimestamp).thenReturn(1);
-          when(() => wordSelectionBloc.state).thenReturn(
-            WordSelectionState(
-              status: WordSelectionStatus.preSolving,
-              word: SelectedWord(
-                section: (0, 0),
-                word: word,
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
               ),
-            ),
-          );
+            );
 
-          await tester.pumpApp(
-            layout: IoLayoutData.large,
-            BlocProvider<WordSelectionBloc>(
-              create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
-            ),
-          );
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
 
-          final ioWordFinder = find.byType(IoWord);
-          expect(ioWordFinder, findsOneWidget);
+            final ioWordFinder = find.byType(IoWord);
+            expect(ioWordFinder, findsOneWidget);
 
-          final ioWord = tester.widget<IoWord>(ioWordFinder);
-          expect(ioWord.data, equals(word.answer));
-        },
-      );
+            final ioWord = tester.widget<IoWord>(ioWordFinder);
+            expect(ioWord.data, equals(word.answer));
+          },
+        );
+
+        testWidgets(
+          'with mascot styling when word is solved',
+          (tester) async {
+            when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
+
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.preSolving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            final themeData = IoCrosswordTheme().themeData;
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              Theme(
+                data: themeData,
+                child: BlocProvider<WordSelectionBloc>(
+                  create: (_) => wordSelectionBloc,
+                  child: const Crossword2View(),
+                ),
+              ),
+            );
+
+            final ioWordFinder = find.byType(IoWord);
+            expect(ioWordFinder, findsOneWidget);
+
+            final ioWord = tester.widget<IoWord>(ioWordFinder);
+
+            final actualStyle = ioWord.style;
+            final expectedStyle = IoWordStyle(
+              margin: themeData.io.wordInput.secondary.padding,
+              boxSize: themeData.io.wordInput.secondary.filled.size,
+              borderRadius: BorderRadius.zero,
+              backgroundColor:
+                  themeData.io.crosswordLetterTheme.dash.backgroundColor,
+              textStyle: themeData.io.crosswordLetterTheme.dash.textStyle,
+            );
+
+            expect(actualStyle, equals(expectedStyle));
+          },
+        );
+      });
 
       testWidgets(
         'not shown when word is not solved',
