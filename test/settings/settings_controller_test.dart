@@ -9,8 +9,6 @@ void main() {
       controller = SettingsController();
     });
 
-    ;
-
     test('can toggle musicOn', () async {
       controller.toggleMusicOn();
       expect(controller.musicOn.value, isFalse);

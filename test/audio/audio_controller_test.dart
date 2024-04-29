@@ -406,7 +406,6 @@ void main() {
 
         verify(musicPlayer.resume).called(1);
       });
-      ;
     });
 
     group('soundsOn', () {
