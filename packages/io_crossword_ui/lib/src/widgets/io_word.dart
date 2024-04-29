@@ -9,6 +9,7 @@ class IoWord extends StatelessWidget {
   const IoWord(
     this.data, {
     required this.style,
+    this.direction = Axis.horizontal,
     super.key,
   });
 
@@ -20,11 +21,21 @@ class IoWord extends StatelessWidget {
   /// {@macro io_word_style}
   final IoWordStyle style;
 
+  /// The direction of the word.
+  ///
+  /// Since the word does not support [TextDirection.rtl], an [Axis.horizontal]
+  /// will show the word with characters appearing from left to right. Whereas
+  /// an [Axis.vertical] will display characters from top to bottom.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis direction;
+
   @override
   Widget build(BuildContext context) {
     return Semantics(
       label: data,
-      child: Row(
+      child: Flex(
+        direction: direction,
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final char in data.split(''))
