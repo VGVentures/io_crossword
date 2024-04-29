@@ -28,13 +28,14 @@ class WordSelectionTopBar extends StatelessWidget {
         ),
         BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
           selector: (state) => state.word,
-          builder: (context, word) {
-            if (word?.word == null) return const SizedBox.shrink();
+          builder: (context, selectedWord) {
+            final word = selectedWord;
+            if (word == null) return const SizedBox.shrink();
 
             final l10n = context.l10n;
             final mascot = context.select<CrosswordBloc, Mascots?>(
               (bloc) {
-                final currentWord = bloc.state.sections[word!.section]?.words
+                final currentWord = bloc.state.sections[word.section]?.words
                     .firstWhere((element) => element.id == word.word.id);
                 return currentWord?.mascot;
               },
