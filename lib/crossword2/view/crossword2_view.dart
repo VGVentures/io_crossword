@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis, Mascots;
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -124,7 +124,7 @@ class _CrosswordStack extends StatelessWidget {
                   child: selectedWord.word.isSolved
                       ? IoWord(
                           selectedWord.word.answer,
-                          style: theme.io.wordTheme.big,
+                          style: word.mascot!.toIoWordStyle(theme),
                         )
                       : CrosswordInput(
                           key: ValueKey(selectedWord.word.id),
@@ -148,4 +148,30 @@ extension on Quad {
 extension on domain.Axis {
   Axis toAxis() =>
       this == domain.Axis.horizontal ? Axis.horizontal : Axis.vertical;
+}
+
+extension on domain.Mascots {
+  IoWordStyle toIoWordStyle(ThemeData theme) {
+    return theme.io.wordTheme.big.copyWith(
+      margin: theme.io.wordInput.secondary.padding,
+      boxSize: theme.io.wordInput.secondary.filled.size,
+      textStyle: switch (this) {
+        domain.Mascots.dash => theme.io.crosswordLetterTheme.dash.textStyle,
+        domain.Mascots.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
+        domain.Mascots.dino => theme.io.crosswordLetterTheme.dino.textStyle,
+        domain.Mascots.android =>
+          theme.io.crosswordLetterTheme.android.textStyle,
+      },
+      backgroundColor: switch (this) {
+        domain.Mascots.dash =>
+          theme.io.crosswordLetterTheme.dash.backgroundColor,
+        domain.Mascots.sparky =>
+          theme.io.crosswordLetterTheme.sparky.backgroundColor,
+        domain.Mascots.dino =>
+          theme.io.crosswordLetterTheme.dino.backgroundColor,
+        domain.Mascots.android =>
+          theme.io.crosswordLetterTheme.android.backgroundColor,
+      },
+    );
+  }
 }
