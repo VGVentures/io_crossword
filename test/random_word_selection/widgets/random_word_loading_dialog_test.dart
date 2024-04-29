@@ -16,7 +16,7 @@ class _MockRandomWordSelectionBloc
     implements RandomWordSelectionBloc {}
 
 void main() {
-  group('RandomWordLoadingDialog', () {
+  group('$RandomWordLoadingDialog', () {
     late RandomWordSelectionBloc randomWordSelectionBloc;
     late MockNavigator mockNavigator;
     late AppLocalizations l10n;
@@ -36,7 +36,7 @@ void main() {
     });
 
     testWidgets(
-      'displays RandomWordLoadingDialog when openDialog is called',
+      'displays $RandomWordLoadingDialog when openDialog is called',
       (tester) async {
         await tester.pumpApp(
           BlocProvider(

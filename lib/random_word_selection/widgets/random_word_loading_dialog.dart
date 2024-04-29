@@ -30,18 +30,17 @@ class RandomWordLoadingDialog extends StatelessWidget {
           current.status != RandomWordSelectionStatus.failure,
       listener: (context, state) => Navigator.pop(context),
       builder: (context, state) {
-        final child = state.status == RandomWordSelectionStatus.loading
-            ? const LoadingView()
-            : ErrorView(
-                title: l10n.findRandomWordError,
-                buttonTitle: l10n.close,
-                onPressed: () => Navigator.pop(context),
-              );
-
         return Center(
           child: IoCrosswordCard(
             maxHeight: 400,
-            child: child,
+            child: switch (state.status) {
+              RandomWordSelectionStatus.loading => const LoadingView(),
+              _ => ErrorView(
+                  title: l10n.findRandomWordError,
+                  buttonTitle: l10n.close,
+                  onPressed: () => Navigator.pop(context),
+                ),
+            },
           ),
         );
       },
@@ -49,8 +48,8 @@ class RandomWordLoadingDialog extends StatelessWidget {
   }
 }
 
+@visibleForTesting
 class LoadingView extends StatelessWidget {
-  @visibleForTesting
   const LoadingView({super.key});
 
   @override
