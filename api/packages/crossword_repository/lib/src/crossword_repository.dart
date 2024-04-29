@@ -97,8 +97,10 @@ class CrosswordRepository {
       return false;
     }
 
-    final sectionX = correctAnswer.section.x;
-    final sectionY = correctAnswer.section.y;
+    // TODO(Ayad): update all the sections
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6530206382
+    final sectionX = correctAnswer.sections.first.x;
+    final sectionY = correctAnswer.sections.first.y;
     final section = await findSectionByPosition(sectionX, sectionY);
 
     if (section == null) {
