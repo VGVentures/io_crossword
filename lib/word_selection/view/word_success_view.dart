@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
@@ -22,6 +24,7 @@ class WordSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AudioController>().playSfx(Assets.music.rightWord);
     final layout = IoLayout.of(context);
     return switch (layout) {
       IoLayoutData.large => const WordSelectionSuccessLargeView(),
