@@ -123,9 +123,7 @@ void main() {
 
           expect(find.byType(CrosswordBackdrop), findsOneWidget);
         });
-      });
 
-      group('not shown', () {
         testWidgets(
           'when a solved word is selected with a small layout',
           (tester) async {
@@ -148,7 +146,7 @@ void main() {
               ),
             );
 
-            expect(find.byType(CrosswordBackdrop), findsNothing);
+            expect(find.byType(CrosswordBackdrop), findsOneWidget);
           },
         );
 
@@ -174,10 +172,12 @@ void main() {
               ),
             );
 
-            expect(find.byType(CrosswordBackdrop), findsNothing);
+            expect(find.byType(CrosswordBackdrop), findsOneWidget);
           },
         );
+      });
 
+      group('not shown', () {
         testWidgets(
           'when no word is selected with a large layout',
           (tester) async {
@@ -191,6 +191,29 @@ void main() {
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            expect(find.byType(CrosswordBackdrop), findsNothing);
+          },
+        );
+
+        testWidgets(
+          'when no word is selected with a small layout',
+          (tester) async {
+            when(() => wordSelectionBloc.state).thenReturn(
+              const WordSelectionState(
+                status: WordSelectionStatus.empty,
+                // ignore: avoid_redundant_argument_values
+                word: null,
+              ),
+            );
+
+            await tester.pumpApp(
+              layout: IoLayoutData.small,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
                 child: const Crossword2View(),

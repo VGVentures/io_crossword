@@ -92,15 +92,14 @@ class _CrosswordStack extends StatelessWidget {
                   crosswordLayout.padding.top,
               child: CrosswordChunk(index: chunk),
             ),
-          if (layout == IoLayoutData.large)
-            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-              selector: (state) => state.word,
-              builder: (context, selectedWord) {
-                return selectedWord != null
-                    ? const CrosswordBackdrop()
-                    : const SizedBox.shrink();
-              },
-            ),
+          BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+            selector: (state) => state.word,
+            builder: (context, selectedWord) {
+              return selectedWord != null
+                  ? const CrosswordBackdrop()
+                  : const SizedBox.shrink();
+            },
+          ),
           if (layout == IoLayoutData.large)
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
               selector: (state) => state.word,
