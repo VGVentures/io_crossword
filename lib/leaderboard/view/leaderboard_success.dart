@@ -206,7 +206,7 @@ class UserLeaderboardRanking extends StatelessWidget {
                 rank.toDisplayNumber(),
               ),
               IoWord(
-                player.initials.toUpperCase(),
+                player.initials,
                 style: style,
               ),
               const SizedBox(),

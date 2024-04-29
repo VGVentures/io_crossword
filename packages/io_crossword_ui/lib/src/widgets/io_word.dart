@@ -13,6 +13,8 @@ class IoWord extends StatelessWidget {
   });
 
   /// The word to display.
+  ///
+  /// It will always be upper-cased.
   final String data;
 
   /// {@macro io_word_style}
@@ -59,7 +61,7 @@ class _CharacterBox extends StatelessWidget {
         dimension: style.boxSize.width,
         child: Center(
           child: Text(
-            data,
+            data.toUpperCase(),
             style: style.textStyle,
           ),
         ),

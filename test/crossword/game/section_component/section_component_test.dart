@@ -102,7 +102,6 @@ void main() {
           position: const Point(0, 0),
           axis: Axis.vertical,
           answer: 'Flutter',
-          length: 7,
           clue: '',
         );
         setUpStreamController(
@@ -186,7 +185,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
-                    length: 7,
                     clue: '',
                   ),
                   Word(
@@ -194,7 +192,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
-                    length: 8,
                     clue: '',
                   ),
                 ],
@@ -237,7 +234,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
-                    length: 7,
                     clue: '',
                     solvedTimestamp: 1,
                   ),
@@ -246,7 +242,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
-                    length: 8,
                     clue: '',
                   ),
                 ],
@@ -299,7 +294,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.vertical,
                     answer: 'Flutter',
-                    length: 7,
                     clue: '',
                   ),
                   Word(
@@ -307,7 +301,6 @@ void main() {
                     position: const Point(0, 0),
                     axis: Axis.horizontal,
                     answer: 'Firebase',
-                    length: 8,
                     clue: '',
                   ),
                 ],

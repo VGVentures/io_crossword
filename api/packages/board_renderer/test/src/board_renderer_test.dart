@@ -62,7 +62,6 @@ void main() {
             position: Point(1, 1),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
           ),
           Word(
@@ -70,7 +69,6 @@ void main() {
             position: Point(2, 7),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ];
@@ -121,7 +119,6 @@ void main() {
             position: Point(1, 1),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
           ),
           Word(
@@ -129,7 +126,6 @@ void main() {
             position: Point(2, 7),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ];
@@ -181,7 +177,6 @@ void main() {
               position: Point(1, 1),
               axis: Axis.horizontal,
               answer: 'hello',
-              length: 5,
               clue: '',
             ),
           ];
@@ -256,7 +251,6 @@ void main() {
               position: Point(1, 1),
               axis: Axis.horizontal,
               answer: 'hello',
-              length: 5,
               clue: '',
             ),
             Word(
@@ -264,7 +258,6 @@ void main() {
               position: Point(2, 7),
               axis: Axis.vertical,
               answer: 'there',
-              length: 5,
               clue: '',
             ),
           ];
@@ -298,7 +291,6 @@ void main() {
           position: Point(18, 12),
           axis: Axis.horizontal,
           answer: 'hello',
-          length: 5,
           clue: '',
         ),
         Word(
@@ -306,7 +298,6 @@ void main() {
           position: Point(10, 11),
           axis: Axis.vertical,
           answer: 'there',
-          length: 5,
           clue: '',
         ),
       ];
@@ -605,7 +596,6 @@ void main() {
             position: Point(18, 12),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
           ),
           Word(
@@ -613,7 +603,6 @@ void main() {
             position: Point(10, 11),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ],
@@ -630,7 +619,6 @@ void main() {
             position: Point(18, 12),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
           ),
           Word(
@@ -638,7 +626,6 @@ void main() {
             position: Point(10, 11),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ],
@@ -655,7 +642,6 @@ void main() {
             position: Point(18, 22),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
           ),
@@ -664,7 +650,6 @@ void main() {
             position: Point(10, 21),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ],
@@ -681,7 +666,6 @@ void main() {
             position: Point(28, 12),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
           ),
@@ -690,7 +674,6 @@ void main() {
             position: Point(20, 11),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ],
@@ -707,7 +690,6 @@ void main() {
             position: Point(28, 12),
             axis: Axis.horizontal,
             answer: 'hello',
-            length: 5,
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
           ),
@@ -716,7 +698,6 @@ void main() {
             position: Point(20, 11),
             axis: Axis.vertical,
             answer: 'there',
-            length: 5,
             clue: '',
           ),
         ],
@@ -1039,7 +1020,6 @@ void main() {
           position: Point(18, 12),
           axis: Axis.horizontal,
           answer: 'hello',
-          length: 5,
           clue: '',
           solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
         ),
@@ -1048,7 +1028,6 @@ void main() {
           position: Point(10, 11),
           axis: Axis.vertical,
           answer: 'there',
-          length: 5,
           clue: '',
         ),
       ];

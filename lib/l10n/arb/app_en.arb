@@ -81,6 +81,10 @@
   "@solveIt": {
     "description": "Solve it label"
   },
+  "hintError": "An error occurred while asking for a hint.\nPlease try again.",
+  "@hintError": {
+    "description": "Error message when asking for a hint"
+  },
   "askGeminiHint": "Ask Gemini for a hint",
   "@askGeminiHint": {
     "description": "Ask Gemini for a hint label"
@@ -160,6 +164,19 @@
   "couldNotOpenUrl": "Could not open url",
   "@couldNotOpenUrl": {
     "description": "Could not open url error message when trying to open link"
+  },
+  "alreadySolvedTitle": "{team} team won this word!",
+  "@alreadySolvedTitle": {
+    "description": "Title when a word gets solved while solving it.",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadySolvedSubtitle": "Submit correctly to still win points.",
+  "@alreadySolvedSubtitle": {
+    "description": "Subtitle when a word gets solved while solving it."
   },
   "learn": "Learn",
   "@learn": {
@@ -257,7 +274,7 @@
   "@claimBadge": {
     "description": "Claim badge label"
   },
-   "finishAndSubmitScore": "Finish & submit score",
+  "finishAndSubmitScore": "Finish & submit score",
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
