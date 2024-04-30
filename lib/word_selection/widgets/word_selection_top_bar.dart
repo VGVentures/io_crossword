@@ -2,6 +2,9 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:intl/intl.dart';
+import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/extensions/mascot_color.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -23,12 +26,43 @@ class WordSelectionTopBar extends StatelessWidget {
           icon: const Icon(Icons.ios_share),
           style: themeData.io.iconButtonTheme.filled,
         ),
-        BlocSelector<WordSelectionBloc, WordSelectionState, Word?>(
-          selector: (state) => state.word?.word,
-          builder: (context, word) {
+        BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+          selector: (state) => state.word,
+          builder: (context, selectedWord) {
+            final word = selectedWord;
             if (word == null) return const SizedBox.shrink();
+
+            final l10n = context.l10n;
+            final mascot = context.select<CrosswordBloc, Mascots?>(
+              (bloc) {
+                final currentWord = bloc.state.sections[word.section]?.words
+                    .firstWhere((element) => element.id == word.word.id);
+                return currentWord?.mascot;
+              },
+            );
+
+            if (mascot != null) {
+              return Padding(
+                padding: const EdgeInsets.all(11),
+                child: Column(
+                  children: [
+                    Text(
+                      l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
+                      style: themeData.textTheme.labelLarge?.copyWith(
+                        color: mascot.color,
+                      ),
+                    ),
+                    Text(
+                      l10n.alreadySolvedSubtitle.toUpperCase(),
+                      style: themeData.textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+              );
+            }
+
             return Text(
-              wordIdentifier(word),
+              wordIdentifier(word.word),
               style: themeData.textTheme.labelLarge,
             );
           },
