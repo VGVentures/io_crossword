@@ -55,10 +55,12 @@ void main() {
       });
     });
 
-    group('VisibleSectionsCleaned', () {
+    group('$LoadedSectionsSuspended', () {
       test('can be instantiated', () {
         expect(
-            LoadedSectionsSuspended({(1, 1)}), isA<LoadedSectionsSuspended>());
+          LoadedSectionsSuspended({(1, 1)}),
+          isA<LoadedSectionsSuspended>(),
+        );
       });
       test('supports value comparisons', () {
         expect(

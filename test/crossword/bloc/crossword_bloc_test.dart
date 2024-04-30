@@ -83,7 +83,7 @@ void main() {
       );
     });
 
-    group('VisibleSectionsCleaned', () {
+    group('$LoadedSectionsSuspended', () {
       late StreamSubscription<BoardSection?> subscription;
 
       setUp(() {
