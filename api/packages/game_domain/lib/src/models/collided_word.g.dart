@@ -10,8 +10,7 @@ CollidedWord _$CollidedWordFromJson(Map<String, dynamic> json) => CollidedWord(
       wordId: json['wordId'] as String,
       position: (json['position'] as num).toInt(),
       character: json['character'] as String,
-      sections: const ListPointConverter()
-          .fromJson(json['sections'] as List<Map<String, dynamic>>),
+      sections: const ListPointConverter().fromJson(json['sections'] as List),
     );
 
 Map<String, dynamic> _$CollidedWordToJson(CollidedWord instance) =>
