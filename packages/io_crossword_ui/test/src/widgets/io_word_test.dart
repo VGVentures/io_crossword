@@ -70,7 +70,7 @@ void main() {
 
     group('renders as expected', () {
       Uri goldenKey(String name) =>
-          Uri.parse('goldens/io_word/io_word__$name.png');
+          Uri.parse('goldens/io_word/io_word__${name.toLowerCase()}.png');
 
       setUp(() async {
         final previousComparator = goldenFileComparator;
@@ -81,229 +81,118 @@ void main() {
         });
       });
 
-      group('with Android theme', () {
-        late ThemeData themeData;
+      for (final theme in {
+        'Android': IoAndroidTheme.new,
+        'Chrome': IoChromeTheme.new,
+        'Firebase': IoFirebaseTheme.new,
+        'Flutter': IoFlutterTheme.new,
+      }.entries) {
+        group('with ${theme.key} theme', () {
+          late ThemeData themeData;
 
-        setUp(() {
-          themeData = IoAndroidTheme().themeData;
+          setUp(() {
+            themeData = theme.value().themeData;
+          });
+
+          testWidgets(
+            'big and horizontal',
+            tags: TestTag.golden,
+            (tester) async {
+              await tester.binding.setSurfaceSize(const Size(300, 150));
+              addTearDown(() => tester.binding.setSurfaceSize(null));
+
+              await tester.pumpWidget(
+                _GoldenSubject(
+                  themeData: themeData,
+                  child: IoWord(
+                    'ABC',
+                    style: themeData.io.wordTheme.big,
+                  ),
+                ),
+              );
+
+              await expectLater(
+                find.byType(IoWord),
+                matchesGoldenFile(goldenKey('${theme.key}--big--horizontal')),
+              );
+            },
+          );
+
+          testWidgets(
+            'big and vertical',
+            tags: TestTag.golden,
+            (tester) async {
+              await tester.binding.setSurfaceSize(const Size(150, 300));
+              addTearDown(() => tester.binding.setSurfaceSize(null));
+
+              await tester.pumpWidget(
+                _GoldenSubject(
+                  themeData: themeData,
+                  child: IoWord(
+                    'ABC',
+                    direction: Axis.vertical,
+                    style: themeData.io.wordTheme.big,
+                  ),
+                ),
+              );
+
+              await expectLater(
+                find.byType(IoWord),
+                matchesGoldenFile(goldenKey('${theme.key}--big--vertical')),
+              );
+            },
+          );
+
+          testWidgets(
+            'small and horizontal',
+            tags: TestTag.golden,
+            (tester) async {
+              await tester.binding.setSurfaceSize(const Size(300, 150));
+              addTearDown(() => tester.binding.setSurfaceSize(null));
+
+              await tester.pumpWidget(
+                _GoldenSubject(
+                  themeData: themeData,
+                  child: IoWord(
+                    'ABC',
+                    style: themeData.io.wordTheme.small,
+                  ),
+                ),
+              );
+
+              await expectLater(
+                find.byType(IoWord),
+                matchesGoldenFile(goldenKey('${theme.key}--small--horizontal')),
+              );
+            },
+          );
+
+          testWidgets(
+            'small and vertical',
+            tags: TestTag.golden,
+            (tester) async {
+              await tester.binding.setSurfaceSize(const Size(150, 300));
+              addTearDown(() => tester.binding.setSurfaceSize(null));
+
+              await tester.pumpWidget(
+                _GoldenSubject(
+                  themeData: themeData,
+                  child: IoWord(
+                    'ABC',
+                    direction: Axis.vertical,
+                    style: themeData.io.wordTheme.small,
+                  ),
+                ),
+              );
+
+              await expectLater(
+                find.byType(IoWord),
+                matchesGoldenFile(goldenKey('${theme.key}--small--vertical')),
+              );
+            },
+          );
         });
-
-        testWidgets(
-          'and big',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.big,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('android--big')),
-            );
-          },
-        );
-
-        testWidgets(
-          'and small',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.small,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('android--small')),
-            );
-          },
-        );
-      });
-
-      group('with Chrome theme', () {
-        late ThemeData themeData;
-
-        setUp(() {
-          themeData = IoChromeTheme().themeData;
-        });
-
-        testWidgets(
-          'and big',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.big,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('chrome--big')),
-            );
-          },
-        );
-
-        testWidgets(
-          'and small',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.small,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('chrome--small')),
-            );
-          },
-        );
-      });
-
-      group('with Firebase theme', () {
-        late ThemeData themeData;
-
-        setUp(() {
-          themeData = IoFirebaseTheme().themeData;
-        });
-
-        testWidgets(
-          'and big',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.big,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('firebase--big')),
-            );
-          },
-        );
-
-        testWidgets(
-          'and small',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.small,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('firebase--small')),
-            );
-          },
-        );
-      });
-
-      group('with Flutter theme', () {
-        late ThemeData themeData;
-
-        setUp(() {
-          themeData = IoFlutterTheme().themeData;
-        });
-
-        testWidgets(
-          'and big',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.big,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('flutter--big')),
-            );
-          },
-        );
-
-        testWidgets(
-          'and small',
-          tags: TestTag.golden,
-          (tester) async {
-            await tester.binding.setSurfaceSize(const Size(300, 150));
-            addTearDown(() => tester.binding.setSurfaceSize(null));
-
-            await tester.pumpWidget(
-              _GoldenSubject(
-                themeData: themeData,
-                child: IoWord(
-                  'ABC',
-                  style: themeData.io.wordTheme.small,
-                ),
-              ),
-            );
-
-            await expectLater(
-              find.byType(IoWord),
-              matchesGoldenFile(goldenKey('flutter--small')),
-            );
-          },
-        );
-      });
+      }
     });
   });
 
