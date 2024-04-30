@@ -57,17 +57,18 @@ void main() {
 
     group('VisibleSectionsCleaned', () {
       test('can be instantiated', () {
-        expect(VisibleSectionsCleaned({(1, 1)}), isA<VisibleSectionsCleaned>());
+        expect(
+            LoadedSectionsSuspended({(1, 1)}), isA<LoadedSectionsSuspended>());
       });
       test('supports value comparisons', () {
         expect(
-          VisibleSectionsCleaned({(1, 1)}),
-          VisibleSectionsCleaned({(1, 1)}),
+          LoadedSectionsSuspended({(1, 1)}),
+          LoadedSectionsSuspended({(1, 1)}),
         );
         expect(
-          VisibleSectionsCleaned({(1, 1)}),
+          LoadedSectionsSuspended({(1, 1)}),
           isNot(
-            VisibleSectionsCleaned(
+            LoadedSectionsSuspended(
               {(1, 2)},
             ),
           ),

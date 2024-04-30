@@ -21,37 +21,39 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     @visibleForTesting SubscriptionsMap? subscriptionsMap,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
-        subscriptions = subscriptionsMap ?? {},
+        _subscriptions = subscriptionsMap ?? {},
         super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
-    on<VisibleSectionsCleaned>(_onVisibleSectionsCleaned);
+    on<LoadedSectionsSuspended>(_onVisibleSectionsCleaned);
     on<BoardSectionLoaded>(_onBoardSectionLoaded);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
 
-  final SubscriptionsMap subscriptions;
+  final SubscriptionsMap _subscriptions;
 
   void _onVisibleSectionsCleaned(
-    VisibleSectionsCleaned event,
+    LoadedSectionsSuspended event,
     Emitter<CrosswordState> emit,
   ) {
-    for (final key in subscriptions.keys) {
-      if (!event.visibleSections.contains(key)) {
-        subscriptions[key]?.pause();
+    for (final key in _subscriptions.keys) {
+      if (!event.loadedSections.contains(key)) {
+        _subscriptions[key]?.pause();
       }
     }
   }
 
   @override
   Future<void> close() {
-    for (final sub in subscriptions.values) {
-      sub.cancel();
+    for (final subscription in _subscriptions.values) {
+      subscription.cancel();
     }
+    _subscriptions.clear();
+
     return super.close();
   }
 
@@ -77,12 +79,12 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) {
     final index = (event.position.$1, event.position.$2);
 
-    if (subscriptions[index] != null) {
-      if (subscriptions[index]!.isPaused) {
-        subscriptions[index]!.resume();
+    if (_subscriptions[index] != null) {
+      if (_subscriptions[index]!.isPaused) {
+        _subscriptions[index]!.resume();
       }
     } else {
-      subscriptions[index] = _crosswordRepository
+      _subscriptions[index] = _crosswordRepository
           .watchSectionFromPosition(index.$1, index.$2)
           .listen(
         (section) {

@@ -98,7 +98,7 @@ void main() {
           boardInfoRepository: boardInfoRepository,
           subscriptionsMap: {(0, 0): subscription},
         ),
-        act: (bloc) => bloc.add(const VisibleSectionsCleaned({(1, 1)})),
+        act: (bloc) => bloc.add(const LoadedSectionsSuspended({(1, 1)})),
         verify: (bloc) {
           verify(() => subscription.pause()).called(1);
         },
@@ -111,7 +111,7 @@ void main() {
           boardInfoRepository: boardInfoRepository,
           subscriptionsMap: {(0, 0): subscription},
         ),
-        act: (bloc) => bloc.add(const VisibleSectionsCleaned({(0, 0)})),
+        act: (bloc) => bloc.add(const LoadedSectionsSuspended({(0, 0)})),
         verify: (bloc) {
           verifyNever(() => subscription.pause());
         },

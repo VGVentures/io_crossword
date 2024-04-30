@@ -31,13 +31,15 @@ class BoardSectionLoaded extends CrosswordEvent {
   List<Object> get props => [section];
 }
 
-class VisibleSectionsCleaned extends CrosswordEvent {
-  const VisibleSectionsCleaned(this.visibleSections);
+/// Suspends the stream subscriptions to the chunks that are loaded
+/// but not visible.
+class LoadedSectionsSuspended extends CrosswordEvent {
+  const LoadedSectionsSuspended(this.loadedSections);
 
-  final Set<(int, int)> visibleSections;
+  final Set<(int, int)> loadedSections;
 
   @override
-  List<Object> get props => [visibleSections];
+  List<Object> get props => [loadedSections];
 }
 
 class WordSelected extends CrosswordEvent {
