@@ -81,6 +81,7 @@ class _CrosswordStack extends StatelessWidget {
       return chunkRect.overlaps(extendedViewport);
     }
 
+    // Chunks that are in the extendedViewport
     final loadedChunks = <CrosswordChunkIndex>{
       for (var row = 0; row <= configuration.bottomRight.$1; row++)
         for (var column = 0; column <= configuration.bottomRight.$2; column++)
@@ -94,7 +95,7 @@ class _CrosswordStack extends StatelessWidget {
 
     context.read<CrosswordBloc>().add(LoadedSectionsSuspended(loadedChunks));
 
-    for (final chunk in visibleChunks) {
+    for (final chunk in loadedChunks) {
       context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
     }
 
