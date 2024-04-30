@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
