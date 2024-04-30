@@ -20,6 +20,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
+    on<GameStatusRequested>(_onGameStatusRequested);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -130,6 +131,27 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           zoomLimit: zoomLimit,
           sectionSize: sectionSize,
         ),
+      );
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+      emit(
+        const CrosswordState(
+          status: CrosswordStatus.failure,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onGameStatusRequested(
+    GameStatusRequested event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    try {
+      return emit.forEach(
+        _boardInfoRepository.getGameStatus(),
+        onData: (status) {
+          return state.copyWith(gameStatus: status);
+        },
       );
     } catch (error, stackTrace) {
       addError(error, stackTrace);

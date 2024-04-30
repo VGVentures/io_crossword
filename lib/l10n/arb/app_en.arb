@@ -402,5 +402,13 @@
   "doneButtonLabel": "Done",
   "@doneButtonLabel": {
     "description": "The label for the done button."
+  },
+  "resetDialogTitle": "Game completed!",
+  "@resetDialogTitle": {
+    "description": "The title of the game completed modal."
+  },
+  "resetDialogSubtitle": "Please wait while the board resets.",
+  "@resetDialogSubtitle": {
+    "description": "The subtitle of the game completed modal."
   }
 }

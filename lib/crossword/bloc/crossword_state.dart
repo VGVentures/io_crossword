@@ -41,6 +41,7 @@ class WordSelection extends Equatable {
 class CrosswordState extends Equatable {
   const CrosswordState({
     this.status = CrosswordStatus.initial,
+    this.gameStatus = GameStatus.inProgress,
     this.sectionSize = 0,
     this.sections = const {},
     this.selectedWord,
@@ -48,6 +49,7 @@ class CrosswordState extends Equatable {
   });
 
   final CrosswordStatus status;
+  final GameStatus gameStatus;
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
   final WordSelection? selectedWord;
@@ -55,6 +57,7 @@ class CrosswordState extends Equatable {
 
   CrosswordState copyWith({
     CrosswordStatus? status,
+    GameStatus? gameStatus,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
     WordSelection? selectedWord,
@@ -62,6 +65,7 @@ class CrosswordState extends Equatable {
   }) {
     return CrosswordState(
       status: status ?? this.status,
+      gameStatus: gameStatus ?? this.gameStatus,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
       selectedWord: selectedWord ?? this.selectedWord,
@@ -80,5 +84,5 @@ class CrosswordState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [status, sectionSize, sections, selectedWord, zoomLimit];
+      [status, gameStatus, sectionSize, sections, selectedWord, zoomLimit];
 }
