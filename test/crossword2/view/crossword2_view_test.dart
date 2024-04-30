@@ -381,22 +381,24 @@ void main() {
 
     group('$IoWord', () {
       group('shown', () {
+        setUp(() {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.preSolving,
+              word: SelectedWord(
+                section: (0, 0),
+                word: word,
+              ),
+            ),
+          );
+        });
+
         testWidgets(
           'with answer when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
             when(() => word.mascot).thenReturn(Mascots.dash);
-
             when(() => word.solvedTimestamp).thenReturn(1);
-            when(() => wordSelectionBloc.state).thenReturn(
-              WordSelectionState(
-                status: WordSelectionStatus.preSolving,
-                word: SelectedWord(
-                  section: (0, 0),
-                  word: word,
-                ),
-              ),
-            );
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
@@ -414,6 +416,54 @@ void main() {
           },
         );
 
+        testWidgets(
+          'horizontally when word is horizontal',
+          (tester) async {
+            when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => word.axis).thenReturn(domain.Axis.horizontal);
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            final ioWordFinder = find.byType(IoWord);
+            expect(ioWordFinder, findsOneWidget);
+
+            final ioWord = tester.widget<IoWord>(ioWordFinder);
+            expect(ioWord.direction, equals(Axis.horizontal));
+          },
+        );
+
+        testWidgets(
+          'vertically when word is vertical',
+          (tester) async {
+            when(() => word.isSolved).thenReturn(true);
+            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.solvedTimestamp).thenReturn(1);
+            when(() => word.axis).thenReturn(domain.Axis.vertical);
+
+            await tester.pumpApp(
+              layout: IoLayoutData.large,
+              BlocProvider<WordSelectionBloc>(
+                create: (_) => wordSelectionBloc,
+                child: const Crossword2View(),
+              ),
+            );
+
+            final ioWordFinder = find.byType(IoWord);
+            expect(ioWordFinder, findsOneWidget);
+
+            final ioWord = tester.widget<IoWord>(ioWordFinder);
+            expect(ioWord.direction, equals(Axis.vertical));
+          },
+        );
+
         group('with mascot styling', () {
           late ThemeData themeData;
 
@@ -422,15 +472,6 @@ void main() {
 
             when(() => word.isSolved).thenReturn(true);
             when(() => word.solvedTimestamp).thenReturn(1);
-            when(() => wordSelectionBloc.state).thenReturn(
-              WordSelectionState(
-                status: WordSelectionStatus.preSolving,
-                word: SelectedWord(
-                  section: (0, 0),
-                  word: word,
-                ),
-              ),
-            );
           });
 
           testWidgets(
