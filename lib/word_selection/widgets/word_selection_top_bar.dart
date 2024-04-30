@@ -10,7 +10,9 @@ import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WordSelectionTopBar extends StatelessWidget {
-  const WordSelectionTopBar({super.key});
+  const WordSelectionTopBar({this.canSolveWord = false, super.key});
+
+  final bool canSolveWord;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +54,11 @@ class WordSelectionTopBar extends StatelessWidget {
                         color: mascot.color,
                       ),
                     ),
-                    Text(
-                      l10n.alreadySolvedSubtitle.toUpperCase(),
-                      style: themeData.textTheme.labelLarge,
-                    ),
+                    if (canSolveWord)
+                      Text(
+                        l10n.alreadySolvedSubtitle.toUpperCase(),
+                        style: themeData.textTheme.labelLarge,
+                      ),
                   ],
                 ),
               );

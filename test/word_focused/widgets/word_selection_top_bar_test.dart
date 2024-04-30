@@ -62,7 +62,6 @@ class _SolvedFakeWord extends Fake implements Word {
 
 void main() {
   group('$WordSelectionTopBar', () {
-    late Widget widget;
     late WordSelectionBloc wordSelectionBloc;
     late CrosswordBloc crosswordBloc;
 
@@ -98,21 +97,25 @@ void main() {
           },
         ),
       );
-      widget = BlocProvider(
-        create: (context) => wordSelectionBloc,
-        child: const WordSelectionTopBar(),
-      );
     });
+
+    Widget buildWidget({bool canSolveWord = false}) => BlocProvider(
+          create: (context) => wordSelectionBloc,
+          child: const WordSelectionTopBar(
+            canSolveWord: true,
+          ),
+        );
 
     group('renders', () {
       testWidgets('the word identifier', (tester) async {
-        await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+        await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
         expect(find.text('11,000 ACROSS'), findsOneWidget);
       });
 
-      testWidgets('the word identifier and changes if the word gets solved',
-          (tester) async {
+      testWidgets(
+          'the word identifier and changes if the word gets solved'
+          ' canSolveWord param is true', (tester) async {
         final section = BoardSection(
           id: 'id',
           position: Point(0, 0),
@@ -141,10 +144,15 @@ void main() {
             },
           ),
         );
-        await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+        await tester.pumpApp(
+          buildWidget(canSolveWord: true),
+          crosswordBloc: crosswordBloc,
+        );
 
         expect(find.text('11,000 ACROSS'), findsOneWidget);
+
         await tester.pump();
+
         expect(
           find.text(
             l10n
@@ -170,20 +178,20 @@ void main() {
           ),
         );
 
-        await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+        await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
         expect(find.byType(SizedBox), findsAtLeast(1));
       });
 
       testWidgets('a $CloseWordSelectionIconButton', (tester) async {
-        await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+        await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
         expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
       });
 
       testWidgets(
         'icon ios_share',
         (tester) async {
-          await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+          await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
           expect(find.byIcon(Icons.ios_share), findsOneWidget);
         },
@@ -199,7 +207,7 @@ void main() {
             ),
           );
 
-          await tester.pumpApp(widget, crosswordBloc: crosswordBloc);
+          await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
           await tester.tap(find.byIcon(Icons.ios_share));
 

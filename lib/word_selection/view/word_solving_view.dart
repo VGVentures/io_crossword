@@ -40,7 +40,7 @@ class WordSolvingLargeView extends StatelessWidget {
 
     return Column(
       children: [
-        const WordSelectionTopBar(),
+        const WordSelectionTopBar(canSolveWord: true),
         const SizedBox(height: 32),
         Expanded(
           child: Column(
@@ -110,7 +110,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
 
     return Column(
       children: [
-        const WordSelectionTopBar(),
+        const WordSelectionTopBar(canSolveWord: true),
         const SizedBox(height: 32),
         CrosswordInput(
           length: selectedWord.word.length,
