@@ -25,6 +25,7 @@ class RandomWordSelectionBloc
   ) async {
     try {
       emit(state.copyWith(status: RandomWordSelectionStatus.loading));
+
       final randomSection =
           await _crosswordRepository.getRandomUncompletedSection();
       if (randomSection != null) {

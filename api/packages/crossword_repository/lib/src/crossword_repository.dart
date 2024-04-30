@@ -15,8 +15,8 @@ class CrosswordRepository {
 
   final DbClient _dbClient;
 
-  static const _sectionsCollection = 'boardChunks2';
-  static const _answersCollection = 'answers2';
+  static const _sectionsCollection = 'boardChunks';
+  static const _answersCollection = 'answers';
   static const _boardInfoCollection = 'boardInfo';
 
   /// Fetches all sections from the board.
@@ -97,39 +97,95 @@ class CrosswordRepository {
       return false;
     }
 
-    final sectionX = correctAnswer.section.x;
-    final sectionY = correctAnswer.section.y;
-    final section = await findSectionByPosition(sectionX, sectionY);
-
-    if (section == null) {
-      throw CrosswordRepositoryException(
-        'Section not found for position ($sectionX, $sectionY)',
-        StackTrace.current,
+    final sectionsPoints = <Point<int>>{}
+      ..addAll(correctAnswer.sections)
+      ..addAll(
+        [
+          for (final collidedWord in correctAnswer.collidedWords)
+            ...collidedWord.sections,
+        ],
       );
+
+    final sections = <BoardSection>[];
+
+    for (final position in sectionsPoints) {
+      final sectionX = position.x;
+      final sectionY = position.y;
+      final section = await findSectionByPosition(sectionX, sectionY);
+
+      if (section == null) {
+        throw CrosswordRepositoryException(
+          'Section not found for position ($sectionX, $sectionY)',
+          StackTrace.current,
+        );
+      }
+
+      var updatedSection = section;
+
+      if (correctAnswer.sections.contains(position)) {
+        final word =
+            updatedSection.words.firstWhereOrNull((e) => e.id == wordId);
+
+        if (word == null) {
+          throw CrosswordRepositoryException(
+            'Word with id $wordId not found for section ($sectionX, $sectionY)',
+            StackTrace.current,
+          );
+        }
+
+        final solvedWord = word.copyWith(
+          answer: correctAnswer.answer,
+          solvedTimestamp: clock.now().millisecondsSinceEpoch,
+          mascot: mascot,
+        );
+        updatedSection = updatedSection.copyWith(
+          words: [...section.words..remove(word), solvedWord],
+        );
+      }
+
+      for (final collidedWord in correctAnswer.collidedWords) {
+        if (collidedWord.sections.contains(position)) {
+          final word = updatedSection.words
+              .firstWhereOrNull((e) => e.id == collidedWord.wordId);
+
+          if (word == null) {
+            throw CrosswordRepositoryException(
+              'Word with id $wordId not found for section '
+              '($sectionX, $sectionY)',
+              StackTrace.current,
+            );
+          }
+
+          if (word.solvedTimestamp != null) continue;
+
+          final updatedWord = word.copyWith(
+            answer: _replaceCharAt(
+              word.answer,
+              collidedWord.position,
+              collidedWord.character,
+            ),
+          );
+
+          updatedSection = updatedSection.copyWith(
+            words: [...updatedSection.words..remove(word), updatedWord],
+          );
+        }
+      }
+
+      sections.add(updatedSection);
     }
 
-    final word = section.words.firstWhereOrNull((e) => e.id == wordId);
-
-    if (word == null) {
-      throw CrosswordRepositoryException(
-        'Word with id $wordId not found for section ($sectionX, $sectionY)',
-        StackTrace.current,
-      );
+    for (final section in sections) {
+      await updateSection(section);
     }
 
-    if (userAnswer.toLowerCase() == correctAnswer.answer.toLowerCase()) {
-      final solvedWord = word.copyWith(
-        answer: correctAnswer.answer,
-        solvedTimestamp: clock.now().millisecondsSinceEpoch,
-        mascot: mascot,
-      );
-      final newSection = section.copyWith(
-        words: [...section.words..remove(word), solvedWord],
-      );
-      await updateSection(newSection);
-      return true;
-    }
-    return false;
+    return true;
+  }
+
+  String _replaceCharAt(String oldString, int index, String newChar) {
+    return oldString.substring(0, index) +
+        newChar +
+        oldString.substring(index + 1);
   }
 
   /// Adds one to the solved words count in the crossword.

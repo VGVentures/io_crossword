@@ -15,7 +15,7 @@ import '../../helpers/helpers.dart';
 
 class _FakeWord extends Fake implements Word {
   @override
-  String? get answer => 'answer';
+  String get answer => 'answer';
 
   @override
   String get clue => 'clue';

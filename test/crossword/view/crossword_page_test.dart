@@ -7,12 +7,14 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -51,6 +53,12 @@ void main() {
   group('$CrosswordView', () {
     late CrosswordBloc crosswordBloc;
 
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
+
     setUp(() {
       Flame.images = Images(prefix: '');
       crosswordBloc = _MockCrosswordBloc();
@@ -72,8 +80,11 @@ void main() {
         borderWords: const [],
       );
 
-      testWidgets('success, adds $BoardSectionRequested event', (tester) async {
+      setUp(() {
         when(() => crosswordBloc.state).thenReturn(const CrosswordState());
+      });
+
+      testWidgets('success, adds $BoardSectionRequested event', (tester) async {
         final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
         whenListen(
           randomWordSelectionBloc,
@@ -104,6 +115,49 @@ void main() {
             ),
           ),
         ).called(1);
+      });
+
+      testWidgets('loading, opens $RandomWordLoadingDialog', (tester) async {
+        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+        whenListen(
+          randomWordSelectionBloc,
+          Stream.fromIterable([
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.loading,
+            ),
+          ]),
+          initialState: RandomWordSelectionState(),
+        );
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          randomWordSelectionBloc: randomWordSelectionBloc,
+        );
+        await tester.pump();
+        expect(find.byType(RandomWordLoadingDialog), findsOneWidget);
+      });
+
+      testWidgets('failure, opens error dialog', (tester) async {
+        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+        whenListen(
+          randomWordSelectionBloc,
+          Stream.fromIterable([
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.loading,
+            ),
+            RandomWordSelectionState(
+              status: RandomWordSelectionStatus.failure,
+            ),
+          ]),
+          initialState: RandomWordSelectionState(),
+        );
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          randomWordSelectionBloc: randomWordSelectionBloc,
+        );
+        await tester.pump();
+        expect(find.text(l10n.findRandomWordError), findsOneWidget);
       });
     });
 
@@ -183,6 +237,18 @@ void main() {
         );
 
         expect(find.byType(WordSelectionPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders $BottomBar',
+      (tester) async {
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.byType(BottomBar), findsOneWidget);
       },
     );
   });

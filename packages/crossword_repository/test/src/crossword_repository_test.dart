@@ -17,7 +17,6 @@ void main() {
       position: Point(0, 1),
       axis: Axis.horizontal,
       answer: 'answer',
-      length: 6,
       clue: 'clue',
     );
     final boardSection = BoardSection(
@@ -29,7 +28,7 @@ void main() {
       ],
       borderWords: const [],
     );
-    const sectionsCollection = 'boardChunks2';
+    const sectionsCollection = 'boardChunks';
 
     late FirebaseFirestore firebaseFirestore;
     late CrosswordRepository crosswordRepository;

@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/bottom_bar/view/bottom_bar.dart';
+import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
