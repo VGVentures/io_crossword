@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis, Mascots;
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -12,6 +12,10 @@ class Crossword2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
+    // hard-coding it:
+    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
     const configuration = CrosswordConfiguration(
       bottomRight: (45, 45),
       chunkSize: 20,
@@ -88,25 +92,25 @@ class _CrosswordStack extends StatelessWidget {
                   crosswordLayout.padding.top,
               child: CrosswordChunk(index: chunk),
             ),
+          BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+            selector: (state) => state.word,
+            builder: (context, selectedWord) {
+              return selectedWord != null
+                  ? const CrosswordBackdrop()
+                  : const SizedBox.shrink();
+            },
+          ),
           if (layout == IoLayoutData.large)
             BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
               selector: (state) => state.word,
               builder: (context, selectedWord) {
-                return selectedWord != null
-                    ? const CrosswordBackdrop()
-                    : const SizedBox.shrink();
-              },
-            ),
-          if (layout == IoLayoutData.large)
-            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-              selector: (state) => state.word,
-              builder: (context, selectedWord) {
-                if (selectedWord == null ||
-                    selectedWord.word.solvedTimestamp != null) {
+                if (selectedWord == null) {
                   return const SizedBox.shrink();
                 }
 
                 final word = selectedWord.word;
+                final theme = Theme.of(context);
+
                 return Positioned(
                   left: (selectedWord.section.$1 *
                           crosswordLayout.chunkSize.width) +
@@ -116,12 +120,17 @@ class _CrosswordStack extends StatelessWidget {
                           crosswordLayout.chunkSize.height) +
                       (word.position.y * crosswordLayout.cellSize.height) +
                       crosswordLayout.padding.top,
-                  child: CrosswordInput(
-                    key: ValueKey(selectedWord.word.id),
-                    style: Theme.of(context).io.wordInput.secondary,
-                    direction: word.axis.toAxis(),
-                    length: selectedWord.word.length,
-                  ),
+                  child: selectedWord.word.isSolved
+                      ? IoWord(
+                          selectedWord.word.answer,
+                          style: word.mascot!.toIoWordStyle(theme),
+                        )
+                      : CrosswordInput(
+                          key: ValueKey(selectedWord.word.id),
+                          style: theme.io.wordInput.secondary,
+                          direction: word.axis.toAxis(),
+                          length: selectedWord.word.length,
+                        ),
                 );
               },
             ),
@@ -138,4 +147,31 @@ extension on Quad {
 extension on domain.Axis {
   Axis toAxis() =>
       this == domain.Axis.horizontal ? Axis.horizontal : Axis.vertical;
+}
+
+extension on domain.Mascots {
+  IoWordStyle toIoWordStyle(ThemeData theme) {
+    return theme.io.wordTheme.big.copyWith(
+      borderRadius: BorderRadius.zero,
+      margin: theme.io.wordInput.secondary.padding,
+      boxSize: theme.io.wordInput.secondary.filled.size,
+      textStyle: switch (this) {
+        domain.Mascots.dash => theme.io.crosswordLetterTheme.dash.textStyle,
+        domain.Mascots.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
+        domain.Mascots.dino => theme.io.crosswordLetterTheme.dino.textStyle,
+        domain.Mascots.android =>
+          theme.io.crosswordLetterTheme.android.textStyle,
+      },
+      backgroundColor: switch (this) {
+        domain.Mascots.dash =>
+          theme.io.crosswordLetterTheme.dash.backgroundColor,
+        domain.Mascots.sparky =>
+          theme.io.crosswordLetterTheme.sparky.backgroundColor,
+        domain.Mascots.dino =>
+          theme.io.crosswordLetterTheme.dino.backgroundColor,
+        domain.Mascots.android =>
+          theme.io.crosswordLetterTheme.android.backgroundColor,
+      },
+    );
+  }
 }

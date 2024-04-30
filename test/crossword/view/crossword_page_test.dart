@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
@@ -236,6 +237,18 @@ void main() {
         );
 
         expect(find.byType(WordSelectionPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'renders $BottomBar',
+      (tester) async {
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.byType(BottomBar), findsOneWidget);
       },
     );
   });

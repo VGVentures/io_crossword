@@ -16,8 +16,8 @@ void main() {
   group('CrosswordRepository', () {
     late DbClient dbClient;
 
-    const sectionsCollection = 'boardChunks2';
-    const answersCollection = 'answers2';
+    const sectionsCollection = 'boardChunks';
+    const answersCollection = 'answers';
 
     setUpAll(() {
       registerFallbackValue(_MockDbEntityRecord());
@@ -151,7 +151,6 @@ void main() {
         position: const Point(1, 1),
         axis: Axis.vertical,
         answer: 'flutter',
-        length: 7,
         clue: '',
       );
 
@@ -186,7 +185,10 @@ void main() {
         when(() => answersRecord.id).thenReturn('1');
         when(() => answersRecord.data).thenReturn({
           'answer': 'flutter',
-          'section': {'x': 1, 'y': 1},
+          'sections': [
+            {'x': 1, 'y': 1},
+          ],
+          'collidedWords': <Map<String, dynamic>>[],
         });
         when(
           () => dbClient.getById(answersCollection, '1'),
@@ -272,7 +274,10 @@ void main() {
           when(() => answersRecord.id).thenReturn('fake');
           when(() => answersRecord.data).thenReturn({
             'answer': 'flutter',
-            'section': {'x': 1, 'y': 1},
+            'sections': [
+              {'x': 1, 'y': 1},
+            ],
+            'collidedWords': <Map<String, dynamic>>[],
           });
           when(
             () => dbClient.getById(answersCollection, 'fake'),
