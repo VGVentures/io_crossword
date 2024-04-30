@@ -15,6 +15,7 @@ class CollidedWord extends Equatable {
     required this.wordId,
     required this.position,
     required this.character,
+    required this.sections,
   });
 
   /// {@macro collided_word}
@@ -37,6 +38,11 @@ class CollidedWord extends Equatable {
   @JsonKey()
   final String character;
 
+  /// The sections of the board where the word is located.
+  @JsonKey()
+  @ListPointConverter()
+  final List<Point<int>> sections;
+
   @override
-  List<Object?> get props => [wordId, position, character];
+  List<Object?> get props => [wordId, position, character, sections];
 }
