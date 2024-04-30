@@ -78,7 +78,7 @@ class _CrosswordStack extends StatelessWidget {
       return chunkRect.overlaps(viewport);
     }
 
-    bool isChunkToBeLoaded(CrosswordChunkIndex index) {
+    bool shouldChunkBeLoaded(CrosswordChunkIndex index) {
       final chunkRect = getChunkRect(index);
       return chunkRect.overlaps(extendedViewport);
     }
@@ -87,10 +87,9 @@ class _CrosswordStack extends StatelessWidget {
     final loadedChunks = <CrosswordChunkIndex>{
       for (var row = 0; row <= configuration.bottomRight.$1; row++)
         for (var column = 0; column <= configuration.bottomRight.$2; column++)
-          if (isChunkToBeLoaded((row, column))) (row, column),
+          if (shouldChunkBeLoaded((row, column))) (row, column),
     };
 
-    // Chunks that are in the viewport
     final visibleChunks = <CrosswordChunkIndex>{
       for (final loadedChunk in loadedChunks)
         if (isChunkVisible(loadedChunk)) loadedChunk,
