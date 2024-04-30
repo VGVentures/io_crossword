@@ -142,6 +142,7 @@ class LoadedBoardView extends StatelessWidget {
       child: Stack(
         children: [
           const Crossword2View(),
+          const WordSelectionPage(),
           Stack(
             children: [
               if (gameStatus == GameStatus.resetInProgress)
