@@ -65,20 +65,6 @@
         color: #ffffff;
       }
 
-      #circular-loader{
-        animation: rotate 2s linear infinite;
-        height: 100px;
-        position: relative;
-        width: 100px;
-      }
-
-      #circular-loader .path {
-        stroke-dasharray: 1,200;
-        stroke-dashoffset: 0;
-        stroke:#ffffff;
-        animation: dash 2s ease-in-out infinite;
-      }
-
       @keyframes rotate{
         100%{
           transform: rotate(360deg);
@@ -223,9 +209,7 @@
       (function () {
         const cookieBar = document.querySelector("#cookie-bar");
         const cookieBarButton = document.querySelector("#confirm-cookies");
-        const circularLoader = document.querySelector("#circular-loader");
         const splashCopy = document.querySelector("#splash_copy");
-        const splashLogo = document.querySelector("#splash_logo");
 
         const additionalScripts = [];
 
@@ -237,6 +221,45 @@
         cookieBarButton.addEventListener("click", function () {
             cookieBar.remove();
             cookiesAcceptanceCompleter();
+        });
+
+        function injectScript(url) {
+          return new Promise(function (resolve) {
+            let scriptTag = document.createElement("script");
+            scriptTag.src = url;
+            scriptTag.type = "application/javascript";
+            scriptTag.onload = function () {
+              resolve();
+            };
+
+            document.body.append(scriptTag);
+          });
+        }
+
+        window.addEventListener("load", async function (ev) {
+          await injectScript("flutter.js");
+
+          _flutter.loader.loadEntrypoint({
+              serviceWorker: {
+                serviceWorkerVersion: serviceWorkerVersion,
+              },
+              onEntrypointLoaded: function (engineInitializer) {
+                engineInitializer
+                  .initializeEngine()
+                  .then(async function (appRunner) {
+                    await hasUserAcceptedCookies;
+                    window.addEventListener(
+                      "flutter-first-frame",
+                      function () {
+                        splashCopy.remove();
+                        document.body.classList.remove("loading-mode");
+                      }
+                    );
+
+                    appRunner.runApp();
+                });
+              },
+            });
         });
       })();
     </script>
