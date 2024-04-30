@@ -341,6 +341,39 @@ void main() {
       );
 
       test(
+        'throws $CrosswordRepositoryException if collided word is not found',
+        () async {
+          final answersRecord = _MockDbEntityRecord();
+          when(() => answersRecord.id).thenReturn('3');
+          when(() => answersRecord.data).thenReturn({
+            'answer': 'happy',
+            'sections': [
+              {'x': 1, 'y': 1},
+            ],
+            'collidedWords': <Map<String, dynamic>>[
+              {
+                'wordId': '6',
+                'position': 1,
+                'character': 'l',
+                'sections': [
+                  {'x': 1, 'y': 1},
+                  {'x': 1, 'y': 2},
+                ],
+              }
+            ],
+          });
+          when(
+            () => dbClient.getById(answersCollection, '3'),
+          ).thenAnswer((_) async => answersRecord);
+
+          expect(
+            () => repository.answerWord('3', Mascots.sparky, 'happy'),
+            throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
+
+      test(
         'throws $CrosswordRepositoryException if section does not exist',
         () async {
           when(
