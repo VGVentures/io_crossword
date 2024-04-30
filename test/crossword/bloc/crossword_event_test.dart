@@ -11,10 +11,11 @@ class _MockWord extends Mock implements Word {}
 
 void main() {
   group('CrosswordEvent', () {
-    group('BoardSectionRequested', () {
+    group('$BoardSectionRequested', () {
       test('can be instantiated', () {
         expect(BoardSectionRequested((1, 1)), isA<BoardSectionRequested>());
       });
+
       test('supports value comparisons', () {
         expect(BoardSectionRequested((1, 1)), BoardSectionRequested((1, 1)));
         expect(
@@ -28,7 +29,7 @@ void main() {
       });
     });
 
-    group('BoardSectionLoaded', () {
+    group('$BoardSectionLoaded', () {
       final boardSection = BoardSection(
         id: 'id',
         position: Point(1, 1),
@@ -36,9 +37,11 @@ void main() {
         words: [],
         borderWords: [],
       );
+
       test('can be instantiated', () {
         expect(BoardSectionLoaded(boardSection), isA<BoardSectionLoaded>());
       });
+
       test('supports value comparisons', () {
         expect(
           BoardSectionLoaded(boardSection),
@@ -79,7 +82,7 @@ void main() {
       });
     });
 
-    group('WordSelected', () {
+    group('$WordSelected', () {
       test('can be instantiated', () {
         expect(WordSelected((0, 0), _MockWord()), isA<WordSelected>());
       });
@@ -107,7 +110,7 @@ void main() {
       });
     });
 
-    group('WordUnselected', () {
+    group('$WordUnselected', () {
       test('can be instantiated', () {
         expect(WordUnselected(), isA<WordUnselected>());
       });
@@ -117,7 +120,7 @@ void main() {
       });
     });
 
-    group('BoardLoadingInfoFetched', () {
+    group('$BoardLoadingInformationRequested', () {
       test('can be instantiated', () {
         expect(
           BoardLoadingInformationRequested(),
