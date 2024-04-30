@@ -10,6 +10,7 @@ environment:
 dependencies:
   api_client:
     path: packages/api_client
+  audioplayers: ^6.0.0
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^8.1.4
@@ -77,6 +78,7 @@ flutter:
     - assets/anim/
     - assets/icons/
     - assets/images/
+    - assets/music/
 
 flutter_gen:
   output: lib/assets/

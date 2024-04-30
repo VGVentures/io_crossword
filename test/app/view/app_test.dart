@@ -11,9 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app/app.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/rotate_phone/rotate_phone.dart';
+import 'package:io_crossword/settings/settings.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -24,6 +26,15 @@ class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
 class _MockApiClient extends Mock implements ApiClient {}
+
+class _MockAudioController extends Mock implements AudioController {}
+
+class _MockBuildContext extends Mock implements BuildContext {}
+
+class _MockLifecycleNotifier extends Mock
+    implements ValueNotifier<AppLifecycleState> {}
+
+class _MockSettingsController extends Mock implements SettingsController {}
 
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
@@ -112,6 +123,57 @@ void main() {
       final context = tester.element(find.byType(AppView));
 
       expect(context.read<CrosswordBloc>(), isNotNull);
+    });
+
+    group('update AudioController', () {
+      setUpAll(() {
+        registerFallbackValue(_MockSettingsController());
+        registerFallbackValue(_MockLifecycleNotifier());
+      });
+      test('initializes, attach to lifecycle', () {
+        final buildContext = _MockBuildContext();
+        final settingsController = _MockSettingsController();
+        final lifecycle = _MockLifecycleNotifier();
+        final audioController = _MockAudioController();
+
+        when(audioController.initialize).thenAnswer((_) async {});
+        when(() => audioController.attachSettings(any())).thenAnswer((_) {});
+        when(() => audioController.attachLifecycleNotifier(any()))
+            .thenAnswer((_) {});
+
+        final result = updateAudioController(
+          buildContext,
+          settingsController,
+          lifecycle,
+          audioController,
+        );
+        verify(() => audioController.attachSettings(any())).called(1);
+        verify(() => audioController.attachLifecycleNotifier(any())).called(1);
+
+        expect(result, audioController);
+      });
+
+      test('returns a new instance when audio controller is null', () {
+        final buildContext = _MockBuildContext();
+        final audioController = _MockAudioController();
+
+        when(audioController.initialize).thenAnswer((_) async {});
+        when(() => audioController.attachSettings(any())).thenAnswer((_) {});
+        when(() => audioController.attachLifecycleNotifier(any()))
+            .thenAnswer((_) {});
+
+        final result = updateAudioController(
+          buildContext,
+          SettingsController(),
+          ValueNotifier(AppLifecycleState.paused),
+          null,
+          createAudioController: () => audioController,
+        );
+
+        verify(() => audioController.attachLifecycleNotifier(any())).called(1);
+
+        expect(result, audioController);
+      });
     });
   });
 
