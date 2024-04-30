@@ -11,6 +11,11 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 part 'crossword_event.dart';
 part 'crossword_state.dart';
 
+/// Signature of the Map that holds the subscriptions for each chunk.
+///
+/// See also:
+///
+/// * [CrosswordBloc._subscriptions], the map that holds the subscriptions.
 typedef SubscriptionsMap
     = Map<CrosswordChunkIndex, StreamSubscription<BoardSection?>>;
 
@@ -34,6 +39,15 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
 
+  /// Holds the subscriptions for each chunk.
+  ///
+  /// Originally, the map is empty. As chunks get loaded the key is the index of
+  /// the chunk and the value is the subscription to the stream of the chunk.
+  ///
+  /// Whenever a chunk is not visible, the subscription is not cancelled or
+  /// removed, but paused, until is visible again.
+  ///
+  /// Once the [CrosswordBloc] is [close]ed all subscriptions are canceled.
   final SubscriptionsMap _subscriptions;
 
   void _onVisibleSectionsCleaned(
