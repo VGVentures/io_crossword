@@ -123,6 +123,7 @@ class _CrosswordStack extends StatelessWidget {
                   child: selectedWord.word.isSolved
                       ? IoWord(
                           selectedWord.word.answer,
+                          direction: word.axis.toAxis(),
                           style: word.mascot!.toIoWordStyle(theme),
                         )
                       : CrosswordInput(

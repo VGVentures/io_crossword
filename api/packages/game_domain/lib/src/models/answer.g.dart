@@ -9,8 +9,7 @@ part of 'answer.dart';
 Answer _$AnswerFromJson(Map<String, dynamic> json) => Answer(
       id: json['id'] as String,
       answer: json['answer'] as String,
-      sections: const ListPointConverter()
-          .fromJson(json['sections'] as List<Map<String, dynamic>>),
+      sections: const ListPointConverter().fromJson(json['sections'] as List),
       collidedWords: (json['collidedWords'] as List<dynamic>)
           .map((e) => CollidedWord.fromJson(e as Map<String, dynamic>))
           .toList(),
