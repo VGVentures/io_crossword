@@ -799,5 +799,43 @@ void main() {
         ],
       );
     });
+
+    group('GameStatusRequested', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [failure] state if getGameStatus fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenThrow(Exception('error'));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.failure,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [success] state with game status when getGameStatus succeeds',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenAnswer((_) => Stream.value(GameStatus.inProgress));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            gameStatus: GameStatus.inProgress,
+          ),
+        ],
+      );
+    });
   });
 }

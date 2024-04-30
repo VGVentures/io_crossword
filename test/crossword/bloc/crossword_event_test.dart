@@ -81,5 +81,15 @@ void main() {
         );
       });
     });
+
+    group('GameStatusRequested', () {
+      test('can be instantiated', () {
+        expect(GameStatusRequested(), isA<GameStatusRequested>());
+      });
+
+      test('supports value comparisons', () {
+        expect(GameStatusRequested(), equals(GameStatusRequested()));
+      });
+    });
   });
 }

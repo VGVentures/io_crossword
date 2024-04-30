@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Axis;
@@ -8,7 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
-import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
+import 'package:io_crossword/crossword/crossword.dart'
+    hide WordSelected, WordUnselected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -251,6 +253,48 @@ void main() {
         expect(find.byType(BottomBar), findsOneWidget);
       },
     );
+
+    testWidgets(
+        'renders $ResetDialogContent when gameStatus '
+        'is resetInProgress', (tester) async {
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(
+          status: CrosswordStatus.success,
+          gameStatus: GameStatus.resetInProgress,
+        ),
+      );
+
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+      );
+
+      expect(find.byType(ResetDialogContent), findsOneWidget);
+    });
+
+    testWidgets(
+        'verify WordUnselected is added when gameStatus is resetInProgress',
+        (tester) async {
+      final wordSelectionBloc = _MockWordSelectionBloc();
+
+      whenListen(
+        crosswordBloc,
+        Stream.fromIterable(
+          [
+            CrosswordState(gameStatus: GameStatus.resetInProgress),
+          ],
+        ),
+        initialState: CrosswordState(),
+      );
+
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+        wordSelectionBloc: wordSelectionBloc,
+      );
+
+      verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
+    });
   });
 }
 

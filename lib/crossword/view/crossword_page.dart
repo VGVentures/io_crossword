@@ -12,7 +12,6 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
-import 'package:io_crossword/word_selection/bloc/word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -149,7 +148,7 @@ class LoadedBoardView extends StatelessWidget {
                 const ColoredBox(
                   color: Color(0x88000000),
                   child: Center(
-                    child: _ResetDialogContent(),
+                    child: ResetDialogContent(),
                   ),
                 ),
               const BottomBar(),
@@ -161,8 +160,9 @@ class LoadedBoardView extends StatelessWidget {
   }
 }
 
-class _ResetDialogContent extends StatelessWidget {
-  const _ResetDialogContent();
+class ResetDialogContent extends StatelessWidget {
+  @visibleForTesting
+  const ResetDialogContent({super.key});
 
   @override
   Widget build(BuildContext context) {
