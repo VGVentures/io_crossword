@@ -62,6 +62,7 @@ void main() {
           isA<LoadedSectionsSuspended>(),
         );
       });
+
       test('supports value comparisons', () {
         expect(
           LoadedSectionsSuspended({(1, 1)}),
