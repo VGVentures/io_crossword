@@ -98,6 +98,8 @@ void main(List<String> args) async {
 
   final answers = <Answer>[];
 
+  final wordsSections = <Word, List<Point<int>>>{};
+
   for (var i = minSectionX; i < maxSectionX; i++) {
     for (var j = minSectionY; j < maxSectionY; j++) {
       final sectionX = i * sectionSize;
@@ -136,6 +138,10 @@ void main(List<String> args) async {
 
         final sectionsPoint = word.getSections(sectionX, sectionY, sectionSize);
 
+        if (!wordsSections.containsKey(word)) {
+          wordsSections[word] = sectionsPoint;
+        }
+
         final allWordsSections = <Word>{}
           ..addAll(
             [
@@ -167,6 +173,12 @@ void main(List<String> args) async {
                 character: collision.$2,
                 position: collision.$1,
                 wordId: word.id,
+                sections: wordsSections[word] ??
+                    word.getSections(
+                      sectionX,
+                      sectionY,
+                      sectionSize,
+                    ),
               ),
             );
           }
@@ -192,7 +204,7 @@ void main(List<String> args) async {
   print('Added all answers to the database.');
 
   print('Uploading sections...');
-  await crosswordRepository.addSections(sections);
+  // await crosswordRepository.addSections(sections);
   print('Added all ${sections.length} section to the database.');
 }
 
