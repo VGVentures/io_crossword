@@ -15,6 +15,7 @@ void main() {
             wordId: 'word-id',
             position: 3,
             character: 'b',
+            sections: [Point(3, 2)],
           ),
         ],
       );
@@ -32,6 +33,9 @@ void main() {
               'wordId': 'word-id',
               'position': 3,
               'character': 'b',
+              'sections': [
+                {'x': 3, 'y': 2},
+              ],
             },
           ],
         }),
@@ -50,6 +54,9 @@ void main() {
             'wordId': 'word-id',
             'position': 3,
             'character': 'b',
+            'sections': [
+              {'x': 3, 'y': 2},
+            ],
           },
         ],
       };
@@ -66,6 +73,7 @@ void main() {
                 wordId: 'word-id',
                 position: 3,
                 character: 'b',
+                sections: [Point(3, 2)],
               ),
             ],
           ),
@@ -83,6 +91,7 @@ void main() {
             wordId: 'word-id',
             position: 3,
             character: 'b',
+            sections: [Point(3, 2)],
           ),
         ],
       );
@@ -95,6 +104,7 @@ void main() {
             wordId: 'word-id',
             position: 3,
             character: 'b',
+            sections: [Point(3, 2)],
           ),
         ],
       );
