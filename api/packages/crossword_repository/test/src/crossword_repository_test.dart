@@ -150,19 +150,37 @@ void main() {
         id: '1',
         position: const Point(1, 1),
         axis: Axis.vertical,
-        answer: 'flutter',
+        answer: '       ',
+        clue: '',
+      );
+
+      final word2 = Word(
+        id: '2',
+        position: const Point(1, 1),
+        axis: Axis.horizontal,
+        answer: 'b   ',
+        clue: '',
+      );
+
+      final word3 = Word(
+        id: '3',
+        position: const Point(1, 1),
+        axis: Axis.horizontal,
+        answer: 'hap y',
         clue: '',
       );
 
       setUp(() {
         final record = _MockDbEntityRecord();
-        when(() => record.id).thenReturn('id');
+        when(() => record.id).thenReturn('1');
         when(() => record.data).thenReturn(
           {
             'position': {'x': 1, 'y': 1},
             'size': 300,
             'words': [
               {'id': '1', ...word.toJson()},
+              {'id': '2', ...word2.toJson()},
+              {'id': '3', ...word3.toJson()},
             ],
             'borderWords': const <dynamic>[],
           },
@@ -173,6 +191,25 @@ void main() {
             {'position.x': 1, 'position.y': 1},
           ),
         ).thenAnswer((_) async => [record]);
+
+        final record2 = _MockDbEntityRecord();
+        when(() => record2.id).thenReturn('2');
+        when(() => record2.data).thenReturn(
+          {
+            'position': {'x': 1, 'y': 2},
+            'size': 300,
+            'words': [
+              {'id': '2', ...word2.toJson()},
+            ],
+            'borderWords': const <dynamic>[],
+          },
+        );
+        when(
+          () => dbClient.find(
+            sectionsCollection,
+            {'position.x': 1, 'position.y': 2},
+          ),
+        ).thenAnswer((_) async => [record2]);
 
         when(
           () => dbClient.update(
@@ -188,11 +225,45 @@ void main() {
           'sections': [
             {'x': 1, 'y': 1},
           ],
-          'collidedWords': <Map<String, dynamic>>[],
+          'collidedWords': <Map<String, dynamic>>[
+            {
+              'wordId': '2',
+              'position': 1,
+              'character': 'l',
+              'sections': [
+                {'x': 1, 'y': 1},
+                {'x': 1, 'y': 2},
+              ],
+            }
+          ],
         });
         when(
           () => dbClient.getById(answersCollection, '1'),
         ).thenAnswer((_) async => answersRecord);
+
+        final answersRecord2 = _MockDbEntityRecord();
+        when(() => answersRecord2.id).thenReturn('2');
+        when(() => answersRecord2.data).thenReturn({
+          'answer': 'blue',
+          'sections': [
+            {'x': 1, 'y': 1},
+            {'x': 1, 'y': 2},
+          ],
+          'collidedWords': <Map<String, dynamic>>[
+            {
+              'wordId': '2',
+              'position': 1,
+              'character': 'l',
+              'sections': [
+                {'x': 1, 'y': 1},
+              ],
+            }
+          ],
+        });
+
+        when(
+          () => dbClient.getById(answersCollection, '2'),
+        ).thenAnswer((_) async => answersRecord2);
 
         repository = CrosswordRepository(dbClient: dbClient);
       });
@@ -204,31 +275,50 @@ void main() {
           final valid =
               await repository.answerWord('1', Mascots.dino, 'flutter');
           expect(valid, isTrue);
-          final captured = verify(
+
+          verify(
             () => dbClient.update(
               sectionsCollection,
-              captureAny(),
+              DbEntityRecord(
+                id: '2',
+                data: {
+                  'position': {'x': 1, 'y': 2},
+                  'size': 300,
+                  'words': [
+                    word2.copyWith(answer: 'bl  ').toJson(),
+                  ],
+                  'borderWords': <String>[],
+                  'snapshotUrl': null,
+                },
+              ),
             ),
-          ).captured.single as DbEntityRecord;
+          ).called(1);
 
-          expect(captured.id, 'id');
-          expect(
-            captured.data,
-            {
-              'position': {'x': 1, 'y': 1},
-              'size': 300,
-              'words': [
-                word
-                    .copyWith(
-                      solvedTimestamp: time.millisecondsSinceEpoch,
-                      mascot: Mascots.dino,
-                    )
-                    .toJson(),
-              ],
-              'borderWords': <String>[],
-              'snapshotUrl': null,
-            },
-          );
+          verify(
+            () => dbClient.update(
+              sectionsCollection,
+              DbEntityRecord(
+                id: '1',
+                data: {
+                  'position': {'x': 1, 'y': 1},
+                  'size': 300,
+                  'words': [
+                    word3.toJson(),
+                    word
+                        .copyWith(
+                          solvedTimestamp: time.millisecondsSinceEpoch,
+                          mascot: Mascots.dino,
+                          answer: 'flutter',
+                        )
+                        .toJson(),
+                    word2.copyWith(answer: 'bl  ').toJson(),
+                  ],
+                  'borderWords': <String>[],
+                  'snapshotUrl': null,
+                },
+              ),
+            ),
+          ).called(1);
         });
       });
 

@@ -97,9 +97,18 @@ class CrosswordRepository {
       return false;
     }
 
-    // Need to update the collided words with all of the sections of the
-    // collided.
-    for (final position in correctAnswer.sections) {
+    final sectionsPoints = <Point<int>>{}
+      ..addAll(correctAnswer.sections)
+      ..addAll(
+        [
+          for (final collidedWord in correctAnswer.collidedWords)
+            ...collidedWord.sections,
+        ],
+      );
+
+    final sections = <BoardSection>[];
+
+    for (final position in sectionsPoints) {
       final sectionX = position.x;
       final sectionY = position.y;
       final section = await findSectionByPosition(sectionX, sectionY);
@@ -111,26 +120,72 @@ class CrosswordRepository {
         );
       }
 
-      final word = section.words.firstWhereOrNull((e) => e.id == wordId);
+      var updatedSection = section;
 
-      if (word == null) {
-        throw CrosswordRepositoryException(
-          'Word with id $wordId not found for section ($sectionX, $sectionY)',
-          StackTrace.current,
+      if (correctAnswer.sections.contains(position)) {
+        final word =
+            updatedSection.words.firstWhereOrNull((e) => e.id == wordId);
+
+        if (word == null) {
+          throw CrosswordRepositoryException(
+            'Word with id $wordId not found for section ($sectionX, $sectionY)',
+            StackTrace.current,
+          );
+        }
+
+        final solvedWord = word.copyWith(
+          answer: correctAnswer.answer,
+          solvedTimestamp: clock.now().millisecondsSinceEpoch,
+          mascot: mascot,
+        );
+        updatedSection = updatedSection.copyWith(
+          words: [...section.words..remove(word), solvedWord],
         );
       }
 
-      final solvedWord = word.copyWith(
-        answer: correctAnswer.answer,
-        solvedTimestamp: clock.now().millisecondsSinceEpoch,
-        mascot: mascot,
-      );
-      final newSection = section.copyWith(
-        words: [...section.words..remove(word), solvedWord],
-      );
-      await updateSection(newSection);
+      for (final collidedWord in correctAnswer.collidedWords) {
+        if (collidedWord.sections.contains(position)) {
+          final word = updatedSection.words
+              .firstWhereOrNull((e) => e.id == collidedWord.wordId);
+
+          if (word == null) {
+            throw CrosswordRepositoryException(
+              'Word with id $wordId not found for section '
+              '($sectionX, $sectionY)',
+              StackTrace.current,
+            );
+          }
+
+          if (word.solvedTimestamp != null) continue;
+
+          final updatedWord = word.copyWith(
+            answer: _replaceCharAt(
+              word.answer,
+              collidedWord.position,
+              collidedWord.character,
+            ),
+          );
+
+          updatedSection = updatedSection.copyWith(
+            words: [...updatedSection.words..remove(word), updatedWord],
+          );
+        }
+      }
+
+      sections.add(updatedSection);
     }
+
+    for (final section in sections) {
+      await updateSection(section);
+    }
+
     return true;
+  }
+
+  String _replaceCharAt(String oldString, int index, String newChar) {
+    return oldString.substring(0, index) +
+        newChar +
+        oldString.substring(index + 1);
   }
 
   /// Adds one to the solved words count in the crossword.
