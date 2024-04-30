@@ -55,12 +55,10 @@ class _CrosswordStack extends StatelessWidget {
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
 
-    final extendedViewport = Rect.fromLTWH(
-      viewport.left - crosswordLayout.chunkSize.width / 2,
-      viewport.top - crosswordLayout.chunkSize.height / 2,
-      viewport.width + crosswordLayout.chunkSize.width,
-      viewport.height + crosswordLayout.chunkSize.height,
-    );
+    final extendedViewport = EdgeInsets.symmetric(
+      horizontal: crosswordLayout.chunkSize.width,
+      vertical: crosswordLayout.chunkSize.height,
+    ).inflateRect(viewport);
 
     Rect getChunkRect(CrosswordChunkIndex index) {
       return Rect.fromLTWH(
@@ -83,7 +81,6 @@ class _CrosswordStack extends StatelessWidget {
       return chunkRect.overlaps(extendedViewport);
     }
 
-    // Chunks that are in the extendedViewport
     final loadedChunks = <CrosswordChunkIndex>{
       for (var row = 0; row <= configuration.bottomRight.$1; row++)
         for (var column = 0; column <= configuration.bottomRight.$2; column++)

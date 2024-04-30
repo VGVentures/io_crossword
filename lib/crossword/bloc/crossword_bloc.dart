@@ -45,7 +45,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   /// the chunk and the value is the subscription to the stream of the chunk.
   ///
   /// Whenever a chunk is not visible, the subscription is not cancelled or
-  /// removed, but paused, until is visible again.
+  /// removed, but paused, until it is visible again.
   ///
   /// Once the [CrosswordBloc] is [close]ed all subscriptions are canceled.
   final SubscriptionsMap _subscriptions;
