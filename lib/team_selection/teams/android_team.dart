@@ -48,40 +48,40 @@ class AndroidTeam extends Team {
   @override
   SpriteInformation get lookUpSpriteInformation => SpriteInformation(
         path: lookUpAnimation.path,
-        rows: 15,
-        columns: 5,
+        rows: 11,
+        columns: 7,
         stepTime: 0.042,
-        width: 200,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get pickUpSpriteInformation => SpriteInformation(
         path: pickUpAnimation.path,
-        rows: 17,
-        columns: 4,
+        rows: 11,
+        columns: 6,
         stepTime: 0.042,
-        width: 200,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get dangleSpriteInformation => SpriteInformation(
         path: dangleAnimation.path,
-        rows: 17,
-        columns: 2,
+        rows: 11,
+        columns: 4,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get dropInSpriteInformation => SpriteInformation(
         path: dropInAnimation.path,
-        rows: 22,
-        columns: 2,
+        rows: 7,
+        columns: 6,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 360,
+        height: 612,
       );
 }
