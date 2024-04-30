@@ -32,7 +32,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
-    on<LoadedSectionsSuspended>(_onVisibleSectionsCleaned);
+    on<LoadedSectionsSuspended>(_onLoadedSectionsSuspended);
     on<BoardSectionLoaded>(_onBoardSectionLoaded);
   }
 
@@ -50,7 +50,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   /// Once the [CrosswordBloc] is [close]ed all subscriptions are canceled.
   final SubscriptionsMap _subscriptions;
 
-  void _onVisibleSectionsCleaned(
+  void _onLoadedSectionsSuspended(
     LoadedSectionsSuspended event,
     Emitter<CrosswordState> emit,
   ) {
