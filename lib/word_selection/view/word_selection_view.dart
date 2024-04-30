@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -82,6 +84,9 @@ class _WordSelectionBody extends StatelessWidget {
         WordSelectionStatus>(
       selector: (state) => state.status,
       builder: (context, status) {
+        if (status == WordSelectionStatus.incorrect) {
+          context.read<AudioController>().playSfx(Assets.music.wrongWord);
+        }
         // coverage:ignore-start
         final view = switch (status) {
           WordSelectionStatus.preSolving => const WordPreSolvingView(),

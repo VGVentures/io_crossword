@@ -290,12 +290,50 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsMusicGen {
+  const $AssetsMusicGen();
+
+  /// File path: assets/music/ArrowsSound.mp3
+  String get arrowsSound => 'assets/music/ArrowsSound.mp3';
+
+  /// File path: assets/music/BackgroundMusicCrossword.mp3
+  String get backgroundMusicCrossword =>
+      'assets/music/BackgroundMusicCrossword.mp3';
+
+  /// File path: assets/music/Drop In.mp3
+  String get dropIn => 'assets/music/Drop In.mp3';
+
+  /// File path: assets/music/RightWord.mp3
+  String get rightWord => 'assets/music/RightWord.mp3';
+
+  /// File path: assets/music/Start Button 1.mp3
+  String get startButton1 => 'assets/music/Start Button 1.mp3';
+
+  /// File path: assets/music/WordSelection.mp3
+  String get wordSelection => 'assets/music/WordSelection.mp3';
+
+  /// File path: assets/music/WrongWord.mp3
+  String get wrongWord => 'assets/music/WrongWord.mp3';
+
+  /// List of all assets
+  List<String> get values => [
+        arrowsSound,
+        backgroundMusicCrossword,
+        dropIn,
+        rightWord,
+        startButton1,
+        wordSelection,
+        wrongWord
+      ];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsAnimGen anim = $AssetsAnimGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsMusicGen music = $AssetsMusicGen();
 }
 
 class AssetGenImage {

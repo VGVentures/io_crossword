@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/crossword2/widgets/widgets.dart';
 import 'package:io_crossword/hint/hint.dart';
@@ -16,6 +17,8 @@ import '../../helpers/helpers.dart';
 class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
+
+class _MockAudioController extends Mock implements AudioController {}
 
 class _MockHintBloc extends MockBloc<HintEvent, HintState>
     implements HintBloc {}
@@ -46,9 +49,11 @@ void main() {
       late HintBloc hintBloc;
       late WordSelectionBloc wordSelectionBloc;
       late SelectedWord selectedWord;
+      late AudioController audioController;
 
       setUp(() {
         hintBloc = _MockHintBloc();
+        audioController = _MockAudioController();
         wordSelectionBloc = _MockWordSelectionBloc();
         selectedWord = SelectedWord(section: (0, 0), word: _FakeWord());
       });
@@ -69,6 +74,7 @@ void main() {
               create: (_) => wordSelectionBloc,
               child: WordSelectionView(),
             ),
+            audioController: audioController,
           );
 
           expect(find.byType(WordSelectionLargeContainer), findsOneWidget);
@@ -91,6 +97,7 @@ void main() {
               create: (_) => wordSelectionBloc,
               child: WordSelectionView(),
             ),
+            audioController: audioController,
           );
 
           expect(find.byType(WordSelectionSmallContainer), findsOneWidget);
@@ -156,10 +163,39 @@ void main() {
               child: WordSelectionView(),
             ),
           ),
+          audioController: audioController,
         );
 
         expect(find.byType(WordSuccessView), findsOneWidget);
       });
+
+      testWidgets(
+        'Plays wrong sound when ${WordSelectionStatus.incorrect}',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+              word: selectedWord,
+              wordPoints: 0,
+            ),
+          );
+          when(() => hintBloc.state).thenReturn(HintState());
+
+          await tester.pumpApp(
+            DefaultWordInputController(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (_) => wordSelectionBloc),
+                  BlocProvider(create: (context) => hintBloc),
+                ],
+                child: WordSelectionView(),
+              ),
+            ),
+          );
+
+          expect(find.byType(WordSolvingView), findsOneWidget);
+        },
+      );
     });
   });
 }

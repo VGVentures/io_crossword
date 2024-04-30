@@ -89,7 +89,11 @@ class _HowToPlaySmall extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 375),
                       child: SingleChildScrollView(
-                        child: HowToPlayContent(mascot: mascot),
+                        child: HowToPlayContent(
+                          mascot: mascot,
+                          onDonePressed: () =>
+                              context.flow<GameIntroStatus>().complete(),
+                        ),
                       ),
                     ),
                   ),
@@ -150,7 +154,11 @@ class _HowToPlayLarge extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          HowToPlayContent(mascot: mascot),
+                          HowToPlayContent(
+                            mascot: mascot,
+                            onDonePressed: () =>
+                                context.flow<GameIntroStatus>().complete(),
+                          ),
                           const SizedBox(height: 40),
                           OutlinedButton(
                             onPressed: () {
