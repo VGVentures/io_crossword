@@ -97,29 +97,29 @@ class CrosswordRepository {
       return false;
     }
 
-    // TODO(Ayad): update all the sections
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6530206382
-    final sectionX = correctAnswer.sections.first.x;
-    final sectionY = correctAnswer.sections.first.y;
-    final section = await findSectionByPosition(sectionX, sectionY);
+    // Need to update the collided words with all of the sections of the
+    // collided.
+    for (final position in correctAnswer.sections) {
+      final sectionX = position.x;
+      final sectionY = position.y;
+      final section = await findSectionByPosition(sectionX, sectionY);
 
-    if (section == null) {
-      throw CrosswordRepositoryException(
-        'Section not found for position ($sectionX, $sectionY)',
-        StackTrace.current,
-      );
-    }
+      if (section == null) {
+        throw CrosswordRepositoryException(
+          'Section not found for position ($sectionX, $sectionY)',
+          StackTrace.current,
+        );
+      }
 
-    final word = section.words.firstWhereOrNull((e) => e.id == wordId);
+      final word = section.words.firstWhereOrNull((e) => e.id == wordId);
 
-    if (word == null) {
-      throw CrosswordRepositoryException(
-        'Word with id $wordId not found for section ($sectionX, $sectionY)',
-        StackTrace.current,
-      );
-    }
+      if (word == null) {
+        throw CrosswordRepositoryException(
+          'Word with id $wordId not found for section ($sectionX, $sectionY)',
+          StackTrace.current,
+        );
+      }
 
-    if (userAnswer.toLowerCase() == correctAnswer.answer.toLowerCase()) {
       final solvedWord = word.copyWith(
         answer: correctAnswer.answer,
         solvedTimestamp: clock.now().millisecondsSinceEpoch,
@@ -129,9 +129,8 @@ class CrosswordRepository {
         words: [...section.words..remove(word), solvedWord],
       );
       await updateSection(newSection);
-      return true;
     }
-    return false;
+    return true;
   }
 
   /// Adds one to the solved words count in the crossword.
