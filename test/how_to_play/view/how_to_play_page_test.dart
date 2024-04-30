@@ -15,7 +15,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -153,6 +153,42 @@ void main() {
         );
 
         await tester.tap(find.byType(OutlinedButton));
+        await tester.pumpAndSettle();
+
+        expect(flowController.completed, isTrue);
+      });
+
+      testWidgets('completes flow when done button is pressed', (tester) async {
+        final flowController = FlowController(GameIntroStatus.howToPlay);
+        final l10n = await AppLocalizations.delegate.load(Locale('en'));
+        addTearDown(flowController.dispose);
+
+        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+        when(() => howToPlayCubit.state).thenReturn(4);
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: gameIntroBloc,
+              ),
+              BlocProvider.value(
+                value: howToPlayCubit,
+              ),
+              BlocProvider.value(
+                value: playerBloc,
+              ),
+            ],
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: HowToPlayView()),
+              ],
+            ),
+          ),
+          layout: layout,
+        );
+
+        await tester.tap(find.text(l10n.doneButtonLabel));
         await tester.pumpAndSettle();
 
         expect(flowController.completed, isTrue);
