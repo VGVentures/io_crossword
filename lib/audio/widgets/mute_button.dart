@@ -1,6 +1,3 @@
-// TODO(Ayad): volume logic
-// https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6417645325
-// coverage:ignore-file
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/settings/settings.dart';
