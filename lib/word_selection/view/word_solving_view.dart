@@ -114,6 +114,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         const SizedBox(height: 32),
         CrosswordInput(
           length: selectedWord.word.length,
+          characters: selectedWord.word.solvedCharacters,
         ),
         const SizedBox(height: 16),
         Text(

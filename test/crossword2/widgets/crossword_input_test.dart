@@ -28,7 +28,10 @@ void main() {
           DefaultWordInputController(
             child: BlocProvider.value(
               value: wordSelectionBloc,
-              child: const CrosswordInput(length: 5),
+              child: const CrosswordInput(
+                length: 5,
+                characters: {},
+              ),
             ),
           ),
         );
@@ -40,6 +43,36 @@ void main() {
           () =>
               wordSelectionBloc.add(const WordSolveAttempted(answer: 'hello')),
         ).called(1);
+      },
+    );
+
+    testWidgets(
+      'sends characters correctly to IoWordInput',
+      (tester) async {
+        await tester.pumpApp(
+          DefaultWordInputController(
+            child: BlocProvider.value(
+              value: wordSelectionBloc,
+              child: const CrosswordInput(
+                length: 5,
+                characters: {
+                  1: 'a',
+                  4: 'y',
+                },
+              ),
+            ),
+          ),
+        );
+
+        expect(
+          tester.widget<IoWordInput>(find.byType(IoWordInput)).characters,
+          equals(
+            {
+              1: 'a',
+              4: 'y',
+            },
+          ),
+        );
       },
     );
   });
