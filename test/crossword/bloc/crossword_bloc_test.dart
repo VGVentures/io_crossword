@@ -820,6 +820,26 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
+        'emits BoardStatus.resetInProgress when GameStatus is resetInProgress',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenAnswer((_) => Stream.value(GameStatus.resetInProgress));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.boardStatus,
+            'boardStatus',
+            BoardStatus.resetInProgress,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
         'emits [success] state with game status when getGameStatus succeeds',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
@@ -833,6 +853,24 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             gameStatus: GameStatus.inProgress,
+          ),
+        ],
+      );
+    });
+
+    group('BoardStatusResumed', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [BoardStatus.inProgress] state with board status in progress',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(BoardStatusResumed()),
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.boardStatus,
+            'boardStatus',
+            BoardStatus.inProgress,
           ),
         ],
       );

@@ -91,5 +91,15 @@ void main() {
         expect(GameStatusRequested(), equals(GameStatusRequested()));
       });
     });
+
+    group('BoardStatusResumed', () {
+      test('can be instantiated', () {
+        expect(BoardStatusResumed(), isA<BoardStatusResumed>());
+      });
+
+      test('supports value comparisons', () {
+        expect(BoardStatusResumed(), equals(BoardStatusResumed()));
+      });
+    });
   });
 }

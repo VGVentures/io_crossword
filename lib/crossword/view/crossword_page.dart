@@ -8,6 +8,7 @@ import 'package:io_crossword/crossword/crossword.dart'
     hide WordSelected, WordUnselected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
@@ -134,26 +135,24 @@ class LoadedBoardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameStatus =
-        context.select((CrosswordBloc bloc) => bloc.state.gameStatus);
+    final boardStatus = context.select(
+      (CrosswordBloc bloc) => bloc.state.boardStatus,
+    );
 
     return DefaultWordInputController(
       child: Stack(
         children: [
           const Crossword2View(),
           const WordSelectionPage(),
-          Stack(
-            children: [
-              if (gameStatus == GameStatus.resetInProgress)
-                const ColoredBox(
-                  color: Color(0x88000000),
-                  child: Center(
-                    child: ResetDialogContent(),
-                  ),
-                ),
-              const BottomBar(),
-            ],
-          ),
+          if (boardStatus != BoardStatus.resetInProgress)
+            const BottomBar()
+          else
+            const ColoredBox(
+              color: Color(0x88000000),
+              child: Center(
+                child: ResetDialogContent(),
+              ),
+            ),
         ],
       ),
     );
@@ -188,11 +187,62 @@ class ResetDialogContent extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
+                const _BottomActions(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BottomActions extends StatelessWidget {
+  const _BottomActions();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    final gameStatus = context.select(
+      (CrosswordBloc bloc) => bloc.state.gameStatus,
+    );
+
+    final resetInProgress = gameStatus == GameStatus.resetInProgress;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => EndGameCheck.openDialog(context),
+            child: Text(l10n.exitButtonLabel),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: IgnorePointer(
+            ignoring: resetInProgress,
+            child: OutlinedButton(
+              style: resetInProgress
+                  ? Theme.of(context).outlinedButtonTheme.style?.copyWith(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.grey),
+                        side: MaterialStateProperty.all<BorderSide>(
+                          const BorderSide(color: Colors.grey),
+                        ),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          const StadiumBorder(side: BorderSide(width: 2)),
+                        ),
+                      )
+                  : null,
+              onPressed: () =>
+                  context.read<CrosswordBloc>().add(const BoardStatusResumed()),
+              child: Text(l10n.keepPlayingButtonLabel),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -13,6 +13,7 @@ import 'package:io_crossword/crossword/crossword.dart'
     hide WordSelected, WordUnselected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
@@ -254,46 +255,127 @@ void main() {
       },
     );
 
-    testWidgets(
-        'renders $ResetDialogContent when gameStatus '
-        'is resetInProgress', (tester) async {
-      when(() => crosswordBloc.state).thenReturn(
-        const CrosswordState(
-          status: CrosswordStatus.success,
-          gameStatus: GameStatus.resetInProgress,
-        ),
-      );
+    group('gameReset', () {
+      testWidgets(
+          'renders $ResetDialogContent when boardStatus '
+          'is resetInProgress', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
 
-      await tester.pumpSubject(
-        CrosswordView(),
-        crosswordBloc: crosswordBloc,
-      );
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
 
-      expect(find.byType(ResetDialogContent), findsOneWidget);
-    });
+        expect(find.byType(ResetDialogContent), findsOneWidget);
+      });
 
-    testWidgets(
-        'verify WordUnselected is added when gameStatus is resetInProgress',
-        (tester) async {
-      final wordSelectionBloc = _MockWordSelectionBloc();
+      testWidgets(
+          'verify WordUnselected is added when gameStatus is resetInProgress',
+          (tester) async {
+        final wordSelectionBloc = _MockWordSelectionBloc();
 
-      whenListen(
-        crosswordBloc,
-        Stream.fromIterable(
-          [
-            CrosswordState(gameStatus: GameStatus.resetInProgress),
-          ],
-        ),
-        initialState: CrosswordState(),
-      );
+        whenListen(
+          crosswordBloc,
+          Stream.fromIterable(
+            [
+              CrosswordState(gameStatus: GameStatus.resetInProgress),
+            ],
+          ),
+          initialState: CrosswordState(),
+        );
 
-      await tester.pumpSubject(
-        CrosswordView(),
-        crosswordBloc: crosswordBloc,
-        wordSelectionBloc: wordSelectionBloc,
-      );
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
+        );
 
-      verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
+        verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
+      });
+
+      testWidgets(
+          'bottomBar is not rendered when boardStatus is resetInProgress',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.byType(BottomBar), findsNothing);
+      });
+
+      testWidgets('exit button opens EndGameCheck dialog when pressed',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.text(l10n.exitButtonLabel));
+        await tester.pump();
+
+        expect(find.byType(EndGameCheck), findsOneWidget);
+      });
+
+      testWidgets(
+          'keep playing button does nothing when pressed when '
+          'gameStatus is resetInProgress', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            gameStatus: GameStatus.resetInProgress,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.text(l10n.keepPlayingButtonLabel));
+
+        verifyNever(() => crosswordBloc.add(BoardStatusResumed()));
+      });
+
+      testWidgets(
+          'verify that BoardStatusResumed is added when '
+          'keep playing button is pressed', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.text(l10n.keepPlayingButtonLabel));
+
+        verify(() => crosswordBloc.add(BoardStatusResumed())).called(1);
+      });
     });
   });
 }

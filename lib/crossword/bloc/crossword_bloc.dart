@@ -21,6 +21,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
     on<GameStatusRequested>(_onGameStatusRequested);
+    on<BoardStatusResumed>(_onBoardStatusResumed);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -150,6 +151,13 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
       return emit.forEach(
         _boardInfoRepository.getGameStatus(),
         onData: (status) {
+          if (status == GameStatus.resetInProgress) {
+            return state.copyWith(
+              gameStatus: status,
+              boardStatus: BoardStatus.resetInProgress,
+            );
+          }
+
           return state.copyWith(gameStatus: status);
         },
       );
@@ -161,5 +169,16 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         ),
       );
     }
+  }
+
+  void _onBoardStatusResumed(
+    BoardStatusResumed event,
+    Emitter<CrosswordState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        boardStatus: BoardStatus.inProgress,
+      ),
+    );
   }
 }
