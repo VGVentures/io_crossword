@@ -5,10 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
-import 'package:io_crossword/widget/io_scaffold.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -82,9 +83,22 @@ class CrosswordView extends StatelessWidget {
                 );
         }
       },
-      child: IoScaffold(
-        title: const PlayerRankingInformation(),
-        child: BlocBuilder<CrosswordBloc, CrosswordState>(
+      child: Scaffold(
+        endDrawer: const CrosswordDrawer(),
+        appBar: IoAppBar(
+          title: const PlayerRankingInformation(),
+          crossword: l10n.crossword,
+          actions: (context) {
+            return const Row(
+              children: [
+                MuteButton(),
+                SizedBox(width: 7),
+                EndDrawerButton(),
+              ],
+            );
+          },
+        ),
+        body: BlocBuilder<CrosswordBloc, CrosswordState>(
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
             switch (state.status) {

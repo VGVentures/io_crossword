@@ -5,6 +5,7 @@ import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -47,6 +48,7 @@ class WelcomeLarge extends StatelessWidget {
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
+        actions: (context) => const MuteButton(),
       ),
       body: SelectionArea(
         child: Container(
