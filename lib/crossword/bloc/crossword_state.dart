@@ -15,7 +15,6 @@ enum WordStatus {
 enum BoardStatus {
   inProgress,
   resetInProgress,
-  resetComplete,
 }
 
 class WordSelection extends Equatable {
