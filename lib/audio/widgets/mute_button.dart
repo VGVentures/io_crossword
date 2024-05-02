@@ -7,7 +7,7 @@ class MuteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsController>();
+    final settings = context.read<SettingsController>();
     return ValueListenableBuilder<bool>(
       valueListenable: settings.muted,
       builder: (_, muted, __) {
