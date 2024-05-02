@@ -1,7 +1,5 @@
-import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
@@ -32,11 +30,6 @@ class BottomBarContent extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
 
-    final resetInProgress = context.select(
-      (CrosswordBloc bloc) =>
-          bloc.state.gameStatus == GameStatus.resetInProgress,
-    );
-
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -57,11 +50,9 @@ class BottomBarContent extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             OutlinedButton.icon(
-              onPressed: () => resetInProgress
-                  ? null
-                  : context
-                      .read<RandomWordSelectionBloc>()
-                      .add(const RandomWordRequested()),
+              onPressed: () => context
+                  .read<RandomWordSelectionBloc>()
+                  .add(const RandomWordRequested()),
               icon: const Icon(Icons.location_searching),
               label: Text(l10n.findNewWord),
             ),

@@ -352,7 +352,12 @@ void main() {
           crosswordBloc: crosswordBloc,
         );
 
-        await tester.tap(find.text(l10n.keepPlayingButtonLabel));
+        await tester.pumpAndSettle();
+
+        await tester.tap(
+          find.text(l10n.keepPlayingButtonLabel),
+          warnIfMissed: false,
+        );
 
         verifyNever(() => crosswordBloc.add(BoardStatusResumed()));
       });
