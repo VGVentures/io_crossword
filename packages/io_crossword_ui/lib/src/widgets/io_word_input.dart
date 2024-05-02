@@ -30,6 +30,14 @@ class IoWordInputController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Resets the word to an empty string.
+  void reset() {
+    if (_word.isEmpty) return;
+
+    _word = '';
+    notifyListeners();
+  }
+
   /// The word that has been inputted so far.
   ///
   /// This word might not reach the specified [IoWordInput.length].
@@ -301,6 +309,16 @@ class _IoWordInputState extends State<IoWordInput> {
     _activeFocusNode?.requestFocus();
   }
 
+  void _onInputReset() {
+    final controller = widget.controller;
+
+    if (controller != null && controller.word.isEmpty) {
+      while (_word.isNotEmpty) {
+        _onTextChanged('');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -317,6 +335,7 @@ class _IoWordInputState extends State<IoWordInput> {
       focusNode.addListener(() => _onFocusChanged(focusNode));
     }
 
+    widget.controller?.addListener(_onInputReset);
     widget.controller?._updateWord(_word);
     _next();
   }
