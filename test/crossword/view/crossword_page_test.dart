@@ -10,11 +10,10 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
 import 'package:io_crossword/crossword2/crossword2.dart';
-import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/widget/mute_button.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
+import 'package:io_crossword/widget/io_scaffold.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -161,37 +160,9 @@ void main() {
       });
     });
 
-    testWidgets('renders $IoAppBar', (tester) async {
+    testWidgets('renders $IoScaffold', (tester) async {
       await tester.pumpSubject(CrosswordView());
-      expect(find.byType(IoAppBar), findsOneWidget);
-    });
-
-    testWidgets('renders $PlayerRankingInformation', (tester) async {
-      await tester.pumpSubject(CrosswordView());
-      expect(find.byType(PlayerRankingInformation), findsOneWidget);
-    });
-
-    testWidgets('renders $MuteButton', (tester) async {
-      await tester.pumpSubject(CrosswordView());
-
-      expect(find.byType(MuteButton), findsOneWidget);
-    });
-
-    testWidgets('renders $EndDrawerButton', (tester) async {
-      await tester.pumpSubject(CrosswordView());
-
-      expect(find.byType(EndDrawerButton), findsOneWidget);
-    });
-
-    testWidgets('opens $CrosswordDrawer when $EndDrawerButton is tapped',
-        (tester) async {
-      await tester.pumpSubject(CrosswordView());
-
-      await tester.tap(find.byType(EndDrawerButton));
-
-      await tester.pump();
-
-      expect(find.byType(CrosswordDrawer), findsOneWidget);
+      expect(find.byType(IoScaffold), findsOneWidget);
     });
 
     testWidgets(

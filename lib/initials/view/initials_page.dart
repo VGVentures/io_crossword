@@ -6,6 +6,7 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/widget/io_scaffold.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class InitialsPage extends StatelessWidget {
@@ -60,11 +61,8 @@ class _InitialsViewState extends State<InitialsView> {
     return BlocListener<InitialsBloc, InitialsState>(
       listenWhen: (previous, current) => current.initials.isValid,
       listener: _onSuccess,
-      child: Scaffold(
-        appBar: IoAppBar(
-          crossword: l10n.crossword,
-        ),
-        body: SelectionArea(
+      child: IoScaffold(
+        child: SelectionArea(
           child: SingleChildScrollView(
             child: Align(
               alignment: Alignment.topCenter,

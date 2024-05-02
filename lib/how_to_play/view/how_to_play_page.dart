@@ -6,6 +6,7 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/widget/io_scaffold.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class HowToPlayPage extends StatelessWidget {
@@ -31,14 +32,10 @@ class HowToPlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final layout = IoLayout.of(context);
 
-    return Scaffold(
-      appBar: IoAppBar(
-        crossword: l10n.crossword,
-      ),
-      body: switch (layout) {
+    return IoScaffold(
+      child: switch (layout) {
         IoLayoutData.small => const _HowToPlaySmall(),
         IoLayoutData.large => const _HowToPlayLarge(),
       },
