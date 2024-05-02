@@ -37,6 +37,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   int get length => 6;
+
+  @override
+  Map<int, String> get solvedCharacters => {};
 }
 
 void main() {
@@ -254,6 +257,45 @@ void main() {
         (tester) async {
           await tester.pumpApp(widget);
           expect(find.byType(WordSelectionTopBar), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $CrosswordInput',
+        (tester) async {
+          await tester.pumpApp(widget);
+          expect(find.byType(CrosswordInput), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a $CrosswordInput with solved characters',
+        (tester) async {
+          final word = Word(
+            id: 'id',
+            position: Point(1, 2),
+            axis: Axis.horizontal,
+            clue: '',
+            answer: ' a  y',
+          );
+
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: SelectedWord(
+                section: (0, 0),
+                word: word,
+              ),
+            ),
+          );
+
+          await tester.pumpApp(widget);
+          expect(
+            tester
+                .widget<CrosswordInput>(find.byType(CrosswordInput))
+                .characters,
+            equals({1: 'a', 4: 'y'}),
+          );
         },
       );
 

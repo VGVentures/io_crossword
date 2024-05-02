@@ -92,11 +92,7 @@ class ShareDialogHeader extends StatelessWidget {
 
     return Row(
       children: [
-        const Icon(
-          Icons.ios_share,
-          size: 20,
-        ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 30),
         Expanded(
           child: Text(
             title,
