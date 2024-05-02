@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/music.dart';
-import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/widget/io_scaffold.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mockingjay/mockingjay.dart';
 
 import '../helpers/helpers.dart';
-
-class _MockSettingsController extends Mock implements SettingsController {}
 
 void main() {
   group('IoScaffold', () {
