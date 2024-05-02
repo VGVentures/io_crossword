@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -50,6 +51,18 @@ void main() {
       await tester.pumpApp(IoScaffold(child: Placeholder()));
 
       expect(find.byType(EndDrawerButton), findsOneWidget);
+    });
+
+    testWidgets('opens $CrosswordDrawer when $EndDrawerButton is tapped',
+        (tester) async {
+      await tester.pumpApp(IoScaffold(child: Placeholder()));
+
+      await tester.tap(find.byType(EndDrawerButton));
+
+      await tester.pump();
+
+      expect(find.byType(CrosswordDrawer), findsOneWidget);
+      expect(find.byType(IoScaffold), findsOneWidget);
     });
   });
 }
