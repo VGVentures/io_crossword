@@ -129,11 +129,6 @@ void main(List<String> args) async {
 
       // Answers
       for (final word in sectionWords) {
-        // The word is already added
-        if (answers.indexWhere((answer) => answer.answer == word.answer) > -1) {
-          continue;
-        }
-
         final allLetters = word.allLetters;
 
         final sectionsPoint = word.getSections(sectionX, sectionY, sectionSize);
@@ -184,14 +179,28 @@ void main(List<String> args) async {
           }
         }
 
-        answers.add(
-          Answer(
+        final index = answers.indexWhere((answer) => answer.id == word.id);
+
+        if (index > -1) {
+          answers[index] = Answer(
             id: word.id,
             answer: answersMap[word.id]!,
-            sections: sectionsPoint,
-            collidedWords: collidedWords,
-          ),
-        );
+            sections: wordsSections[word]!,
+            collidedWords: {
+              ...answers[index].collidedWords,
+              ...collidedWords,
+            }.toList(),
+          );
+        } else {
+          answers.add(
+            Answer(
+              id: word.id,
+              answer: answersMap[word.id]!,
+              sections: wordsSections[word]!,
+              collidedWords: collidedWords,
+            ),
+          );
+        }
       }
     }
   }
