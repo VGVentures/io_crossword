@@ -10,7 +10,7 @@ class Shakable extends StatefulWidget {
   const Shakable({
     required this.child,
     required this.shakeDuration,
-    this.shakeCount = 3,
+    this.speed = 6,
     super.key,
   });
 
@@ -20,8 +20,8 @@ class Shakable extends StatefulWidget {
   /// Duration of the shaking animation.
   final Duration shakeDuration;
 
-  /// How many times the child will move back and forth.
-  final int shakeCount;
+  /// Speed of the animation.
+  final int speed;
 
   @override
   State<Shakable> createState() => ShakableState();
@@ -57,7 +57,7 @@ class ShakableState extends State<Shakable>
       child: widget.child,
       builder: (context, child) {
         final sinValue = sin(
-          widget.shakeCount * 2 * pi * _animationController.value,
+          widget.speed * pi * _animationController.value,
         );
         return Transform.translate(
           offset: Offset(sinValue * 10, 0),

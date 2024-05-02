@@ -54,6 +54,7 @@ class _CrosswordInputState extends State<CrosswordInput> {
       listener: (context, state) {
         if (state.status == WordSelectionStatus.incorrect) {
           shakeKey.currentState?.shake();
+          //context.read<WordSelectionBloc>().add(event)
         }
       },
       child: Shakable(
