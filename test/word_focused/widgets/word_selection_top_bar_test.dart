@@ -101,8 +101,8 @@ void main() {
 
     Widget buildWidget({bool canSolveWord = false}) => BlocProvider(
           create: (context) => wordSelectionBloc,
-          child: const WordSelectionTopBar(
-            canSolveWord: true,
+          child: WordSelectionTopBar(
+            canSolveWord: canSolveWord,
           ),
         );
 
@@ -114,8 +114,8 @@ void main() {
       });
 
       testWidgets(
-          'the word identifier and changes if the word gets solved'
-          ' canSolveWord param is true', (tester) async {
+          'the word identifier and changes with subtitle'
+          ' if the word gets solved', (tester) async {
         final section = BoardSection(
           id: 'id',
           position: Point(0, 0),
@@ -166,6 +166,47 @@ void main() {
             l10n.alreadySolvedSubtitle.toUpperCase(),
           ),
           findsOneWidget,
+        );
+      });
+
+      testWidgets(
+          'the word identifier and alreadySolvedTitle without subtitle'
+          ' if the word is already solved', (tester) async {
+        final section = BoardSection(
+          id: 'id',
+          position: Point(0, 0),
+          size: 20,
+          words: [_SolvedFakeWord()],
+          borderWords: const [],
+        );
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordState(
+            selectedWord:
+                WordSelection(section: (0, 0), word: _SolvedFakeWord()),
+            sections: {
+              (0, 0): section,
+            },
+          ),
+        );
+        await tester.pumpApp(
+          buildWidget(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.text('11,000 ACROSS'), findsOneWidget);
+        expect(
+          find.text(
+            l10n
+                .alreadySolvedTitle(_SolvedFakeWord().mascot!.name)
+                .toUpperCase(),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text(
+            l10n.alreadySolvedSubtitle.toUpperCase(),
+          ),
+          findsNothing,
         );
       });
 

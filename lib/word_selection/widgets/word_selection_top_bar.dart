@@ -58,6 +58,11 @@ class WordSelectionTopBar extends StatelessWidget {
                       Text(
                         l10n.alreadySolvedSubtitle.toUpperCase(),
                         style: themeData.textTheme.labelLarge,
+                      )
+                    else
+                      Text(
+                        wordIdentifier(word.word),
+                        style: themeData.textTheme.labelLarge,
                       ),
                   ],
                 ),
