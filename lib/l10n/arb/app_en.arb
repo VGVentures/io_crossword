@@ -407,7 +407,7 @@
   "@resetDialogTitle": {
     "description": "The title of the game completed modal."
   },
-  "resetDialogSubtitle": "Hang on while we reset the board so you can keep building that streak.\n\nWhen the board has been regenerated, you'll be able to continue playing",
+  "resetDialogSubtitle": "Hang on while we reset the board so you can keep building that streak.\n\nWhen the board has been regenerated, you'll be able to continue playing.",
   "@resetDialogSubtitle": {
     "description": "The subtitle of the game completed modal."
   },
