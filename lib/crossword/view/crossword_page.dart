@@ -3,6 +3,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart'
     hide WordSelected, WordUnselected;
@@ -10,7 +11,6 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/music/music.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
