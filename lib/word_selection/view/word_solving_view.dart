@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/hint/hint.dart';
@@ -112,9 +113,13 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
       children: [
         const WordSelectionTopBar(canSolveWord: true),
         const SizedBox(height: 32),
-        CrosswordInput(
-          length: selectedWord.word.length,
-          characters: selectedWord.word.solvedCharacters,
+        SingleChildScrollView(
+          clipBehavior: Clip.none,
+          scrollDirection: Axis.horizontal,
+          child: CrosswordInput(
+            length: selectedWord.word.length,
+            characters: selectedWord.word.solvedCharacters,
+          ),
         ),
         const SizedBox(height: 16),
         Text(
