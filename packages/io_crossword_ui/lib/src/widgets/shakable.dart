@@ -11,8 +11,14 @@ class Shakable extends StatefulWidget {
     required this.child,
     required this.shakeDuration,
     this.speed = 6,
+    @visibleForTesting this.controller,
     super.key,
   });
+
+  /// Animation controller.
+  ///
+  /// Usable only for testing.
+  final AnimationController? controller;
 
   /// Child widget.
   final Widget child;
@@ -32,10 +38,11 @@ class Shakable extends StatefulWidget {
 /// {@endtemplate}
 class ShakableState extends State<Shakable>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController = AnimationController(
-    vsync: this,
-    duration: widget.shakeDuration,
-  );
+  late final AnimationController _animationController = widget.controller ??
+      AnimationController(
+        vsync: this,
+        duration: widget.shakeDuration,
+      );
 
   /// Starts the shaking animation and resets it when it ends.
   void shake() {
