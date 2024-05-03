@@ -336,7 +336,7 @@ class _IoWordInputState extends State<IoWordInput> {
   void didUpdateWidget(covariant IoWordInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.readOnly != widget.readOnly) return;
+    if (oldWidget.readOnly == widget.readOnly) return;
 
     setState(() {});
   }
