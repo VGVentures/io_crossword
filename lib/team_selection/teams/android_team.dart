@@ -58,8 +58,8 @@ class AndroidTeam extends Team {
   @override
   SpriteInformation get pickUpSpriteInformation => SpriteInformation(
         path: pickUpAnimation.path,
-        rows: 11,
-        columns: 6,
+        rows: 18,
+        columns: 4,
         stepTime: 0.042,
         width: 360,
         height: 612,
@@ -68,8 +68,8 @@ class AndroidTeam extends Team {
   @override
   SpriteInformation get dangleSpriteInformation => SpriteInformation(
         path: dangleAnimation.path,
-        rows: 11,
-        columns: 4,
+        rows: 7,
+        columns: 6,
         stepTime: 0.042,
         width: 360,
         height: 612,
