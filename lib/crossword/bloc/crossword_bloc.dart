@@ -50,13 +50,13 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   /// Once the [CrosswordBloc] is [close]ed all subscriptions are canceled.
   final SubscriptionsMap _subscriptions;
 
-  void _onLoadedSectionsSuspended(
+  Future<void> _onLoadedSectionsSuspended(
     LoadedSectionsSuspended event,
     Emitter<CrosswordState> emit,
-  ) {
-    for (final key in _subscriptions.keys) {
-      if (!event.loadedSections.contains(key)) {
-        _subscriptions[key]?.pause();
+  ) async {
+    for (final entry in _subscriptions.entries) {
+      if (!event.loadedSections.contains(entry.key) && !entry.value.isPaused) {
+        entry.value.pause();
       }
     }
   }
