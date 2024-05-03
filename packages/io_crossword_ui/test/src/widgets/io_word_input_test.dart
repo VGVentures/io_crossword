@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -98,6 +100,31 @@ void main() {
       await tester.enterText(editableTexts.last, 'Z');
       await submit();
       expect(words.last, equals('ABYZE'));
+    });
+
+    testWidgets('does not change text when readOnly', (tester) async {
+      final words = <String>[];
+      await tester.pumpWidget(
+        _Subject(
+          child: IoWordInput.alphabetic(
+            length: 5,
+            onSubmit: words.add,
+            readOnly: true,
+          ),
+        ),
+      );
+
+      Future<void> submit() async {
+        await TestWidgetsFlutterBinding.instance.testTextInput
+            .receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+      }
+
+      final editableTexts = find.byType(EditableText);
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words, isEmpty);
     });
 
     testWidgets(
@@ -543,7 +570,7 @@ class _Subject extends StatelessWidget {
     required this.child,
   });
 
-  final IoWordInput child;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
