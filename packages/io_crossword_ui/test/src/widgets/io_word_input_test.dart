@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -98,6 +100,83 @@ void main() {
       await tester.enterText(editableTexts.last, 'Z');
       await submit();
       expect(words.last, equals('ABYZE'));
+    });
+
+    testWidgets('does not change text when readOnly', (tester) async {
+      final words = <String>[];
+      await tester.pumpWidget(
+        _Subject(
+          child: IoWordInput.alphabetic(
+            length: 5,
+            onSubmit: words.add,
+            readOnly: true,
+          ),
+        ),
+      );
+
+      Future<void> submit() async {
+        await TestWidgetsFlutterBinding.instance.testTextInput
+            .receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+      }
+
+      final editableTexts = find.byType(EditableText);
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words, isEmpty);
+    });
+
+    testWidgets('updates readOnly to be able to write', (tester) async {
+      final words = <String>[];
+
+      var readOnly = true;
+
+      await tester.pumpWidget(
+        _Subject(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  IoWordInput.alphabetic(
+                    length: 5,
+                    onSubmit: words.add,
+                    readOnly: readOnly,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        readOnly = false;
+                      });
+                    },
+                    child: Text('can write'),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+
+      Future<void> submit() async {
+        await TestWidgetsFlutterBinding.instance.testTextInput
+            .receiveAction(TextInputAction.done);
+        await tester.pumpAndSettle();
+      }
+
+      final editableTexts = find.byType(EditableText);
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words, isEmpty);
+
+      await tester.tap(find.byType(ElevatedButton));
+
+      await tester.pumpAndSettle();
+
+      await tester.enterText(editableTexts.first, 'C');
+      await submit();
+      expect(words, equals(['C']));
     });
 
     testWidgets(
@@ -543,7 +622,7 @@ class _Subject extends StatelessWidget {
     required this.child,
   });
 
-  final IoWordInput child;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
