@@ -905,7 +905,7 @@ void main() {
       );
 
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits [success] state with game status when getGameStatus succeeds',
+        'emits [inProgress] state with game status when getGameStatus succeeds',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
