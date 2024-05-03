@@ -188,9 +188,9 @@ void main() {
           word.solvedCharacters,
           equals(
             {
-              1: 'a',
-              2: 'p',
-              4: 'y',
+              1: 'A',
+              2: 'P',
+              4: 'Y',
             },
           ),
         );

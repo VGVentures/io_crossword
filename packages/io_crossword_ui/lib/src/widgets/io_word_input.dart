@@ -67,6 +67,7 @@ class IoWordInput extends StatefulWidget {
   IoWordInput._({
     required this.length,
     required this.characterValidator,
+    required this.readOnly,
     this.controller,
     this.onWord,
     this.onSubmit,
@@ -85,6 +86,7 @@ class IoWordInput extends StatefulWidget {
   /// Creates an [IoWordInput] that only accepts alphabetic characters.
   IoWordInput.alphabetic({
     required int length,
+    bool readOnly = false,
     IoWordInputController? controller,
     Axis? direction,
     Map<int, String>? characters,
@@ -95,6 +97,7 @@ class IoWordInput extends StatefulWidget {
   }) : this._(
           length: length,
           key: key,
+          readOnly: readOnly,
           characters: characters,
           direction: direction,
           controller: controller,
@@ -174,6 +177,14 @@ class IoWordInput extends StatefulWidget {
   ///
   /// Defaults to the inherited [IoWordInputTheme.primary].
   final IoWordInputStyle? style;
+
+  /// Whether the [EditableText] can be changed.
+  ///
+  /// When this is set to true, the text cannot be modified
+  /// by any shortcut or keyboard operation. The text is still selectable.
+  ///
+  /// Defaults to false.
+  final bool readOnly;
 
   /// The character that represents an empty character field.
   static const _emptyCharacter = '_';
@@ -373,10 +384,10 @@ class _IoWordInputState extends State<IoWordInput> {
     for (var i = 0; i < widget.length; i++) {
       final focusNode = _focusNodes[i];
       final controller = _controllers[i];
-      final readOnly = !(focusNode != null && controller != null);
+      final displayText = !(focusNode != null && controller != null);
 
       late final IoWordInputCharacterFieldStyle style;
-      if (readOnly) {
+      if (displayText) {
         style = textInputStyle.disabled;
       } else if (focusNode.hasFocus) {
         style = textInputStyle.focused;
@@ -393,13 +404,14 @@ class _IoWordInputState extends State<IoWordInput> {
           shakeDuration: const Duration(milliseconds: 500),
           child: _CharacterField(
             style: style,
-            child: readOnly
+            child: widget.readOnly
                 ? Text(
                     widget.characters![i]!,
                     style: style.textStyle,
                     textAlign: TextAlign.center,
                   )
                 : EditableText(
+                    readOnly: widget.readOnly,
                     keyboardType: TextInputType.text,
                     enableSuggestions: false,
                     controller: controller,
