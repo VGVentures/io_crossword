@@ -6,15 +6,34 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/app_lifecycle/app_lifecycle.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/rotate_phone/rotate_phone.dart';
+import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
+
+typedef CreateAudioController = AudioController Function();
+
+@visibleForTesting
+AudioController updateAudioController(
+  BuildContext context,
+  SettingsController settings,
+  ValueNotifier<AppLifecycleState> lifecycleNotifier,
+  AudioController? audio, {
+  CreateAudioController createAudioController = AudioController.new,
+}) {
+  return audio ?? createAudioController()
+    ..initialize()
+    ..attachSettings(settings)
+    ..attachLifecycleNotifier(lifecycleNotifier);
+}
 
 class App extends StatelessWidget {
   const App({
@@ -23,6 +42,7 @@ class App extends StatelessWidget {
     required this.boardInfoRepository,
     required this.leaderboardRepository,
     required this.user,
+    this.audioController,
     super.key,
   });
 
@@ -31,40 +51,58 @@ class App extends StatelessWidget {
   final CrosswordRepository crosswordRepository;
   final BoardInfoRepository boardInfoRepository;
   final LeaderboardRepository leaderboardRepository;
+  final AudioController? audioController;
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider.value(value: apiClient.crosswordResource),
-        Provider.value(value: apiClient.leaderboardResource),
-        Provider.value(value: apiClient.hintResource),
-        Provider.value(value: user),
-        Provider.value(value: crosswordRepository),
-        Provider.value(value: boardInfoRepository),
-        Provider.value(value: leaderboardRepository),
-      ],
-      child: MultiBlocProvider(
+    return AppLifecycleObserver(
+      child: MultiProvider(
         providers: [
-          BlocProvider(
-            create: (_) => CrosswordBloc(
-              crosswordRepository: crosswordRepository,
-              boardInfoRepository: boardInfoRepository,
-            ),
-          ),
-          BlocProvider(
-            create: (_) => PlayerBloc(
-              leaderboardRepository: leaderboardRepository,
-            )..add(PlayerLoaded(userId: user.id)),
-          ),
-          BlocProvider(
+          Provider.value(value: apiClient.crosswordResource),
+          Provider.value(value: apiClient.leaderboardResource),
+          Provider.value(value: apiClient.hintResource),
+          Provider.value(value: user),
+          Provider.value(value: crosswordRepository),
+          Provider.value(value: boardInfoRepository),
+          Provider.value(value: leaderboardRepository),
+          Provider<SettingsController>(
             lazy: false,
-            create: (context) => ChallengeBloc(
-              boardInfoRepository: context.read(),
-            )..add(const ChallengeDataRequested()),
+            create: (context) => SettingsController(),
+          ),
+          ProxyProvider2<SettingsController, ValueNotifier<AppLifecycleState>,
+              AudioController>(
+            // Ensures that the AudioController is created on startup,
+            // and not "only when it's needed", as is default behavior.
+            // This way, music starts immediately.
+            lazy: false,
+            create: (context) =>
+                audioController ?? (AudioController()..initialize()),
+            update: updateAudioController,
+            dispose: (context, audio) => audio.dispose(),
           ),
         ],
-        child: const AppView(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => CrosswordBloc(
+                crosswordRepository: crosswordRepository,
+                boardInfoRepository: boardInfoRepository,
+              ),
+            ),
+            BlocProvider(
+              create: (_) => PlayerBloc(
+                leaderboardRepository: leaderboardRepository,
+              )..add(PlayerLoaded(userId: user.id)),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (context) => ChallengeBloc(
+                boardInfoRepository: context.read(),
+              )..add(const ChallengeDataRequested()),
+            ),
+          ],
+          child: const AppView(),
+        ),
       ),
     );
   }

@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
+import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mockingjay/mockingjay.dart';
@@ -26,6 +28,13 @@ class _MockCrosswordResource extends Mock implements CrosswordResource {}
 class _MockLeaderboardResource extends Mock implements LeaderboardResource {}
 
 class _MockHintResource extends Mock implements HintResource {}
+
+class _MockAudioController extends Mock implements AudioController {}
+
+class _MockSettingsController extends Mock implements SettingsController {
+  @override
+  ValueNotifier<bool> get muted => ValueNotifier(true);
+}
 
 class _MockLeaderboardRepository extends Mock
     implements LeaderboardRepository {}
@@ -58,6 +67,8 @@ extension PumpApp on WidgetTester {
     HintResource? hintResource,
     CrosswordBloc? crosswordBloc,
     PlayerBloc? playerBloc,
+    AudioController? audioController,
+    SettingsController? settingsController,
     ChallengeBloc? challengeBloc,
     MockNavigator? navigator,
   }) {
@@ -113,6 +124,12 @@ extension PumpApp on WidgetTester {
           ),
           Provider.value(
             value: user ?? _MockUser(),
+          ),
+          Provider.value(
+            value: settingsController ?? _MockSettingsController(),
+          ),
+          Provider.value(
+            value: audioController ?? _MockAudioController(),
           ),
         ],
         child: Builder(
@@ -178,6 +195,8 @@ extension PumpRoute on WidgetTester {
     LeaderboardRepository? leaderboardRepository,
     CrosswordResource? crosswordResource,
     LeaderboardResource? leaderboardResource,
+    AudioController? audioController,
+    SettingsController? settingsController,
     HintResource? hintResource,
     MockNavigator? navigator,
   }) async {
@@ -243,6 +262,12 @@ extension PumpRoute on WidgetTester {
           ),
           Provider.value(
             value: user ?? _MockUser(),
+          ),
+          Provider.value(
+            value: settingsController ?? _MockSettingsController(),
+          ),
+          Provider.value(
+            value: audioController ?? _MockAudioController(),
           ),
         ],
         child: Builder(

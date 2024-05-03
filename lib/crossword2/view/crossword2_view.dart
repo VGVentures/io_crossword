@@ -152,6 +152,7 @@ class _CrosswordStack extends StatelessWidget {
                           style: theme.io.wordInput.secondary,
                           direction: word.axis.toAxis(),
                           length: selectedWord.word.length,
+                          characters: selectedWord.word.solvedCharacters,
                         ),
                 );
               },
