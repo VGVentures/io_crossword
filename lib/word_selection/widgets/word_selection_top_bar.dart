@@ -17,17 +17,22 @@ class WordSelectionTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-
+    final status = context.select<WordSelectionBloc, WordSelectionStatus>(
+      (bloc) => bloc.state.status,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          onPressed: () {
-            ShareWordPage.showModal(context);
-          },
-          icon: const Icon(Icons.ios_share),
-          style: themeData.io.iconButtonTheme.filled,
-        ),
+        if (status != WordSelectionStatus.preSolving)
+          IconButton(
+            onPressed: () {
+              ShareWordPage.showModal(context);
+            },
+            icon: const Icon(Icons.ios_share),
+            style: themeData.io.iconButtonTheme.filled,
+          )
+        else
+          const SizedBox(),
         BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
           selector: (state) => state.word,
           builder: (context, selectedWord) {
