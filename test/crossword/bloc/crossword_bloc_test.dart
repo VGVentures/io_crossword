@@ -98,6 +98,9 @@ void main() {
           boardInfoRepository: boardInfoRepository,
           subscriptionsMap: {(0, 0): subscription},
         ),
+        setUp: () {
+          when(() => subscription.isPaused).thenReturn(false);
+        },
         act: (bloc) => bloc.add(const LoadedSectionsSuspended({(1, 1)})),
         verify: (bloc) {
           verify(() => subscription.pause()).called(1);
