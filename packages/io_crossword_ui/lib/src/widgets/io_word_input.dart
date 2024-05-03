@@ -404,7 +404,7 @@ class _IoWordInputState extends State<IoWordInput> {
           shakeDuration: const Duration(milliseconds: 500),
           child: _CharacterField(
             style: style,
-            child: widget.readOnly
+            child: displayText
                 ? Text(
                     widget.characters![i]!,
                     style: style.textStyle,
