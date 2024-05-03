@@ -101,43 +101,51 @@ class _CrosswordStack extends StatelessWidget {
             },
           ),
           if (layout == IoLayoutData.large)
-            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-              selector: (state) => state.word,
-              builder: (context, selectedWord) {
-                if (selectedWord == null) {
-                  return const SizedBox.shrink();
-                }
-
-                final word = selectedWord.word;
-                final theme = Theme.of(context);
-
-                return Positioned(
-                  left: (selectedWord.section.$1 *
-                          crosswordLayout.chunkSize.width) +
-                      (word.position.x * crosswordLayout.cellSize.width) +
-                      crosswordLayout.padding.left,
-                  top: (selectedWord.section.$2 *
-                          crosswordLayout.chunkSize.height) +
-                      (word.position.y * crosswordLayout.cellSize.height) +
-                      crosswordLayout.padding.top,
-                  child: selectedWord.word.isSolved
-                      ? IoWord(
-                          selectedWord.word.answer,
-                          direction: word.axis.toAxis(),
-                          style: word.mascot!.toIoWordStyle(theme),
-                        )
-                      : CrosswordInput(
-                          key: ValueKey(selectedWord.word.id),
-                          style: theme.io.wordInput.secondary,
-                          direction: word.axis.toAxis(),
-                          length: selectedWord.word.length,
-                          characters: selectedWord.word.solvedCharacters,
-                        ),
-                );
-              },
-            ),
+            const CrosswordSelectedWordLargeView(),
         ],
       ),
+    );
+  }
+}
+
+@visibleForTesting
+class CrosswordSelectedWordLargeView extends StatelessWidget {
+  @visibleForTesting
+  const CrosswordSelectedWordLargeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedWord =
+        context.select((WordSelectionBloc bloc) => bloc.state.word);
+
+    if (selectedWord == null) {
+      return const SizedBox.shrink();
+    }
+
+    final word = selectedWord.word;
+    final theme = Theme.of(context);
+    final crosswordLayout = CrosswordLayoutScope.of(context);
+
+    return Positioned(
+      left: (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
+          (word.position.x * crosswordLayout.cellSize.width) +
+          crosswordLayout.padding.left,
+      top: (selectedWord.section.$2 * crosswordLayout.chunkSize.height) +
+          (word.position.y * crosswordLayout.cellSize.height) +
+          crosswordLayout.padding.top,
+      child: selectedWord.word.isSolved
+          ? IoWord(
+              selectedWord.word.answer,
+              direction: word.axis.toAxis(),
+              style: word.mascot!.toIoWordStyle(theme),
+            )
+          : CrosswordInput(
+              key: ValueKey(selectedWord.word.id),
+              style: theme.io.wordInput.secondary,
+              direction: word.axis.toAxis(),
+              length: selectedWord.word.length,
+              characters: selectedWord.word.solvedCharacters,
+            ),
     );
   }
 }
