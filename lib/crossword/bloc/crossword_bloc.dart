@@ -4,59 +4,118 @@ import 'package:bloc/bloc.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword2/crossword2.dart';
 
 part 'crossword_event.dart';
 part 'crossword_state.dart';
+
+/// Signature of the Map that holds the subscriptions for each chunk.
+///
+/// See also:
+///
+/// * [CrosswordBloc._subscriptions], the map that holds the subscriptions.
+typedef SubscriptionsMap
+    = Map<CrosswordChunkIndex, StreamSubscription<BoardSection?>>;
 
 class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   CrosswordBloc({
     required CrosswordRepository crosswordRepository,
     required BoardInfoRepository boardInfoRepository,
+    @visibleForTesting SubscriptionsMap? subscriptionsMap,
   })  : _crosswordRepository = crosswordRepository,
         _boardInfoRepository = boardInfoRepository,
+        _subscriptions = subscriptionsMap ?? {},
         super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
     on<WordSelected>(_onWordSelected);
     on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
+    on<LoadedSectionsSuspended>(_onLoadedSectionsSuspended);
+    on<BoardSectionLoaded>(_onBoardSectionLoaded);
   }
 
   final CrosswordRepository _crosswordRepository;
   final BoardInfoRepository _boardInfoRepository;
 
-  Future<void> _onBoardSectionRequested(
-    BoardSectionRequested event,
+  /// Holds the subscriptions for each chunk.
+  ///
+  /// Originally, the map is empty. As chunks get loaded the key is the index of
+  /// the chunk and the value is the subscription to the stream of the chunk.
+  ///
+  /// Whenever a chunk is not visible, the subscription is not cancelled or
+  /// removed, but paused, until it is visible again.
+  ///
+  /// Once the [CrosswordBloc] is [close]ed all subscriptions are canceled.
+  final SubscriptionsMap _subscriptions;
+
+  Future<void> _onLoadedSectionsSuspended(
+    LoadedSectionsSuspended event,
     Emitter<CrosswordState> emit,
   ) async {
-    final wasAlreadyRequested = state.sections.containsKey(event.position);
-    if (wasAlreadyRequested) return;
+    for (final entry in _subscriptions.entries) {
+      if (!event.loadedSections.contains(entry.key) && !entry.value.isPaused) {
+        entry.value.pause();
+      }
+    }
+  }
 
-    return emit.forEach(
-      _crosswordRepository.watchSectionFromPosition(
-        event.position.$1,
-        event.position.$2,
+  @override
+  Future<void> close() {
+    for (final subscription in _subscriptions.values) {
+      subscription.cancel();
+    }
+    _subscriptions.clear();
+
+    return super.close();
+  }
+
+  void _onBoardSectionLoaded(
+    BoardSectionLoaded event,
+    Emitter<CrosswordState> emit,
+  ) {
+    final newSectionKey = (event.section.position.x, event.section.position.y);
+    final sections = {...state.sections};
+    sections[newSectionKey] = event.section;
+    emit(
+      state.copyWith(
+        status: CrosswordStatus.success,
+        sectionSize: event.section.size,
+        sections: sections,
       ),
-      onData: (section) {
-        if (section == null) return state;
-
-        final newSectionKey = (section.position.x, section.position.y);
-        final newSections = {...state.sections};
-        newSections[newSectionKey] = section;
-
-        return state.copyWith(
-          status: CrosswordStatus.success,
-          sectionSize: section.size,
-          sections: newSections,
-        );
-      },
-      onError: (error, stackTrace) {
-        addError(error, stackTrace);
-        return state.copyWith(
-          status: CrosswordStatus.failure,
-        );
-      },
     );
+  }
+
+  void _onBoardSectionRequested(
+    BoardSectionRequested event,
+    Emitter<CrosswordState> emit,
+  ) {
+    final index = (event.position.$1, event.position.$2);
+
+    if (_subscriptions[index] != null) {
+      if (_subscriptions[index]!.isPaused) {
+        _subscriptions[index]!.resume();
+      }
+    } else {
+      _subscriptions[index] = _crosswordRepository
+          .watchSectionFromPosition(index.$1, index.$2)
+          .listen(
+        (section) {
+          if (section == null) return;
+
+          add(BoardSectionLoaded(section));
+        },
+        onError: (Object error, StackTrace stackTrace) {
+          addError(error, stackTrace);
+          emit(
+            state.copyWith(
+              status: CrosswordStatus.failure,
+            ),
+          );
+        },
+      );
+    }
   }
 
   (int, int) _findWordInSection(
