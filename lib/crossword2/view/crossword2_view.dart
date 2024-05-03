@@ -126,6 +126,13 @@ class CrosswordSelectedWordLargeView extends StatelessWidget {
     final theme = Theme.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
 
+    final canType = context.select((WordSelectionBloc bloc) {
+      final status = bloc.state.status;
+
+      return status != WordSelectionStatus.empty ||
+          status != WordSelectionStatus.preSolving;
+    });
+
     return Positioned(
       left: (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
           (word.position.x * crosswordLayout.cellSize.width) +

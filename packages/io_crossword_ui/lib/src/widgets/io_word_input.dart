@@ -373,6 +373,7 @@ class _IoWordInputState extends State<IoWordInput> {
                   textAlign: TextAlign.center,
                 )
               : EditableText(
+                  readOnly: !(widget.controller?.canType ?? true),
                   keyboardType: TextInputType.text,
                   enableSuggestions: false,
                   controller: controller,
