@@ -332,15 +332,6 @@ class _IoWordInputState extends State<IoWordInput> {
     _next();
   }
 
-  @override
-  void didUpdateWidget(covariant IoWordInput oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.readOnly == widget.readOnly) return;
-
-    setState(() {});
-  }
-
   void _onFocusChanged(FocusNode focusNode) {
     if (focusNode.hasFocus) _focus();
     focusNode.parent;
