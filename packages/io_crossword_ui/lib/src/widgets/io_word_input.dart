@@ -1,10 +1,13 @@
 import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+
+part 'shakable.dart';
 
 /// {@template character_validator}
 /// Validates a character.
@@ -34,8 +37,10 @@ class IoWordInputController extends ChangeNotifier {
   void reset() {
     if (_word.isEmpty) return;
 
-    _word = '';
-    notifyListeners();
+    if (_word.length > 1) {
+      _word = '';
+      notifyListeners();
+    }
   }
 
   /// The word that has been inputted so far.
@@ -383,35 +388,39 @@ class _IoWordInputState extends State<IoWordInput> {
 
       final character = Padding(
         padding: textInputStyle.padding,
-        child: _CharacterField(
-          style: style,
-          child: readOnly
-              ? Text(
-                  widget.characters![i]!,
-                  style: style.textStyle,
-                  textAlign: TextAlign.center,
-                )
-              : EditableText(
-                  keyboardType: TextInputType.text,
-                  enableSuggestions: false,
-                  controller: controller,
-                  focusNode: focusNode,
-                  style: style.textStyle,
-                  cursorWidth: 0,
-                  textAlign: TextAlign.center,
-                  cursorColor: Colors.transparent,
-                  backgroundCursorColor: Colors.transparent,
-                  onChanged: _onTextChanged,
-                  onSubmitted: widget.onSubmit != null
-                      ? (_) => widget.onSubmit!(_word)
-                      : null,
-                  onSelectionChanged: (selection, cause) {
-                    final offset = math.min(1, controller.text.length);
-                    controller.selection = TextSelection.fromPosition(
-                      TextPosition(offset: offset),
-                    );
-                  },
-                ),
+        child: Shakable(
+          controller: widget.controller,
+          shakeDuration: const Duration(milliseconds: 500),
+          child: _CharacterField(
+            style: style,
+            child: readOnly
+                ? Text(
+                    widget.characters![i]!,
+                    style: style.textStyle,
+                    textAlign: TextAlign.center,
+                  )
+                : EditableText(
+                    keyboardType: TextInputType.text,
+                    enableSuggestions: false,
+                    controller: controller,
+                    focusNode: focusNode,
+                    style: style.textStyle,
+                    cursorWidth: 0,
+                    textAlign: TextAlign.center,
+                    cursorColor: Colors.transparent,
+                    backgroundCursorColor: Colors.transparent,
+                    onChanged: _onTextChanged,
+                    onSubmitted: widget.onSubmit != null
+                        ? (_) => widget.onSubmit!(_word)
+                        : null,
+                    onSelectionChanged: (selection, cause) {
+                      final offset = math.min(1, controller.text.length);
+                      controller.selection = TextSelection.fromPosition(
+                        TextPosition(offset: offset),
+                      );
+                    },
+                  ),
+          ),
         ),
       );
       characters.add(character);

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockController extends Mock implements AnimationController {}
+class _MockAnimationController extends Mock implements AnimationController {}
 
 void main() {
   group('$Shakable', () {
@@ -21,20 +21,22 @@ void main() {
       expect(find.text('shakableChild'), findsOneWidget);
     });
 
-    testWidgets('moves child when shake is called', (tester) async {
+    testWidgets('moves child when word controller notifies', (tester) async {
       final textKey = GlobalKey();
-      final shakeKey = GlobalKey<ShakableState>();
-      final controller = _MockController();
-      when(() => controller.forward(from: 0)).thenAnswer(
+      final controller = IoWordInputController();
+      final animationController = _MockAnimationController();
+
+      when(() => animationController.forward(from: 0)).thenAnswer(
         (_) => TickerFuture.complete(),
       );
-      when(() => controller.value).thenReturn(1);
+      when(() => animationController.value).thenReturn(1);
+
       await tester.pumpWidget(
         MaterialApp(
           home: Shakable(
-            key: shakeKey,
-            shakeDuration: Duration(milliseconds: 500),
             controller: controller,
+            animationController: animationController,
+            shakeDuration: Duration(milliseconds: 500),
             child: Text(
               'shakableChild',
               key: textKey,
@@ -44,11 +46,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      shakeKey.currentState?.shake();
+      controller.notifyListeners();
 
       await tester.pump();
 
-      verify(() => controller.forward(from: 0)).called(1);
+      verify(() => animationController.forward(from: 0)).called(1);
     });
   });
 }

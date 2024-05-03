@@ -269,7 +269,7 @@ void main() {
         expect(words.last, equals('ABCDE'));
 
         controller.reset();
-        await tester.pumpAndSettle();
+        await tester.pump();
         expect(words.last, equals(''));
       });
     });

@@ -23,7 +23,6 @@ class CrosswordInput extends StatefulWidget {
 }
 
 class _CrosswordInputState extends State<CrosswordInput> {
-  final shakeKey = GlobalKey<ShakableState>();
   IoWordInputController? _controller;
   String _lastWord = '';
 
@@ -55,25 +54,20 @@ class _CrosswordInputState extends State<CrosswordInput> {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == WordSelectionStatus.incorrect) {
-          shakeKey.currentState?.shake();
           _controller?.reset();
         }
       },
-      child: Shakable(
-        key: shakeKey,
-        shakeDuration: const Duration(milliseconds: 500),
-        child: IoWordInput.alphabetic(
-          controller: _controller,
-          style: widget.style,
-          direction: widget.direction,
-          length: widget.length,
-          characters: widget.characters,
-          onSubmit: (value) {
-            context
-                .read<WordSelectionBloc>()
-                .add(WordSolveAttempted(answer: value));
-          },
-        ),
+      child: IoWordInput.alphabetic(
+        controller: _controller,
+        style: widget.style,
+        direction: widget.direction,
+        length: widget.length,
+        characters: widget.characters,
+        onSubmit: (value) {
+          context
+              .read<WordSelectionBloc>()
+              .add(WordSolveAttempted(answer: value));
+        },
       ),
     );
   }
