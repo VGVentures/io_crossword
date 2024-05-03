@@ -40,6 +40,7 @@ void main() {
       when(() => word.answer).thenReturn('word');
       when(() => word.isSolved).thenReturn(false);
       when(() => word.solvedTimestamp).thenReturn(null);
+      when(() => word.solvedCharacters).thenReturn({});
     });
 
     testWidgets('requests chunk', (tester) async {

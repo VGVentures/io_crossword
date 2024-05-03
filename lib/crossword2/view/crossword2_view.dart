@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis, Mascots;
+import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -54,8 +55,13 @@ class _CrosswordStack extends StatelessWidget {
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
 
-    bool isChunkVisible(CrosswordChunkIndex index) {
-      final chunkRect = Rect.fromLTWH(
+    final extendedViewport = EdgeInsets.symmetric(
+      horizontal: crosswordLayout.chunkSize.width,
+      vertical: crosswordLayout.chunkSize.height,
+    ).inflateRect(viewport);
+
+    Rect getChunkRect(CrosswordChunkIndex index) {
+      return Rect.fromLTWH(
         (index.$1 * crosswordLayout.chunkSize.width) +
             crosswordLayout.padding.left,
         (index.$2 * crosswordLayout.chunkSize.height) +
@@ -63,18 +69,33 @@ class _CrosswordStack extends StatelessWidget {
         crosswordLayout.chunkSize.width,
         crosswordLayout.chunkSize.height,
       );
+    }
+
+    bool isChunkVisible(CrosswordChunkIndex index) {
+      final chunkRect = getChunkRect(index);
       return chunkRect.overlaps(viewport);
     }
 
-    final visibleChunks = <CrosswordChunkIndex>{
-      // TODO(alestiago): Instead of computing the visiblity naively, we should
-      // use the points to derive the visible chunks in O(1).
-      // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6487319379
+    bool shouldChunkBeLoaded(CrosswordChunkIndex index) {
+      final chunkRect = getChunkRect(index);
+      return chunkRect.overlaps(extendedViewport);
+    }
+
+    // Chunks that are in the extendedViewport
+    final loadedChunks = <CrosswordChunkIndex>{
       for (var row = 0; row <= configuration.bottomRight.$1; row++)
         for (var column = 0; column <= configuration.bottomRight.$2; column++)
-          if (isChunkVisible((row, column))) (row, column),
+          if (shouldChunkBeLoaded((row, column))) (row, column),
     };
-    for (final chunk in visibleChunks) {
+
+    final visibleChunks = <CrosswordChunkIndex>{
+      for (final loadedChunk in loadedChunks)
+        if (isChunkVisible(loadedChunk)) loadedChunk,
+    };
+
+    context.read<CrosswordBloc>().add(LoadedSectionsSuspended(loadedChunks));
+
+    for (final chunk in loadedChunks) {
       context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
     }
 
@@ -131,6 +152,7 @@ class _CrosswordStack extends StatelessWidget {
                           style: theme.io.wordInput.secondary,
                           direction: word.axis.toAxis(),
                           length: selectedWord.word.length,
+                          characters: selectedWord.word.solvedCharacters,
                         ),
                 );
               },
