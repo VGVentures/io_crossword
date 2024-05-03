@@ -295,7 +295,7 @@ void main() {
               tester
                   .widget<CrosswordInput>(find.byType(CrosswordInput))
                   .characters,
-              equals({1: 'a', 4: 'y'}),
+              equals({1: 'A', 4: 'Y'}),
             );
           },
         );
