@@ -57,18 +57,26 @@ class _CrosswordInputState extends State<CrosswordInput> {
           status == WordSelectionStatus.preSolving;
     });
 
-    return IoWordInput.alphabetic(
-      readOnly: readOnly,
-      controller: _controller,
-      style: widget.style,
-      direction: widget.direction,
-      length: widget.length,
-      characters: widget.characters,
-      onSubmit: (value) {
-        context
-            .read<WordSelectionBloc>()
-            .add(WordSolveAttempted(answer: value));
+    return BlocListener<WordSelectionBloc, WordSelectionState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == WordSelectionStatus.incorrect) {
+          _controller?.reset(initialCharacters: widget.characters);
+        }
       },
+      child: IoWordInput.alphabetic(
+        readOnly: readOnly,
+        controller: _controller,
+        style: widget.style,
+        direction: widget.direction,
+        length: widget.length,
+        characters: widget.characters,
+        onSubmit: (value) {
+          context
+              .read<WordSelectionBloc>()
+              .add(WordSolveAttempted(answer: value));
+        },
+      ),
     );
   }
 }
