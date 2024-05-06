@@ -29,5 +29,7 @@ class LoadingCubit extends Cubit<LoadingState> {
         emit(state.copyWith(loaded: state.loaded + 1));
       }
     }
+
+    emit(state.copyWith(status: LoadingStatus.loaded));
   }
 }

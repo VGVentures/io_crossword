@@ -129,7 +129,7 @@ class LoadingBody extends StatelessWidget {
           const SizedBox(height: 48),
           BlocConsumer<LoadingCubit, LoadingState>(
             listener: (context, state) {
-              if (state.progress == 100) {
+              if (state.status == LoadingStatus.loaded) {
                 _onGetStarted(context);
               }
             },

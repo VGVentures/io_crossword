@@ -181,6 +181,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    emit(state.copyWith(mascotVisible: true));
+
     try {
       final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();

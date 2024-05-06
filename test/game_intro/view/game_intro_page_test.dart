@@ -70,7 +70,11 @@ void main() {
 
       when(() => loadingCubit.load()).thenAnswer((_) async => {});
       when(() => loadingCubit.state).thenReturn(
-        LoadingState(assetsCount: 1, loaded: 1),
+        LoadingState(
+          status: LoadingStatus.loaded,
+          assetsCount: 1,
+          loaded: 1,
+        ),
       );
 
       widget = BlocProvider.value(

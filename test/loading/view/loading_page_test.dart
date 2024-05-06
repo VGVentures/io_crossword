@@ -91,7 +91,15 @@ void main() {
 
         whenListen(
           loadingCubit,
-          Stream.fromIterable([LoadingState(assetsCount: 8, loaded: 8)]),
+          Stream.fromIterable(
+            [
+              LoadingState(
+                status: LoadingStatus.loaded,
+                assetsCount: 8,
+                loaded: 8,
+              )
+            ],
+          ),
           initialState: const LoadingState.initial(),
         );
 
