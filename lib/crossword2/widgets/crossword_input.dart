@@ -61,6 +61,7 @@ class _CrosswordInputState extends State<CrosswordInput> {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == WordSelectionStatus.incorrect) {
+          print('ssss');
           _controller?.reset();
         }
       },

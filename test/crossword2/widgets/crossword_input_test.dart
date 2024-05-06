@@ -15,6 +15,11 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
+class _MockIoWordInputController extends Mock implements IoWordInputController {
+  @override
+  void updateWord(String word, {required bool isInitial}) {}
+}
+
 void main() {
   group('$CrosswordInput', () {
     late WordSelectionBloc wordSelectionBloc;
@@ -90,6 +95,46 @@ void main() {
         },
       );
     }
+
+    testWidgets(
+      'incorrect attempt causes word controller to reset',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+          ),
+        );
+        whenListen(
+          wordSelectionBloc,
+          Stream.fromIterable([
+            WordSelectionState(
+              status: WordSelectionStatus.incorrect,
+            ),
+          ]),
+          initialState: WordSelectionState(
+            status: WordSelectionStatus.solving,
+          ),
+        );
+        final controller = _MockIoWordInputController();
+
+        await tester.pumpApp(
+          IoWordInputControllerScope(
+            wordInputController: controller,
+            child: BlocProvider.value(
+              value: wordSelectionBloc,
+              child: const CrosswordInput(
+                length: 5,
+                characters: {},
+              ),
+            ),
+          ),
+        );
+
+        await tester.pump();
+
+        verify(controller.reset).called(1);
+      },
+    );
 
     testWidgets(
       'submitting the input sends the WordSolveAttempted event',
