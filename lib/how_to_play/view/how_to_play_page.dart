@@ -12,6 +12,8 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class HowToPlayPage extends StatelessWidget {
   const HowToPlayPage({super.key});
 
+  static const String dangleMascotHeroTag = 'dangle_mascot_tag';
+
   static Page<void> page() {
     return const MaterialPage(child: HowToPlayPage());
   }
@@ -69,7 +71,7 @@ class _HowToPlaySmall extends StatelessWidget {
             width: mascot!.teamMascot.dangleSpriteInformation.width,
             height: mascot.teamMascot.dangleSpriteInformation.height,
             child: const Hero(
-              tag: 'dangle_mascot',
+              tag: HowToPlayPage.dangleMascotHeroTag,
               child: _MascotAnimation(),
             ),
           ),
@@ -138,7 +140,7 @@ class _HowToPlayLarge extends StatelessWidget {
                   width: mascot!.teamMascot.dangleSpriteInformation.width,
                   height: mascot.teamMascot.dangleSpriteInformation.height,
                   child: const Hero(
-                    tag: 'dangle_mascot',
+                    tag: HowToPlayPage.dangleMascotHeroTag,
                     child: _MascotAnimation(),
                   ),
                 ),

@@ -119,7 +119,7 @@ class CrosswordView extends StatelessWidget {
                 if (state.mascotVisible)
                   Align(
                     child: Hero(
-                      tag: 'dangle_mascot',
+                      tag: HowToPlayPage.dangleMascotHeroTag,
                       child: MascotAnimation(
                         context.read<PlayerBloc>().state.mascot!,
                       ),

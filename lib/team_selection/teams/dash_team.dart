@@ -47,40 +47,40 @@ class DashTeam extends Team {
   @override
   SpriteInformation get lookUpSpriteInformation => SpriteInformation(
         path: lookUpAnimation.path,
-        rows: 20,
-        columns: 3,
+        rows: 15,
+        columns: 4,
         stepTime: 0.042,
-        width: 200,
-        height: 340,
+        width: 457,
+        height: 612,
       );
 
   @override
   SpriteInformation get pickUpSpriteInformation => SpriteInformation(
         path: pickUpAnimation.path,
-        rows: 11,
-        columns: 6,
+        rows: 16,
+        columns: 4,
         stepTime: 0.042,
-        width: 270,
-        height: 340,
+        width: 457,
+        height: 612,
       );
 
   @override
   SpriteInformation get dangleSpriteInformation => SpriteInformation(
         path: dangleAnimation.path,
-        rows: 23,
-        columns: 2,
+        rows: 12,
+        columns: 3,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 457,
+        height: 612,
       );
 
   @override
   SpriteInformation get dropInSpriteInformation => SpriteInformation(
         path: dropInAnimation.path,
-        rows: 11,
-        columns: 4,
+        rows: 7,
+        columns: 5,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 457,
+        height: 612,
       );
 }

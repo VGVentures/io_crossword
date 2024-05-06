@@ -50,8 +50,8 @@ class DinoTeam extends Team {
         rows: 15,
         columns: 4,
         stepTime: 0.042,
-        width: 250,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
@@ -60,8 +60,8 @@ class DinoTeam extends Team {
         rows: 15,
         columns: 5,
         stepTime: 0.042,
-        width: 200,
-        height: 272,
+        width: 360,
+        height: 612,
       );
 
   @override
@@ -70,8 +70,8 @@ class DinoTeam extends Team {
         rows: 17,
         columns: 2,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 360,
+        height: 612,
       );
 
   @override
@@ -80,7 +80,7 @@ class DinoTeam extends Team {
         rows: 22,
         columns: 2,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 360,
+        height: 612,
       );
 }

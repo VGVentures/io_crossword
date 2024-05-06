@@ -47,40 +47,40 @@ class SparkyTeam extends Team {
   @override
   SpriteInformation get lookUpSpriteInformation => SpriteInformation(
         path: lookUpAnimation.path,
-        rows: 9,
-        columns: 7,
+        rows: 21,
+        columns: 3,
         stepTime: 0.042,
-        width: 200,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get pickUpSpriteInformation => SpriteInformation(
         path: pickUpAnimation.path,
-        rows: 7,
-        columns: 9,
+        rows: 19,
+        columns: 3,
         stepTime: 0.042,
-        width: 270,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get dangleSpriteInformation => SpriteInformation(
         path: dangleAnimation.path,
-        rows: 6,
-        columns: 6,
+        rows: 9,
+        columns: 3,
         stepTime: 0.042,
-        width: 140,
-        height: 340,
+        width: 360,
+        height: 612,
       );
 
   @override
   SpriteInformation get dropInSpriteInformation => SpriteInformation(
         path: dropInAnimation.path,
         rows: 11,
-        columns: 4,
+        columns: 3,
         stepTime: 0.042,
-        width: 150,
-        height: 300,
+        width: 360,
+        height: 612,
       );
 }
