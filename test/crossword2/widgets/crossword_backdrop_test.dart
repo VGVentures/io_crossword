@@ -98,6 +98,8 @@ void main() {
 
       await tester.tap(find.byType(CrosswordBackdrop));
 
+      await tester.pumpAndSettle();
+
       verifyNever(() => wordSelectionBloc.add(const WordUnselected()));
     });
 
