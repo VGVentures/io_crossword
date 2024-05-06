@@ -229,12 +229,37 @@ void main() {
         expect(find.byType(CloseWordSelectionIconButton), findsOneWidget);
       });
 
+      for (final status in [...WordSelectionStatus.values]
+        ..remove(WordSelectionStatus.preSolving)) {
+        testWidgets(
+          'visible icon ios_share if status is $status',
+          (tester) async {
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                word: SelectedWord(section: (0, 0), word: _UnsolvedFakeWord()),
+                status: status,
+              ),
+            );
+            await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
+
+            final visibility =
+                tester.widget(find.byType(Visibility)) as Visibility;
+
+            expect(visibility.visible, isTrue);
+            expect(find.byIcon(Icons.ios_share), findsOneWidget);
+          },
+        );
+      }
+
       testWidgets(
-        'icon ios_share',
+        'invisible icon ios_share'
+        ' if status is ${WordSelectionStatus.preSolving}',
         (tester) async {
           await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
-          expect(find.byIcon(Icons.ios_share), findsOneWidget);
+          final visibility =
+              tester.widget(find.byType(Visibility)) as Visibility;
+          expect(visibility.visible, isFalse);
         },
       );
 
