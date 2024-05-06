@@ -97,7 +97,7 @@ void main() {
                 status: LoadingStatus.loaded,
                 assetsCount: 8,
                 loaded: 8,
-              )
+              ),
             ],
           ),
           initialState: const LoadingState.initial(),

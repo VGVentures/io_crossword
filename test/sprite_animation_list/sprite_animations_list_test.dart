@@ -3,7 +3,7 @@
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/how_to_play/how_to_play.dart';
+import 'package:io_crossword/sprite_animation_list/sprite_animation_list.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
