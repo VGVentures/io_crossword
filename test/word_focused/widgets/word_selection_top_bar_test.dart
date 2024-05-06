@@ -232,7 +232,7 @@ void main() {
       for (final status in [...WordSelectionStatus.values]
         ..remove(WordSelectionStatus.preSolving)) {
         testWidgets(
-          'icon ios_share if status is $status',
+          'visible icon ios_share if status is $status',
           (tester) async {
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
@@ -242,10 +242,26 @@ void main() {
             );
             await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
 
+            final visibility =
+                tester.widget(find.byType(Visibility)) as Visibility;
+
+            expect(visibility.visible, isFalse);
             expect(find.byIcon(Icons.ios_share), findsOneWidget);
           },
         );
       }
+
+      testWidgets(
+        'invisible icon ios_share'
+        ' if status is ${WordSelectionStatus.preSolving}',
+        (tester) async {
+          await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
+
+          final visibility =
+              tester.widget(find.byType(Visibility)) as Visibility;
+          expect(visibility.visible, isFalse);
+        },
+      );
 
       testWidgets(
         'ShareWordPage when icon ios_share tapped',
@@ -267,15 +283,5 @@ void main() {
         },
       );
     });
-
-    testWidgets(
-      'does not render icon ios_share'
-      ' if status is ${WordSelectionStatus.preSolving}',
-      (tester) async {
-        await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
-
-        expect(find.byIcon(Icons.ios_share), findsNothing);
-      },
-    );
   });
 }
