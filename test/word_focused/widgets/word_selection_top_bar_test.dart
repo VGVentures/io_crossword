@@ -245,7 +245,7 @@ void main() {
             final visibility =
                 tester.widget(find.byType(Visibility)) as Visibility;
 
-            expect(visibility.visible, isFalse);
+            expect(visibility.visible, isTrue);
             expect(find.byIcon(Icons.ios_share), findsOneWidget);
           },
         );
