@@ -47,40 +47,40 @@ class DinoTeam extends Team {
   @override
   SpriteInformation get lookUpSpriteInformation => SpriteInformation(
         path: lookUpAnimation.path,
-        rows: 15,
-        columns: 4,
+        rows: 9,
+        columns: 7,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 384,
+        height: 544,
       );
 
   @override
   SpriteInformation get pickUpSpriteInformation => SpriteInformation(
         path: pickUpAnimation.path,
-        rows: 15,
-        columns: 5,
+        rows: 17,
+        columns: 4,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 384,
+        height: 544,
       );
 
   @override
   SpriteInformation get dangleSpriteInformation => SpriteInformation(
         path: dangleAnimation.path,
-        rows: 17,
-        columns: 2,
+        rows: 9,
+        columns: 3,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 384,
+        height: 544,
       );
 
   @override
   SpriteInformation get dropInSpriteInformation => SpriteInformation(
         path: dropInAnimation.path,
-        rows: 22,
-        columns: 2,
+        rows: 7,
+        columns: 5,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 384,
+        height: 544,
       );
 }
