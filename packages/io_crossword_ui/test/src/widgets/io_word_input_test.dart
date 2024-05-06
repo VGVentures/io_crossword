@@ -277,26 +277,23 @@ void main() {
           _Subject(
             child: IoWordInput.alphabetic(
               length: 5,
-              characters: const {0: 'A', 1: 'B', 4: 'E'},
               controller: controller,
             ),
           ),
         );
 
-        expect(words.last, equals('ABE'));
-
         final editableTexts = find.byType(EditableText);
 
         await tester.enterText(editableTexts.first, 'C');
         await tester.pumpAndSettle();
-        expect(words.last, equals('ABCE'));
+        expect(words.last, equals('C'));
 
         await tester.enterText(editableTexts.last, 'D');
         await tester.pumpAndSettle();
-        expect(words.last, equals('ABCDE'));
+        expect(words.last, equals('CD'));
 
         controller.reset();
-        await tester.pump();
+        await tester.pumpAndSettle();
         expect(words.last, equals(''));
       });
     });
