@@ -99,7 +99,7 @@ void main() {
 
       await tester.enterText(editableTexts.last, 'Z');
       await submit();
-      expect(words.last, equals('ABYZE'));
+      expect(words.last, equals('ABCZE'));
     });
 
     testWidgets('does not change text when readOnly', (tester) async {
@@ -183,7 +183,7 @@ void main() {
 
         expect(
           words,
-          equals(['ABYZE']),
+          equals(['ABCYE', 'ABCZE']),
           reason: '''onWord should be called again with the updated word''',
         );
       },
@@ -223,7 +223,7 @@ void main() {
         await tester.enterText(editableTexts.first, 'Y');
         await tester.enterText(editableTexts.last, 'Z');
         await tester.pumpAndSettle();
-        expect(controller.word, equals('ABYZE'));
+        expect(controller.word, equals('ABCZE'));
       });
 
       testWidgets('word gets notified as input changes', (tester) async {
@@ -262,7 +262,7 @@ void main() {
         await tester.enterText(editableTexts.first, 'Y');
         await tester.enterText(editableTexts.last, 'Z');
         await tester.pumpAndSettle();
-        expect(words.last, equals('ABYZE'));
+        expect(words.last, equals('ABCZE'));
       });
     });
 

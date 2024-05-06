@@ -186,12 +186,7 @@ class IoWordInput extends StatefulWidget {
 // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
 class _IoWordInputState extends State<IoWordInput> {
   /// The current character that is being inputted.
-  ///
-  /// Will be `null` if there is no available character field to input. This
-  /// happens when [IoWordInput.characters] is has the same length as
-  /// [IoWordInput.length]. In other words, when there is no available character
-  /// field to input since they are all fixed.
-  int? _currentCharacterIndex;
+  int _currentCharacterIndex = -1;
 
   final Map<int, FocusNode> _focusNodes = {};
 
@@ -209,16 +204,27 @@ class _IoWordInputState extends State<IoWordInput> {
   String get _word {
     final word = StringBuffer();
 
-    for (var i = 0; i < widget.length; i++) {
+    for (var i = widget.length - 1; i >= 0; i--) {
       final isFixed =
           widget.characters != null && widget.characters!.containsKey(i);
       final character =
           (isFixed ? widget.characters![i] : _controllers[i]!.text)!
               .replaceAll(IoWordInput._emptyCharacter, '');
-      if (character.isNotEmpty) word.write(character);
+      if (character.isNotEmpty) {
+        word.write(character);
+        _wordDuplicate[i] = character;
+        if (i > 0) {
+          _wordDuplicate[i - 1] = IoWordInput._emptyCharacter;
+        }
+      }
     }
-    return word.toString();
+    return word.toString().split('').reversed.join();
   }
+
+  late final List<String> _wordDuplicate = List.generate(
+    widget.length,
+    (index) => widget.characters?[index] ?? IoWordInput._emptyCharacter,
+  );
 
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
@@ -232,8 +238,23 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     if (newValue.isEmpty) {
+      final lastCharacter =
+          _wordDuplicate.elementAtOrNull(_currentCharacterIndex) ??
+              IoWordInput._emptyCharacter;
+
+      _wordDuplicate[_currentCharacterIndex] = IoWordInput._emptyCharacter;
       _activeController?.text = IoWordInput._emptyCharacter;
-      _previous();
+
+      // Because in the active controller we get the text already modified,
+      // we need this to know if the focused character was empty or filled
+      // when the backspace was pressed.
+      //
+      // If it was empty, we delete also the letter at the previous index.
+      if (lastCharacter == IoWordInput._emptyCharacter) {
+        _previous();
+        _wordDuplicate[_currentCharacterIndex] = IoWordInput._emptyCharacter;
+        _activeController?.text = IoWordInput._emptyCharacter;
+      }
       updateWord();
       return;
     }
@@ -242,6 +263,7 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
+    _wordDuplicate[_currentCharacterIndex] = newCharacter.toUpperCase();
     _next();
     updateWord();
   }
@@ -253,7 +275,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// happen.
   void _next() {
     final nextFields = _controllers.entries
-        .where((e) => e.key > (_currentCharacterIndex ?? -1))
+        .where((e) => e.key > _currentCharacterIndex)
         .map((e) => e.key);
 
     if (nextFields.isEmpty) {
@@ -274,7 +296,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// presses backspace.
   void _previous() {
     final previousFields = _controllers.entries
-        .where((e) => e.key < (_currentCharacterIndex ?? widget.length))
+        .where((e) => e.key < _currentCharacterIndex)
         .map((e) => e.key);
 
     if (previousFields.isEmpty) return;
