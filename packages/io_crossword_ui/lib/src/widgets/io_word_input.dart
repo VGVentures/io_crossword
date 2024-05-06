@@ -25,22 +25,30 @@ typedef CharacterValidator = bool Function(String character);
 /// {@endtemplate}
 class IoWordInputController extends ChangeNotifier {
   String _word = '';
+  String _initialWord = '';
   bool _didReset = false;
 
-  void _updateWord(String word) {
+  @visibleForTesting
+
+  /// Updates the [_word] with new value.
+  ///
+  /// If [isInitial] is true, sets the [_initialWord] with the same value.
+  void updateWord(String word, {required bool isInitial}) {
     if (word == _word) return;
 
+    if (isInitial) _initialWord = word;
+
     _word = word;
-    if (_word == '') _didReset = false;
+    if (_word == _initialWord) _didReset = false;
     notifyListeners();
   }
 
   /// Resets the word to an empty string.
   void reset() {
-    if (_word.isEmpty) return;
+    if (_word == _initialWord) return;
 
-    if (_word.length > 1) {
-      _word = '';
+    if (_word.length > _initialWord.length) {
+      _word = _initialWord;
       _didReset = true;
       notifyListeners();
     }
@@ -239,6 +247,8 @@ class _IoWordInputState extends State<IoWordInput> {
     return word.toString();
   }
 
+  bool get _initial => _word.length == widget.characters?.length;
+
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
     final newValue = (value.split('')
@@ -247,7 +257,7 @@ class _IoWordInputState extends State<IoWordInput> {
 
     void updateWord() {
       setState(() {});
-      widget.controller?._updateWord(_word);
+      widget.controller?.updateWord(_word, isInitial: _initial);
     }
 
     if (newValue.isEmpty) {
@@ -333,9 +343,12 @@ class _IoWordInputState extends State<IoWordInput> {
 
   void _onInputReset() {
     final controller = widget.controller;
+    final initialCharacters = widget.characters;
 
-    if (controller != null && controller.word.isEmpty) {
-      while (_word.isNotEmpty) {
+    if (controller != null &&
+        initialCharacters != null &&
+        controller._word.length == initialCharacters.length) {
+      while (_word.length > initialCharacters.length) {
         _onTextChanged('');
       }
     }
@@ -358,7 +371,7 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     widget.controller?.addListener(_onInputReset);
-    widget.controller?._updateWord(_word);
+    widget.controller?.updateWord(_word, isInitial: _initial);
     _next();
   }
 
