@@ -44,7 +44,7 @@ class IoWordInputController extends ChangeNotifier {
 
   /// Resets the word to the initial word or an empty string if
   /// no [initialCharacters] is passed.
-  void reset({Map<int, String>? initialCharacters}) {
+  void reset({required Map<int, String>? initialCharacters}) {
     final initialWord = initialCharacters?.values.join() ?? '';
 
     if (_word == initialWord) return;
