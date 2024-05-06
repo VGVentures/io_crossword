@@ -50,7 +50,15 @@ class _CrosswordInputState extends State<CrosswordInput> {
 
   @override
   Widget build(BuildContext context) {
+    final readOnly = context.select((WordSelectionBloc bloc) {
+      final status = bloc.state.status;
+
+      return status == WordSelectionStatus.empty ||
+          status == WordSelectionStatus.preSolving;
+    });
+
     return IoWordInput.alphabetic(
+      readOnly: readOnly,
       controller: _controller,
       style: widget.style,
       direction: widget.direction,

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,9 +23,80 @@ void main() {
       wordSelectionBloc = _MockWordSelectionBloc();
     });
 
+    for (final status in WordSelectionStatus.values.toList()
+      ..remove(WordSelectionStatus.empty)
+      ..remove(WordSelectionStatus.preSolving)) {
+      testWidgets(
+        'IoWordInput is not read only with $status',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: status,
+            ),
+          );
+
+          await tester.pumpApp(
+            DefaultWordInputController(
+              child: BlocProvider.value(
+                value: wordSelectionBloc,
+                child: const CrosswordInput(
+                  length: 5,
+                  characters: {},
+                ),
+              ),
+            ),
+          );
+
+          expect(
+            tester.widget<IoWordInput>(find.byType(IoWordInput)).readOnly,
+            isFalse,
+          );
+        },
+      );
+    }
+
+    for (final status in [
+      WordSelectionStatus.empty,
+      WordSelectionStatus.preSolving,
+    ]) {
+      testWidgets(
+        'IoWordInput is read only with $status',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: status,
+            ),
+          );
+
+          await tester.pumpApp(
+            DefaultWordInputController(
+              child: BlocProvider.value(
+                value: wordSelectionBloc,
+                child: const CrosswordInput(
+                  length: 5,
+                  characters: {},
+                ),
+              ),
+            ),
+          );
+
+          expect(
+            tester.widget<IoWordInput>(find.byType(IoWordInput)).readOnly,
+            isTrue,
+          );
+        },
+      );
+    }
+
     testWidgets(
       'submitting the input sends the WordSolveAttempted event',
       (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+          ),
+        );
+
         await tester.pumpApp(
           DefaultWordInputController(
             child: BlocProvider.value(
@@ -49,6 +122,12 @@ void main() {
     testWidgets(
       'sends characters correctly to IoWordInput',
       (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          WordSelectionState(
+            status: WordSelectionStatus.solving,
+          ),
+        );
+
         await tester.pumpApp(
           DefaultWordInputController(
             child: BlocProvider.value(
