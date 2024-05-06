@@ -92,7 +92,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final begin = _transformationController.value.getTranslation();
 
     final layout = IoLayout.of(context);
-    final reducedViewportSize = viewport.obscured(layout);
+    final reducedViewportSize = viewport.reduced(layout);
     final center = Vector3(
       reducedViewportSize.width / 2,
       reducedViewportSize.height / 2,
@@ -183,7 +183,7 @@ extension on Quad {
   /// The widgets that obscure the quad are the [WordSelectionSmallContainer],
   /// in a small layout, or the [WordSelectionLargeContainer], in a large
   /// layout. They appear when a word is selected.
-  Size obscured(IoLayoutData layout) {
+  Size reduced(IoLayoutData layout) {
     return switch (layout) {
       IoLayoutData.small => Size(
           width,
