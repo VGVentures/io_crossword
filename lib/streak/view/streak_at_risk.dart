@@ -141,21 +141,24 @@ class _BottomActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          child: LeaveButton(
-            onPressed: () => _onLeave(context),
+    return SizedBox(
+      height: 56,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: LeaveButton(
+              onPressed: () => _onLeave(context),
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: SolveItButton(
-            onPressed: () => _onSolveIt(context),
+          const SizedBox(width: 8),
+          Expanded(
+            child: SolveItButton(
+              onPressed: () => _onSolveIt(context),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
