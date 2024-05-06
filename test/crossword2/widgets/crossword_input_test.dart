@@ -127,7 +127,7 @@ void main() {
 
         await tester.pump();
 
-        verify(controller.reset).called(1);
+        verify(() => controller.reset(initialCharacters: null)).called(1);
       },
     );
 

@@ -292,7 +292,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(words.last, equals('CD'));
 
-        controller.reset();
+        controller.reset(initialCharacters: null);
         await tester.pumpAndSettle();
         expect(words.last, equals(''));
       });
