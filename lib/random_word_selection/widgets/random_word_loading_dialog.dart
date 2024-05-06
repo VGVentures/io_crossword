@@ -34,12 +34,12 @@ class RandomWordLoadingDialog extends StatelessWidget {
           child: IoCrosswordCard(
             maxHeight: 400,
             child: switch (state.status) {
-              RandomWordSelectionStatus.loading => const LoadingView(),
-              _ => ErrorView(
+              RandomWordSelectionStatus.failure => ErrorView(
                   title: l10n.findRandomWordError,
                   buttonTitle: l10n.close,
                   onPressed: () => Navigator.pop(context),
                 ),
+              _ => const LoadingView(),
             },
           ),
         );

@@ -22,6 +22,30 @@ class BoardSectionRequested extends CrosswordEvent {
   List<Object> get props => [position];
 }
 
+@visibleForTesting
+class BoardSectionLoaded extends CrosswordEvent {
+  const BoardSectionLoaded(this.section);
+
+  final BoardSection section;
+
+  @override
+  List<Object> get props => [section];
+}
+
+/// Pauses the active subscriptions from already loaded chunks that are not
+/// currently needed.
+///
+/// The subscriptions might be resumed later on.
+class LoadedSectionsSuspended extends CrosswordEvent {
+  const LoadedSectionsSuspended(this.loadedSections);
+
+  /// The current chunks that should be loaded and listened to.
+  final Set<(int, int)> loadedSections;
+
+  @override
+  List<Object> get props => [loadedSections];
+}
+
 class WordSelected extends CrosswordEvent {
   const WordSelected(this.section, this.word);
 

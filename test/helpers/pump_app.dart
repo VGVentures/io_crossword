@@ -32,7 +32,10 @@ class _MockHintResource extends Mock implements HintResource {}
 
 class _MockAudioController extends Mock implements AudioController {}
 
-class _MockSettingsController extends Mock implements SettingsController {}
+class _MockSettingsController extends Mock implements SettingsController {
+  @override
+  ValueNotifier<bool> get muted => ValueNotifier(true);
+}
 
 class _MockLeaderboardRepository extends Mock
     implements LeaderboardRepository {}
@@ -195,6 +198,8 @@ extension PumpRoute on WidgetTester {
     LeaderboardRepository? leaderboardRepository,
     CrosswordResource? crosswordResource,
     LeaderboardResource? leaderboardResource,
+    AudioController? audioController,
+    SettingsController? settingsController,
     HintResource? hintResource,
     MockNavigator? navigator,
   }) async {
@@ -260,6 +265,12 @@ extension PumpRoute on WidgetTester {
           ),
           Provider.value(
             value: user ?? _MockUser(),
+          ),
+          Provider.value(
+            value: settingsController ?? _MockSettingsController(),
+          ),
+          Provider.value(
+            value: audioController ?? _MockAudioController(),
           ),
         ],
         child: Builder(

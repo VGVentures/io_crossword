@@ -161,5 +161,40 @@ void main() {
         expect(word.isSolved, isFalse);
       });
     });
+
+    group('solvedCharacters', () {
+      test(' is empty when there are no characters solved', () {
+        final word = Word(
+          id: '1',
+          position: Point(1, 2),
+          axis: Axis.horizontal,
+          answer: '                ',
+          clue: 'clue',
+        );
+
+        expect(word.solvedCharacters, isEmpty);
+      });
+
+      test(' returns the solved characters', () {
+        final word = Word(
+          id: '1',
+          position: Point(1, 2),
+          axis: Axis.horizontal,
+          answer: ' ap y',
+          clue: 'clue',
+        );
+
+        expect(
+          word.solvedCharacters,
+          equals(
+            {
+              1: 'A',
+              2: 'P',
+              4: 'Y',
+            },
+          ),
+        );
+      });
+    });
   });
 }

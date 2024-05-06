@@ -37,6 +37,9 @@ class _FakeWord extends Fake implements Word {
 
   @override
   int get length => 6;
+
+  @override
+  Map<int, String> get solvedCharacters => {};
 }
 
 void main() {
@@ -256,6 +259,61 @@ void main() {
           expect(find.byType(WordSelectionTopBar), findsOneWidget);
         },
       );
+
+      group('a $CrosswordInput', () {
+        testWidgets(
+          'successfully',
+          (tester) async {
+            await tester.pumpApp(widget);
+            expect(find.byType(CrosswordInput), findsOneWidget);
+          },
+        );
+
+        testWidgets(
+          'a $CrosswordInput with solved characters',
+          (tester) async {
+            final word = Word(
+              id: 'id',
+              position: Point(1, 2),
+              axis: Axis.horizontal,
+              clue: '',
+              answer: ' a  y',
+            );
+
+            when(() => wordSelectionBloc.state).thenReturn(
+              WordSelectionState(
+                status: WordSelectionStatus.solving,
+                word: SelectedWord(
+                  section: (0, 0),
+                  word: word,
+                ),
+              ),
+            );
+
+            await tester.pumpApp(widget);
+            expect(
+              tester
+                  .widget<CrosswordInput>(find.byType(CrosswordInput))
+                  .characters,
+              equals({1: 'A', 4: 'Y'}),
+            );
+          },
+        );
+
+        testWidgets(
+          'is nested within a $SingleChildScrollView',
+          (tester) async {
+            await tester.pumpApp(widget);
+
+            final singleChildScrollViewFinder =
+                find.byWidgetPredicate((widget) {
+              return widget is SingleChildScrollView &&
+                  widget.child is CrosswordInput;
+            });
+            expect(singleChildScrollViewFinder, findsOneWidget);
+          },
+        );
+      });
 
       testWidgets(
         'incorrectAnswer text when the status is incorrect',

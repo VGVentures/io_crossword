@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -37,6 +38,7 @@ class HowToPlayView extends StatelessWidget {
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
+        actions: (context) => const MuteButton(),
       ),
       body: switch (layout) {
         IoLayoutData.small => const _HowToPlaySmall(),

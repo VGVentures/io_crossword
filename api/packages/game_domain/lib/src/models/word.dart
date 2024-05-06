@@ -68,6 +68,21 @@ class Word extends Equatable {
   @JsonKey()
   final Mascots? mascot;
 
+  /// Returns the solved characters with the index position and character
+  /// solved.
+  Map<int, String> get solvedCharacters {
+    final map = <int, String>{};
+
+    for (var i = 0; i < answer.length; i++) {
+      final character = answer[i];
+      if (character != ' ') {
+        map[i] = character.toUpperCase();
+      }
+    }
+
+    return map;
+  }
+
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$WordToJson(this);
 

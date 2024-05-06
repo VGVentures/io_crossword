@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -35,12 +36,12 @@ class TeamSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     final layout = IoLayout.of(context);
 
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
+        actions: (context) => const MuteButton(),
       ),
       body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
         builder: (context, state) => switch (layout) {
