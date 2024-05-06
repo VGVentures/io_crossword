@@ -53,7 +53,7 @@ class ShakableState extends State<Shakable>
   void _onInputReset() {
     final controller = widget.controller;
 
-    if (controller != null && controller.word.isEmpty) {
+    if (controller != null && controller.didReset) {
       _animationController.forward(from: 0).then(
             (value) => _animationController.reset(),
           );

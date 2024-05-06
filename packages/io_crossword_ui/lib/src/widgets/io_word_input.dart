@@ -25,11 +25,13 @@ typedef CharacterValidator = bool Function(String character);
 /// {@endtemplate}
 class IoWordInputController extends ChangeNotifier {
   String _word = '';
+  bool _didReset = false;
 
   void _updateWord(String word) {
     if (word == _word) return;
 
     _word = word;
+    if (_word == '') _didReset = false;
     notifyListeners();
   }
 
@@ -39,6 +41,7 @@ class IoWordInputController extends ChangeNotifier {
 
     if (_word.length > 1) {
       _word = '';
+      _didReset = true;
       notifyListeners();
     }
   }
@@ -54,6 +57,9 @@ class IoWordInputController extends ChangeNotifier {
   /// * [IoWordInput.onWord], the callback that is called when a word has been
   ///  completed.
   String get word => _word;
+
+  /// Is true if [reset] method has been called.
+  bool get didReset => _didReset;
 }
 
 /// {@template io_word_input}
