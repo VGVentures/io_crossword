@@ -99,11 +99,6 @@ void main() {
     testWidgets(
       'incorrect attempt causes word controller to reset',
       (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          WordSelectionState(
-            status: WordSelectionStatus.solving,
-          ),
-        );
         whenListen(
           wordSelectionBloc,
           Stream.fromIterable([
