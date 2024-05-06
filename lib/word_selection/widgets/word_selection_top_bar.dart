@@ -17,64 +17,82 @@ class WordSelectionTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final displayShare = context.select<WordSelectionBloc, bool>(
+      (bloc) => bloc.state.status != WordSelectionStatus.preSolving,
+    );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          onPressed: () {
-            ShareWordPage.showModal(context);
-          },
-          icon: const Icon(Icons.ios_share),
-          style: themeData.io.iconButtonTheme.filled,
+        Visibility(
+          visible: displayShare,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: IconButton(
+            onPressed: () {
+              ShareWordPage.showModal(context);
+            },
+            icon: const Icon(Icons.ios_share),
+            style: themeData.io.iconButtonTheme.filled,
+          ),
         ),
-        BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-          selector: (state) => state.word,
-          builder: (context, selectedWord) {
-            final word = selectedWord;
-            if (word == null) return const SizedBox.shrink();
+        const SizedBox(width: 4),
+        Flexible(
+          child: BlocSelector<WordSelectionBloc, WordSelectionState,
+              SelectedWord?>(
+            selector: (state) => state.word,
+            builder: (context, selectedWord) {
+              final word = selectedWord;
+              if (word == null) return const SizedBox.shrink();
 
-            final l10n = context.l10n;
-            final mascot = context.select<CrosswordBloc, Mascots?>(
-              (bloc) {
-                final currentWord = bloc.state.sections[word.section]?.words
-                    .firstWhere((element) => element.id == word.word.id);
-                return currentWord?.mascot;
-              },
-            );
-
-            if (mascot != null) {
-              return Padding(
-                padding: const EdgeInsets.all(11),
-                child: Column(
-                  children: [
-                    Text(
-                      l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
-                      style: themeData.textTheme.labelLarge?.copyWith(
-                        color: mascot.color,
-                      ),
-                    ),
-                    if (canSolveWord)
-                      Text(
-                        l10n.alreadySolvedSubtitle.toUpperCase(),
-                        style: themeData.textTheme.labelLarge,
-                      )
-                    else
-                      Text(
-                        wordIdentifier(word.word),
-                        style: themeData.textTheme.labelLarge,
-                      ),
-                  ],
-                ),
+              final l10n = context.l10n;
+              final mascot = context.select<CrosswordBloc, Mascots?>(
+                (bloc) {
+                  final currentWord = bloc.state.sections[word.section]?.words
+                      .firstWhere((element) => element.id == word.word.id);
+                  return currentWord?.mascot;
+                },
               );
-            }
 
-            return Text(
-              wordIdentifier(word.word),
-              style: themeData.textTheme.labelLarge,
-            );
-          },
+              if (mascot != null) {
+                return Padding(
+                  padding: const EdgeInsets.all(11),
+                  child: Column(
+                    children: [
+                      Text(
+                        l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
+                        style: themeData.textTheme.labelLarge?.copyWith(
+                          color: mascot.color,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (canSolveWord)
+                        Text(
+                          l10n.alreadySolvedSubtitle.toUpperCase(),
+                          style: themeData.textTheme.labelLarge,
+                          textAlign: TextAlign.center,
+                        )
+                      else
+                        Text(
+                          wordIdentifier(word.word),
+                          style: themeData.textTheme.labelLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                    ],
+                  ),
+                );
+              }
+
+              return Text(
+                wordIdentifier(word.word),
+                style: themeData.textTheme.labelLarge,
+                textAlign: TextAlign.center,
+              );
+            },
+          ),
         ),
+        const SizedBox(width: 4),
         const CloseWordSelectionIconButton(),
       ],
     );
