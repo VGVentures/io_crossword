@@ -89,7 +89,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final wordRect = selectedWord.offset(crosswordLayout) &
         selectedWord.word.size(crosswordLayout);
-    final wordMiddle = wordRect.center;
+    final wordCenter = wordRect.center;
 
     final begin = _transformationController.value.getTranslation();
 
@@ -100,7 +100,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       reducedViewportSize.height / 2,
       0,
     );
-    final end = center - Vector3(wordMiddle.dx, wordMiddle.dy, 0);
+    final end = center - Vector3(wordCenter.dx, wordCenter.dy, 0);
     end
       ..x = math.max(
         math.min(end.x, _minTranslation.x),
