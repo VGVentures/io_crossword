@@ -306,11 +306,12 @@ void main() {
         final words = <String>[];
         controller.addListener(() => words.add(controller.word));
 
+        const initialCharacters = {0: 'A', 1: 'B', 4: 'E'};
         await tester.pumpWidget(
           _Subject(
             child: IoWordInput.alphabetic(
               length: 5,
-              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              characters: initialCharacters,
               controller: controller,
             ),
           ),
@@ -328,7 +329,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(words.last, equals('ABCDE'));
 
-        controller.reset();
+        controller.reset(initialCharacters: initialCharacters);
         await tester.pumpAndSettle();
         expect(words.last, equals('ABE'));
       });

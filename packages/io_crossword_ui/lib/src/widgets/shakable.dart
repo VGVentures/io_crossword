@@ -61,11 +61,6 @@ class ShakableState extends State<Shakable>
   }
 
   @override
-  void didUpdateWidget(covariant Shakable oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void dispose() {
     widget.controller?.removeListener(_onInputReset);
     _animationController.dispose();

@@ -17,7 +17,7 @@ class _MockWordSelectionBloc
 
 class _MockIoWordInputController extends Mock implements IoWordInputController {
   @override
-  void updateWord(String word, {required bool isInitial}) {}
+  void updateWord(String word, {bool isInitial = false}) {}
 }
 
 void main() {
@@ -119,7 +119,7 @@ void main() {
               value: wordSelectionBloc,
               child: const CrosswordInput(
                 length: 5,
-                characters: {},
+                characters: null,
               ),
             ),
           ),

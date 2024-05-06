@@ -61,7 +61,7 @@ class _CrosswordInputState extends State<CrosswordInput> {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == WordSelectionStatus.incorrect) {
-          _controller?.reset();
+          _controller?.reset(initialCharacters: widget.characters);
         }
       },
       child: IoWordInput.alphabetic(

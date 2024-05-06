@@ -25,30 +25,31 @@ typedef CharacterValidator = bool Function(String character);
 /// {@endtemplate}
 class IoWordInputController extends ChangeNotifier {
   String _word = '';
-  String _initialWord = '';
   bool _didReset = false;
 
   @visibleForTesting
 
   /// Updates the [_word] with new value.
   ///
-  /// If [isInitial] is true, sets the [_initialWord] with the same value.
-  void updateWord(String word, {required bool isInitial}) {
+  /// If [isInitial] is true, sets the [_didReset] to false.
+  void updateWord(String word, {bool isInitial = false}) {
     if (word == _word) return;
 
-    if (isInitial) _initialWord = word;
-
     _word = word;
-    if (_word == _initialWord) _didReset = false;
+
+    if (isInitial) _didReset = false;
+
     notifyListeners();
   }
 
   /// Resets the word to an empty string.
-  void reset() {
-    if (_word == _initialWord) return;
+  void reset({Map<int, String>? initialCharacters}) {
+    final initialWord = initialCharacters?.values.join() ?? '';
 
-    if (_word.length > _initialWord.length) {
-      _word = _initialWord;
+    if (_word == initialWord) return;
+
+    if (_word.length > initialWord.length) {
+      _word = initialWord;
       _didReset = true;
       notifyListeners();
     }
