@@ -45,7 +45,9 @@ void main() {
 
     testWidgets('requests chunk', (tester) async {
       final crosswordBloc = _MockCrosswordBloc();
-      when(() => crosswordBloc.state).thenReturn(const CrosswordState());
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(sectionSize: 20),
+      );
 
       await tester.pumpApp(
         crosswordBloc: crosswordBloc,
