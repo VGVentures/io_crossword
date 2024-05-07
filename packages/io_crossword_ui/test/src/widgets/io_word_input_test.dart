@@ -261,6 +261,75 @@ void main() {
         await tester.pumpAndSettle();
         expect(words.last, equals('ABCZE'));
       });
+
+      testWidgets('word resets when controller.reset is called',
+          (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        final words = <String>[];
+        controller.addListener(() => words.add(controller.word));
+
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              controller: controller,
+            ),
+          ),
+        );
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('C'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('CD'));
+
+        controller.reset(initialCharacters: null);
+        await tester.pumpAndSettle();
+        expect(words.last, equals(''));
+      });
+
+      testWidgets(
+          'word resets when word already has characters and'
+          ' controller.reset is called', (tester) async {
+        final controller = IoWordInputController();
+        addTearDown(controller.dispose);
+
+        final words = <String>[];
+        controller.addListener(() => words.add(controller.word));
+
+        const initialCharacters = {0: 'A', 1: 'B', 4: 'E'};
+        await tester.pumpWidget(
+          _Subject(
+            child: IoWordInput.alphabetic(
+              length: 5,
+              characters: initialCharacters,
+              controller: controller,
+            ),
+          ),
+        );
+
+        expect(words.last, equals('ABE'));
+
+        final editableTexts = find.byType(EditableText);
+
+        await tester.enterText(editableTexts.first, 'C');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCE'));
+
+        await tester.enterText(editableTexts.last, 'D');
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABCDE'));
+
+        controller.reset(initialCharacters: initialCharacters);
+        await tester.pumpAndSettle();
+        expect(words.last, equals('ABE'));
+      });
     });
 
     group('renders as expected', () {

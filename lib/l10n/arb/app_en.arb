@@ -20,7 +20,7 @@
   "@shareWordTitle": {
     "description": "Title of the share word modal"
   },
-  "shareWordSubtitle": "Join me on I/O Crossword to help me solve this word and break a world record.",
+  "shareWordSubtitle": "Join me on I/O Crossword and help me solve this word.",
   "@shareWordSubtitle": {
     "description": "Subtitle of the share word modal"
   },

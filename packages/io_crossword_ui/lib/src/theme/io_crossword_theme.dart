@@ -138,9 +138,9 @@ class IoCrosswordTheme {
           size: size,
         ),
         filled: IoWordInputCharacterFieldStyle(
-          backgroundColor: backgroundColor,
+          backgroundColor: colorScheme.primary,
           border: Border.all(
-            color: borderSide.color,
+            color: colorScheme.primary,
             width: borderSide.width,
           ),
           borderRadius: BorderRadius.zero,
