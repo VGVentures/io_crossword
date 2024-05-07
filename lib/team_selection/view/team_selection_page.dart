@@ -473,6 +473,7 @@ class _SubmitButton extends StatelessWidget {
             .flow<GameIntroStatus>()
             .update((state) => GameIntroStatus.enterInitials);
         context.read<PlayerBloc>().add(MascotSelected(mascot));
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),
