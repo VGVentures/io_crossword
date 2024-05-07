@@ -2,24 +2,12 @@
 <html>
 
   <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
     <base href="$FLUTTER_BASE_HREF">
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Google I/O Crossword game">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -41,19 +29,25 @@
     <title>Google I/O Crossword</title>
     <link rel="manifest" href="manifest.json" />
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-67589403-11"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7DXVLXY48"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date()); 
-      gtag('config', 'UA-67589403-11');
+      gtag('js', new Date());
+      
+      gtag('config', 'G-P7DXVLXY48');
     </script>
+
     <style type="text/css">
       html {
         height: 100%;
       }
 
-      body.loading-mode {
+      body {
+        background-image: url("bckimg.png");
+        background-size: cover;
+        background-color: #212123;
         min-height: 100%;
         display: flex;
         flex: 1;
@@ -62,10 +56,9 @@
         flex-direction: column;
         overflow: hidden;
         margin: 0;
-        background-color: #020F30;
       }
 
-      .loading-mode p {
+      body p {
         font-family: "Google Sans Text";
         font-style: normal;
         font-weight: 400;
@@ -74,20 +67,6 @@
         text-align: center;
         letter-spacing: 0.25px;
         color: #ffffff;
-      }
-
-      #circular-loader{
-        animation: rotate 2s linear infinite;
-        height: 100px;
-        position: relative;
-        width: 100px;
-      }
-
-      #circular-loader .path {
-        stroke-dasharray: 1,200;
-        stroke-dashoffset: 0;
-        stroke:#ffffff;
-        animation: dash 2s ease-in-out infinite;
       }
 
       @keyframes rotate{
@@ -110,10 +89,28 @@
         }
       }
 
+      #modal {
+        background: var(--Basic-Dark-Gray, #212123);
+        border: 1px solid var(--Basic-Medium-Gray, #393B40);
+      }
+
+      #title {
+        font-family: Google Sans;
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 40px;
+        text-align: center;
+        color: #ffffff;
+
+      }
       #splash_copy {
+        font-family: Google Sans;
         margin: 32px;
-        font-size: 16px;
-        line-height: 24px;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+        text-align: center;
+        color: #ffffff;
       }
 
       #cookie-bar {
@@ -122,39 +119,39 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: #CDDAFB;
+        background-color: #393B40;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
         align-items: center;
         z-index: 9999;
         flex-direction: column;
+        border-top: 1px solid var(--Basic-Soft-Gray, #80858B)
       }
 
-      #cookie-bar p {
+      #cookie-bar p, #cookie-bar a {
         margin: 0;
         padding-bottom: 4px;
-        font-size: 12px;
-        font-weight: 400;
         font-family: "Google Sans";
-        color: #000000;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        text-align: center;
+        color: var(--Basic-White, #FFFFFF);
       }
 
       #cookie-bar a {
         text-decoration: underline;
-        color: #000000;
       }
 
       #cookie-bar button {
         cursor: pointer;
         margin-top: 20px;
-        padding: 8px 60px;
-        background: #2448DE;
-        border-width: 0px;
+        padding: 8px 24px;
         border-radius: 100px;
         font-family: "Google Sans";
         font-style: normal;
-        font-weight: 400;
+        font-weight: 500;
         font-size: 16px;
         line-height: 24px;
         display: flex;
@@ -163,7 +160,29 @@
         letter-spacing: 0.25px;
         text-decoration: none;
         color: #ffffff;
+        border: 2px solid;
+        background: var(--Basic-Dark-Gray, #212123);
       }
+
+      #background {
+        display: none;
+      }
+
+      @media only screen and (max-device-width: 480px) {
+        body {
+          background-image: none;
+          align-items: normal;
+          justify-content: start;
+        }
+        #background {
+          display: block;
+        }
+        #modal {
+          border: none;
+          padding: 40px;
+        }
+      }
+      
     </style>
 
     <script>
@@ -172,15 +191,16 @@
     </script>
   </head>
   <body class="loading-mode">
-    <img id="splash_logo" src = "logo-placeholder.svg" alt="I/O Crossword logo"/>
-    <p id="splash_copy">
-      Help solve the World's Largest Crossword,<br>
-      built with Gemini for Google I/O 2024
-    </p>
-    <svg id="circular-loader">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
-    </svg>
+    <img id="background" src="hero.png" />
+    <div id="modal">
+      <p id="title">Welcome!</p>
+      <p id="splash_copy">
+        Help solve a massive crossword puzzle,<br>
+        built with the Gemini API for Google I/O 2024
+      </p>
+    </div>
     <div id="cookie-bar">
+      <p>You must accept cookies to play the game.</p>
       <p>
         This site uses cookies from Google to deliver and enhance the quality of
         its services and to analyze traffic. <link><a href="https://policies.google.com/technologies/cookies">Learn More.</a></link>
@@ -194,9 +214,7 @@
       (function () {
         const cookieBar = document.querySelector("#cookie-bar");
         const cookieBarButton = document.querySelector("#confirm-cookies");
-        const circularLoader = document.querySelector("#circular-loader");
         const splashCopy = document.querySelector("#splash_copy");
-        const splashLogo = document.querySelector("#splash_logo");
 
         const additionalScripts = [];
 
@@ -223,58 +241,10 @@
           });
         }
 
-        function beginPreloading(manifestAssets) {
-          var assets = [
-            "flutter.js",
-            "main.dart.js",
+        window.addEventListener("load", async function (ev) {
+          await injectScript("flutter.js");
 
-            ...additionalScripts,
-            ...manifestAssets,
-          ];
-          let totalAssets = assets.length + 1;
-          let loaded = 0;
-
-          const batchSize = 20;
-
-          async function reportProgress() {
-            loaded++;
-
-            if (assets.length == 0) {
-              dispatchAppLoad();
-            } else {
-              load(assets.shift());
-            }
-          }
-
-          function load(url) {
-            const req = new XMLHttpRequest();
-            req.onload = reportProgress;
-            req.open("get", url);
-            req.send();
-          }
-
-          function startBatch() {
-            const end = Math.min(batchSize, assets.length);
-            for (let i = 0; i < end; i++) {
-              load(assets.shift());
-            }
-          }
-
-          var scriptLoaded = false;
-          async function dispatchAppLoad() {
-            if (scriptLoaded) {
-              return;
-            }
-            scriptLoaded = true;
-
-            for (let i = 0; i < additionalScripts.length; i++) {
-              await injectScript(additionalScripts[i]);
-            }
-
-            await injectScript("flutter.js");
-
-            // Download main.dart.js
-            _flutter.loader.loadEntrypoint({
+          _flutter.loader.loadEntrypoint({
               serviceWorker: {
                 serviceWorkerVersion: serviceWorkerVersion,
               },
@@ -286,8 +256,6 @@
                     window.addEventListener(
                       "flutter-first-frame",
                       function () {
-                        circularLoader.remove();
-                        splashLogo.remove();
                         splashCopy.remove();
                         document.body.classList.remove("loading-mode");
                       }
@@ -297,19 +265,6 @@
                 });
               },
             });
-          }
-
-          startBatch();
-        }
-
-        window.addEventListener("load", async function (ev) {
-          const response = await fetch("assets/AssetManifest.json");
-          const manifest = await response.json();
-          const assets = Object.values(manifest)
-            .map((list) => list.map((url) => "assets/" + url))
-            .reduce((arr, curr) => [...arr, ...curr]);
-
-          beginPreloading(assets);
         });
       })();
     </script>

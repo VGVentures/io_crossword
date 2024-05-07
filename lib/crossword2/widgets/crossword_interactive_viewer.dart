@@ -87,21 +87,20 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final wordMiddlePosition = selectedWord.word.middlePosition();
+    final wordRect = selectedWord.offset(crosswordLayout) &
+        selectedWord.word.size(crosswordLayout);
+    final wordCenter = wordRect.center;
 
     final begin = _transformationController.value.getTranslation();
 
     final layout = IoLayout.of(context);
-    final end = viewport.center(layout) -
-        Vector3(
-          (selectedWord.section.$1 * crosswordLayout.chunkSize.width) +
-              (wordMiddlePosition.$1 * crosswordLayout.cellSize.width) +
-              crosswordLayout.padding.left,
-          (selectedWord.section.$2 * crosswordLayout.chunkSize.height) +
-              (wordMiddlePosition.$2 * crosswordLayout.cellSize.height) +
-              crosswordLayout.padding.top,
-          0,
-        );
+    final reducedViewportSize = viewport.reduced(layout);
+    final center = Vector3(
+      reducedViewportSize.width / 2,
+      reducedViewportSize.height / 2,
+      0,
+    );
+    final end = center - Vector3(wordCenter.dx, wordCenter.dy, 0);
     end
       ..x = math.max(
         math.min(end.x, _minTranslation.x),
@@ -171,27 +170,21 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 }
 
 extension on Quad {
-  /// The visible center of the quad.
+  /// Determines the size of the visible area, when the
+  /// [CrosswordInteractiveViewer] is obscured by other widgets.
   ///
-  /// This is not the actual center of the quad, but the center of the area that
-  /// is not-obscured by other widgets that overlay the quad.
-  ///
-  /// In a small layout, the [WordSelectionSmallContainer] obscures the quad,
-  /// once a word is selected. We assume it's height is always the same.
-  ///
-  /// Whereas, in a large layout, the [WordSelectionLargeContainer] obscures the
-  /// quad, once a word is selected.
-  Vector3 center(IoLayoutData data) {
-    return switch (data) {
-      IoLayoutData.small => Vector3(
-          width / 2,
-          height * 0.3,
-          0,
+  /// The widgets that obscure the quad are the [WordSelectionSmallContainer],
+  /// in a small layout, or the [WordSelectionLargeContainer], in a large
+  /// layout. They appear when a word is selected.
+  Size reduced(IoLayoutData layout) {
+    return switch (layout) {
+      IoLayoutData.small => Size(
+          width,
+          height * 0.7,
         ),
-      IoLayoutData.large => Vector3(
-          width * (1 - WordSelectionLargeContainer.widthRatio) / 2,
-          height / 2,
-          0,
+      IoLayoutData.large => Size(
+          width * (1 - WordSelectionLargeContainer.widthRatio),
+          height,
         ),
     };
   }
@@ -201,11 +194,36 @@ extension on Quad {
   double get height => point2.y - point0.y;
 }
 
+extension on SelectedWord {
+  /// Determines the absolute offset of the word in the crossword.
+  ///
+  /// The origin is based on the top-left corner of the crossword.
+  Offset offset(CrosswordLayoutData layout) {
+    final chunkOffset = Offset(
+      (section.$1 * layout.chunkSize.width) + layout.padding.left,
+      (section.$2 * layout.chunkSize.height) + layout.padding.top,
+    );
+    final wordOffset = Offset(
+      word.position.x * layout.cellSize.width,
+      word.position.y * layout.cellSize.height,
+    );
+
+    return chunkOffset + wordOffset;
+  }
+}
+
 extension on domain.Word {
-  (num, num) middlePosition() {
+  /// The size of the word in the crossword.
+  Size size(CrosswordLayoutData layout) {
     return switch (axis) {
-      domain.Axis.horizontal => (position.x + (length / 2), position.y + .5),
-      domain.Axis.vertical => (position.x + .5, position.y + (length / 2)),
+      domain.Axis.horizontal => Size(
+          length * layout.cellSize.width,
+          layout.cellSize.height,
+        ),
+      domain.Axis.vertical => Size(
+          layout.cellSize.width,
+          length * layout.cellSize.height,
+        ),
     };
   }
 }

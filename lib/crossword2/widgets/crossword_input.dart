@@ -50,17 +50,33 @@ class _CrosswordInputState extends State<CrosswordInput> {
 
   @override
   Widget build(BuildContext context) {
-    return IoWordInput.alphabetic(
-      controller: _controller,
-      style: widget.style,
-      direction: widget.direction,
-      length: widget.length,
-      characters: widget.characters,
-      onSubmit: (value) {
-        context
-            .read<WordSelectionBloc>()
-            .add(WordSolveAttempted(answer: value));
+    final readOnly = context.select((WordSelectionBloc bloc) {
+      final status = bloc.state.status;
+
+      return status == WordSelectionStatus.empty ||
+          status == WordSelectionStatus.preSolving;
+    });
+
+    return BlocListener<WordSelectionBloc, WordSelectionState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == WordSelectionStatus.incorrect) {
+          _controller?.reset(initialCharacters: widget.characters);
+        }
       },
+      child: IoWordInput.alphabetic(
+        readOnly: readOnly,
+        controller: _controller,
+        style: widget.style,
+        direction: widget.direction,
+        length: widget.length,
+        characters: widget.characters,
+        onSubmit: (value) {
+          context
+              .read<WordSelectionBloc>()
+              .add(WordSolveAttempted(answer: value));
+        },
+      ),
     );
   }
 }

@@ -76,7 +76,7 @@ class Word extends Equatable {
     for (var i = 0; i < answer.length; i++) {
       final character = answer[i];
       if (character != ' ') {
-        map[i] = character;
+        map[i] = character.toUpperCase();
       }
     }
 
