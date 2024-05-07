@@ -3,8 +3,7 @@
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/sprite_animation_list/sprite_animation_list.dart';
-import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 abstract class _StubFunction {
@@ -19,40 +18,39 @@ void main() {
   const dangleAssetPath = 'assets/anim/dash_dangle.png';
   const dropInAssetPath = 'assets/anim/dash_drop_in.png';
 
-  setUpAll(() async {
-    Flame.images = Images(prefix: '');
-    await Flame.images.loadAll([
-      dangleAssetPath,
-      dropInAssetPath,
-    ]);
-  });
-
   group('SpriteAnimationList', () {
+    setUpAll(() async {
+      Flame.images = Images(prefix: '');
+      await Flame.images.loadAll([
+        dangleAssetPath,
+        dropInAssetPath,
+      ]);
+    });
     final mockFunction = _MockFunction();
 
-    final dangleSpriteInformation = SpriteInformation(
+    final dangleSpriteData = SpriteData(
       path: dangleAssetPath,
-      rows: 23,
-      columns: 2,
+      amountPerRow: 23,
+      amountPerColumn: 2,
       stepTime: 0.042,
       width: 150,
       height: 300,
     );
 
-    final dropInSpriteInformation = SpriteInformation(
+    final dropInSpriteData = SpriteData(
       path: dropInAssetPath,
-      rows: 11,
-      columns: 4,
+      amountPerRow: 11,
+      amountPerColumn: 4,
       stepTime: 0.042,
       width: 150,
       height: 300,
     );
 
-    final dangleAnimationListItem = AnimationListItem(
-      spriteInformation: dangleSpriteInformation,
+    final dangleAnimationListItem = AnimationItem(
+      spriteData: dangleSpriteData,
     );
-    final dropInAnimationListItem = AnimationListItem(
-      spriteInformation: dropInSpriteInformation,
+    final dropInAnimationListItem = AnimationItem(
+      spriteData: dropInSpriteData,
       loop: false,
       onComplete: mockFunction.call,
     );
@@ -61,7 +59,7 @@ void main() {
       final controller = SpriteListController();
 
       final spriteAnimationList = SpriteAnimationList(
-        animationListItems: [
+        animationItems: [
           dangleAnimationListItem,
           dropInAnimationListItem,
         ],
@@ -77,7 +75,7 @@ void main() {
       final controller = SpriteListController();
 
       final spriteAnimationList = SpriteAnimationList(
-        animationListItems: [
+        animationItems: [
           dangleAnimationListItem,
           dropInAnimationListItem,
         ],
@@ -86,13 +84,13 @@ void main() {
 
       await tester.pumpWidget(spriteAnimationList);
 
-      controller.changeAnimation(dropInSpriteInformation.path);
+      controller.changeAnimation(dropInSpriteData.path);
 
       controller.animationDataList.first.spriteAnimationTicker.setToLast();
 
       expect(
         controller.currentPlayingAnimationId,
-        equals(dropInSpriteInformation.path),
+        equals(dropInSpriteData.path),
       );
     });
 
@@ -100,7 +98,7 @@ void main() {
       final controller = SpriteListController();
 
       final spriteAnimationList = SpriteAnimationList(
-        animationListItems: [
+        animationItems: [
           dropInAnimationListItem,
         ],
         controller: controller,
@@ -113,6 +111,44 @@ void main() {
       await controller.animationDataList.last.spriteAnimationTicker.completed;
 
       verify(mockFunction.call).called(1);
+    });
+
+    group('AnimationItem', () {
+      test('supports equality', () {
+        final animationItem1 = AnimationItem(
+          spriteData: dangleSpriteData,
+        );
+
+        final animationItem2 = AnimationItem(
+          spriteData: dangleSpriteData,
+        );
+
+        expect(animationItem1, equals(animationItem2));
+      });
+    });
+
+    group('SpriteData', () {
+      test('supports equality', () {
+        final spriteData1 = SpriteData(
+          path: 'path',
+          amountPerRow: 16,
+          amountPerColumn: 5,
+          stepTime: 0.042,
+          width: 225,
+          height: 325,
+        );
+
+        final spriteData2 = SpriteData(
+          path: 'path',
+          amountPerRow: 16,
+          amountPerColumn: 5,
+          stepTime: 0.042,
+          width: 225,
+          height: 325,
+        );
+
+        expect(spriteData1, equals(spriteData2));
+      });
     });
   });
 }

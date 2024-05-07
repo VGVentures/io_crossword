@@ -4,7 +4,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:io_crossword/team_selection/team_selection.dart';
 
 /// {@template sprite_animation_list}
 /// Widget that simplifies handling of multiple sprite animations.
@@ -12,12 +11,15 @@ import 'package:io_crossword/team_selection/team_selection.dart';
 class SpriteAnimationList extends StatefulWidget {
   /// {@macro sprite_animation_list}
   const SpriteAnimationList({
-    required this.animationListItems,
+    required this.animationItems,
     required this.controller,
     super.key,
   });
 
-  final List<AnimationListItem> animationListItems;
+  /// The list of animations.
+  final List<AnimationItem> animationItems;
+
+  /// The controller that manages the sprite animations.
   final SpriteListController controller;
 
   @override
@@ -33,21 +35,21 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
   void initState() {
     super.initState();
 
-    _currentAnimationId = widget.animationListItems[0].spriteInformation.path;
+    _currentAnimationId = widget.animationItems[0].spriteData.path;
     widget.controller.currentPlayingAnimationId = _currentAnimationId;
 
-    for (final animationItem in widget.animationListItems) {
+    for (final animationItem in widget.animationItems) {
       final spriteAnimation = SpriteAnimation.fromFrameData(
-        Flame.images.fromCache(animationItem.spriteInformation.path),
+        Flame.images.fromCache(animationItem.spriteData.path),
         SpriteAnimationData.sequenced(
-          amount: animationItem.spriteInformation.rows *
-              animationItem.spriteInformation.columns,
-          stepTime: animationItem.spriteInformation.stepTime,
+          amount: animationItem.spriteData.amountPerRow *
+              animationItem.spriteData.amountPerColumn,
+          stepTime: animationItem.spriteData.stepTime,
           textureSize: Vector2(
-            animationItem.spriteInformation.width,
-            animationItem.spriteInformation.height,
+            animationItem.spriteData.width,
+            animationItem.spriteData.height,
           ),
-          amountPerRow: animationItem.spriteInformation.rows,
+          amountPerRow: animationItem.spriteData.amountPerRow,
           loop: animationItem.loop,
         ),
       );
@@ -57,7 +59,7 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
 
       _animationDataList.add(
         AnimationData(
-          animationItem.spriteInformation.path,
+          animationItem.spriteData.path,
           spriteAnimation,
           ticker,
           onComplete: animationItem.onComplete,
@@ -101,42 +103,72 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
   }
 }
 
+/// {@template sprite_list_controller}
+/// Controller that manages the sprite animations.
+/// {@endtemplate}
 class SpriteListController extends ChangeNotifier {
   String? _currentAnimationId;
+
+  /// The id of the animation that is currently playing.
   String? currentPlayingAnimationId;
+
+  /// The list of animations.
   List<AnimationData> animationDataList = [];
 
+  /// The id of the current animation.
+  ///
+  /// This could be different from the [currentPlayingAnimationId] if
+  /// changeAnimation is called before the current animation completes.
   String? get currentAnimationId => _currentAnimationId;
 
+  /// Changes the current animation to the one with the given [id].
+  ///
+  /// The animation will update once the current animation reaches the last
+  /// frame in the current loop.
   void changeAnimation(String id) {
     _currentAnimationId = id;
     notifyListeners();
   }
 
+  /// Notifies the listeners that the frame has been updated.
   void frameUpdated() {
     notifyListeners();
   }
 }
 
-class AnimationListItem extends Equatable {
-  const AnimationListItem({
-    required this.spriteInformation,
+/// {@template animation_item}
+/// Data class that holds the sprite data and animation settings.
+/// {@endtemplate}
+class AnimationItem extends Equatable {
+  /// {@macro animation_item}
+  const AnimationItem({
+    required this.spriteData,
     this.loop = true,
     this.onComplete,
   });
 
-  final SpriteInformation spriteInformation;
+  /// The sprite data.
+  final SpriteData spriteData;
+
+  /// Whether the animation should loop.
   final bool loop;
+
+  /// Callback that is called when the animation completes.
   final VoidCallback? onComplete;
 
   @override
-  List<Object> get props => [
-        spriteInformation,
+  List<Object?> get props => [
+        spriteData,
         loop,
+        onComplete,
       ];
 }
 
+/// {@template animation_data}
+/// Data class that contains what is needed for the [SpriteAnimationWidget].
+/// {@endtemplate}
 class AnimationData {
+  /// {@macro animation_data}
   const AnimationData(
     this.id,
     this.spriteAnimation,
@@ -144,8 +176,58 @@ class AnimationData {
     this.onComplete,
   });
 
+  /// The id of the animation.
   final String id;
+
+  /// The sprite animation.
   final SpriteAnimation spriteAnimation;
+
+  /// The sprite animation ticker.
   final SpriteAnimationTicker spriteAnimationTicker;
+
+  /// Callback that is called when the animation completes.
   final VoidCallback? onComplete;
+}
+
+/// {@template sprite_data}
+/// Data class that holds the sprite information.
+/// {@endtemplate}
+class SpriteData extends Equatable {
+  /// {@macro sprite_data}
+  const SpriteData({
+    required this.path,
+    required this.amountPerRow,
+    required this.amountPerColumn,
+    required this.width,
+    required this.height,
+    required this.stepTime,
+  });
+
+  /// The file path to the sprite image.
+  final String path;
+
+  /// The number of sprites per row in the sprite sheet.
+  final int amountPerRow;
+
+  /// The number of sprites per column in the sprite sheet.
+  final int amountPerColumn;
+
+  /// The width of each frame in the sprite sheet.
+  final double width;
+
+  /// The height of each frame in the sprite sheet.
+  final double height;
+
+  /// The time between each frame in the sprite sheet.
+  final double stepTime;
+
+  @override
+  List<Object> get props => [
+        path,
+        amountPerRow,
+        amountPerColumn,
+        width,
+        height,
+        stepTime,
+      ];
 }

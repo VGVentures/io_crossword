@@ -1,5 +1,6 @@
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class DinoTeam extends Team {
   const DinoTeam();
@@ -35,50 +36,50 @@ class DinoTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDino;
 
   @override
-  SpriteInformation get idleSpriteInformation => SpriteInformation(
+  SpriteData get idleSpriteData => SpriteData(
         path: idleAnimation.path,
-        rows: 14,
-        columns: 2,
+        amountPerRow: 14,
+        amountPerColumn: 2,
         stepTime: 0.042,
         width: 280,
         height: 370,
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+  SpriteData get lookUpSpriteData => SpriteData(
         path: lookUpAnimation.path,
-        rows: 9,
-        columns: 7,
+        amountPerRow: 9,
+        amountPerColumn: 7,
         stepTime: 0.042,
         width: 384,
         height: 544,
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+  SpriteData get pickUpSpriteData => SpriteData(
         path: pickUpAnimation.path,
-        rows: 17,
-        columns: 4,
+        amountPerRow: 17,
+        amountPerColumn: 4,
         stepTime: 0.042,
         width: 384,
         height: 544,
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+  SpriteData get dangleSpriteData => SpriteData(
         path: dangleAnimation.path,
-        rows: 9,
-        columns: 3,
+        amountPerRow: 9,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 384,
         height: 544,
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+  SpriteData get dropInSpriteData => SpriteData(
         path: dropInAnimation.path,
-        rows: 7,
-        columns: 5,
+        amountPerRow: 7,
+        amountPerColumn: 5,
         stepTime: 0.042,
         width: 384,
         height: 544,

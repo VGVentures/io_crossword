@@ -13,7 +13,6 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/sprite_animation_list/sprite_animation_list.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
@@ -293,9 +292,9 @@ void main() {
               .widget as SpriteAnimationList;
 
           expect(
-            widget.animationListItems.contains(
-              AnimationListItem(
-                spriteInformation: mascot.teamMascot.lookUpSpriteInformation,
+            widget.animationItems.contains(
+              AnimationItem(
+                spriteData: mascot.teamMascot.lookUpSpriteData,
               ),
             ),
             isTrue,

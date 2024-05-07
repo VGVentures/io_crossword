@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:io_crossword/assets/assets.dart';
-import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 abstract class Team extends Equatable {
   const Team();
@@ -25,15 +25,15 @@ abstract class Team extends Equatable {
 
   AssetGenImage get howToPlayStreak;
 
-  SpriteInformation get idleSpriteInformation;
+  SpriteData get idleSpriteData;
 
-  SpriteInformation get lookUpSpriteInformation;
+  SpriteData get lookUpSpriteData;
 
-  SpriteInformation get pickUpSpriteInformation;
+  SpriteData get pickUpSpriteData;
 
-  SpriteInformation get dangleSpriteInformation;
+  SpriteData get dangleSpriteData;
 
-  SpriteInformation get dropInSpriteInformation;
+  SpriteData get dropInSpriteData;
 
   List<String> loadableAssets() => [
         idleAnimation.path,
@@ -56,10 +56,10 @@ abstract class Team extends Equatable {
         howToPlayAnswer,
         howToPlayFindWord,
         howToPlayStreak,
-        idleSpriteInformation,
-        lookUpSpriteInformation,
-        pickUpSpriteInformation,
-        dangleSpriteInformation,
-        dropInSpriteInformation,
+        idleSpriteData,
+        lookUpSpriteData,
+        pickUpSpriteData,
+        dangleSpriteData,
+        dropInSpriteData,
       ];
 }

@@ -12,7 +12,7 @@ import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/loading/cubit/loading_cubit.dart';
+import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/rotate_phone/rotate_phone.dart';
 import 'package:io_crossword/settings/settings.dart';

@@ -1,5 +1,6 @@
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class DashTeam extends Team {
   const DashTeam();
@@ -35,50 +36,50 @@ class DashTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDash;
 
   @override
-  SpriteInformation get idleSpriteInformation => SpriteInformation(
+  SpriteData get idleSpriteData => SpriteData(
         path: idleAnimation.path,
-        rows: 10,
-        columns: 7,
+        amountPerRow: 10,
+        amountPerColumn: 7,
         stepTime: 0.042,
         width: 300,
         height: 336,
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+  SpriteData get lookUpSpriteData => SpriteData(
         path: lookUpAnimation.path,
-        rows: 15,
-        columns: 4,
+        amountPerRow: 15,
+        amountPerColumn: 4,
         stepTime: 0.042,
         width: 457,
         height: 612,
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+  SpriteData get pickUpSpriteData => SpriteData(
         path: pickUpAnimation.path,
-        rows: 16,
-        columns: 4,
+        amountPerRow: 16,
+        amountPerColumn: 4,
         stepTime: 0.042,
         width: 457,
         height: 612,
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+  SpriteData get dangleSpriteData => SpriteData(
         path: dangleAnimation.path,
-        rows: 12,
-        columns: 3,
+        amountPerRow: 12,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 457,
         height: 612,
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+  SpriteData get dropInSpriteData => SpriteData(
         path: dropInAnimation.path,
-        rows: 7,
-        columns: 5,
+        amountPerRow: 7,
+        amountPerColumn: 5,
         stepTime: 0.042,
         width: 457,
         height: 612,

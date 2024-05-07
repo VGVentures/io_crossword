@@ -1,5 +1,6 @@
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class SparkyTeam extends Team {
   const SparkyTeam();
@@ -35,50 +36,50 @@ class SparkyTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakSparky;
 
   @override
-  SpriteInformation get idleSpriteInformation => SpriteInformation(
+  SpriteData get idleSpriteData => SpriteData(
         path: idleAnimation.path,
-        rows: 16,
-        columns: 5,
+        amountPerRow: 16,
+        amountPerColumn: 5,
         stepTime: 0.042,
         width: 225,
         height: 325,
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => SpriteInformation(
+  SpriteData get lookUpSpriteData => SpriteData(
         path: lookUpAnimation.path,
-        rows: 21,
-        columns: 3,
+        amountPerRow: 21,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 360,
         height: 612,
       );
 
   @override
-  SpriteInformation get pickUpSpriteInformation => SpriteInformation(
+  SpriteData get pickUpSpriteData => SpriteData(
         path: pickUpAnimation.path,
-        rows: 19,
-        columns: 3,
+        amountPerRow: 19,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 360,
         height: 612,
       );
 
   @override
-  SpriteInformation get dangleSpriteInformation => SpriteInformation(
+  SpriteData get dangleSpriteData => SpriteData(
         path: dangleAnimation.path,
-        rows: 9,
-        columns: 3,
+        amountPerRow: 9,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 360,
         height: 612,
       );
 
   @override
-  SpriteInformation get dropInSpriteInformation => SpriteInformation(
+  SpriteData get dropInSpriteData => SpriteData(
         path: dropInAnimation.path,
-        rows: 11,
-        columns: 3,
+        amountPerRow: 11,
+        amountPerColumn: 3,
         stepTime: 0.042,
         width: 360,
         height: 612,

@@ -12,7 +12,6 @@ import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
-import 'package:io_crossword/sprite_animation_list/sprite_animation_list.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -183,8 +182,8 @@ class _MascotAnimationState extends State<MascotAnimation> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.mascot.teamMascot.dangleSpriteInformation.width,
-      height: widget.mascot.teamMascot.dangleSpriteInformation.height,
+      width: widget.mascot.teamMascot.dangleSpriteData.width,
+      height: widget.mascot.teamMascot.dangleSpriteData.height,
       child: GestureDetector(
         onTap: () {
           _controller.changeAnimation(
@@ -192,14 +191,12 @@ class _MascotAnimationState extends State<MascotAnimation> {
           );
         },
         child: SpriteAnimationList(
-          animationListItems: [
-            AnimationListItem(
-              spriteInformation:
-                  widget.mascot.teamMascot.dangleSpriteInformation,
+          animationItems: [
+            AnimationItem(
+              spriteData: widget.mascot.teamMascot.dangleSpriteData,
             ),
-            AnimationListItem(
-              spriteInformation:
-                  widget.mascot.teamMascot.dropInSpriteInformation,
+            AnimationItem(
+              spriteData: widget.mascot.teamMascot.dropInSpriteData,
               loop: false,
               onComplete: () =>
                   context.read<CrosswordBloc>().add(const MascotDropped()),

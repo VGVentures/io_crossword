@@ -6,7 +6,6 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/sprite_animation_list/sprite_animation_list.dart';
 import 'package:io_crossword/team_selection/view/view.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -69,8 +68,8 @@ class _HowToPlaySmall extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
-            width: mascot!.teamMascot.dangleSpriteInformation.width,
-            height: mascot.teamMascot.dangleSpriteInformation.height,
+            width: mascot!.teamMascot.dangleSpriteData.width,
+            height: mascot.teamMascot.dangleSpriteData.height,
             child: const Hero(
               tag: HowToPlayPage.dangleMascotHeroTag,
               child: _MascotAnimation(),
@@ -138,8 +137,8 @@ class _HowToPlayLarge extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
-                  width: mascot!.teamMascot.dangleSpriteInformation.width,
-                  height: mascot.teamMascot.dangleSpriteInformation.height,
+                  width: mascot!.teamMascot.dangleSpriteData.width,
+                  height: mascot.teamMascot.dangleSpriteData.height,
                   child: const Hero(
                     tag: HowToPlayPage.dangleMascotHeroTag,
                     child: _MascotAnimation(),
@@ -212,12 +211,12 @@ class _MascotAnimationState extends State<_MascotAnimation> {
         }
       },
       child: SpriteAnimationList(
-        animationListItems: [
-          AnimationListItem(
-            spriteInformation: mascot!.teamMascot.lookUpSpriteInformation,
+        animationItems: [
+          AnimationItem(
+            spriteData: mascot!.teamMascot.lookUpSpriteData,
           ),
-          AnimationListItem(
-            spriteInformation: mascot.teamMascot.pickUpSpriteInformation,
+          AnimationItem(
+            spriteData: mascot.teamMascot.pickUpSpriteData,
             loop: false,
             onComplete: () {
               context
@@ -225,8 +224,8 @@ class _MascotAnimationState extends State<_MascotAnimation> {
                   .updateStatus(HowToPlayStatus.complete);
             },
           ),
-          AnimationListItem(
-            spriteInformation: mascot.teamMascot.dangleSpriteInformation,
+          AnimationItem(
+            spriteData: mascot.teamMascot.dangleSpriteData,
           ),
         ],
         controller: controller,
