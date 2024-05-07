@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
+import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// {@template crossword_interactive_viewer}
 /// An [InteractiveViewer] configured to show a crossword.
@@ -52,7 +52,9 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     vsync: this,
     duration: const Duration(milliseconds: 250),
   );
-  Animation<Vector3>? _translationAnimation;
+  Animation<Matrix4>? _centerAnimation;
+
+  double zoom = 1;
 
   /// The minimum amount of translation allowed.
   final _minTranslation = Vector3.zero();
@@ -61,8 +63,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   final _maxTranslation = Vector3.zero();
 
   void _onAnimateTranslation() {
-    _transformationController.value =
-        Matrix4.translation(_translationAnimation!.value);
+    _transformationController.value = _centerAnimation!.value;
   }
 
   void _centerSelectedWord(BuildContext context) {
@@ -87,8 +88,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final wordRect = selectedWord.offset(crosswordLayout) &
-        selectedWord.word.size(crosswordLayout);
+    final wordSize = selectedWord.word.size(crosswordLayout);
+    final wordRect = selectedWord.offset(crosswordLayout) & wordSize;
     final wordCenter = wordRect.center;
 
     final begin = _transformationController.value.getTranslation();
@@ -112,13 +113,30 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       );
     if (begin == end) return;
 
-    _translationAnimation?.removeListener(_onAnimateTranslation);
-    _translationAnimation = Tween(begin: begin, end: end).animate(
+    final reducedRect = reducedViewportSize.toRect();
+    final wordIsScaled = reducedRect.contains(wordSize.toOffset());
+    final centerEnd = Matrix4.translation(end);
+
+    double currentScale = _transformationController.value.getMaxScaleOnAxis();
+
+    print('currentScale $currentScale');
+    if (!wordIsScaled) {
+      print(reducedRect);
+      print(wordRect);
+      print('center scale');
+      print(centerEnd.scaled(0.9, 0.9));
+    }
+
+    _centerAnimation = Tween(
+      begin: Matrix4.translation(begin),
+      end: centerEnd,
+    ).animate(
       CurvedAnimation(
         parent: animationController!,
         curve: Curves.decelerate,
       ),
     )..addListener(_onAnimateTranslation);
+
     animationController.forward(from: 0);
   }
 
@@ -130,8 +148,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   @override
   void dispose() {
-    _translationAnimation?.removeListener(_onAnimateTranslation);
-    _translationAnimation = null;
+    _centerAnimation?.removeListener(_onAnimateTranslation);
+    _centerAnimation = null;
     _animationController?.dispose();
     _animationController = null;
 
@@ -150,7 +168,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         },
         builder: (context, state) {
           return InteractiveViewer.builder(
-            scaleEnabled: false,
+            scaleEnabled: true,
             panEnabled: state.word == null,
             transformationController: _transformationController,
             builder: (context, quad) {
