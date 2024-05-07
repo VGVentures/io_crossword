@@ -867,19 +867,22 @@ void main() {
 
     group('GameStatusRequested', () {
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits [failure] state if getGameStatus fails',
+        'emits [failure] state '
+        'when getGameStatus fails',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
           when(() => boardInfoRepository.getGameStatus())
-              .thenThrow(Exception('error'));
+              .thenAnswer((_) => Stream.error(Exception()));
         },
         act: (bloc) => bloc.add(GameStatusRequested()),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.failure,
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.status,
+            'status',
+            CrosswordStatus.failure,
           ),
         ],
       );

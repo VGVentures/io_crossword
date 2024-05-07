@@ -102,6 +102,8 @@ class CrosswordView extends StatelessWidget {
           },
         ),
         body: BlocConsumer<CrosswordBloc, CrosswordState>(
+          listenWhen: (previous, current) =>
+              previous.gameStatus != current.gameStatus,
           listener: (context, state) {
             if (state.gameStatus == GameStatus.resetInProgress) {
               context.read<WordSelectionBloc>().add(const WordUnselected());
@@ -221,25 +223,13 @@ class _BottomActions extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: IgnorePointer(
-            ignoring: resetInProgress,
-            child: OutlinedButton(
-              style: resetInProgress
-                  ? Theme.of(context).outlinedButtonTheme.style?.copyWith(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.grey),
-                        side: MaterialStateProperty.all<BorderSide>(
-                          const BorderSide(color: Colors.grey),
-                        ),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          const StadiumBorder(side: BorderSide(width: 2)),
-                        ),
-                      )
-                  : null,
-              onPressed: () =>
-                  context.read<CrosswordBloc>().add(const BoardStatusResumed()),
-              child: Text(l10n.keepPlayingButtonLabel),
-            ),
+          child: OutlinedButton(
+            onPressed: resetInProgress
+                ? null
+                : () => context
+                    .read<CrosswordBloc>()
+                    .add(const BoardStatusResumed()),
+            child: Text(l10n.keepPlayingButtonLabel),
           ),
         ),
       ],

@@ -356,7 +356,6 @@ void main() {
 
         await tester.tap(
           find.text(l10n.keepPlayingButtonLabel),
-          warnIfMissed: false,
         );
 
         verifyNever(() => crosswordBloc.add(BoardStatusResumed()));

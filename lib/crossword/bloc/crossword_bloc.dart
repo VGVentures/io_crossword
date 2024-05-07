@@ -206,28 +206,25 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     GameStatusRequested event,
     Emitter<CrosswordState> emit,
   ) async {
-    try {
-      return emit.forEach(
-        _boardInfoRepository.getGameStatus(),
-        onData: (status) {
-          if (status == GameStatus.resetInProgress) {
-            return state.copyWith(
-              gameStatus: status,
-              boardStatus: BoardStatus.resetInProgress,
-            );
-          }
+    return emit.forEach(
+      _boardInfoRepository.getGameStatus(),
+      onData: (status) {
+        if (status == GameStatus.resetInProgress) {
+          return state.copyWith(
+            gameStatus: status,
+            boardStatus: BoardStatus.resetInProgress,
+          );
+        }
 
-          return state.copyWith(gameStatus: status);
-        },
-      );
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      emit(
-        const CrosswordState(
+        return state.copyWith(gameStatus: status);
+      },
+      onError: (error, stackTrace) {
+        addError(error, stackTrace);
+        return state.copyWith(
           status: CrosswordStatus.failure,
-        ),
-      );
-    }
+        );
+      },
+    );
   }
 
   void _onBoardStatusResumed(
