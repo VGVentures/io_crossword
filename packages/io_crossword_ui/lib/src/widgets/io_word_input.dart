@@ -1,10 +1,13 @@
 import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+
+part 'shakable.dart';
 
 /// {@template character_validator}
 /// Validates a character.
@@ -22,11 +25,32 @@ typedef CharacterValidator = bool Function(String character);
 /// {@endtemplate}
 class IoWordInputController extends ChangeNotifier {
   String _word = '';
+  bool _didReset = false;
 
-  void _updateWord(String word) {
+  @visibleForTesting
+
+  /// Updates the [_word] with new value.
+  ///
+  /// If [isInitial] is true, sets the [_didReset] to false.
+  void updateWord(String word, {bool isInitial = false}) {
     if (word == _word) return;
 
     _word = word;
+
+    if (isInitial) _didReset = false;
+
+    notifyListeners();
+  }
+
+  /// Resets the word to the initial word or an empty string if
+  /// no [initialCharacters] is passed.
+  void reset({required Map<int, String>? initialCharacters}) {
+    final initialWord = initialCharacters?.values.join() ?? '';
+
+    if (_word == initialWord) return;
+
+    _word = initialWord;
+    _didReset = true;
     notifyListeners();
   }
 
@@ -41,6 +65,9 @@ class IoWordInputController extends ChangeNotifier {
   /// * [IoWordInput.onWord], the callback that is called when a word has been
   ///  completed.
   String get word => _word;
+
+  /// Is true if [reset] method has been called.
+  bool get didReset => _didReset;
 }
 
 /// {@template io_word_input}
@@ -220,6 +247,8 @@ class _IoWordInputState extends State<IoWordInput> {
     return word.toString();
   }
 
+  bool get _initial => _word.length == widget.characters?.length;
+
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
     final newValue = (value.split('')
@@ -228,7 +257,7 @@ class _IoWordInputState extends State<IoWordInput> {
 
     void updateWord() {
       setState(() {});
-      widget.controller?._updateWord(_word);
+      widget.controller?.updateWord(_word, isInitial: _initial);
     }
 
     if (newValue.isEmpty) {
@@ -312,6 +341,19 @@ class _IoWordInputState extends State<IoWordInput> {
     _activeFocusNode?.requestFocus();
   }
 
+  void _onInputReset() {
+    final controller = widget.controller;
+    final initialCharacters = widget.characters;
+
+    if (controller != null &&
+        initialCharacters != null &&
+        controller._word.length == initialCharacters.length) {
+      while (_word.length > initialCharacters.length) {
+        _onTextChanged('');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -328,7 +370,8 @@ class _IoWordInputState extends State<IoWordInput> {
       focusNode.addListener(() => _onFocusChanged(focusNode));
     }
 
-    widget.controller?._updateWord(_word);
+    widget.controller?.addListener(_onInputReset);
+    widget.controller?.updateWord(_word, isInitial: _initial);
     _next();
   }
 
@@ -375,36 +418,40 @@ class _IoWordInputState extends State<IoWordInput> {
 
       final character = Padding(
         padding: textInputStyle.padding,
-        child: _CharacterField(
-          style: style,
-          child: displayText
-              ? Text(
-                  widget.characters![i]!,
-                  style: style.textStyle,
-                  textAlign: TextAlign.center,
-                )
-              : EditableText(
-                  readOnly: widget.readOnly,
-                  keyboardType: TextInputType.text,
-                  enableSuggestions: false,
-                  controller: controller,
-                  focusNode: focusNode,
-                  style: style.textStyle,
-                  cursorWidth: 0,
-                  textAlign: TextAlign.center,
-                  cursorColor: Colors.transparent,
-                  backgroundCursorColor: Colors.transparent,
-                  onChanged: _onTextChanged,
-                  onSubmitted: widget.onSubmit != null
-                      ? (_) => widget.onSubmit!(_word)
-                      : null,
-                  onSelectionChanged: (selection, cause) {
-                    final offset = math.min(1, controller.text.length);
-                    controller.selection = TextSelection.fromPosition(
-                      TextPosition(offset: offset),
-                    );
-                  },
-                ),
+        child: Shakable(
+          controller: widget.controller,
+          shakeDuration: const Duration(milliseconds: 500),
+          child: _CharacterField(
+            style: style,
+            child: displayText
+                ? Text(
+                    widget.characters![i]!,
+                    style: style.textStyle,
+                    textAlign: TextAlign.center,
+                  )
+                : EditableText(
+                    readOnly: widget.readOnly,
+                    keyboardType: TextInputType.text,
+                    enableSuggestions: false,
+                    controller: controller,
+                    focusNode: focusNode,
+                    style: style.textStyle,
+                    cursorWidth: 0,
+                    textAlign: TextAlign.center,
+                    cursorColor: Colors.transparent,
+                    backgroundCursorColor: Colors.transparent,
+                    onChanged: _onTextChanged,
+                    onSubmitted: widget.onSubmit != null
+                        ? (_) => widget.onSubmit!(_word)
+                        : null,
+                    onSelectionChanged: (selection, cause) {
+                      final offset = math.min(1, controller.text.length);
+                      controller.selection = TextSelection.fromPosition(
+                        TextPosition(offset: offset),
+                      );
+                    },
+                  ),
+          ),
         ),
       );
       characters.add(character);
