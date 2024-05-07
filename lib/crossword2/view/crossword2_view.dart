@@ -14,12 +14,15 @@ class Crossword2View extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final sectionSize = context.select<CrosswordBloc, int>(
+      (bloc) => bloc.state.sectionSize,
+    );
     // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
     // hard-coding it:
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
-    const configuration = CrosswordConfiguration(
+    final configuration = CrosswordConfiguration(
       bottomRight: (45, 45),
-      chunkSize: 20,
+      chunkSize: sectionSize,
     );
 
     return CrosswordLayoutScope(
@@ -34,7 +37,7 @@ class Crossword2View extends StatelessWidget {
       ),
       child: DefaultTransformationController(
         child: CrosswordInteractiveViewer(
-          builder: (_, __) => const _CrosswordStack(
+          builder: (_, __) => _CrosswordStack(
             configuration: configuration,
           ),
         ),
