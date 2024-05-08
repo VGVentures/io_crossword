@@ -234,7 +234,7 @@ class _IoWordInputState extends State<IoWordInput> {
   String get _word {
     final word = StringBuffer();
 
-    for (var i = widget.length - 1; i >= 0; i--) {
+    for (var i = 0; i < widget.length; i++) {
       final isFixed =
           widget.characters != null && widget.characters!.containsKey(i);
       final character =
@@ -243,12 +243,11 @@ class _IoWordInputState extends State<IoWordInput> {
       if (character.isNotEmpty) {
         word.write(character);
         _wordDuplicate[i] = character;
-        if (i > 0) {
-          _wordDuplicate[i - 1] = IoWordInput._emptyCharacter;
-        }
+      } else {
+        _wordDuplicate[i] = IoWordInput._emptyCharacter;
       }
     }
-    return word.toString().split('').reversed.join();
+    return word.toString();
   }
 
   late final List<String> _wordDuplicate = List.generate(
