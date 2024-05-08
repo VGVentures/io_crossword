@@ -231,32 +231,28 @@ class _IoWordInputState extends State<IoWordInput> {
       _controllers[_activeCharacterIndex];
 
   /// The entire word that has been inputted so far.
-  String get _word {
+  String get _word => getCurrentWord().replaceAll(
+        IoWordInput._emptyCharacter,
+        '',
+      );
+
+  String getCurrentWord() {
     final word = StringBuffer();
-    final wordDuplicateBuffer = StringBuffer();
 
     for (var i = 0; i < widget.length; i++) {
       final isFixed =
           widget.characters != null && widget.characters!.containsKey(i);
       final character =
-          (isFixed ? widget.characters![i] : _controllers[i]!.text)!
-              .replaceAll(IoWordInput._emptyCharacter, '');
+          (isFixed ? widget.characters![i] : _controllers[i]!.text)!;
       if (character.isNotEmpty) {
         word.write(character);
-        wordDuplicateBuffer.write(character);
-      } else {
-        wordDuplicateBuffer.write(IoWordInput._emptyCharacter);
       }
     }
 
-    _wordDuplicate = wordDuplicateBuffer.toString();
     return word.toString();
   }
 
-  late String _wordDuplicate = List.generate(
-    widget.length,
-    (index) => widget.characters?[index] ?? IoWordInput._emptyCharacter,
-  ).join();
+  late String _wordDuplicate = getCurrentWord();
 
   bool get _initial => _word.length == widget.characters?.length;
 
