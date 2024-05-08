@@ -14,6 +14,14 @@ import 'package:flutter/services.dart';
 class $AssetsAnimGen {
   const $AssetsAnimGen();
 
+  /// File path: assets/anim/android_dangle.png
+  AssetGenImage get androidDangle =>
+      const AssetGenImage('assets/anim/android_dangle.png');
+
+  /// File path: assets/anim/android_drop_in.png
+  AssetGenImage get androidDropIn =>
+      const AssetGenImage('assets/anim/android_drop_in.png');
+
   /// File path: assets/anim/android_idle.png
   AssetGenImage get androidIdle =>
       const AssetGenImage('assets/anim/android_idle.png');
@@ -22,9 +30,21 @@ class $AssetsAnimGen {
   AssetGenImage get androidLookUp =>
       const AssetGenImage('assets/anim/android_look_up.png');
 
+  /// File path: assets/anim/android_pick_up.png
+  AssetGenImage get androidPickUp =>
+      const AssetGenImage('assets/anim/android_pick_up.png');
+
   /// File path: assets/anim/android_platform.png
   AssetGenImage get androidPlatform =>
       const AssetGenImage('assets/anim/android_platform.png');
+
+  /// File path: assets/anim/dash_dangle.png
+  AssetGenImage get dashDangle =>
+      const AssetGenImage('assets/anim/dash_dangle.png');
+
+  /// File path: assets/anim/dash_drop_in.png
+  AssetGenImage get dashDropIn =>
+      const AssetGenImage('assets/anim/dash_drop_in.png');
 
   /// File path: assets/anim/dash_idle.png
   AssetGenImage get dashIdle =>
@@ -34,9 +54,21 @@ class $AssetsAnimGen {
   AssetGenImage get dashLookUp =>
       const AssetGenImage('assets/anim/dash_look_up.png');
 
+  /// File path: assets/anim/dash_pick_up.png
+  AssetGenImage get dashPickUp =>
+      const AssetGenImage('assets/anim/dash_pick_up.png');
+
   /// File path: assets/anim/dash_platform.png
   AssetGenImage get dashPlatform =>
       const AssetGenImage('assets/anim/dash_platform.png');
+
+  /// File path: assets/anim/dino_dangle.png
+  AssetGenImage get dinoDangle =>
+      const AssetGenImage('assets/anim/dino_dangle.png');
+
+  /// File path: assets/anim/dino_drop_in.png
+  AssetGenImage get dinoDropIn =>
+      const AssetGenImage('assets/anim/dino_drop_in.png');
 
   /// File path: assets/anim/dino_idle.png
   AssetGenImage get dinoIdle =>
@@ -46,9 +78,21 @@ class $AssetsAnimGen {
   AssetGenImage get dinoLookUp =>
       const AssetGenImage('assets/anim/dino_look_up.png');
 
+  /// File path: assets/anim/dino_pick_up.png
+  AssetGenImage get dinoPickUp =>
+      const AssetGenImage('assets/anim/dino_pick_up.png');
+
   /// File path: assets/anim/dino_platform.png
   AssetGenImage get dinoPlatform =>
       const AssetGenImage('assets/anim/dino_platform.png');
+
+  /// File path: assets/anim/sparky_dangle.png
+  AssetGenImage get sparkyDangle =>
+      const AssetGenImage('assets/anim/sparky_dangle.png');
+
+  /// File path: assets/anim/sparky_drop_in.png
+  AssetGenImage get sparkyDropIn =>
+      const AssetGenImage('assets/anim/sparky_drop_in.png');
 
   /// File path: assets/anim/sparky_idle.png
   AssetGenImage get sparkyIdle =>
@@ -58,23 +102,39 @@ class $AssetsAnimGen {
   AssetGenImage get sparkyLookUp =>
       const AssetGenImage('assets/anim/sparky_look_up.png');
 
+  /// File path: assets/anim/sparky_pick_up.png
+  AssetGenImage get sparkyPickUp =>
+      const AssetGenImage('assets/anim/sparky_pick_up.png');
+
   /// File path: assets/anim/sparky_platform.png
   AssetGenImage get sparkyPlatform =>
       const AssetGenImage('assets/anim/sparky_platform.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        androidDangle,
+        androidDropIn,
         androidIdle,
         androidLookUp,
+        androidPickUp,
         androidPlatform,
+        dashDangle,
+        dashDropIn,
         dashIdle,
         dashLookUp,
+        dashPickUp,
         dashPlatform,
+        dinoDangle,
+        dinoDropIn,
         dinoIdle,
         dinoLookUp,
+        dinoPickUp,
         dinoPlatform,
+        sparkyDangle,
+        sparkyDropIn,
         sparkyIdle,
         sparkyLookUp,
+        sparkyPickUp,
         sparkyPlatform
       ];
 }

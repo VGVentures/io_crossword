@@ -79,6 +79,8 @@ void main() {
           .thenAnswer((_) => Future.value(20));
       when(boardInfoRepository.getZoomLimit)
           .thenAnswer((_) => Future.value(0.8));
+      when(boardInfoRepository.getGameStatus)
+          .thenAnswer((_) => Stream.value(GameStatus.inProgress));
     });
 
     testWidgets('renders AppView', (tester) async {

@@ -53,6 +53,7 @@ class GameIntroView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final loadingStatus = context.read<LoadingCubit>().state.status;
 
     return BlocListener<GameIntroBloc, GameIntroState>(
       listenWhen: (previous, current) => previous.status != current.status,
@@ -77,7 +78,11 @@ class GameIntroView extends StatelessWidget {
       child: Material(
         child: FlowBuilder<GameIntroStatus>(
           controller: _flowController,
-          state: _flowController == null ? GameIntroStatus.loading : null,
+          state: _flowController == null
+              ? loadingStatus == LoadingStatus.loaded
+                  ? GameIntroStatus.welcome
+                  : GameIntroStatus.loading
+              : null,
           onGeneratePages: onGenerateGameIntroPages,
           onComplete: (state) {
             final playerState = context.read<PlayerBloc>().state;

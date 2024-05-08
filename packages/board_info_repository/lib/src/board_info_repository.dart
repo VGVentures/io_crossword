@@ -1,6 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
+/// {@template game_status}
+/// The status of the game.
+/// {@endtemplate}
+enum GameStatus {
+  /// The game is in progress.
+  inProgress('in_progress'),
+
+  /// The game is completed and in the process of resetting.
+  resetInProgress('reset_in_progress');
+
+  /// {@macro game_status}
+  const GameStatus(this.value);
+
+  /// The String value of the status.
+  final String value;
+
+  /// Converts the [value] to a [GameStatus].
+  static GameStatus fromString(String value) => values.firstWhere(
+        (element) => element.value == value,
+        orElse: () => inProgress,
+      );
+}
+
 /// {@template board_info_exception}
 /// An exception to throw when there is an error fetching the board info.
 /// {@endtemplate}
@@ -110,5 +133,21 @@ class BoardInfoRepository {
         .onError(_hintsEnabled!.addError);
 
     return _hintsEnabled!.stream;
+  }
+
+  /// Returns the status of the game.
+  Stream<GameStatus> getGameStatus() {
+    try {
+      return boardInfoCollection
+          .where('type', isEqualTo: 'game_status')
+          .snapshots()
+          .map(
+            (event) => GameStatus.fromString(
+              event.docs.first.data()['value'] as String,
+            ),
+          );
+    } catch (error, stackStrace) {
+      throw BoardInfoException(error, stackStrace);
+    }
   }
 }
