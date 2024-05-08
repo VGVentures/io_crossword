@@ -1,5 +1,6 @@
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class AndroidTeam extends Team {
   const AndroidTeam();
@@ -17,6 +18,15 @@ class AndroidTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.androidLookUp;
 
   @override
+  AssetGenImage get pickUpAnimation => Assets.anim.androidPickUp;
+
+  @override
+  AssetGenImage get dangleAnimation => Assets.anim.androidDangle;
+
+  @override
+  AssetGenImage get dropInAnimation => Assets.anim.androidDropIn;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerAndroid;
 
   @override
@@ -27,20 +37,52 @@ class AndroidTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakAndroid;
 
   @override
-  SpriteInformation get idleSpriteInformation => const SpriteInformation(
-        rows: 7,
-        columns: 4,
+  SpriteData get idleSpriteData => SpriteData(
+        path: idleAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 4,
         stepTime: 0.042,
         width: 250,
         height: 360,
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
-        rows: 15,
-        columns: 5,
+  SpriteData get lookUpSpriteData => SpriteData(
+        path: lookUpAnimation.path,
+        amountPerRow: 11,
+        amountPerColumn: 7,
         stepTime: 0.042,
-        width: 200,
-        height: 340,
+        width: 360,
+        height: 612,
+      );
+
+  @override
+  SpriteData get pickUpSpriteData => SpriteData(
+        path: pickUpAnimation.path,
+        amountPerRow: 18,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 360,
+        height: 612,
+      );
+
+  @override
+  SpriteData get dangleSpriteData => SpriteData(
+        path: dangleAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 6,
+        stepTime: 0.042,
+        width: 360,
+        height: 612,
+      );
+
+  @override
+  SpriteData get dropInSpriteData => SpriteData(
+        path: dropInAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 6,
+        stepTime: 0.042,
+        width: 360,
+        height: 612,
       );
 }

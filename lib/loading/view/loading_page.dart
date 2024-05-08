@@ -17,10 +17,7 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoadingCubit()..load(),
-      child: const LoadingView(),
-    );
+    return const LoadingView();
   }
 }
 
@@ -132,7 +129,7 @@ class LoadingBody extends StatelessWidget {
           const SizedBox(height: 48),
           BlocConsumer<LoadingCubit, LoadingState>(
             listener: (context, state) {
-              if (state.progress == 100) {
+              if (state.status == LoadingStatus.loaded) {
                 _onGetStarted(context);
               }
             },
