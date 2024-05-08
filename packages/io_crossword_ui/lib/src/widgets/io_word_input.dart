@@ -212,20 +212,23 @@ class IoWordInput extends StatefulWidget {
 // will be updated in the future, as soon as the following is resolved:
 // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
 class _IoWordInputState extends State<IoWordInput> {
-  /// The current character that is being inputted.
-  int _currentCharacterIndex = -1;
+  /// The index of the current character that is being inputted.
+  ///
+  /// Initiated to minus one until the first call to [_next] initiates the
+  /// actual active index.
+  int _activeCharacterIndex = -1;
 
   final Map<int, FocusNode> _focusNodes = {};
 
   /// The [FocusNode] of the character field that is currently being inputted.
-  FocusNode? get _activeFocusNode => _focusNodes[_currentCharacterIndex];
+  FocusNode? get _activeFocusNode => _focusNodes[_activeCharacterIndex];
 
   final Map<int, TextEditingController> _controllers = {};
 
   /// The [TextEditingController] of the character field that is currently
   /// being inputted.
   TextEditingController? get _activeController =>
-      _controllers[_currentCharacterIndex];
+      _controllers[_activeCharacterIndex];
 
   /// The entire word that has been inputted so far.
   String get _word {
@@ -267,11 +270,11 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     if (newValue.isEmpty) {
-      final lastCharacter =
-          _wordDuplicate.elementAtOrNull(_currentCharacterIndex) ??
+      final previousActiveCharacter =
+          _wordDuplicate.elementAtOrNull(_activeCharacterIndex) ??
               IoWordInput._emptyCharacter;
 
-      _wordDuplicate[_currentCharacterIndex] = IoWordInput._emptyCharacter;
+      _wordDuplicate[_activeCharacterIndex] = IoWordInput._emptyCharacter;
       _activeController?.text = IoWordInput._emptyCharacter;
 
       // Because in the active controller we get the text already modified,
@@ -279,9 +282,9 @@ class _IoWordInputState extends State<IoWordInput> {
       // when the backspace was pressed.
       //
       // If it was empty, we delete also the letter at the previous index.
-      if (lastCharacter == IoWordInput._emptyCharacter) {
+      if (previousActiveCharacter == IoWordInput._emptyCharacter) {
         _previous();
-        _wordDuplicate[_currentCharacterIndex] = IoWordInput._emptyCharacter;
+        _wordDuplicate[_activeCharacterIndex] = IoWordInput._emptyCharacter;
         _activeController?.text = IoWordInput._emptyCharacter;
       }
       updateWord();
@@ -292,7 +295,7 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
-    _wordDuplicate[_currentCharacterIndex] = newCharacter.toUpperCase();
+    _wordDuplicate[_activeCharacterIndex] = newCharacter.toUpperCase();
     _next();
     updateWord();
   }
@@ -304,7 +307,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// happen.
   void _next() {
     final nextFields = _controllers.entries
-        .where((e) => e.key > _currentCharacterIndex)
+        .where((e) => e.key > _activeCharacterIndex)
         .map((e) => e.key);
 
     if (nextFields.isEmpty) {
@@ -325,7 +328,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// presses backspace.
   void _previous() {
     final previousFields = _controllers.entries
-        .where((e) => e.key < _currentCharacterIndex)
+        .where((e) => e.key < _activeCharacterIndex)
         .map((e) => e.key);
 
     if (previousFields.isEmpty) return;
@@ -346,11 +349,11 @@ class _IoWordInputState extends State<IoWordInput> {
     final isOutsideRange = index < 0 || index >= widget.length;
     final isFixed =
         widget.characters != null && widget.characters!.containsKey(index);
-    if (index == _currentCharacterIndex || isOutsideRange || isFixed) {
+    if (index == _activeCharacterIndex || isOutsideRange || isFixed) {
       return;
     }
 
-    _currentCharacterIndex = index;
+    _activeCharacterIndex = index;
     _focus();
   }
 

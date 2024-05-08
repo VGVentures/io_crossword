@@ -244,7 +244,7 @@ void main() {
 
         final editableTexts = find.byType(EditableText);
 
-        await tester.enterText(editableTexts.first, 'C');
+        await tester.enterText(editableTexts.last, 'C');
         await tester.pumpAndSettle();
         expect(words.last, equals('ABCE'));
 
