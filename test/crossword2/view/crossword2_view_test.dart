@@ -239,7 +239,7 @@ void main() {
 
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
-                status: WordSelectionStatus.preSolving,
+                status: WordSelectionStatus.solving,
                 word: SelectedWord(
                   section: (0, 0),
                   word: word,
@@ -273,7 +273,7 @@ void main() {
 
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
-                status: WordSelectionStatus.preSolving,
+                status: WordSelectionStatus.solving,
                 word: SelectedWord(
                   section: (0, 0),
                   word: word,
@@ -620,14 +620,14 @@ void main() {
       });
 
       testWidgets(
-        'not shown when word is not solved',
+        'not shown when word is not solved and the word is being solved',
         (tester) async {
           when(() => word.isSolved).thenReturn(false);
 
           when(() => word.solvedTimestamp).thenReturn(1);
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
-              status: WordSelectionStatus.preSolving,
+              status: WordSelectionStatus.solving,
               word: SelectedWord(
                 section: (0, 0),
                 word: word,
