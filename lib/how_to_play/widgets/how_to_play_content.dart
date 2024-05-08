@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -142,6 +143,9 @@ class _TabSelector extends StatelessWidget {
         GestureDetector(
           onTap: index > 0
               ? () {
+                  context
+                      .read<AudioController>()
+                      .playSfx(Assets.music.arrowsSound);
                   context.read<HowToPlayCubit>().updateIndex(index - 1);
                 }
               : null,
@@ -162,6 +166,7 @@ class _TabSelector extends StatelessWidget {
             if (index == tabController.length - 1) {
               onDonePressed();
             } else {
+              context.read<AudioController>().playSfx(Assets.music.arrowsSound);
               context.read<HowToPlayCubit>().updateIndex(index + 1);
             }
           },

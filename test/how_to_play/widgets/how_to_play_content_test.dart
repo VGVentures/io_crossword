@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -14,13 +16,17 @@ import '../../helpers/helpers.dart';
 
 class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
 
+class _MockAudioController extends Mock implements AudioController {}
+
 void main() {
   group('HowToPlayContent', () {
+    late AudioController audioController;
     late AppLocalizations l10n;
     late HowToPlayCubit howToPlayCubit;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       howToPlayCubit = _MockHowToPlayCubit();
 
       widget = BlocProvider.value(
@@ -152,6 +158,46 @@ void main() {
           find.text(l10n.aboutHowToPlayFirstInstructions),
           findsOneWidget,
         );
+      },
+    );
+
+    testWidgets(
+      'plays ${Assets.music.startButton1} when back button is pressed',
+      (tester) async {
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable([0]),
+          initialState: 1,
+        );
+
+        await tester.pumpApp(widget, audioController: audioController);
+
+        await tester.tap(find.text(l10n.backButtonLabel));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => audioController.playSfx(Assets.music.arrowsSound),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'plays ${Assets.music.startButton1} when next button is pressed',
+      (tester) async {
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable([0]),
+          initialState: 1,
+        );
+
+        await tester.pumpApp(widget, audioController: audioController);
+
+        await tester.tap(find.text(l10n.nextButtonLabel));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => audioController.playSfx(Assets.music.arrowsSound),
+        ).called(1);
       },
     );
 
