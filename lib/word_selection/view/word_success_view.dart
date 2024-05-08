@@ -316,6 +316,7 @@ class KeepPlayingButton extends StatelessWidget {
     final l10n = context.l10n;
     return OutlinedButton.icon(
       onPressed: () {
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
         context.read<CrosswordBloc>().add(const WordUnselected());
         context.read<WordSelectionBloc>().add(const selection.WordUnselected());
       },

@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -100,7 +101,12 @@ class _HowToPlaySmall extends StatelessWidget {
                     ),
                   ),
                   OutlinedButton(
-                    onPressed: () => context.flow<GameIntroStatus>().complete(),
+                    onPressed: () {
+                      context
+                          .read<AudioController>()
+                          .playSfx(Assets.music.startButton1);
+                      context.flow<GameIntroStatus>().complete();
+                    },
                     child: Text(l10n.playNow),
                   ),
                 ],
@@ -160,8 +166,12 @@ class _HowToPlayLarge extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       OutlinedButton(
-                        onPressed: () =>
-                            context.flow<GameIntroStatus>().complete(),
+                        onPressed: () {
+                          context
+                              .read<AudioController>()
+                              .playSfx(Assets.music.startButton1);
+                          context.flow<GameIntroStatus>().complete();
+                        },
                         child: Text(l10n.playNow),
                       ),
                     ],
