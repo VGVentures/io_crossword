@@ -139,6 +139,30 @@ void main() {
       });
     });
 
+    group('signOut', () {
+      test('calls signOut on FirebaseAuth', () async {
+        when(() => firebaseAuth.signOut()).thenAnswer((_) async {});
+
+        await authenticationRepository.signOut();
+        verify(() => firebaseAuth.signOut()).called(1);
+      });
+
+      test('updates user with unauthenticated', () async {
+        when(() => firebaseAuth.signOut()).thenAnswer((_) async {});
+
+        await authenticationRepository.signOut();
+
+        await expectLater(
+          authenticationRepository.userController.stream,
+          emitsInOrder(
+            <User>[
+              User.unauthenticated,
+            ],
+          ),
+        );
+      });
+    });
+
     group('dispose', () {
       test('cancels internal subscriptions', () async {
         final controller = StreamController<fb.User>();
