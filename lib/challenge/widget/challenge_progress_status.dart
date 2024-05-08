@@ -1,8 +1,7 @@
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/challenge/bloc/challenge_bloc.dart';
-import 'package:io_crossword/welcome/welcome.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 
 class ChallengeProgressStatus extends StatelessWidget {
   const ChallengeProgressStatus({super.key});
