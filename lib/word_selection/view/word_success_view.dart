@@ -57,9 +57,12 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
         children: [
           const SuccessTopBar(),
           const SizedBox(height: 32),
-          IoWord(
-            selectedWord.word.answer,
-            style: themeData.io.wordTheme.big,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: IoWord(
+              selectedWord.word.answer,
+              style: themeData.io.wordTheme.big,
+            ),
           ),
           const SizedBox(height: 40),
           Expanded(
@@ -132,9 +135,12 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 342),
                 child: Column(
                   children: [
-                    IoWord(
-                      selectedWord.word.answer,
-                      style: themeData.io.wordTheme.big,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: IoWord(
+                        selectedWord.word.answer,
+                        style: themeData.io.wordTheme.big,
+                      ),
                     ),
                     const SizedBox(height: 40),
                     const SuccessStats(),
