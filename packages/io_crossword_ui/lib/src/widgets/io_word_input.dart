@@ -214,8 +214,8 @@ class IoWordInput extends StatefulWidget {
 class _IoWordInputState extends State<IoWordInput> {
   /// The index of the current character that is being inputted.
   ///
-  /// Initiated to minus one until the first call to [_next] initiates the
-  /// actual active index.
+  /// Initiated to minus one until [initState]'s first call to [_next]
+  /// initiating the actual active index.
   int _activeCharacterIndex = -1;
 
   final Map<int, FocusNode> _focusNodes = {};
@@ -397,6 +397,7 @@ class _IoWordInputState extends State<IoWordInput> {
 
     widget.controller?.addListener(_onInputReset);
     widget.controller?.updateWord(_word, isInitial: _initial);
+    _updateCurrentIndex(0);
     _next();
   }
 
