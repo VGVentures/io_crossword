@@ -445,13 +445,7 @@ class _TeamSelector extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
-        // TODO(marwfair): Get the team player count.
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422631645
-        const Text('10000 players'),
-        const SizedBox(
-          height: 32,
-        ),
+        const SizedBox(height: 32),
         _SubmitButton(Mascots.values[index]),
       ],
     );
@@ -473,6 +467,7 @@ class _SubmitButton extends StatelessWidget {
             .flow<GameIntroStatus>()
             .update((state) => GameIntroStatus.enterInitials);
         context.read<PlayerBloc>().add(MascotSelected(mascot));
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),

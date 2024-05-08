@@ -943,5 +943,21 @@ void main() {
         ],
       );
     });
+
+    group('MascotDropped', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits state with mascotVisible to false when dropped',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(MascotDropped()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            mascotVisible: false,
+          ),
+        ],
+      );
+    });
   });
 }

@@ -36,6 +36,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<BoardSectionLoaded>(_onBoardSectionLoaded);
     on<GameStatusRequested>(_onGameStatusRequested);
     on<BoardStatusResumed>(_onBoardStatusResumed);
+    on<MascotDropped>(_onMascotDropped);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -182,6 +183,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    emit(state.copyWith(mascotVisible: true));
+
     try {
       final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();
@@ -234,6 +237,17 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     emit(
       state.copyWith(
         boardStatus: BoardStatus.inProgress,
+      ),
+    );
+  }
+
+  void _onMascotDropped(
+    MascotDropped event,
+    Emitter<CrosswordState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        mascotVisible: false,
       ),
     );
   }

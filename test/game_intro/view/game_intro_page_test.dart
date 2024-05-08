@@ -29,7 +29,12 @@ class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
 
+class _MockLoadingCubit extends MockCubit<LoadingState>
+    implements LoadingCubit {}
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('GameIntroPage', () {
     testWidgets('renders GameIntroView', (tester) async {
       await tester.pumpApp(GameIntroPage());
@@ -41,6 +46,7 @@ void main() {
   group('GameIntroView', () {
     late GameIntroBloc gameIntroBloc;
     late PlayerBloc playerBloc;
+    late LoadingCubit loadingCubit;
     late Widget widget;
 
     late AppLocalizations l10n;
@@ -50,13 +56,27 @@ void main() {
 
       Flame.images = Images(prefix: '');
       await Flame.images.loadAll([
-        Mascots.dash.teamMascot.lookUpAnimation.keyName,
+        ...Mascots.dash.teamMascot.loadableAssets(),
+        ...Mascots.android.teamMascot.loadableAssets(),
+        ...Mascots.dino.teamMascot.loadableAssets(),
+        ...Mascots.sparky.teamMascot.loadableAssets(),
       ]);
     });
 
     setUp(() {
       gameIntroBloc = _MockGameIntroBloc();
       playerBloc = _MockPlayerBloc();
+      loadingCubit = _MockLoadingCubit();
+
+      when(() => loadingCubit.load()).thenAnswer((_) async => {});
+      when(() => loadingCubit.state).thenReturn(
+        LoadingState(
+          status: LoadingStatus.loaded,
+          assetsCount: 1,
+          loaded: 1,
+        ),
+      );
+
       widget = BlocProvider.value(
         value: gameIntroBloc,
         child: GameIntroView(),
@@ -210,7 +230,7 @@ void main() {
 
     testWidgets(
       'navigates to CrosswordPage '
-      'when ${GameIntroPlayerCreationStatus.success}',
+      'when GameIntroPlayerCreationStatus.success',
       (tester) async {
         whenListen(
           gameIntroBloc,
@@ -222,8 +242,14 @@ void main() {
           initialState: GameIntroState(),
         );
 
+        when(() => playerBloc.state).thenReturn(
+          PlayerState(mascot: Mascots.dash),
+        );
+
         await tester.pumpApp(
           widget,
+          playerBloc: playerBloc,
+          loadingCubit: loadingCubit,
         );
 
         await tester.pump();

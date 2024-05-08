@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
@@ -22,6 +24,8 @@ class _MockTeamSelectionCubit extends MockCubit<TeamSelectionState>
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +53,7 @@ void main() {
   });
 
   group('$TeamSelectionView', () {
+    late AudioController audioController;
     late TeamSelectionCubit teamSelectionCubit;
     late Widget widget;
     late AppLocalizations l10n;
@@ -58,6 +63,7 @@ void main() {
     });
 
     setUp(() {
+      audioController = _MockAudioController();
       teamSelectionCubit = _MockTeamSelectionCubit();
 
       widget = BlocProvider<TeamSelectionCubit>(
@@ -172,6 +178,33 @@ void main() {
           GameIntroStatus.teamSelection,
         );
         addTearDown(flowController.dispose);
+      });
+
+      testWidgets(
+          'plays ${Assets.music.startButton1} when '
+          'submit button is tapped', (tester) async {
+        await tester.pumpApp(
+          playerBloc: playerBloc,
+          BlocProvider(
+            create: (_) => teamSelectionCubit,
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: TeamSelectionView()),
+              ],
+            ),
+          ),
+          audioController: audioController,
+        );
+
+        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+        await tester.ensureVisible(submitButtonFinder);
+        await tester.tap(submitButtonFinder);
+        await tester.pump();
+
+        verify(
+          () => audioController.playSfx(Assets.music.startButton1),
+        ).called(1);
       });
 
       testWidgets('adds MascotSelected', (tester) async {

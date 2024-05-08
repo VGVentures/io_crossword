@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -22,10 +24,13 @@ import '../../helpers/helpers.dart';
 class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
     implements GameIntroBloc {}
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +38,10 @@ void main() {
   setUpAll(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      Mascots.dash.teamMascot.lookUpAnimation.keyName,
-      Mascots.android.teamMascot.lookUpAnimation.keyName,
-      Mascots.dino.teamMascot.lookUpAnimation.keyName,
-      Mascots.sparky.teamMascot.lookUpAnimation.keyName,
+      ...Mascots.dash.teamMascot.loadableAssets(),
+      ...Mascots.android.teamMascot.loadableAssets(),
+      ...Mascots.dino.teamMascot.loadableAssets(),
+      ...Mascots.sparky.teamMascot.loadableAssets(),
     ]);
   });
 
@@ -74,17 +79,19 @@ void main() {
   });
 
   group('$HowToPlayView', () {
+    late AudioController audioController;
     late GameIntroBloc gameIntroBloc;
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       gameIntroBloc = _MockGameIntroBloc();
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
 
       when(() => playerBloc.state)
           .thenReturn(PlayerState(mascot: Mascots.dash));
@@ -122,12 +129,63 @@ void main() {
       });
     }
 
+    testWidgets('plays ${Assets.music.startButton1} when button is pressed',
+        (tester) async {
+      final flowController = FlowController(GameIntroStatus.howToPlay);
+      addTearDown(flowController.dispose);
+
+      when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: gameIntroBloc,
+            ),
+            BlocProvider.value(
+              value: howToPlayCubit,
+            ),
+            BlocProvider.value(
+              value: playerBloc,
+            ),
+          ],
+          child: FlowBuilder<GameIntroStatus>(
+            controller: flowController,
+            onGeneratePages: (_, __) => [
+              const MaterialPage(child: HowToPlayView()),
+            ],
+          ),
+        ),
+        layout: IoLayoutData.small,
+        audioController: audioController,
+      );
+
+      await tester.tap(find.byType(OutlinedButton));
+
+      verify(
+        () => audioController.playSfx(Assets.music.startButton1),
+      ).called(1);
+    });
+
     for (final layout in IoLayoutData.values) {
-      testWidgets('completes flow when button is pressed', (tester) async {
+      testWidgets(
+          'completes flow when pickup '
+          'animation compeletes for $layout', (tester) async {
         final flowController = FlowController(GameIntroStatus.howToPlay);
         addTearDown(flowController.dispose);
 
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable(
+            [
+              HowToPlayState(status: HowToPlayStatus.pickingUp),
+              HowToPlayState(status: HowToPlayStatus.complete),
+            ],
+          ),
+          initialState: HowToPlayState(),
+        );
 
         await tester.pumpApp(
           MultiBlocProvider(
@@ -145,53 +203,40 @@ void main() {
             child: FlowBuilder<GameIntroStatus>(
               controller: flowController,
               onGeneratePages: (_, __) => [
-                const MaterialPage(child: HowToPlayView()),
+                MaterialPage(child: HowToPlayView()),
               ],
             ),
           ),
           layout: layout,
         );
 
-        await tester.tap(find.byType(OutlinedButton));
-        await tester.pumpAndSettle();
+        await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
 
         expect(flowController.completed, isTrue);
       });
 
-      testWidgets('completes flow when done button is pressed', (tester) async {
-        final flowController = FlowController(GameIntroStatus.howToPlay);
+      testWidgets(
+          'verify pickingUp event is added '
+          'when done button is pressed', (tester) async {
         final l10n = await AppLocalizations.delegate.load(Locale('en'));
-        addTearDown(flowController.dispose);
 
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-        when(() => howToPlayCubit.state).thenReturn(4);
-        await tester.pumpApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: gameIntroBloc,
-              ),
-              BlocProvider.value(
-                value: howToPlayCubit,
-              ),
-              BlocProvider.value(
-                value: playerBloc,
-              ),
-            ],
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: HowToPlayView()),
-              ],
-            ),
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 4));
+
+        when(() => gameIntroBloc.state).thenReturn(
+          GameIntroState(
+            status: GameIntroPlayerCreationStatus.inProgress,
           ),
+        );
+
+        await tester.pumpApp(
+          widget,
           layout: layout,
         );
 
         await tester.tap(find.text(l10n.doneButtonLabel));
-        await tester.pumpAndSettle();
 
-        expect(flowController.completed, isTrue);
+        verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
+            .called(1);
       });
     }
 
@@ -248,27 +293,8 @@ void main() {
         expect(find.text(l10n.playNow), findsOneWidget);
       });
 
-      testWidgets(
-        'an $CircularProgressIndicator '
-        'with ${GameIntroPlayerCreationStatus.inProgress}',
-        (tester) async {
-          when(() => gameIntroBloc.state).thenReturn(
-            GameIntroState(
-              status: GameIntroPlayerCreationStatus.inProgress,
-            ),
-          );
-
-          await tester.pumpApp(
-            widget,
-            layout: IoLayoutData.small,
-          );
-
-          expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        },
-      );
-
       for (final mascot in Mascots.values) {
-        testWidgets('renders LookUp animation for each mascot', (tester) async {
+        testWidgets('renders LookUp animation for $mascot', (tester) async {
           when(() => playerBloc.state).thenReturn(PlayerState(mascot: mascot));
 
           when(() => gameIntroBloc.state).thenReturn(GameIntroState());
@@ -291,14 +317,83 @@ void main() {
             layout: IoLayoutData.small,
           );
 
-          final widget = find.byType(LookUp).evaluate().single.widget as LookUp;
+          final widget = find
+              .byType(SpriteAnimationList)
+              .evaluate()
+              .single
+              .widget as SpriteAnimationList;
 
           expect(
-            widget.mascot,
-            equals(mascot),
+            widget.animationItems.contains(
+              AnimationItem(
+                spriteData: mascot.teamMascot.lookUpSpriteData,
+              ),
+            ),
+            isTrue,
           );
         });
       }
+
+      for (final layout in IoLayoutData.values) {
+        testWidgets(
+            'verify pickingUpStatus is called when '
+            'OutlinedButton is tapped in $layout', (tester) async {
+          when(() => gameIntroBloc.state).thenReturn(
+            GameIntroState(
+              status: GameIntroPlayerCreationStatus.inProgress,
+            ),
+          );
+
+          await tester.pumpApp(
+            widget,
+            layout: layout,
+          );
+
+          await tester.tap(find.byType(OutlinedButton));
+
+          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
+              .called(1);
+        });
+      }
+
+      testWidgets('complete status is called when pickUp animation is done',
+          (tester) async {
+        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable(
+            [
+              HowToPlayState(status: HowToPlayStatus.pickingUp),
+            ],
+          ),
+          initialState: HowToPlayState(),
+        );
+
+        await tester.runAsync(() async {
+          await tester.pumpApp(
+            widget,
+            layout: IoLayoutData.large,
+          );
+
+          await Future<void>.delayed(Duration(seconds: 3));
+
+          await tester.pump();
+
+          final spriteAnimationList = tester.widget<SpriteAnimationList>(
+            find.byType(SpriteAnimationList),
+          );
+
+          final controller = spriteAnimationList.controller;
+
+          controller.animationDataList[1].spriteAnimationTicker.setToLast();
+
+          await controller.animationDataList[1].spriteAnimationTicker.completed;
+
+          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.complete))
+              .called(1);
+        });
+      });
     });
   });
 }
