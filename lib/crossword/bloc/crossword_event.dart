@@ -69,3 +69,24 @@ class BoardLoadingInformationRequested extends CrosswordEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GameStatusRequested extends CrosswordEvent {
+  const GameStatusRequested();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class BoardStatusResumed extends CrosswordEvent {
+  const BoardStatusResumed();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class MascotDropped extends CrosswordEvent {
+  const MascotDropped();
+
+  @override
+  List<Object?> get props => [];
+}

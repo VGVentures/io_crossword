@@ -451,7 +451,7 @@ class _IoWordInputState extends State<IoWordInput> {
       final displayText = !(focusNode != null && controller != null);
 
       late final IoWordInputCharacterFieldStyle style;
-      if (displayText) {
+      if (displayText || widget.readOnly) {
         style = textInputStyle.disabled;
       } else if (focusNode.hasFocus) {
         style = textInputStyle.focused;

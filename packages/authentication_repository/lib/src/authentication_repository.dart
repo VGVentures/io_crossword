@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
+import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// {@template authentication_repository}
 /// Repository to manage authentication.
@@ -11,10 +13,13 @@ class AuthenticationRepository {
   AuthenticationRepository({
     fb.FirebaseAuth? firebaseAuth,
   })  : _firebaseAuth = firebaseAuth ?? fb.FirebaseAuth.instance,
-        _userController = StreamController<User>.broadcast();
+        userController = BehaviorSubject<User>();
 
   final fb.FirebaseAuth _firebaseAuth;
-  final StreamController<User> _userController;
+
+  /// [BehaviorSubject] with the [User].
+  @visibleForTesting
+  final BehaviorSubject<User> userController;
   StreamSubscription<fb.User?>? _firebaseUserSubscription;
 
   /// Stream of [User] which will emit the current user when
@@ -24,12 +29,12 @@ class AuthenticationRepository {
   Stream<User> get user {
     _firebaseUserSubscription ??=
         _firebaseAuth.authStateChanges().listen((firebaseUser) {
-      _userController.add(
+      userController.add(
         firebaseUser?.toUser ?? User.unauthenticated,
       );
     });
 
-    return _userController.stream;
+    return userController.stream;
   }
 
   /// Stream of id tokens that can be used to authenticate with Firebase.
@@ -51,16 +56,25 @@ class AuthenticationRepository {
   Future<void> signInAnonymously() async {
     try {
       final userCredential = await _firebaseAuth.signInAnonymously();
-      _userController.add(userCredential.toUser);
+      userController.add(userCredential.toUser);
     } on Exception catch (error, stackTrace) {
       throw AuthenticationException(error, stackTrace);
     }
   }
 
+  /// Sign in the user anonymously.
+  ///
+  /// If the sign in fails, an [AuthenticationException] is thrown.
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+
+    userController.add(User.unauthenticated);
+  }
+
   /// Disposes any internal resources.
   void dispose() {
     _firebaseUserSubscription?.cancel();
-    _userController.close();
+    userController.close();
   }
 }
 

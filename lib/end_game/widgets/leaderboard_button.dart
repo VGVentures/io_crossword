@@ -11,6 +11,7 @@ class LeaderboardButton extends StatelessWidget {
 
     return OutlinedButton(
       onPressed: () {
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
         Navigator.push(context, LeaderboardPage.route());
       },
       style: Theme.of(context).io.outlineButtonTheme.simpleBorder,

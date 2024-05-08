@@ -135,5 +135,35 @@ void main() {
         );
       });
     });
+
+    group('GameStatusRequested', () {
+      test('can be instantiated', () {
+        expect(GameStatusRequested(), isA<GameStatusRequested>());
+      });
+
+      test('supports value comparisons', () {
+        expect(GameStatusRequested(), equals(GameStatusRequested()));
+      });
+    });
+
+    group('BoardStatusResumed', () {
+      test('can be instantiated', () {
+        expect(BoardStatusResumed(), isA<BoardStatusResumed>());
+      });
+
+      test('supports value comparisons', () {
+        expect(BoardStatusResumed(), equals(BoardStatusResumed()));
+      });
+    });
+
+    group('MascotDropped', () {
+      test('can be instantiated', () {
+        expect(MascotDropped(), isA<MascotDropped>());
+      });
+
+      test('supports value comparisons', () {
+        expect(MascotDropped(), equals(MascotDropped()));
+      });
+    });
   });
 }

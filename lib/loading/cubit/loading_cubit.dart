@@ -12,24 +12,10 @@ class LoadingCubit extends Cubit<LoadingState> {
 
   Future<void> load() async {
     final loadables = [
-      () => Flame.images.load(Mascots.dash.teamMascot.idleAnimation.keyName),
-      () =>
-          Flame.images.load(Mascots.dash.teamMascot.platformAnimation.keyName),
-      () => Flame.images.load(Mascots.dash.teamMascot.lookUpAnimation.keyName),
-      () => Flame.images.load(Mascots.android.teamMascot.idleAnimation.keyName),
-      () => Flame.images
-          .load(Mascots.android.teamMascot.platformAnimation.keyName),
-      () =>
-          Flame.images.load(Mascots.android.teamMascot.lookUpAnimation.keyName),
-      () => Flame.images.load(Mascots.dino.teamMascot.idleAnimation.keyName),
-      () =>
-          Flame.images.load(Mascots.dino.teamMascot.platformAnimation.keyName),
-      () => Flame.images.load(Mascots.dino.teamMascot.lookUpAnimation.keyName),
-      () => Flame.images.load(Mascots.sparky.teamMascot.idleAnimation.keyName),
-      () => Flame.images
-          .load(Mascots.sparky.teamMascot.platformAnimation.keyName),
-      () =>
-          Flame.images.load(Mascots.sparky.teamMascot.lookUpAnimation.keyName),
+      () => Flame.images.loadAll(Mascots.dash.teamMascot.loadableAssets()),
+      () => Flame.images.loadAll(Mascots.android.teamMascot.loadableAssets()),
+      () => Flame.images.loadAll(Mascots.dino.teamMascot.loadableAssets()),
+      () => Flame.images.loadAll(Mascots.sparky.teamMascot.loadableAssets()),
     ];
 
     emit(state.copyWith(assetsCount: loadables.length));
@@ -43,5 +29,7 @@ class LoadingCubit extends Cubit<LoadingState> {
         emit(state.copyWith(loaded: state.loaded + 1));
       }
     }
+
+    emit(state.copyWith(status: LoadingStatus.loaded));
   }
 }

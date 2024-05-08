@@ -1,9 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
-class HowToPlayCubit extends Cubit<int> {
-  HowToPlayCubit() : super(0);
+part 'how_to_play_state.dart';
+
+class HowToPlayCubit extends Cubit<HowToPlayState> {
+  HowToPlayCubit() : super(const HowToPlayState());
 
   void updateIndex(int index) {
-    emit(index);
+    emit(state.copyWith(index: index));
+  }
+
+  void updateStatus(HowToPlayStatus status) {
+    emit(state.copyWith(status: status));
   }
 }

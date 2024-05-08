@@ -864,5 +864,100 @@ void main() {
         ],
       );
     });
+
+    group('GameStatusRequested', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [failure] state '
+        'when getGameStatus fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenAnswer((_) => Stream.error(Exception()));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.status,
+            'status',
+            CrosswordStatus.failure,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits BoardStatus.resetInProgress when GameStatus is resetInProgress',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenAnswer((_) => Stream.value(GameStatus.resetInProgress));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.boardStatus,
+            'boardStatus',
+            BoardStatus.resetInProgress,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [inProgress] state with game status when getGameStatus succeeds',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => boardInfoRepository.getGameStatus())
+              .thenAnswer((_) => Stream.value(GameStatus.inProgress));
+        },
+        act: (bloc) => bloc.add(GameStatusRequested()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            gameStatus: GameStatus.inProgress,
+          ),
+        ],
+      );
+    });
+
+    group('BoardStatusResumed', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [BoardStatus.inProgress] state with board status in progress',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(BoardStatusResumed()),
+        expect: () => [
+          isA<CrosswordState>().having(
+            (state) => state.boardStatus,
+            'boardStatus',
+            BoardStatus.inProgress,
+          ),
+        ],
+      );
+    });
+
+    group('MascotDropped', () {
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits state with mascotVisible to false when dropped',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        act: (bloc) => bloc.add(MascotDropped()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            mascotVisible: false,
+          ),
+        ],
+      );
+    });
   });
 }

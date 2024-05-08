@@ -10,7 +10,6 @@ import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/project_details.dart';
-import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class CrosswordDrawer extends StatelessWidget {
@@ -125,15 +124,7 @@ class CrosswordDrawer extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
-            selector: (state) => (state.solvedWords, state.totalWords),
-            builder: (context, words) {
-              return ChallengeProgress(
-                solvedWords: words.$1,
-                totalWords: words.$2,
-              );
-            },
-          ),
+          const ChallengeProgressStatus(),
           const SizedBox(height: 48),
           ...items.map(
             (item) => ListTile(
