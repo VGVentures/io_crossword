@@ -261,11 +261,11 @@ class _IoWordInputState extends State<IoWordInput> {
   ///
   /// This may not reflect the current [_entireWord], but the previous word before
   /// it has been processed by [_onTextChanged]. After it has been processed, the
-  /// [_entireWord] will be equal to the [_wordDuplicate].
+  /// [_entireWord] will be equal to the [_previousWord].
   ///
   /// It includes the empty character fields, represented by the
   /// [IoWordInput._emptyCharacter].
-  late String _wordDuplicate = _entireWord;
+  late String _previousWord = _entireWord;
 
   bool get _initial => _word.length == widget.characters?.length;
 
@@ -281,9 +281,9 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     if (newValue.isEmpty) {
-      final previousActiveCharacter = _wordDuplicate[_activeCharacterIndex];
+      final previousActiveCharacter = _previousWord[_activeCharacterIndex];
 
-      _wordDuplicate = _wordDuplicate.replaceAt(
+      _previousWord = _previousWord.replaceAt(
         _activeCharacterIndex,
         IoWordInput._emptyCharacter,
       );
@@ -296,7 +296,7 @@ class _IoWordInputState extends State<IoWordInput> {
       // If it was empty, we delete also the letter at the previous index.
       if (previousActiveCharacter == IoWordInput._emptyCharacter) {
         _previous();
-        _wordDuplicate = _wordDuplicate.replaceAt(
+        _previousWord = _previousWord.replaceAt(
           _activeCharacterIndex,
           IoWordInput._emptyCharacter,
         );
@@ -310,7 +310,7 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
-    _wordDuplicate = _wordDuplicate.replaceAt(
+    _previousWord = _previousWord.replaceAt(
       _activeCharacterIndex,
       newCharacter.toUpperCase(),
     );
