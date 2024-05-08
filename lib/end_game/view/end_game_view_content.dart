@@ -66,6 +66,9 @@ class ActionButtonsEndGame extends StatelessWidget {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
+                    context
+                        .read<AudioController>()
+                        .playSfx(Assets.music.startButton1);
                     Navigator.pushReplacement(
                       context,
                       GameIntroPage.route(),

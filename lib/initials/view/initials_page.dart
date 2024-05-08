@@ -2,6 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
@@ -103,7 +104,12 @@ class _InitialsViewState extends State<InitialsView> {
                       ),
                     ),
                     InitialsSubmitButton(
-                      onPressed: () => _onSubmit(context),
+                      onPressed: () {
+                        _onSubmit(context);
+                        context
+                            .read<AudioController>()
+                            .playSfx(Assets.music.startButton1);
+                      },
                     ),
                   ],
                 ),
