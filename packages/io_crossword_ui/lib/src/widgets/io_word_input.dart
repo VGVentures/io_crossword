@@ -260,8 +260,10 @@ class _IoWordInputState extends State<IoWordInput> {
   /// The previous word that has been inputted so far.
   ///
   /// This may not reflect the current [_entireWord], but the previous word
-  /// before it has been processed by [_onTextChanged]. After it has been
-  /// processed, the [_entireWord] will be equal to the [_previousWord].
+  /// before it has been processed by [_onTextChanged].
+  ///
+  /// After it has been processed, the [_previousWord] will be equivalent to
+  /// the [_entireWord].
   ///
   /// It includes the empty character fields, represented by the
   /// [IoWordInput._emptyCharacter].
