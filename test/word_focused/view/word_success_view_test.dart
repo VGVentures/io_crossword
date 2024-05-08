@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -50,7 +51,7 @@ class _FakeWord extends Fake implements Word {
   String get answer => 'answer';
 
   @override
-  Axis get axis => Axis.horizontal;
+  domain.Axis get axis => domain.Axis.horizontal;
 
   @override
   int get length => 4;
@@ -146,10 +147,20 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoWord', (tester) async {
+    testWidgets('renders an horizontally scrollable $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoWord), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byWidgetPredicate(
+            (widget) =>
+                widget is SingleChildScrollView &&
+                widget.scrollDirection == Axis.horizontal,
+          ),
+          matching: find.byType(IoWord),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders success stats', (tester) async {
@@ -201,10 +212,20 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoWord', (tester) async {
+    testWidgets('renders an horizontally scrollable $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoWord), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byWidgetPredicate(
+            (widget) =>
+                widget is SingleChildScrollView &&
+                widget.scrollDirection == Axis.horizontal,
+          ),
+          matching: find.byType(IoWord),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders success stats', (tester) async {
