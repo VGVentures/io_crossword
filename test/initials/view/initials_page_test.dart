@@ -3,6 +3,8 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -18,6 +20,8 @@ class _MockInitialsBloc extends MockBloc<InitialsEvent, InitialsState>
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
 
+class _MockAudioController extends Mock implements AudioController {}
+
 void main() {
   group('$InitialsPage', () {
     testWidgets('displays an $InitialsView', (tester) async {
@@ -28,7 +32,13 @@ void main() {
   });
 
   group('$InitialsView', () {
+    late AudioController audioController;
+
     TestWidgetsFlutterBinding.ensureInitialized();
+
+    setUp(() {
+      audioController = _MockAudioController();
+    });
 
     testWidgets(
       'updates initials and flow when submission is valid',
@@ -123,6 +133,33 @@ void main() {
       ).called(1);
     });
 
+    testWidgets(
+        'plays ${Assets.music.startButton1} when '
+        '$InitialsSubmitButton is tapped', (tester) async {
+      final initialsBloc = _MockInitialsBloc();
+      whenListen(
+        initialsBloc,
+        const Stream<InitialsState>.empty(),
+        initialState: InitialsState.initial(),
+      );
+
+      await tester.pumpSubject(
+        initialsBloc: initialsBloc,
+        const InitialsView(),
+        audioController: audioController,
+      );
+
+      final submitButtonFinder = find.byType(InitialsSubmitButton);
+      await tester.ensureVisible(submitButtonFinder);
+
+      await tester.tap(submitButtonFinder);
+      await tester.pumpAndSettle();
+
+      verify(
+        () => audioController.playSfx(Assets.music.startButton1),
+      ).called(1);
+    });
+
     group('displays', () {
       testWidgets('a $IoAppBar', (tester) async {
         await tester.pumpSubject(const InitialsView());
@@ -203,6 +240,7 @@ extension on WidgetTester {
     Widget child, {
     InitialsBloc? initialsBloc,
     PlayerBloc? playerBloc,
+    AudioController? audioController,
   }) {
     final bloc = initialsBloc ?? _MockInitialsBloc();
     if (initialsBloc == null) {
@@ -216,6 +254,7 @@ extension on WidgetTester {
 
     return pumpApp(
       playerBloc: playerBloc,
+      audioController: audioController,
       BlocProvider(
         create: (_) => bloc,
         child: child,
