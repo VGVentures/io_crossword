@@ -22,7 +22,7 @@ class Crossword2View extends StatelessWidget {
     // hard-coding it:
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
     final configuration = CrosswordConfiguration(
-      bottomRight: (20, 20),
+      bottomRight: (15, 15),
       chunkSize: sectionSize,
     );
 
