@@ -109,9 +109,9 @@ void main() {
     );
 
     group('displays', () {
-      testWidgets('a $ChallengeProgress', (tester) async {
+      testWidgets('a $ChallengeProgressStatus', (tester) async {
         await tester.pumpSubject(const WelcomeBody());
-        expect(find.byType(ChallengeProgress), findsOneWidget);
+        expect(find.byType(ChallengeProgressStatus), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {
