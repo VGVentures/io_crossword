@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
@@ -41,6 +43,9 @@ class BottomBarContent extends StatelessWidget {
           children: [
             OutlinedButton(
               onPressed: () {
+                context
+                    .read<AudioController>()
+                    .playSfx(Assets.music.startButton1);
                 EndGameCheck.openDialog(context);
               },
               child: Text(
@@ -50,9 +55,14 @@ class BottomBarContent extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             OutlinedButton.icon(
-              onPressed: () => context
-                  .read<RandomWordSelectionBloc>()
-                  .add(const RandomWordRequested()),
+              onPressed: () {
+                context
+                    .read<AudioController>()
+                    .playSfx(Assets.music.startButton1);
+                context
+                    .read<RandomWordSelectionBloc>()
+                    .add(const RandomWordRequested());
+              },
               icon: const Icon(Icons.location_searching),
               label: Text(l10n.findNewWord),
             ),
