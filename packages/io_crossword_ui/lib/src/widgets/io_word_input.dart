@@ -397,7 +397,6 @@ class _IoWordInputState extends State<IoWordInput> {
 
     widget.controller?.addListener(_onInputReset);
     widget.controller?.updateWord(_word, isInitial: _initial);
-    _updateCurrentIndex(0);
     _next();
   }
 
