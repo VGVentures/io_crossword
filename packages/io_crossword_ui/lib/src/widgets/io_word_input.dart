@@ -233,6 +233,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// The entire word that has been inputted so far.
   String get _word {
     final word = StringBuffer();
+    final wordDuplicateBuffer = StringBuffer();
 
     for (var i = 0; i < widget.length; i++) {
       final isFixed =
@@ -242,18 +243,20 @@ class _IoWordInputState extends State<IoWordInput> {
               .replaceAll(IoWordInput._emptyCharacter, '');
       if (character.isNotEmpty) {
         word.write(character);
-        _wordDuplicate[i] = character;
+        wordDuplicateBuffer.write(character);
       } else {
-        _wordDuplicate[i] = IoWordInput._emptyCharacter;
+        wordDuplicateBuffer.write(IoWordInput._emptyCharacter);
       }
     }
+
+    _wordDuplicate = wordDuplicateBuffer.toString();
     return word.toString();
   }
 
-  late final List<String> _wordDuplicate = List.generate(
+  late String _wordDuplicate = List.generate(
     widget.length,
     (index) => widget.characters?[index] ?? IoWordInput._emptyCharacter,
-  );
+  ).join();
 
   bool get _initial => _word.length == widget.characters?.length;
 
@@ -268,12 +271,20 @@ class _IoWordInputState extends State<IoWordInput> {
       widget.controller?.updateWord(_word, isInitial: _initial);
     }
 
-    if (newValue.isEmpty) {
-      final previousActiveCharacter =
-          _wordDuplicate.elementAtOrNull(_activeCharacterIndex) ??
-              IoWordInput._emptyCharacter;
+    String replaceCharAt(String oldString, int index, String newChar) {
+      return oldString.substring(0, index) +
+          newChar +
+          oldString.substring(index + 1);
+    }
 
-      _wordDuplicate[_activeCharacterIndex] = IoWordInput._emptyCharacter;
+    if (newValue.isEmpty) {
+      final previousActiveCharacter = _wordDuplicate[_activeCharacterIndex];
+
+      _wordDuplicate = replaceCharAt(
+        _wordDuplicate,
+        _activeCharacterIndex,
+        IoWordInput._emptyCharacter,
+      );
       _activeController?.text = IoWordInput._emptyCharacter;
 
       // Because in the active controller we get the text already modified,
@@ -283,7 +294,11 @@ class _IoWordInputState extends State<IoWordInput> {
       // If it was empty, we delete also the letter at the previous index.
       if (previousActiveCharacter == IoWordInput._emptyCharacter) {
         _previous();
-        _wordDuplicate[_activeCharacterIndex] = IoWordInput._emptyCharacter;
+        _wordDuplicate = replaceCharAt(
+          _wordDuplicate,
+          _activeCharacterIndex,
+          IoWordInput._emptyCharacter,
+        );
         _activeController?.text = IoWordInput._emptyCharacter;
       }
       updateWord();
@@ -294,7 +309,11 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
-    _wordDuplicate[_activeCharacterIndex] = newCharacter.toUpperCase();
+    _wordDuplicate = replaceCharAt(
+      _wordDuplicate,
+      _activeCharacterIndex,
+      newCharacter.toUpperCase(),
+    );
     _next();
     updateWord();
   }
