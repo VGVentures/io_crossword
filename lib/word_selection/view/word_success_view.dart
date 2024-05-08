@@ -9,6 +9,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
 import 'package:io_crossword/share/share.dart';
+import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
 import 'package:io_crossword/word_selection/word_selection.dart' as selection;
@@ -69,7 +70,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
                   children: [
                     SuccessStats(),
                     SizedBox(height: 40),
-                    ChallengeProgressStatus(),
+                    _SuccessChallengeProgress(),
                     SizedBox(height: 24),
                   ],
                 ),
@@ -138,7 +139,7 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                     const SizedBox(height: 40),
                     const SuccessStats(),
                     const SizedBox(height: 40),
-                    const ChallengeProgressStatus(),
+                    const _SuccessChallengeProgress(),
                     const SizedBox(height: 40),
                     const KeepPlayingButton(),
                     const SizedBox(height: 16),
@@ -285,6 +286,23 @@ class _StatsRow extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _SuccessChallengeProgress extends StatelessWidget {
+  const _SuccessChallengeProgress();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
+      selector: (state) => (state.solvedWords, state.totalWords),
+      builder: (context, words) {
+        return ChallengeProgress(
+          solvedWords: words.$1,
+          totalWords: words.$2,
+        );
+      },
     );
   }
 }

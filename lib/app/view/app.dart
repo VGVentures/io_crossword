@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app_lifecycle/app_lifecycle.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
@@ -87,6 +88,12 @@ class App extends StatelessWidget {
               create: (_) => PlayerBloc(
                 leaderboardRepository: leaderboardRepository,
               )..add(PlayerLoaded(userId: user.id)),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (context) => ChallengeBloc(
+                boardInfoRepository: context.read(),
+              )..add(const ChallengeDataRequested()),
             ),
           ],
           child: const AppView(),
