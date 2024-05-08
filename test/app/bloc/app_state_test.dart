@@ -4,7 +4,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/app/bloc/app_bloc.dart';
+import 'package:io_crossword/app/app.dart';
 
 void main() {
   group('$AppState', () {
