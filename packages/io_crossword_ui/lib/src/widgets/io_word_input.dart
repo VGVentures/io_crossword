@@ -231,15 +231,13 @@ class _IoWordInputState extends State<IoWordInput> {
       _controllers[_activeCharacterIndex];
 
   /// The word that has been inputted so far by the user.
-  ///
-  /// This does not include the fixed characters, since those are not
-  /// inputted by the user.
   String get _word => _entireWord.replaceAll(
         IoWordInput._emptyCharacter,
         '',
       );
 
-  /// The word that has been inputted so far, including the fixed characters.
+  /// The word that has been inputted so far, with the empty character fields
+  /// represented by the [IoWordInput._emptyCharacter].
   String get _entireWord {
     final word = StringBuffer();
 
