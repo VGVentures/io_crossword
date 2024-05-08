@@ -231,6 +231,9 @@ class _IoWordInputState extends State<IoWordInput> {
       _controllers[_activeCharacterIndex];
 
   /// The word that has been inputted so far by the user.
+  ///
+  /// Unlike [_entireWord], this word does not contain the empty character
+  /// fields.
   String get _word => _entireWord.replaceAll(
         IoWordInput._emptyCharacter,
         '',
