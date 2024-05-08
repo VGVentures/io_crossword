@@ -271,17 +271,10 @@ class _IoWordInputState extends State<IoWordInput> {
       widget.controller?.updateWord(_word, isInitial: _initial);
     }
 
-    String replaceCharAt(String oldString, int index, String newChar) {
-      return oldString.substring(0, index) +
-          newChar +
-          oldString.substring(index + 1);
-    }
-
     if (newValue.isEmpty) {
       final previousActiveCharacter = _wordDuplicate[_activeCharacterIndex];
 
-      _wordDuplicate = replaceCharAt(
-        _wordDuplicate,
+      _wordDuplicate = _wordDuplicate.replaceAt(
         _activeCharacterIndex,
         IoWordInput._emptyCharacter,
       );
@@ -294,8 +287,7 @@ class _IoWordInputState extends State<IoWordInput> {
       // If it was empty, we delete also the letter at the previous index.
       if (previousActiveCharacter == IoWordInput._emptyCharacter) {
         _previous();
-        _wordDuplicate = replaceCharAt(
-          _wordDuplicate,
+        _wordDuplicate = _wordDuplicate.replaceAt(
           _activeCharacterIndex,
           IoWordInput._emptyCharacter,
         );
@@ -309,8 +301,7 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
-    _wordDuplicate = replaceCharAt(
-      _wordDuplicate,
+    _wordDuplicate = _wordDuplicate.replaceAt(
       _activeCharacterIndex,
       newCharacter.toUpperCase(),
     );
@@ -747,4 +738,9 @@ class IoWordInputCharacterFieldStyle extends Equatable {
         size,
         elevation,
       ];
+}
+
+extension on String {
+  String replaceAt(int index, String newChar) =>
+      replaceRange(index, index + 1, newChar);
 }
