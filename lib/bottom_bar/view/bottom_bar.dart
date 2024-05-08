@@ -43,6 +43,9 @@ class BottomBarContent extends StatelessWidget {
           children: [
             OutlinedButton(
               onPressed: () {
+                context
+                    .read<AudioController>()
+                    .playSfx(Assets.music.startButton1);
                 EndGameCheck.openDialog(context);
               },
               child: Text(

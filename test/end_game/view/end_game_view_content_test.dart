@@ -91,7 +91,8 @@ void main() {
       expect(find.text(l10n.playAgain), findsOneWidget);
     });
 
-    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
+    testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
+        (tester) async {
       await tester.pumpApp(
         ActionButtonsEndGame(),
         audioController: audioController,
@@ -103,6 +104,16 @@ void main() {
       verify(
         () => audioController.playSfx(Assets.music.startButton1),
       ).called(1);
+    });
+
+    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
+      await tester.pumpApp(
+        ActionButtonsEndGame(),
+      );
+
+      await tester.tap(find.text(l10n.playAgain));
+
+      await tester.pumpAndSettle();
       expect(find.byType(GameIntroPage), findsOneWidget);
     });
 

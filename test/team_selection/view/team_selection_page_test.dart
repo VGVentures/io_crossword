@@ -180,7 +180,9 @@ void main() {
         addTearDown(flowController.dispose);
       });
 
-      testWidgets('adds MascotSelected', (tester) async {
+      testWidgets(
+          'plays ${Assets.music.startButton1} when '
+          'submit button is tapped', (tester) async {
         await tester.pumpApp(
           playerBloc: playerBloc,
           BlocProvider(
@@ -203,6 +205,27 @@ void main() {
         verify(
           () => audioController.playSfx(Assets.music.startButton1),
         ).called(1);
+      });
+
+      testWidgets('adds MascotSelected', (tester) async {
+        await tester.pumpApp(
+          playerBloc: playerBloc,
+          BlocProvider(
+            create: (_) => teamSelectionCubit,
+            child: FlowBuilder<GameIntroStatus>(
+              controller: flowController,
+              onGeneratePages: (_, __) => [
+                const MaterialPage(child: TeamSelectionView()),
+              ],
+            ),
+          ),
+        );
+
+        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
+        await tester.ensureVisible(submitButtonFinder);
+        await tester.tap(submitButtonFinder);
+        await tester.pump();
+
         verify(() => playerBloc.add(MascotSelected(Mascots.android))).called(1);
       });
 

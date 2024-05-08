@@ -166,8 +166,12 @@ class _HowToPlayLarge extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       OutlinedButton(
-                        onPressed: () =>
-                            context.flow<GameIntroStatus>().complete(),
+                        onPressed: () {
+                          context
+                              .read<AudioController>()
+                              .playSfx(Assets.music.startButton1);
+                          context.flow<GameIntroStatus>().complete();
+                        },
                         child: Text(l10n.playNow),
                       ),
                     ],

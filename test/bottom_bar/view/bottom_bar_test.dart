@@ -87,6 +87,24 @@ void main() {
         when(() => wordSelectionBloc.state).thenReturn(
           const WordSelectionState.initial(),
         );
+        await tester.pumpApp(widget);
+
+        await tester.tap(find.text(l10n.findNewWord));
+
+        await tester.pumpAndSettle();
+
+        verify(
+          () => randomWordSelectionBloc.add(RandomWordRequested()),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'plays ${Assets.music.startButton1} when find new word button is tapped',
+      (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState.initial(),
+        );
         await tester.pumpApp(widget, audioController: audioController);
 
         await tester.tap(find.text(l10n.findNewWord));
@@ -95,9 +113,6 @@ void main() {
 
         verify(
           () => audioController.playSfx(Assets.music.startButton1),
-        ).called(1);
-        verify(
-          () => randomWordSelectionBloc.add(RandomWordRequested()),
         ).called(1);
       },
     );
@@ -117,6 +132,21 @@ void main() {
         (tester) async {
           await tester.pumpApp(
             BottomBarContent(),
+          );
+
+          await tester.tap(find.text(l10n.endGame));
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(EndGameCheck), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'plays ${Assets.music.startButton1} on endGame button tapped',
+        (tester) async {
+          await tester.pumpApp(
+            BottomBarContent(),
             audioController: audioController,
           );
 
@@ -127,7 +157,6 @@ void main() {
           verify(
             () => audioController.playSfx(Assets.music.startButton1),
           ).called(1);
-          expect(find.byType(EndGameCheck), findsOneWidget);
         },
       );
     });

@@ -128,6 +128,45 @@ void main() {
       });
     }
 
+    testWidgets('plays ${Assets.music.startButton1} when button is pressed',
+        (tester) async {
+      final flowController = FlowController(GameIntroStatus.howToPlay);
+      addTearDown(flowController.dispose);
+
+      when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: gameIntroBloc,
+            ),
+            BlocProvider.value(
+              value: howToPlayCubit,
+            ),
+            BlocProvider.value(
+              value: playerBloc,
+            ),
+          ],
+          child: FlowBuilder<GameIntroStatus>(
+            controller: flowController,
+            onGeneratePages: (_, __) => [
+              const MaterialPage(child: HowToPlayView()),
+            ],
+          ),
+        ),
+        layout: IoLayoutData.small,
+        audioController: audioController,
+      );
+
+      await tester.tap(find.byType(OutlinedButton));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => audioController.playSfx(Assets.music.startButton1),
+      ).called(1);
+    });
+
     for (final layout in IoLayoutData.values) {
       testWidgets('completes flow when button is pressed', (tester) async {
         final flowController = FlowController(GameIntroStatus.howToPlay);
@@ -156,15 +195,11 @@ void main() {
             ),
           ),
           layout: layout,
-          audioController: audioController,
         );
 
         await tester.tap(find.byType(OutlinedButton));
         await tester.pumpAndSettle();
 
-        verify(
-          () => audioController.playSfx(Assets.music.startButton1),
-        ).called(1);
         expect(flowController.completed, isTrue);
       });
 

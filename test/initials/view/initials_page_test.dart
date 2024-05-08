@@ -115,7 +115,6 @@ void main() {
       await tester.pumpSubject(
         initialsBloc: initialsBloc,
         const InitialsView(),
-        audioController: audioController,
       );
 
       final editableTexts = find.byType(EditableText);
@@ -130,10 +129,34 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(
-        () => audioController.playSfx(Assets.music.startButton1),
-      ).called(1);
-      verify(
         () => initialsBloc.add(const InitialsSubmitted('AB')),
+      ).called(1);
+    });
+
+    testWidgets(
+        'plays ${Assets.music.startButton1} when '
+        '$InitialsSubmitButton is tapped', (tester) async {
+      final initialsBloc = _MockInitialsBloc();
+      whenListen(
+        initialsBloc,
+        const Stream<InitialsState>.empty(),
+        initialState: InitialsState.initial(),
+      );
+
+      await tester.pumpSubject(
+        initialsBloc: initialsBloc,
+        const InitialsView(),
+        audioController: audioController,
+      );
+
+      final submitButtonFinder = find.byType(InitialsSubmitButton);
+      await tester.ensureVisible(submitButtonFinder);
+
+      await tester.tap(submitButtonFinder);
+      await tester.pumpAndSettle();
+
+      verify(
+        () => audioController.playSfx(Assets.music.startButton1),
       ).called(1);
     });
 

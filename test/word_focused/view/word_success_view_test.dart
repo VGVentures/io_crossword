@@ -295,7 +295,7 @@ void main() {
     });
 
     testWidgets(
-      'adds $WordUnselected event when tapping the keep playing button',
+      'plays ${Assets.music.startButton1} when tapping the keep playing button',
       (tester) async {
         await tester.pumpApp(
           BlocProvider(
@@ -310,6 +310,21 @@ void main() {
         verify(
           () => audioController.playSfx(Assets.music.startButton1),
         ).called(1);
+      },
+    );
+
+    testWidgets(
+      'adds $WordUnselected event when tapping the keep playing button',
+      (tester) async {
+        await tester.pumpApp(
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: widget,
+          ),
+        );
+
+        await tester.tap(find.byIcon(Icons.gamepad));
+
         verify(() => crosswordBloc.add(const WordUnselected())).called(1);
         verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
             .called(1);
