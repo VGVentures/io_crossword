@@ -14,7 +14,7 @@ class _MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
 
 void main() {
-  group('AppBloc', () {
+  group('$AppBloc', () {
     late AuthenticationRepository authenticationRepository;
     late AppBloc bloc;
 
