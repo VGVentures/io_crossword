@@ -445,13 +445,7 @@ class _TeamSelector extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
-        // TODO(marwfair): Get the team player count.
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422631645
-        const Text('10000 players'),
-        const SizedBox(
-          height: 32,
-        ),
+        const SizedBox(height: 32),
         _SubmitButton(Mascots.values[index]),
       ],
     );
