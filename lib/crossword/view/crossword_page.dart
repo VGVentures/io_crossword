@@ -1,4 +1,5 @@
 import 'package:api_client/api_client.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,10 +25,14 @@ class CrosswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CrosswordBloc>().add(const BoardLoadingInformationRequested());
-
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (_) => CrosswordBloc(
+            crosswordRepository: context.read<CrosswordRepository>(),
+            boardInfoRepository: context.read<BoardInfoRepository>(),
+          )..add(const BoardLoadingInformationRequested()),
+        ),
         BlocProvider(
           create: (_) => WordSelectionBloc(
             crosswordResource: context.read<CrosswordResource>(),
