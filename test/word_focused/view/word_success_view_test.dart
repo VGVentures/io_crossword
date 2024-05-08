@@ -5,6 +5,8 @@ import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -54,6 +56,8 @@ class _FakeWord extends Fake implements Word {
   @override
   String get clue => 'clue';
 }
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   late AppLocalizations l10n;
@@ -275,11 +279,13 @@ void main() {
   });
 
   group('KeepPlayingButton', () {
+    late AudioController audioController;
     late CrosswordBloc crosswordBloc;
     late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
       widget = BlocProvider.value(
@@ -296,10 +302,14 @@ void main() {
             create: (_) => wordSelectionBloc,
             child: widget,
           ),
+          audioController: audioController,
         );
 
         await tester.tap(find.byIcon(Icons.gamepad));
 
+        verify(
+          () => audioController.playSfx(Assets.music.startButton1),
+        ).called(1);
         verify(() => crosswordBloc.add(const WordUnselected())).called(1);
         verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
             .called(1);

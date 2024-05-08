@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -26,6 +28,8 @@ class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -74,12 +78,14 @@ void main() {
   });
 
   group('$HowToPlayView', () {
+    late AudioController audioController;
     late GameIntroBloc gameIntroBloc;
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       gameIntroBloc = _MockGameIntroBloc();
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
@@ -150,11 +156,15 @@ void main() {
             ),
           ),
           layout: layout,
+          audioController: audioController,
         );
 
         await tester.tap(find.byType(OutlinedButton));
         await tester.pumpAndSettle();
 
+        verify(
+          () => audioController.playSfx(Assets.music.startButton1),
+        ).called(1);
         expect(flowController.completed, isTrue);
       });
 
