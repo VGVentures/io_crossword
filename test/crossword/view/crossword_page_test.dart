@@ -48,6 +48,14 @@ void main() {
 
       expect(find.byType(CrosswordView), findsOneWidget);
     });
+
+    testWidgets('renders $CrosswordView', (tester) async {
+      await tester.pumpWidget(CrosswordPage());
+
+      final context = tester.element(find.byType(CrosswordView));
+
+      expect(context.read<CrosswordBloc>(), isNotNull);
+    });
   });
 
   group('$CrosswordView', () {
