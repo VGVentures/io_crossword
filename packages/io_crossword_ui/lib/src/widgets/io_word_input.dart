@@ -257,6 +257,14 @@ class _IoWordInputState extends State<IoWordInput> {
     return word.toString();
   }
 
+  /// The previous word that has been inputted so far.
+  ///
+  /// This may not reflect the current [_entireWord], but the previous word before
+  /// it has been processed by [_onTextChanged]. After it has been processed, the
+  /// [_entireWord] will be equal to the [_wordDuplicate].
+  ///
+  /// It includes the empty character fields, represented by the
+  /// [IoWordInput._emptyCharacter].
   late String _wordDuplicate = _entireWord;
 
   bool get _initial => _word.length == widget.characters?.length;
