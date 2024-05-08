@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Axis;
@@ -9,9 +10,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
-import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
+import 'package:io_crossword/crossword/crossword.dart'
+    hide WordSelected, WordUnselected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
@@ -309,6 +312,136 @@ void main() {
         await controller.animationDataList[1].spriteAnimationTicker.completed;
 
         verify(() => crosswordBloc.add(const MascotDropped())).called(1);
+      });
+    });
+
+    group('gameReset', () {
+      testWidgets(
+          'renders $ResetDialogContent when boardStatus '
+          'is resetInProgress', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.byType(ResetDialogContent), findsOneWidget);
+      });
+
+      testWidgets(
+          'verify WordUnselected is added when gameStatus is resetInProgress',
+          (tester) async {
+        final wordSelectionBloc = _MockWordSelectionBloc();
+
+        whenListen(
+          crosswordBloc,
+          Stream.fromIterable(
+            [
+              CrosswordState(gameStatus: GameStatus.resetInProgress),
+            ],
+          ),
+          initialState: CrosswordState(),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          wordSelectionBloc: wordSelectionBloc,
+        );
+
+        verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
+      });
+
+      testWidgets(
+          'bottomBar is not rendered when boardStatus is resetInProgress',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        expect(find.byType(BottomBar), findsNothing);
+      });
+
+      testWidgets('exit button opens EndGameCheck dialog when pressed',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+            mascotVisible: false,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.text(l10n.exitButtonLabel));
+        await tester.pump();
+
+        expect(find.byType(EndGameCheck), findsOneWidget);
+      });
+
+      testWidgets(
+          'keep playing button does nothing when pressed when '
+          'gameStatus is resetInProgress', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            gameStatus: GameStatus.resetInProgress,
+            boardStatus: BoardStatus.resetInProgress,
+            mascotVisible: false,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.pumpAndSettle();
+
+        await tester.tap(
+          find.text(l10n.keepPlayingButtonLabel),
+        );
+
+        verifyNever(() => crosswordBloc.add(BoardStatusResumed()));
+      });
+
+      testWidgets(
+          'verify that BoardStatusResumed is added when '
+          'keep playing button is pressed', (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+            boardStatus: BoardStatus.resetInProgress,
+            mascotVisible: false,
+          ),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+        );
+
+        await tester.tap(find.text(l10n.keepPlayingButtonLabel));
+
+        verify(() => crosswordBloc.add(BoardStatusResumed())).called(1);
       });
     });
   });
