@@ -146,6 +146,63 @@ void main() {
         expect(result, emits(true));
       });
     });
+
+    group('getGameStatus', () {
+      test('returns inProgress GameStatus from firebase', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'in_progress'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.inProgress));
+      });
+
+      test('returns resetInProgress GameStatus from firebase', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'reset_in_progress'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.resetInProgress));
+      });
+
+      test(
+          'returns inProgress GameStatus from firebase '
+          'when status is unknown', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'unknown'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.inProgress));
+      });
+
+      test('throws BoardInfoException when fetching the info fails', () {
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenThrow(Exception('oops'));
+
+        expect(
+          () => boardInfoRepository.getGameStatus(),
+          throwsA(isA<BoardInfoException>()),
+        );
+      });
+    });
   });
 
   group('BoardInfoException', () {
