@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   equatable: ^2.0.5
+  flame: ^1.16.0
   flutter:
     sdk: flutter
   meta: ^1.11.0
@@ -34,3 +35,5 @@ flutter:
     - family: IoIcons
       fonts:
         - asset: assets/icons/IoIcons.ttf
+  assets:
+    - assets/anim/

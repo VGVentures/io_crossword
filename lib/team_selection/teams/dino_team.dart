@@ -1,5 +1,6 @@
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class DinoTeam extends Team {
   const DinoTeam();
@@ -17,6 +18,15 @@ class DinoTeam extends Team {
   AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
 
   @override
+  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUp;
+
+  @override
+  AssetGenImage get dangleAnimation => Assets.anim.dinoDangle;
+
+  @override
+  AssetGenImage get dropInAnimation => Assets.anim.dinoDropIn;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDino;
 
   @override
@@ -26,20 +36,52 @@ class DinoTeam extends Team {
   AssetGenImage get howToPlayStreak => Assets.images.howToPlayStreakDino;
 
   @override
-  SpriteInformation get idleSpriteInformation => const SpriteInformation(
-        rows: 14,
-        columns: 2,
+  SpriteData get idleSpriteData => SpriteData(
+        path: idleAnimation.path,
+        amountPerRow: 14,
+        amountPerColumn: 2,
         stepTime: 0.042,
         width: 280,
         height: 370,
       );
 
   @override
-  SpriteInformation get lookUpSpriteInformation => const SpriteInformation(
-        rows: 15,
-        columns: 4,
+  SpriteData get lookUpSpriteData => SpriteData(
+        path: lookUpAnimation.path,
+        amountPerRow: 9,
+        amountPerColumn: 7,
         stepTime: 0.042,
-        width: 250,
-        height: 340,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get pickUpSpriteData => SpriteData(
+        path: pickUpAnimation.path,
+        amountPerRow: 17,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get dangleSpriteData => SpriteData(
+        path: dangleAnimation.path,
+        amountPerRow: 9,
+        amountPerColumn: 3,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get dropInSpriteData => SpriteData(
+        path: dropInAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 5,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
       );
 }
