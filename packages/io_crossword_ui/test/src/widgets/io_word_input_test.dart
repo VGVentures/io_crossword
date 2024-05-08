@@ -322,7 +322,6 @@ void main() {
         await tester.enterText(editableTexts.first, 'C');
         await tester.pumpAndSettle();
         expect(words.last, equals('ABCE'));
-        print(editableTexts.allCandidates.length);
 
         await tester.enterText(editableTexts.last, 'D');
         await tester.pumpAndSettle();
