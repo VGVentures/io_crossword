@@ -10,6 +10,7 @@ import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
@@ -366,7 +367,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://io.google/2024',
+            ProjectDetailsLinks.claimBadge,
             any(),
           ),
         );
