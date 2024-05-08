@@ -174,10 +174,12 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([0]),
-          initialState: 1,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(index: 2),
         );
-
         await tester.pumpApp(widget, audioController: audioController);
 
         await tester.tap(find.text(l10n.backButtonLabel));
@@ -194,8 +196,11 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([0]),
-          initialState: 1,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(index: 1),
         );
 
         await tester.pumpApp(widget, audioController: audioController);
