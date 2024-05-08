@@ -8,6 +8,7 @@ import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:game_domain/game_domain.dart' as domain show Axis;
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -126,6 +127,12 @@ void main() {
         create: (_) => wordSelectionBloc,
         child: WordSelectionSuccessLargeView(),
       );
+    });
+
+    testWidgets('renders $ChallengeProgressStatus', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(ChallengeProgressStatus), findsOneWidget);
     });
 
     testWidgets('renders word solved text', (tester) async {

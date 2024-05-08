@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
@@ -32,6 +33,12 @@ void main() {
       await tester.pumpApp(CrosswordDrawer());
 
       expect(find.byType(Drawer), findsOneWidget);
+    });
+
+    testWidgets('displays a $ChallengeProgressStatus', (tester) async {
+      await tester.pumpApp(CrosswordDrawer());
+
+      expect(find.byType(ChallengeProgressStatus), findsOneWidget);
     });
 
     testWidgets('closes when close button is tapped', (tester) async {
