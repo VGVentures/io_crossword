@@ -216,7 +216,7 @@ void main() {
       });
 
       testWidgets(
-          'verify pickingUp event is added '
+          'verify status is updated to pickingUp '
           'when done button is pressed', (tester) async {
         final l10n = await AppLocalizations.delegate.load(Locale('en'));
 
