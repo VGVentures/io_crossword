@@ -21,7 +21,8 @@ class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
 
 class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
@@ -79,7 +80,7 @@ void main() {
         (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,
@@ -99,7 +100,7 @@ void main() {
         (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,
@@ -119,7 +120,7 @@ void main() {
       final l10n = await AppLocalizations.delegate.load(Locale('en'));
       final mockNavigator = MockNavigator();
       when(mockNavigator.canPop).thenReturn(true);
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,

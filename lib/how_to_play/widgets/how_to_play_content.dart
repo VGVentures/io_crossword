@@ -31,7 +31,7 @@ class _HowToPlayContentState extends State<HowToPlayContent>
     _tabController = TabController(
       length: 5,
       vsync: this,
-      initialIndex: context.read<HowToPlayCubit>().state,
+      initialIndex: context.read<HowToPlayCubit>().state.index,
     );
   }
 
@@ -72,10 +72,10 @@ class _HowToPlayContentState extends State<HowToPlayContent>
       ),
     ];
 
-    return BlocConsumer<HowToPlayCubit, int>(
+    return BlocConsumer<HowToPlayCubit, HowToPlayState>(
       listener: (context, state) {
         _tabController.animateTo(
-          state,
+          state.index,
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
@@ -102,7 +102,7 @@ class _HowToPlayContentState extends State<HowToPlayContent>
                 Flexible(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: howToPlaySteps[state],
+                    child: howToPlaySteps[state.index],
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -134,7 +134,7 @@ class _TabSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final index = context.select((HowToPlayCubit cubit) => cubit.state);
+    final index = context.select((HowToPlayCubit cubit) => cubit.state).index;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
