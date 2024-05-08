@@ -98,12 +98,27 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final layout = IoLayout.of(context);
     final reducedViewportSize = viewport.reduced(layout) * currentScale;
+    final reducedRect = reducedViewportSize.toRect();
     final center = Vector3(
       reducedViewportSize.width / 2,
       reducedViewportSize.height / 2,
       0,
     );
-    final end = center - Vector3(wordCenter.dx, wordCenter.dy, 0);
+
+    final wordIsScaled = reducedRect.contains(wordSize.toOffset());
+    var updatedScale = currentScale;
+    if (!wordIsScaled) {
+      final widthScale = reducedViewportSize.width < wordSize.width
+          ? reducedViewportSize.width / wordSize.width
+          : 1;
+      final heightScale = reducedViewportSize.height < wordSize.height
+          ? reducedViewportSize.height / wordSize.height
+          : 1;
+      updatedScale = math.min(widthScale, heightScale).toDouble();
+    }
+
+    final scaledWordCenter = wordCenter * updatedScale;
+    final end = center - Vector3(scaledWordCenter.dx, scaledWordCenter.dy, 0);
     end
       ..x = math.max(
         math.min(end.x, _minTranslation.x),
@@ -115,27 +130,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       );
     if (begin == end) return;
 
-    final reducedRect = reducedViewportSize.toRect();
-    final wordIsScaled = reducedRect.contains(wordSize.toOffset());
-
-    final centerBegin = Matrix4.translation(begin);
-    Matrix4 centerEnd;
-
-    centerBegin.scale(currentScale);
-
-    if (!wordIsScaled) {
-      final widthScale = reducedViewportSize.width < wordSize.width
-          ? reducedViewportSize.width / wordSize.width
-          : 1;
-      final heightScale = reducedViewportSize.height < wordSize.height
-          ? reducedViewportSize.height / wordSize.height
-          : 1;
-      final endScale = math.min(widthScale, heightScale).toDouble();
-
-      centerEnd = Matrix4.translation(end.scaled(endScale))..scale(endScale);
-    } else {
-      centerEnd = Matrix4.translation(end);
-    }
+    final centerBegin = Matrix4.translation(begin)..scale(currentScale);
+    final centerEnd = Matrix4.translation(end)..scale(updatedScale);
 
     _centerAnimation?.removeListener(_onAnimateTransformation);
     _centerAnimation = Tween(
