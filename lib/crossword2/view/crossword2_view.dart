@@ -169,27 +169,33 @@ class _WordInput extends StatelessWidget {
     final layout = IoLayout.of(context);
     final theme = Theme.of(context);
 
-    return switch (layout) {
-      IoLayoutData.small => IoWord(
-          word.answer,
-          direction: word.axis.toAxis(),
-          style: theme.io.wordTheme.big.copyWith(
-            borderRadius: BorderRadius.zero,
-            margin: theme.io.wordInput.secondary.padding,
-            boxSize: theme.io.wordInput.secondary.filled.size,
-            backgroundColor:
-                theme.io.crosswordLetterTheme.empty.backgroundColor,
-            textStyle: theme.io.crosswordLetterTheme.empty.textStyle,
-          ),
+    final readOnly = context.select<WordSelectionBloc, bool>(
+      (bloc) =>
+          bloc.state.status == WordSelectionStatus.empty ||
+          bloc.state.status == WordSelectionStatus.preSolving,
+    );
+
+    if (readOnly || layout == IoLayoutData.small) {
+      return IoWord(
+        word.answer,
+        direction: word.axis.toAxis(),
+        style: theme.io.wordTheme.big.copyWith(
+          borderRadius: BorderRadius.zero,
+          margin: theme.io.wordInput.secondary.padding,
+          boxSize: theme.io.wordInput.secondary.filled.size,
+          backgroundColor: theme.io.crosswordLetterTheme.empty.backgroundColor,
+          textStyle: theme.io.crosswordLetterTheme.empty.textStyle,
         ),
-      IoLayoutData.large => CrosswordInput(
-          key: ValueKey(word.id),
-          style: theme.io.wordInput.secondary,
-          direction: word.axis.toAxis(),
-          length: word.length,
-          characters: word.solvedCharacters,
-        ),
-    };
+      );
+    }
+
+    return CrosswordInput(
+      key: ValueKey(word.id),
+      style: theme.io.wordInput.secondary,
+      direction: word.axis.toAxis(),
+      length: word.length,
+      characters: word.solvedCharacters,
+    );
   }
 }
 
