@@ -96,8 +96,14 @@ class _HowToPlaySmall extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: HowToPlayContent(
                           mascot: mascot,
-                          onDonePressed: () =>
-                              context.flow<GameIntroStatus>().complete(),
+                          onDonePressed: () {
+                            context
+                                .read<HowToPlayCubit>()
+                                .updateStatus(HowToPlayStatus.pickingUp);
+                            context
+                                .read<AudioController>()
+                                .playSfx(Assets.music.startButton1);
+                          },
                         ),
                       ),
                     ),
@@ -166,8 +172,14 @@ class _HowToPlayLarge extends StatelessWidget {
                         children: [
                           HowToPlayContent(
                             mascot: mascot,
-                            onDonePressed: () =>
-                                context.flow<GameIntroStatus>().complete(),
+                            onDonePressed: () {
+                              context
+                                  .read<HowToPlayCubit>()
+                                  .updateStatus(HowToPlayStatus.pickingUp);
+                              context
+                                  .read<AudioController>()
+                                  .playSfx(Assets.music.startButton1);
+                            },
                           ),
                           const SizedBox(height: 40),
                           OutlinedButton(
