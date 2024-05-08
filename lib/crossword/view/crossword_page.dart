@@ -6,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
-import 'package:io_crossword/crossword/crossword.dart' hide WordSelected;
+import 'package:io_crossword/crossword/crossword.dart'
+    hide WordSelected, WordUnselected;
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -107,7 +109,14 @@ class CrosswordView extends StatelessWidget {
             );
           },
         ),
-        body: BlocBuilder<CrosswordBloc, CrosswordState>(
+        body: BlocConsumer<CrosswordBloc, CrosswordState>(
+          listenWhen: (previous, current) =>
+              previous.gameStatus != current.gameStatus,
+          listener: (context, state) {
+            if (state.gameStatus == GameStatus.resetInProgress) {
+              context.read<WordSelectionBloc>().add(const WordUnselected());
+            }
+          },
           buildWhen: (previous, current) =>
               previous.status != current.status ||
               previous.mascotVisible != current.mascotVisible,
@@ -146,14 +155,102 @@ class LoadedBoardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultWordInputController(
+    final boardStatus = context.select(
+      (CrosswordBloc bloc) => bloc.state.boardStatus,
+    );
+
+    return DefaultWordInputController(
       child: Stack(
         children: [
-          Crossword2View(),
-          WordSelectionPage(),
-          BottomBar(),
+          const Crossword2View(),
+          const WordSelectionPage(),
+          if (boardStatus != BoardStatus.resetInProgress)
+            const BottomBar()
+          else
+            const ColoredBox(
+              color: Color(0x88000000),
+              child: Center(
+                child: ResetDialogContent(),
+              ),
+            ),
         ],
       ),
+    );
+  }
+}
+
+class ResetDialogContent extends StatelessWidget {
+  @visibleForTesting
+  const ResetDialogContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return IoPhysicalModel(
+      child: Card(
+        child: SizedBox(
+          width: 340,
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  l10n.resetDialogTitle,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  l10n.resetDialogSubtitle,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                const _BottomActions(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomActions extends StatelessWidget {
+  const _BottomActions();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    final gameStatus = context.select(
+      (CrosswordBloc bloc) => bloc.state.gameStatus,
+    );
+
+    final resetInProgress = gameStatus == GameStatus.resetInProgress;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => EndGameCheck.openDialog(context),
+            child: Text(l10n.exitButtonLabel),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: OutlinedButton(
+            onPressed: resetInProgress
+                ? null
+                : () => context
+                    .read<CrosswordBloc>()
+                    .add(const BoardStatusResumed()),
+            child: Text(l10n.keepPlayingButtonLabel),
+          ),
+        ),
+      ],
     );
   }
 }

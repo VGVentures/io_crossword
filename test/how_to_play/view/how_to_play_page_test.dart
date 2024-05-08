@@ -215,40 +215,28 @@ void main() {
         expect(flowController.completed, isTrue);
       });
 
-      testWidgets('completes flow when done button is pressed', (tester) async {
-        final flowController = FlowController(GameIntroStatus.howToPlay);
+      testWidgets(
+          'verify status is updated to pickingUp '
+          'when done button is pressed', (tester) async {
         final l10n = await AppLocalizations.delegate.load(Locale('en'));
-        addTearDown(flowController.dispose);
 
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
         when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 4));
-        await tester.pumpApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: gameIntroBloc,
-              ),
-              BlocProvider.value(
-                value: howToPlayCubit,
-              ),
-              BlocProvider.value(
-                value: playerBloc,
-              ),
-            ],
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: HowToPlayView()),
-              ],
-            ),
+
+        when(() => gameIntroBloc.state).thenReturn(
+          GameIntroState(
+            status: GameIntroPlayerCreationStatus.inProgress,
           ),
+        );
+
+        await tester.pumpApp(
+          widget,
           layout: layout,
         );
 
         await tester.tap(find.text(l10n.doneButtonLabel));
-        await tester.pumpAndSettle();
 
-        expect(flowController.completed, isTrue);
+        verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
+            .called(1);
       });
     }
 
