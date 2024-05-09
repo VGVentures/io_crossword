@@ -76,6 +76,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewport = _viewport;
     if (viewport == null) return;
 
+    final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
 
     _maxTranslation.setValues(
@@ -89,8 +90,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     );
 
     final scaleBegin = _transformationController.value.getMaxScaleOnAxis();
-
-    final layout = IoLayout.of(context);
 
     final reducedViewportSize = viewport.reduced(layout) * scaleBegin;
     final reducedViewportCenter = Vector3(
