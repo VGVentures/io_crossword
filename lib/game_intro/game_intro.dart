@@ -1,1 +1,1 @@
-export 'view/view.dart';
+export 'bloc/game_intro_bloc.dart';

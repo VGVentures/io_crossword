@@ -1,6 +1,7 @@
-import 'package:flow_builder/flow_builder.dart';
+import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
@@ -21,8 +22,17 @@ class HowToPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HowToPlayCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => HowToPlayCubit(),
+        ),
+        BlocProvider(
+          create: (context) => GameIntroBloc(
+            leaderboardResource: context.read<LeaderboardResource>(),
+          ),
+        ),
+      ],
       child: const HowToPlayView(),
     );
   }
@@ -43,10 +53,31 @@ class HowToPlayView extends StatelessWidget {
         crossword: l10n.crossword,
         actions: (context) => const MuteButton(),
       ),
-      body: switch (layout) {
-        IoLayoutData.small => const _HowToPlaySmall(),
-        IoLayoutData.large => const _HowToPlayLarge(),
-      },
+      body: BlocListener<GameIntroBloc, GameIntroState>(
+        listenWhen: (previous, current) => previous.status != current.status,
+        listener: (context, state) {
+          switch (state.status) {
+            case GameIntroPlayerCreationStatus.initial:
+            case GameIntroPlayerCreationStatus.inProgress:
+              break;
+            case GameIntroPlayerCreationStatus.success:
+              GoRouter.of(context).go('/game');
+            case GameIntroPlayerCreationStatus.failure:
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.errorPromptText),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+          }
+        },
+        child: switch (layout) {
+          IoLayoutData.small => const _HowToPlaySmall(),
+          IoLayoutData.large => const _HowToPlayLarge(),
+        },
+      ),
     );
   }
 }
@@ -228,7 +259,14 @@ class _MascotAnimationState extends State<_MascotAnimation> {
         }
 
         if (state.status == HowToPlayStatus.complete) {
-          context.flow<GameIntroStatus>().complete();
+          final playerState = context.read<PlayerBloc>().state;
+
+          context.read<GameIntroBloc>().add(
+                GameIntroPlayerCreated(
+                  initials: playerState.player.initials,
+                  mascot: playerState.mascot,
+                ),
+              );
         }
       },
       child: SpriteAnimationList(

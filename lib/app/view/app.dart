@@ -6,13 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:go_router/go_router.dart';
 import 'package:io_crossword/app_lifecycle/app_lifecycle.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/rotate_phone/rotate_phone.dart';
+import 'package:io_crossword/router/router.dart';
 import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
@@ -35,15 +36,16 @@ AudioController updateAudioController(
 }
 
 class App extends StatelessWidget {
-  const App({
+  App({
     required this.apiClient,
     required this.crosswordRepository,
     required this.boardInfoRepository,
     required this.leaderboardRepository,
     required this.user,
+    GoRouter? router,
     this.audioController,
     super.key,
-  });
+  }) : _router = router ?? createRouter();
 
   final ApiClient apiClient;
   final User user;
@@ -51,6 +53,7 @@ class App extends StatelessWidget {
   final BoardInfoRepository boardInfoRepository;
   final LeaderboardRepository leaderboardRepository;
   final AudioController? audioController;
+  final GoRouter _router;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +92,7 @@ class App extends StatelessWidget {
               )..add(PlayerLoaded(userId: user.id)),
             ),
           ],
-          child: const AppView(),
+          child: AppView(router: _router),
         ),
       ),
     );
@@ -97,7 +100,12 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
+  AppView({
+    GoRouter? router,
+    super.key,
+  }) : _router = router ?? createRouter();
+
+  final GoRouter _router;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +115,7 @@ class AppView extends StatelessWidget {
           return state.mascot;
         },
         builder: (context, mascot) {
-          return MaterialApp(
+          return MaterialApp.router(
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
@@ -119,7 +127,7 @@ class AppView extends StatelessWidget {
                 ],
               );
             },
-            home: const GameIntroPage(),
+            routerConfig: _router,
           );
         },
       ),

@@ -1,10 +1,11 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -17,7 +18,14 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WelcomeView();
+    return BlocBuilder<LoadingCubit, LoadingState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          LoadingStatus.loading => const LoadingPage(),
+          LoadingStatus.loaded => const WelcomeView(),
+        };
+      },
+    );
   }
 }
 
@@ -104,9 +112,7 @@ class WelcomeBody extends StatelessWidget {
   const WelcomeBody({super.key});
 
   void _onGetStarted(BuildContext context) {
-    context
-        .flow<GameIntroStatus>()
-        .update((status) => GameIntroStatus.teamSelection);
+    GoRouter.of(context).go('/team');
   }
 
   @override

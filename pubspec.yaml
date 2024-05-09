@@ -29,7 +29,6 @@ dependencies:
   flame_behaviors: ^1.0.0
   flame_bloc: ^1.11.1
   flame_test: ^1.16.1
-  flow_builder: ^0.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
@@ -39,6 +38,7 @@ dependencies:
   formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
+  go_router: ^14.0.2
   http: ^1.2.1
   intl: ^0.18.1
   io_crossword_ui:

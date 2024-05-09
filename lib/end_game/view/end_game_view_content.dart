@@ -69,10 +69,7 @@ class ActionButtonsEndGame extends StatelessWidget {
                     context
                         .read<AudioController>()
                         .playSfx(Assets.music.startButton1);
-                    Navigator.pushReplacement(
-                      context,
-                      GameIntroPage.route(),
-                    );
+                    GoRouter.of(context).go('/');
                   },
                   icon: const Icon(Icons.gamepad),
                   label: Text(l10n.playAgain),
