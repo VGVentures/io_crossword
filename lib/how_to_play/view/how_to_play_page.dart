@@ -1,9 +1,9 @@
 import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -18,6 +18,10 @@ class HowToPlayPage extends StatelessWidget {
 
   static Page<void> page() {
     return const MaterialPage(child: HowToPlayPage());
+  }
+
+  static Route<void> route() {
+    return MaterialPageRoute(builder: (_) => const HowToPlayPage());
   }
 
   @override
@@ -61,7 +65,11 @@ class HowToPlayView extends StatelessWidget {
             case GameIntroPlayerCreationStatus.inProgress:
               break;
             case GameIntroPlayerCreationStatus.success:
-              GoRouter.of(context).go('/game');
+              Navigator.pushAndRemoveUntil(
+                context,
+                CrosswordPage.route(),
+                (route) => route.isFirst,
+              );
             case GameIntroPlayerCreationStatus.failure:
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()

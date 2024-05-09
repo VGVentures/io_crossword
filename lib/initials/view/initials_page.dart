@@ -1,9 +1,9 @@
 import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/how_to_play/view/how_to_play_page.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -12,7 +12,9 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class InitialsPage extends StatelessWidget {
   const InitialsPage({super.key});
 
-  static Page<void> page() => const MaterialPage<void>(child: InitialsPage());
+  static Route<void> route() {
+    return MaterialPageRoute(builder: (_) => const InitialsPage());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class _InitialsViewState extends State<InitialsView> {
 
   void _onSuccess(BuildContext context, InitialsState state) {
     context.read<PlayerBloc>().add(InitialsSelected(state.initials.value));
-    GoRouter.of(context).go('/how-to-play');
+    Navigator.of(context).push(HowToPlayPage.route());
   }
 
   @override

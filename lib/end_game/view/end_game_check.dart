@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -45,8 +45,7 @@ class EndGameCheck extends StatelessWidget {
                     icon: const Icon(Icons.logout),
                     label: Text(l10n.endGame),
                     onPressed: () {
-                      GoRouter.of(context).pop();
-                      GoRouter.of(context).go('/end-game');
+                      Navigator.pushReplacement(context, EndGamePage.route());
                     },
                   ),
                 ],

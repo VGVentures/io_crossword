@@ -38,7 +38,6 @@ dependencies:
   formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
-  go_router: ^14.0.2
   http: ^1.2.1
   intl: ^0.18.1
   io_crossword_ui:
