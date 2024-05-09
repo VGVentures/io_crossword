@@ -92,8 +92,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final currentScale = _transformationController.value.getMaxScaleOnAxis();
     var updatedScale = currentScale;
-    final translationBegin = _transformationController.value.getTranslation()
-      ..scale(currentScale);
 
     final layout = IoLayout.of(context);
 
@@ -121,6 +119,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       updatedScale = math.min(widthScale, heightScale).toDouble();
     }
 
+    final translationBegin = _transformationController.value.getTranslation()
+      ..scale(currentScale);
     final scaledWordCenter = wordCenter * updatedScale;
     final translationEnd = center -
         Vector3(
