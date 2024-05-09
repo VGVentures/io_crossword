@@ -52,7 +52,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     vsync: this,
     duration: const Duration(milliseconds: 500),
   );
-  Animation<Matrix4>? _centerAnimation;
+  Animation<Matrix4>? _transformationAnimation;
 
   /// The minimum amount of translation allowed.
   final _minTranslation = Vector3.zero();
@@ -61,7 +61,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   final _maxTranslation = Vector3.zero();
 
   void _onAnimateTransformation() {
-    _transformationController.value = _centerAnimation!.value;
+    _transformationController.value = _transformationAnimation!.value;
   }
 
   void _centerSelectedWord(BuildContext context) {
@@ -148,8 +148,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       ..scale(currentScale);
     final centerEnd = Matrix4.translation(translationEnd)..scale(updatedScale);
 
-    _centerAnimation?.removeListener(_onAnimateTransformation);
-    _centerAnimation = Tween(
+    _transformationAnimation?.removeListener(_onAnimateTransformation);
+    _transformationAnimation = Tween(
       begin: centerBegin,
       end: centerEnd,
     ).animate(
@@ -170,8 +170,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   @override
   void dispose() {
-    _centerAnimation?.removeListener(_onAnimateTransformation);
-    _centerAnimation = null;
+    _transformationAnimation?.removeListener(_onAnimateTransformation);
+    _transformationAnimation = null;
     _animationController?.dispose();
     _animationController = null;
 
