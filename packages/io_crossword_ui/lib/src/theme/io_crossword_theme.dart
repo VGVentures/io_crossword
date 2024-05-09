@@ -378,20 +378,31 @@ class IoCrosswordTheme {
   }
 
   IoIconButtonTheme get _iconButtonTheme {
-    return const IoIconButtonTheme(
+    return IoIconButtonTheme(
       outlined: ButtonStyle(
-        iconSize: MaterialStatePropertyAll<double>(20),
-        shape: MaterialStatePropertyAll<OutlinedBorder>(
+        iconSize: const MaterialStatePropertyAll<double>(20),
+        shape: const MaterialStatePropertyAll<OutlinedBorder>(
           CircleBorder(side: BorderSide(color: IoCrosswordColors.mediumGray)),
         ),
-        iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
-        backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent),
+        iconColor: MaterialStateColor.resolveWith((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return IoCrosswordColors.mediumGray;
+          }
+          return IoCrosswordColors.seedWhite;
+        }),
+        backgroundColor:
+            const MaterialStatePropertyAll<Color>(Colors.transparent),
       ),
       filled: ButtonStyle(
-        iconSize: MaterialStatePropertyAll<double>(20),
-        iconColor: MaterialStatePropertyAll<Color>(IoCrosswordColors.seedWhite),
+        iconSize: const MaterialStatePropertyAll<double>(20),
+        iconColor: MaterialStateColor.resolveWith((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return IoCrosswordColors.mediumGray;
+          }
+          return IoCrosswordColors.seedWhite;
+        }),
         backgroundColor:
-            MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
+            const MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
       ),
     );
   }
