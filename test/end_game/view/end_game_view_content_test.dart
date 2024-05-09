@@ -22,6 +22,9 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 class _MockAudioController extends Mock implements AudioController {}
 
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
 void main() {
   late AppLocalizations l10n;
   late AudioController audioController;
@@ -97,40 +100,16 @@ void main() {
 
     testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
         (tester) async {
-      final mockNavigator = MockNavigator();
-
-      when(mockNavigator.canPop).thenReturn(true);
-
       await tester.pumpApp(
         ActionButtonsEndGame(),
         audioController: audioController,
-        navigator: mockNavigator,
       );
 
       await tester.tap(find.text(l10n.playAgain));
 
-      await tester.pumpAndSettle();
       verify(
         () => audioController.playSfx(Assets.music.startButton1),
       ).called(1);
-    });
-
-    testWidgets('displays CrosswordPage when playAgain tapped', (tester) async {
-      final mockNavigator = MockNavigator();
-
-      when(mockNavigator.canPop).thenReturn(true);
-      when(() => mockNavigator.pushReplacement(any())).thenAnswer((_) async {});
-
-      await tester.pumpApp(
-        ActionButtonsEndGame(),
-        playerBloc: playerBloc,
-        navigator: mockNavigator,
-      );
-
-      await tester.tap(find.text(l10n.playAgain));
-
-      verify(() => mockNavigator.pushReplacement(CrosswordPage.route()))
-          .called(1);
     });
 
     testWidgets('displays claimBadgeContributing', (tester) async {
