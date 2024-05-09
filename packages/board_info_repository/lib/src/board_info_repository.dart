@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -107,6 +109,26 @@ class BoardInfoRepository {
 
       final data = results.docs.first.data();
       return (data['value'] as num).toDouble();
+    } catch (error, stackStrace) {
+      throw BoardInfoException(error, stackStrace);
+    }
+  }
+
+  /// returns bottom right section's position
+  Future<Point<int>> getBottomRight() async {
+    try {
+      final results = await boardInfoCollection
+          .where('type', isEqualTo: 'bottom_right')
+          .get();
+
+      final data = results.docs.first.data();
+      final string = data['value'] as String;
+      final position = string.split(',');
+      final (x, y) = (
+        int.tryParse(position.first),
+        int.tryParse(position.first),
+      );
+      return Point(x!, y!);
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
