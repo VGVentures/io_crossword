@@ -182,6 +182,7 @@ void main() {
         );
       },
     );
+
     testWidgets(
       'Google I/O is tapped',
       (tester) async {
@@ -198,6 +199,7 @@ void main() {
         );
       },
     );
+
     testWidgets(
       'Explore in AI Studio is tapped',
       (tester) async {
