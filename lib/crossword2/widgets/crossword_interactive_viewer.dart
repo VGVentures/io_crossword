@@ -86,10 +86,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final wordSize = selectedWord.word.size(crosswordLayout);
-    final wordRect = selectedWord.offset(crosswordLayout) & wordSize;
-    final wordCenter = wordRect.center;
-
     final scaleBegin = _transformationController.value.getMaxScaleOnAxis();
 
     final layout = IoLayout.of(context);
@@ -100,6 +96,10 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       reducedViewportSize.height / 2,
       0,
     );
+
+    final wordSize = selectedWord.word.size(crosswordLayout);
+    final wordRect = selectedWord.offset(crosswordLayout) & wordSize;
+    final wordCenter = wordRect.center;
 
     final scaleEnd = math
         .min(
