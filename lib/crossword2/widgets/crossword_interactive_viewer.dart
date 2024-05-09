@@ -139,14 +139,15 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       );
     if (translationBegin == translationEnd) return;
 
-    final centerBegin = Matrix4.translation(translationBegin)
+    final transformationBegin = Matrix4.translation(translationBegin)
       ..scale(currentScale);
-    final centerEnd = Matrix4.translation(translationEnd)..scale(updatedScale);
+    final transformationEnd = Matrix4.translation(translationEnd)
+      ..scale(updatedScale);
 
     _transformationAnimation?.removeListener(_onAnimateTransformation);
     _transformationAnimation = Tween(
-      begin: centerBegin,
-      end: centerEnd,
+      begin: transformationBegin,
+      end: transformationEnd,
     ).animate(
       CurvedAnimation(
         parent: animationController!,
