@@ -131,6 +131,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     if (begin == end) return;
 
     final centerBegin = Matrix4.translation(begin)..scale(currentScale);
+
     final centerEnd = Matrix4.translation(end)..scale(updatedScale);
 
     _centerAnimation?.removeListener(_onAnimateTransformation);
@@ -175,7 +176,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         },
         builder: (context, state) {
           return InteractiveViewer.builder(
-            scaleEnabled: true,
+            scaleEnabled: false,
             panEnabled: state.word == null,
             transformationController: _transformationController,
             builder: (context, quad) {
