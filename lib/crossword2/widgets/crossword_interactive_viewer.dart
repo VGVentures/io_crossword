@@ -92,30 +92,31 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final currentScale = _transformationController.value.getMaxScaleOnAxis();
     var updatedScale = currentScale;
-    final begin = _transformationController.value.getTranslation()
+    final translationBegin = _transformationController.value.getTranslation()
       ..scale(
         currentScale,
       );
 
     final layout = IoLayout.of(context);
 
-    bool scaledInViewport(Size viewport) {
+    bool wordFitsInViewport(Size viewport) {
       final reducedViewportSize = viewport;
       final reducedRect = reducedViewportSize.toRect();
 
       return reducedRect.contains(wordSize.toOffset());
     }
 
-    final reducedViewportSize = viewport.reduced(layout) * currentScale;
+    final viewportSize = viewport.reduced(layout);
+    final reducedViewportSize = viewportSize * currentScale;
     final center = Vector3(
       reducedViewportSize.width / 2,
       reducedViewportSize.height / 2,
       0,
     );
 
-    if (currentScale != 1 && scaledInViewport(viewport.reduced(layout))) {
+    if (currentScale != 1 && wordFitsInViewport(viewportSize)) {
       updatedScale = 1;
-    } else if (!scaledInViewport(reducedViewportSize)) {
+    } else if (!wordFitsInViewport(reducedViewportSize)) {
       final widthScale = reducedViewportSize.width < wordSize.width
           ? reducedViewportSize.width / wordSize.width
           : 1;
@@ -126,20 +127,26 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     }
 
     final scaledWordCenter = wordCenter * updatedScale;
-    final end = center - Vector3(scaledWordCenter.dx, scaledWordCenter.dy, 0);
-    end
+    final translationEnd = center -
+        Vector3(
+          scaledWordCenter.dx,
+          scaledWordCenter.dy,
+          0,
+        );
+    translationEnd
       ..x = math.max(
-        math.min(end.x, _minTranslation.x),
+        math.min(translationEnd.x, _minTranslation.x),
         _maxTranslation.x,
       )
       ..y = math.max(
-        math.min(end.y, _minTranslation.y),
+        math.min(translationEnd.y, _minTranslation.y),
         _maxTranslation.y,
       );
-    if (begin == end) return;
+    if (translationBegin == translationEnd) return;
 
-    final centerBegin = Matrix4.translation(begin)..scale(currentScale);
-    final centerEnd = Matrix4.translation(end)..scale(updatedScale);
+    final centerBegin = Matrix4.translation(translationBegin)
+      ..scale(currentScale);
+    final centerEnd = Matrix4.translation(translationEnd)..scale(updatedScale);
 
     _centerAnimation?.removeListener(_onAnimateTransformation);
     _centerAnimation = Tween(
