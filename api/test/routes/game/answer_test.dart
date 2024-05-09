@@ -67,7 +67,7 @@ void main() {
       });
 
       test(
-        'returns Response with valid to true and updates score '
+        'returns Response with valid to (true, true) and updates score '
         'if answer is correct',
         () async {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
@@ -77,12 +77,10 @@ void main() {
               initials: 'ABC',
             ),
           );
-          when(
-            () => crosswordRepository.updateSolvedWordsCount(),
-          ).thenAnswer((_) async {});
+
           when(
             () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
-          ).thenAnswer((_) async => true);
+          ).thenAnswer((_) async => (true, true));
           when(
             () => leaderboardRepository.updateScore(user.id),
           ).thenAnswer((_) async => 10);
@@ -102,6 +100,72 @@ void main() {
       );
 
       test(
+        'returns Response with valid to (true, true) does not call '
+        'updateSolvedWordsCount',
+        () async {
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
+
+          when(
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+          ).thenAnswer((_) async => (true, true));
+          when(
+            () => leaderboardRepository.updateScore(user.id),
+          ).thenAnswer((_) async => 10);
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'wordId': 'id',
+              'answer': 'sun',
+            },
+          );
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.ok);
+          verifyNever(() => crosswordRepository.updateSolvedWordsCount());
+        },
+      );
+
+      test(
+        'returns Response with valid to (true, false) '
+        'calls updateSolvedWordsCount',
+        () async {
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascots.dash,
+              initials: 'ABC',
+            ),
+          );
+          when(
+            () => crosswordRepository.updateSolvedWordsCount(),
+          ).thenAnswer((_) async {});
+          when(
+            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+          ).thenAnswer((_) async => (true, false));
+          when(
+            () => leaderboardRepository.updateScore(user.id),
+          ).thenAnswer((_) async => 10);
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'wordId': 'id',
+              'answer': 'sun',
+            },
+          );
+
+          final response = await route.onRequest(requestContext);
+
+          expect(response.statusCode, HttpStatus.ok);
+          verify(() => crosswordRepository.updateSolvedWordsCount()).called(1);
+        },
+      );
+
+      test(
         'returns Response with 0 points and does not update score '
         'if answer is incorrect',
         () async {
@@ -114,7 +178,7 @@ void main() {
           );
           when(
             () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
-          ).thenAnswer((_) async => false);
+          ).thenAnswer((_) async => (false, false));
           when(() => request.json()).thenAnswer(
             (_) async => {
               'wordId': 'id',
