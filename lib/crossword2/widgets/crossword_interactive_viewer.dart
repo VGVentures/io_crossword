@@ -95,7 +95,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final layout = IoLayout.of(context);
 
     final reducedViewportSize = viewport.reduced(layout) * scaleBegin;
-    final center = Vector3(
+    final reducedViewportCenter = Vector3(
       reducedViewportSize.width / 2,
       reducedViewportSize.height / 2,
       0,
@@ -115,7 +115,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final translationBegin = _transformationController.value.getTranslation()
       ..scale(scaleBegin);
     final scaledWordCenter = wordCenter * scaleEnd;
-    final translationEnd = center -
+    final translationEnd = reducedViewportCenter -
         Vector3(
           scaledWordCenter.dx,
           scaledWordCenter.dy,
