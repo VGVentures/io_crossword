@@ -144,7 +144,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       ).animate(
         CurvedAnimation(
           parent: animationController!,
-          curve: Curves.decelerate,
+          curve: Curves.linear,
         ),
       )..addListener(_onAnimateTransformation);
 
@@ -185,6 +185,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
             transformationController: _transformationController,
             builder: (context, quad) {
               _viewport = quad;
+              print('viewport: ${quad.width}, ${quad.height}');
               _centerSelectedWord(context);
 
               return QuadScope(
