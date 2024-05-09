@@ -15,12 +15,6 @@ import 'package:io_crossword/welcome/welcome.dart';
 class GameIntroPage extends StatelessWidget {
   const GameIntroPage({super.key});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const GameIntroPage(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GameIntroBloc>(
