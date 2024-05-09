@@ -91,7 +91,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final wordCenter = wordRect.center;
 
     final scaleBegin = _transformationController.value.getMaxScaleOnAxis();
-    var updatedScale = scaleBegin;
+    var scaleEnd = scaleBegin;
 
     final layout = IoLayout.of(context);
 
@@ -108,7 +108,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     );
 
     if (scaleBegin != 1 && wordFitsInViewport(viewportSize)) {
-      updatedScale = 1;
+      scaleEnd = 1;
     } else if (!wordFitsInViewport(reducedViewportSize)) {
       final widthScale = reducedViewportSize.width < wordSize.width
           ? reducedViewportSize.width / wordSize.width
@@ -116,12 +116,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       final heightScale = reducedViewportSize.height < wordSize.height
           ? reducedViewportSize.height / wordSize.height
           : 1;
-      updatedScale = math.min(widthScale, heightScale).toDouble();
+      scaleEnd = math.min(widthScale, heightScale).toDouble();
     }
 
     final translationBegin = _transformationController.value.getTranslation()
       ..scale(scaleBegin);
-    final scaledWordCenter = wordCenter * updatedScale;
+    final scaledWordCenter = wordCenter * scaleEnd;
     final translationEnd = center -
         Vector3(
           scaledWordCenter.dx,
@@ -141,7 +141,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final transformationBegin = Matrix4.translation(translationBegin)
       ..scale(scaleBegin);
     final transformationEnd = Matrix4.translation(translationEnd)
-      ..scale(updatedScale);
+      ..scale(scaleEnd);
 
     if (transformationBegin != transformationEnd) {
       _transformationAnimation?.removeListener(_onAnimateTransformation);
