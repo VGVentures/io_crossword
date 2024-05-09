@@ -71,8 +71,10 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     }
 
     final selectedWord = context.read<WordSelectionBloc>().state.word;
+    if (selectedWord == null) return;
+
     final viewport = _viewport;
-    if (selectedWord == null || viewport == null) return;
+    if (viewport == null) return;
 
     final crosswordLayout = CrosswordLayoutScope.of(context);
 
