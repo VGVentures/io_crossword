@@ -98,10 +98,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final layout = IoLayout.of(context);
 
     bool wordFitsInViewport(Size viewport) {
-      final reducedViewportSize = viewport;
-      final reducedRect = reducedViewportSize.toRect();
-
-      return reducedRect.contains(wordSize.toOffset());
+      return viewport.toRect().contains(wordSize.toOffset());
     }
 
     final viewportSize = viewport.reduced(layout);
