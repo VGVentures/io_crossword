@@ -60,15 +60,19 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// The maximum amount of translation allowed.
   final _maxTranslation = Vector3.zero();
 
+  /// The scale that should be used, whenever possible.
+  ///
+  /// It is assumed it is the identity of multiplication.
+  final _idealScale = 1.0;
+
   void _onAnimateTransformation() {
     _transformationController.value = _transformationAnimation!.value;
   }
 
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
-    if (_animationController == null || _animationController!.isAnimating) {
-      return;
-    }
+    if (animationController == null) return;
+    if (animationController.isAnimating) return;
 
     final selectedWord = context.read<WordSelectionBloc>().state.word;
     if (selectedWord == null) return;
@@ -90,38 +94,56 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     );
 
     final scaleBegin = _transformationController.value.getMaxScaleOnAxis();
+    final translationBegin =
+        _transformationController.value.getTranslation() * scaleBegin;
 
-    final reducedViewportSize = viewport.reduced(layout) * scaleBegin;
-    final reducedViewportCenter = Vector3(
-      reducedViewportSize.width / 2,
-      reducedViewportSize.height / 2,
+    final beginViewportSize = viewport.reduced(layout);
+
+    // scaleBegin == _idealScale => idealViewportSize = beginViewportSize
+    // (x, y) Scale: 1
+    // (1856, 889) Scale: 0.801
+    // 1856 * 0.801 = 1487
+    // 889 * 0.801 = 712
+
+    // (x, y) Scale: 1
+    // (703, 337) Scale: 2.11
+    // 703 * 2.11 = 1487
+    // 337 * 2.11 = 712
+
+    final idealViewportSize = beginViewportSize * scaleBegin;
+    final idealWordSize = selectedWord.word.size(crosswordLayout) * _idealScale;
+    final scaleEnd = math.min(
+      idealViewportSize.width < idealWordSize.width
+          ? idealViewportSize.width / idealWordSize.width
+          : _idealScale,
+      idealViewportSize.height < idealWordSize.height
+          ? idealViewportSize.height / idealWordSize.height
+          : _idealScale,
+    );
+
+    final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
+    final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
+    final endWordCenter = endWordRect.center;
+
+    // Begin = (1487, 713) Scale 1
+    // Scale End = 0.8
+    // End (1856, 889)
+    // 1487 / 0.8 = 1856
+
+    final endViewportSize = beginViewportSize * scaleEnd;
+    final endViewportCenter = Vector3(
+      endViewportSize.width / 2,
+      endViewportSize.height / 2,
       0,
     );
 
-    final wordSize = selectedWord.word.size(crosswordLayout);
-    final wordRect = selectedWord.offset(crosswordLayout) & wordSize;
-    final wordCenter = wordRect.center;
-
-    final scaleEnd = math
-        .min(
-          reducedViewportSize.width < wordSize.width
-              ? reducedViewportSize.width / wordSize.width
-              : 1,
-          reducedViewportSize.height < wordSize.height
-              ? reducedViewportSize.height / wordSize.height
-              : 1,
-        )
-        .toDouble();
-
-    final translationBegin = _transformationController.value.getTranslation()
-      ..scale(scaleBegin);
-    final scaledWordCenter = wordCenter * scaleEnd;
-    final translationEnd = reducedViewportCenter -
+    final translationEnd = endViewportCenter -
         Vector3(
-          scaledWordCenter.dx,
-          scaledWordCenter.dy,
+          endWordCenter.dx,
+          endWordCenter.dy,
           0,
-        );
+        )
+      ..scale(scaleEnd);
     translationEnd
       ..x = math.max(
         math.min(translationEnd.x, _minTranslation.x),
@@ -144,11 +166,12 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         end: transformationEnd,
       ).animate(
         CurvedAnimation(
-          parent: animationController!,
+          parent: animationController,
           curve: Curves.linear,
         ),
       )..addListener(_onAnimateTransformation);
 
+      print('Animate');
       animationController.forward(from: 0);
     }
   }
@@ -181,11 +204,17 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         },
         builder: (context, state) {
           return InteractiveViewer.builder(
-            scaleEnabled: false,
+            scaleEnabled: true,
             panEnabled: state.word == null,
             transformationController: _transformationController,
             builder: (context, quad) {
               _viewport = quad;
+
+              final scaleBegin =
+                  _transformationController.value.getMaxScaleOnAxis();
+              print('scaleBegin: $scaleBegin');
+              print('viewport: ${quad.width}, ${quad.height}');
+
               _centerSelectedWord(context);
 
               return QuadScope(
