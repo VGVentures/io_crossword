@@ -348,5 +348,30 @@ void main() {
         );
       });
     });
+
+    group('iconButton', () {
+      group('iconColor', () {
+        test('is mediumGray when ${MaterialState.disabled}', () {
+          final iconButtonTheme = IoCrosswordTheme().themeData.iconButtonTheme;
+          final property = iconButtonTheme.style!.iconColor!;
+
+          expect(
+            property.resolve({MaterialState.disabled}),
+            IoCrosswordColors.mediumGray,
+          );
+        });
+
+        for (final state in MaterialState.values.toSet()
+          ..remove(MaterialState.disabled)) {
+          test('is seedWhite when $state', () {
+            final iconButtonTheme =
+                IoCrosswordTheme().themeData.iconButtonTheme;
+            final property = iconButtonTheme.style!.iconColor!;
+
+            expect(property.resolve({state}), IoCrosswordColors.seedWhite);
+          });
+        }
+      });
+    });
   });
 }
