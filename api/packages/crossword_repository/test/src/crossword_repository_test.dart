@@ -170,6 +170,16 @@ void main() {
         clue: '',
       );
 
+      final word4 = Word(
+        id: '4',
+        position: const Point(1, 4),
+        axis: Axis.horizontal,
+        answer: 'solved',
+        clue: '',
+        solvedTimestamp: 12343,
+        mascot: Mascots.sparky,
+      );
+
       setUp(() {
         final record = _MockDbEntityRecord();
         when(() => record.id).thenReturn('1');
@@ -268,13 +278,57 @@ void main() {
         repository = CrosswordRepository(dbClient: dbClient);
       });
 
-      test('returns true if answer is correct', () async {
+      test('returns (true, true) if answer is correct and pre-solved',
+          () async {
+        final record = _MockDbEntityRecord();
+        when(() => record.id).thenReturn('4');
+        when(() => record.data).thenReturn(
+          {
+            'position': {'x': 1, 'y': 4},
+            'size': 300,
+            'words': [
+              {'id': '4', ...word4.toJson()},
+            ],
+            'borderWords': const <dynamic>[],
+          },
+        );
+        when(
+          () => dbClient.find(
+            sectionsCollection,
+            {'position.x': 1, 'position.y': 4},
+          ),
+        ).thenAnswer((_) async => [record]);
+
+        final answersRecord = _MockDbEntityRecord();
+        when(() => answersRecord.id).thenReturn('4');
+        when(() => answersRecord.data).thenReturn({
+          'answer': 'solved',
+          'sections': [
+            {'x': 1, 'y': 4},
+          ],
+          'collidedWords': <Map<String, dynamic>>[],
+        });
+        when(
+          () => dbClient.getById(answersCollection, '4'),
+        ).thenAnswer((_) async => answersRecord);
+
+        final time = DateTime.now();
+        final clock = Clock.fixed(time);
+        await withClock(clock, () async {
+          final valid =
+              await repository.answerWord('4', Mascots.dino, 'solved');
+          expect(valid, (true, true));
+        });
+      });
+
+      test('returns (true, false) if answer is correct and not preSolved',
+          () async {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
           final valid =
               await repository.answerWord('1', Mascots.dino, 'flutter');
-          expect(valid, isTrue);
+          expect(valid, (true, false));
 
           verify(
             () => dbClient.update(
@@ -322,9 +376,9 @@ void main() {
         });
       });
 
-      test('returns false if answer is incorrect', () async {
+      test('returns (false, false) if answer is incorrect', () async {
         final valid = await repository.answerWord('1', Mascots.dino, 'android');
-        expect(valid, isFalse);
+        expect(valid, (false, false));
       });
 
       test(
