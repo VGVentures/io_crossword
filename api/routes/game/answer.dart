@@ -36,7 +36,7 @@ Future<Response> _onPost(RequestContext context) async {
   }
 
   try {
-    final valid = await crosswordRepository.answerWord(
+    final (valid, preSolved) = await crosswordRepository.answerWord(
       wordId,
       player.mascot,
       answer,
@@ -44,8 +44,11 @@ Future<Response> _onPost(RequestContext context) async {
 
     var points = 0;
     if (valid) {
-      await crosswordRepository.updateSolvedWordsCount();
       points = await leaderboardRepository.updateScore(user.id);
+
+      if (!preSolved) {
+        await crosswordRepository.updateSolvedWordsCount();
+      }
     }
 
     return Response.json(body: {'points': points});
