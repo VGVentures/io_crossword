@@ -91,23 +91,31 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final wordCenter = wordRect.center;
 
     final currentScale = _transformationController.value.getMaxScaleOnAxis();
+    var updatedScale = currentScale;
     final begin = _transformationController.value.getTranslation()
       ..scale(
         currentScale,
       );
 
     final layout = IoLayout.of(context);
+
+    bool scaledInViewport(Size viewport) {
+      final reducedViewportSize = viewport;
+      final reducedRect = reducedViewportSize.toRect();
+
+      return reducedRect.contains(wordSize.toOffset());
+    }
+
     final reducedViewportSize = viewport.reduced(layout) * currentScale;
-    final reducedRect = reducedViewportSize.toRect();
     final center = Vector3(
       reducedViewportSize.width / 2,
       reducedViewportSize.height / 2,
       0,
     );
 
-    final wordIsScaled = reducedRect.contains(wordSize.toOffset());
-    var updatedScale = currentScale;
-    if (!wordIsScaled) {
+    if (currentScale != 1 && scaledInViewport(viewport.reduced(layout))) {
+      updatedScale = 1;
+    } else if (!scaledInViewport(reducedViewportSize)) {
       final widthScale = reducedViewportSize.width < wordSize.width
           ? reducedViewportSize.width / wordSize.width
           : 1;
@@ -131,7 +139,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     if (begin == end) return;
 
     final centerBegin = Matrix4.translation(begin)..scale(currentScale);
-
     final centerEnd = Matrix4.translation(end)..scale(updatedScale);
 
     _centerAnimation?.removeListener(_onAnimateTransformation);
