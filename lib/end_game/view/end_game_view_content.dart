@@ -71,7 +71,7 @@ class ActionButtonsEndGame extends StatelessWidget {
                         .playSfx(Assets.music.startButton1);
                     Navigator.pushReplacement(
                       context,
-                      GameIntroPage.route(),
+                      CrosswordPage.route(),
                     );
                   },
                   icon: const Icon(Icons.gamepad),

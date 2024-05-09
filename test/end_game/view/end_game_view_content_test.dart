@@ -7,13 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/end_game/end_game.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/widget/widget.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -30,7 +30,11 @@ void main() {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
   });
 
+  late PlayerBloc playerBloc;
+
   setUp(() {
+    playerBloc = _MockPlayerBloc();
+
     audioController = _MockAudioController();
   });
 
@@ -93,9 +97,14 @@ void main() {
 
     testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
         (tester) async {
+      final mockNavigator = MockNavigator();
+
+      when(mockNavigator.canPop).thenReturn(true);
+
       await tester.pumpApp(
         ActionButtonsEndGame(),
         audioController: audioController,
+        navigator: mockNavigator,
       );
 
       await tester.tap(find.text(l10n.playAgain));
@@ -106,15 +115,22 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
+    testWidgets('displays CrosswordPage when playAgain tapped', (tester) async {
+      final mockNavigator = MockNavigator();
+
+      when(mockNavigator.canPop).thenReturn(true);
+      when(() => mockNavigator.pushReplacement(any())).thenAnswer((_) async {});
+
       await tester.pumpApp(
         ActionButtonsEndGame(),
+        playerBloc: playerBloc,
+        navigator: mockNavigator,
       );
 
       await tester.tap(find.text(l10n.playAgain));
 
-      await tester.pumpAndSettle();
-      expect(find.byType(GameIntroPage), findsOneWidget);
+      verify(() => mockNavigator.pushReplacement(CrosswordPage.route()))
+          .called(1);
     });
 
     testWidgets('displays claimBadgeContributing', (tester) async {
@@ -131,12 +147,6 @@ void main() {
   });
 
   group('$EndGameImage', () {
-    late PlayerBloc playerBloc;
-
-    setUp(() {
-      playerBloc = _MockPlayerBloc();
-    });
-
     testWidgets('displays endGameDash image with ${Mascots.dash}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
