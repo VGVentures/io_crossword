@@ -85,6 +85,7 @@ class WelcomeSmall extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
+        actions: (context) => const MuteButton(),
       ),
       body: const SelectionArea(
         child: SingleChildScrollView(
