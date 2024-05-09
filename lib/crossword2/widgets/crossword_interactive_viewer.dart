@@ -186,7 +186,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
             transformationController: _transformationController,
             builder: (context, quad) {
               _viewport = quad;
-              print('viewport: ${quad.width}, ${quad.height}');
               _centerSelectedWord(context);
 
               return QuadScope(
