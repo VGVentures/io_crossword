@@ -502,14 +502,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.1"
-  flow_builder:
-    dependency: "direct main"
-    description:
-      name: flow_builder
-      sha256: "9e66aa7209e9a31c347bb316abf191d2300db41cd6b7254f89abd4e76d9b3f8d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   flutter:
     dependency: "direct main"
     description: flutter

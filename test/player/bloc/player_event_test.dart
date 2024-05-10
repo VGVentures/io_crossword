@@ -20,6 +20,15 @@ void main() {
       });
     });
 
+    group('$PlayerCreateScoreRequested', () {
+      test('supports value equality', () {
+        expect(
+          PlayerCreateScoreRequested(),
+          equals(PlayerCreateScoreRequested()),
+        );
+      });
+    });
+
     group('MascotSelected', () {
       test('can be instantiated', () {
         expect(MascotSelected(Mascots.sparky), isA<MascotSelected>());

@@ -1,16 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -41,8 +40,12 @@ void main() {
     });
 
     testWidgets(
-      'updates initials and flow when submission is valid',
+      'navigates to $HowToPlayPage when submission is valid',
       (tester) async {
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
         final initialsBloc = _MockInitialsBloc();
         whenListen(
           initialsBloc,
@@ -57,24 +60,26 @@ void main() {
         );
         final playerBloc = _MockPlayerBloc();
 
-        final flowController = FlowController(GameIntroStatus.enterInitials);
-        addTearDown(flowController.dispose);
-
         await tester.pumpSubject(
           playerBloc: playerBloc,
           initialsBloc: initialsBloc,
-          FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: InitialsView()),
-            ],
-          ),
+          navigator: navigator,
+          const InitialsView(),
         );
 
         verify(
           () => playerBloc.add(const InitialsSelected('ABC')),
         ).called(1);
-        expect(flowController.state, equals(GameIntroStatus.howToPlay));
+
+        verify(
+          () => navigator.push<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(HowToPlayPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
       },
     );
 
@@ -241,6 +246,7 @@ extension on WidgetTester {
     InitialsBloc? initialsBloc,
     PlayerBloc? playerBloc,
     AudioController? audioController,
+    MockNavigator? navigator,
   }) {
     final bloc = initialsBloc ?? _MockInitialsBloc();
     if (initialsBloc == null) {
@@ -255,6 +261,7 @@ extension on WidgetTester {
     return pumpApp(
       playerBloc: playerBloc,
       audioController: audioController,
+      navigator: navigator,
       BlocProvider(
         create: (_) => bloc,
         child: child,

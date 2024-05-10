@@ -1,10 +1,9 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -13,9 +12,13 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class TeamSelectionPage extends StatelessWidget {
   const TeamSelectionPage({super.key});
 
-  static Page<void> page() {
-    return const MaterialPage(
-      child: TeamSelectionPage(),
+  @visibleForTesting
+  static const String routeName = '/team-selection';
+
+  static Route<void> route() {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const TeamSelectionPage(),
     );
   }
 
@@ -463,11 +466,9 @@ class _SubmitButton extends StatelessWidget {
 
     return OutlinedButton(
       onPressed: () {
-        context
-            .flow<GameIntroStatus>()
-            .update((state) => GameIntroStatus.enterInitials);
-        context.read<PlayerBloc>().add(MascotSelected(mascot));
         context.read<AudioController>().playSfx(Assets.music.startButton1);
+        context.read<PlayerBloc>().add(MascotSelected(mascot));
+        Navigator.of(context).push(InitialsPage.route());
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),

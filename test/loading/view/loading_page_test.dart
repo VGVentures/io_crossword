@@ -1,20 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockLoadingCubit extends Mock implements LoadingCubit {}
+class _MockLoadingCubit extends MockCubit<LoadingState>
+    implements LoadingCubit {}
 
 void main() {
   group('$LoadingPage', () {
@@ -26,6 +25,43 @@ void main() {
   });
 
   group('$LoadingView', () {
+    testWidgets('navigates to $WelcomePage when loaded', (tester) async {
+      final navigator = MockNavigator();
+      when(navigator.canPop).thenReturn(true);
+      when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
+      final cubit = _MockLoadingCubit();
+      whenListen(
+        cubit,
+        Stream.fromIterable(
+          [
+            const LoadingState(
+              assetsCount: 1,
+              loaded: 1,
+              status: LoadingStatus.loaded,
+            ),
+          ],
+        ),
+        initialState: const LoadingState.initial(),
+      );
+
+      await tester.pumpSubject(
+        loadingCubit: cubit,
+        navigator: navigator,
+        LoadingView(),
+      );
+
+      verify(
+        () => navigator.push<void>(
+          any(
+            that: isRoute<void>(
+              whereName: equals(WelcomePage.routeName),
+            ),
+          ),
+        ),
+      ).called(1);
+    });
+
     testWidgets(
       'displays a $LoadingLarge and $LoadingBody when layout is large',
       (tester) async {
@@ -42,7 +78,7 @@ void main() {
     );
 
     testWidgets(
-      'displays a $LoadingSmall and $LoadingBody when layout is large',
+      'displays a $LoadingSmall and $LoadingBody when layout is small',
       (tester) async {
         await tester.pumpSubject(
           const IoLayout(
@@ -81,45 +117,6 @@ void main() {
   });
 
   group('$LoadingBody', () {
-    testWidgets(
-      'updates flow when loading is complete',
-      (tester) async {
-        final flowController = FlowController(GameIntroStatus.loading);
-        addTearDown(flowController.dispose);
-
-        final loadingCubit = _MockLoadingCubit();
-
-        whenListen(
-          loadingCubit,
-          Stream.fromIterable(
-            [
-              LoadingState(
-                status: LoadingStatus.loaded,
-                assetsCount: 8,
-                loaded: 8,
-              ),
-            ],
-          ),
-          initialState: const LoadingState.initial(),
-        );
-
-        await tester.pumpSubject(
-          FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: LoadingBody()),
-            ],
-          ),
-          loadingCubit: loadingCubit,
-        );
-
-        expect(
-          flowController.state,
-          equals(GameIntroStatus.welcome),
-        );
-      },
-    );
-
     group('displays', () {
       testWidgets('a localized welcome text', (tester) async {
         late final AppLocalizations l10n;
@@ -156,6 +153,7 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget child, {
     LoadingCubit? loadingCubit,
+    MockNavigator? navigator,
   }) {
     final cubit = loadingCubit ?? _MockLoadingCubit();
     if (loadingCubit == null) {
@@ -169,6 +167,7 @@ extension on WidgetTester {
     }
 
     return pumpApp(
+      navigator: navigator,
       BlocProvider.value(
         value: cubit,
         child: child,

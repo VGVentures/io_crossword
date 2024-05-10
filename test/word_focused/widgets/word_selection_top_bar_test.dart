@@ -25,6 +25,9 @@ class _UnsolvedFakeWord extends Fake implements Word {
   String get id => '11000';
 
   @override
+  String get answer => 'answer';
+
+  @override
   Axis get axis => Axis.horizontal;
 
   @override

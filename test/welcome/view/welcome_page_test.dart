@@ -1,15 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -17,6 +16,13 @@ class _MockChallengeBloc extends Mock implements ChallengeBloc {}
 
 void main() {
   group('$WelcomePage', () {
+    testWidgets('route builds a $WelcomePage', (tester) async {
+      await tester.pumpRoute(WelcomePage.route());
+      await tester.pump();
+
+      expect(find.byType(WelcomePage), findsOneWidget);
+    });
+
     testWidgets('displays a $WelcomeView', (tester) async {
       await tester.pumpApp(const WelcomePage());
 
@@ -91,18 +97,15 @@ void main() {
 
   group('$WelcomeBody', () {
     testWidgets(
-      'updates flow when "Get Started" button is pressed',
+      'navigates into $TeamSelectionPage when button is tapped',
       (tester) async {
-        final flowController = FlowController(GameIntroStatus.welcome);
-        addTearDown(flowController.dispose);
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
 
         await tester.pumpSubject(
-          FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: WelcomeBody()),
-            ],
-          ),
+          navigator: navigator,
+          const WelcomeBody(),
         );
 
         final outlinedButtonFinder = find.byType(OutlinedButton);
@@ -112,10 +115,15 @@ void main() {
         await tester.tap(outlinedButtonFinder);
         await tester.pump();
 
-        expect(
-          flowController.state,
-          equals(GameIntroStatus.teamSelection),
-        );
+        verify(
+          () => navigator.push<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(TeamSelectionPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
       },
     );
 
@@ -186,6 +194,7 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget child, {
     ChallengeBloc? welcomeBloc,
+    MockNavigator? navigator,
   }) {
     final bloc = welcomeBloc ?? _MockChallengeBloc();
     if (welcomeBloc == null) {
@@ -198,6 +207,7 @@ extension on WidgetTester {
     }
 
     return pumpApp(
+      navigator: navigator,
       BlocProvider(
         create: (_) => bloc,
         child: child,
