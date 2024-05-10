@@ -64,10 +64,7 @@ class _HowToPlaySmall extends StatelessWidget {
     final l10n = context.l10n;
 
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
-
-    final status = context.select(
-      (HowToPlayCubit cubit) => cubit.state.status,
-    );
+    final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
 
     return Stack(
       children: [
@@ -140,10 +137,7 @@ class _HowToPlayLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final status = context.select(
-      (HowToPlayCubit cubit) => cubit.state.status,
-    );
-
+    final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
     return Stack(

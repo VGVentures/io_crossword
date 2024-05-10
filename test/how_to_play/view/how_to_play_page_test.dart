@@ -57,19 +57,16 @@ void main() {
     });
 
     testWidgets('route builds a $HowToPlayPage', (tester) async {
-      final route = HowToPlayPage.route() as MaterialPageRoute;
+      when(() => playerBloc.state)
+          .thenReturn(PlayerState(mascot: Mascots.dash));
 
-      late BuildContext buildContext;
-      await tester.pumpWidget(
-        Builder(
-          builder: (context) {
-            buildContext = context;
-            return SizedBox();
-          },
-        ),
+      await tester.pumpRoute(
+        playerBloc: playerBloc,
+        HowToPlayPage.route(),
       );
+      await tester.pump();
 
-      expect(route.builder(buildContext), isA<HowToPlayPage>());
+      expect(find.byType(HowToPlayPage), findsOneWidget);
     });
 
     testWidgets('displays a $HowToPlayView', (tester) async {

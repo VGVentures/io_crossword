@@ -17,19 +17,10 @@ class _MockChallengeBloc extends Mock implements ChallengeBloc {}
 void main() {
   group('$WelcomePage', () {
     testWidgets('route builds a $WelcomePage', (tester) async {
-      final route = WelcomePage.route() as MaterialPageRoute;
+      await tester.pumpRoute(WelcomePage.route());
+      await tester.pump();
 
-      late BuildContext buildContext;
-      await tester.pumpWidget(
-        Builder(
-          builder: (context) {
-            buildContext = context;
-            return const SizedBox();
-          },
-        ),
-      );
-
-      expect(route.builder(buildContext), isA<WelcomePage>());
+      expect(find.byType(WelcomePage), findsOneWidget);
     });
 
     testWidgets('displays a $WelcomeView', (tester) async {
