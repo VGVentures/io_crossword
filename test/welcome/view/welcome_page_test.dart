@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';

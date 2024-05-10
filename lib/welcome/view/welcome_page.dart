@@ -12,22 +12,20 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
-  static Page<void> page() {
-    return const MaterialPage(child: WelcomePage());
+  static const routeName = '/';
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const WelcomePage(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return const PopScope(
       canPop: false,
-      child: BlocBuilder<LoadingCubit, LoadingState>(
-        builder: (context, state) {
-          return switch (state.status) {
-            LoadingStatus.loading => const LoadingPage(),
-            LoadingStatus.loaded => const WelcomeView(),
-          };
-        },
-      ),
+      child: WelcomeView(),
     );
   }
 }

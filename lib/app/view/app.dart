@@ -111,7 +111,7 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const WelcomePage(),
+            home: const LoadingPage(),
             builder: (context, child) {
               return Stack(
                 children: [

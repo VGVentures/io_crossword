@@ -15,7 +15,11 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LoadingView();
+    return BlocBuilder<LoadingCubit, LoadingState>(
+      builder: (context, state) {
+        return const LoadingView();
+      },
+    );
   }
 }
 
@@ -23,14 +27,25 @@ class LoadingView extends StatelessWidget {
   @visibleForTesting
   const LoadingView({super.key});
 
+  void _onLoaded(BuildContext context) {
+    Navigator.of(context).push<void>(WelcomePage.route());
+  }
+
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
-    return switch (layout) {
-      IoLayoutData.small => const LoadingSmall(),
-      IoLayoutData.large => const LoadingLarge(),
-    };
+    return BlocListener<LoadingCubit, LoadingState>(
+      listener: (context, state) {
+        if (state.status == LoadingStatus.loaded) {
+          _onLoaded(context);
+        }
+      },
+      child: switch (layout) {
+        IoLayoutData.small => const LoadingSmall(),
+        IoLayoutData.large => const LoadingLarge(),
+      },
+    );
   }
 }
 
