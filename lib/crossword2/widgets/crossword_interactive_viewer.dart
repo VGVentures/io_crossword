@@ -50,7 +50,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   late AnimationController? _animationController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 500),
+    duration: const Duration(milliseconds: 900),
   );
   Animation<Matrix4>? _transformationAnimation;
 
@@ -93,7 +93,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final scaleBegin = _transformationController.value.getMaxScaleOnAxis();
+    final scaleBegin =
+        _transformationController.value.getMaxScaleOnAxis().roundTo(3);
     final translationBegin =
         _transformationController.value.getTranslation() * scaleBegin;
 
@@ -103,25 +104,26 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final requiredWordSize =
         selectedWord.word.size(crosswordLayout) * _idealScale;
 
-    final scaleEnd = math.min(
-      beginViewportSize.width < requiredWordSize.width
-          ? beginViewportSize.width / requiredWordSize.width
-          : _idealScale,
-      beginViewportSize.height < requiredWordSize.height
-          ? beginViewportSize.height / requiredWordSize.height
-          : _idealScale,
-    );
+    final scaleEnd = math
+        .min(
+          beginViewportSize.width < requiredWordSize.width
+              ? beginViewportSize.width / requiredWordSize.width
+              : _idealScale,
+          beginViewportSize.height < requiredWordSize.height
+              ? beginViewportSize.height / requiredWordSize.height
+              : _idealScale,
+        )
+        .roundTo(3);
 
     final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
     final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
     final endWordCenter = endWordRect.center;
 
-    final endViewportSize = viewportSize * scaleEnd;
     final endViewportCenter = Vector3(
-      endViewportSize.width / 2,
-      endViewportSize.height / 2,
+      (beginViewportSize.width / 2).roundTo(3),
+      (beginViewportSize.height / 2).roundTo(3),
       0,
-    )..scale(scaleEnd);
+    );
 
     final translationEnd = endViewportCenter -
         Vector3(
@@ -139,7 +141,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         math.min(translationEnd.y, _minTranslation.y),
         _maxTranslation.y,
       );
-
     final transformationBegin = Matrix4.translation(translationBegin)
       ..scale(scaleBegin);
     final transformationEnd = Matrix4.translation(translationEnd)
@@ -266,4 +267,8 @@ extension on domain.Word {
         ),
     };
   }
+}
+
+extension on double {
+  double roundTo(int digits) => double.parse(toStringAsFixed(digits));
 }
