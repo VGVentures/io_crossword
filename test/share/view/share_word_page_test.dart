@@ -16,7 +16,7 @@ import '../../helpers/helpers.dart';
 
 class _FakeWord extends Fake implements Word {
   @override
-  String get answer => 'answer';
+  String get answer => 'an  er';
 
   @override
   String get clue => 'clue';
@@ -32,7 +32,7 @@ class _MockWordSelectionBloc
 void main() {
   group('$ShareWordPage', () {
     testWidgets(
-      'renders correctly',
+      'renders IoWord',
       (tester) async {
         final word = _FakeWord();
         await tester.pumpApp(
@@ -40,9 +40,36 @@ void main() {
         );
 
         expect(find.byType(IoWord), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'displays the answer correctly in IoWord',
+      (tester) async {
+        final word = _FakeWord();
+        await tester.pumpApp(
+          ShareWordPage(word: word),
+        );
+
+        expect(
+          tester.widget<IoWord>(find.byType(IoWord)).data,
+          equals('an__er'),
+        );
+      },
+    );
+
+    testWidgets(
+      'displays clue',
+      (tester) async {
+        final word = _FakeWord();
+        await tester.pumpApp(
+          ShareWordPage(word: word),
+        );
+
         expect(find.text(word.clue), findsOneWidget);
       },
     );
+
     group('showModal', () {
       late WordSelectionBloc wordSelectionBloc;
 
