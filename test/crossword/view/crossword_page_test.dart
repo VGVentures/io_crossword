@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -278,7 +279,9 @@ void main() {
 
     testWidgets(
         'dropIn animation is displayed when SpriteAnimationList '
-        'is tapped with small layout', (tester) async {
+        'is tapped on mobile', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
       await tester.pumpSubject(
         CrosswordView(),
         crosswordBloc: crosswordBloc,
@@ -300,11 +303,15 @@ void main() {
         spriteAnimationList.controller.currentAnimationId,
         equals(mascotAnimation.mascot.teamMascot.dropInMobileAnimation.path),
       );
+
+      debugDefaultTargetPlatformOverride = null;
     });
 
     testWidgets(
         'dropIn animation is displayed when SpriteAnimationList '
-        'is tapped with large layout', (tester) async {
+        'is tapped on desktop', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+
       await tester.pumpSubject(
         CrosswordView(),
         crosswordBloc: crosswordBloc,
@@ -327,6 +334,8 @@ void main() {
         spriteAnimationList.controller.currentAnimationId,
         equals(mascotAnimation.mascot.teamMascot.dropInAnimation.path),
       );
+
+      debugDefaultTargetPlatformOverride = null;
     });
 
     for (final layout in IoLayoutData.values) {

@@ -70,7 +70,6 @@ class CrosswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final layout = IoLayout.of(context);
 
     return BlocListener<RandomWordSelectionBloc, RandomWordSelectionState>(
       listenWhen: (previous, current) => previous.status != current.status,
@@ -145,7 +144,6 @@ class CrosswordView extends StatelessWidget {
                       tag: HowToPlayPage.dangleMascotHeroTag,
                       child: MascotAnimation(
                         context.read<PlayerBloc>().state.mascot!,
-                        mobile: layout == IoLayoutData.small,
                       ),
                     ),
                   ),
@@ -269,12 +267,10 @@ class MascotAnimation extends StatefulWidget {
   @visibleForTesting
   const MascotAnimation(
     this.mascot, {
-    required this.mobile,
     super.key,
   });
 
   final Mascots mascot;
-  final bool mobile;
 
   @override
   State<MascotAnimation> createState() => _MascotAnimationState();
@@ -288,9 +284,10 @@ class _MascotAnimationState extends State<MascotAnimation> {
     super.initState();
 
     _controller.changeAnimation(
-      widget.mobile
-          ? widget.mascot.teamMascot.dangleMobileAnimation.path
-          : widget.mascot.teamMascot.dangleAnimation.path,
+      platformAwareAsset(
+        mobile: widget.mascot.teamMascot.dangleMobileAnimation.path,
+        desktop: widget.mascot.teamMascot.dangleAnimation.path,
+      ),
     );
   }
 
@@ -302,32 +299,39 @@ class _MascotAnimationState extends State<MascotAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.mobile
-          ? widget.mascot.teamMascot.dangleSpriteMobileData.width
-          : widget.mascot.teamMascot.dangleSpriteDesktopData.width,
-      height: widget.mobile
-          ? widget.mascot.teamMascot.dangleSpriteMobileData.height
-          : widget.mascot.teamMascot.dangleSpriteDesktopData.height,
+    return SizedBox.fromSize(
+      size: platformAwareAsset(
+        mobile: Size(
+          widget.mascot.teamMascot.dangleSpriteMobileData.width,
+          widget.mascot.teamMascot.dangleSpriteMobileData.height,
+        ),
+        desktop: Size(
+          widget.mascot.teamMascot.dangleSpriteDesktopData.width,
+          widget.mascot.teamMascot.dangleSpriteDesktopData.height,
+        ),
+      ),
       child: GestureDetector(
         onTap: () {
           _controller.changeAnimation(
-            widget.mobile
-                ? widget.mascot.teamMascot.dropInMobileAnimation.path
-                : widget.mascot.teamMascot.dropInAnimation.path,
+            platformAwareAsset(
+              mobile: widget.mascot.teamMascot.dropInMobileAnimation.path,
+              desktop: widget.mascot.teamMascot.dropInAnimation.path,
+            ),
           );
         },
         child: SpriteAnimationList(
           animationItems: [
             AnimationItem(
-              spriteData: widget.mobile
-                  ? widget.mascot.teamMascot.dangleSpriteMobileData
-                  : widget.mascot.teamMascot.dangleSpriteDesktopData,
+              spriteData: platformAwareAsset(
+                mobile: widget.mascot.teamMascot.dangleSpriteMobileData,
+                desktop: widget.mascot.teamMascot.dangleSpriteDesktopData,
+              ),
             ),
             AnimationItem(
-              spriteData: widget.mobile
-                  ? widget.mascot.teamMascot.dropInSpriteMobileData
-                  : widget.mascot.teamMascot.dropInSpriteDesktopData,
+              spriteData: platformAwareAsset(
+                mobile: widget.mascot.teamMascot.dropInSpriteMobileData,
+                desktop: widget.mascot.teamMascot.dropInSpriteDesktopData,
+              ),
               loop: false,
               onComplete: () =>
                   context.read<CrosswordBloc>().add(const MascotDropped()),

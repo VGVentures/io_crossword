@@ -3,6 +3,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -146,8 +147,7 @@ void main() {
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
-      when(() => howToPlayCubit.loadAssets(any(), mobile: any(named: 'mobile')))
-          .thenAnswer((_) async {});
+      when(() => howToPlayCubit.loadAssets(any())).thenAnswer((_) async {});
 
       when(() => howToPlayCubit.state).thenReturn(
         HowToPlayState(
@@ -333,7 +333,7 @@ void main() {
       });
 
       testWidgets('renders LookUp animation for dash', (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
         await tester.pumpApp(
           MultiBlocProvider(
@@ -364,6 +364,8 @@ void main() {
           ),
           isTrue,
         );
+
+        debugDefaultTargetPlatformOverride = null;
       });
 
       testWidgets('complete status is called when pickUp animation is done',

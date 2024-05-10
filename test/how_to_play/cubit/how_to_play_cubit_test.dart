@@ -2,6 +2,7 @@
 
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -33,6 +34,8 @@ void main() {
         expectLater(cubit.stream, emitsInOrder(expectedStates));
 
         cubit.updateStatus(status);
+
+        debugDefaultTargetPlatformOverride = null;
       });
     });
 
@@ -42,6 +45,8 @@ void main() {
       });
 
       test('emits inProgress and success for mobile', () {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
         final cubit = HowToPlayCubit();
 
         final expectedStates = [
@@ -54,10 +59,11 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        cubit.loadAssets(Mascots.dash, mobile: true);
+        cubit.loadAssets(Mascots.dash);
       });
 
       test('emits inProgress and success for desktop', () {
+        debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
         final cubit = HowToPlayCubit();
 
         final expectedStates = [
@@ -70,7 +76,9 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        cubit.loadAssets(Mascots.dash, mobile: false);
+        cubit.loadAssets(Mascots.dash);
+
+        debugDefaultTargetPlatformOverride = null;
       });
     });
   });
