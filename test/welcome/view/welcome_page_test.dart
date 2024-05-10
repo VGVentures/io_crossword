@@ -8,6 +8,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -92,7 +93,14 @@ void main() {
     testWidgets(
       'navigates into $TeamSelectionPage when button is tapped',
       (tester) async {
-        await tester.pumpSubject(const WelcomeBody());
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
+        await tester.pumpSubject(
+          navigator: navigator,
+          const WelcomeBody(),
+        );
 
         final outlinedButtonFinder = find.byType(OutlinedButton);
         await tester.ensureVisible(outlinedButtonFinder);
@@ -101,7 +109,15 @@ void main() {
         await tester.tap(outlinedButtonFinder);
         await tester.pump();
 
-        // TODO(alestiago): Add test for navigation.
+        verify(
+          () => navigator.push<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(TeamSelectionPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
       },
     );
 
@@ -172,6 +188,7 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget child, {
     ChallengeBloc? welcomeBloc,
+    MockNavigator? navigator,
   }) {
     final bloc = welcomeBloc ?? _MockChallengeBloc();
     if (welcomeBloc == null) {
@@ -184,6 +201,7 @@ extension on WidgetTester {
     }
 
     return pumpApp(
+      navigator: navigator,
       BlocProvider(
         create: (_) => bloc,
         child: child,

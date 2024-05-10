@@ -115,7 +115,7 @@ class WelcomeBody extends StatelessWidget {
   const WelcomeBody({super.key});
 
   void _onGetStarted(BuildContext context) {
-    Navigator.push(context, TeamSelectionPage.route());
+    Navigator.of(context).push<void>(TeamSelectionPage.route());
   }
 
   @override
