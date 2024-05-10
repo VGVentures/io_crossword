@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 
 import '../../helpers/helpers.dart';
@@ -73,7 +74,7 @@ void main() {
 
           expect(
             tester.widget<ShareDialog>(find.byType(ShareDialog)).url,
-            equals('https://crossword.withgoogle.com'),
+            equals(ProjectDetailsLinks.crossword),
           );
         },
       );
