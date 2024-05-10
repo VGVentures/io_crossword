@@ -11,11 +11,7 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoadingCubit, LoadingState>(
-      builder: (context, state) {
-        return const LoadingView();
-      },
-    );
+    return const LoadingView();
   }
 }
 
