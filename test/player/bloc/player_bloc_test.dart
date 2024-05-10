@@ -103,6 +103,12 @@ void main() {
             ),
           ),
         ],
+        verify: (bloc) => verify(
+          () => leaderboardResource.createScore(
+            initials: 'AAA',
+            mascot: Mascots.dash,
+          ),
+        ).called(1),
       );
 
       blocTest<PlayerBloc, PlayerState>(
