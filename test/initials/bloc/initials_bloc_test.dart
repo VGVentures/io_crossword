@@ -90,6 +90,32 @@ void main() {
           ),
         ],
       );
+
+      blocTest<InitialsBloc, InitialsState>(
+        'updates initials when submitted twice',
+        build: () => InitialsBloc(leaderboardResource: leaderboardResource),
+        act: (bloc) {
+          bloc
+            ..add(const InitialsSubmitted('ABC'))
+            ..add(const InitialsSubmitted('ABC'));
+        },
+        expect: () => [
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.dirty('ABC'),
+            ),
+          ),
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.dirty('ABC'),
+            ),
+          ),
+        ],
+      );
     });
   });
 }
