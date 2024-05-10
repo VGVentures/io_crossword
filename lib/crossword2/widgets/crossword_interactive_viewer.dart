@@ -32,10 +32,11 @@ class CrosswordInteractiveViewer extends StatefulWidget {
 
   @override
   State<CrosswordInteractiveViewer> createState() =>
-      _CrosswordInteractiveViewerState();
+      CrosswordInteractiveViewerState();
 }
 
-class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
+@visibleForTesting
+class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     with SingleTickerProviderStateMixin {
   /// The latest viewport reported by the [InteractiveViewer.builder].
   Quad? _viewport;
@@ -65,6 +66,10 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// It is assumed it is the identity of multiplication.
   final _idealScale = 1.0;
 
+  @visibleForTesting
+  double get currentScale =>
+      _transformationController.value.getMaxScaleOnAxis().roundTo(3);
+
   void _onAnimateTransformation() {
     _transformationController.value = _transformationAnimation!.value;
   }
@@ -80,11 +85,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final layout = IoLayout.of(context);
     final viewportSize = viewport.reduced(layout);
 
-    final scaleBegin =
-        _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-
-    final scaleEnd = scaleBegin + value;
-    final desiredScale = scaleEnd / scaleBegin;
+    final scaleEnd = currentScale + value;
+    final desiredScale = scaleEnd / currentScale;
 
     final viewportCenter = Offset(
       viewportSize.width / 2,
@@ -149,11 +151,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final scaleBegin =
-        _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-
     final viewportSize = viewport.reduced(layout);
-    final beginViewportSize = viewportSize * scaleBegin;
+    final beginViewportSize = viewportSize * currentScale;
 
     final requiredWordSize =
         selectedWord.word.size(crosswordLayout) * _idealScale;

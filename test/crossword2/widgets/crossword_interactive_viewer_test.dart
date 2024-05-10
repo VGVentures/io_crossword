@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis;
@@ -67,6 +67,54 @@ void main() {
       );
 
       expect(find.byType(ZoomControls), findsNothing);
+    });
+
+    testWidgets('zooms in when zoom in button is pressed', (tester) async {
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+
+      expect(viewerState.currentScale, 1.0);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 1.2);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 1.4);
+    });
+
+    testWidgets('zooms out when zoom out button is pressed', (tester) async {
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+
+      expect(viewerState.currentScale, 1.0);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 0.8);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 0.6);
     });
 
     testWidgets(
