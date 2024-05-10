@@ -24,10 +24,14 @@ void main() {
           bloc.add(const InitialsBlocklistRequested());
         },
         expect: () => [
-          InitialsState.initial().copyWith(
-            initials: InitialsInput.pure(
-              '',
-              blocklist: Blocklist({'AAA', 'BBB'}),
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.pure(
+                '',
+                blocklist: Blocklist({'AAA', 'BBB'}),
+              ),
             ),
           ),
         ],
@@ -54,11 +58,15 @@ void main() {
             ..add(const InitialsBlocklistRequested())
             ..add(const InitialsBlocklistRequested());
         },
-        expect: () => <InitialsState>[
-          InitialsState.initial().copyWith(
-            initials: InitialsInput.pure(
-              '',
-              blocklist: Blocklist({'AAA'}),
+        expect: () => [
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.pure(
+                '',
+                blocklist: Blocklist({'AAA'}),
+              ),
             ),
           ),
         ],
@@ -73,8 +81,38 @@ void main() {
           bloc.add(const InitialsSubmitted('ABC'));
         },
         expect: () => [
-          InitialsState.initial().copyWith(
-            initials: InitialsInput.dirty('ABC'),
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.dirty('ABC'),
+            ),
+          ),
+        ],
+      );
+
+      blocTest<InitialsBloc, InitialsState>(
+        'updates initials when submitted twice',
+        build: () => InitialsBloc(leaderboardResource: leaderboardResource),
+        act: (bloc) {
+          bloc
+            ..add(const InitialsSubmitted('ABC'))
+            ..add(const InitialsSubmitted('ABC'));
+        },
+        expect: () => [
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.dirty('ABC'),
+            ),
+          ),
+          isA<InitialsState>().having(
+            (state) => state.initials,
+            'initials',
+            equals(
+              InitialsInput.dirty('ABC'),
+            ),
           ),
         ],
       );

@@ -10,22 +10,20 @@ void main() {
       );
     });
 
-    test('supports value equality', () {
+    test('does not support value equality', () {
       final state1 = InitialsState.initial();
       final state2 = InitialsState.initial();
-      final state3 = InitialsState.initial().copyWith(
-        initials: InitialsInput.dirty('ABC'),
-      );
 
-      expect(state1, equals(state2));
-      expect(state1, isNot(equals(state3)));
+      expect(state1, isNot(equals(state2)));
     });
 
     group('copyWith', () {
-      test('returns same object when no properties are passed', () {
+      test('does not change properties when no properties are passed', () {
         final state = InitialsState.initial();
 
-        expect(state.copyWith(), equals(state));
+        final copy = state.copyWith();
+
+        expect(copy.initials, equals(state.initials));
       });
 
       test('returns object with updated properties', () {
@@ -37,7 +35,7 @@ void main() {
           initials: newState.initials,
         );
 
-        expect(updatedState, equals(newState));
+        expect(updatedState.initials, equals(newState.initials));
       });
     });
   });

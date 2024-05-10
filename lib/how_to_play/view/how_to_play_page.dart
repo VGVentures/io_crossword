@@ -1,9 +1,8 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -15,8 +14,14 @@ class HowToPlayPage extends StatelessWidget {
 
   static const String dangleMascotHeroTag = 'dangle_mascot_tag';
 
-  static Page<void> page() {
-    return const MaterialPage(child: HowToPlayPage());
+  @visibleForTesting
+  static const routeName = '/how-to-play';
+
+  static Route<void> route() {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const HowToPlayPage(),
+    );
   }
 
   @override
@@ -59,10 +64,7 @@ class _HowToPlaySmall extends StatelessWidget {
     final l10n = context.l10n;
 
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
-
-    final status = context.select(
-      (HowToPlayCubit cubit) => cubit.state.status,
-    );
+    final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
 
     return Stack(
       children: [
@@ -135,10 +137,7 @@ class _HowToPlayLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final status = context.select(
-      (HowToPlayCubit cubit) => cubit.state.status,
-    );
-
+    final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
     return Stack(
@@ -228,7 +227,10 @@ class _MascotAnimationState extends State<_MascotAnimation> {
         }
 
         if (state.status == HowToPlayStatus.complete) {
-          context.flow<GameIntroStatus>().complete();
+          Navigator.of(context).pushAndRemoveUntil<void>(
+            CrosswordPage.route(),
+            (route) => route.isFirst,
+          );
         }
       },
       child: SpriteAnimationList(

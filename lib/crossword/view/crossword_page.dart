@@ -22,35 +22,42 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
 
+  @visibleForTesting
+  static const String routeName = '/crossword';
+
   static Route<void> route() {
     return PageRouteBuilder(
       transitionDuration: const Duration(seconds: 3),
+      settings: const RouteSettings(name: routeName),
       pageBuilder: (_, __, ___) => const CrosswordPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => CrosswordBloc(
-            crosswordRepository: context.read<CrosswordRepository>(),
-            boardInfoRepository: context.read<BoardInfoRepository>(),
-          )..add(const BoardLoadingInformationRequested()),
-        ),
-        BlocProvider(
-          create: (_) => WordSelectionBloc(
-            crosswordResource: context.read<CrosswordResource>(),
+    return PopScope(
+      canPop: false,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => CrosswordBloc(
+              crosswordRepository: context.read<CrosswordRepository>(),
+              boardInfoRepository: context.read<BoardInfoRepository>(),
+            )..add(const BoardLoadingInformationRequested()),
           ),
-        ),
-        BlocProvider(
-          create: (_) => RandomWordSelectionBloc(
-            crosswordRepository: context.read<CrosswordRepository>(),
-          )..add(const RandomWordRequested()),
-        ),
-      ],
-      child: const CrosswordView(),
+          BlocProvider(
+            create: (_) => WordSelectionBloc(
+              crosswordResource: context.read<CrosswordResource>(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => RandomWordSelectionBloc(
+              crosswordRepository: context.read<CrosswordRepository>(),
+            )..add(const RandomWordRequested()),
+          ),
+        ],
+        child: const CrosswordView(),
+      ),
     );
   }
 }

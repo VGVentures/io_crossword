@@ -3,13 +3,13 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
@@ -32,6 +32,8 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 class _MockAudioController extends Mock implements AudioController {}
 
+class _MockRoute extends Mock implements Route<dynamic> {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -52,6 +54,19 @@ void main() {
     setUp(() {
       gameIntroBloc = _MockGameIntroBloc();
       playerBloc = _MockPlayerBloc();
+    });
+
+    testWidgets('route builds a $HowToPlayPage', (tester) async {
+      when(() => playerBloc.state)
+          .thenReturn(PlayerState(mascot: Mascots.dash));
+
+      await tester.pumpRoute(
+        playerBloc: playerBloc,
+        HowToPlayPage.route(),
+      );
+      await tester.pump();
+
+      expect(find.byType(HowToPlayPage), findsOneWidget);
     });
 
     testWidgets('displays a $HowToPlayView', (tester) async {
@@ -129,63 +144,10 @@ void main() {
       });
     }
 
-    testWidgets('plays ${Assets.music.startButton1} when button is pressed',
-        (tester) async {
-      final flowController = FlowController(GameIntroStatus.howToPlay);
-      addTearDown(flowController.dispose);
-
-      when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(
-              value: gameIntroBloc,
-            ),
-            BlocProvider.value(
-              value: howToPlayCubit,
-            ),
-            BlocProvider.value(
-              value: playerBloc,
-            ),
-          ],
-          child: FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: HowToPlayView()),
-            ],
-          ),
-        ),
-        layout: IoLayoutData.small,
-        audioController: audioController,
-      );
-
-      await tester.tap(find.byType(OutlinedButton));
-
-      verify(
-        () => audioController.playSfx(Assets.music.startButton1),
-      ).called(1);
-    });
-
-    for (final layout in IoLayoutData.values) {
-      testWidgets(
-          'completes flow when pickup '
-          'animation compeletes for $layout', (tester) async {
-        final flowController = FlowController(GameIntroStatus.howToPlay);
-        addTearDown(flowController.dispose);
-
+    testWidgets(
+      'plays ${Assets.music.startButton1} when button is pressed',
+      (tester) async {
         when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
-        whenListen(
-          howToPlayCubit,
-          Stream.fromIterable(
-            [
-              HowToPlayState(status: HowToPlayStatus.pickingUp),
-              HowToPlayState(status: HowToPlayStatus.complete),
-            ],
-          ),
-          initialState: HowToPlayState(),
-        );
 
         await tester.pumpApp(
           MultiBlocProvider(
@@ -200,20 +162,87 @@ void main() {
                 value: playerBloc,
               ),
             ],
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                MaterialPage(child: HowToPlayView()),
-              ],
-            ),
+            child: HowToPlayView(),
           ),
-          layout: layout,
+          layout: IoLayoutData.small,
+          audioController: audioController,
         );
 
-        await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
+        await tester.tap(find.byType(OutlinedButton));
 
-        expect(flowController.completed, isTrue);
-      });
+        verify(
+          () => audioController.playSfx(Assets.music.startButton1),
+        ).called(1);
+      },
+    );
+
+    for (final layout in IoLayoutData.values) {
+      testWidgets(
+        'navigates to $CrosswordPage when animation completes for $layout',
+        (tester) async {
+          final navigator = MockNavigator();
+          when(navigator.canPop).thenReturn(true);
+          when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
+              .thenAnswer((_) async {});
+
+          when(() => gameIntroBloc.state).thenReturn(GameIntroState());
+
+          whenListen(
+            howToPlayCubit,
+            Stream.fromIterable(
+              [
+                HowToPlayState(status: HowToPlayStatus.pickingUp),
+                HowToPlayState(status: HowToPlayStatus.complete),
+              ],
+            ),
+            initialState: HowToPlayState(),
+          );
+
+          await tester.pumpApp(
+            layout: layout,
+            navigator: navigator,
+            MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: gameIntroBloc,
+                ),
+                BlocProvider.value(
+                  value: howToPlayCubit,
+                ),
+                BlocProvider.value(
+                  value: playerBloc,
+                ),
+              ],
+              child: HowToPlayView(),
+            ),
+          );
+
+          await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
+
+          final verification = verify(
+            () => navigator.pushAndRemoveUntil<void>(
+              any(
+                that: isRoute<void>(
+                  whereName: equals(CrosswordPage.routeName),
+                ),
+              ),
+              captureAny(),
+            ),
+          );
+
+          final capturedPredicate =
+              verification.captured.first as RoutePredicate;
+
+          final firstRoute = _MockRoute();
+          when(() => firstRoute.isFirst).thenReturn(true);
+
+          final secondRoute = _MockRoute();
+          when(() => secondRoute.isFirst).thenReturn(false);
+
+          expect(capturedPredicate(firstRoute), isTrue);
+          expect(capturedPredicate(secondRoute), isFalse);
+        },
+      );
 
       testWidgets(
           'verify status is updated to pickingUp '

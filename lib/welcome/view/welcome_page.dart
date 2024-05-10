@@ -1,23 +1,31 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
-  static Page<void> page() {
-    return const MaterialPage(child: WelcomePage());
+  @visibleForTesting
+  static const routeName = '/';
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const WelcomePage(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const WelcomeView();
+    return const PopScope(
+      canPop: false,
+      child: WelcomeView(),
+    );
   }
 }
 
@@ -104,9 +112,7 @@ class WelcomeBody extends StatelessWidget {
   const WelcomeBody({super.key});
 
   void _onGetStarted(BuildContext context) {
-    context
-        .flow<GameIntroStatus>()
-        .update((status) => GameIntroStatus.teamSelection);
+    Navigator.of(context).push<void>(TeamSelectionPage.route());
   }
 
   @override

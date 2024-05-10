@@ -202,6 +202,7 @@ extension PumpRoute on WidgetTester {
     SettingsController? settingsController,
     HintResource? hintResource,
     MockNavigator? navigator,
+    PlayerBloc? playerBloc,
   }) async {
     final widget = Center(
       child: Builder(
@@ -284,10 +285,12 @@ extension PumpRoute on WidgetTester {
                   ),
                 ),
                 BlocProvider(
-                  create: (context) => PlayerBloc(
-                    leaderboardRepository:
-                        leaderboardRepository ?? _MockLeaderboardRepository(),
-                  ),
+                  create: (context) =>
+                      playerBloc ??
+                      PlayerBloc(
+                        leaderboardRepository: leaderboardRepository ??
+                            _MockLeaderboardRepository(),
+                      ),
                 ),
               ],
               child: IoLayout(

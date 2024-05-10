@@ -67,7 +67,7 @@ class InitialsInput extends FormzInput<String, InitialsInputError> {
   }
 }
 
-class InitialsState extends Equatable {
+class InitialsState {
   const InitialsState({
     required this.initials,
   });
@@ -87,7 +87,4 @@ class InitialsState extends Equatable {
       initials: initials ?? this.initials,
     );
   }
-
-  @override
-  List<Object?> get props => [initials];
 }
