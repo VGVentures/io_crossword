@@ -26,9 +26,15 @@ class HowToPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HowToPlayCubit(),
-      child: const HowToPlayView(),
+    return PopScope(
+      canPop: context.select<PlayerBloc, bool>((bloc) {
+        final status = bloc.state.status;
+        return status != PlayerStatus.playing && status != PlayerStatus.loading;
+      }),
+      child: BlocProvider(
+        create: (_) => HowToPlayCubit(),
+        child: const HowToPlayView(),
+      ),
     );
   }
 }
