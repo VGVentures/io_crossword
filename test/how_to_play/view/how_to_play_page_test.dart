@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
@@ -29,8 +28,6 @@ class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
-
-class _MockAudioController extends Mock implements AudioController {}
 
 class _MockRoute extends Mock implements Route<dynamic> {}
 
@@ -94,14 +91,12 @@ void main() {
   });
 
   group('$HowToPlayView', () {
-    late AudioController audioController;
     late GameIntroBloc gameIntroBloc;
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late Widget widget;
 
     setUp(() {
-      audioController = _MockAudioController();
       gameIntroBloc = _MockGameIntroBloc();
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
@@ -144,38 +139,6 @@ void main() {
       });
     }
 
-    testWidgets(
-      'plays ${Assets.music.startButton1} when button is pressed',
-      (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
-        await tester.pumpApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: gameIntroBloc,
-              ),
-              BlocProvider.value(
-                value: howToPlayCubit,
-              ),
-              BlocProvider.value(
-                value: playerBloc,
-              ),
-            ],
-            child: HowToPlayView(),
-          ),
-          layout: IoLayoutData.small,
-          audioController: audioController,
-        );
-
-        await tester.tap(find.byType(OutlinedButton));
-
-        verify(
-          () => audioController.playSfx(Assets.music.startButton1),
-        ).called(1);
-      },
-    );
-
     for (final layout in IoLayoutData.values) {
       testWidgets(
         'navigates to $CrosswordPage when animation completes for $layout',
@@ -217,7 +180,7 @@ void main() {
             ),
           );
 
-          await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
+          await tester.tap(find.byType(PlayNowButton), warnIfMissed: false);
 
           final verification = verify(
             () => navigator.pushAndRemoveUntil<void>(
@@ -273,7 +236,7 @@ void main() {
       for (final status in GameIntroPlayerCreationStatus.values.toList()
         ..remove(GameIntroPlayerCreationStatus.inProgress)) {
         testWidgets(
-            'an $OutlinedButton with $status'
+            'an $PlayNowButton with $status'
             'when small layout', (tester) async {
           when(() => gameIntroBloc.state)
               .thenReturn(GameIntroState(status: status));
@@ -283,14 +246,14 @@ void main() {
             layout: IoLayoutData.small,
           );
 
-          expect(find.byType(OutlinedButton), findsOneWidget);
+          expect(find.byType(PlayNowButton), findsOneWidget);
         });
       }
 
       for (final status in GameIntroPlayerCreationStatus.values.toList()
         ..remove(GameIntroPlayerCreationStatus.inProgress)) {
         testWidgets(
-            'an $OutlinedButton with $status'
+            'an $PlayNowButton with $status'
             'when large layout', (tester) async {
           when(() => gameIntroBloc.state)
               .thenReturn(GameIntroState(status: status));
@@ -300,7 +263,7 @@ void main() {
             layout: IoLayoutData.large,
           );
 
-          expect(find.byType(OutlinedButton), findsOneWidget);
+          expect(find.byType(PlayNowButton), findsOneWidget);
         });
       }
 
@@ -360,28 +323,6 @@ void main() {
             ),
             isTrue,
           );
-        });
-      }
-
-      for (final layout in IoLayoutData.values) {
-        testWidgets(
-            'verify pickingUpStatus is called when '
-            'OutlinedButton is tapped in $layout', (tester) async {
-          when(() => gameIntroBloc.state).thenReturn(
-            GameIntroState(
-              status: GameIntroPlayerCreationStatus.inProgress,
-            ),
-          );
-
-          await tester.pumpApp(
-            widget,
-            layout: layout,
-          );
-
-          await tester.tap(find.byType(OutlinedButton));
-
-          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
-              .called(1);
         });
       }
 
