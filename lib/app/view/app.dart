@@ -83,6 +83,7 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => PlayerBloc(
+                leaderboardResource: apiClient.leaderboardResource,
                 leaderboardRepository: leaderboardRepository,
               )..add(PlayerLoaded(userId: user.id)),
             ),

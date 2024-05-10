@@ -26,9 +26,15 @@ class HowToPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => HowToPlayCubit(),
-      child: const HowToPlayView(),
+    return PopScope(
+      canPop: context.select<PlayerBloc, bool>((bloc) {
+        final status = bloc.state.status;
+        return status != PlayerStatus.playing && status != PlayerStatus.loading;
+      }),
+      child: BlocProvider(
+        create: (_) => HowToPlayCubit(),
+        child: const HowToPlayView(),
+      ),
     );
   }
 }
@@ -61,8 +67,6 @@ class _HowToPlaySmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
     final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
 
@@ -112,17 +116,7 @@ class _HowToPlaySmall extends StatelessWidget {
                       ),
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      context
-                          .read<HowToPlayCubit>()
-                          .updateStatus(HowToPlayStatus.pickingUp);
-                      context
-                          .read<AudioController>()
-                          .playSfx(Assets.music.startButton1);
-                    },
-                    child: Text(l10n.playNow),
-                  ),
+                  const PlayNowButton(),
                 ],
               ),
             ),
@@ -137,8 +131,6 @@ class _HowToPlayLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
@@ -183,17 +175,7 @@ class _HowToPlayLarge extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 40),
-                          OutlinedButton(
-                            onPressed: () {
-                              context
-                                  .read<HowToPlayCubit>()
-                                  .updateStatus(HowToPlayStatus.pickingUp);
-                              context
-                                  .read<AudioController>()
-                                  .playSfx(Assets.music.startButton1);
-                            },
-                            child: Text(l10n.playNow),
-                          ),
+                          const PlayNowButton(),
                         ],
                       ),
                     ),
