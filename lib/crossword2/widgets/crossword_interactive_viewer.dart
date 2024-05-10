@@ -82,32 +82,37 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final scaleBegin =
         _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-    final currentTranslation =
-        _transformationController.value.getTranslation() * scaleBegin;
-    final beginViewportSize = viewportSize * scaleBegin;
-    print('viewport size $viewportSize');
-    print('beginViewportSize $beginViewportSize');
 
     final scaleEnd = scaleBegin + value;
+    final desiredScale = scaleEnd / scaleBegin;
 
-    final adjustedTranslation = Vector3(
-      currentTranslation.x + (viewportSize.width / 2),
-      currentTranslation.y + (viewportSize.height / 2),
-      0,
+    final viewportCenter = Offset(
+      viewportSize.width / 2,
+      viewportSize.height / 2,
     );
 
-    final translationEnd = adjustedTranslation;
+    final beginOffset = _transformationController.toScene(viewportCenter);
 
-    print(currentTranslation);
-    print(scaleEnd);
+    final newTransformation = Matrix4.copy(_transformationController.value)
+      ..scale(desiredScale);
 
-    final transformationBegin = Matrix4.translation(currentTranslation)
-      ..scale(scaleBegin);
-    final transformationEnd = Matrix4.translation(translationEnd)
-      ..scale(scaleEnd);
+    final inverseMatrix = Matrix4.inverted(newTransformation);
+    final untransformed = inverseMatrix.transform3(
+      Vector3(
+        viewportCenter.dx,
+        viewportCenter.dy,
+        0,
+      ),
+    );
+    final endOffset = Offset(untransformed.x, untransformed.y);
+    final dx = beginOffset.dx - endOffset.dx;
+    final dy = beginOffset.dy - endOffset.dy;
+
+    newTransformation.translate(-dx, -dy);
+
     _playTransformation(
-      transformationBegin,
-      transformationEnd,
+      _transformationController.value,
+      newTransformation,
       animationController,
     );
   }
@@ -146,7 +151,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final scaleBegin =
         _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-    final translationBegin = _transformationController.value.getTranslation();
 
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * scaleBegin;
@@ -191,25 +195,15 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         math.min(translationEnd.y, _minTranslation.y),
         _maxTranslation.y,
       );
-    final transformationBegin = Matrix4.translation(translationBegin)
-      ..scale(scaleBegin);
+
     final transformationEnd = Matrix4.translation(translationEnd)
       ..scale(scaleEnd);
 
-    if (transformationBegin != transformationEnd) {
-      _transformationAnimation?.removeListener(_onAnimateTransformation);
-      _transformationAnimation = Tween(
-        begin: transformationBegin,
-        end: transformationEnd,
-      ).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.linear,
-        ),
-      )..addListener(_onAnimateTransformation);
-
-      animationController.forward(from: 0);
-    }
+    _playTransformation(
+      _transformationController.value,
+      transformationEnd,
+      animationController,
+    );
   }
 
   void _playTransformation(
@@ -219,7 +213,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   ) {
     if (transformationBegin != transformationEnd) {
       _transformationAnimation?.removeListener(_onAnimateTransformation);
-      _transformationAnimation = Tween(
+      _transformationAnimation = Matrix4Tween(
         begin: transformationBegin,
         end: transformationEnd,
       ).animate(
@@ -251,7 +245,6 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return BlocListener<WordSelectionBloc, WordSelectionState>(
       listenWhen: (previous, current) =>
           previous.word != current.word && current.word != null,
@@ -261,6 +254,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           return (previous.word != null) != (current.word != null);
         },
         builder: (context, state) {
+          final layout = IoLayout.of(context);
           return Stack(
             children: [
               InteractiveViewer.builder(
@@ -279,29 +273,51 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
                   );
                 },
               ),
-              Positioned(
-                bottom: 100,
-                right: 20,
-                child: Column(
-                  children: [
-                    IconButton(
-                      style: theme.io.iconButtonTheme.filled,
-                      onPressed: () => _zoomIn(context),
-                      icon: Icon(Icons.add),
-                    ),
-                    const SizedBox(height: 10),
-                    IconButton(
-                      style: theme.io.iconButtonTheme.filled,
-                      onPressed: () => _zoomOut(context),
-                      icon: Icon(Icons.add),
-                    ),
-                  ],
+              if (layout == IoLayoutData.large)
+                Positioned(
+                  bottom: 120,
+                  right: 20,
+                  child: ZoomControls(
+                    zoomInPressed: () => _zoomIn(context),
+                    zoomOutPressed: () => _zoomOut(context),
+                  ),
                 ),
-              ),
             ],
           );
         },
       ),
+    );
+  }
+}
+
+@visibleForTesting
+class ZoomControls extends StatelessWidget {
+  const ZoomControls({
+    required this.zoomInPressed,
+    required this.zoomOutPressed,
+    super.key,
+  });
+
+  final VoidCallback zoomInPressed;
+  final VoidCallback zoomOutPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        IconButton(
+          style: theme.io.iconButtonTheme.filled,
+          onPressed: zoomInPressed,
+          icon: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 10),
+        IconButton(
+          style: theme.io.iconButtonTheme.filled,
+          onPressed: zoomOutPressed,
+          icon: const Icon(Icons.remove),
+        ),
+      ],
     );
   }
 }

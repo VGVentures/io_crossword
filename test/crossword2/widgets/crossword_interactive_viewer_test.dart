@@ -41,6 +41,34 @@ void main() {
       expect(find.byType(CrosswordInteractiveViewer), findsOneWidget);
     });
 
+    testWidgets('pumps with zoom controls when layout is large',
+        (tester) async {
+      await tester.pumpSubject(
+        layoutData: IoLayoutData.large,
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(find.byType(ZoomControls), findsOneWidget);
+    });
+
+    testWidgets('pumps without zoom controls when layout is small',
+        (tester) async {
+      await tester.pumpSubject(
+        layoutData: IoLayoutData.small,
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(find.byType(ZoomControls), findsNothing);
+    });
+
     testWidgets(
       "pumps a $QuadScope with the viewer's viewport",
       (tester) async {
@@ -269,6 +297,7 @@ extension on WidgetTester {
     Widget widget, {
     WordSelectionBloc? wordSelectionBloc,
     CrosswordLayoutData? crosswordLayoutData,
+    IoLayoutData? layoutData,
   }) {
     final internalWordSelectionBloc =
         wordSelectionBloc ?? _MockWordSelectionBloc();
@@ -288,6 +317,7 @@ extension on WidgetTester {
         );
 
     return pumpApp(
+      layout: layoutData ?? IoLayoutData.large,
       DefaultTransformationController(
         child: BlocProvider<WordSelectionBloc>(
           create: (_) => internalWordSelectionBloc,
