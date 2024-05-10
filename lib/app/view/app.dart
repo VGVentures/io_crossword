@@ -13,7 +13,6 @@ import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/rotate_phone/rotate_phone.dart';
 import 'package:io_crossword/settings/settings.dart';
-import 'package:io_crossword/welcome/view/welcome_page.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';

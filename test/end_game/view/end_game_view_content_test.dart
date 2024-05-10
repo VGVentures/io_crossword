@@ -14,7 +14,6 @@ import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/widget/widget.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
