@@ -12,6 +12,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class TeamSelectionPage extends StatelessWidget {
   const TeamSelectionPage({super.key});
 
+  @visibleForTesting
   static const String routeName = '/team-selection';
 
   static Route<void> route() {

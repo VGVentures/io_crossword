@@ -10,6 +10,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
+  @visibleForTesting
   static const routeName = '/';
 
   static Route<void> route() {

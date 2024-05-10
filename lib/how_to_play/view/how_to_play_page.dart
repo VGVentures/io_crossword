@@ -16,11 +16,8 @@ class HowToPlayPage extends StatelessWidget {
 
   static const String dangleMascotHeroTag = 'dangle_mascot_tag';
 
+  @visibleForTesting
   static const routeName = '/how-to-play';
-
-  static Page<void> page() {
-    return const MaterialPage(child: HowToPlayPage());
-  }
 
   static Route<void> route() {
     return MaterialPageRoute(
