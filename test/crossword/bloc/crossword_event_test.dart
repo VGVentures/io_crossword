@@ -5,9 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:mocktail/mocktail.dart';
-
-class _MockWord extends Mock implements Word {}
 
 void main() {
   group('CrosswordEvent', () {
