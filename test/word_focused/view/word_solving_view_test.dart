@@ -400,7 +400,7 @@ void main() {
     );
 
     testWidgets(
-      'deleting a letter sends $WordSolveRequested',
+      'adding the first letter sends $WordSolveRequested',
       (tester) async {
         await tester.pumpApp(widget);
         await tester.pumpAndSettle();

@@ -379,6 +379,18 @@ class IoCrosswordTheme {
 
   IoIconButtonTheme get _iconButtonTheme {
     return IoIconButtonTheme(
+      flat: ButtonStyle(
+        iconSize: const MaterialStatePropertyAll<double>(20),
+        side: const MaterialStatePropertyAll<BorderSide>(BorderSide.none),
+        iconColor: MaterialStateColor.resolveWith((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return IoCrosswordColors.mediumGray;
+          }
+          return IoCrosswordColors.seedWhite;
+        }),
+        backgroundColor:
+            const MaterialStatePropertyAll<Color>(Colors.transparent),
+      ),
       outlined: ButtonStyle(
         iconSize: const MaterialStatePropertyAll<double>(20),
         shape: const MaterialStatePropertyAll<OutlinedBorder>(

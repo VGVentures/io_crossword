@@ -6,6 +6,9 @@ void main() {
   group('$IoIconButtonTheme', () {
     test('lerps', () {
       final from = IoIconButtonTheme(
+        flat: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+        ),
         outlined: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
         ),
@@ -14,6 +17,9 @@ void main() {
         ),
       );
       final to = IoIconButtonTheme(
+        flat: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+        ),
         outlined: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(const Color(0xff0000ff)),
         ),
@@ -23,6 +29,9 @@ void main() {
       );
 
       final newTheme = from.lerp(to, 0.5);
+
+      expect(newTheme.flat, isNot(equals(from.flat)));
+      expect(newTheme.flat, isNot(equals(to.flat)));
 
       expect(newTheme.outlined, isNot(equals(from.outlined)));
       expect(newTheme.outlined, isNot(equals(to.outlined)));

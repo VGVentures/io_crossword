@@ -124,6 +124,46 @@ void main() {
       );
 
       blocTest<PlayerBloc, PlayerState>(
+        'emits [loading] status when player is already playing',
+        build: () => bloc,
+        setUp: () {
+          when(
+            () => leaderboardResource.createScore(
+              initials: 'AAA',
+              mascot: Mascots.dash,
+            ),
+          ).thenAnswer((_) async {});
+        },
+        seed: () => PlayerState(
+          status: PlayerStatus.playing,
+          mascot: Mascots.dash,
+          player: Player(
+            id: '1',
+            initials: 'AAA',
+            mascot: Mascots.dash,
+          ),
+        ),
+        act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+        expect: () => <PlayerState>[
+          PlayerState(
+            status: PlayerStatus.loading,
+            mascot: Mascots.dash,
+            player: Player(
+              id: '1',
+              initials: 'AAA',
+              mascot: Mascots.dash,
+            ),
+          ),
+        ],
+        verify: (bloc) => verify(
+          () => leaderboardResource.createScore(
+            initials: 'AAA',
+            mascot: Mascots.dash,
+          ),
+        ).called(1),
+      );
+
+      blocTest<PlayerBloc, PlayerState>(
         'emits [failure] status when player fails to be created',
         build: () => bloc,
         setUp: () {
@@ -166,22 +206,6 @@ void main() {
       );
 
       group('does nothing', () {
-        blocTest<PlayerBloc, PlayerState>(
-          'when already playing',
-          build: () => bloc,
-          seed: () => PlayerState(
-            status: PlayerStatus.playing,
-            mascot: Mascots.dash,
-            player: Player(
-              id: '1',
-              initials: 'AAA',
-              mascot: Mascots.dash,
-            ),
-          ),
-          act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
-          expect: () => <PlayerState>[],
-        );
-
         blocTest<PlayerBloc, PlayerState>(
           'when loading',
           build: () => bloc,

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -32,10 +32,11 @@ class CrosswordInteractiveViewer extends StatefulWidget {
 
   @override
   State<CrosswordInteractiveViewer> createState() =>
-      _CrosswordInteractiveViewerState();
+      CrosswordInteractiveViewerState();
 }
 
-class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
+@visibleForTesting
+class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     with SingleTickerProviderStateMixin {
   /// The latest viewport reported by the [InteractiveViewer.builder].
   Quad? _viewport;
@@ -65,8 +66,65 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// It is assumed it is the identity of multiplication.
   final _idealScale = 1.0;
 
+  @visibleForTesting
+  double get currentScale =>
+      _transformationController.value.getMaxScaleOnAxis().roundTo(3);
+
   void _onAnimateTransformation() {
     _transformationController.value = _transformationAnimation!.value;
+  }
+
+  void _zoom(double value, BuildContext context) {
+    final animationController = _animationController;
+    if (animationController == null) return;
+    if (animationController.isAnimating) return;
+
+    final viewport = _viewport;
+    if (viewport == null) return;
+
+    final layout = IoLayout.of(context);
+    final viewportSize = viewport.reduced(layout);
+
+    final scaleEnd = currentScale + value;
+    final desiredScale = scaleEnd / currentScale;
+
+    final viewportCenter = Offset(
+      viewportSize.width / 2,
+      viewportSize.height / 2,
+    );
+
+    final beginOffset = _transformationController.toScene(viewportCenter);
+
+    final newTransformation = Matrix4.copy(_transformationController.value)
+      ..scale(desiredScale);
+
+    final inverseMatrix = Matrix4.inverted(newTransformation);
+    final untransformed = inverseMatrix.transform3(
+      Vector3(
+        viewportCenter.dx,
+        viewportCenter.dy,
+        0,
+      ),
+    );
+    final endOffset = Offset(untransformed.x, untransformed.y);
+    final dx = beginOffset.dx - endOffset.dx;
+    final dy = beginOffset.dy - endOffset.dy;
+
+    newTransformation.translate(-dx, -dy);
+
+    _playTransformation(
+      _transformationController.value,
+      newTransformation,
+      animationController,
+    );
+  }
+
+  void _zoomIn(BuildContext context) {
+    _zoom(0.2, context);
+  }
+
+  void _zoomOut(BuildContext context) {
+    _zoom(-0.2, context);
   }
 
   void _centerSelectedWord(BuildContext context) {
@@ -93,13 +151,8 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       0,
     );
 
-    final scaleBegin =
-        _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-    final translationBegin =
-        _transformationController.value.getTranslation() * scaleBegin;
-
     final viewportSize = viewport.reduced(layout);
-    final beginViewportSize = viewportSize * scaleBegin;
+    final beginViewportSize = viewportSize * currentScale;
 
     final requiredWordSize =
         selectedWord.word.size(crosswordLayout) * _idealScale;
@@ -141,14 +194,25 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         math.min(translationEnd.y, _minTranslation.y),
         _maxTranslation.y,
       );
-    final transformationBegin = Matrix4.translation(translationBegin)
-      ..scale(scaleBegin);
+
     final transformationEnd = Matrix4.translation(translationEnd)
       ..scale(scaleEnd);
 
+    _playTransformation(
+      _transformationController.value,
+      transformationEnd,
+      animationController,
+    );
+  }
+
+  void _playTransformation(
+    Matrix4 transformationBegin,
+    Matrix4 transformationEnd,
+    AnimationController animationController,
+  ) {
     if (transformationBegin != transformationEnd) {
       _transformationAnimation?.removeListener(_onAnimateTransformation);
-      _transformationAnimation = Tween(
+      _transformationAnimation = Matrix4Tween(
         begin: transformationBegin,
         end: transformationEnd,
       ).animate(
@@ -189,23 +253,70 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           return (previous.word != null) != (current.word != null);
         },
         builder: (context, state) {
-          return InteractiveViewer.builder(
-            minScale: 0.6,
-            panEnabled: state.word == null,
-            transformationController: _transformationController,
-            builder: (context, quad) {
-              _viewport = quad;
+          final layout = IoLayout.of(context);
+          return Stack(
+            children: [
+              InteractiveViewer.builder(
+                minScale: 0.6,
+                maxScale: 1.8,
+                panEnabled: state.word == null,
+                transformationController: _transformationController,
+                builder: (context, quad) {
+                  _viewport = quad;
 
-              _centerSelectedWord(context);
+                  _centerSelectedWord(context);
 
-              return QuadScope(
-                data: quad,
-                child: widget.builder(context, quad),
-              );
-            },
+                  return QuadScope(
+                    data: quad,
+                    child: widget.builder(context, quad),
+                  );
+                },
+              ),
+              if (layout == IoLayoutData.large)
+                Positioned(
+                  bottom: 120,
+                  right: 20,
+                  child: ZoomControls(
+                    zoomInPressed: () => _zoomIn(context),
+                    zoomOutPressed: () => _zoomOut(context),
+                  ),
+                ),
+            ],
           );
         },
       ),
+    );
+  }
+}
+
+@visibleForTesting
+class ZoomControls extends StatelessWidget {
+  const ZoomControls({
+    required this.zoomInPressed,
+    required this.zoomOutPressed,
+    super.key,
+  });
+
+  final VoidCallback zoomInPressed;
+  final VoidCallback zoomOutPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        IconButton(
+          style: theme.io.iconButtonTheme.filled,
+          onPressed: zoomInPressed,
+          icon: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 10),
+        IconButton(
+          style: theme.io.iconButtonTheme.filled,
+          onPressed: zoomOutPressed,
+          icon: const Icon(Icons.remove),
+        ),
+      ],
     );
   }
 }
