@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -69,6 +69,57 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _transformationController.value = _transformationAnimation!.value;
   }
 
+  void _zoom(double value, BuildContext context) {
+    final animationController = _animationController;
+    if (animationController == null) return;
+    if (animationController.isAnimating) return;
+
+    final viewport = _viewport;
+    if (viewport == null) return;
+
+    final layout = IoLayout.of(context);
+    final viewportSize = viewport.reduced(layout);
+
+    final scaleBegin =
+        _transformationController.value.getMaxScaleOnAxis().roundTo(3);
+    final currentTranslation =
+        _transformationController.value.getTranslation() * scaleBegin;
+    final beginViewportSize = viewportSize * scaleBegin;
+    print('viewport size $viewportSize');
+    print('beginViewportSize $beginViewportSize');
+
+    final scaleEnd = scaleBegin + value;
+
+    final adjustedTranslation = Vector3(
+      currentTranslation.x + (viewportSize.width / 2),
+      currentTranslation.y + (viewportSize.height / 2),
+      0,
+    );
+
+    final translationEnd = adjustedTranslation;
+
+    print(currentTranslation);
+    print(scaleEnd);
+
+    final transformationBegin = Matrix4.translation(currentTranslation)
+      ..scale(scaleBegin);
+    final transformationEnd = Matrix4.translation(translationEnd)
+      ..scale(scaleEnd);
+    _playTransformation(
+      transformationBegin,
+      transformationEnd,
+      animationController,
+    );
+  }
+
+  void _zoomIn(BuildContext context) {
+    _zoom(0.2, context);
+  }
+
+  void _zoomOut(BuildContext context) {
+    _zoom(-0.2, context);
+  }
+
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
     if (animationController == null) return;
@@ -95,8 +146,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final scaleBegin =
         _transformationController.value.getMaxScaleOnAxis().roundTo(3);
-    final translationBegin =
-        _transformationController.value.getTranslation() * scaleBegin;
+    final translationBegin = _transformationController.value.getTranslation();
 
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * scaleBegin;
@@ -162,6 +212,27 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     }
   }
 
+  void _playTransformation(
+    Matrix4 transformationBegin,
+    Matrix4 transformationEnd,
+    AnimationController animationController,
+  ) {
+    if (transformationBegin != transformationEnd) {
+      _transformationAnimation?.removeListener(_onAnimateTransformation);
+      _transformationAnimation = Tween(
+        begin: transformationBegin,
+        end: transformationEnd,
+      ).animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: Curves.linear,
+        ),
+      )..addListener(_onAnimateTransformation);
+
+      animationController.forward(from: 0);
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -180,6 +251,7 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocListener<WordSelectionBloc, WordSelectionState>(
       listenWhen: (previous, current) =>
           previous.word != current.word && current.word != null,
@@ -189,20 +261,44 @@ class _CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           return (previous.word != null) != (current.word != null);
         },
         builder: (context, state) {
-          return InteractiveViewer.builder(
-            minScale: 0.6,
-            panEnabled: state.word == null,
-            transformationController: _transformationController,
-            builder: (context, quad) {
-              _viewport = quad;
+          return Stack(
+            children: [
+              InteractiveViewer.builder(
+                minScale: 0.6,
+                maxScale: 1.8,
+                panEnabled: state.word == null,
+                transformationController: _transformationController,
+                builder: (context, quad) {
+                  _viewport = quad;
 
-              _centerSelectedWord(context);
+                  _centerSelectedWord(context);
 
-              return QuadScope(
-                data: quad,
-                child: widget.builder(context, quad),
-              );
-            },
+                  return QuadScope(
+                    data: quad,
+                    child: widget.builder(context, quad),
+                  );
+                },
+              ),
+              Positioned(
+                bottom: 100,
+                right: 20,
+                child: Column(
+                  children: [
+                    IconButton(
+                      style: theme.io.iconButtonTheme.filled,
+                      onPressed: () => _zoomIn(context),
+                      icon: Icon(Icons.add),
+                    ),
+                    const SizedBox(height: 10),
+                    IconButton(
+                      style: theme.io.iconButtonTheme.filled,
+                      onPressed: () => _zoomOut(context),
+                      icon: Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
