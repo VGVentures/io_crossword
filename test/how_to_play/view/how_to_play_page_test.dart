@@ -65,6 +65,51 @@ void main() {
       expect(find.byType(HowToPlayPage), findsOneWidget);
     });
 
+    group('canPop', () {
+      for (final status in PlayerStatus.values.toSet()
+        ..removeAll({PlayerStatus.loading, PlayerStatus.playing})) {
+        testWidgets('is true when status is $status', (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              status: status,
+              mascot: Mascots.dash,
+            ),
+          );
+
+          await tester.pumpApp(
+            playerBloc: playerBloc,
+            HowToPlayPage(),
+          );
+
+          final popScope = tester.widget<PopScope>(find.byType(PopScope));
+          final canPop = popScope.canPop;
+
+          expect(canPop, isTrue);
+        });
+      }
+
+      for (final status in {PlayerStatus.loading, PlayerStatus.playing}) {
+        testWidgets('is false when status is $status', (tester) async {
+          when(() => playerBloc.state).thenReturn(
+            PlayerState(
+              status: status,
+              mascot: Mascots.dash,
+            ),
+          );
+
+          await tester.pumpApp(
+            playerBloc: playerBloc,
+            HowToPlayPage(),
+          );
+
+          final popScope = tester.widget<PopScope>(find.byType(PopScope));
+          final canPop = popScope.canPop;
+
+          expect(canPop, isFalse);
+        });
+      }
+    });
+
     testWidgets('displays a $HowToPlayView', (tester) async {
       when(() => gameIntroBloc.state).thenReturn(GameIntroState());
       when(() => playerBloc.state)
