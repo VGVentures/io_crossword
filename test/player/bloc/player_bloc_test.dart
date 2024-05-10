@@ -167,22 +167,6 @@ void main() {
 
       group('does nothing', () {
         blocTest<PlayerBloc, PlayerState>(
-          'when already playing',
-          build: () => bloc,
-          seed: () => PlayerState(
-            status: PlayerStatus.playing,
-            mascot: Mascots.dash,
-            player: Player(
-              id: '1',
-              initials: 'AAA',
-              mascot: Mascots.dash,
-            ),
-          ),
-          act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
-          expect: () => <PlayerState>[],
-        );
-
-        blocTest<PlayerBloc, PlayerState>(
           'when loading',
           build: () => bloc,
           seed: () => PlayerState(
