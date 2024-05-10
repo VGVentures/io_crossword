@@ -35,9 +35,12 @@ abstract class Team extends Equatable {
 
   SpriteData get dropInSpriteData;
 
-  List<String> loadableAssets() => [
+  List<String> loadableTeamSelectionAssets() => [
         idleAnimation.path,
         platformAnimation.path,
+      ];
+
+  List<String> loadableHowToPlayAssets() => [
         lookUpAnimation.path,
         pickUpAnimation.path,
         dangleAnimation.path,

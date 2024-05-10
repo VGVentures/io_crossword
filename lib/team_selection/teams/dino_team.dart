@@ -15,16 +15,16 @@ class DinoTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dinoPlatform;
 
   @override
-  AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
+  AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUpMobile;
 
   @override
-  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUp;
+  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUpMobile;
 
   @override
-  AssetGenImage get dangleAnimation => Assets.anim.dinoDangle;
+  AssetGenImage get dangleAnimation => Assets.anim.dinoDangleMobile;
 
   @override
-  AssetGenImage get dropInAnimation => Assets.anim.dinoDropIn;
+  AssetGenImage get dropInAnimation => Assets.anim.dinoDropInMobile;
 
   @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDino;
@@ -51,8 +51,8 @@ class DinoTeam extends Team {
         amountPerRow: 9,
         amountPerColumn: 7,
         stepTime: 0.042,
-        width: 384,
-        height: 544,
+        width: 384 / 2,
+        height: 544 / 2,
       );
 
   @override
@@ -61,8 +61,8 @@ class DinoTeam extends Team {
         amountPerRow: 17,
         amountPerColumn: 4,
         stepTime: 0.042,
-        width: 384,
-        height: 544,
+        width: 384 / 2,
+        height: 544 / 2,
       );
 
   @override
@@ -71,8 +71,8 @@ class DinoTeam extends Team {
         amountPerRow: 9,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 384,
-        height: 544,
+        width: 384 / 2,
+        height: 544 / 2,
       );
 
   @override
@@ -81,7 +81,7 @@ class DinoTeam extends Team {
         amountPerRow: 7,
         amountPerColumn: 5,
         stepTime: 0.042,
-        width: 384,
-        height: 544,
+        width: 384 / 2,
+        height: 544 / 2,
       );
 }

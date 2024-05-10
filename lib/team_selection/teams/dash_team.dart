@@ -15,16 +15,16 @@ class DashTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dashPlatform;
 
   @override
-  AssetGenImage get lookUpAnimation => Assets.anim.dashLookUp;
+  AssetGenImage get lookUpAnimation => Assets.anim.dashLookUpMobile;
 
   @override
-  AssetGenImage get pickUpAnimation => Assets.anim.dashPickUp;
+  AssetGenImage get pickUpAnimation => Assets.anim.dashPickUpMobile;
 
   @override
-  AssetGenImage get dangleAnimation => Assets.anim.dashDangle;
+  AssetGenImage get dangleAnimation => Assets.anim.dashDangleMobile;
 
   @override
-  AssetGenImage get dropInAnimation => Assets.anim.dashDropIn;
+  AssetGenImage get dropInAnimation => Assets.anim.dashDropInMobile;
 
   @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDash;
@@ -51,8 +51,8 @@ class DashTeam extends Team {
         amountPerRow: 15,
         amountPerColumn: 4,
         stepTime: 0.042,
-        width: 457,
-        height: 612,
+        width: 457 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -61,8 +61,8 @@ class DashTeam extends Team {
         amountPerRow: 16,
         amountPerColumn: 4,
         stepTime: 0.042,
-        width: 457,
-        height: 612,
+        width: 457 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -71,8 +71,8 @@ class DashTeam extends Team {
         amountPerRow: 12,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 457,
-        height: 612,
+        width: 457 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -81,7 +81,7 @@ class DashTeam extends Team {
         amountPerRow: 7,
         amountPerColumn: 5,
         stepTime: 0.042,
-        width: 457,
-        height: 612,
+        width: 457 / 2,
+        height: 612 / 2,
       );
 }

@@ -27,7 +27,8 @@ class HowToPlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HowToPlayCubit(),
+      create: (_) => HowToPlayCubit()
+        ..loadAssets(context.read<PlayerBloc>().state.mascot!),
       child: const HowToPlayView(),
     );
   }
@@ -48,10 +49,15 @@ class HowToPlayView extends StatelessWidget {
         crossword: l10n.crossword,
         actions: (context) => const MuteButton(),
       ),
-      body: switch (layout) {
-        IoLayoutData.small => const _HowToPlaySmall(),
-        IoLayoutData.large => const _HowToPlayLarge(),
-      },
+      body: BlocBuilder<HowToPlayCubit, HowToPlayState>(
+        builder: (context, state) =>
+            state.assetsStatus == AssetsLoadingStatus.inProgress
+                ? const SizedBox.shrink()
+                : switch (layout) {
+                    IoLayoutData.small => const _HowToPlaySmall(),
+                    IoLayoutData.large => const _HowToPlayLarge(),
+                  },
+      ),
     );
   }
 }
@@ -68,14 +74,16 @@ class _HowToPlaySmall extends StatelessWidget {
 
     return Stack(
       children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: mascot!.teamMascot.dangleSpriteData.width,
-            height: mascot.teamMascot.dangleSpriteData.height,
-            child: const Hero(
-              tag: HowToPlayPage.dangleMascotHeroTag,
-              child: _MascotAnimation(),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              width: mascot!.teamMascot.dangleSpriteData.width,
+              height: mascot.teamMascot.dangleSpriteData.height,
+              child: const Hero(
+                tag: HowToPlayPage.dangleMascotHeroTag,
+                child: _MascotAnimation(),
+              ),
             ),
           ),
         ),
@@ -246,9 +254,6 @@ class _MascotAnimationState extends State<_MascotAnimation> {
                   .read<HowToPlayCubit>()
                   .updateStatus(HowToPlayStatus.complete);
             },
-          ),
-          AnimationItem(
-            spriteData: mascot.teamMascot.dangleSpriteData,
           ),
         ],
         controller: controller,

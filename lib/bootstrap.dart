@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -37,6 +39,7 @@ Future<void> bootstrap(BootstrapBuilder builder) async {
   Bloc.observer = const AppBlocObserver();
 
   // Add cross-flavor configuration here
+  Flame.images = Images(prefix: '');
 
   runApp(
     await builder(

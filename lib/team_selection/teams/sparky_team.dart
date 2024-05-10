@@ -15,16 +15,16 @@ class SparkyTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.sparkyPlatform;
 
   @override
-  AssetGenImage get lookUpAnimation => Assets.anim.sparkyLookUp;
+  AssetGenImage get lookUpAnimation => Assets.anim.sparkyLookUpMobile;
 
   @override
-  AssetGenImage get pickUpAnimation => Assets.anim.sparkyPickUp;
+  AssetGenImage get pickUpAnimation => Assets.anim.sparkyPickUpMobile;
 
   @override
-  AssetGenImage get dangleAnimation => Assets.anim.sparkyDangle;
+  AssetGenImage get dangleAnimation => Assets.anim.sparkyDangleMobile;
 
   @override
-  AssetGenImage get dropInAnimation => Assets.anim.sparkyDropIn;
+  AssetGenImage get dropInAnimation => Assets.anim.sparkyDropInMobile;
 
   @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerSparky;
@@ -51,8 +51,8 @@ class SparkyTeam extends Team {
         amountPerRow: 21,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -61,8 +61,8 @@ class SparkyTeam extends Team {
         amountPerRow: 19,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -71,8 +71,8 @@ class SparkyTeam extends Team {
         amountPerRow: 9,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -81,7 +81,7 @@ class SparkyTeam extends Team {
         amountPerRow: 11,
         amountPerColumn: 3,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 }

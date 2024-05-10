@@ -15,16 +15,16 @@ class AndroidTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.androidPlatform;
 
   @override
-  AssetGenImage get lookUpAnimation => Assets.anim.androidLookUp;
+  AssetGenImage get lookUpAnimation => Assets.anim.androidLookUpMobile;
 
   @override
-  AssetGenImage get pickUpAnimation => Assets.anim.androidPickUp;
+  AssetGenImage get pickUpAnimation => Assets.anim.androidPickUpMobile;
 
   @override
-  AssetGenImage get dangleAnimation => Assets.anim.androidDangle;
+  AssetGenImage get dangleAnimation => Assets.anim.androidDangleMobile;
 
   @override
-  AssetGenImage get dropInAnimation => Assets.anim.androidDropIn;
+  AssetGenImage get dropInAnimation => Assets.anim.androidDropInMobile;
 
   @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerAndroid;
@@ -52,8 +52,8 @@ class AndroidTeam extends Team {
         amountPerRow: 11,
         amountPerColumn: 7,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -62,8 +62,8 @@ class AndroidTeam extends Team {
         amountPerRow: 18,
         amountPerColumn: 4,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -72,8 +72,8 @@ class AndroidTeam extends Team {
         amountPerRow: 7,
         amountPerColumn: 6,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 
   @override
@@ -82,7 +82,7 @@ class AndroidTeam extends Team {
         amountPerRow: 7,
         amountPerColumn: 6,
         stepTime: 0.042,
-        width: 360,
-        height: 612,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 }

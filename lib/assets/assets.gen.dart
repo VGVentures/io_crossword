@@ -18,9 +18,17 @@ class $AssetsAnimGen {
   AssetGenImage get androidDangle =>
       const AssetGenImage('assets/anim/android_dangle.png');
 
+  /// File path: assets/anim/android_dangle_mobile.png
+  AssetGenImage get androidDangleMobile =>
+      const AssetGenImage('assets/anim/android_dangle_mobile.png');
+
   /// File path: assets/anim/android_drop_in.png
   AssetGenImage get androidDropIn =>
       const AssetGenImage('assets/anim/android_drop_in.png');
+
+  /// File path: assets/anim/android_drop_in_mobile.png
+  AssetGenImage get androidDropInMobile =>
+      const AssetGenImage('assets/anim/android_drop_in_mobile.png');
 
   /// File path: assets/anim/android_idle.png
   AssetGenImage get androidIdle =>
@@ -30,9 +38,17 @@ class $AssetsAnimGen {
   AssetGenImage get androidLookUp =>
       const AssetGenImage('assets/anim/android_look_up.png');
 
+  /// File path: assets/anim/android_look_up_mobile.png
+  AssetGenImage get androidLookUpMobile =>
+      const AssetGenImage('assets/anim/android_look_up_mobile.png');
+
   /// File path: assets/anim/android_pick_up.png
   AssetGenImage get androidPickUp =>
       const AssetGenImage('assets/anim/android_pick_up.png');
+
+  /// File path: assets/anim/android_pick_up_mobile.png
+  AssetGenImage get androidPickUpMobile =>
+      const AssetGenImage('assets/anim/android_pick_up_mobile.png');
 
   /// File path: assets/anim/android_platform.png
   AssetGenImage get androidPlatform =>
@@ -42,9 +58,17 @@ class $AssetsAnimGen {
   AssetGenImage get dashDangle =>
       const AssetGenImage('assets/anim/dash_dangle.png');
 
+  /// File path: assets/anim/dash_dangle_mobile.png
+  AssetGenImage get dashDangleMobile =>
+      const AssetGenImage('assets/anim/dash_dangle_mobile.png');
+
   /// File path: assets/anim/dash_drop_in.png
   AssetGenImage get dashDropIn =>
       const AssetGenImage('assets/anim/dash_drop_in.png');
+
+  /// File path: assets/anim/dash_drop_in_mobile.png
+  AssetGenImage get dashDropInMobile =>
+      const AssetGenImage('assets/anim/dash_drop_in_mobile.png');
 
   /// File path: assets/anim/dash_idle.png
   AssetGenImage get dashIdle =>
@@ -54,9 +78,17 @@ class $AssetsAnimGen {
   AssetGenImage get dashLookUp =>
       const AssetGenImage('assets/anim/dash_look_up.png');
 
+  /// File path: assets/anim/dash_look_up_mobile.png
+  AssetGenImage get dashLookUpMobile =>
+      const AssetGenImage('assets/anim/dash_look_up_mobile.png');
+
   /// File path: assets/anim/dash_pick_up.png
   AssetGenImage get dashPickUp =>
       const AssetGenImage('assets/anim/dash_pick_up.png');
+
+  /// File path: assets/anim/dash_pick_up_mobile.png
+  AssetGenImage get dashPickUpMobile =>
+      const AssetGenImage('assets/anim/dash_pick_up_mobile.png');
 
   /// File path: assets/anim/dash_platform.png
   AssetGenImage get dashPlatform =>
@@ -66,9 +98,17 @@ class $AssetsAnimGen {
   AssetGenImage get dinoDangle =>
       const AssetGenImage('assets/anim/dino_dangle.png');
 
+  /// File path: assets/anim/dino_dangle_mobile.png
+  AssetGenImage get dinoDangleMobile =>
+      const AssetGenImage('assets/anim/dino_dangle_mobile.png');
+
   /// File path: assets/anim/dino_drop_in.png
   AssetGenImage get dinoDropIn =>
       const AssetGenImage('assets/anim/dino_drop_in.png');
+
+  /// File path: assets/anim/dino_drop_in_mobile.png
+  AssetGenImage get dinoDropInMobile =>
+      const AssetGenImage('assets/anim/dino_drop_in_mobile.png');
 
   /// File path: assets/anim/dino_idle.png
   AssetGenImage get dinoIdle =>
@@ -78,9 +118,17 @@ class $AssetsAnimGen {
   AssetGenImage get dinoLookUp =>
       const AssetGenImage('assets/anim/dino_look_up.png');
 
+  /// File path: assets/anim/dino_look_up_mobile.png
+  AssetGenImage get dinoLookUpMobile =>
+      const AssetGenImage('assets/anim/dino_look_up_mobile.png');
+
   /// File path: assets/anim/dino_pick_up.png
   AssetGenImage get dinoPickUp =>
       const AssetGenImage('assets/anim/dino_pick_up.png');
+
+  /// File path: assets/anim/dino_pick_up_mobile.png
+  AssetGenImage get dinoPickUpMobile =>
+      const AssetGenImage('assets/anim/dino_pick_up_mobile.png');
 
   /// File path: assets/anim/dino_platform.png
   AssetGenImage get dinoPlatform =>
@@ -90,9 +138,17 @@ class $AssetsAnimGen {
   AssetGenImage get sparkyDangle =>
       const AssetGenImage('assets/anim/sparky_dangle.png');
 
+  /// File path: assets/anim/sparky_dangle_mobile.png
+  AssetGenImage get sparkyDangleMobile =>
+      const AssetGenImage('assets/anim/sparky_dangle_mobile.png');
+
   /// File path: assets/anim/sparky_drop_in.png
   AssetGenImage get sparkyDropIn =>
       const AssetGenImage('assets/anim/sparky_drop_in.png');
+
+  /// File path: assets/anim/sparky_drop_in_mobile.png
+  AssetGenImage get sparkyDropInMobile =>
+      const AssetGenImage('assets/anim/sparky_drop_in_mobile.png');
 
   /// File path: assets/anim/sparky_idle.png
   AssetGenImage get sparkyIdle =>
@@ -102,9 +158,17 @@ class $AssetsAnimGen {
   AssetGenImage get sparkyLookUp =>
       const AssetGenImage('assets/anim/sparky_look_up.png');
 
+  /// File path: assets/anim/sparky_look_up_mobile.png
+  AssetGenImage get sparkyLookUpMobile =>
+      const AssetGenImage('assets/anim/sparky_look_up_mobile.png');
+
   /// File path: assets/anim/sparky_pick_up.png
   AssetGenImage get sparkyPickUp =>
       const AssetGenImage('assets/anim/sparky_pick_up.png');
+
+  /// File path: assets/anim/sparky_pick_up_mobile.png
+  AssetGenImage get sparkyPickUpMobile =>
+      const AssetGenImage('assets/anim/sparky_pick_up_mobile.png');
 
   /// File path: assets/anim/sparky_platform.png
   AssetGenImage get sparkyPlatform =>
@@ -113,28 +177,44 @@ class $AssetsAnimGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         androidDangle,
+        androidDangleMobile,
         androidDropIn,
+        androidDropInMobile,
         androidIdle,
         androidLookUp,
+        androidLookUpMobile,
         androidPickUp,
+        androidPickUpMobile,
         androidPlatform,
         dashDangle,
+        dashDangleMobile,
         dashDropIn,
+        dashDropInMobile,
         dashIdle,
         dashLookUp,
+        dashLookUpMobile,
         dashPickUp,
+        dashPickUpMobile,
         dashPlatform,
         dinoDangle,
+        dinoDangleMobile,
         dinoDropIn,
+        dinoDropInMobile,
         dinoIdle,
         dinoLookUp,
+        dinoLookUpMobile,
         dinoPickUp,
+        dinoPickUpMobile,
         dinoPlatform,
         sparkyDangle,
+        sparkyDangleMobile,
         sparkyDropIn,
+        sparkyDropInMobile,
         sparkyIdle,
         sparkyLookUp,
+        sparkyLookUpMobile,
         sparkyPickUp,
+        sparkyPickUpMobile,
         sparkyPlatform
       ];
 }
