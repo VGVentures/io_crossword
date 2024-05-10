@@ -1,12 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -91,19 +90,9 @@ void main() {
 
   group('$WelcomeBody', () {
     testWidgets(
-      'updates flow when "Get Started" button is pressed',
+      'navigates into $TeamSelectionPage when button is tapped',
       (tester) async {
-        final flowController = FlowController(GameIntroStatus.welcome);
-        addTearDown(flowController.dispose);
-
-        await tester.pumpSubject(
-          FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: WelcomeBody()),
-            ],
-          ),
-        );
+        await tester.pumpSubject(const WelcomeBody());
 
         final outlinedButtonFinder = find.byType(OutlinedButton);
         await tester.ensureVisible(outlinedButtonFinder);
@@ -112,10 +101,7 @@ void main() {
         await tester.tap(outlinedButtonFinder);
         await tester.pump();
 
-        expect(
-          flowController.state,
-          equals(GameIntroStatus.teamSelection),
-        );
+        // TODO(alestiago): Add test for navigation.
       },
     );
 

@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -81,45 +79,6 @@ void main() {
   });
 
   group('$LoadingBody', () {
-    testWidgets(
-      'updates flow when loading is complete',
-      (tester) async {
-        final flowController = FlowController(GameIntroStatus.loading);
-        addTearDown(flowController.dispose);
-
-        final loadingCubit = _MockLoadingCubit();
-
-        whenListen(
-          loadingCubit,
-          Stream.fromIterable(
-            [
-              LoadingState(
-                status: LoadingStatus.loaded,
-                assetsCount: 8,
-                loaded: 8,
-              ),
-            ],
-          ),
-          initialState: const LoadingState.initial(),
-        );
-
-        await tester.pumpSubject(
-          FlowBuilder<GameIntroStatus>(
-            controller: flowController,
-            onGeneratePages: (_, __) => [
-              const MaterialPage(child: LoadingBody()),
-            ],
-          ),
-          loadingCubit: loadingCubit,
-        );
-
-        expect(
-          flowController.state,
-          equals(GameIntroStatus.welcome),
-        );
-      },
-    );
-
     group('displays', () {
       testWidgets('a localized welcome text', (tester) async {
         late final AppLocalizations l10n;

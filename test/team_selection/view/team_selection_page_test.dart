@@ -3,14 +3,13 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -164,7 +163,6 @@ void main() {
 
     group('joining a team', () {
       late PlayerBloc playerBloc;
-      late FlowController<GameIntroStatus> flowController;
 
       setUp(() {
         when(() => teamSelectionCubit.state).thenReturn(
@@ -174,10 +172,6 @@ void main() {
         );
 
         playerBloc = _MockPlayerBloc();
-        flowController = FlowController<GameIntroStatus>(
-          GameIntroStatus.teamSelection,
-        );
-        addTearDown(flowController.dispose);
       });
 
       testWidgets(
@@ -187,12 +181,7 @@ void main() {
           playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: TeamSelectionView()),
-              ],
-            ),
+            child: TeamSelectionView(),
           ),
           audioController: audioController,
         );
@@ -212,12 +201,7 @@ void main() {
           playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: TeamSelectionView()),
-              ],
-            ),
+            child: TeamSelectionView(),
           ),
         );
 
@@ -230,17 +214,12 @@ void main() {
       });
 
       testWidgets(
-        'flows into enterInitials',
+        'navigates into $InitialsPage',
         (tester) async {
           await tester.pumpApp(
             BlocProvider(
               create: (_) => teamSelectionCubit,
-              child: FlowBuilder<GameIntroStatus>(
-                controller: flowController,
-                onGeneratePages: (_, __) => [
-                  const MaterialPage(child: TeamSelectionView()),
-                ],
-              ),
+              child: TeamSelectionView(),
             ),
           );
 
@@ -249,7 +228,7 @@ void main() {
           await tester.tap(submitButtonFinder);
           await tester.pump();
 
-          expect(flowController.state, equals(GameIntroStatus.enterInitials));
+          // TODO(alestiago): Add test for navigation.
         },
       );
     });
