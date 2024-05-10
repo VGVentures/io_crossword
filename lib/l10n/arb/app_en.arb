@@ -24,13 +24,13 @@
   "@shareWordSubtitle": {
     "description": "Subtitle of the share word modal"
   },
-  "welcomeSubtitle": "Help solve the World's Largest Crossword, built with Gemini for Google I/O 2024",
+  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with Gemini API.",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
   },
-  "wordsToBreakRecord": "Words to break the world record",
-  "@wordsToBreakRecord": {
-    "description": "Label for the title regarding words to break the world record"
+  "countdownToCompletion": "Countdown to completion",
+  "@countdownToCompletion": {
+    "description": "Label for the title regarding words to finish the crossword"
   },
   "getStarted": "Get Started",
   "@getStarted": {
@@ -157,7 +157,7 @@
   "@shareYourScore": {
     "description": "Share your score label"
   },
-  "shareScoreContent": "Check my score in I/O Crosswords and join to break the world record!",
+  "shareScoreContent": "Check my score in the I/O Crossword! Join in on the fun.",
   "@shareScoreContent": {
     "description": "Sentence sent when sharing score"
   },
@@ -282,7 +282,7 @@
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
-  "claimBadgeDescription": "Claim an official Developer Profile badge for attempting a Guinness World Record with Google.",
+  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini API.",
   "@claimBadgeDescription": {
     "description": "Developer Profile label"
   },
@@ -330,7 +330,7 @@
   "@aboutHowToPlayFifthInstructionsTitle": {
     "description": "The fifth step instruction on how to play."
   },
-  "aboutHowToPlayFifthInstructions": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini AI.",
+  "aboutHowToPlayFifthInstructions": "Get a badge for your Developer Profile to show you helped solve the 2024 I/O Crossword puzzle.",
   "@aboutHowToPlayFifthInstructions": {
     "description": "The Fifth step instruction on how to play."
   },
@@ -375,7 +375,7 @@
   "@thanksForContributing": {
     "description": "Thanks for contributing! label."
   },
-  "claimBadgeContributing": "Claim a badge for contributing to the Guinness Book of World Record's largest crossword puzzle.",
+  "claimBadgeContributing": "Claim a badge for your contribution to solving the 2024 I/O Crossword.",
   "@claimBadgeContributing": {
     "description": "Claim badge for contributing"
   },

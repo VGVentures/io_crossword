@@ -58,6 +58,20 @@ void main() {
   });
 
   group('$CrosswordPage', () {
+    testWidgets('route builds a $CrosswordPage', (tester) async {
+      final playerBloc = _MockPlayerBloc();
+      when(() => playerBloc.state)
+          .thenReturn(PlayerState(mascot: Mascots.dash));
+
+      await tester.pumpRoute(
+        playerBloc: playerBloc,
+        CrosswordPage.route(),
+      );
+      await tester.pump();
+
+      expect(find.byType(CrosswordPage), findsOneWidget);
+    });
+
     testWidgets('renders $CrosswordView', (tester) async {
       await tester.pumpSubject(CrosswordPage());
 

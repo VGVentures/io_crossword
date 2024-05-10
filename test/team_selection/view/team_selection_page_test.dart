@@ -3,19 +3,18 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
+import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -45,7 +44,14 @@ void main() {
   });
 
   group('$TeamSelectionPage', () {
-    testWidgets('renders a TeamSelectionView', (tester) async {
+    testWidgets('route builds a $TeamSelectionPage', (tester) async {
+      await tester.pumpRoute(TeamSelectionPage.route());
+      await tester.pump();
+
+      expect(find.byType(TeamSelectionPage), findsOneWidget);
+    });
+
+    testWidgets('renders a $TeamSelectionView', (tester) async {
       await tester.pumpApp(TeamSelectionPage());
 
       expect(find.byType(TeamSelectionView), findsOneWidget);
@@ -164,7 +170,6 @@ void main() {
 
     group('joining a team', () {
       late PlayerBloc playerBloc;
-      late FlowController<GameIntroStatus> flowController;
 
       setUp(() {
         when(() => teamSelectionCubit.state).thenReturn(
@@ -174,10 +179,6 @@ void main() {
         );
 
         playerBloc = _MockPlayerBloc();
-        flowController = FlowController<GameIntroStatus>(
-          GameIntroStatus.teamSelection,
-        );
-        addTearDown(flowController.dispose);
       });
 
       testWidgets(
@@ -187,12 +188,7 @@ void main() {
           playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: TeamSelectionView()),
-              ],
-            ),
+            child: TeamSelectionView(),
           ),
           audioController: audioController,
         );
@@ -212,12 +208,7 @@ void main() {
           playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
-            child: FlowBuilder<GameIntroStatus>(
-              controller: flowController,
-              onGeneratePages: (_, __) => [
-                const MaterialPage(child: TeamSelectionView()),
-              ],
-            ),
+            child: TeamSelectionView(),
           ),
         );
 
@@ -230,17 +221,17 @@ void main() {
       });
 
       testWidgets(
-        'flows into enterInitials',
+        'navigates into $InitialsPage',
         (tester) async {
+          final navigator = MockNavigator();
+          when(navigator.canPop).thenReturn(true);
+          when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
           await tester.pumpApp(
+            navigator: navigator,
             BlocProvider(
               create: (_) => teamSelectionCubit,
-              child: FlowBuilder<GameIntroStatus>(
-                controller: flowController,
-                onGeneratePages: (_, __) => [
-                  const MaterialPage(child: TeamSelectionView()),
-                ],
-              ),
+              child: TeamSelectionView(),
             ),
           );
 
@@ -249,7 +240,15 @@ void main() {
           await tester.tap(submitButtonFinder);
           await tester.pump();
 
-          expect(flowController.state, equals(GameIntroStatus.enterInitials));
+          verify(
+            () => navigator.push<void>(
+              any(
+                that: isRoute<void>(
+                  whereName: equals(InitialsPage.routeName),
+                ),
+              ),
+            ),
+          ).called(1);
         },
       );
     });

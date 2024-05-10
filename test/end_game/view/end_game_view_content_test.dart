@@ -7,14 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/end_game/end_game.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/widget/widget.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
@@ -118,9 +118,16 @@ void main() {
 
     testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
         (tester) async {
+      final navigator = MockNavigator();
+      when(navigator.canPop).thenReturn(true);
+      when(() => navigator.pushReplacement<void, void>(any())).thenAnswer(
+        (_) async {},
+      );
+
       await tester.pumpApp(
-        ActionButtonsEndGame(),
         audioController: audioController,
+        navigator: navigator,
+        ActionButtonsEndGame(),
       );
 
       await tester.tap(find.text(l10n.playAgain));
@@ -131,16 +138,34 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
-      await tester.pumpApp(
-        ActionButtonsEndGame(),
-      );
+    testWidgets(
+      'navigates to $CrosswordPage when playAgain tapped',
+      (tester) async {
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.pushReplacement<void, void>(any())).thenAnswer(
+          (_) async {},
+        );
 
-      await tester.tap(find.text(l10n.playAgain));
+        await tester.pumpApp(
+          navigator: navigator,
+          ActionButtonsEndGame(),
+        );
 
-      await tester.pumpAndSettle();
-      expect(find.byType(GameIntroPage), findsOneWidget);
-    });
+        await tester.tap(find.text(l10n.playAgain));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.pushReplacement<void, void>(
+            any(
+              that: isRoute(
+                whereName: equals(CrosswordPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
+      },
+    );
 
     testWidgets('displays claimBadgeContributing', (tester) async {
       await tester.pumpApp(ActionButtonsEndGame());

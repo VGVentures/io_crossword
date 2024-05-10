@@ -7,5 +7,5 @@ class ProjectDetailsLinks {
   static const claimBadge =
       'https://developers.google.com/profile/badges/events/io/2024/crossword';
   static const googleAI = 'https://ai.google.dev/';
-  static const crossword = 'https://crossword.withgoogle.com';
+  static const crossword = 'https://e7b2896c65fabc0480edc6c0e.web.app';
 }

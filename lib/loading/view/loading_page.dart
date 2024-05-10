@@ -1,8 +1,6 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/welcome/welcome.dart';
@@ -10,10 +8,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
-
-  static Page<void> page() {
-    return const MaterialPage(child: LoadingPage());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +19,25 @@ class LoadingView extends StatelessWidget {
   @visibleForTesting
   const LoadingView({super.key});
 
+  void _onLoaded(BuildContext context) {
+    Navigator.of(context).push<void>(WelcomePage.route());
+  }
+
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
 
-    return switch (layout) {
-      IoLayoutData.small => const LoadingSmall(),
-      IoLayoutData.large => const LoadingLarge(),
-    };
+    return BlocListener<LoadingCubit, LoadingState>(
+      listener: (context, state) {
+        if (state.status == LoadingStatus.loaded) {
+          _onLoaded(context);
+        }
+      },
+      child: switch (layout) {
+        IoLayoutData.small => const LoadingSmall(),
+        IoLayoutData.large => const LoadingLarge(),
+      },
+    );
   }
 }
 
@@ -101,10 +106,6 @@ class LoadingBody extends StatelessWidget {
   @visibleForTesting
   const LoadingBody({super.key});
 
-  void _onGetStarted(BuildContext context) {
-    context.flow<GameIntroStatus>().update((status) => GameIntroStatus.welcome);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -127,12 +128,7 @@ class LoadingBody extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
-          BlocConsumer<LoadingCubit, LoadingState>(
-            listener: (context, state) {
-              if (state.status == LoadingStatus.loaded) {
-                _onGetStarted(context);
-              }
-            },
+          BlocBuilder<LoadingCubit, LoadingState>(
             builder: (context, state) {
               return LoadingProgress(
                 progress: state.progress,

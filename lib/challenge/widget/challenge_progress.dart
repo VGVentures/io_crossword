@@ -43,7 +43,7 @@ class ChallengeProgress extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          l10n.wordsToBreakRecord,
+          l10n.countdownToCompletion,
           style: theme.textTheme.bodyMedium,
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),

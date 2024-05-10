@@ -45,10 +45,7 @@ class EndGameCheck extends StatelessWidget {
                     icon: const Icon(Icons.logout),
                     label: Text(l10n.endGame),
                     onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        EndGamePage.route(),
-                        (_) => false,
-                      );
+                      Navigator.pushReplacement(context, EndGamePage.route());
                     },
                   ),
                 ],

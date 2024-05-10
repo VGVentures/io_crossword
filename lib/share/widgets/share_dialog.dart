@@ -18,6 +18,7 @@ class ShareDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final iconButtonStyle = Theme.of(context).io.iconButtonTheme.flat;
 
     return Center(
       child: IoPhysicalModel(
@@ -46,18 +47,21 @@ class ShareDialog extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
+                          style: iconButtonStyle,
                           onPressed: () {
                             context.shareLinkedIn(shareUrl: url);
                           },
                           icon: const Icon(IoIcons.linkedin),
                         ),
                         IconButton(
+                          style: iconButtonStyle,
                           onPressed: () {
                             context.shareTwitter(shareUrl: url);
                           },
                           icon: const Icon(IoIcons.twitter),
                         ),
                         IconButton(
+                          style: iconButtonStyle,
                           onPressed: () {
                             context.shareFacebook(shareUrl: url);
                           },

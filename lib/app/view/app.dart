@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/app_lifecycle/app_lifecycle.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/player.dart';
@@ -85,6 +84,7 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => PlayerBloc(
+                leaderboardResource: apiClient.leaderboardResource,
                 leaderboardRepository: leaderboardRepository,
               )..add(PlayerLoaded(userId: user.id)),
             ),
@@ -111,6 +111,7 @@ class AppView extends StatelessWidget {
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
+            home: const LoadingPage(),
             builder: (context, child) {
               return Stack(
                 children: [
@@ -119,7 +120,6 @@ class AppView extends StatelessWidget {
                 ],
               );
             },
-            home: const GameIntroPage(),
           );
         },
       ),
