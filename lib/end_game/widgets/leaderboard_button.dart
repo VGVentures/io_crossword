@@ -18,7 +18,9 @@ class LeaderboardButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.leaderboard),
+          Text(
+            l10n.leaderboard,
+          ),
           const SizedBox(width: 8),
           const Icon(IoIcons.trophy, size: 20),
         ],

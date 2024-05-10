@@ -27,16 +27,11 @@ class WordSolvingLargeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
-    final isIncorrectAnswer = context.select(
-      (WordSelectionBloc bloc) =>
-          bloc.state.status == WordSelectionStatus.incorrect,
-    );
 
     return Column(
       children: [
@@ -46,11 +41,7 @@ class WordSolvingLargeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
-                style: IoCrosswordTextStyles.bodyMD.medium
-                    ?.copyWith(color: theme.colorScheme.error),
-              ),
+              const IncorrectAnswerText(),
               const SizedBox(height: 24),
               Text(
                 selectedWord.word.clue,
@@ -97,16 +88,11 @@ class WordSolvingSmallView extends StatefulWidget {
 class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
     if (selectedWord == null) return const SizedBox.shrink();
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
-    final isIncorrectAnswer = context.select(
-      (WordSelectionBloc bloc) =>
-          bloc.state.status == WordSelectionStatus.incorrect,
-    );
 
     return Column(
       children: [
@@ -121,11 +107,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          isIncorrectAnswer ? context.l10n.incorrectAnswer : '',
-          style: IoCrosswordTextStyles.bodyMD.medium
-              ?.copyWith(color: theme.colorScheme.error),
-        ),
+        const IncorrectAnswerText(),
         const SizedBox(height: 16),
         Text(
           selectedWord.word.clue,
@@ -156,6 +138,29 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         ],
         const BottomPanel(),
       ],
+    );
+  }
+}
+
+@visibleForTesting
+class IncorrectAnswerText extends StatelessWidget {
+  @visibleForTesting
+  const IncorrectAnswerText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final status = context.select(
+      (WordSelectionBloc bloc) => bloc.state.status,
+    );
+
+    return Text(
+      status == WordSelectionStatus.incorrect
+          ? context.l10n.incorrectAnswer
+          : '',
+      style: IoCrosswordTextStyles.bodyMD.medium
+          ?.copyWith(color: theme.colorScheme.error),
+      textAlign: TextAlign.center,
     );
   }
 }
