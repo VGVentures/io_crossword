@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
@@ -65,11 +65,12 @@ class ShareWordPage extends StatelessWidget {
           style: themeData.textTheme.bodyLarge.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xxlg),
-        // TODO(any): Display parts of the word completed
-        // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6517409519
-        IoWord(
-          '_' * word.length,
-          style: themeData.io.wordTheme.big,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: IoWord(
+            word.answer.replaceAll(' ', '_'),
+            style: themeData.io.wordTheme.big,
+          ),
         ),
         const SizedBox(height: IoCrosswordSpacing.xlg),
         Text(
