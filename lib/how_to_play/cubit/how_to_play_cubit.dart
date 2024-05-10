@@ -17,7 +17,7 @@ class HowToPlayCubit extends Cubit<HowToPlayState> {
     emit(state.copyWith(status: status));
   }
 
-  Future<void> loadAssets(Mascots mascot) async {
+  Future<void> loadAssets(Mascots mascot, {required bool mobile}) async {
     emit(
       state.copyWith(
         assetsStatus: AssetsLoadingStatus.inProgress,
@@ -26,7 +26,13 @@ class HowToPlayCubit extends Cubit<HowToPlayState> {
 
     Flame.images.clearCache();
 
-    await Flame.images.loadAll(mascot.teamMascot.loadableHowToPlayAssets());
+    if (mobile) {
+      await Flame.images
+          .loadAll(mascot.teamMascot.loadableHowToPlayMobileAssets());
+    } else {
+      await Flame.images
+          .loadAll(mascot.teamMascot.loadableHowToPlayDesktopAssets());
+    }
 
     emit(
       state.copyWith(

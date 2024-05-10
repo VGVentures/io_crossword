@@ -15,16 +15,28 @@ class DinoTeam extends Team {
   AssetGenImage get platformAnimation => Assets.anim.dinoPlatform;
 
   @override
-  AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUpMobile;
+  AssetGenImage get lookUpAnimation => Assets.anim.dinoLookUp;
 
   @override
-  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUpMobile;
+  AssetGenImage get pickUpAnimation => Assets.anim.dinoPickUp;
 
   @override
-  AssetGenImage get dangleAnimation => Assets.anim.dinoDangleMobile;
+  AssetGenImage get dangleAnimation => Assets.anim.dinoDangle;
 
   @override
-  AssetGenImage get dropInAnimation => Assets.anim.dinoDropInMobile;
+  AssetGenImage get dropInAnimation => Assets.anim.dinoDropIn;
+
+  @override
+  AssetGenImage get lookUpMobileAnimation => Assets.anim.dinoLookUpMobile;
+
+  @override
+  AssetGenImage get pickUpMobileAnimation => Assets.anim.dinoPickUpMobile;
+
+  @override
+  AssetGenImage get dangleMobileAnimation => Assets.anim.dinoDangleMobile;
+
+  @override
+  AssetGenImage get dropInMobileAnimation => Assets.anim.dinoDropInMobile;
 
   @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDino;
@@ -46,8 +58,48 @@ class DinoTeam extends Team {
       );
 
   @override
-  SpriteData get lookUpSpriteData => SpriteData(
+  SpriteData get lookUpSpriteDesktopData => SpriteData(
         path: lookUpAnimation.path,
+        amountPerRow: 9,
+        amountPerColumn: 7,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get pickUpSpriteDesktopData => SpriteData(
+        path: pickUpAnimation.path,
+        amountPerRow: 17,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get dangleSpriteDesktopData => SpriteData(
+        path: dangleAnimation.path,
+        amountPerRow: 9,
+        amountPerColumn: 3,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get dropInSpriteDesktopData => SpriteData(
+        path: dropInAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 5,
+        stepTime: 0.042,
+        width: 384,
+        height: 544,
+      );
+
+  @override
+  SpriteData get lookUpSpriteMobileData => SpriteData(
+        path: lookUpMobileAnimation.path,
         amountPerRow: 9,
         amountPerColumn: 7,
         stepTime: 0.042,
@@ -56,8 +108,8 @@ class DinoTeam extends Team {
       );
 
   @override
-  SpriteData get pickUpSpriteData => SpriteData(
-        path: pickUpAnimation.path,
+  SpriteData get pickUpSpriteMobileData => SpriteData(
+        path: pickUpMobileAnimation.path,
         amountPerRow: 17,
         amountPerColumn: 4,
         stepTime: 0.042,
@@ -66,8 +118,8 @@ class DinoTeam extends Team {
       );
 
   @override
-  SpriteData get dangleSpriteData => SpriteData(
-        path: dangleAnimation.path,
+  SpriteData get dangleSpriteMobileData => SpriteData(
+        path: dangleMobileAnimation.path,
         amountPerRow: 9,
         amountPerColumn: 3,
         stepTime: 0.042,
@@ -76,8 +128,8 @@ class DinoTeam extends Team {
       );
 
   @override
-  SpriteData get dropInSpriteData => SpriteData(
-        path: dropInAnimation.path,
+  SpriteData get dropInSpriteMobileData => SpriteData(
+        path: dropInMobileAnimation.path,
         amountPerRow: 7,
         amountPerColumn: 5,
         stepTime: 0.042,
