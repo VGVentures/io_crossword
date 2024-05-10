@@ -68,7 +68,7 @@ void main() {
     group('canPop', () {
       for (final status in PlayerStatus.values.toSet()
         ..removeAll({PlayerStatus.loading, PlayerStatus.playing})) {
-        testWidgets('is true when $status', (tester) async {
+        testWidgets('is true when status is $status', (tester) async {
           when(() => playerBloc.state).thenReturn(
             PlayerState(
               status: status,
