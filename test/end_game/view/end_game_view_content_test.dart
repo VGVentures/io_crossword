@@ -13,6 +13,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/widget/widget.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -93,9 +94,16 @@ void main() {
 
     testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
         (tester) async {
+      final navigator = MockNavigator();
+      when(navigator.canPop).thenReturn(true);
+      when(() => navigator.pushReplacement<void, void>(any())).thenAnswer(
+        (_) async {},
+      );
+
       await tester.pumpApp(
-        ActionButtonsEndGame(),
         audioController: audioController,
+        navigator: navigator,
+        ActionButtonsEndGame(),
       );
 
       await tester.tap(find.text(l10n.playAgain));
@@ -109,14 +117,29 @@ void main() {
     testWidgets(
       'navigates to $CrosswordPage when playAgain tapped',
       (tester) async {
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.pushReplacement<void, void>(any())).thenAnswer(
+          (_) async {},
+        );
+
         await tester.pumpApp(
+          navigator: navigator,
           ActionButtonsEndGame(),
         );
 
         await tester.tap(find.text(l10n.playAgain));
-
         await tester.pumpAndSettle();
-        expect(find.byType(CrosswordPage), findsOneWidget);
+
+        verify(
+          () => navigator.pushReplacement<void, void>(
+            any(
+              that: isRoute(
+                whereName: equals(CrosswordPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
       },
     );
 

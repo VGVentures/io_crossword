@@ -22,9 +22,12 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class CrosswordPage extends StatelessWidget {
   const CrosswordPage({super.key});
 
+  static const String routeName = '/crossword';
+
   static Route<void> route() {
     return PageRouteBuilder(
       transitionDuration: const Duration(seconds: 3),
+      settings: const RouteSettings(name: routeName),
       pageBuilder: (_, __, ___) => const CrosswordPage(),
     );
   }
