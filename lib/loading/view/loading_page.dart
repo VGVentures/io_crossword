@@ -9,9 +9,7 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
 
-  static Page<void> page() {
-    return const MaterialPage(child: LoadingPage());
-  }
+  static Page<void> page() => const MaterialPage(child: LoadingPage());
 
   @override
   Widget build(BuildContext context) {
