@@ -49,24 +49,7 @@ class LeaderboardView extends StatelessWidget {
         title: Text(l10n.leaderboard),
         crossword: l10n.crossword,
         actions: (context) {
-          final layout = IoLayout.of(context);
-
-          return switch (layout) {
-            IoLayoutData.small => const CloseButton(),
-            IoLayoutData.large => Row(
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.gamepad),
-                    label: Text(l10n.playAgain),
-                  ),
-                  const SizedBox(width: 7),
-                  const CloseButton(),
-                ],
-              ),
-          };
+          return const CloseButton();
         },
       ),
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(

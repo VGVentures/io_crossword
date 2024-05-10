@@ -152,6 +152,8 @@ extension PumpApp on WidgetTester {
                   create: (context) =>
                       playerBloc ??
                       PlayerBloc(
+                        leaderboardResource:
+                            context.read<LeaderboardResource>(),
                         leaderboardRepository:
                             context.read<LeaderboardRepository>(),
                       ),
@@ -288,6 +290,8 @@ extension PumpRoute on WidgetTester {
                   create: (context) =>
                       playerBloc ??
                       PlayerBloc(
+                        leaderboardResource:
+                            context.read<LeaderboardResource>(),
                         leaderboardRepository: leaderboardRepository ??
                             _MockLeaderboardRepository(),
                       ),

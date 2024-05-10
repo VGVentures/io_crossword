@@ -122,53 +122,5 @@ void main() {
         expect(find.byType(LeaderboardSuccess), findsOneWidget);
       },
     );
-
-    testWidgets(
-      'does not display playAgain and icon on small screen',
-      (tester) async {
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-
-        await tester.pumpApp(widget);
-
-        expect(find.text(l10n.playAgain), findsNothing);
-        expect(find.byIcon(Icons.gamepad), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'display playAgain and icon on large screen',
-      (tester) async {
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.large,
-        );
-
-        expect(find.text(l10n.playAgain), findsOneWidget);
-        expect(find.byIcon(Icons.gamepad), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'pops the screen when playAgain is tapped',
-      (tester) async {
-        final mockNavigator = MockNavigator();
-
-        when(mockNavigator.canPop).thenReturn(true);
-
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-
-        await tester.pumpApp(
-          widget,
-          navigator: mockNavigator,
-          layout: IoLayoutData.large,
-        );
-
-        await tester.tap(find.text(l10n.playAgain));
-
-        verify(mockNavigator.pop).called(1);
-      },
-    );
   });
 }
