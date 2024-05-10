@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' as domain show Axis;
@@ -39,6 +39,82 @@ void main() {
       );
 
       expect(find.byType(CrosswordInteractiveViewer), findsOneWidget);
+    });
+
+    testWidgets('pumps with zoom controls when layout is large',
+        (tester) async {
+      await tester.pumpSubject(
+        layoutData: IoLayoutData.large,
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(find.byType(ZoomControls), findsOneWidget);
+    });
+
+    testWidgets('pumps without zoom controls when layout is small',
+        (tester) async {
+      await tester.pumpSubject(
+        layoutData: IoLayoutData.small,
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(find.byType(ZoomControls), findsNothing);
+    });
+
+    testWidgets('zooms in when zoom in button is pressed', (tester) async {
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+
+      expect(viewerState.currentScale, 1.0);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 1.2);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 1.4);
+    });
+
+    testWidgets('zooms out when zoom out button is pressed', (tester) async {
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+
+      expect(viewerState.currentScale, 1.0);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 0.8);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pumpAndSettle();
+      expect(viewerState.currentScale, 0.6);
     });
 
     testWidgets(
@@ -269,6 +345,7 @@ extension on WidgetTester {
     Widget widget, {
     WordSelectionBloc? wordSelectionBloc,
     CrosswordLayoutData? crosswordLayoutData,
+    IoLayoutData? layoutData,
   }) {
     final internalWordSelectionBloc =
         wordSelectionBloc ?? _MockWordSelectionBloc();
@@ -288,6 +365,7 @@ extension on WidgetTester {
         );
 
     return pumpApp(
+      layout: layoutData ?? IoLayoutData.large,
       DefaultTransformationController(
         child: BlocProvider<WordSelectionBloc>(
           create: (_) => internalWordSelectionBloc,
