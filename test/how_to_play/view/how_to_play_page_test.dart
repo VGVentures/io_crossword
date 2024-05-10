@@ -32,6 +32,8 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 class _MockAudioController extends Mock implements AudioController {}
 
+class _MockRoute extends Mock implements Route<dynamic> {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -201,6 +203,7 @@ void main() {
 
           await tester.pumpApp(
             layout: layout,
+            navigator: navigator,
             MultiBlocProvider(
               providers: [
                 BlocProvider.value(
@@ -219,30 +222,28 @@ void main() {
 
           await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
 
-          // TODO:
+          final verification = verify(
+            () => navigator.pushAndRemoveUntil<void>(
+              any(
+                that: isRoute<void>(
+                  whereName: equals(CrosswordPage.routeName),
+                ),
+              ),
+              captureAny(),
+            ),
+          );
 
-          // verify(
-          //   () => navigator.pushAndRemoveUntil<void>(
-          //     any(
-          //       that: isRoute<void>(
-          //         whereName: equals(CrosswordPage.routeName),
-          //       ),
-          //     ),
-          //     any(),
-          //   ),
-          // ).called(1);
+          final capturedPredicate =
+              verification.captured.first as RoutePredicate;
 
-          // final capturedPredicate =
-          //     verification.captured.single as RoutePredicate;
+          final firstRoute = _MockRoute();
+          when(() => firstRoute.isFirst).thenReturn(true);
 
-          // final firstRoute = _MockRoute();
-          // when(() => firstRoute.isFirst).thenReturn(true);
+          final secondRoute = _MockRoute();
+          when(() => secondRoute.isFirst).thenReturn(false);
 
-          // final secondRoute = _MockRoute();
-          // when(() => secondRoute.isFirst).thenReturn(false);
-
-          // expect(capturedPredicate(firstRoute), isTrue);
-          // expect(capturedPredicate(secondRoute), isFalse);
+          expect(capturedPredicate(firstRoute), isTrue);
+          expect(capturedPredicate(secondRoute), isFalse);
         },
       );
 

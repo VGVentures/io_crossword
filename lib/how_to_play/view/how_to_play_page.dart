@@ -1,10 +1,8 @@
-import 'package:api_client/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -28,17 +26,8 @@ class HowToPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => HowToPlayCubit(),
-        ),
-        BlocProvider(
-          create: (context) => GameIntroBloc(
-            leaderboardResource: context.read<LeaderboardResource>(),
-          ),
-        ),
-      ],
+    return BlocProvider(
+      create: (_) => HowToPlayCubit(),
       child: const HowToPlayView(),
     );
   }
@@ -59,34 +48,10 @@ class HowToPlayView extends StatelessWidget {
         crossword: l10n.crossword,
         actions: (context) => const MuteButton(),
       ),
-      body: BlocListener<GameIntroBloc, GameIntroState>(
-        listenWhen: (previous, current) => previous.status != current.status,
-        listener: (context, state) {
-          switch (state.status) {
-            case GameIntroPlayerCreationStatus.initial:
-            case GameIntroPlayerCreationStatus.inProgress:
-              break;
-            case GameIntroPlayerCreationStatus.success:
-              Navigator.of(context).pushAndRemoveUntil<void>(
-                CrosswordPage.route(),
-                (route) => route.isFirst,
-              );
-            case GameIntroPlayerCreationStatus.failure:
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorPromptText),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-          }
-        },
-        child: switch (layout) {
-          IoLayoutData.small => const _HowToPlaySmall(),
-          IoLayoutData.large => const _HowToPlayLarge(),
-        },
-      ),
+      body: switch (layout) {
+        IoLayoutData.small => const _HowToPlaySmall(),
+        IoLayoutData.large => const _HowToPlayLarge(),
+      },
     );
   }
 }
@@ -268,14 +233,10 @@ class _MascotAnimationState extends State<_MascotAnimation> {
         }
 
         if (state.status == HowToPlayStatus.complete) {
-          final playerState = context.read<PlayerBloc>().state;
-
-          context.read<GameIntroBloc>().add(
-                GameIntroPlayerCreated(
-                  initials: playerState.player.initials,
-                  mascot: playerState.mascot,
-                ),
-              );
+          Navigator.of(context).pushAndRemoveUntil<void>(
+            CrosswordPage.route(),
+            (route) => route.isFirst,
+          );
         }
       },
       child: SpriteAnimationList(
