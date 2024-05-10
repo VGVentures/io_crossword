@@ -126,9 +126,7 @@ void main() {
                 ),
               ],
             ),
-          ).thenAnswer((_) async {
-            return null;
-          });
+          ).thenAnswer((_) async {});
 
           final response = await route.onRequest(requestContext);
 
