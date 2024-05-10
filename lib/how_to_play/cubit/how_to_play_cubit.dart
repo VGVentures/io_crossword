@@ -34,10 +34,12 @@ class HowToPlayCubit extends Cubit<HowToPlayState> {
           .loadAll(mascot.teamMascot.loadableHowToPlayDesktopAssets());
     }
 
-    emit(
-      state.copyWith(
-        assetsStatus: AssetsLoadingStatus.success,
-      ),
-    );
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
+    }
   }
 }

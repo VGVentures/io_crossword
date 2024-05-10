@@ -29,10 +29,12 @@ class TeamSelectionCubit extends Cubit<TeamSelectionState> {
       ...Mascots.dino.teamMascot.loadableTeamSelectionAssets(),
     ]);
 
-    emit(
-      state.copyWith(
-        assetsStatus: AssetsLoadingStatus.success,
-      ),
-    );
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
+    }
   }
 }

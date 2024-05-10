@@ -70,6 +70,8 @@ class CrosswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final layout = IoLayout.of(context);
+
     return BlocListener<RandomWordSelectionBloc, RandomWordSelectionState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
@@ -143,7 +145,7 @@ class CrosswordView extends StatelessWidget {
                       tag: HowToPlayPage.dangleMascotHeroTag,
                       child: MascotAnimation(
                         context.read<PlayerBloc>().state.mascot!,
-                        mobile: IoLayout.of(context) == IoLayoutData.small,
+                        mobile: layout == IoLayoutData.small,
                       ),
                     ),
                   ),

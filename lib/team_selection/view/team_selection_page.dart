@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
