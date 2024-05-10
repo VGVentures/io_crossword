@@ -26,8 +26,8 @@ class _CrosswordInputState extends State<CrosswordInput> {
   IoWordInputController? _controller;
   String _lastWord = '';
 
-  void _onDelete() {
-    if (_lastWord.length > _controller!.word.length) {
+  void _onNewLetter() {
+    if (_lastWord.isEmpty && (_lastWord.length < _controller!.word.length)) {
       context.read<WordSelectionBloc>().add(const WordSolveRequested());
     }
     _lastWord = _controller!.word;
@@ -37,14 +37,14 @@ class _CrosswordInputState extends State<CrosswordInput> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _controller?.removeListener(_onDelete);
+    _controller?.removeListener(_onNewLetter);
     _controller = DefaultWordInputController.of(context);
-    _controller!.addListener(_onDelete);
+    _controller!.addListener(_onNewLetter);
   }
 
   @override
   void dispose() {
-    _controller!.removeListener(_onDelete);
+    _controller!.removeListener(_onNewLetter);
     super.dispose();
   }
 
