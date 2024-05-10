@@ -29,8 +29,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         _subscriptions = subscriptionsMap ?? {},
         super(const CrosswordState()) {
     on<BoardSectionRequested>(_onBoardSectionRequested);
-    on<WordSelected>(_onWordSelected);
-    on<WordUnselected>(_onWordUnselected);
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
     on<LoadedSectionsSuspended>(_onLoadedSectionsSuspended);
     on<BoardSectionLoaded>(_onBoardSectionLoaded);
@@ -119,64 +117,6 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         },
       );
     }
-  }
-
-  (int, int) _findWordInSection(
-    CrosswordState state,
-    Word word,
-    (int, int) section, {
-    int attempt = 1,
-  }) {
-    final sections = state.sections;
-
-    // TODO(Ayad): If it fails because the section is not loaded we
-    // should fetch the section
-    if (sections[section]!.words.contains(word)) {
-      return section;
-    }
-
-    // TODO(Ayad): control error handle
-    if (attempt >= 3) {
-      throw Exception('Word not found in crossword');
-    }
-
-    final previousSection = word.axis == Axis.horizontal
-        ? (section.$1 - 1, section.$2)
-        : (section.$1, section.$2 - 1);
-
-    return _findWordInSection(
-      state,
-      word,
-      previousSection,
-      attempt: attempt + 1,
-    );
-  }
-
-  void _onWordSelected(
-    WordSelected event,
-    Emitter<CrosswordState> emit,
-  ) {
-    final section = _findWordInSection(
-      state,
-      event.word,
-      event.section,
-    );
-
-    emit(
-      state.copyWith(
-        selectedWord: WordSelection(
-          section: section,
-          word: event.word,
-        ),
-      ),
-    );
-  }
-
-  void _onWordUnselected(
-    WordUnselected event,
-    Emitter<CrosswordState> emit,
-  ) {
-    emit(state.removeSelectedWord());
   }
 
   FutureOr<void> _onBoardLoadingInformationRequested(

@@ -4,8 +4,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:game_domain/game_domain.dart' hide Axis;
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -14,9 +14,7 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
-import 'package:io_crossword/word_selection/word_selection.dart'
-    hide WordUnselected;
-import 'package:io_crossword/word_selection/word_selection.dart' as selection;
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -354,9 +352,7 @@ void main() {
 
         await tester.tap(find.byIcon(Icons.gamepad));
 
-        verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-        verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
-            .called(1);
+        verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
       },
     );
   });
