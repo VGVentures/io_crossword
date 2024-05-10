@@ -44,7 +44,23 @@ void main() {
   });
 
   group('$TeamSelectionPage', () {
-    testWidgets('renders a TeamSelectionView', (tester) async {
+    testWidgets('route builds a $TeamSelectionPage', (tester) async {
+      final route = TeamSelectionPage.route() as MaterialPageRoute;
+
+      late BuildContext buildContext;
+      await tester.pumpWidget(
+        Builder(
+          builder: (context) {
+            buildContext = context;
+            return SizedBox();
+          },
+        ),
+      );
+
+      expect(route.builder(buildContext), isA<TeamSelectionPage>());
+    });
+
+    testWidgets('renders a $TeamSelectionView', (tester) async {
       await tester.pumpApp(TeamSelectionPage());
 
       expect(find.byType(TeamSelectionView), findsOneWidget);

@@ -32,8 +32,6 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 class _MockAudioController extends Mock implements AudioController {}
 
-class _MockRoute extends Mock implements Route<dynamic> {}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -54,6 +52,22 @@ void main() {
     setUp(() {
       gameIntroBloc = _MockGameIntroBloc();
       playerBloc = _MockPlayerBloc();
+    });
+
+    testWidgets('route builds a $HowToPlayPage', (tester) async {
+      final route = HowToPlayPage.route() as MaterialPageRoute;
+
+      late BuildContext buildContext;
+      await tester.pumpWidget(
+        Builder(
+          builder: (context) {
+            buildContext = context;
+            return SizedBox();
+          },
+        ),
+      );
+
+      expect(route.builder(buildContext), isA<HowToPlayPage>());
     });
 
     testWidgets('displays a $HowToPlayView', (tester) async {
