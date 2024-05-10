@@ -66,6 +66,9 @@ class ActionButtonsEndGame extends StatelessWidget {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
+                    context
+                        .read<AudioController>()
+                        .playSfx(Assets.music.startButton1);
                     Navigator.pushReplacement(
                       context,
                       GameIntroPage.route(),
@@ -96,8 +99,10 @@ class ActionButtonsEndGame extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         FilledButton.tonalIcon(
-          onPressed: () {}, // coverage:ignore-line
-          label: Text(l10n.developerProfile),
+          onPressed: () {
+            context.launchUrl(ProjectDetailsLinks.claimBadge);
+          },
+          label: Text(l10n.claimBadge),
           icon: const Icon(IoIcons.google, size: 20),
         ),
       ],

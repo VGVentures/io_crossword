@@ -3,6 +3,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -61,6 +62,11 @@ void main() {
         await tester.pumpSubject(const WelcomeLarge());
         expect(find.byType(IoAppBar), findsOneWidget);
       });
+
+      testWidgets('a $MuteButton', (tester) async {
+        await tester.pumpSubject(const WelcomeLarge());
+        expect(find.byType(MuteButton), findsOneWidget);
+      });
     });
   });
 
@@ -69,6 +75,11 @@ void main() {
       testWidgets('an $IoAppBar', (tester) async {
         await tester.pumpSubject(const WelcomeSmall());
         expect(find.byType(IoAppBar), findsOneWidget);
+      });
+
+      testWidgets('a $MuteButton', (tester) async {
+        await tester.pumpSubject(const WelcomeSmall());
+        expect(find.byType(MuteButton), findsOneWidget);
       });
 
       testWidgets('a $WelcomeHeaderImage', (tester) async {
@@ -109,9 +120,9 @@ void main() {
     );
 
     group('displays', () {
-      testWidgets('a $ChallengeProgress', (tester) async {
+      testWidgets('a $ChallengeProgressStatus', (tester) async {
         await tester.pumpSubject(const WelcomeBody());
-        expect(find.byType(ChallengeProgress), findsOneWidget);
+        expect(find.byType(ChallengeProgressStatus), findsOneWidget);
       });
 
       testWidgets('a localized welcome text', (tester) async {

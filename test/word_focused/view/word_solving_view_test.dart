@@ -409,7 +409,6 @@ void main() {
         await tester.enterText(editableTexts.at(0), 'A');
         await tester.enterText(editableTexts.at(1), 'N');
         await tester.enterText(editableTexts.at(2), 'S');
-        await tester.enterText(editableTexts.at(3), '!'); // focus previous cell
         await tester.pumpAndSettle();
 
         await tester.sendKeyEvent(LogicalKeyboardKey.backspace);

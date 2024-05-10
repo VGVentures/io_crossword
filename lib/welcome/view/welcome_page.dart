@@ -1,6 +1,5 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -86,6 +85,7 @@ class WelcomeSmall extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
+        actions: (context) => const MuteButton(),
       ),
       body: const SelectionArea(
         child: SingleChildScrollView(
@@ -131,15 +131,7 @@ class WelcomeBody extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
-          BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
-            selector: (state) => (state.solvedWords, state.totalWords),
-            builder: (context, words) {
-              return ChallengeProgress(
-                solvedWords: words.$1,
-                totalWords: words.$2,
-              );
-            },
-          ),
+          const ChallengeProgressStatus(),
           const SizedBox(height: 48),
           OutlinedButton(
             onPressed: () => _onGetStarted(context),

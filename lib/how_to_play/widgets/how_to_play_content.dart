@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -31,7 +32,7 @@ class _HowToPlayContentState extends State<HowToPlayContent>
     _tabController = TabController(
       length: 5,
       vsync: this,
-      initialIndex: context.read<HowToPlayCubit>().state,
+      initialIndex: context.read<HowToPlayCubit>().state.index,
     );
   }
 
@@ -72,10 +73,10 @@ class _HowToPlayContentState extends State<HowToPlayContent>
       ),
     ];
 
-    return BlocConsumer<HowToPlayCubit, int>(
+    return BlocConsumer<HowToPlayCubit, HowToPlayState>(
       listener: (context, state) {
         _tabController.animateTo(
-          state,
+          state.index,
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
@@ -102,7 +103,7 @@ class _HowToPlayContentState extends State<HowToPlayContent>
                 Flexible(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: howToPlaySteps[state],
+                    child: howToPlaySteps[state.index],
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -134,7 +135,7 @@ class _TabSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final index = context.select((HowToPlayCubit cubit) => cubit.state);
+    final index = context.select((HowToPlayCubit cubit) => cubit.state).index;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,6 +143,9 @@ class _TabSelector extends StatelessWidget {
         GestureDetector(
           onTap: index > 0
               ? () {
+                  context
+                      .read<AudioController>()
+                      .playSfx(Assets.music.arrowsSound);
                   context.read<HowToPlayCubit>().updateIndex(index - 1);
                 }
               : null,
@@ -162,6 +166,7 @@ class _TabSelector extends StatelessWidget {
             if (index == tabController.length - 1) {
               onDonePressed();
             } else {
+              context.read<AudioController>().playSfx(Assets.music.arrowsSound);
               context.read<HowToPlayCubit>().updateIndex(index + 1);
             }
           },

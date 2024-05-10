@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
@@ -12,15 +14,20 @@ import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   group('HowToPlayContent', () {
+    late AudioController audioController;
     late AppLocalizations l10n;
     late HowToPlayCubit howToPlayCubit;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       howToPlayCubit = _MockHowToPlayCubit();
 
       widget = BlocProvider.value(
@@ -31,7 +38,7 @@ void main() {
         ),
       );
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
     });
 
     setUpAll(() async {
@@ -62,8 +69,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.value(1),
-          initialState: 0,
+          Stream.value(HowToPlayState(index: 1)),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -87,8 +94,11 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -112,8 +122,12 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2, 3]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+            HowToPlayState(index: 3),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -139,8 +153,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([0]),
-          initialState: 1,
+          Stream.fromIterable([HowToPlayState()]),
+          initialState: HowToPlayState(index: 1),
         );
 
         await tester.pumpApp(widget);
@@ -156,14 +170,64 @@ void main() {
     );
 
     testWidgets(
+      'plays ${Assets.music.startButton1} when back button is pressed',
+      (tester) async {
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(index: 2),
+        );
+        await tester.pumpApp(widget, audioController: audioController);
+
+        await tester.tap(find.text(l10n.backButtonLabel));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => audioController.playSfx(Assets.music.arrowsSound),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'plays ${Assets.music.startButton1} when next button is pressed',
+      (tester) async {
+        whenListen(
+          howToPlayCubit,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+          ]),
+          initialState: HowToPlayState(index: 1),
+        );
+
+        await tester.pumpApp(widget, audioController: audioController);
+
+        await tester.tap(find.text(l10n.nextButtonLabel));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => audioController.playSfx(Assets.music.arrowsSound),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
       'renders first tab view aboutHowToPlayFirstInstructions when next is '
       'pressed twice and previous is pressed more than passing '
       'through initial value',
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([1, 2, 1, 0]),
-          initialState: 0,
+          Stream.fromIterable([
+            HowToPlayState(index: 1),
+            HowToPlayState(index: 2),
+            HowToPlayState(index: 1),
+            HowToPlayState(),
+          ]),
+          initialState: HowToPlayState(),
         );
 
         await tester.pumpApp(widget);
@@ -198,8 +262,8 @@ void main() {
       (tester) async {
         whenListen(
           howToPlayCubit,
-          Stream.fromIterable([4]),
-          initialState: 3,
+          Stream.fromIterable([HowToPlayState(index: 4)]),
+          initialState: HowToPlayState(index: 3),
         );
 
         await tester.pumpApp(widget);
@@ -217,7 +281,7 @@ void main() {
     testWidgets(
       'renders correct step 1 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(0);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(
@@ -241,7 +305,7 @@ void main() {
     testWidgets(
       'renders correct step 2 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(1);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 1));
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(
@@ -265,7 +329,7 @@ void main() {
     testWidgets(
       'renders correct step 3 assets',
       (tester) async {
-        when(() => howToPlayCubit.state).thenReturn(2);
+        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 2));
 
         for (final mascot in Mascots.values) {
           await tester.pumpApp(

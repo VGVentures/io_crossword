@@ -99,7 +99,7 @@ void main() {
 
       await tester.enterText(editableTexts.last, 'Z');
       await submit();
-      expect(words.last, equals('ABYZE'));
+      expect(words.last, equals('ABCZE'));
     });
 
     testWidgets('does not change text when readOnly', (tester) async {
@@ -183,7 +183,7 @@ void main() {
 
         expect(
           words,
-          equals(['ABYZE']),
+          equals(['ABCYE', 'ABCZE']),
           reason: '''onWord should be called again with the updated word''',
         );
       },
@@ -198,32 +198,29 @@ void main() {
           _Subject(
             child: IoWordInput.alphabetic(
               length: 5,
-              characters: const {0: 'A', 1: 'B', 4: 'E'},
+              characters: const {0: 'A', 1: 'B'},
               controller: controller,
             ),
           ),
         );
 
-        expect(controller.word, equals('ABE'));
+        expect(controller.word, equals('AB'));
 
         final editableTexts = find.byType(EditableText);
 
         await tester.enterText(editableTexts.first, 'C');
         await tester.pumpAndSettle();
-        expect(controller.word, equals('ABCE'));
+        expect(controller.word, equals('ABC'));
 
         await tester.enterText(editableTexts.last, 'D');
-        await tester.pumpAndSettle();
-        expect(controller.word, equals('ABCDE'));
-
         await tester.enterText(editableTexts.last, '!');
         await tester.pumpAndSettle();
-        expect(controller.word, equals('ABCE'));
+        expect(controller.word, equals('ABC'));
 
-        await tester.enterText(editableTexts.first, 'Y');
+        await tester.enterText(editableTexts.last, 'Y');
         await tester.enterText(editableTexts.last, 'Z');
         await tester.pumpAndSettle();
-        expect(controller.word, equals('ABYZE'));
+        expect(controller.word, equals('ABCYZ'));
       });
 
       testWidgets('word gets notified as input changes', (tester) async {
@@ -247,7 +244,7 @@ void main() {
 
         final editableTexts = find.byType(EditableText);
 
-        await tester.enterText(editableTexts.first, 'C');
+        await tester.enterText(editableTexts.last, 'C');
         await tester.pumpAndSettle();
         expect(words.last, equals('ABCE'));
 
@@ -262,7 +259,7 @@ void main() {
         await tester.enterText(editableTexts.first, 'Y');
         await tester.enterText(editableTexts.last, 'Z');
         await tester.pumpAndSettle();
-        expect(words.last, equals('ABYZE'));
+        expect(words.last, equals('ABCZE'));
       });
 
       testWidgets('word resets when controller.reset is called',
@@ -316,6 +313,7 @@ void main() {
             ),
           ),
         );
+        await tester.pumpAndSettle();
 
         expect(words.last, equals('ABE'));
 

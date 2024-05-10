@@ -9,7 +9,6 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
 import 'package:io_crossword/share/share.dart';
-import 'package:io_crossword/welcome/welcome.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
 import 'package:io_crossword/word_selection/word_selection.dart' as selection;
@@ -57,9 +56,12 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
         children: [
           const SuccessTopBar(),
           const SizedBox(height: 32),
-          IoWord(
-            selectedWord.word.answer,
-            style: themeData.io.wordTheme.big,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: IoWord(
+              selectedWord.word.answer,
+              style: themeData.io.wordTheme.big,
+            ),
           ),
           const SizedBox(height: 40),
           Expanded(
@@ -70,7 +72,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
                   children: [
                     SuccessStats(),
                     SizedBox(height: 40),
-                    _SuccessChallengeProgress(),
+                    ChallengeProgressStatus(),
                     SizedBox(height: 24),
                   ],
                 ),
@@ -132,14 +134,17 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 342),
                 child: Column(
                   children: [
-                    IoWord(
-                      selectedWord.word.answer,
-                      style: themeData.io.wordTheme.big,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: IoWord(
+                        selectedWord.word.answer,
+                        style: themeData.io.wordTheme.big,
+                      ),
                     ),
                     const SizedBox(height: 40),
                     const SuccessStats(),
                     const SizedBox(height: 40),
-                    const _SuccessChallengeProgress(),
+                    const ChallengeProgressStatus(),
                     const SizedBox(height: 40),
                     const KeepPlayingButton(),
                     const SizedBox(height: 16),
@@ -290,23 +295,6 @@ class _StatsRow extends StatelessWidget {
   }
 }
 
-class _SuccessChallengeProgress extends StatelessWidget {
-  const _SuccessChallengeProgress();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocSelector<ChallengeBloc, ChallengeState, (int, int)>(
-      selector: (state) => (state.solvedWords, state.totalWords),
-      builder: (context, words) {
-        return ChallengeProgress(
-          solvedWords: words.$1,
-          totalWords: words.$2,
-        );
-      },
-    );
-  }
-}
-
 class KeepPlayingButton extends StatelessWidget {
   @visibleForTesting
   const KeepPlayingButton({super.key});
@@ -316,6 +304,7 @@ class KeepPlayingButton extends StatelessWidget {
     final l10n = context.l10n;
     return OutlinedButton.icon(
       onPressed: () {
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
         context.read<CrosswordBloc>().add(const WordUnselected());
         context.read<WordSelectionBloc>().add(const selection.WordUnselected());
       },

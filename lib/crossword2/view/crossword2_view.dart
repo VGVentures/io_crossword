@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis, Mascots;
+import 'package:game_domain/game_domain.dart' as domain
+    show Axis, Mascots, Word;
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -21,7 +22,7 @@ class Crossword2View extends StatelessWidget {
     // hard-coding it:
     // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
     final configuration = CrosswordConfiguration(
-      bottomRight: (45, 45),
+      bottomRight: (15, 15),
       chunkSize: sectionSize,
     );
 
@@ -53,7 +54,6 @@ class _CrosswordStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
     final quad = QuadScope.of(context);
     final viewport = quad.toRect();
@@ -124,44 +124,77 @@ class _CrosswordStack extends StatelessWidget {
                   : const SizedBox.shrink();
             },
           ),
-          if (layout == IoLayoutData.large)
-            BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
-              selector: (state) => state.word,
-              builder: (context, selectedWord) {
-                if (selectedWord == null) {
-                  return const SizedBox.shrink();
-                }
+          BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
+            selector: (state) => state.word,
+            builder: (context, selectedWord) {
+              if (selectedWord == null) {
+                return const SizedBox.shrink();
+              }
 
-                final word = selectedWord.word;
-                final theme = Theme.of(context);
+              final word = selectedWord.word;
+              final theme = Theme.of(context);
 
-                return Positioned(
-                  left: (selectedWord.section.$1 *
-                          crosswordLayout.chunkSize.width) +
-                      (word.position.x * crosswordLayout.cellSize.width) +
-                      crosswordLayout.padding.left,
-                  top: (selectedWord.section.$2 *
-                          crosswordLayout.chunkSize.height) +
-                      (word.position.y * crosswordLayout.cellSize.height) +
-                      crosswordLayout.padding.top,
-                  child: selectedWord.word.isSolved
-                      ? IoWord(
-                          selectedWord.word.answer,
-                          direction: word.axis.toAxis(),
-                          style: word.mascot!.toIoWordStyle(theme),
-                        )
-                      : CrosswordInput(
-                          key: ValueKey(selectedWord.word.id),
-                          style: theme.io.wordInput.secondary,
-                          direction: word.axis.toAxis(),
-                          length: selectedWord.word.length,
-                          characters: selectedWord.word.solvedCharacters,
-                        ),
-                );
-              },
-            ),
+              return Positioned(
+                left: (selectedWord.section.$1 *
+                        crosswordLayout.chunkSize.width) +
+                    (word.position.x * crosswordLayout.cellSize.width) +
+                    crosswordLayout.padding.left,
+                top: (selectedWord.section.$2 *
+                        crosswordLayout.chunkSize.height) +
+                    (word.position.y * crosswordLayout.cellSize.height) +
+                    crosswordLayout.padding.top,
+                child: selectedWord.word.isSolved
+                    ? IoWord(
+                        selectedWord.word.answer,
+                        direction: word.axis.toAxis(),
+                        style: word.mascot!.toIoWordStyle(theme),
+                      )
+                    : _WordInput(word: word),
+              );
+            },
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _WordInput extends StatelessWidget {
+  const _WordInput({required this.word});
+
+  final domain.Word word;
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
+    final theme = Theme.of(context);
+
+    final readOnly = context.select<WordSelectionBloc, bool>(
+      (bloc) =>
+          bloc.state.status == WordSelectionStatus.empty ||
+          bloc.state.status == WordSelectionStatus.preSolving,
+    );
+
+    if (readOnly || layout == IoLayoutData.small) {
+      return IoWord(
+        word.answer,
+        direction: word.axis.toAxis(),
+        style: theme.io.wordTheme.big.copyWith(
+          borderRadius: BorderRadius.zero,
+          margin: theme.io.wordInput.secondary.padding,
+          boxSize: theme.io.wordInput.secondary.filled.size,
+          backgroundColor: theme.io.crosswordLetterTheme.empty.backgroundColor,
+          textStyle: theme.io.crosswordLetterTheme.empty.textStyle,
+        ),
+      );
+    }
+
+    return CrosswordInput(
+      key: ValueKey(word.id),
+      style: theme.io.wordInput.secondary,
+      direction: word.axis.toAxis(),
+      length: word.length,
+      characters: word.solvedCharacters,
     );
   }
 }

@@ -10,6 +10,7 @@ void main() {
         LoadingState.initial(),
         equals(
           LoadingState(
+            status: LoadingStatus.loading,
             assetsCount: 0,
             loaded: 0,
           ),
@@ -22,6 +23,7 @@ void main() {
         LoadingState.initial().copyWith(),
         equals(
           LoadingState(
+            status: LoadingStatus.loading,
             assetsCount: 0,
             loaded: 0,
           ),

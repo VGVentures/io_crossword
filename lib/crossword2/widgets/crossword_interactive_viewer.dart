@@ -221,7 +221,7 @@ extension on Quad {
     return switch (layout) {
       IoLayoutData.small => Size(
           width,
-          height * 0.3,
+          height * 0.7,
         ),
       IoLayoutData.large => Size(
           width * (1 - WordSelectionLargeContainer.widthRatio),

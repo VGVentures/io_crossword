@@ -212,40 +212,62 @@ class IoWordInput extends StatefulWidget {
 // will be updated in the future, as soon as the following is resolved:
 // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
 class _IoWordInputState extends State<IoWordInput> {
-  /// The current character that is being inputted.
+  /// The index of the current character that is being inputted.
   ///
-  /// Will be `null` if there is no available character field to input. This
-  /// happens when [IoWordInput.characters] is has the same length as
-  /// [IoWordInput.length]. In other words, when there is no available character
-  /// field to input since they are all fixed.
-  int? _currentCharacterIndex;
+  /// Initiated to minus one until [initState]'s first call to [_next]
+  /// initiating the actual active index.
+  int _activeCharacterIndex = -1;
 
   final Map<int, FocusNode> _focusNodes = {};
 
   /// The [FocusNode] of the character field that is currently being inputted.
-  FocusNode? get _activeFocusNode => _focusNodes[_currentCharacterIndex];
+  FocusNode? get _activeFocusNode => _focusNodes[_activeCharacterIndex];
 
   final Map<int, TextEditingController> _controllers = {};
 
   /// The [TextEditingController] of the character field that is currently
   /// being inputted.
   TextEditingController? get _activeController =>
-      _controllers[_currentCharacterIndex];
+      _controllers[_activeCharacterIndex];
 
-  /// The entire word that has been inputted so far.
-  String get _word {
+  /// The word that has been inputted so far by the user.
+  ///
+  /// Unlike [_entireWord], this word does not contain the empty character
+  /// fields.
+  String get _word => _entireWord.replaceAll(
+        IoWordInput._emptyCharacter,
+        '',
+      );
+
+  /// The word that has been inputted so far, with the empty character fields
+  /// represented by the [IoWordInput._emptyCharacter].
+  String get _entireWord {
     final word = StringBuffer();
 
     for (var i = 0; i < widget.length; i++) {
       final isFixed =
           widget.characters != null && widget.characters!.containsKey(i);
       final character =
-          (isFixed ? widget.characters![i] : _controllers[i]!.text)!
-              .replaceAll(IoWordInput._emptyCharacter, '');
-      if (character.isNotEmpty) word.write(character);
+          (isFixed ? widget.characters![i] : _controllers[i]!.text)!;
+      if (character.isNotEmpty) {
+        word.write(character);
+      }
     }
+
     return word.toString();
   }
+
+  /// The previous word that has been inputted so far.
+  ///
+  /// This may not reflect the current [_entireWord], but the previous word
+  /// before it has been processed by [_onTextChanged].
+  ///
+  /// After it has been processed, the [_previousWord] will be equivalent to
+  /// the [_entireWord].
+  ///
+  /// It includes the empty character fields, represented by the
+  /// [IoWordInput._emptyCharacter].
+  late String _previousWord = _entireWord;
 
   bool get _initial => _word.length == widget.characters?.length;
 
@@ -261,8 +283,27 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     if (newValue.isEmpty) {
+      final previousActiveCharacter = _previousWord[_activeCharacterIndex];
+
+      _previousWord = _previousWord.replaceAt(
+        _activeCharacterIndex,
+        IoWordInput._emptyCharacter,
+      );
       _activeController?.text = IoWordInput._emptyCharacter;
-      _previous();
+
+      // Because in the active controller we get the text already modified,
+      // we need this to know if the focused character was empty or filled
+      // when the backspace was pressed.
+      //
+      // If it was empty, we delete also the letter at the previous index.
+      if (previousActiveCharacter == IoWordInput._emptyCharacter) {
+        _previous();
+        _previousWord = _previousWord.replaceAt(
+          _activeCharacterIndex,
+          IoWordInput._emptyCharacter,
+        );
+        _activeController?.text = IoWordInput._emptyCharacter;
+      }
       updateWord();
       return;
     }
@@ -271,6 +312,10 @@ class _IoWordInputState extends State<IoWordInput> {
     // forced to be at the end.
     final newCharacter = newValue[newValue.length - 1];
     _activeController?.text = newCharacter.toUpperCase();
+    _previousWord = _previousWord.replaceAt(
+      _activeCharacterIndex,
+      newCharacter.toUpperCase(),
+    );
     _next();
     updateWord();
   }
@@ -282,7 +327,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// happen.
   void _next() {
     final nextFields = _controllers.entries
-        .where((e) => e.key > (_currentCharacterIndex ?? -1))
+        .where((e) => e.key > _activeCharacterIndex)
         .map((e) => e.key);
 
     if (nextFields.isEmpty) {
@@ -303,7 +348,7 @@ class _IoWordInputState extends State<IoWordInput> {
   /// presses backspace.
   void _previous() {
     final previousFields = _controllers.entries
-        .where((e) => e.key < (_currentCharacterIndex ?? widget.length))
+        .where((e) => e.key < _activeCharacterIndex)
         .map((e) => e.key);
 
     if (previousFields.isEmpty) return;
@@ -324,11 +369,11 @@ class _IoWordInputState extends State<IoWordInput> {
     final isOutsideRange = index < 0 || index >= widget.length;
     final isFixed =
         widget.characters != null && widget.characters!.containsKey(index);
-    if (index == _currentCharacterIndex || isOutsideRange || isFixed) {
+    if (index == _activeCharacterIndex || isOutsideRange || isFixed) {
       return;
     }
 
-    _currentCharacterIndex = index;
+    _activeCharacterIndex = index;
     _focus();
   }
 
@@ -406,7 +451,7 @@ class _IoWordInputState extends State<IoWordInput> {
       final displayText = !(focusNode != null && controller != null);
 
       late final IoWordInputCharacterFieldStyle style;
-      if (displayText) {
+      if (displayText || widget.readOnly) {
         style = textInputStyle.disabled;
       } else if (focusNode.hasFocus) {
         style = textInputStyle.focused;
@@ -704,4 +749,9 @@ class IoWordInputCharacterFieldStyle extends Equatable {
         size,
         elevation,
       ];
+}
+
+extension on String {
+  String replaceAt(int index, String newChar) =>
+      replaceRange(index, index + 1, newChar);
 }

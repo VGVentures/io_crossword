@@ -10,3 +10,4 @@ export 'io_logo.dart';
 export 'io_physical_model.dart';
 export 'io_word.dart';
 export 'io_word_input.dart';
+export 'sprite_animation_list.dart';

@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/drawer/view/crossword_drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
@@ -21,7 +22,8 @@ class _MockUrlLauncherPlatform extends Mock
     with MockPlatformInterfaceMixin
     implements UrlLauncherPlatform {}
 
-class _MockHowToPlayCubit extends MockCubit<int> implements HowToPlayCubit {}
+class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
+    implements HowToPlayCubit {}
 
 class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
@@ -31,6 +33,12 @@ void main() {
       await tester.pumpApp(CrosswordDrawer());
 
       expect(find.byType(Drawer), findsOneWidget);
+    });
+
+    testWidgets('displays a $ChallengeProgressStatus', (tester) async {
+      await tester.pumpApp(CrosswordDrawer());
+
+      expect(find.byType(ChallengeProgressStatus), findsOneWidget);
     });
 
     testWidgets('closes when close button is tapped', (tester) async {
@@ -79,7 +87,7 @@ void main() {
         (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,
@@ -99,7 +107,7 @@ void main() {
         (tester) async {
       final HowToPlayCubit howToPlayCubit = _MockHowToPlayCubit();
 
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,
@@ -119,7 +127,7 @@ void main() {
       final l10n = await AppLocalizations.delegate.load(Locale('en'));
       final mockNavigator = MockNavigator();
       when(mockNavigator.canPop).thenReturn(true);
-      when(() => howToPlayCubit.state).thenReturn(0);
+      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
       await tester.pumpApp(
         BlocProvider(
           create: (_) => howToPlayCubit,
@@ -174,6 +182,7 @@ void main() {
         );
       },
     );
+
     testWidgets(
       'Google I/O is tapped',
       (tester) async {
@@ -190,6 +199,7 @@ void main() {
         );
       },
     );
+
     testWidgets(
       'Explore in AI Studio is tapped',
       (tester) async {

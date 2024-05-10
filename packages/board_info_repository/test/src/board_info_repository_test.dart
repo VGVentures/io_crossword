@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, subtype_of_sealed_class
 
+import 'dart:math';
+
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -44,6 +46,9 @@ void main() {
       ).thenReturn(collection);
       when(
         () => collection.where('type', isEqualTo: 'section_size'),
+      ).thenReturn(collection);
+      when(
+        () => collection.where('type', isEqualTo: 'bottom_right'),
       ).thenReturn(collection);
 
       when(collection.get).thenAnswer((_) async => query);
@@ -131,6 +136,24 @@ void main() {
       });
     });
 
+    group('getBottomRight', () {
+      test("returns bottom right section's position from firebase", () async {
+        mockQueryResult('16,16');
+        final result = await boardInfoRepository.getBottomRight();
+        expect(result, equals(Point(16, 16)));
+      });
+
+      test('throws BoardInfoException when fetching the info fails', () {
+        when(
+          () => collection.where('type', isEqualTo: 'bottom_right'),
+        ).thenThrow(Exception('oops'));
+        expect(
+          () => boardInfoRepository.getBottomRight(),
+          throwsA(isA<BoardInfoException>()),
+        );
+      });
+    });
+
     group('isHintsEnabled', () {
       test('returns hints enabled status from firebase', () {
         final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
@@ -144,6 +167,63 @@ void main() {
 
         final result = boardInfoRepository.isHintsEnabled();
         expect(result, emits(true));
+      });
+    });
+
+    group('getGameStatus', () {
+      test('returns inProgress GameStatus from firebase', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'in_progress'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.inProgress));
+      });
+
+      test('returns resetInProgress GameStatus from firebase', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'reset_in_progress'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.resetInProgress));
+      });
+
+      test(
+          'returns inProgress GameStatus from firebase '
+          'when status is unknown', () async {
+        final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+        final query = _MockQuerySnapshot<Map<String, dynamic>>();
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
+        when(() => query.docs).thenReturn([doc]);
+        when(doc.data).thenReturn({'value': 'unknown'});
+
+        final result = boardInfoRepository.getGameStatus();
+        expect(result, emits(GameStatus.inProgress));
+      });
+
+      test('throws BoardInfoException when fetching the info fails', () {
+        when(
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenThrow(Exception('oops'));
+
+        expect(
+          () => boardInfoRepository.getGameStatus(),
+          throwsA(isA<BoardInfoException>()),
+        );
       });
     });
   });

@@ -5,24 +5,42 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/widget/widget.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import '../../helpers/helpers.dart';
 
 class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
     implements PlayerBloc {}
 
+class _MockAudioController extends Mock implements AudioController {}
+
+class _MockUrlLauncherPlatform extends Mock
+    with MockPlatformInterfaceMixin
+    implements UrlLauncherPlatform {}
+
+class _FakeLaunchOptions extends Fake implements LaunchOptions {}
+
 void main() {
   late AppLocalizations l10n;
+  late AudioController audioController;
 
   setUpAll(() async {
     l10n = await AppLocalizations.delegate.load(Locale('en'));
+  });
+
+  setUp(() {
+    audioController = _MockAudioController();
   });
 
   group('$EndGameContent', () {
@@ -58,6 +76,22 @@ void main() {
   });
 
   group('$ActionButtonsEndGame', () {
+    late UrlLauncherPlatform urlLauncher;
+
+    setUpAll(() {
+      registerFallbackValue(_FakeLaunchOptions());
+    });
+
+    setUp(() {
+      urlLauncher = _MockUrlLauncherPlatform();
+
+      UrlLauncherPlatform.instance = urlLauncher;
+
+      when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => true);
+      when(() => urlLauncher.launchUrl(any(), any()))
+          .thenAnswer((_) async => true);
+    });
+
     testWidgets('displays share', (tester) async {
       await tester.pumpApp(ActionButtonsEndGame());
 
@@ -65,7 +99,9 @@ void main() {
     });
 
     testWidgets('displays ShareScorePage when share is tapped', (tester) async {
-      await tester.pumpApp(ActionButtonsEndGame());
+      await tester.pumpApp(
+        ActionButtonsEndGame(),
+      );
 
       await tester.tap(find.text(l10n.share));
 
@@ -80,13 +116,29 @@ void main() {
       expect(find.text(l10n.playAgain), findsOneWidget);
     });
 
-    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
-      await tester.pumpApp(ActionButtonsEndGame());
+    testWidgets('plays ${Assets.music.startButton1} when playAgain tapped',
+        (tester) async {
+      await tester.pumpApp(
+        ActionButtonsEndGame(),
+        audioController: audioController,
+      );
 
       await tester.tap(find.text(l10n.playAgain));
 
       await tester.pumpAndSettle();
+      verify(
+        () => audioController.playSfx(Assets.music.startButton1),
+      ).called(1);
+    });
 
+    testWidgets('displays GameIntroPage when playAgain tapped', (tester) async {
+      await tester.pumpApp(
+        ActionButtonsEndGame(),
+      );
+
+      await tester.tap(find.text(l10n.playAgain));
+
+      await tester.pumpAndSettle();
       expect(find.byType(GameIntroPage), findsOneWidget);
     });
 
@@ -96,11 +148,28 @@ void main() {
       expect(find.text(l10n.claimBadgeContributing), findsOneWidget);
     });
 
-    testWidgets('displays developerProfile', (tester) async {
+    testWidgets('displays claim badge', (tester) async {
       await tester.pumpApp(ActionButtonsEndGame());
 
-      expect(find.text(l10n.developerProfile), findsOneWidget);
+      expect(find.text(l10n.claimBadge), findsOneWidget);
     });
+
+    testWidgets(
+      'opens new tab to claim badge when tapped',
+      (tester) async {
+        await tester.pumpApp(ActionButtonsEndGame());
+
+        await tester.tap(find.text(l10n.claimBadge));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => urlLauncher.launchUrl(
+            ProjectDetailsLinks.claimBadge,
+            any(),
+          ),
+        );
+      },
+    );
   });
 
   group('$EndGameImage', () {

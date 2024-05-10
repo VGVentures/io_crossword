@@ -266,10 +266,6 @@
   "@googleIO": {
     "description": "Google I/O label."
   },
-  "developerProfile": "Developer Profile",
-  "@developerProfile": {
-    "description": "Developer Profile label."
-  },
   "findNewWord": "Find a new word",
   "@findNewWord": {
     "description": "Find new word label"
@@ -402,5 +398,21 @@
   "doneButtonLabel": "Done",
   "@doneButtonLabel": {
     "description": "The label for the done button."
+  },
+  "resetDialogTitle": "WOW! We've just completed the 2024 I/O Crossword, but the game isn't over!",
+  "@resetDialogTitle": {
+    "description": "The title of the game completed modal."
+  },
+  "resetDialogSubtitle": "Hang on while we reset the board so you can keep building that streak.\n\nWhen the board has been regenerated, you'll be able to continue playing.",
+  "@resetDialogSubtitle": {
+    "description": "The subtitle of the game completed modal."
+  },
+  "exitButtonLabel": "Exit",
+  "@exitButtonLabel": {
+    "description": "The label for the exit button."
+  },
+  "keepPlayingButtonLabel": "Keep playing",
+  "@keepPlayingButtonLabel": {
+    "description": "The label for the keep playing button."
   }
 }

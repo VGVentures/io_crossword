@@ -34,6 +34,9 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
     on<LoadedSectionsSuspended>(_onLoadedSectionsSuspended);
     on<BoardSectionLoaded>(_onBoardSectionLoaded);
+    on<GameStatusRequested>(_onGameStatusRequested);
+    on<BoardStatusResumed>(_onBoardStatusResumed);
+    on<MascotDropped>(_onMascotDropped);
   }
 
   final CrosswordRepository _crosswordRepository;
@@ -180,6 +183,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     BoardLoadingInformationRequested event,
     Emitter<CrosswordState> emit,
   ) async {
+    emit(state.copyWith(mascotVisible: true));
+
     try {
       final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();
@@ -198,5 +203,52 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         ),
       );
     }
+  }
+
+  Future<void> _onGameStatusRequested(
+    GameStatusRequested event,
+    Emitter<CrosswordState> emit,
+  ) async {
+    return emit.forEach(
+      _boardInfoRepository.getGameStatus(),
+      onData: (status) {
+        if (status == GameStatus.resetInProgress) {
+          return state.copyWith(
+            gameStatus: status,
+            boardStatus: BoardStatus.resetInProgress,
+          );
+        }
+
+        return state.copyWith(gameStatus: status);
+      },
+      onError: (error, stackTrace) {
+        addError(error, stackTrace);
+        return state.copyWith(
+          status: CrosswordStatus.failure,
+        );
+      },
+    );
+  }
+
+  void _onBoardStatusResumed(
+    BoardStatusResumed event,
+    Emitter<CrosswordState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        boardStatus: BoardStatus.inProgress,
+      ),
+    );
+  }
+
+  void _onMascotDropped(
+    MascotDropped event,
+    Emitter<CrosswordState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        mascotVisible: false,
+      ),
+    );
   }
 }

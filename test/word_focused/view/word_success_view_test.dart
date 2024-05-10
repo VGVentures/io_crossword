@@ -1,13 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
+import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain show Axis;
+import 'package:io_crossword/assets/assets.dart';
+import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart'
     hide WordUnselected;
@@ -46,7 +51,7 @@ class _FakeWord extends Fake implements Word {
   String get answer => 'answer';
 
   @override
-  Axis get axis => Axis.horizontal;
+  domain.Axis get axis => domain.Axis.horizontal;
 
   @override
   int get length => 4;
@@ -54,6 +59,8 @@ class _FakeWord extends Fake implements Word {
   @override
   String get clue => 'clue';
 }
+
+class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   late AppLocalizations l10n;
@@ -122,6 +129,12 @@ void main() {
       );
     });
 
+    testWidgets('renders $ChallengeProgressStatus', (tester) async {
+      await tester.pumpApp(widget);
+
+      expect(find.byType(ChallengeProgressStatus), findsOneWidget);
+    });
+
     testWidgets('renders word solved text', (tester) async {
       await tester.pumpApp(widget);
 
@@ -134,10 +147,20 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoWord', (tester) async {
+    testWidgets('renders an horizontally scrollable $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoWord), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byWidgetPredicate(
+            (widget) =>
+                widget is SingleChildScrollView &&
+                widget.scrollDirection == Axis.horizontal,
+          ),
+          matching: find.byType(IoWord),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders success stats', (tester) async {
@@ -189,10 +212,20 @@ void main() {
       expect(find.byType(SuccessTopBar), findsOneWidget);
     });
 
-    testWidgets('renders $IoWord', (tester) async {
+    testWidgets('renders an horizontally scrollable $IoWord', (tester) async {
       await tester.pumpApp(widget);
 
-      expect(find.byType(IoWord), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byWidgetPredicate(
+            (widget) =>
+                widget is SingleChildScrollView &&
+                widget.scrollDirection == Axis.horizontal,
+          ),
+          matching: find.byType(IoWord),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders success stats', (tester) async {
@@ -275,11 +308,13 @@ void main() {
   });
 
   group('KeepPlayingButton', () {
+    late AudioController audioController;
     late CrosswordBloc crosswordBloc;
     late WordSelectionBloc wordSelectionBloc;
     late Widget widget;
 
     setUp(() {
+      audioController = _MockAudioController();
       wordSelectionBloc = _MockWordSelectionBloc();
       crosswordBloc = _MockCrosswordBloc();
       widget = BlocProvider.value(
@@ -287,6 +322,25 @@ void main() {
         child: KeepPlayingButton(),
       );
     });
+
+    testWidgets(
+      'plays ${Assets.music.startButton1} when tapping the keep playing button',
+      (tester) async {
+        await tester.pumpApp(
+          BlocProvider(
+            create: (_) => wordSelectionBloc,
+            child: widget,
+          ),
+          audioController: audioController,
+        );
+
+        await tester.tap(find.byIcon(Icons.gamepad));
+
+        verify(
+          () => audioController.playSfx(Assets.music.startButton1),
+        ).called(1);
+      },
+    );
 
     testWidgets(
       'adds $WordUnselected event when tapping the keep playing button',
@@ -341,7 +395,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://io.google/2024',
+            ProjectDetailsLinks.claimBadge,
             any(),
           ),
         );
