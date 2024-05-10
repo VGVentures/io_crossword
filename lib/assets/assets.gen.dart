@@ -232,6 +232,18 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/android_idle_unselected.png
+  AssetGenImage get androidIdleUnselected =>
+      const AssetGenImage('assets/images/android_idle_unselected.png');
+
+  /// File path: assets/images/dash_idle_unselected.png
+  AssetGenImage get dashIdleUnselected =>
+      const AssetGenImage('assets/images/dash_idle_unselected.png');
+
+  /// File path: assets/images/dino_idle_unselected.png
+  AssetGenImage get dinoIdleUnselected =>
+      const AssetGenImage('assets/images/dino_idle_unselected.png');
+
   /// File path: assets/images/end_game_android.png
   AssetGenImage get endGameAndroid =>
       const AssetGenImage('assets/images/end_game_android.png');
@@ -327,6 +339,10 @@ class $AssetsImagesGen {
   AssetGenImage get shareSparky =>
       const AssetGenImage('assets/images/share_sparky.png');
 
+  /// File path: assets/images/sparky_idle_unselected.png
+  AssetGenImage get sparkyIdleUnselected =>
+      const AssetGenImage('assets/images/sparky_idle_unselected.png');
+
   /// File path: assets/images/tile.png
   AssetGenImage get tile => const AssetGenImage('assets/images/tile.png');
 
@@ -340,6 +356,9 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        androidIdleUnselected,
+        dashIdleUnselected,
+        dinoIdleUnselected,
         endGameAndroid,
         endGameDash,
         endGameDino,
@@ -364,6 +383,7 @@ class $AssetsImagesGen {
         shareDash,
         shareDino,
         shareSparky,
+        sparkyIdleUnselected,
         tile,
         tileLarge,
         welcomeBackground

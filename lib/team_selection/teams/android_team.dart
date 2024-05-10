@@ -27,6 +27,9 @@ class AndroidTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.androidDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.androidIdleUnselected;
+
+  @override
   AssetGenImage get lookUpMobileAnimation => Assets.anim.androidLookUpMobile;
 
   @override

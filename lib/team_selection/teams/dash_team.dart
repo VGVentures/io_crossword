@@ -27,6 +27,9 @@ class DashTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.dashDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.dashIdleUnselected;
+
+  @override
   AssetGenImage get lookUpMobileAnimation => Assets.anim.dashLookUpMobile;
 
   @override

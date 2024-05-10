@@ -527,6 +527,9 @@ class _SmallMascot extends StatelessWidget {
 
     return index == mascot.index
         ? TeamSelectionMascot(mascot)
-        : const SizedBox.shrink();
+        : Image.asset(
+            mascot.teamMascot.idleUnselected.path,
+            alignment: Alignment.bottomCenter,
+          );
   }
 }

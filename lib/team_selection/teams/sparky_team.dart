@@ -27,6 +27,9 @@ class SparkyTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.sparkyDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.sparkyIdleUnselected;
+
+  @override
   AssetGenImage get lookUpMobileAnimation => Assets.anim.sparkyLookUpMobile;
 
   @override

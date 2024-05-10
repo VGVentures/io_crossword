@@ -19,6 +19,8 @@ abstract class Team extends Equatable {
 
   AssetGenImage get dropInAnimation;
 
+  AssetGenImage get idleUnselected;
+
   AssetGenImage get lookUpMobileAnimation;
 
   AssetGenImage get pickUpMobileAnimation;
@@ -79,6 +81,7 @@ abstract class Team extends Equatable {
         pickUpAnimation,
         dangleAnimation,
         dropInAnimation,
+        idleUnselected,
         lookUpMobileAnimation,
         pickUpMobileAnimation,
         dangleMobileAnimation,

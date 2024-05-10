@@ -27,6 +27,9 @@ class DinoTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.dinoDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.dinoIdleUnselected;
+
+  @override
   AssetGenImage get lookUpMobileAnimation => Assets.anim.dinoLookUpMobile;
 
   @override
