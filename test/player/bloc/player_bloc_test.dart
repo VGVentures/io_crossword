@@ -39,6 +39,18 @@ void main() {
 
     group('$PlayerLoaded', () {
       blocTest<PlayerBloc, PlayerState>(
+        'emits nothing when player is empty',
+        setUp: () {
+          when(() => leaderboardRepository.getPlayerRanked('user-id'))
+              .thenAnswer((_) => Stream.value((Player.empty, 3)));
+        },
+        seed: PlayerState.new,
+        build: () => bloc,
+        act: (bloc) => bloc.add(PlayerLoaded(userId: 'user-id')),
+        expect: () => <PlayerState>[],
+      );
+
+      blocTest<PlayerBloc, PlayerState>(
         'emits [playing] with the player and ranking position',
         setUp: () {
           when(() => leaderboardRepository.getPlayerRanked('user-id'))

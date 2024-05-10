@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -59,6 +61,10 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     return emit.forEach(
       _leaderboardRepository.getPlayerRanked(event.userId),
       onData: (data) {
+        if (data.$1 == Player.empty) {
+          return state;
+        }
+
         return state.copyWith(
           status: PlayerStatus.playing,
           player: data.$1,
