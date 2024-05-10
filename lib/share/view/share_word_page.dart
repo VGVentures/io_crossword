@@ -77,6 +77,7 @@ class ShareWordPage extends StatelessWidget {
           word.clue,
           style: themeData.textTheme.bodyLarge.regular
               ?.copyWith(color: themeData.colorScheme.primary),
+          textAlign: TextAlign.center,
         ),
       ],
     );
