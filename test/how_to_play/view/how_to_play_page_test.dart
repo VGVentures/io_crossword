@@ -32,6 +32,8 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 class _MockAudioController extends Mock implements AudioController {}
 
+class _MockRoute extends Mock implements Route<dynamic> {}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -165,6 +167,11 @@ void main() {
       testWidgets(
         'navigates to $CrosswordPage when animation completes for $layout',
         (tester) async {
+          final navigator = MockNavigator();
+          when(navigator.canPop).thenReturn(true);
+          when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
+              .thenAnswer((_) async {});
+
           when(() => gameIntroBloc.state).thenReturn(GameIntroState());
 
           whenListen(
@@ -198,7 +205,30 @@ void main() {
 
           await tester.tap(find.byType(OutlinedButton), warnIfMissed: false);
 
-          // TODO(alestiago): Test navigation.
+          // TODO:
+
+          // verify(
+          //   () => navigator.pushAndRemoveUntil<void>(
+          //     any(
+          //       that: isRoute<void>(
+          //         whereName: equals(CrosswordPage.routeName),
+          //       ),
+          //     ),
+          //     any(),
+          //   ),
+          // ).called(1);
+
+          // final capturedPredicate =
+          //     verification.captured.single as RoutePredicate;
+
+          // final firstRoute = _MockRoute();
+          // when(() => firstRoute.isFirst).thenReturn(true);
+
+          // final secondRoute = _MockRoute();
+          // when(() => secondRoute.isFirst).thenReturn(false);
+
+          // expect(capturedPredicate(firstRoute), isTrue);
+          // expect(capturedPredicate(secondRoute), isFalse);
         },
       );
 

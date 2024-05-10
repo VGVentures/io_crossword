@@ -16,12 +16,17 @@ class HowToPlayPage extends StatelessWidget {
 
   static const String dangleMascotHeroTag = 'dangle_mascot_tag';
 
+  static const routeName = '/how-to-play';
+
   static Page<void> page() {
     return const MaterialPage(child: HowToPlayPage());
   }
 
   static Route<void> route() {
-    return MaterialPageRoute(builder: (_) => const HowToPlayPage());
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const HowToPlayPage(),
+    );
   }
 
   @override
@@ -65,8 +70,7 @@ class HowToPlayView extends StatelessWidget {
             case GameIntroPlayerCreationStatus.inProgress:
               break;
             case GameIntroPlayerCreationStatus.success:
-              Navigator.pushAndRemoveUntil(
-                context,
+              Navigator.of(context).pushAndRemoveUntil<void>(
                 CrosswordPage.route(),
                 (route) => route.isFirst,
               );

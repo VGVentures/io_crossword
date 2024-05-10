@@ -467,7 +467,7 @@ class _SubmitButton extends StatelessWidget {
       onPressed: () {
         context.read<AudioController>().playSfx(Assets.music.startButton1);
         context.read<PlayerBloc>().add(MascotSelected(mascot));
-        Navigator.push(context, InitialsPage.route());
+        Navigator.of(context).push(InitialsPage.route());
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),

@@ -9,6 +9,7 @@ import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -42,6 +43,10 @@ void main() {
     testWidgets(
       'navigates to $HowToPlayPage when submission is valid',
       (tester) async {
+        final navigator = MockNavigator();
+        when(navigator.canPop).thenReturn(true);
+        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
         final initialsBloc = _MockInitialsBloc();
         whenListen(
           initialsBloc,
@@ -59,6 +64,7 @@ void main() {
         await tester.pumpSubject(
           playerBloc: playerBloc,
           initialsBloc: initialsBloc,
+          navigator: navigator,
           const InitialsView(),
         );
 
@@ -66,7 +72,15 @@ void main() {
           () => playerBloc.add(const InitialsSelected('ABC')),
         ).called(1);
 
-        // TODO(alestiago): Test the navigation.
+        verify(
+          () => navigator.push<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(HowToPlayPage.routeName),
+              ),
+            ),
+          ),
+        ).called(1);
       },
     );
 
@@ -233,6 +247,7 @@ extension on WidgetTester {
     InitialsBloc? initialsBloc,
     PlayerBloc? playerBloc,
     AudioController? audioController,
+    MockNavigator? navigator,
   }) {
     final bloc = initialsBloc ?? _MockInitialsBloc();
     if (initialsBloc == null) {
@@ -247,6 +262,7 @@ extension on WidgetTester {
     return pumpApp(
       playerBloc: playerBloc,
       audioController: audioController,
+      navigator: navigator,
       BlocProvider(
         create: (_) => bloc,
         child: child,

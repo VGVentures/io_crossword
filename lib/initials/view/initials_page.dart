@@ -12,8 +12,13 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class InitialsPage extends StatelessWidget {
   const InitialsPage({super.key});
 
+  static const routeName = '/initials';
+
   static Route<void> route() {
-    return MaterialPageRoute(builder: (_) => const InitialsPage());
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const InitialsPage(),
+    );
   }
 
   @override
