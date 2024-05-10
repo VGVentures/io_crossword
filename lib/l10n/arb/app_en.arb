@@ -266,10 +266,6 @@
   "@googleIO": {
     "description": "Google I/O label."
   },
-  "developerProfile": "Developer Profile",
-  "@developerProfile": {
-    "description": "Developer Profile label."
-  },
   "findNewWord": "Find a new word",
   "@findNewWord": {
     "description": "Find new word label"

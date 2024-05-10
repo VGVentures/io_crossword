@@ -77,9 +77,10 @@ class CrosswordRepository {
   }
 
   /// Tries solving a word.
-  /// Returns true if succeeds and updates the word's solvedTimestamp
-  /// attribute.
-  Future<bool> answerWord(
+  /// The first value returns true if succeeds and updates the word's
+  /// solvedTimestamp attribute.
+  /// The second value returns true if the answer was previously answered.
+  Future<(bool, bool)> answerWord(
     String wordId,
     Mascots mascot,
     String userAnswer,
@@ -94,7 +95,7 @@ class CrosswordRepository {
     }
 
     if (userAnswer.toLowerCase() != correctAnswer.answer.toLowerCase()) {
-      return false;
+      return (false, false);
     }
 
     final sectionsPoints = <Point<int>>{}
@@ -131,6 +132,11 @@ class CrosswordRepository {
             'Word with id $wordId not found for section ($sectionX, $sectionY)',
             StackTrace.current,
           );
+        }
+
+        // The word has been solved previously
+        if (word.solvedTimestamp != null) {
+          return (true, true);
         }
 
         final solvedWord = word.copyWith(
@@ -179,7 +185,7 @@ class CrosswordRepository {
       await updateSection(section);
     }
 
-    return true;
+    return (true, false);
   }
 
   String _replaceCharAt(String oldString, int index, String newChar) {

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/widgets/share_dialog.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -39,7 +40,7 @@ void main() {
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          url: 'https://crossword.withgoogle.com',
+          url: ProjectDetailsLinks.crossword,
         ),
       );
 
@@ -51,7 +52,7 @@ void main() {
         ShareDialog(
           title: 'title',
           content: const Text('test'),
-          url: 'https://crossword.withgoogle.com',
+          url: ProjectDetailsLinks.crossword,
         ),
       );
 
@@ -60,7 +61,7 @@ void main() {
 
     testWidgets('launches linkedIn url when linkedin icon is tapped',
         (tester) async {
-      const url = 'https://crossword.withgoogle.com';
+      const url = ProjectDetailsLinks.crossword;
 
       await tester.pumpApp(
         ShareDialog(
@@ -82,7 +83,7 @@ void main() {
 
     testWidgets('launches twitter url when twitter icon is tapped',
         (tester) async {
-      const url = 'https://crossword.withgoogle.com';
+      const url = ProjectDetailsLinks.crossword;
 
       await tester.pumpApp(
         ShareDialog(
@@ -104,7 +105,7 @@ void main() {
 
     testWidgets('launches facebook url when facebook icon is tapped',
         (tester) async {
-      const url = 'https://crossword.withgoogle.com';
+      const url = ProjectDetailsLinks.crossword;
 
       await tester.pumpApp(
         ShareDialog(

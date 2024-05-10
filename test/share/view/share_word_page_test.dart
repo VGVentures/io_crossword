@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/l10n/l10n.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/share/share.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -157,7 +158,7 @@ void main() {
 
           expect(
             tester.widget<ShareDialog>(find.byType(ShareDialog)).url,
-            equals('https://crossword.withgoogle.com'),
+            equals(ProjectDetailsLinks.crossword),
           );
         },
       );

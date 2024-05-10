@@ -98,8 +98,10 @@ class ActionButtonsEndGame extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         FilledButton.tonalIcon(
-          onPressed: () {}, // coverage:ignore-line
-          label: Text(l10n.developerProfile),
+          onPressed: () {
+            context.launchUrl(ProjectDetailsLinks.claimBadge);
+          },
+          label: Text(l10n.claimBadge),
           icon: const Icon(IoIcons.google, size: 20),
         ),
       ],

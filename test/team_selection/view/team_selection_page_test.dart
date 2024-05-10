@@ -15,7 +15,6 @@ import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/team_selection/team_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
 
