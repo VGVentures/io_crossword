@@ -75,7 +75,7 @@ void main() {
       });
 
       testWidgets(
-        'wordsToBreakRecord',
+        'countdownToCompletion',
         (tester) async {
           late final AppLocalizations l10n;
 
@@ -88,7 +88,7 @@ void main() {
             ),
           );
 
-          expect(find.text(l10n.wordsToBreakRecord), findsOneWidget);
+          expect(find.text(l10n.countdownToCompletion), findsOneWidget);
         },
       );
 
