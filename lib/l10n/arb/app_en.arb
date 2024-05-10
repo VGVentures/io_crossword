@@ -282,7 +282,7 @@
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
-  "claimBadgeDescription": "Claim an official Developer Profile badge for playing the Google IO crossword with Google.",
+  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini API.",
   "@claimBadgeDescription": {
     "description": "Developer Profile label"
   },
