@@ -5,20 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
-class _FakeWord extends Fake implements Word {
-  _FakeWord({this.answer = ''});
-
-  @override
-  final String answer;
-
-  @override
-  int? get solvedTimestamp => 1;
-}
-
 void main() {
   group('CrosswordState', () {
-    final fakeWord = _FakeWord();
-
     test('can be instantiated', () {
       expect(
         CrosswordState(
@@ -228,94 +216,6 @@ void main() {
               borderWords: const [],
             ),
           },
-        );
-      });
-
-      test('returns an instance with new selected word', () {
-        final state = CrosswordState(
-          sectionSize: 400,
-        );
-        final newState = state.copyWith(
-          selectedWord: WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-          ),
-        );
-        expect(
-          newState.selectedWord,
-          WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-          ),
-        );
-      });
-    });
-
-    group('WordSelection', () {
-      test('can be instantiated', () {
-        expect(
-          WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-          ),
-          isA<WordSelection>(),
-        );
-      });
-
-      test('copyWith returns same object', () {
-        final wordSelection = WordSelection(
-          section: (0, 0),
-          word: fakeWord,
-        );
-        expect(
-          wordSelection.copyWith(),
-          equals(wordSelection),
-        );
-      });
-
-      test('copyWith updates solvedStatus', () {
-        final wordSelection = WordSelection(
-          section: (0, 0),
-          word: fakeWord,
-        );
-        final solvedWordSelection = WordSelection(
-          section: (0, 0),
-          word: fakeWord,
-          solvedStatus: WordStatus.solved,
-        );
-        expect(
-          wordSelection.copyWith(solvedStatus: WordStatus.solved),
-          equals(solvedWordSelection),
-        );
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          WordSelection(
-            section: (0, 0),
-            word: fakeWord,
-          ),
-          equals(
-            WordSelection(
-              section: (0, 0),
-              word: fakeWord,
-            ),
-          ),
-        );
-
-        expect(
-          WordSelection(
-            section: (0, 0),
-            word: _FakeWord(answer: 'flutter'),
-          ),
-          isNot(
-            equals(
-              WordSelection(
-                section: (0, 0),
-                word: _FakeWord(answer: 'dart'),
-              ),
-            ),
-          ),
         );
       });
     });
