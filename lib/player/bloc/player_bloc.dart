@@ -29,8 +29,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     PlayerCreateScoreRequested event,
     Emitter<PlayerState> emit,
   ) async {
-    if (state.status == PlayerStatus.loading ||
-        state.status == PlayerStatus.playing) {
+    if (state.status == PlayerStatus.loading) {
       // A player score has been created or is being created, don't create
       // another one.
       return;

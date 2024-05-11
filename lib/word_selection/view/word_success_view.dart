@@ -3,15 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
-import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
 import 'package:io_crossword/share/share.dart';
-import 'package:io_crossword/word_selection/word_selection.dart'
-    hide WordUnselected;
-import 'package:io_crossword/word_selection/word_selection.dart' as selection;
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template word_success_view}
@@ -305,8 +302,7 @@ class KeepPlayingButton extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: () {
         context.read<AudioController>().playSfx(Assets.music.startButton1);
-        context.read<CrosswordBloc>().add(const WordUnselected());
-        context.read<WordSelectionBloc>().add(const selection.WordUnselected());
+        context.read<WordSelectionBloc>().add(const WordUnselected());
       },
       icon: const Icon(
         Icons.gamepad,

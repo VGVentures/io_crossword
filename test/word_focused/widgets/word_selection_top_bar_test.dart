@@ -87,8 +87,6 @@ void main() {
 
       when(() => crosswordBloc.state).thenReturn(
         CrosswordState(
-          selectedWord:
-              WordSelection(section: (0, 0), word: _UnsolvedFakeWord()),
           sections: {
             (0, 0): BoardSection(
               id: 'id',
@@ -131,8 +129,6 @@ void main() {
           Stream.fromIterable(
             [
               CrosswordState(
-                selectedWord:
-                    WordSelection(section: (0, 0), word: _UnsolvedFakeWord()),
                 sections: {
                   (0, 0): section.copyWith(words: [_SolvedFakeWord()]),
                 },
@@ -140,8 +136,6 @@ void main() {
             ],
           ),
           initialState: CrosswordState(
-            selectedWord:
-                WordSelection(section: (0, 0), word: _UnsolvedFakeWord()),
             sections: {
               (0, 0): section,
             },
@@ -184,8 +178,6 @@ void main() {
         );
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(
-            selectedWord:
-                WordSelection(section: (0, 0), word: _SolvedFakeWord()),
             sections: {
               (0, 0): section,
             },

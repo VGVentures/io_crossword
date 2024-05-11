@@ -31,14 +31,12 @@ class IoWordInputController extends ChangeNotifier {
 
   /// Updates the [_word] with new value.
   ///
-  /// If [isInitial] is true, sets the [_didReset] to false.
-  void updateWord(String word, {bool isInitial = false}) {
+  /// Sets the [_didReset] to false.
+  void updateWord(String word) {
     if (word == _word) return;
 
     _word = word;
-
-    if (isInitial) _didReset = false;
-
+    _didReset = false;
     notifyListeners();
   }
 
@@ -269,8 +267,6 @@ class _IoWordInputState extends State<IoWordInput> {
   /// [IoWordInput._emptyCharacter].
   late String _previousWord = _entireWord;
 
-  bool get _initial => _word.length == widget.characters?.length;
-
   /// Callback for when a character field has changed its value.
   void _onTextChanged(String value) {
     final newValue = (value.split('')
@@ -279,7 +275,7 @@ class _IoWordInputState extends State<IoWordInput> {
 
     void updateWord() {
       setState(() {});
-      widget.controller?.updateWord(_word, isInitial: _initial);
+      widget.controller?.updateWord(_word);
     }
 
     if (newValue.isEmpty) {
@@ -394,7 +390,17 @@ class _IoWordInputState extends State<IoWordInput> {
         initialCharacters != null &&
         controller._word.length == initialCharacters.length) {
       while (_word.length > initialCharacters.length) {
-        _onTextChanged('');
+        for (var i = 0; i < widget.length; i++) {
+          if (!initialCharacters.containsKey(i)) {
+            _controllers[i] =
+                TextEditingController(text: IoWordInput._emptyCharacter);
+            _previousWord = _previousWord.replaceAt(
+              i,
+              IoWordInput._emptyCharacter,
+            );
+          }
+          _previous();
+        }
       }
     }
   }
@@ -416,7 +422,7 @@ class _IoWordInputState extends State<IoWordInput> {
     }
 
     widget.controller?.addListener(_onInputReset);
-    widget.controller?.updateWord(_word, isInitial: _initial);
+    widget.controller?.updateWord(_word);
     _next();
   }
 
