@@ -46,23 +46,6 @@ class LoadedSectionsSuspended extends CrosswordEvent {
   List<Object> get props => [loadedSections];
 }
 
-class WordSelected extends CrosswordEvent {
-  const WordSelected(this.section, this.word);
-
-  final (int, int) section;
-  final Word word;
-
-  @override
-  List<Object> get props => [section, word];
-}
-
-class WordUnselected extends CrosswordEvent {
-  const WordUnselected();
-
-  @override
-  List<Object> get props => [];
-}
-
 class BoardLoadingInformationRequested extends CrosswordEvent {
   const BoardLoadingInformationRequested();
 

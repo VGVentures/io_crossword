@@ -7,9 +7,7 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/streak/streak.dart';
-import 'package:io_crossword/word_selection/word_selection.dart'
-    hide WordUnselected;
-import 'package:io_crossword/word_selection/word_selection.dart' as selection;
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -55,9 +53,7 @@ void main() {
       await tester.tap(find.byType(CloseWordSelectionIconButton));
       await tester.pumpAndSettle();
 
-      verify(() => crosswordBloc.add(const WordUnselected())).called(1);
-      verify(() => wordSelectionBloc.add(const selection.WordUnselected()))
-          .called(1);
+      verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
     });
 
     testWidgets(
@@ -82,9 +78,8 @@ void main() {
       await tester.tap(find.byType(CloseWordSelectionIconButton));
       await tester.pumpAndSettle();
 
-      verifyNever(() => crosswordBloc.add(const WordUnselected()));
       verifyNever(
-        () => wordSelectionBloc.add(const selection.WordUnselected()),
+        () => wordSelectionBloc.add(const WordUnselected()),
       );
     });
 
