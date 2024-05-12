@@ -34,8 +34,6 @@ void main() {
         expectLater(cubit.stream, emitsInOrder(expectedStates));
 
         cubit.updateStatus(status);
-
-        debugDefaultTargetPlatformOverride = null;
       });
     });
 
@@ -60,6 +58,8 @@ void main() {
         );
 
         cubit.loadAssets(Mascots.dash);
+
+        debugDefaultTargetPlatformOverride = null;
       });
 
       test('emits inProgress and success for desktop', () {
