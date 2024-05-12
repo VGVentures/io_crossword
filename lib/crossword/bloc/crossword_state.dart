@@ -6,41 +6,9 @@ enum CrosswordStatus {
   failure,
 }
 
-enum WordStatus {
-  solved,
-  pending,
-  invalid,
-}
-
 enum BoardStatus {
   inProgress,
   resetInProgress,
-}
-
-class WordSelection extends Equatable {
-  WordSelection({
-    required this.section,
-    required this.word,
-    WordStatus? solvedStatus,
-  }) : solvedStatus = solvedStatus ??
-            (word.solvedTimestamp != null
-                ? WordStatus.solved
-                : WordStatus.pending);
-
-  final (int, int) section;
-  final Word word;
-  final WordStatus solvedStatus;
-
-  WordSelection copyWith({WordStatus? solvedStatus}) {
-    return WordSelection(
-      section: section,
-      word: word,
-      solvedStatus: solvedStatus ?? this.solvedStatus,
-    );
-  }
-
-  @override
-  List<Object> get props => [section, word, solvedStatus];
 }
 
 class CrosswordState extends Equatable {
@@ -50,7 +18,6 @@ class CrosswordState extends Equatable {
     this.boardStatus = BoardStatus.inProgress,
     this.sectionSize = 0,
     this.sections = const {},
-    this.selectedWord,
     this.zoomLimit = 0.35,
     this.mascotVisible = true,
   });
@@ -60,7 +27,6 @@ class CrosswordState extends Equatable {
   final BoardStatus boardStatus;
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
-  final WordSelection? selectedWord;
   final double zoomLimit;
   final bool mascotVisible;
 
@@ -70,7 +36,6 @@ class CrosswordState extends Equatable {
     BoardStatus? boardStatus,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
-    WordSelection? selectedWord,
     double? zoomLimit,
     bool? mascotVisible,
   }) {
@@ -80,19 +45,8 @@ class CrosswordState extends Equatable {
       boardStatus: boardStatus ?? this.boardStatus,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
-      selectedWord: selectedWord ?? this.selectedWord,
       zoomLimit: zoomLimit ?? this.zoomLimit,
       mascotVisible: mascotVisible ?? this.mascotVisible,
-    );
-  }
-
-  CrosswordState removeSelectedWord() {
-    return CrosswordState(
-      status: status,
-      sectionSize: sectionSize,
-      sections: sections,
-      zoomLimit: zoomLimit,
-      mascotVisible: mascotVisible,
     );
   }
 
@@ -103,7 +57,6 @@ class CrosswordState extends Equatable {
         boardStatus,
         sectionSize,
         sections,
-        selectedWord,
         zoomLimit,
         mascotVisible,
       ];

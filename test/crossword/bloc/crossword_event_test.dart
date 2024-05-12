@@ -5,9 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:mocktail/mocktail.dart';
-
-class _MockWord extends Mock implements Word {}
 
 void main() {
   group('CrosswordEvent', () {
@@ -79,44 +76,6 @@ void main() {
             ),
           ),
         );
-      });
-    });
-
-    group('$WordSelected', () {
-      test('can be instantiated', () {
-        expect(WordSelected((0, 0), _MockWord()), isA<WordSelected>());
-      });
-
-      test('supports value comparisons', () {
-        final firstWord = _MockWord();
-        final secondWord = _MockWord();
-
-        expect(
-          WordSelected((0, 0), firstWord),
-          equals(WordSelected((0, 0), firstWord)),
-        );
-        expect(
-          WordSelected((0, 0), firstWord),
-          isNot(
-            WordSelected((0, 0), secondWord),
-          ),
-        );
-        expect(
-          WordSelected((0, 0), firstWord),
-          isNot(
-            WordSelected((0, 1), firstWord),
-          ),
-        );
-      });
-    });
-
-    group('$WordUnselected', () {
-      test('can be instantiated', () {
-        expect(WordUnselected(), isA<WordUnselected>());
-      });
-
-      test('supports value comparisons', () {
-        expect(WordUnselected(), equals(WordUnselected()));
       });
     });
 
