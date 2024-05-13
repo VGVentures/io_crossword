@@ -1,12 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-/// Definition of a platform aware asset function.
-typedef PlatformAwareAsset<T> = T Function({
-  required T desktop,
-  required T mobile,
-  TargetPlatform? overrideDefaultTargetPlatform,
-});
-
 /// Returns an asset based on the current platform.
 T platformAwareAsset<T>({
   required T desktop,
