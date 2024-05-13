@@ -128,11 +128,13 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     try {
       final zoomLimit = await _boardInfoRepository.getZoomLimit();
       final sectionSize = await _boardInfoRepository.getSectionSize();
+      final bottomRight = await _boardInfoRepository.getBottomRight();
 
       emit(
         state.copyWith(
           zoomLimit: zoomLimit,
           sectionSize: sectionSize,
+          bottomRight: (bottomRight.x, bottomRight.y),
         ),
       );
     } catch (error, stackTrace) {
