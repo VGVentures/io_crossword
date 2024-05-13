@@ -93,9 +93,67 @@ void main() {
       expect(viewerState.currentScale, 1.4);
     });
 
+    testWidgets(
+        'does nothing when zoom in button is pressed and '
+        'limit has been reached', (tester) async {
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+      final maxScale = viewerState.maxScale;
+
+      while (viewerState.currentScale < maxScale) {
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pumpAndSettle();
+      }
+      expect(viewerState.currentScale, maxScale);
+
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(viewerState.currentScale, maxScale);
+    });
+
+    testWidgets(
+        'does nothing when zoom out button is pressed and '
+        'limit has been reached', (tester) async {
+      const zoomLimit = 0.6;
+      await tester.pumpSubject(
+        CrosswordInteractiveViewer(
+          zoomLimit: zoomLimit,
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      final viewerState = tester.state<CrosswordInteractiveViewerState>(
+        find.byType(CrosswordInteractiveViewer),
+      );
+
+      while (viewerState.currentScale > zoomLimit) {
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+      }
+      expect(viewerState.currentScale, zoomLimit);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pumpAndSettle();
+
+      expect(viewerState.currentScale, zoomLimit);
+    });
+
     testWidgets('zooms out when zoom out button is pressed', (tester) async {
       await tester.pumpSubject(
         CrosswordInteractiveViewer(
+          zoomLimit: 0.6,
           builder: (context, position) {
             return const SizedBox();
           },

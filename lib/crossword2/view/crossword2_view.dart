@@ -15,13 +15,15 @@ class Crossword2View extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final (sectionSize, bottomRight) =
-        context.select<CrosswordBloc, (int, (int, int))>(
-      (bloc) => (bloc.state.sectionSize, bloc.state.bottomRight),
+    final (sectionSize, bottomRight, zoomLimit) =
+        context.select<CrosswordBloc, (int, (int, int), double)>(
+      (bloc) => (
+        bloc.state.sectionSize,
+        bloc.state.bottomRight,
+        bloc.state.zoomLimit,
+      ),
     );
-    // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
-    // hard-coding it:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
+
     final configuration = CrosswordConfiguration(
       bottomRight: bottomRight,
       chunkSize: sectionSize,
@@ -39,6 +41,7 @@ class Crossword2View extends StatelessWidget {
       ),
       child: DefaultTransformationController(
         child: CrosswordInteractiveViewer(
+          zoomLimit: zoomLimit,
           builder: (_, __) => _CrosswordStack(
             configuration: configuration,
           ),

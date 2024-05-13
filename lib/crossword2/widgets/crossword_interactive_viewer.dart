@@ -15,6 +15,7 @@ class CrosswordInteractiveViewer extends StatefulWidget {
   /// {@macro crossword_interactive_viewer}
   const CrosswordInteractiveViewer({
     required this.builder,
+    this.zoomLimit = 0.7,
     super.key,
   });
 
@@ -29,6 +30,8 @@ class CrosswordInteractiveViewer extends StatefulWidget {
   /// * [InteractiveViewer.builder], which is used to build the
   /// [InteractiveViewer].
   final InteractiveViewerWidgetBuilder builder;
+
+  final double zoomLimit;
 
   @override
   State<CrosswordInteractiveViewer> createState() =>
@@ -66,6 +69,12 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// It is assumed it is the identity of multiplication.
   final _idealScale = 1.0;
 
+  /// The maximum scale to be used.
+  final _maxScale = 1.4;
+
+  @visibleForTesting
+  double get maxScale => _maxScale;
+
   @visibleForTesting
   double get currentScale =>
       _transformationController.value.getMaxScaleOnAxis().roundTo(3);
@@ -86,6 +95,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewportSize = viewport.reduced(layout);
 
     final scaleEnd = currentScale + value;
+
+    if (scaleEnd < widget.zoomLimit || scaleEnd > _maxScale) return;
+
     final desiredScale = scaleEnd / currentScale;
 
     final viewportCenter = Offset(
@@ -257,8 +269,8 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           return Stack(
             children: [
               InteractiveViewer.builder(
-                minScale: 0.6,
-                maxScale: 1.8,
+                minScale: widget.zoomLimit,
+                maxScale: _maxScale,
                 panEnabled: state.word == null,
                 transformationController: _transformationController,
                 builder: (context, quad) {
