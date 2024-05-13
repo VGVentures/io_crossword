@@ -15,7 +15,7 @@ class CrosswordInteractiveViewer extends StatefulWidget {
   /// {@macro crossword_interactive_viewer}
   const CrosswordInteractiveViewer({
     required this.builder,
-    this.zoomLimit = 0.7,
+    required this.zoomLimit,
     super.key,
   });
 
@@ -69,7 +69,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// It is assumed it is the identity of multiplication.
   final _idealScale = 1.0;
 
-  /// The maximum scale to be used.
+  /// The maximum scale to be used when the board is zoomed in.
   final _maxScale = 1.4;
 
   @visibleForTesting
