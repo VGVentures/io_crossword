@@ -382,17 +382,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
               padding: EdgeInsets.all(45),
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // TODO(marwfair): Create a custom TabBarSelector.
-                    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6422570849
-                    // TabPageSelector(
-                    //   controller: _tabController,
-                    // ),
-                    _TeamSelector(),
-                  ],
-                ),
+                child: _TeamSelector(),
               ),
             ),
           ],
@@ -412,6 +402,7 @@ class _TeamSelector extends StatelessWidget {
         context.select((TeamSelectionCubit cubit) => cubit.state.index);
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 302,

@@ -76,7 +76,6 @@ class CrosswordView extends StatelessWidget {
           case RandomWordSelectionStatus.loading:
             RandomWordLoadingDialog.openDialog(context);
           case RandomWordSelectionStatus.notFound:
-          // TODO(hugo): Show popup notifying that the crossword is complete.
           case RandomWordSelectionStatus.initial:
           case RandomWordSelectionStatus.failure:
             break;
