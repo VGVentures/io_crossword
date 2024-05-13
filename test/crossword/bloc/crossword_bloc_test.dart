@@ -249,8 +249,8 @@ void main() {
 
     group('BoardLoadingInfoFetched', () {
       blocTest<CrosswordBloc, CrosswordState>(
-        'emits same state with updated size and render limits info when'
-        ' state is CrosswordState',
+        'emits same state with updated size, render limit and bottom right'
+        ' info when state is CrosswordState',
         build: () => CrosswordBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -260,6 +260,8 @@ void main() {
               .thenAnswer((_) => Future.value(20));
           when(boardInfoRepository.getZoomLimit)
               .thenAnswer((_) => Future.value(0.8));
+          when(boardInfoRepository.getBottomRight)
+              .thenAnswer((_) => Future.value(Point(1, 1)));
         },
         seed: () => CrosswordState(
           status: CrosswordStatus.success,
@@ -272,6 +274,7 @@ void main() {
             status: CrosswordStatus.success,
             sectionSize: 20,
             zoomLimit: 0.8,
+            bottomRight: (1, 1),
           ),
         ],
       );
@@ -307,6 +310,29 @@ void main() {
               .thenThrow(Exception('error'));
           when(boardInfoRepository.getZoomLimit)
               .thenAnswer((_) => Future.value(0.8));
+        },
+        seed: () => CrosswordState(sectionSize: sectionSize, sections: {}),
+        act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.failure,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [failure] state if getBottomRight fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(boardInfoRepository.getSectionSize)
+              .thenAnswer((_) => Future.value(20));
+          when(boardInfoRepository.getZoomLimit)
+              .thenAnswer((_) => Future.value(0.8));
+          when(boardInfoRepository.getBottomRight)
+              .thenThrow(Exception('error'));
         },
         seed: () => CrosswordState(sectionSize: sectionSize, sections: {}),
         act: (bloc) => bloc.add(BoardLoadingInformationRequested()),
