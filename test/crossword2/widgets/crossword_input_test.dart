@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -15,10 +16,9 @@ class _MockWordSelectionBloc
     extends MockBloc<WordSelectionEvent, WordSelectionState>
     implements WordSelectionBloc {}
 
-class _MockIoWordInputController extends Mock implements IoWordInputController {
-  @override
-  void updateWord(String word, {bool isInitial = false}) {}
-}
+class _MockAnimationController extends Mock implements AnimationController {}
+
+class _MockTickerFuture extends Mock implements TickerFuture {}
 
 void main() {
   group('$CrosswordInput', () {
@@ -97,7 +97,7 @@ void main() {
     }
 
     testWidgets(
-      'incorrect attempt causes word controller to reset',
+      'incorrect attempt causes word controller to shake',
       (tester) async {
         whenListen(
           wordSelectionBloc,
@@ -110,16 +110,22 @@ void main() {
             status: WordSelectionStatus.solving,
           ),
         );
-        final controller = _MockIoWordInputController();
+
+        final animationController = _MockAnimationController();
+
+        when(() => animationController.value).thenReturn(0);
+        when(() => animationController.forward(from: 0))
+            .thenAnswer((_) => _MockTickerFuture());
+        when(animationController.dispose).thenAnswer((_) async {});
 
         await tester.pumpApp(
-          IoWordInputControllerScope(
-            wordInputController: controller,
+          DefaultWordInputController(
             child: BlocProvider.value(
               value: wordSelectionBloc,
-              child: const CrosswordInput(
+              child: CrosswordInput(
                 length: 5,
                 characters: null,
+                animationController: animationController,
               ),
             ),
           ),
@@ -127,7 +133,7 @@ void main() {
 
         await tester.pump();
 
-        verify(() => controller.reset(initialCharacters: null)).called(1);
+        verify(() => animationController.forward(from: 0)).called(1);
       },
     );
 
