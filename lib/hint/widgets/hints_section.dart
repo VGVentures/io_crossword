@@ -105,7 +105,7 @@ class HintQuestionResponse extends StatelessWidget {
       children: [
         Text(
           'Q$questionNumber: ${hint.question}',
-          style: textTheme.bodySmall?.copyWith(
+          style: IoCrosswordTextStyles.mobile.body.copyWith(
             color: IoCrosswordColors.softGray,
           ),
           textAlign: TextAlign.center,

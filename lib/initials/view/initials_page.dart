@@ -64,7 +64,7 @@ class _InitialsViewState extends State<InitialsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
 
     return BlocListener<InitialsBloc, InitialsState>(
       listenWhen: (previous, current) => current.initials.isValid,
@@ -86,7 +86,7 @@ class _InitialsViewState extends State<InitialsView> {
                     Text(
                       l10n.enterInitials,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineLarge,
+                      style: textTheme.heading1,
                     ),
                     const SizedBox(height: 32),
                     IoWordInput.alphabetic(

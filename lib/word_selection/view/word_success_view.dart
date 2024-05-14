@@ -81,7 +81,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 342),
             child: Text(
               l10n.claimBadgeDescription,
-              style: IoCrosswordTextStyles.labelMD
+              style: IoCrosswordTextStyles.desktop.body5
                   .copyWith(color: IoCrosswordColors.softGray),
               textAlign: TextAlign.center,
             ),
@@ -91,7 +91,7 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ClaimBadgeButton(),
-              SizedBox(width: 16),
+              Spacer(),
               KeepPlayingButton(),
             ],
           ),
@@ -147,14 +147,14 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       l10n.or,
-                      style: IoCrosswordTextStyles.labelMD
+                      style: IoCrosswordTextStyles.mobile.body3
                           .copyWith(color: IoCrosswordColors.softGray),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       l10n.claimBadgeDescription,
-                      style: IoCrosswordTextStyles.labelMD
+                      style: IoCrosswordTextStyles.mobile.body3
                           .copyWith(color: IoCrosswordColors.softGray),
                       textAlign: TextAlign.center,
                     ),
@@ -193,7 +193,7 @@ class SuccessTopBar extends StatelessWidget {
         ),
         Text(
           l10n.wordSolved,
-          style: IoCrosswordTextStyles.headlineSM,
+          style: IoCrosswordTextStyles.mobile.heading1,
         ),
         const CloseWordSelectionIconButton(),
       ],
@@ -264,13 +264,14 @@ class _StatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: IoCrosswordTextStyles.labelMD,
+          style: textTheme.body3,
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -283,7 +284,7 @@ class _StatsRow extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               value,
-              style: IoCrosswordTextStyles.labelMD,
+              style: textTheme.body3,
             ),
           ],
         ),

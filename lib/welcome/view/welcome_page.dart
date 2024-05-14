@@ -117,7 +117,7 @@ class WelcomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
     final l10n = context.l10n;
 
     return ConstrainedBox(
@@ -128,12 +128,12 @@ class WelcomeBody extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             l10n.welcome,
-            style: theme.textTheme.headlineSmall,
+            style: textTheme.heading1,
           ),
           const SizedBox(height: 32),
           Text(
             l10n.welcomeSubtitle,
-            style: theme.textTheme.bodyMedium,
+            style: textTheme.body,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),

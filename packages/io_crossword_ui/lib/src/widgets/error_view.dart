@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 
 /// {@template error_view}
 /// A widget used when there is an error.
@@ -38,7 +39,7 @@ class ErrorView extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             title,
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).io.textStyles.h2,
             textAlign: TextAlign.center,
           ),
           if (buttonTitle != null)

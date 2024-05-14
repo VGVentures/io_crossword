@@ -56,13 +56,13 @@ class ShareWordPage extends StatelessWidget {
         Text(
           l10n.shareWordTitle,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyLarge.regular,
+          style: themeData.io.textStyles.body,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         Text(
           l10n.shareWordSubtitle,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyLarge.regular,
+          style: themeData.io.textStyles.body,
         ),
         const SizedBox(height: IoCrosswordSpacing.xxlg),
         SingleChildScrollView(
@@ -75,8 +75,8 @@ class ShareWordPage extends StatelessWidget {
         const SizedBox(height: IoCrosswordSpacing.xlg),
         Text(
           word.clue,
-          style: themeData.textTheme.bodyLarge.regular
-              ?.copyWith(color: themeData.colorScheme.primary),
+          style: themeData.io.textStyles.body
+              .copyWith(color: themeData.colorScheme.primary),
           textAlign: TextAlign.center,
         ),
       ],

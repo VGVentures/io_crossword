@@ -12,27 +12,36 @@ class HowMade extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
     const linkColor = IoCrosswordColors.linkBlue;
+    const textColor = IoCrosswordColors.seedWhite;
 
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         text: '${l10n.learn} ',
-        style: textTheme.titleMedium,
+        style: textTheme.body.copyWith(
+          color: textColor,
+        ),
         children: [
           TextSpan(
             text: l10n.howMade,
-            style: textTheme.titleMedium?.copyWith(
+            style: textTheme.body.copyWith(
               color: linkColor,
             ),
             // TODO(Ayad): add link
             // recognizer: TapGestureRecognizer()..onTap = () {},
           ),
-          TextSpan(text: ' ${l10n.and} '),
+          TextSpan(
+            text: ' ${l10n.and} ',
+            style: textTheme.body
+              ..copyWith(
+                color: textColor,
+              ),
+          ),
           TextSpan(
             text: l10n.openSourceCode,
-            style: textTheme.titleMedium?.copyWith(
+            style: textTheme.body.copyWith(
               color: linkColor,
             ),
             recognizer: TapGestureRecognizer()
@@ -40,8 +49,11 @@ class HowMade extends StatelessWidget {
                 context.launchUrl(ProjectDetailsLinks.github);
               },
           ),
-          const TextSpan(
+          TextSpan(
             text: '.',
+            style: textTheme.body.copyWith(
+              color: textColor,
+            ),
           ),
         ],
       ),

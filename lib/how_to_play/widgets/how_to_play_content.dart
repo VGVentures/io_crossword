@@ -137,6 +137,8 @@ class _TabSelector extends StatelessWidget {
 
     final index = context.select((HowToPlayCubit cubit) => cubit.state).index;
 
+    final textTheme = Theme.of(context).io.textStyles;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -151,7 +153,7 @@ class _TabSelector extends StatelessWidget {
               : null,
           child: Text(
             l10n.backButtonLabel,
-            style: TextStyle(
+            style: textTheme.body2.copyWith(
               color: index > 0
                   ? IoCrosswordColors.seedWhite
                   : IoCrosswordColors.softGray,
@@ -174,7 +176,7 @@ class _TabSelector extends StatelessWidget {
             index < tabController.length - 1
                 ? l10n.nextButtonLabel
                 : l10n.doneButtonLabel,
-            style: const TextStyle(color: IoCrosswordColors.seedWhite),
+            style: textTheme.body2.copyWith(color: IoCrosswordColors.seedWhite),
           ),
         ),
       ],
@@ -210,10 +212,7 @@ class HowToPlayStep extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+            style: Theme.of(context).io.textStyles.h2,
           ),
           const SizedBox(height: 24),
           Container(
@@ -234,10 +233,7 @@ class HowToPlayStep extends StatelessWidget {
                 : largeTextHeight,
             child: Text(
               message,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
+              style: Theme.of(context).io.textStyles.body3,
             ),
           ),
         ],

@@ -50,7 +50,6 @@ class BottomBarContent extends StatelessWidget {
               },
               child: Text(
                 l10n.endGame,
-                style: theme.textTheme.bodySmall,
               ),
             ),
             const SizedBox(width: 16),

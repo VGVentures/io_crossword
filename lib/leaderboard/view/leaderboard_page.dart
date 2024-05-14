@@ -46,7 +46,10 @@ class LeaderboardView extends StatelessWidget {
 
     return Scaffold(
       appBar: IoAppBar(
-        title: Text(l10n.leaderboard),
+        title: Text(
+          l10n.leaderboard,
+          style: IoCrosswordTextStyles.mobile.h2,
+        ),
         crossword: l10n.crossword,
         actions: (context) {
           return const CloseButton();

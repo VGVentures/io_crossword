@@ -21,6 +21,7 @@ class IoCrosswordTheme {
       wordInput: _textInput,
       outlineButtonTheme: _ioOutlineButtonTheme,
       crosswordLetterTheme: _crosswordLetterTheme,
+      textStyles: _textStyles,
     );
 
     return ThemeData(
@@ -266,7 +267,7 @@ class IoCrosswordTheme {
         backgroundColor: IoCrosswordColors.darkGray,
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        textStyle: IoCrosswordTextStyles.bodyLG.medium,
+        textStyle: _textStyles.body2,
       ).copyWith(
         shape: MaterialStateProperty.resolveWith(
           (states) {
@@ -420,11 +421,11 @@ class IoCrosswordTheme {
   }
 
   IoCrosswordLetterTheme get _crosswordLetterTheme {
-    final textTheme = _textTheme;
+    final textTheme = _textStyles;
     final colorScheme = this.colorScheme;
 
     final border = Border.all(color: colorScheme.background);
-    final textStyle = textTheme.titleLarge!.copyWith(
+    final textStyle = textTheme.h2.copyWith(
       color: colorScheme.background,
       height: 1.1,
     );
@@ -461,7 +462,7 @@ class IoCrosswordTheme {
   static FilledButtonThemeData get _filledButtonThemeData {
     return FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        textStyle: IoCrosswordTextStyles.bodyLG,
+        textStyle: _textStyles.body2,
         minimumSize: const Size(140, 56),
         backgroundColor: const Color(0XFF393B40),
         foregroundColor: Colors.white,
@@ -516,7 +517,7 @@ class IoCrosswordTheme {
 
     return InputDecorationTheme(
       outlineBorder: borderSide,
-      hintStyle: _textTheme.bodyLarge?.copyWith(
+      hintStyle: _textStyles.body.copyWith(
         color: const Color(0xFF80858B),
         fontWeight: FontWeight.w400,
       ),
@@ -563,5 +564,14 @@ class IoCrosswordTheme {
     return isMobile
         ? IoCrosswordTextStyles.mobile.textTheme
         : IoCrosswordTextStyles.desktop.textTheme;
+  }
+
+  static IoCrosswordTextStyles get _textStyles {
+    final isMobile = defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+
+    return isMobile
+        ? IoCrosswordTextStyles.mobile
+        : IoCrosswordTextStyles.desktop;
   }
 }

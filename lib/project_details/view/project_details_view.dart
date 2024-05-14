@@ -60,7 +60,7 @@ class ProjectDetailsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
     const linkColor = IoCrosswordColors.linkBlue;
     final layout = IoLayout.of(context);
     final verticalSpacing = layout == IoLayoutData.small ? 24.0 : 40.0;
@@ -110,15 +110,13 @@ class ProjectDetailsContent extends StatelessWidget {
                   SizedBox(height: verticalSpacing),
                   Text(
                     '${l10n.otherLinks}:',
-                    style: textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: textTheme.body,
                   ),
                   const SizedBox(height: 8),
                   RichText(
                     text: TextSpan(
                       text: 'Google I/O',
-                      style: textTheme.bodyLarge?.copyWith(
+                      style: textTheme.body.copyWith(
                         color: linkColor,
                         decoration: TextDecoration.underline,
                         decorationColor: linkColor,
@@ -133,7 +131,7 @@ class ProjectDetailsContent extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: l10n.privacyPolicy,
-                      style: textTheme.bodyLarge?.copyWith(
+                      style: textTheme.body.copyWith(
                         color: linkColor,
                         decoration: TextDecoration.underline,
                         decorationColor: linkColor,
@@ -148,7 +146,7 @@ class ProjectDetailsContent extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: l10n.termsOfService,
-                      style: textTheme.bodyLarge?.copyWith(
+                      style: textTheme.body.copyWith(
                         color: linkColor,
                         decoration: TextDecoration.underline,
                         decorationColor: linkColor,
@@ -163,7 +161,7 @@ class ProjectDetailsContent extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: l10n.faqs,
-                      style: textTheme.bodyLarge?.copyWith(
+                      style: textTheme.body.copyWith(
                         color: linkColor,
                         decoration: TextDecoration.underline,
                         decorationColor: linkColor,
@@ -190,11 +188,11 @@ class _ProjectDetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Text(
       l10n.projectDetails,
-      style: textTheme.titleLarge,
+      style: textTheme.h2,
     );
   }
 }

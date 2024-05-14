@@ -65,7 +65,7 @@ class LoadingView extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             l10n.findRandomWordLoadingText,
-            style: theme.textTheme.labelMedium.bold,
+            style: theme.io.textStyles.body3,
           ),
         ],
       ),
