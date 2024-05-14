@@ -14,12 +14,6 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
   });
 
   @override
-  WordCandidate? get nextCandidate {
-    if (crossword.words.length > 50000) return null;
-    return super.nextCandidate;
-  }
-
-  @override
   void add(WordEntry entry) {
     super.add(entry);
 
@@ -31,18 +25,21 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
 
   @override
   void seed() {
-    final constraints = ConstrainedWordCandidate(
-      invalidLengths: {
-        for (int i = 2; i <= pool.longestWordLength; i += 2) i,
-      },
+    final bounds = crossword.bounds!;
+
+    const constraints = ConstrainedWordCandidate(
+      invalidLengths: {},
       start: Location.zero,
-      direction: Direction.down,
-      constraints: const {0: 'a'},
+      direction: Direction.across,
+      constraints: {0: 'a'},
     );
     final word = pool.firstMatch(constraints)!;
     final entry = WordEntry(
       word: word,
-      start: Location(x: 0, y: 0 - (word.length ~/ 2)),
+      start: Location(
+        x: bounds.topLeft.x,
+        y: bounds.topLeft.y,
+      ),
       direction: constraints.direction,
     );
     add(entry);
