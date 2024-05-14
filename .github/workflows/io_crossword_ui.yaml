@@ -16,6 +16,6 @@ jobs:
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      flutter_channel: stable
+      flutter_version: 3.19.6
       working_directory: packages/io_crossword_ui
       coverage_excludes: "**/*.g.dart"
