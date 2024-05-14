@@ -76,5 +76,27 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'calls launchUrl when tapped on "How crossword was made"',
+      (tester) async {
+        await tester.pumpApp(HowMade());
+
+        final finder = find.byWidgetPredicate(
+          (widget) =>
+              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+        );
+
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        verify(
+          () => urlLauncher.launchUrl(
+            'https://flutter.dev/crossword',
+            any(),
+          ),
+        );
+      },
+    );
   });
 }

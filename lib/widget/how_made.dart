@@ -26,8 +26,8 @@ class HowMade extends StatelessWidget {
             style: textTheme.titleMedium?.copyWith(
               color: linkColor,
             ),
-            // TODO(Ayad): add link
-            // recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => context.launchUrl(ProjectDetailsLinks.blogPost),
           ),
           TextSpan(text: ' ${l10n.and} '),
           TextSpan(
@@ -36,9 +36,7 @@ class HowMade extends StatelessWidget {
               color: linkColor,
             ),
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                context.launchUrl(ProjectDetailsLinks.github);
-              },
+              ..onTap = () => context.launchUrl(ProjectDetailsLinks.github),
           ),
           const TextSpan(
             text: '.',
