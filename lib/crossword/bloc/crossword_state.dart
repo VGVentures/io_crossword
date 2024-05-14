@@ -2,8 +2,9 @@ part of 'crossword_bloc.dart';
 
 enum CrosswordStatus {
   initial,
-  success,
   failure,
+  success,
+  ready,
 }
 
 enum BoardStatus {
@@ -21,6 +22,7 @@ class CrosswordState extends Equatable {
     this.zoomLimit = 0.35,
     this.mascotVisible = true,
     this.bottomRight = (0, 0),
+    this.initialWord,
   });
 
   final CrosswordStatus status;
@@ -31,6 +33,7 @@ class CrosswordState extends Equatable {
   final double zoomLimit;
   final bool mascotVisible;
   final CrosswordChunkIndex bottomRight;
+  final SelectedWord? initialWord;
 
   CrosswordState copyWith({
     CrosswordStatus? status,
@@ -42,6 +45,7 @@ class CrosswordState extends Equatable {
     bool? mascotVisible,
     CrosswordConfiguration? configuration,
     CrosswordChunkIndex? bottomRight,
+    SelectedWord? initialWord,
   }) {
     return CrosswordState(
       status: status ?? this.status,
@@ -52,6 +56,7 @@ class CrosswordState extends Equatable {
       zoomLimit: zoomLimit ?? this.zoomLimit,
       mascotVisible: mascotVisible ?? this.mascotVisible,
       bottomRight: bottomRight ?? this.bottomRight,
+      initialWord: initialWord ?? this.initialWord,
     );
   }
 
@@ -65,5 +70,6 @@ class CrosswordState extends Equatable {
         zoomLimit,
         mascotVisible,
         bottomRight,
+        initialWord,
       ];
 }

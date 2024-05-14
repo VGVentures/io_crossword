@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -139,6 +140,74 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _zoom(-0.2, context);
   }
 
+  void _centerSelectedSection(BuildContext context) {
+    final selectedWord = context.read<CrosswordBloc>().state.initialWord;
+
+    if (selectedWord == null) return;
+
+    final viewport = _viewport;
+    if (viewport == null) return;
+
+    final layout = IoLayout.of(context);
+    final crosswordLayout = CrosswordLayoutScope.of(context);
+
+    _maxTranslation.setValues(
+      -(crosswordLayout.crosswordSize.width +
+              crosswordLayout.padding.horizontal) +
+          viewport.width,
+      -(crosswordLayout.crosswordSize.height +
+              crosswordLayout.padding.vertical) +
+          viewport.height,
+      0,
+    );
+
+    final viewportSize = viewport.reduced(layout);
+    final beginViewportSize = viewportSize * currentScale;
+
+    final requiredWordSize =
+        selectedWord.word.size(crosswordLayout) * _idealScale;
+
+    final scaleEnd = math
+        .min(
+          beginViewportSize.width < requiredWordSize.width
+              ? beginViewportSize.width / requiredWordSize.width
+              : _idealScale,
+          beginViewportSize.height < requiredWordSize.height
+              ? beginViewportSize.height / requiredWordSize.height
+              : _idealScale,
+        )
+        .roundTo(3);
+
+    final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
+    final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
+    final endWordCenter = endWordRect.center;
+
+    final endViewportCenter = Vector3(
+      (beginViewportSize.width / 2).roundTo(3),
+      (beginViewportSize.height / 2).roundTo(3),
+      0,
+    );
+
+    final translationEnd = endViewportCenter -
+        Vector3(
+          endWordCenter.dx,
+          endWordCenter.dy,
+          0,
+        )
+      ..scale(scaleEnd);
+    translationEnd
+      ..x = math.max(
+        math.min(translationEnd.x, _minTranslation.x),
+        _maxTranslation.x,
+      )
+      ..y = math.max(
+        math.min(translationEnd.y, _minTranslation.y),
+        _maxTranslation.y,
+      );
+
+    _transformationController.value = Matrix4.translation(translationEnd);
+  }
+
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
     if (animationController == null) return;
@@ -239,6 +308,15 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _centerSelectedSection(context);
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transformationController = DefaultTransformationController.of(context);
@@ -258,12 +336,11 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   Widget build(BuildContext context) {
     return BlocListener<WordSelectionBloc, WordSelectionState>(
       listenWhen: (previous, current) =>
-          previous.word != current.word && current.word != null,
+          previous.word != current.word && current.word == null,
       listener: (context, state) => _centerSelectedWord(context),
       child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-        buildWhen: (previous, current) {
-          return (previous.word != null) != (current.word != null);
-        },
+        buildWhen: (previous, current) =>
+            previous.word != current.word || current.word == null,
         builder: (context, state) {
           final layout = IoLayout.of(context);
           return Stack(
@@ -276,7 +353,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
                 builder: (context, quad) {
                   _viewport = quad;
 
-                  _centerSelectedWord(context);
+                  if (state.word != null) {
+                    _centerSelectedWord(context);
+                  }
 
                   return QuadScope(
                     data: quad,

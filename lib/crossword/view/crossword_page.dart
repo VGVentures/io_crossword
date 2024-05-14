@@ -52,7 +52,7 @@ class CrosswordPage extends StatelessWidget {
           BlocProvider(
             create: (_) => RandomWordSelectionBloc(
               crosswordRepository: context.read<CrosswordRepository>(),
-            )..add(const RandomWordRequested()),
+            ),
           ),
         ],
         child: const CrosswordView(),
@@ -70,37 +70,63 @@ class CrosswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocListener<RandomWordSelectionBloc, RandomWordSelectionState>(
-      listenWhen: (previous, current) => previous.status != current.status,
-      listener: (context, state) {
-        switch (state.status) {
-          case RandomWordSelectionStatus.loading:
-            RandomWordLoadingDialog.openDialog(context);
-          case RandomWordSelectionStatus.notFound:
-          // TODO(hugo): Show popup notifying that the crossword is complete.
-          case RandomWordSelectionStatus.initial:
-          case RandomWordSelectionStatus.failure:
-            break;
-          case RandomWordSelectionStatus.success:
-            final position = (
-              state.uncompletedSection!.position.x,
-              state.uncompletedSection!.position.y
-            );
-            context.read<CrosswordBloc>().add(
-                  BoardSectionRequested(position),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CrosswordBloc, CrosswordState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            if (state.status == CrosswordStatus.success) {
+              context.read<RandomWordSelectionBloc>().add(
+                    const RandomWordInitialRequested(),
+                  );
+            }
+          },
+        ),
+        BlocListener<RandomWordSelectionBloc, RandomWordSelectionState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            switch (state.status) {
+              case RandomWordSelectionStatus.loading:
+              case RandomWordSelectionStatus.notFound:
+              case RandomWordSelectionStatus.initial:
+              case RandomWordSelectionStatus.failure:
+                break;
+              case RandomWordSelectionStatus.initialSuccess:
+                final position = (
+                  state.uncompletedSection!.position.x,
+                  state.uncompletedSection!.position.y
                 );
-            context.read<WordSelectionBloc>().add(
-                  WordSelected(
-                    selectedWord: SelectedWord(
-                      section: position,
-                      word: state.uncompletedSection!.words.firstWhere(
-                        (element) => element.solvedTimestamp == null,
-                      ),
-                    ),
+
+                final initialWord = SelectedWord(
+                  section: position,
+                  word: state.uncompletedSection!.words.firstWhere(
+                    (element) => element.solvedTimestamp == null,
                   ),
                 );
-        }
-      },
+
+                context
+                    .read<CrosswordBloc>()
+                    .add(CrosswordSectionsLoaded(initialWord));
+              case RandomWordSelectionStatus.success:
+                final position = (
+                  state.uncompletedSection!.position.x,
+                  state.uncompletedSection!.position.y
+                );
+
+                context.read<WordSelectionBloc>().add(
+                      WordSelected(
+                        selectedWord: SelectedWord(
+                          section: position,
+                          word: state.uncompletedSection!.words.firstWhere(
+                            (element) => element.solvedTimestamp == null,
+                          ),
+                        ),
+                      ),
+                    );
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         endDrawer: const CrosswordDrawer(),
         appBar: IoAppBar(
@@ -130,13 +156,17 @@ class CrosswordView extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                switch (state.status) {
-                  CrosswordStatus.initial => const SizedBox.shrink(),
-                  CrosswordStatus.success => const LoadedBoardView(),
-                  CrosswordStatus.failure => ErrorView(
-                      title: l10n.errorPromptText,
-                    ),
-                },
+                if (state.status == CrosswordStatus.failure)
+                  ErrorView(
+                    title: l10n.errorPromptText,
+                  )
+                else
+                  AnimatedSwitcher(
+                    duration: const Duration(seconds: 2),
+                    child: state.status == CrosswordStatus.ready
+                        ? const LoadedBoardView()
+                        : const SizedBox.shrink(),
+                  ),
                 if (state.mascotVisible)
                   Align(
                     child: Hero(

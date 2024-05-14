@@ -100,12 +100,6 @@ class _CrosswordStack extends StatelessWidget {
         if (isChunkVisible(loadedChunk)) loadedChunk,
     };
 
-    context.read<CrosswordBloc>().add(LoadedSectionsSuspended(loadedChunks));
-
-    for (final chunk in loadedChunks) {
-      context.read<CrosswordBloc>().add(BoardSectionRequested(chunk));
-    }
-
     return SizedBox.fromSize(
       size: crosswordLayout.padding.inflateSize(crosswordLayout.crosswordSize),
       child: Stack(
