@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/project_details/view/project_details_view.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/widget/widget.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
