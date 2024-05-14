@@ -25,7 +25,7 @@ class TeamSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamSelectionCubit(),
+      create: (_) => TeamSelectionCubit()..loadAssets(),
       child: const TeamSelectionView(),
     );
   }
@@ -47,10 +47,13 @@ class TeamSelectionView extends StatelessWidget {
         actions: (context) => const MuteButton(),
       ),
       body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
-        builder: (context, state) => switch (layout) {
-          IoLayoutData.small => const _TeamSelectorSmall(),
-          IoLayoutData.large => const _TeamSelectorLarge(),
-        },
+        builder: (context, state) =>
+            state.assetsStatus == AssetsLoadingStatus.inProgress
+                ? const SizedBox.shrink()
+                : switch (layout) {
+                    IoLayoutData.small => const _TeamSelectorSmall(),
+                    IoLayoutData.large => const _TeamSelectorLarge(),
+                  },
       ),
     );
   }
@@ -342,7 +345,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
-                                  child: TeamSelectionMascot(Mascots.dash),
+                                  child: _SmallMascot(Mascots.dash),
                                 ),
                               ),
                               Positioned(
@@ -350,7 +353,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
-                                  child: TeamSelectionMascot(Mascots.sparky),
+                                  child: _SmallMascot(Mascots.sparky),
                                 ),
                               ),
                               Positioned(
@@ -358,7 +361,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
-                                  child: TeamSelectionMascot(Mascots.android),
+                                  child: _SmallMascot(Mascots.android),
                                 ),
                               ),
                               Positioned(
@@ -366,7 +369,7 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                                 child: SizedBox(
                                   width: 200,
                                   height: 400,
-                                  child: TeamSelectionMascot(Mascots.dino),
+                                  child: _SmallMascot(Mascots.dino),
                                 ),
                               ),
                             ],
@@ -503,5 +506,26 @@ class _SmallPlatform extends StatelessWidget {
         selected: index == mascot.index,
       ),
     );
+  }
+}
+
+class _SmallMascot extends StatelessWidget {
+  const _SmallMascot(
+    this.mascot,
+  );
+
+  final Mascots mascot;
+
+  @override
+  Widget build(BuildContext context) {
+    final index =
+        context.select((TeamSelectionCubit cubit) => cubit.state.index);
+
+    return index == mascot.index
+        ? TeamSelectionMascot(mascot)
+        : Image.asset(
+            mascot.teamMascot.idleUnselected.path,
+            alignment: Alignment.bottomCenter,
+          );
   }
 }

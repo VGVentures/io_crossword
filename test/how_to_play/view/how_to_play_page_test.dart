@@ -3,6 +3,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +14,8 @@ import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
-import 'package:io_crossword/team_selection/team_selection.dart';
+import 'package:io_crossword/team_selection/team_selection.dart'
+    hide AssetsLoadingStatus;
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
@@ -33,14 +35,14 @@ class _MockRoute extends Mock implements Route<dynamic> {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() async {
+  setUp(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      ...Mascots.dash.teamMascot.loadableAssets(),
-      ...Mascots.android.teamMascot.loadableAssets(),
-      ...Mascots.dino.teamMascot.loadableAssets(),
-      ...Mascots.sparky.teamMascot.loadableAssets(),
+      ...Mascots.dash.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascots.dash.teamMascot.loadableHowToPlayMobileAssets(),
     ]);
+
+    registerFallbackValue(Mascots.dash);
   });
 
   group('$HowToPlayPage', () {
@@ -145,7 +147,13 @@ void main() {
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
-      when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
+      when(() => howToPlayCubit.loadAssets(any())).thenAnswer((_) async {});
+
+      when(() => howToPlayCubit.state).thenReturn(
+        HowToPlayState(
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
 
       when(() => playerBloc.state)
           .thenReturn(PlayerState(mascot: Mascots.dash));
@@ -198,8 +206,14 @@ void main() {
             howToPlayCubit,
             Stream.fromIterable(
               [
-                HowToPlayState(status: HowToPlayStatus.pickingUp),
-                HowToPlayState(status: HowToPlayStatus.complete),
+                HowToPlayState(
+                  status: HowToPlayStatus.pickingUp,
+                  assetsStatus: AssetsLoadingStatus.success,
+                ),
+                HowToPlayState(
+                  status: HowToPlayStatus.complete,
+                  assetsStatus: AssetsLoadingStatus.success,
+                ),
               ],
             ),
             initialState: HowToPlayState(),
@@ -256,7 +270,12 @@ void main() {
           'when done button is pressed', (tester) async {
         final l10n = await AppLocalizations.delegate.load(Locale('en'));
 
-        when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 4));
+        when(() => howToPlayCubit.state).thenReturn(
+          HowToPlayState(
+            index: 4,
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
+        );
 
         when(() => gameIntroBloc.state).thenReturn(
           GameIntroState(
@@ -277,39 +296,23 @@ void main() {
     }
 
     group('displays', () {
-      for (final status in GameIntroPlayerCreationStatus.values.toList()
-        ..remove(GameIntroPlayerCreationStatus.inProgress)) {
-        testWidgets(
-            'an $PlayNowButton with $status'
-            'when small layout', (tester) async {
-          when(() => gameIntroBloc.state)
-              .thenReturn(GameIntroState(status: status));
+      testWidgets('a $PlayNowButton when small layout', (tester) async {
+        await tester.pumpApp(
+          widget,
+          layout: IoLayoutData.small,
+        );
 
-          await tester.pumpApp(
-            widget,
-            layout: IoLayoutData.small,
-          );
+        expect(find.byType(PlayNowButton), findsOneWidget);
+      });
 
-          expect(find.byType(PlayNowButton), findsOneWidget);
-        });
-      }
+      testWidgets('a $PlayNowButton when large layout', (tester) async {
+        await tester.pumpApp(
+          widget,
+          layout: IoLayoutData.large,
+        );
 
-      for (final status in GameIntroPlayerCreationStatus.values.toList()
-        ..remove(GameIntroPlayerCreationStatus.inProgress)) {
-        testWidgets(
-            'an $PlayNowButton with $status'
-            'when large layout', (tester) async {
-          when(() => gameIntroBloc.state)
-              .thenReturn(GameIntroState(status: status));
-
-          await tester.pumpApp(
-            widget,
-            layout: IoLayoutData.large,
-          );
-
-          expect(find.byType(PlayNowButton), findsOneWidget);
-        });
-      }
+        expect(find.byType(PlayNowButton), findsOneWidget);
+      });
 
       testWidgets('localized playNow text', (tester) async {
         late final AppLocalizations l10n;
@@ -329,46 +332,41 @@ void main() {
         expect(find.text(l10n.playNow), findsOneWidget);
       });
 
-      for (final mascot in Mascots.values) {
-        testWidgets('renders LookUp animation for $mascot', (tester) async {
-          when(() => playerBloc.state).thenReturn(PlayerState(mascot: mascot));
+      testWidgets('renders LookUp animation for dash', (tester) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-          when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
-          await tester.pumpApp(
-            MultiBlocProvider(
-              providers: [
-                BlocProvider.value(
-                  value: gameIntroBloc,
-                ),
-                BlocProvider.value(
-                  value: howToPlayCubit,
-                ),
-                BlocProvider.value(
-                  value: playerBloc,
-                ),
-              ],
-              child: HowToPlayView(),
-            ),
-            layout: IoLayoutData.small,
-          );
-
-          final widget = find
-              .byType(SpriteAnimationList)
-              .evaluate()
-              .single
-              .widget as SpriteAnimationList;
-
-          expect(
-            widget.animationItems.contains(
-              AnimationItem(
-                spriteData: mascot.teamMascot.lookUpSpriteData,
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: gameIntroBloc,
               ),
+              BlocProvider.value(
+                value: howToPlayCubit,
+              ),
+              BlocProvider.value(
+                value: playerBloc,
+              ),
+            ],
+            child: HowToPlayView(),
+          ),
+          layout: IoLayoutData.small,
+        );
+
+        final widget = find.byType(SpriteAnimationList).evaluate().single.widget
+            as SpriteAnimationList;
+
+        expect(
+          widget.animationItems.contains(
+            AnimationItem(
+              spriteData: Mascots.dash.teamMascot.lookUpSpriteMobileData,
             ),
-            isTrue,
-          );
-        });
-      }
+          ),
+          isTrue,
+        );
+
+        debugDefaultTargetPlatformOverride = null;
+      });
 
       testWidgets('complete status is called when pickUp animation is done',
           (tester) async {
@@ -378,10 +376,15 @@ void main() {
           howToPlayCubit,
           Stream.fromIterable(
             [
-              HowToPlayState(status: HowToPlayStatus.pickingUp),
+              HowToPlayState(
+                status: HowToPlayStatus.pickingUp,
+                assetsStatus: AssetsLoadingStatus.success,
+              ),
             ],
           ),
-          initialState: HowToPlayState(),
+          initialState: HowToPlayState(
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
         );
 
         await tester.runAsync(() async {

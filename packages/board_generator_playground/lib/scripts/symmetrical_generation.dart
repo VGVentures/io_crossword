@@ -1,21 +1,8 @@
 import 'dart:io';
 
 import 'package:board_generator_playground/board_generator_playground.dart';
+import 'package:board_generator_playground/scripts/model/model.dart';
 import 'package:csv/csv.dart';
-import 'package:equatable/equatable.dart';
-
-class _WordClue extends Equatable {
-  const _WordClue({
-    required this.word,
-    required this.clue,
-  });
-
-  final String word;
-  final String clue;
-
-  @override
-  List<Object?> get props => [word, clue];
-}
 
 void main({
   void Function(String) log = print,
@@ -24,9 +11,9 @@ void main({
   final rows = const CsvToListConverter().convert(fileString);
 
   final wordsList = rows.map((row) {
-    return _WordClue(
+    return WordClue(
       word: (row[0] as String).replaceAll(' ', '').trim().toLowerCase(),
-      clue: row[2] as String,
+      clue: row[1] as String,
     );
   }).toList()
     ..removeWhere((element) => !RegExp(r'^[a-zA-Z]*$').hasMatch(element.word));
@@ -40,7 +27,7 @@ void main({
   final generator = SymmetricalCrosswordGenerator(
     pool: wordPool,
     crossword: Crossword(
-      bounds: Bounds.square(size: 320),
+      bounds: Bounds.square(size: 93),
       largestWordLength: wordPool.longestWordLength,
       shortestWordLength: wordPool.shortestWordLength,
     ),
@@ -59,6 +46,7 @@ void main({
 
   // Creates CSV file representing the crossword.
   final list = <List<dynamic>>[];
+  final wordsString = <String>{};
 
   for (final word in crossword.words) {
     final axis = word.direction == Direction.across ? 'horizontal' : 'vertical';
@@ -66,7 +54,13 @@ void main({
     final clue = wordsList.firstWhere((w) => w.word == word.word).clue;
 
     list.add([word.start.x, word.start.y, word.word, clue, axis]);
+
+    wordsString.add(word.word);
   }
+
+  final notUsedWords = wordsList.where((w) => !wordsString.contains(w.word));
+
+  log('Unused words: ${notUsedWords.length}');
 
   File('board.txt').writeAsStringSync(const ListToCsvConverter().convert(list));
 }

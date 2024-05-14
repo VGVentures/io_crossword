@@ -19,6 +19,16 @@ abstract class Team extends Equatable {
 
   AssetGenImage get dropInAnimation;
 
+  AssetGenImage get idleUnselected;
+
+  AssetGenImage get lookUpMobileAnimation;
+
+  AssetGenImage get pickUpMobileAnimation;
+
+  AssetGenImage get dangleMobileAnimation;
+
+  AssetGenImage get dropInMobileAnimation;
+
   AssetGenImage get howToPlayAnswer;
 
   AssetGenImage get howToPlayFindWord;
@@ -27,21 +37,39 @@ abstract class Team extends Equatable {
 
   SpriteData get idleSpriteData;
 
-  SpriteData get lookUpSpriteData;
+  SpriteData get lookUpSpriteDesktopData;
 
-  SpriteData get pickUpSpriteData;
+  SpriteData get pickUpSpriteDesktopData;
 
-  SpriteData get dangleSpriteData;
+  SpriteData get dangleSpriteDesktopData;
 
-  SpriteData get dropInSpriteData;
+  SpriteData get dropInSpriteDesktopData;
 
-  List<String> loadableAssets() => [
+  SpriteData get lookUpSpriteMobileData;
+
+  SpriteData get pickUpSpriteMobileData;
+
+  SpriteData get dangleSpriteMobileData;
+
+  SpriteData get dropInSpriteMobileData;
+
+  List<String> loadableTeamSelectionAssets() => [
         idleAnimation.path,
         platformAnimation.path,
+      ];
+
+  List<String> loadableHowToPlayDesktopAssets() => [
         lookUpAnimation.path,
         pickUpAnimation.path,
         dangleAnimation.path,
         dropInAnimation.path,
+      ];
+
+  List<String> loadableHowToPlayMobileAssets() => [
+        lookUpMobileAnimation.path,
+        pickUpMobileAnimation.path,
+        dangleMobileAnimation.path,
+        dropInMobileAnimation.path,
       ];
 
   @override
@@ -53,13 +81,22 @@ abstract class Team extends Equatable {
         pickUpAnimation,
         dangleAnimation,
         dropInAnimation,
+        idleUnselected,
+        lookUpMobileAnimation,
+        pickUpMobileAnimation,
+        dangleMobileAnimation,
+        dropInMobileAnimation,
         howToPlayAnswer,
         howToPlayFindWord,
         howToPlayStreak,
         idleSpriteData,
-        lookUpSpriteData,
-        pickUpSpriteData,
-        dangleSpriteData,
-        dropInSpriteData,
+        lookUpSpriteDesktopData,
+        pickUpSpriteDesktopData,
+        dangleSpriteDesktopData,
+        dropInSpriteDesktopData,
+        lookUpSpriteMobileData,
+        pickUpSpriteMobileData,
+        dangleSpriteMobileData,
+        dropInSpriteMobileData,
       ];
 }

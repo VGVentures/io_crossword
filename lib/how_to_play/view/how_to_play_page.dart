@@ -32,7 +32,10 @@ class HowToPlayPage extends StatelessWidget {
         return status != PlayerStatus.playing && status != PlayerStatus.loading;
       }),
       child: BlocProvider(
-        create: (_) => HowToPlayCubit(),
+        create: (_) => HowToPlayCubit()
+          ..loadAssets(
+            context.read<PlayerBloc>().state.mascot!,
+          ),
         child: const HowToPlayView(),
       ),
     );
@@ -67,19 +70,29 @@ class _HowToPlaySmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
+    final mascot = context.read<PlayerBloc>().state.mascot;
     final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
 
     return Stack(
       children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: mascot!.teamMascot.dangleSpriteData.width,
-            height: mascot.teamMascot.dangleSpriteData.height,
-            child: const Hero(
-              tag: HowToPlayPage.dangleMascotHeroTag,
-              child: _MascotAnimation(),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox.fromSize(
+              size: platformAwareAsset(
+                mobile: Size(
+                  mascot!.teamMascot.dangleSpriteMobileData.width,
+                  mascot.teamMascot.dangleSpriteMobileData.height,
+                ),
+                desktop: Size(
+                  mascot.teamMascot.dangleSpriteDesktopData.width,
+                  mascot.teamMascot.dangleSpriteDesktopData.height,
+                ),
+              ),
+              child: const Hero(
+                tag: HowToPlayPage.dangleMascotHeroTag,
+                child: _MascotAnimation(),
+              ),
             ),
           ),
         ),
@@ -129,59 +142,63 @@ class _HowToPlayLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mascot = context.read<PlayerBloc>().state.mascot;
     final status = context.select((HowToPlayCubit cubit) => cubit.state.status);
-    final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
 
     return Stack(
       children: [
-        Stack(
-          children: [
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: mascot!.teamMascot.dangleSpriteData.width,
-                  height: mascot.teamMascot.dangleSpriteData.height,
-                  child: const Hero(
-                    tag: HowToPlayPage.dangleMascotHeroTag,
-                    child: _MascotAnimation(),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox.fromSize(
+              size: platformAwareAsset(
+                mobile: Size(
+                  mascot!.teamMascot.dangleSpriteMobileData.width,
+                  mascot.teamMascot.dangleSpriteMobileData.height,
+                ),
+                desktop: Size(
+                  mascot.teamMascot.dangleSpriteDesktopData.width,
+                  mascot.teamMascot.dangleSpriteDesktopData.height,
+                ),
+              ),
+              child: const Hero(
+                tag: HowToPlayPage.dangleMascotHeroTag,
+                child: _MascotAnimation(),
+              ),
+            ),
+          ),
+        ),
+        if (status == HowToPlayStatus.idle)
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 539,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      HowToPlayContent(
+                        mascot: mascot,
+                        onDonePressed: () {
+                          context
+                              .read<HowToPlayCubit>()
+                              .updateStatus(HowToPlayStatus.pickingUp);
+                          context
+                              .read<AudioController>()
+                              .playSfx(Assets.music.startButton1);
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      const PlayNowButton(),
+                    ],
                   ),
                 ),
               ),
             ),
-            if (status == HowToPlayStatus.idle)
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 539,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          HowToPlayContent(
-                            mascot: mascot,
-                            onDonePressed: () {
-                              context
-                                  .read<HowToPlayCubit>()
-                                  .updateStatus(HowToPlayStatus.pickingUp);
-                              context
-                                  .read<AudioController>()
-                                  .playSfx(Assets.music.startButton1);
-                            },
-                          ),
-                          const SizedBox(height: 40),
-                          const PlayNowButton(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
+          ),
       ],
     );
   }
@@ -195,17 +212,22 @@ class _MascotAnimation extends StatefulWidget {
 }
 
 class _MascotAnimationState extends State<_MascotAnimation> {
-  late SpriteListController controller = SpriteListController();
+  final SpriteListController _controller = SpriteListController();
 
   @override
   Widget build(BuildContext context) {
     final mascot = context.read<PlayerBloc>().state.mascot;
 
-    return BlocListener<HowToPlayCubit, HowToPlayState>(
+    return BlocConsumer<HowToPlayCubit, HowToPlayState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == HowToPlayStatus.pickingUp) {
-          controller.changeAnimation(mascot.teamMascot.pickUpAnimation.path);
+          _controller.changeAnimation(
+            platformAwareAsset(
+              mobile: mascot!.teamMascot.pickUpMobileAnimation.path,
+              desktop: mascot.teamMascot.pickUpAnimation.path,
+            ),
+          );
         }
 
         if (state.status == HowToPlayStatus.complete) {
@@ -215,32 +237,39 @@ class _MascotAnimationState extends State<_MascotAnimation> {
           );
         }
       },
-      child: SpriteAnimationList(
-        animationItems: [
-          AnimationItem(
-            spriteData: mascot!.teamMascot.lookUpSpriteData,
-          ),
-          AnimationItem(
-            spriteData: mascot.teamMascot.pickUpSpriteData,
-            loop: false,
-            onComplete: () {
-              context
-                  .read<HowToPlayCubit>()
-                  .updateStatus(HowToPlayStatus.complete);
-            },
-          ),
-          AnimationItem(
-            spriteData: mascot.teamMascot.dangleSpriteData,
-          ),
-        ],
-        controller: controller,
-      ),
+      builder: (context, state) {
+        return state.assetsStatus == AssetsLoadingStatus.inProgress
+            ? const SizedBox.shrink()
+            : SpriteAnimationList(
+                animationItems: [
+                  AnimationItem(
+                    spriteData: platformAwareAsset(
+                      mobile: mascot!.teamMascot.lookUpSpriteMobileData,
+                      desktop: mascot.teamMascot.lookUpSpriteDesktopData,
+                    ),
+                  ),
+                  AnimationItem(
+                    spriteData: platformAwareAsset(
+                      mobile: mascot.teamMascot.pickUpSpriteMobileData,
+                      desktop: mascot.teamMascot.pickUpSpriteDesktopData,
+                    ),
+                    loop: false,
+                    onComplete: () {
+                      context
+                          .read<HowToPlayCubit>()
+                          .updateStatus(HowToPlayStatus.complete);
+                    },
+                  ),
+                ],
+                controller: _controller,
+              );
+      },
     );
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }

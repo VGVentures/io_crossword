@@ -27,6 +27,21 @@ class DashTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.dashDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.dashIdleUnselected;
+
+  @override
+  AssetGenImage get lookUpMobileAnimation => Assets.anim.dashLookUpMobile;
+
+  @override
+  AssetGenImage get pickUpMobileAnimation => Assets.anim.dashPickUpMobile;
+
+  @override
+  AssetGenImage get dangleMobileAnimation => Assets.anim.dashDangleMobile;
+
+  @override
+  AssetGenImage get dropInMobileAnimation => Assets.anim.dashDropInMobile;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerDash;
 
   @override
@@ -46,7 +61,7 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteData get lookUpSpriteData => SpriteData(
+  SpriteData get lookUpSpriteDesktopData => SpriteData(
         path: lookUpAnimation.path,
         amountPerRow: 15,
         amountPerColumn: 4,
@@ -56,7 +71,7 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteData get pickUpSpriteData => SpriteData(
+  SpriteData get pickUpSpriteDesktopData => SpriteData(
         path: pickUpAnimation.path,
         amountPerRow: 16,
         amountPerColumn: 4,
@@ -66,7 +81,7 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteData get dangleSpriteData => SpriteData(
+  SpriteData get dangleSpriteDesktopData => SpriteData(
         path: dangleAnimation.path,
         amountPerRow: 12,
         amountPerColumn: 3,
@@ -76,12 +91,52 @@ class DashTeam extends Team {
       );
 
   @override
-  SpriteData get dropInSpriteData => SpriteData(
+  SpriteData get dropInSpriteDesktopData => SpriteData(
         path: dropInAnimation.path,
         amountPerRow: 7,
         amountPerColumn: 5,
         stepTime: 0.042,
         width: 457,
         height: 612,
+      );
+
+  @override
+  SpriteData get lookUpSpriteMobileData => SpriteData(
+        path: lookUpMobileAnimation.path,
+        amountPerRow: 15,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 457 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get pickUpSpriteMobileData => SpriteData(
+        path: pickUpMobileAnimation.path,
+        amountPerRow: 16,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 457 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get dangleSpriteMobileData => SpriteData(
+        path: dangleMobileAnimation.path,
+        amountPerRow: 12,
+        amountPerColumn: 3,
+        stepTime: 0.042,
+        width: 457 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get dropInSpriteMobileData => SpriteData(
+        path: dropInMobileAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 5,
+        stepTime: 0.042,
+        width: 457 / 2,
+        height: 612 / 2,
       );
 }
