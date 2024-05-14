@@ -10,7 +10,10 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Shakable(
-            shakeDuration: Duration(milliseconds: 500),
+            controller: AnimationController(
+              vsync: const TestVSync(),
+              duration: const Duration(milliseconds: 500),
+            ),
             child: Text('shakableChild'),
           ),
         ),
