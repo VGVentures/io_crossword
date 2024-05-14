@@ -12,6 +12,14 @@
   "@settings": {
     "description": "Settings label"
   },
+  "iSolvedWord": "I solved a word!",
+  "@iSolvedWord": {
+    "description": "I solved a word displayed on solved shared word"
+  },
+  "joinToSolveBoard": "Join me on I/O Crossword and help us solve the full board together!",
+  "@joinToSolveBoard": {
+    "description": "Description displayed on solved shared word"
+  },
   "shareThisWord": "Share this word",
   "@shareThisWord": {
     "description": "Share this word label"
