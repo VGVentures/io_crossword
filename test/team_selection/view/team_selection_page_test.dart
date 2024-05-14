@@ -72,6 +72,8 @@ void main() {
       audioController = _MockAudioController();
       teamSelectionCubit = _MockTeamSelectionCubit();
 
+      when(() => teamSelectionCubit.loadAssets()).thenAnswer((_) async {});
+
       widget = BlocProvider<TeamSelectionCubit>(
         create: (_) => teamSelectionCubit,
         child: const TeamSelectionView(),
@@ -96,7 +98,9 @@ void main() {
 
       testWidgets('select Sparky when right button is tapped', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(
-          TeamSelectionState(),
+          TeamSelectionState(
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
         );
 
         await tester.pumpApp(
@@ -113,6 +117,7 @@ void main() {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
             index: 1,
+            assetsStatus: AssetsLoadingStatus.success,
           ),
         );
 
@@ -133,16 +138,21 @@ void main() {
             [
               TeamSelectionState(
                 index: 1,
+                assetsStatus: AssetsLoadingStatus.success,
               ),
               TeamSelectionState(
                 index: 2,
+                assetsStatus: AssetsLoadingStatus.success,
               ),
               TeamSelectionState(
                 index: 3,
+                assetsStatus: AssetsLoadingStatus.success,
               ),
             ],
           ),
-          initialState: TeamSelectionState(),
+          initialState: TeamSelectionState(
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
         );
 
         await tester.pumpApp(
@@ -184,6 +194,13 @@ void main() {
       testWidgets(
           'plays ${Assets.music.startButton1} when '
           'submit button is tapped', (tester) async {
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(
+            index: 2,
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
+        );
+
         await tester.pumpApp(
           playerBloc: playerBloc,
           BlocProvider(
@@ -204,6 +221,13 @@ void main() {
       });
 
       testWidgets('adds MascotSelected', (tester) async {
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(
+            index: 2,
+            assetsStatus: AssetsLoadingStatus.success,
+          ),
+        );
+
         await tester.pumpApp(
           playerBloc: playerBloc,
           BlocProvider(
@@ -226,6 +250,13 @@ void main() {
           final navigator = MockNavigator();
           when(navigator.canPop).thenReturn(true);
           when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
+          when(() => teamSelectionCubit.state).thenReturn(
+            TeamSelectionState(
+              index: 2,
+              assetsStatus: AssetsLoadingStatus.success,
+            ),
+          );
 
           await tester.pumpApp(
             navigator: navigator,
