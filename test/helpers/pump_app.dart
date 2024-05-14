@@ -12,7 +12,6 @@ import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/loading/loading.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/settings/settings.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -71,7 +70,6 @@ extension PumpApp on WidgetTester {
     AudioController? audioController,
     SettingsController? settingsController,
     ChallengeBloc? challengeBloc,
-    LoadingCubit? loadingCubit,
     MockNavigator? navigator,
   }) {
     final mockedCrosswordResource = _MockCrosswordResource();
@@ -166,7 +164,6 @@ extension PumpApp on WidgetTester {
                             context.read<BoardInfoRepository>(),
                       ),
                 ),
-                BlocProvider(create: (_) => loadingCubit ?? LoadingCubit()),
               ],
               child: IoLayout(
                 data: layout,
