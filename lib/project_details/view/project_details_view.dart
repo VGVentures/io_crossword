@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/extensions/extensions.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
@@ -98,13 +99,7 @@ class ProjectDetailsContent extends StatelessWidget {
                   if (layout == IoLayoutData.large)
                     const _ProjectDetailsHeader(),
                   if (layout == IoLayoutData.small)
-                    // TODO(Ayad): add real image
-                    Container(
-                      height: 153,
-                      color: Colors.grey,
-                      width: double.infinity,
-                      child: const Icon(Icons.image, size: 50),
-                    ),
+                    Assets.images.hero.image(height: 154),
                   SizedBox(height: verticalSpacing),
                   const HowMade(),
                   SizedBox(height: verticalSpacing),
