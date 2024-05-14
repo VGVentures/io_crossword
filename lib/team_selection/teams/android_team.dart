@@ -27,6 +27,21 @@ class AndroidTeam extends Team {
   AssetGenImage get dropInAnimation => Assets.anim.androidDropIn;
 
   @override
+  AssetGenImage get idleUnselected => Assets.images.androidIdleUnselected;
+
+  @override
+  AssetGenImage get lookUpMobileAnimation => Assets.anim.androidLookUpMobile;
+
+  @override
+  AssetGenImage get pickUpMobileAnimation => Assets.anim.androidPickUpMobile;
+
+  @override
+  AssetGenImage get dangleMobileAnimation => Assets.anim.androidDangleMobile;
+
+  @override
+  AssetGenImage get dropInMobileAnimation => Assets.anim.androidDropInMobile;
+
+  @override
   AssetGenImage get howToPlayAnswer => Assets.images.howToPlayAnswerAndroid;
 
   @override
@@ -47,7 +62,7 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteData get lookUpSpriteData => SpriteData(
+  SpriteData get lookUpSpriteDesktopData => SpriteData(
         path: lookUpAnimation.path,
         amountPerRow: 11,
         amountPerColumn: 7,
@@ -57,7 +72,7 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteData get pickUpSpriteData => SpriteData(
+  SpriteData get pickUpSpriteDesktopData => SpriteData(
         path: pickUpAnimation.path,
         amountPerRow: 18,
         amountPerColumn: 4,
@@ -67,7 +82,7 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteData get dangleSpriteData => SpriteData(
+  SpriteData get dangleSpriteDesktopData => SpriteData(
         path: dangleAnimation.path,
         amountPerRow: 7,
         amountPerColumn: 6,
@@ -77,12 +92,52 @@ class AndroidTeam extends Team {
       );
 
   @override
-  SpriteData get dropInSpriteData => SpriteData(
+  SpriteData get dropInSpriteDesktopData => SpriteData(
         path: dropInAnimation.path,
         amountPerRow: 7,
         amountPerColumn: 6,
         stepTime: 0.042,
         width: 360,
         height: 612,
+      );
+
+  @override
+  SpriteData get lookUpSpriteMobileData => SpriteData(
+        path: lookUpMobileAnimation.path,
+        amountPerRow: 11,
+        amountPerColumn: 7,
+        stepTime: 0.042,
+        width: 360 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get pickUpSpriteMobileData => SpriteData(
+        path: pickUpMobileAnimation.path,
+        amountPerRow: 18,
+        amountPerColumn: 4,
+        stepTime: 0.042,
+        width: 360 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get dangleSpriteMobileData => SpriteData(
+        path: dangleMobileAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 6,
+        stepTime: 0.042,
+        width: 360 / 2,
+        height: 612 / 2,
+      );
+
+  @override
+  SpriteData get dropInSpriteMobileData => SpriteData(
+        path: dropInMobileAnimation.path,
+        amountPerRow: 7,
+        amountPerColumn: 6,
+        stepTime: 0.042,
+        width: 360 / 2,
+        height: 612 / 2,
       );
 }

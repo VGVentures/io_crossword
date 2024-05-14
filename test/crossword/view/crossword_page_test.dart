@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -49,10 +50,14 @@ void main() {
   setUpAll(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      ...Mascots.dash.teamMascot.loadableAssets(),
-      ...Mascots.android.teamMascot.loadableAssets(),
-      ...Mascots.dino.teamMascot.loadableAssets(),
-      ...Mascots.sparky.teamMascot.loadableAssets(),
+      ...Mascots.dash.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascots.dash.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascots.android.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascots.android.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascots.dino.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascots.dino.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascots.sparky.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascots.sparky.teamMascot.loadableHowToPlayMobileAssets(),
     ]);
   });
 
@@ -272,8 +277,10 @@ void main() {
     );
 
     testWidgets(
-        'dropIn animation is displayed when SpriteAnimationList is tapped',
-        (tester) async {
+        'dropIn animation is displayed when SpriteAnimationList '
+        'is tapped on mobile', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
       await tester.pumpSubject(
         CrosswordView(),
         crosswordBloc: crosswordBloc,
@@ -293,40 +300,76 @@ void main() {
 
       expect(
         spriteAnimationList.controller.currentAnimationId,
-        equals(mascotAnimation.mascot.teamMascot.dropInAnimation.path),
+        equals(mascotAnimation.mascot.teamMascot.dropInMobileAnimation.path),
       );
+
+      debugDefaultTargetPlatformOverride = null;
     });
 
     testWidgets(
-        'verify MascotDropped is called with dropIn animation completes',
-        (tester) async {
-      await tester.runAsync(() async {
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
+        'dropIn animation is displayed when SpriteAnimationList '
+        'is tapped on desktop', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
 
-        await tester.tap(find.byType(SpriteAnimationList));
+      await tester.pumpSubject(
+        CrosswordView(),
+        crosswordBloc: crosswordBloc,
+        layout: IoLayoutData.large,
+      );
 
-        await tester.pump();
+      await tester.tap(find.byType(SpriteAnimationList));
 
-        final spriteAnimationList = tester.widget<SpriteAnimationList>(
-          find.byType(SpriteAnimationList),
-        );
+      final mascotAnimation = tester.widget<MascotAnimation>(
+        find.byType(MascotAnimation),
+      );
 
-        await Future<void>.delayed(Duration(seconds: 3));
+      final spriteAnimationList = tester.widget<SpriteAnimationList>(
+        find.byType(SpriteAnimationList),
+      );
 
-        await tester.pump();
+      await tester.tap(find.byType(SpriteAnimationList));
 
-        final controller = spriteAnimationList.controller;
+      expect(
+        spriteAnimationList.controller.currentAnimationId,
+        equals(mascotAnimation.mascot.teamMascot.dropInAnimation.path),
+      );
 
-        controller.animationDataList[1].spriteAnimationTicker.setToLast();
-
-        await controller.animationDataList[1].spriteAnimationTicker.completed;
-
-        verify(() => crosswordBloc.add(const MascotDropped())).called(1);
-      });
+      debugDefaultTargetPlatformOverride = null;
     });
+
+    for (final layout in IoLayoutData.values) {
+      testWidgets(
+          'verify MascotDropped is called with dropIn animation '
+          'completes with $layout', (tester) async {
+        await tester.runAsync(() async {
+          await tester.pumpSubject(
+            CrosswordView(),
+            crosswordBloc: crosswordBloc,
+            layout: layout,
+          );
+
+          await tester.tap(find.byType(SpriteAnimationList));
+
+          await tester.pump();
+
+          final spriteAnimationList = tester.widget<SpriteAnimationList>(
+            find.byType(SpriteAnimationList),
+          );
+
+          await Future<void>.delayed(Duration(seconds: 3));
+
+          await tester.pump();
+
+          final controller = spriteAnimationList.controller;
+
+          controller.animationDataList[1].spriteAnimationTicker.setToLast();
+
+          await controller.animationDataList[1].spriteAnimationTicker.completed;
+
+          verify(() => crosswordBloc.add(const MascotDropped())).called(1);
+        });
+      });
+    }
 
     group('gameReset', () {
       testWidgets(
@@ -467,6 +510,7 @@ extension on WidgetTester {
     PlayerBloc? playerBloc,
     WordSelectionBloc? wordSelectionBloc,
     RandomWordSelectionBloc? randomWordSelectionBloc,
+    IoLayoutData? layout = IoLayoutData.small,
   }) {
     final bloc = crosswordBloc ?? _MockCrosswordBloc();
     if (crosswordBloc == null) {
@@ -512,6 +556,7 @@ extension on WidgetTester {
         ],
         child: child,
       ),
+      layout: layout,
     );
   }
 }
