@@ -260,6 +260,9 @@ class $AssetsImagesGen {
   AssetGenImage get endGameSparky =>
       const AssetGenImage('assets/images/end_game_sparky.png');
 
+  /// File path: assets/images/hero.png
+  AssetGenImage get hero => const AssetGenImage('assets/images/hero.png');
+
   /// File path: assets/images/how_to_play_answer_android.png
   AssetGenImage get howToPlayAnswerAndroid =>
       const AssetGenImage('assets/images/how_to_play_answer_android.png');
@@ -363,6 +366,7 @@ class $AssetsImagesGen {
         endGameDash,
         endGameDino,
         endGameSparky,
+        hero,
         howToPlayAnswerAndroid,
         howToPlayAnswerDash,
         howToPlayAnswerDino,

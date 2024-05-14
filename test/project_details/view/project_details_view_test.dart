@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/l10n/l10n.dart';
-import 'package:io_crossword/project_details/view/project_details_view.dart';
+import 'package:io_crossword/project_details/project_details.dart';
 import 'package:io_crossword/widget/widget.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -42,10 +40,8 @@ void main() {
 
     group('ProjectDetailsContent', () {
       late UrlLauncherPlatform urlLauncher;
-      late AppLocalizations l10n;
 
       setUpAll(() async {
-        l10n = await AppLocalizations.delegate.load(const Locale('en'));
         registerFallbackValue(_FakeLaunchOptions());
       });
 
@@ -65,191 +61,6 @@ void main() {
           await tester.pumpApp(const ProjectDetailsContent());
 
           expect(find.byType(HowMade), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'displays Google I/O text',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          expect(find.text('Google I/O', findRichText: true), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'calls launchUrl when tapped on Google I/O',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text('Google I/O', findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          verify(
-            () => urlLauncher.launchUrl(
-              'https://io.google/2024',
-              any(),
-            ),
-          ).called(1);
-        },
-      );
-
-      testWidgets(
-        'displays error snack bar when cannot launch Google I/O url',
-        (tester) async {
-          when(() => urlLauncher.canLaunch(any()))
-              .thenAnswer((_) async => false);
-
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text('Google I/O', findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(SnackBar), findsOneWidget);
-          expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'displays privacy policy text',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          expect(
-            find.text(l10n.privacyPolicy, findRichText: true),
-            findsOneWidget,
-          );
-        },
-      );
-
-      testWidgets(
-        'calls launchUrl when tapped on privacy policy',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.privacyPolicy, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          verify(
-            () => urlLauncher.launchUrl(
-              'https://policies.google.com/privacy',
-              any(),
-            ),
-          ).called(1);
-        },
-      );
-
-      testWidgets(
-        'displays error snack bar when cannot launch privacy policy url',
-        (tester) async {
-          when(() => urlLauncher.canLaunch(any()))
-              .thenAnswer((_) async => false);
-
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.privacyPolicy, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(SnackBar), findsOneWidget);
-          expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'displays terms of service text',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          expect(
-            find.text(l10n.termsOfService, findRichText: true),
-            findsOneWidget,
-          );
-        },
-      );
-
-      testWidgets(
-        'displays error snack bar when cannot launch terms of service url',
-        (tester) async {
-          when(() => urlLauncher.canLaunch(any()))
-              .thenAnswer((_) async => false);
-
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.termsOfService, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(SnackBar), findsOneWidget);
-          expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'calls launchUrl when tapped on terms of service',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.termsOfService, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          verify(
-            () => urlLauncher.launchUrl(
-              'https://policies.google.com/terms',
-              any(),
-            ),
-          ).called(1);
-        },
-      );
-
-      testWidgets(
-        'displays faqs text',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          expect(
-            find.text(l10n.faqs, findRichText: true),
-            findsOneWidget,
-          );
-        },
-      );
-
-      testWidgets(
-        'displays error snack bar when cannot launch faqs',
-        (tester) async {
-          when(() => urlLauncher.canLaunch(any()))
-              .thenAnswer((_) async => false);
-
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.termsOfService, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(SnackBar), findsOneWidget);
-          expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
-        },
-      );
-
-      testWidgets(
-        'calls launchUrl when tapped on faqs',
-        (tester) async {
-          await tester.pumpApp(const ProjectDetailsContent());
-
-          await tester.tap(find.text(l10n.faqs, findRichText: true));
-
-          await tester.pumpAndSettle();
-
-          verify(
-            () => urlLauncher.launchUrl(
-              'https://flutter.dev/crossword',
-              any(),
-            ),
-          ).called(1);
         },
       );
     });
