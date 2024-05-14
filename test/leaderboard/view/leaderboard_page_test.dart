@@ -21,7 +21,7 @@ class _MockPlayerBloc extends MockBloc<PlayerEvent, PlayerState>
 
 void main() {
   group('LeaderboardPage', () {
-    testWidgets('renders $LeaderboardView', (tester) async {
+    testWidgets('renders $LeaderboardView route', (tester) async {
       await tester.pumpRoute(LeaderboardPage.route());
       await tester.pump();
 
@@ -31,16 +31,8 @@ void main() {
     testWidgets(
       'renders LeaderboardView',
       (tester) async {
-        await tester.pumpApp(LeaderboardPage());
-
-        expect(find.byType(LeaderboardView), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'renders LeaderboardView',
-      (tester) async {
-        await tester.pumpApp(LeaderboardPage());
+        final themeData = IoCrosswordTheme().themeData;
+        await tester.pumpApp(Theme(data: themeData, child: LeaderboardPage()));
 
         expect(find.byType(LeaderboardView), findsOneWidget);
       },
