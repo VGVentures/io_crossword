@@ -285,7 +285,7 @@ void main() {
     );
 
     testWidgets(
-      'renders ShareWordPage when icon ios_share tapped',
+      'renders ShareSolvedWordPage when icon ios_share tapped',
       (tester) async {
         when(() => wordSelectionBloc.state).thenReturn(
           WordSelectionState(
@@ -300,7 +300,7 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        expect(find.byType(ShareWordPage), findsOneWidget);
+        expect(find.byType(ShareSolvedWordPage), findsOneWidget);
       },
     );
   });
