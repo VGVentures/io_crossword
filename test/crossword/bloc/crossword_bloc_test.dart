@@ -280,7 +280,7 @@ void main() {
           position: Point(0, 0),
           axis: Axis.horizontal,
           clue: 'clue',
-          answer: 'answer,',
+          answer: 'answer',
         ),
       );
 
