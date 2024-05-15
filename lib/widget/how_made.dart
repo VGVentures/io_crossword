@@ -34,7 +34,7 @@ class HowMade extends StatelessWidget {
           ),
           TextSpan(
             text: ' ${l10n.and} ',
-            style: textTheme.body..copyWith(),
+            style: textTheme.body,
           ),
           TextSpan(
             text: l10n.openSourceCode,
