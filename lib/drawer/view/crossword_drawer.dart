@@ -20,6 +20,7 @@ class CrosswordDrawer extends StatelessWidget {
     final mascot = context.select((PlayerBloc bloc) => bloc.state.mascot);
     final l10n = context.l10n;
     final layout = IoLayout.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
     final items = [
       DrawerItem(
         title: l10n.finishAndSubmitScore,
@@ -129,7 +130,7 @@ class CrosswordDrawer extends StatelessWidget {
           ...items.map(
             (item) => ListTile(
               leading: Icon(item.icon),
-              title: Text(item.title),
+              title: Text(item.title, style: textTheme.body3),
               onTap: item.onPressed,
             ),
           ),

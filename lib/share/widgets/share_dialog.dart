@@ -41,6 +41,7 @@ class ShareDialog extends StatelessWidget {
                     const SizedBox(height: IoCrosswordSpacing.xlg),
                     Text(
                       l10n.shareOn,
+                      style: Theme.of(context).io.textStyles.body3,
                     ),
                     const SizedBox(height: IoCrosswordSpacing.xlgsm),
                     Row(
@@ -92,7 +93,7 @@ class ShareDialogHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Row(
       children: [
@@ -101,7 +102,7 @@ class ShareDialogHeader extends StatelessWidget {
           child: Text(
             title,
             textAlign: TextAlign.center,
-            style: textTheme.bodyLarge.medium,
+            style: textTheme.h2,
           ),
         ),
         const CloseButton(),

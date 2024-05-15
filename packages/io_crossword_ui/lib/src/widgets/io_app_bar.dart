@@ -132,7 +132,7 @@ class _IoCrosswordLogo extends StatelessWidget {
         const SizedBox(width: 5),
         Text(
           crossword,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          style: Theme.of(context).io.textStyles.h2.copyWith(
                 fontWeight: FontWeight.w700,
               ),
         ),

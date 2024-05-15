@@ -56,13 +56,13 @@ class _InfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Column(
       children: [
         Text(
           label,
-          style: textTheme.labelMedium.regular,
+          style: textTheme.body3,
         ),
         const SizedBox(height: 13.5),
         Row(
@@ -76,7 +76,7 @@ class _InfoItem extends StatelessWidget {
             const SizedBox(width: 7.5),
             Text(
               info,
-              style: textTheme.labelSmall.regular,
+              style: textTheme.body3,
             ),
           ],
         ),

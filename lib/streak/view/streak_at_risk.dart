@@ -69,11 +69,13 @@ class StreakAtRiskView extends StatelessWidget {
                   Text(
                     context.l10n.streakAtRiskMessage,
                     textAlign: TextAlign.center,
+                    style: Theme.of(context).io.textStyles.body3,
                   ),
                   const SizedBox(height: 32),
                   Text(
                     context.l10n.continuationConfirmation,
                     textAlign: TextAlign.center,
+                    style: Theme.of(context).io.textStyles.body3,
                   ),
                   const SizedBox(height: 32),
                   _BottomActions(
@@ -112,7 +114,7 @@ class _Title extends StatelessWidget {
           const TextSpan(text: ' '),
           TextSpan(
             text: l10n.streakAtRiskTitle,
-            style: theme.textTheme.bodyLarge!.copyWith(
+            style: theme.io.textStyles.h2.copyWith(
               color: color,
             ),
           ),

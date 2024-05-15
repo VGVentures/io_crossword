@@ -21,12 +21,13 @@ class IoCrosswordTheme {
       wordInput: _textInput,
       outlineButtonTheme: _ioOutlineButtonTheme,
       crosswordLetterTheme: _crosswordLetterTheme,
+      textStyles: _textTheme,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      textTheme: _textTheme,
+      textTheme: _textTheme.textTheme,
       tabBarTheme: _tabBarTheme,
       cardColor: _cardTheme.plain.color,
       cardTheme: _cardTheme.plain,
@@ -266,7 +267,7 @@ class IoCrosswordTheme {
         backgroundColor: IoCrosswordColors.darkGray,
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        textStyle: IoCrosswordTextStyles.bodyLG.medium,
+        textStyle: _textTheme.body2,
       ).copyWith(
         shape: MaterialStateProperty.resolveWith(
           (states) {
@@ -424,7 +425,7 @@ class IoCrosswordTheme {
     final colorScheme = this.colorScheme;
 
     final border = Border.all(color: colorScheme.background);
-    final textStyle = textTheme.titleLarge!.copyWith(
+    final textStyle = textTheme.h2.copyWith(
       color: colorScheme.background,
       height: 1.1,
     );
@@ -461,7 +462,7 @@ class IoCrosswordTheme {
   static FilledButtonThemeData get _filledButtonThemeData {
     return FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        textStyle: IoCrosswordTextStyles.bodyLG,
+        textStyle: _textTheme.body2,
         minimumSize: const Size(140, 56),
         backgroundColor: const Color(0XFF393B40),
         foregroundColor: Colors.white,
@@ -516,7 +517,7 @@ class IoCrosswordTheme {
 
     return InputDecorationTheme(
       outlineBorder: borderSide,
-      hintStyle: _textTheme.bodyLarge?.copyWith(
+      hintStyle: _textTheme.body.copyWith(
         color: const Color(0xFF80858B),
         fontWeight: FontWeight.w400,
       ),
@@ -556,12 +557,12 @@ class IoCrosswordTheme {
     );
   }
 
-  static TextTheme get _textTheme {
+  static IoCrosswordTextStyles get _textTheme {
     final isMobile = defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
 
     return isMobile
-        ? IoCrosswordTextStyles.mobile.textTheme
-        : IoCrosswordTextStyles.desktop.textTheme;
+        ? IoCrosswordTextStyles.mobile
+        : IoCrosswordTextStyles.desktop;
   }
 }

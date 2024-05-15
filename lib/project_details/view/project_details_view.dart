@@ -109,11 +109,11 @@ class _ProjectDetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Text(
       l10n.projectDetails,
-      style: textTheme.titleLarge,
+      style: textTheme.h2,
     );
   }
 }

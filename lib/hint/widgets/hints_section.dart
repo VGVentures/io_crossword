@@ -96,7 +96,6 @@ class HintQuestionResponse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final questionNumber = index + 1;
 
     return Column(
@@ -105,7 +104,7 @@ class HintQuestionResponse extends StatelessWidget {
       children: [
         Text(
           'Q$questionNumber: ${hint.question}',
-          style: textTheme.bodySmall?.copyWith(
+          style: IoCrosswordTextStyles.mobile.body.copyWith(
             color: IoCrosswordColors.softGray,
           ),
           textAlign: TextAlign.center,

@@ -52,6 +52,7 @@ class ShareSolvedWordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final themeData = Theme.of(context);
+    final textTheme = themeData.io.textStyles;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,13 +60,13 @@ class ShareSolvedWordPage extends StatelessWidget {
         Text(
           l10n.iSolvedWord,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyLarge.regular,
+          style: textTheme.body,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         Text(
           l10n.joinToSolveBoard,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyLarge.regular,
+          style: textTheme.body,
         ),
         const SizedBox(height: IoCrosswordSpacing.xxlg),
         SingleChildScrollView(
@@ -78,8 +79,7 @@ class ShareSolvedWordPage extends StatelessWidget {
         const SizedBox(height: IoCrosswordSpacing.xlg),
         Text(
           word.clue,
-          style: themeData.textTheme.bodyLarge.regular
-              ?.copyWith(color: themeData.colorScheme.primary),
+          style: textTheme.body.copyWith(color: themeData.colorScheme.primary),
           textAlign: TextAlign.center,
         ),
       ],

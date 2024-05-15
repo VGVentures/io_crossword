@@ -35,7 +35,7 @@ class ChallengeProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
     final l10n = context.l10n;
     final formatter = NumberFormat.decimalPattern(l10n.localeName);
 
@@ -44,7 +44,7 @@ class ChallengeProgress extends StatelessWidget {
       children: [
         Text(
           l10n.countdownToCompletion,
-          style: theme.textTheme.bodyMedium,
+          style: textTheme.body3,
         ),
         const SizedBox(height: IoCrosswordSpacing.sm),
         IoLinearProgressIndicator(
@@ -61,12 +61,12 @@ class ChallengeProgress extends StatelessWidget {
             Text(
               key: solvedWordsKey,
               formatter.format(solvedWords),
-              style: theme.textTheme.labelMedium,
+              style: textTheme.body3,
             ),
             Text(
               key: totalWordsKey,
               formatter.format(totalWords),
-              style: theme.textTheme.labelMedium,
+              style: textTheme.body3,
             ),
           ],
         ),

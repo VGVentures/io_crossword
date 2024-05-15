@@ -5,6 +5,9 @@ import 'package:mocktail/mocktail.dart';
 
 class _MockIoWordTheme extends Mock implements IoWordTheme {}
 
+class _MockIoCrosswordTextStyles extends Mock
+    implements IoCrosswordTextStyles {}
+
 class _MockIoIconButtonTheme extends Mock implements IoIconButtonTheme {}
 
 class _MockIoCardTheme extends Mock implements IoCardTheme {}
@@ -33,6 +36,7 @@ void main() {
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
           crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
+          textStyles: _MockIoCrosswordTextStyles(),
         );
 
         final newTheme = theme.copyWith();
@@ -50,6 +54,7 @@ void main() {
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
           crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
+          textStyles: _MockIoCrosswordTextStyles(),
         );
 
         final newTheme = theme.copyWith(
@@ -71,6 +76,7 @@ void main() {
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
           crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
+          textStyles: _MockIoCrosswordTextStyles(),
         );
 
         final newTheme = theme.lerp(null, 0.5);
@@ -88,6 +94,7 @@ void main() {
           colorScheme: _MockIoColorScheme(),
           outlineButtonTheme: _MockIoOutlineButtonTheme(),
           crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
+          textStyles: _MockIoCrosswordTextStyles(),
         );
 
         when(
@@ -152,6 +159,7 @@ void main() {
               colorScheme: _MockIoColorScheme(),
               outlineButtonTheme: _MockIoOutlineButtonTheme(),
               crosswordLetterTheme: _MockIoCrosswordLetterTheme(),
+              textStyles: _MockIoCrosswordTextStyles(),
             ),
           ],
         );
