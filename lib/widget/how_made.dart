@@ -34,10 +34,7 @@ class HowMade extends StatelessWidget {
           ),
           TextSpan(
             text: ' ${l10n.and} ',
-            style: textTheme.body
-              ..copyWith(
-                color: textColor,
-              ),
+            style: textTheme.body..copyWith(),
           ),
           TextSpan(
             text: l10n.openSourceCode,
@@ -49,9 +46,7 @@ class HowMade extends StatelessWidget {
           ),
           TextSpan(
             text: '.',
-            style: textTheme.body.copyWith(
-              color: textColor,
-            ),
+            style: textTheme.body.copyWith(),
           ),
         ],
       ),
