@@ -159,7 +159,10 @@ class CurrentUserPosition extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${l10n.you}:'),
+              Text(
+                '${l10n.you}:',
+                style: theme.io.textStyles.body4,
+              ),
               UserLeaderboardRanking(
                 player: player,
                 rank: rank,
@@ -204,6 +207,7 @@ class UserLeaderboardRanking extends StatelessWidget {
             children: [
               Text(
                 rank.toDisplayNumber(),
+                style: themeData.io.textStyles.body4,
               ),
               IoWord(
                 player.initials,
@@ -216,11 +220,13 @@ class UserLeaderboardRanking extends StatelessWidget {
         Expanded(
           child: Text(
             player.streak.toDisplayNumber(),
+            style: themeData.io.textStyles.body4,
           ),
         ),
         Expanded(
           child: Text(
             player.score.toDisplayNumber(),
+            style: themeData.io.textStyles.body4,
             textAlign: TextAlign.end,
           ),
         ),
@@ -252,7 +258,7 @@ class _Title extends StatelessWidget {
         const SizedBox(width: 5),
         Text(
           title,
-          style: Theme.of(context).textTheme.labelLarge,
+          style: Theme.of(context).io.textStyles.body4,
         ),
       ],
     );

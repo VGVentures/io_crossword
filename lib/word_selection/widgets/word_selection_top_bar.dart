@@ -62,7 +62,7 @@ class WordSelectionTopBar extends StatelessWidget {
                     children: [
                       Text(
                         l10n.alreadySolvedTitle(mascot.name).toUpperCase(),
-                        style: themeData.textTheme.labelLarge?.copyWith(
+                        style: themeData.io.textStyles.body5.copyWith(
                           color: mascot.color,
                         ),
                         textAlign: TextAlign.center,
@@ -70,23 +70,22 @@ class WordSelectionTopBar extends StatelessWidget {
                       if (canSolveWord)
                         Text(
                           l10n.alreadySolvedSubtitle.toUpperCase(),
-                          style: themeData.textTheme.labelLarge,
+                          style: themeData.io.textStyles.body5,
                           textAlign: TextAlign.center,
                         )
                       else
                         Text(
                           wordIdentifier(word.word),
-                          style: themeData.textTheme.labelLarge,
+                          style: themeData.io.textStyles.body5,
                           textAlign: TextAlign.center,
                         ),
                     ],
                   ),
                 );
               }
-
               return Text(
                 wordIdentifier(word.word),
-                style: themeData.textTheme.labelLarge,
+                style: themeData.io.textStyles.body5,
                 textAlign: TextAlign.center,
               );
             },

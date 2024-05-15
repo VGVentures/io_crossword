@@ -45,7 +45,7 @@ class WordSolvingLargeView extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 selectedWord.word.clue,
-                style: IoCrosswordTextStyles.titleMD,
+                style: IoCrosswordTextStyles.desktop.body,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -111,7 +111,7 @@ class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
         const SizedBox(height: 16),
         Text(
           selectedWord.word.clue,
-          style: IoCrosswordTextStyles.titleMD,
+          style: IoCrosswordTextStyles.desktop.body,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
@@ -158,8 +158,8 @@ class IncorrectAnswerText extends StatelessWidget {
       status == WordSelectionStatus.incorrect
           ? context.l10n.incorrectAnswer
           : '',
-      style: IoCrosswordTextStyles.bodyMD.medium
-          ?.copyWith(color: theme.colorScheme.error),
+      style: IoCrosswordTextStyles.mobile.body3
+          .copyWith(color: theme.colorScheme.error),
       textAlign: TextAlign.center,
     );
   }

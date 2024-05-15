@@ -76,7 +76,7 @@ class _TeamSelectorLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
     final l10n = context.l10n;
 
     return BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
@@ -197,7 +197,7 @@ class _TeamSelectorLarge extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Text(
                 l10n.chooseYourTeam,
-                style: theme.textTheme.headlineLarge,
+                style: textTheme.heading1,
               ),
             ),
             const Padding(
@@ -400,7 +400,7 @@ class _TeamSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final textTheme = Theme.of(context).io.textStyles;
     final index =
         context.select((TeamSelectionCubit cubit) => cubit.state.index);
 
@@ -426,7 +426,7 @@ class _TeamSelector extends StatelessWidget {
               Flexible(
                 child: Text(
                   Mascots.values[index].teamMascot.name,
-                  style: theme.textTheme.headlineLarge,
+                  style: textTheme.heading1,
                 ),
               ),
               IconButton(
@@ -466,6 +466,7 @@ class _SubmitButton extends StatelessWidget {
       },
       child: Text(
         l10n.joinTeam(mascot.teamMascot.name),
+        style: Theme.of(context).io.textStyles.body2,
       ),
     );
   }

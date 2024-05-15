@@ -18,6 +18,7 @@ class IoThemeExtension extends Equatable
     required this.wordInput,
     required this.colorScheme,
     required this.crosswordLetterTheme,
+    required this.textStyles,
   });
 
   /// {@macro io_word_theme}
@@ -44,6 +45,9 @@ class IoThemeExtension extends Equatable
   /// {@macro io_crossword_letter_theme}
   final IoCrosswordLetterTheme crosswordLetterTheme;
 
+  /// {@macro io_crossword_text_styles}
+  final IoCrosswordTextStyles textStyles;
+
   @override
   Object get type => IoThemeExtension;
 
@@ -57,6 +61,7 @@ class IoThemeExtension extends Equatable
     IoColorScheme? colorScheme,
     IoOutlineButtonTheme? outlineButtonTheme,
     IoCrosswordLetterTheme? crosswordLetterTheme,
+    IoCrosswordTextStyles? textStyles,
   }) {
     return IoThemeExtension(
       wordTheme: wordTheme ?? this.wordTheme,
@@ -67,6 +72,7 @@ class IoThemeExtension extends Equatable
       colorScheme: colorScheme ?? this.colorScheme,
       outlineButtonTheme: outlineButtonTheme ?? this.outlineButtonTheme,
       crosswordLetterTheme: crosswordLetterTheme ?? this.crosswordLetterTheme,
+      textStyles: textStyles ?? this.textStyles,
     );
   }
 
@@ -89,6 +95,7 @@ class IoThemeExtension extends Equatable
       outlineButtonTheme: outlineButtonTheme.lerp(other.outlineButtonTheme, t),
       crosswordLetterTheme:
           crosswordLetterTheme.lerp(other.crosswordLetterTheme, t),
+      textStyles: textStyles,
     );
   }
 
@@ -102,6 +109,7 @@ class IoThemeExtension extends Equatable
         colorScheme,
         outlineButtonTheme,
         crosswordLetterTheme,
+        textStyles,
       ];
 }
 

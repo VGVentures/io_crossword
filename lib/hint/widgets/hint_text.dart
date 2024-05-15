@@ -8,7 +8,7 @@ class HintText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -18,7 +18,7 @@ class HintText extends StatelessWidget {
         GeminiGradient(
           child: Text(
             text,
-            style: textTheme.labelMedium,
+            style: textTheme.body4,
           ),
         ),
       ],

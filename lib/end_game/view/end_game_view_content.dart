@@ -9,7 +9,7 @@ class EndGameContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).io.textStyles;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -19,7 +19,7 @@ class EndGameContent extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           l10n.thanksForContributing,
-          style: textTheme.headlineSmall,
+          style: textTheme.heading1,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
@@ -83,7 +83,7 @@ class ActionButtonsEndGame extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           l10n.or,
-          style: Theme.of(context).textTheme.labelMedium.regular?.copyWith(
+          style: Theme.of(context).io.textStyles.body3.copyWith(
                 color: IoCrosswordColors.softGray,
               ),
           textAlign: TextAlign.center,
@@ -92,7 +92,7 @@ class ActionButtonsEndGame extends StatelessWidget {
         Text(
           l10n.claimBadgeContributing,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.labelMedium.regular?.copyWith(
+          style: Theme.of(context).io.textStyles.body3.copyWith(
                 color: IoCrosswordColors.softGray,
               ),
         ),

@@ -9,9 +9,13 @@ import '../helpers/helpers.dart';
 void main() {
   group('ErrorView', () {
     testWidgets('displays title', (tester) async {
+      final themeData = IoCrosswordTheme().themeData;
       await tester.pumpApp(
-        ErrorView(
-          title: 'title',
+        Theme(
+          data: themeData,
+          child: ErrorView(
+            title: 'title',
+          ),
         ),
       );
 
@@ -19,9 +23,13 @@ void main() {
     });
 
     testWidgets('OutlinedButton not visible', (tester) async {
+      final themeData = IoCrosswordTheme().themeData;
       await tester.pumpApp(
-        ErrorView(
-          title: 'error',
+        Theme(
+          data: themeData,
+          child: ErrorView(
+            title: 'error',
+          ),
         ),
       );
 
@@ -29,10 +37,14 @@ void main() {
     });
 
     testWidgets('OutlinedButton visible', (tester) async {
+      final themeData = IoCrosswordTheme().themeData;
       await tester.pumpApp(
-        ErrorView(
-          title: 'error',
-          buttonTitle: 'buttonTitle',
+        Theme(
+          data: themeData,
+          child: ErrorView(
+            title: 'error',
+            buttonTitle: 'buttonTitle',
+          ),
         ),
       );
 
@@ -41,13 +53,17 @@ void main() {
 
     testWidgets('OutlinedButton visible and can be pressed', (tester) async {
       var pressed = false;
+      final themeData = IoCrosswordTheme().themeData;
       await tester.pumpApp(
-        ErrorView(
-          title: 'error',
-          buttonTitle: 'buttonTitle',
-          onPressed: () {
-            pressed = true;
-          },
+        Theme(
+          data: themeData,
+          child: ErrorView(
+            title: 'error',
+            buttonTitle: 'buttonTitle',
+            onPressed: () {
+              pressed = true;
+            },
+          ),
         ),
       );
 
