@@ -46,7 +46,7 @@ class HowMade extends StatelessWidget {
           ),
           TextSpan(
             text: '.',
-            style: textTheme.body.copyWith(),
+            style: textTheme.body,
           ),
         ],
       ),
