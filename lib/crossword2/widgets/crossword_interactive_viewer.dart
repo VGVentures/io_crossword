@@ -280,7 +280,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       ).animate(
         CurvedAnimation(
           parent: animationController,
-          curve: Curves.linear,
+          curve: Curves.decelerate,
         ),
       )..addListener(_onAnimateTransformation);
 
