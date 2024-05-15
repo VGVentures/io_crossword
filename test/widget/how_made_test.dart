@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -74,6 +73,48 @@ void main() {
             any(),
           ),
         );
+      },
+    );
+
+    testWidgets(
+      'calls launchUrl when tapped on "How crossword was made"',
+      (tester) async {
+        await tester.pumpApp(HowMade());
+
+        final finder = find.byWidgetPredicate(
+          (widget) =>
+              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+        );
+
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        verify(
+          () => urlLauncher.launchUrl(
+            'https://flutter.dev/crossword',
+            any(),
+          ),
+        );
+      },
+    );
+
+    testWidgets(
+      'displays error snack bar when cannot launch how made',
+      (tester) async {
+        when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => false);
+
+        await tester.pumpApp(HowMade());
+
+        final finder = find.byWidgetPredicate(
+          (widget) =>
+              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+        );
+
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
       },
     );
   });

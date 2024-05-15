@@ -54,7 +54,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   late AnimationController? _animationController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: const Duration(milliseconds: 300),
   );
   Animation<Matrix4>? _transformationAnimation;
 
@@ -230,7 +230,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
       ).animate(
         CurvedAnimation(
           parent: animationController,
-          curve: Curves.linear,
+          curve: Curves.decelerate,
         ),
       )..addListener(_onAnimateTransformation);
 
