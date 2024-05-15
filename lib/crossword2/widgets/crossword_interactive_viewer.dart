@@ -53,10 +53,8 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// [TransformationController] to its descendants.
   late TransformationController _transformationController;
 
-  late AnimationController? _animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 900),
-  );
+  late AnimationController _animationController;
+
   Animation<Matrix4>? _transformationAnimation;
 
   /// The minimum amount of translation allowed.
@@ -86,7 +84,6 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   void _zoom(double value, BuildContext context) {
     final animationController = _animationController;
-    if (animationController == null) return;
     if (animationController.isAnimating) return;
 
     final viewport = _viewport;
@@ -164,21 +161,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * currentScale;
 
-    final requiredWordSize =
-        selectedWord.word.size(crosswordLayout) * _idealScale;
-
-    final scaleEnd = math
-        .min(
-          beginViewportSize.width < requiredWordSize.width
-              ? beginViewportSize.width / requiredWordSize.width
-              : _idealScale,
-          beginViewportSize.height < requiredWordSize.height
-              ? beginViewportSize.height / requiredWordSize.height
-              : _idealScale,
-        )
-        .roundTo(3);
-
-    final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
+    final endWordSize = selectedWord.word.size(crosswordLayout);
     final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
     final endWordCenter = endWordRect.center;
 
@@ -193,8 +176,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
           endWordCenter.dx,
           endWordCenter.dy,
           0,
-        )
-      ..scale(scaleEnd);
+        );
     translationEnd
       ..x = math.max(
         math.min(translationEnd.x, _minTranslation.x),
@@ -210,7 +192,6 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
-    if (animationController == null) return;
     if (animationController.isAnimating) return;
 
     final selectedWord = context.read<WordSelectionBloc>().state.word;
@@ -320,62 +301,60 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transformationController = DefaultTransformationController.of(context);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
   }
 
   @override
   void dispose() {
     _transformationAnimation?.removeListener(_onAnimateTransformation);
     _transformationAnimation = null;
-    _animationController?.dispose();
-    _animationController = null;
+    _animationController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WordSelectionBloc, WordSelectionState>(
-      listenWhen: (previous, current) =>
-          previous.word != current.word && current.word == null,
-      listener: (context, state) => _centerSelectedWord(context),
-      child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-        buildWhen: (previous, current) =>
-            previous.word != current.word || current.word == null,
-        builder: (context, state) {
-          final layout = IoLayout.of(context);
-          return Stack(
-            children: [
-              InteractiveViewer.builder(
-                minScale: widget.zoomLimit,
-                maxScale: _maxScale,
-                panEnabled: state.word == null,
-                transformationController: _transformationController,
-                builder: (context, quad) {
-                  _viewport = quad;
+    return BlocBuilder<WordSelectionBloc, WordSelectionState>(
+      buildWhen: (previous, current) =>
+          previous.word != current.word || current.word == null,
+      builder: (context, state) {
+        final layout = IoLayout.of(context);
+        return Stack(
+          children: [
+            InteractiveViewer.builder(
+              minScale: widget.zoomLimit,
+              maxScale: _maxScale,
+              panEnabled: state.word == null,
+              transformationController: _transformationController,
+              builder: (context, quad) {
+                _viewport = quad;
 
-                  if (state.word != null) {
-                    _centerSelectedWord(context);
-                  }
+                if (state.word != null) {
+                  _centerSelectedWord(context);
+                }
 
-                  return QuadScope(
-                    data: quad,
-                    child: widget.builder(context, quad),
-                  );
-                },
-              ),
-              if (layout == IoLayoutData.large)
-                Positioned(
-                  bottom: 120,
-                  right: 20,
-                  child: ZoomControls(
-                    zoomInPressed: () => _zoomIn(context),
-                    zoomOutPressed: () => _zoomOut(context),
-                  ),
+                return QuadScope(
+                  data: quad,
+                  child: widget.builder(context, quad),
+                );
+              },
+            ),
+            if (layout == IoLayoutData.large)
+              Positioned(
+                bottom: 120,
+                right: 20,
+                child: ZoomControls(
+                  zoomInPressed: () => _zoomIn(context),
+                  zoomOutPressed: () => _zoomOut(context),
                 ),
-            ],
-          );
-        },
-      ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

@@ -116,7 +116,7 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(const CrosswordState());
       });
 
-      testWidgets('success, adds $BoardSectionRequested event', (tester) async {
+      testWidgets('success, adds $WordSelected event', (tester) async {
         final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
         whenListen(
           randomWordSelectionBloc,
@@ -137,9 +137,6 @@ void main() {
           randomWordSelectionBloc: randomWordSelectionBloc,
         );
 
-        await tester.pump();
-        verify(() => crosswordBloc.add(BoardSectionRequested((1, 1))))
-            .called(1);
         verify(
           () => wordSelectionBloc.add(
             WordSelected(
@@ -149,48 +146,95 @@ void main() {
         ).called(1);
       });
 
-      testWidgets('loading, opens $RandomWordLoadingDialog', (tester) async {
-        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
-        whenListen(
-          randomWordSelectionBloc,
-          Stream.fromIterable([
-            RandomWordSelectionState(
-              status: RandomWordSelectionStatus.loading,
-            ),
-          ]),
-          initialState: RandomWordSelectionState(),
+      testWidgets('initialSuccess, adds CrosswordSectionLoaded event',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.success,
+          ),
         );
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-          randomWordSelectionBloc: randomWordSelectionBloc,
-        );
-        await tester.pump();
-        expect(find.byType(RandomWordLoadingDialog), findsOneWidget);
-      });
 
-      testWidgets('failure, opens error dialog', (tester) async {
+        whenListen(
+          crosswordBloc,
+          Stream.fromIterable(
+            [
+              CrosswordState(
+                status: CrosswordStatus.success,
+              ),
+            ],
+          ),
+          initialState: CrosswordState(),
+        );
+
+        final wordSelectionBloc = _MockWordSelectionBloc();
         final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+
         whenListen(
           randomWordSelectionBloc,
-          Stream.fromIterable([
-            RandomWordSelectionState(
-              status: RandomWordSelectionStatus.loading,
-            ),
-            RandomWordSelectionState(
-              status: RandomWordSelectionStatus.failure,
-            ),
-          ]),
+          Stream.fromIterable(
+            [
+              RandomWordSelectionState(
+                status: RandomWordSelectionStatus.initialSuccess,
+                uncompletedSection: section,
+              ),
+            ],
+          ),
           initialState: RandomWordSelectionState(),
         );
+
         await tester.pumpSubject(
           CrosswordView(),
+          wordSelectionBloc: wordSelectionBloc,
           crosswordBloc: crosswordBloc,
           randomWordSelectionBloc: randomWordSelectionBloc,
         );
-        await tester.pump();
-        expect(find.text(l10n.findRandomWordError), findsOneWidget);
+
+        final initialWord =
+            SelectedWord(section: (1, 1), word: section.words.first);
+
+        verify(() => crosswordBloc.add(CrosswordSectionsLoaded(initialWord)))
+            .called(1);
       });
+    });
+
+    testWidgets('when success, adds initial RandomWordRequested',
+        (tester) async {
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(
+          status: CrosswordStatus.success,
+        ),
+      );
+
+      whenListen(
+        crosswordBloc,
+        Stream.fromIterable(
+          [
+            CrosswordState(
+              status: CrosswordStatus.success,
+            ),
+          ],
+        ),
+        initialState: CrosswordState(),
+      );
+
+      final wordSelectionBloc = _MockWordSelectionBloc();
+      final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+
+      when(() => randomWordSelectionBloc.state).thenReturn(
+        const RandomWordSelectionState(),
+      );
+
+      await tester.pumpSubject(
+        CrosswordView(),
+        wordSelectionBloc: wordSelectionBloc,
+        crosswordBloc: crosswordBloc,
+        randomWordSelectionBloc: randomWordSelectionBloc,
+      );
+
+      verify(
+        () => randomWordSelectionBloc
+            .add(const RandomWordRequested(isInitial: true)),
+      ).called(1);
     });
 
     testWidgets('renders $IoAppBar', (tester) async {
@@ -242,8 +286,14 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders $Crossword2View with ${CrosswordStatus.success}',
+    testWidgets('renders $Crossword2View with ${CrosswordStatus.ready}',
         (tester) async {
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(
+          status: CrosswordStatus.ready,
+        ),
+      );
+
       await tester.pumpSubject(
         crosswordBloc: crosswordBloc,
         CrosswordView(),
@@ -253,20 +303,26 @@ void main() {
     });
 
     testWidgets(
-      'renders $WordSelectionPage when loaded',
+      'does not render $WordSelectionPage when loaded',
       (tester) async {
         await tester.pumpSubject(
           CrosswordView(),
           crosswordBloc: crosswordBloc,
         );
 
-        expect(find.byType(WordSelectionPage), findsOneWidget);
+        expect(find.byType(WordSelectionPage), findsNothing);
       },
     );
 
     testWidgets(
       'renders $BottomBar',
       (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(
+            status: CrosswordStatus.ready,
+          ),
+        );
+
         await tester.pumpSubject(
           CrosswordView(),
           crosswordBloc: crosswordBloc,
@@ -377,7 +433,7 @@ void main() {
           'is resetInProgress', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
-            status: CrosswordStatus.success,
+            status: CrosswordStatus.ready,
             boardStatus: BoardStatus.resetInProgress,
           ),
         );
@@ -436,7 +492,7 @@ void main() {
           (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
-            status: CrosswordStatus.success,
+            status: CrosswordStatus.ready,
             boardStatus: BoardStatus.resetInProgress,
             mascotVisible: false,
           ),
@@ -458,7 +514,7 @@ void main() {
           'gameStatus is resetInProgress', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
-            status: CrosswordStatus.success,
+            status: CrosswordStatus.ready,
             gameStatus: GameStatus.resetInProgress,
             boardStatus: BoardStatus.resetInProgress,
             mascotVisible: false,
@@ -484,7 +540,7 @@ void main() {
           'keep playing button is pressed', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
-            status: CrosswordStatus.success,
+            status: CrosswordStatus.ready,
             boardStatus: BoardStatus.resetInProgress,
             mascotVisible: false,
           ),

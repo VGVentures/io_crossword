@@ -45,6 +45,7 @@ class CrosswordPage extends StatelessWidget {
             )..add(const BoardLoadingInformationRequested()),
           ),
           BlocProvider(
+            lazy: false,
             create: (_) => WordSelectionBloc(
               crosswordResource: context.read<CrosswordResource>(),
             ),
@@ -77,7 +78,7 @@ class CrosswordView extends StatelessWidget {
           listener: (context, state) {
             if (state.status == CrosswordStatus.success) {
               context.read<RandomWordSelectionBloc>().add(
-                    const RandomWordInitialRequested(),
+                    const RandomWordRequested(isInitial: true),
                   );
             }
           },

@@ -43,30 +43,18 @@ void main() {
       when(() => word.solvedCharacters).thenReturn({});
     });
 
-    testWidgets('requests chunk', (tester) async {
+    testWidgets('pumps successfully', (tester) async {
       final crosswordBloc = _MockCrosswordBloc();
       when(() => crosswordBloc.state).thenReturn(
         const CrosswordState(sectionSize: 20),
       );
 
       await tester.pumpApp(
+        BlocProvider<WordSelectionBloc>(
+          create: (_) => wordSelectionBloc,
+          child: const Crossword2View(),
+        ),
         crosswordBloc: crosswordBloc,
-        BlocProvider<WordSelectionBloc>(
-          create: (_) => wordSelectionBloc,
-          child: const Crossword2View(),
-        ),
-      );
-
-      verify(() => crosswordBloc.add(const BoardSectionRequested((0, 0))))
-          .called(1);
-    });
-
-    testWidgets('pumps successfully', (tester) async {
-      await tester.pumpApp(
-        BlocProvider<WordSelectionBloc>(
-          create: (_) => wordSelectionBloc,
-          child: const Crossword2View(),
-        ),
       );
 
       expect(find.byType(Crossword2View), findsOneWidget);

@@ -126,6 +126,12 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
           initialWord: event.selectedWord,
         );
       },
+      onError: (error, stackTrace) {
+        addError(error, stackTrace);
+        return state.copyWith(
+          status: CrosswordStatus.failure,
+        );
+      },
     );
   }
 }

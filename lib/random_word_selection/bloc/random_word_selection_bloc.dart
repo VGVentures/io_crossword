@@ -14,36 +14,10 @@ class RandomWordSelectionBloc
     required CrosswordRepository crosswordRepository,
   })  : _crosswordRepository = crosswordRepository,
         super(const RandomWordSelectionState()) {
-    on<RandomWordInitialRequested>(_onRandomWordInitialRequested);
     on<RandomWordRequested>(_onRandomWordRequested);
   }
 
   final CrosswordRepository _crosswordRepository;
-
-  Future<void> _onRandomWordInitialRequested(
-    RandomWordInitialRequested event,
-    Emitter<RandomWordSelectionState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(status: RandomWordSelectionStatus.loading));
-
-      final randomSection =
-          await _crosswordRepository.getRandomUncompletedSection();
-      if (randomSection != null) {
-        emit(
-          state.copyWith(
-            status: RandomWordSelectionStatus.initialSuccess,
-            uncompletedSection: randomSection,
-          ),
-        );
-      } else {
-        emit(state.copyWith(status: RandomWordSelectionStatus.notFound));
-      }
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      emit(state.copyWith(status: RandomWordSelectionStatus.failure));
-    }
-  }
 
   Future<void> _onRandomWordRequested(
     RandomWordRequested event,
@@ -57,7 +31,9 @@ class RandomWordSelectionBloc
       if (randomSection != null) {
         emit(
           state.copyWith(
-            status: RandomWordSelectionStatus.success,
+            status: event.isInitial
+                ? RandomWordSelectionStatus.initialSuccess
+                : RandomWordSelectionStatus.success,
             uncompletedSection: randomSection,
           ),
         );
