@@ -145,49 +145,10 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewport = _viewport;
     if (viewport == null) return;
 
-    final layout = IoLayout.of(context);
-    final crosswordLayout = CrosswordLayoutScope.of(context);
+    final transformationEnd = _calculatorTransformationEnd(selectedWord);
 
-    _maxTranslation.setValues(
-      -(crosswordLayout.crosswordSize.width +
-              crosswordLayout.padding.horizontal) +
-          viewport.width,
-      -(crosswordLayout.crosswordSize.height +
-              crosswordLayout.padding.vertical) +
-          viewport.height,
-      0,
-    );
-
-    final viewportSize = viewport.reduced(layout);
-    final beginViewportSize = viewportSize * currentScale;
-
-    final endWordSize = selectedWord.word.size(crosswordLayout);
-    final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
-    final endWordCenter = endWordRect.center;
-
-    final endViewportCenter = Vector3(
-      (beginViewportSize.width / 2).roundTo(3),
-      (beginViewportSize.height / 2).roundTo(3),
-      0,
-    );
-
-    final translationEnd = endViewportCenter -
-        Vector3(
-          endWordCenter.dx,
-          endWordCenter.dy,
-          0,
-        );
-    translationEnd
-      ..x = math.max(
-        math.min(translationEnd.x, _minTranslation.x),
-        _maxTranslation.x,
-      )
-      ..y = math.max(
-        math.min(translationEnd.y, _minTranslation.y),
-        _maxTranslation.y,
-      );
-
-    _transformationController.value = Matrix4.translation(translationEnd);
+    _transformationController.value =
+        Matrix4.translation(transformationEnd.getTranslation());
   }
 
   void _centerSelectedWord(BuildContext context) {
@@ -200,8 +161,20 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewport = _viewport;
     if (viewport == null) return;
 
+    final transformationEnd = _calculatorTransformationEnd(selectedWord);
+
+    _playTransformation(
+      _transformationController.value,
+      transformationEnd,
+      animationController,
+    );
+  }
+
+  Matrix4 _calculatorTransformationEnd(SelectedWord selectedWord) {
     final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
+
+    final viewport = _viewport!;
 
     _maxTranslation.setValues(
       -(crosswordLayout.crosswordSize.width +
@@ -257,14 +230,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         _maxTranslation.y,
       );
 
-    final transformationEnd = Matrix4.translation(translationEnd)
-      ..scale(scaleEnd);
-
-    _playTransformation(
-      _transformationController.value,
-      transformationEnd,
-      animationController,
-    );
+    return Matrix4.translation(translationEnd)..scale(scaleEnd);
   }
 
   void _playTransformation(
@@ -303,7 +269,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _transformationController = DefaultTransformationController.of(context);
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 300),
     );
   }
 
