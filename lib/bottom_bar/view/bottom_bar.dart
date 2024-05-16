@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
@@ -16,7 +17,10 @@ class BottomBar extends StatelessWidget {
     final selectionStatus =
         context.select((WordSelectionBloc bloc) => bloc.state.status);
 
-    return selectionStatus != WordSelectionStatus.empty
+    final mascotVisible =
+        context.select((CrosswordBloc bloc) => bloc.state.mascotVisible);
+
+    return selectionStatus != WordSelectionStatus.empty || mascotVisible
         ? const SizedBox.shrink()
         : const BottomBarContent();
   }
