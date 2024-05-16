@@ -20,6 +20,7 @@ class LeaderboardButton extends StatelessWidget {
         children: [
           Text(
             l10n.leaderboard,
+            style: IoCrosswordTextStyles.mobile.body3,
           ),
           const SizedBox(width: 8),
           const Icon(IoIcons.trophy, size: 20),

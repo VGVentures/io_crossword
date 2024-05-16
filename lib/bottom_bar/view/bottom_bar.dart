@@ -34,7 +34,6 @@ class BottomBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -54,7 +53,6 @@ class BottomBarContent extends StatelessWidget {
               },
               child: Text(
                 l10n.endGame,
-                style: theme.textTheme.bodySmall,
               ),
             ),
             const SizedBox(width: 16),

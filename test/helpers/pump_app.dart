@@ -296,6 +296,7 @@ extension PumpRoute on WidgetTester {
               ],
               child: IoLayout(
                 child: MaterialApp(
+                  theme: IoCrosswordTheme().themeData,
                   localizationsDelegates:
                       AppLocalizations.localizationsDelegates,
                   supportedLocales: AppLocalizations.supportedLocales,

@@ -40,7 +40,7 @@ class WordPreSolvingLargeView extends StatelessWidget {
         const Spacer(),
         Text(
           selectedWord.word.clue,
-          style: IoCrosswordTextStyles.titleMD,
+          style: IoCrosswordTextStyles.desktop.body,
           textAlign: TextAlign.center,
         ),
         const Spacer(),
@@ -70,7 +70,7 @@ class WordPreSolvingSmallView extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           selectedWord.word.clue,
-          style: IoCrosswordTextStyles.titleMD,
+          style: IoCrosswordTextStyles.mobile.body,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),

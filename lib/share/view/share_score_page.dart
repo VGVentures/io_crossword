@@ -26,7 +26,6 @@ class ShareScorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final themeData = Theme.of(context);
 
     return Column(
       children: [
@@ -35,7 +34,6 @@ class ShareScorePage extends StatelessWidget {
         Text(
           l10n.shareScoreContent,
           textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyLarge.regular,
         ),
         const SizedBox(height: IoCrosswordSpacing.xlgsm),
         const PlayerInitials(),

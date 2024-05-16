@@ -15,22 +15,33 @@ class PlayerRankingInformation extends StatelessWidget {
     final streak =
         context.select((PlayerBloc bloc) => bloc.state.player.streak);
 
+    final style = IoCrosswordTextStyles.desktop.body5;
+
     return SegmentedButton(
       emptySelectionAllowed: true,
       segments: [
         ButtonSegment(
           value: rank,
-          label: Text(rank.toDisplayNumber()),
+          label: Text(
+            rank.toDisplayNumber(),
+            style: style,
+          ),
           icon: const Icon(IoIcons.trophy),
         ),
         ButtonSegment(
           value: score,
-          label: Text(score.toDisplayNumber()),
+          label: Text(
+            score.toDisplayNumber(),
+            style: style,
+          ),
           icon: const Icon(Icons.stars_rounded),
         ),
         ButtonSegment(
           value: streak,
-          label: Text(streak.toDisplayNumber()),
+          label: Text(
+            streak.toDisplayNumber(),
+            style: style,
+          ),
           icon: const Icon(Icons.local_fire_department),
         ),
       ],

@@ -81,7 +81,7 @@ class _Title extends StatelessWidget {
           const TextSpan(text: ' '),
           TextSpan(
             text: l10n.endingGame,
-            style: theme.textTheme.bodyLarge!.copyWith(
+            style: theme.io.textStyles.h2.copyWith(
               color: color,
             ),
           ),

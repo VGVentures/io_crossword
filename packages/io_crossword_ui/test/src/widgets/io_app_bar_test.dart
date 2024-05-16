@@ -68,7 +68,7 @@ void main() {
     testWidgets(
       'render crossword with small layout if title is null',
       (tester) async {
-        await tester.pumpApp(
+        await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
             actions: (_) => SizedBox(),
@@ -84,7 +84,7 @@ void main() {
     testWidgets(
       'renders crossword with large layout',
       (tester) async {
-        await tester.pumpApp(
+        await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
             actions: (_) => SizedBox(),
@@ -101,7 +101,7 @@ void main() {
       testWidgets(
         'renders title with $layout',
         (tester) async {
-          await tester.pumpApp(
+          await tester.pumpSubject(
             IoAppBar(
               crossword: 'Crossword',
               actions: (_) => SizedBox(),
@@ -119,7 +119,7 @@ void main() {
       testWidgets(
         'renders bottom widget with $layout',
         (tester) async {
-          await tester.pumpApp(
+          await tester.pumpSubject(
             IoAppBar(
               crossword: 'Crossword',
               actions: (_) => SizedBox(),
@@ -137,7 +137,7 @@ void main() {
     testWidgets(
       'display actions based on large layout',
       (tester) async {
-        await tester.pumpApp(
+        await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
             actions: (context) {
@@ -161,7 +161,7 @@ void main() {
     testWidgets(
       'display actions based on large layout',
       (tester) async {
-        await tester.pumpApp(
+        await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
             actions: (context) {
@@ -182,4 +182,19 @@ void main() {
       },
     );
   });
+}
+
+extension on WidgetTester {
+  /// Pumps the test subject with all its required ancestors.
+  Future<void> pumpSubject(
+    Widget child, {
+    IoLayoutData layout = IoLayoutData.small,
+  }) {
+    final themeData = IoCrosswordTheme().themeData;
+
+    return pumpApp(
+      Theme(data: themeData, child: child),
+      layout: layout,
+    );
+  }
 }

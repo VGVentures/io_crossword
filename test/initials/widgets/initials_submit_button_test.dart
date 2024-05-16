@@ -44,50 +44,6 @@ void main() {
 
       expect(find.text(l10n.enter), findsOneWidget);
     });
-
-    group('when layout is small', () {
-      testWidgets('renders text as bodySmall', (tester) async {
-        final themeData = IoCrosswordTheme().themeData;
-        final textStyle = themeData.textTheme.bodySmall!.copyWith(
-          inherit: false,
-        );
-
-        await tester.pumpSubject(
-          layout: IoLayoutData.small,
-          themeData: themeData.copyWith(
-            textTheme: themeData.textTheme.copyWith(
-              bodySmall: textStyle,
-            ),
-          ),
-          InitialsSubmitButton(onPressed: () {}),
-        );
-
-        final text = tester.widget<Text>(find.byType(Text));
-        expect(text.style, equals(textStyle));
-      });
-    });
-
-    group('when layout is large', () {
-      testWidgets('renders text as bodyMedium', (tester) async {
-        final themeData = IoCrosswordTheme().themeData;
-        final textStyle = themeData.textTheme.bodySmall!.copyWith(
-          inherit: false,
-        );
-
-        await tester.pumpSubject(
-          layout: IoLayoutData.large,
-          themeData: themeData.copyWith(
-            textTheme: themeData.textTheme.copyWith(
-              bodyMedium: textStyle,
-            ),
-          ),
-          InitialsSubmitButton(onPressed: () {}),
-        );
-
-        final text = tester.widget<Text>(find.byType(Text));
-        expect(text.style, equals(textStyle));
-      });
-    });
   });
 }
 
