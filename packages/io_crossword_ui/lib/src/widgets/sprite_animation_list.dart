@@ -98,7 +98,6 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
     );
 
     return SpriteAnimationWidget(
-      key: ValueKey(animationData.id),
       animation: animationData.spriteAnimation,
       animationTicker: animationData.spriteAnimationTicker,
       onComplete: animationData.onComplete?.call,
