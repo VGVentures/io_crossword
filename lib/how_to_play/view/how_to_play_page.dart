@@ -12,8 +12,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 class HowToPlayPage extends StatelessWidget {
   const HowToPlayPage({super.key});
 
-  static const String dangleMascotHeroTag = 'dangle_mascot_tag';
-
   @visibleForTesting
   static const routeName = '/how-to-play';
 
@@ -89,10 +87,7 @@ class _HowToPlaySmall extends StatelessWidget {
                   mascot.teamMascot.dangleSpriteDesktopData.height,
                 ),
               ),
-              child: const Hero(
-                tag: HowToPlayPage.dangleMascotHeroTag,
-                child: _MascotAnimation(),
-              ),
+              child: const _MascotAnimation(),
             ),
           ),
         ),
@@ -161,10 +156,7 @@ class _HowToPlayLarge extends StatelessWidget {
                   mascot.teamMascot.dangleSpriteDesktopData.height,
                 ),
               ),
-              child: const Hero(
-                tag: HowToPlayPage.dangleMascotHeroTag,
-                child: _MascotAnimation(),
-              ),
+              child: const _MascotAnimation(),
             ),
           ),
         ),
@@ -222,19 +214,7 @@ class _MascotAnimationState extends State<_MascotAnimation> {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == HowToPlayStatus.pickingUp) {
-          _controller.changeAnimation(
-            platformAwareAsset(
-              mobile: mascot!.teamMascot.pickUpMobileAnimation.path,
-              desktop: mascot.teamMascot.pickUpAnimation.path,
-            ),
-          );
-        }
-
-        if (state.status == HowToPlayStatus.complete) {
-          Navigator.of(context).pushAndRemoveUntil<void>(
-            CrosswordPage.route(),
-            (route) => route.isFirst,
-          );
+          _controller.update();
         }
       },
       builder: (context, state) {
@@ -247,17 +227,11 @@ class _MascotAnimationState extends State<_MascotAnimation> {
                       mobile: mascot!.teamMascot.lookUpSpriteMobileData,
                       desktop: mascot.teamMascot.lookUpSpriteDesktopData,
                     ),
-                  ),
-                  AnimationItem(
-                    spriteData: platformAwareAsset(
-                      mobile: mascot.teamMascot.pickUpSpriteMobileData,
-                      desktop: mascot.teamMascot.pickUpSpriteDesktopData,
-                    ),
-                    loop: false,
                     onComplete: () {
-                      context
-                          .read<HowToPlayCubit>()
-                          .updateStatus(HowToPlayStatus.complete);
+                      Navigator.of(context).pushAndRemoveUntil<void>(
+                        CrosswordPage.route(),
+                        (route) => route.isFirst,
+                      );
                     },
                   ),
                 ],

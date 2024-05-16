@@ -3,14 +3,12 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
-import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
@@ -26,7 +24,6 @@ class CrosswordPage extends StatelessWidget {
 
   static Route<void> route() {
     return PageRouteBuilder(
-      transitionDuration: const Duration(seconds: 3),
       settings: const RouteSettings(name: routeName),
       pageBuilder: (_, __, ___) => const CrosswordPage(),
     );
@@ -62,10 +59,25 @@ class CrosswordPage extends StatelessWidget {
   }
 }
 
-@visibleForTesting
-class CrosswordView extends StatelessWidget {
+class CrosswordView extends StatefulWidget {
   @visibleForTesting
   const CrosswordView({super.key});
+
+  @override
+  State<CrosswordView> createState() => _CrosswordViewState();
+}
+
+class _CrosswordViewState extends State<CrosswordView>
+    with SingleTickerProviderStateMixin {
+  final _controller = SpriteListController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool started = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +105,7 @@ class CrosswordView extends StatelessWidget {
               case RandomWordSelectionStatus.failure:
                 break;
               case RandomWordSelectionStatus.initialSuccess:
+                started = true;
                 final position = (
                   state.uncompletedSection!.position.x,
                   state.uncompletedSection!.position.y
@@ -143,7 +156,7 @@ class CrosswordView extends StatelessWidget {
             );
           },
         ),
-        body: BlocConsumer<CrosswordBloc, CrosswordState>(
+        body: BlocListener<CrosswordBloc, CrosswordState>(
           listenWhen: (previous, current) =>
               previous.gameStatus != current.gameStatus,
           listener: (context, state) {
@@ -151,35 +164,42 @@ class CrosswordView extends StatelessWidget {
               context.read<WordSelectionBloc>().add(const WordUnselected());
             }
           },
-          buildWhen: (previous, current) =>
-              previous.status != current.status ||
-              previous.mascotVisible != current.mascotVisible,
-          builder: (context, state) {
-            return Stack(
-              children: [
-                if (state.status == CrosswordStatus.failure)
-                  ErrorView(
-                    title: l10n.errorPromptText,
-                  )
-                else
-                  AnimatedSwitcher(
-                    duration: const Duration(seconds: 2),
-                    child: state.status == CrosswordStatus.ready
-                        ? const LoadedBoardView()
-                        : const SizedBox.shrink(),
-                  ),
-                if (state.mascotVisible)
-                  Align(
-                    child: Hero(
-                      tag: HowToPlayPage.dangleMascotHeroTag,
-                      child: MascotAnimation(
-                        context.read<PlayerBloc>().state.mascot!,
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          },
+          child: Stack(
+            children: [
+              BlocSelector<CrosswordBloc, CrosswordState, CrosswordStatus>(
+                selector: (state) => state.status,
+                builder: (context, status) {
+                  if (status == CrosswordStatus.failure) {
+                    return ErrorView(
+                      title: l10n.errorPromptText,
+                    );
+                  } else if (status == CrosswordStatus.ready) {
+                    return FadeInAnimation(
+                      onComplete: _controller.playNext,
+                      child: const LoadedBoardView(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BlocSelector<CrosswordBloc, CrosswordState, bool>(
+                  selector: (state) => state.mascotVisible,
+                  builder: (context, visible) {
+                    if (visible) {
+                      return MascotAnimation(
+                        _controller,
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -293,32 +313,101 @@ class _BottomActions extends StatelessWidget {
   }
 }
 
-class MascotAnimation extends StatefulWidget {
+class MascotAnimation extends StatelessWidget {
   @visibleForTesting
   const MascotAnimation(
-    this.mascot, {
+    this.controller, {
     super.key,
   });
 
-  final Mascots mascot;
+  final SpriteListController controller;
 
   @override
-  State<MascotAnimation> createState() => _MascotAnimationState();
+  Widget build(BuildContext context) {
+    final mascot = context.read<PlayerBloc>().state.mascot!;
+
+    return SizedBox.fromSize(
+      size: platformAwareAsset(
+        mobile: Size(
+          mascot.teamMascot.dangleSpriteMobileData.width,
+          mascot.teamMascot.dangleSpriteMobileData.height,
+        ),
+        desktop: Size(
+          mascot.teamMascot.dangleSpriteDesktopData.width,
+          mascot.teamMascot.dangleSpriteDesktopData.height,
+        ),
+      ),
+      child: SpriteAnimationList(
+        animationItems: [
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.pickUpSpriteMobileData,
+              desktop: mascot.teamMascot.pickUpSpriteDesktopData,
+            ),
+            loop: false,
+            onComplete: controller.playNext,
+          ),
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.dangleSpriteMobileData,
+              desktop: mascot.teamMascot.dangleSpriteDesktopData,
+            ),
+          ),
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.dropInSpriteMobileData,
+              desktop: mascot.teamMascot.dropInSpriteDesktopData,
+            ),
+            loop: false,
+            onComplete: () =>
+                context.read<CrosswordBloc>().add(const MascotDropped()),
+          ),
+        ],
+        controller: controller,
+      ),
+    );
+  }
 }
 
-class _MascotAnimationState extends State<MascotAnimation> {
-  final _controller = SpriteListController();
+class FadeInAnimation extends StatefulWidget {
+  const FadeInAnimation({
+    required this.child,
+    this.onComplete,
+    super.key,
+  });
+  final Widget child;
+  final VoidCallback? onComplete;
+
+  @override
+  State<FadeInAnimation> createState() => _FadeInAnimationState();
+}
+
+class _FadeInAnimationState extends State<FadeInAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-
-    _controller.changeAnimation(
-      platformAwareAsset(
-        mobile: widget.mascot.teamMascot.dangleMobileAnimation.path,
-        desktop: widget.mascot.teamMascot.dangleAnimation.path,
-      ),
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
     );
+    _animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(_controller);
+
+    _controller
+      ..forward()
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          if (widget.onComplete != null) {
+            widget.onComplete?.call();
+          }
+        }
+      });
   }
 
   @override
@@ -329,47 +418,9 @@ class _MascotAnimationState extends State<MascotAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.fromSize(
-      size: platformAwareAsset(
-        mobile: Size(
-          widget.mascot.teamMascot.dangleSpriteMobileData.width,
-          widget.mascot.teamMascot.dangleSpriteMobileData.height,
-        ),
-        desktop: Size(
-          widget.mascot.teamMascot.dangleSpriteDesktopData.width,
-          widget.mascot.teamMascot.dangleSpriteDesktopData.height,
-        ),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          _controller.changeAnimation(
-            platformAwareAsset(
-              mobile: widget.mascot.teamMascot.dropInMobileAnimation.path,
-              desktop: widget.mascot.teamMascot.dropInAnimation.path,
-            ),
-          );
-        },
-        child: SpriteAnimationList(
-          animationItems: [
-            AnimationItem(
-              spriteData: platformAwareAsset(
-                mobile: widget.mascot.teamMascot.dangleSpriteMobileData,
-                desktop: widget.mascot.teamMascot.dangleSpriteDesktopData,
-              ),
-            ),
-            AnimationItem(
-              spriteData: platformAwareAsset(
-                mobile: widget.mascot.teamMascot.dropInSpriteMobileData,
-                desktop: widget.mascot.teamMascot.dropInSpriteDesktopData,
-              ),
-              loop: false,
-              onComplete: () =>
-                  context.read<CrosswordBloc>().add(const MascotDropped()),
-            ),
-          ],
-          controller: _controller,
-        ),
-      ),
+    return FadeTransition(
+      opacity: _animation,
+      child: widget.child,
     );
   }
 }
