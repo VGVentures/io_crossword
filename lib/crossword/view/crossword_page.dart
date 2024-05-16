@@ -220,7 +220,15 @@ class LoadedBoardView extends StatelessWidget {
     return DefaultWordInputController(
       child: Stack(
         children: [
-          const Crossword2View(),
+          BlocSelector<CrosswordBloc, CrosswordState, bool>(
+            selector: (state) => state.mascotVisible,
+            builder: (context, mascotVisible) {
+              return IgnorePointer(
+                ignoring: mascotVisible,
+                child: const Crossword2View(),
+              );
+            },
+          ),
           const WordSelectionPage(),
           if (boardStatus != BoardStatus.resetInProgress)
             const BottomBar()

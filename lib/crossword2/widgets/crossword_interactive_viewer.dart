@@ -344,13 +344,20 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
               },
             ),
             if (layout == IoLayoutData.large)
-              Positioned(
-                bottom: 120,
-                right: 20,
-                child: ZoomControls(
-                  zoomInPressed: () => _zoomIn(context),
-                  zoomOutPressed: () => _zoomOut(context),
-                ),
+              BlocSelector<CrosswordBloc, CrosswordState, bool>(
+                selector: (state) => state.mascotVisible,
+                builder: (context, mascotVisible) {
+                  return mascotVisible
+                      ? const SizedBox.shrink()
+                      : Positioned(
+                          bottom: 120,
+                          right: 20,
+                          child: ZoomControls(
+                            zoomInPressed: () => _zoomIn(context),
+                            zoomOutPressed: () => _zoomOut(context),
+                          ),
+                        );
+                },
               ),
           ],
         );
