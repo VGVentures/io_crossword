@@ -1,15 +1,19 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
-import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart' as domain;
+import 'package:game_domain/game_domain.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -19,12 +23,18 @@ class _MockWordSelectionBloc
 
 class _MockWord extends Mock implements Word {}
 
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
 void main() {
   group('$CrosswordInteractiveViewer', () {
     late WordSelectionBloc wordSelectionBloc;
+    late CrosswordBloc crosswordBloc;
 
     setUp(() {
       wordSelectionBloc = _MockWordSelectionBloc();
+      crosswordBloc = _MockCrosswordBloc();
+
       when(() => wordSelectionBloc.state)
           .thenReturn(const WordSelectionState.initial());
     });
@@ -404,6 +414,75 @@ void main() {
         );
       });
     });
+
+    group('transformation', () {
+      testWidgets('translates when centering section', (tester) async {
+        when(() => wordSelectionBloc.state).thenReturn(
+          const WordSelectionState(
+            status: WordSelectionStatus.empty,
+            // ignore: avoid_redundant_argument_values
+            word: null,
+          ),
+        );
+        final streamController = StreamController<WordSelectionState>();
+        addTearDown(streamController.close);
+        final stream = streamController.stream.asBroadcastStream();
+
+        whenListen<WordSelectionState>(wordSelectionBloc, stream);
+
+        when(() => crosswordBloc.state).thenReturn(
+          CrosswordState(
+            initialWord: SelectedWord(
+              section: (0, 0),
+              word: Word(
+                id: 'id',
+                position: Point(0, 0),
+                axis: Axis.horizontal,
+                clue: 'clue',
+                answer: 'answer',
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpSubject(
+          wordSelectionBloc: wordSelectionBloc,
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: 0.4,
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
+
+        // Viewport size 520x600.
+        // "answer" is 300x50.
+        final rect = Rect.fromCenter(
+          center: Offset(483.33333333333326, 358.3333333333333),
+          width: 300,
+          height: 50,
+        );
+
+        final center = rect.center;
+
+        final interactiveViewerFinder = find.byType(InteractiveViewer);
+        expect(
+          tester
+              .widget<InteractiveViewer>(interactiveViewerFinder)
+              .transformationController!
+              .value,
+          Matrix4.translation(
+            Vector3(
+                  double.parse((520 / 2).toStringAsFixed(3)),
+                  double.parse((600 / 2).toStringAsFixed(3)),
+                  0,
+                ) -
+                Vector3(center.dx, center.dy, 0),
+          ),
+        );
+      });
+    });
   });
 }
 
@@ -411,6 +490,7 @@ extension on WidgetTester {
   Future<void> pumpSubject(
     Widget widget, {
     WordSelectionBloc? wordSelectionBloc,
+    CrosswordBloc? crosswordBloc,
     CrosswordLayoutData? crosswordLayoutData,
     IoLayoutData? layoutData,
   }) {
@@ -442,6 +522,7 @@ extension on WidgetTester {
           ),
         ),
       ),
+      crosswordBloc: crosswordBloc,
     );
   }
 }

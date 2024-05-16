@@ -5,80 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 
 void main() {
   group('CrosswordEvent', () {
-    group('$BoardSectionRequested', () {
-      test('can be instantiated', () {
-        expect(BoardSectionRequested((1, 1)), isA<BoardSectionRequested>());
-      });
-
-      test('supports value comparisons', () {
-        expect(BoardSectionRequested((1, 1)), BoardSectionRequested((1, 1)));
-        expect(
-          BoardSectionRequested((1, 1)),
-          isNot(
-            BoardSectionRequested(
-              (1, 2),
-            ),
-          ),
-        );
-      });
-    });
-
-    group('$BoardSectionLoaded', () {
-      final boardSection = BoardSection(
-        id: 'id',
-        position: Point(1, 1),
-        size: 20,
-        words: [],
-        borderWords: [],
-      );
-
-      test('can be instantiated', () {
-        expect(BoardSectionLoaded(boardSection), isA<BoardSectionLoaded>());
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          BoardSectionLoaded(boardSection),
-          BoardSectionLoaded(boardSection),
-        );
-        expect(
-          BoardSectionLoaded(boardSection),
-          isNot(
-            BoardSectionLoaded(
-              boardSection.copyWith(id: 'differentId'),
-            ),
-          ),
-        );
-      });
-    });
-
-    group('$LoadedSectionsSuspended', () {
-      test('can be instantiated', () {
-        expect(
-          LoadedSectionsSuspended({(1, 1)}),
-          isA<LoadedSectionsSuspended>(),
-        );
-      });
-
-      test('supports value comparisons', () {
-        expect(
-          LoadedSectionsSuspended({(1, 1)}),
-          LoadedSectionsSuspended({(1, 1)}),
-        );
-        expect(
-          LoadedSectionsSuspended({(1, 1)}),
-          isNot(
-            LoadedSectionsSuspended(
-              {(1, 2)},
-            ),
-          ),
-        );
-      });
-    });
-
     group('$BoardLoadingInformationRequested', () {
       test('can be instantiated', () {
         expect(
@@ -122,6 +52,35 @@ void main() {
 
       test('supports value comparisons', () {
         expect(MascotDropped(), equals(MascotDropped()));
+      });
+    });
+
+    group('CrosswordSelectionsLoaded', () {
+      final selectedWord = SelectedWord(
+        section: (0, 0),
+        word: Word(
+          id: 'id',
+          position: Point(0, 0),
+          axis: Axis.horizontal,
+          clue: 'clue',
+          answer: 'answer',
+        ),
+      );
+
+      test('can be instantiated', () {
+        expect(
+          CrosswordSectionsLoaded(selectedWord),
+          isA<CrosswordSectionsLoaded>(),
+        );
+      });
+
+      test('supports value comparisons', () {
+        expect(
+          CrosswordSectionsLoaded(selectedWord),
+          equals(
+            CrosswordSectionsLoaded(selectedWord),
+          ),
+        );
       });
     });
   });

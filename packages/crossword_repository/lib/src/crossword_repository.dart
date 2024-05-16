@@ -134,4 +134,16 @@ class CrosswordRepository {
       },
     );
   }
+
+  /// Loads all the sections of the crossword board.
+  Stream<List<BoardSection>> loadBoardSections() {
+    final snapshot = sectionCollection.snapshots().map(
+          (snapshot) => snapshot.docs.map((doc) {
+            final dataJson = doc.data();
+            dataJson['id'] = doc.id;
+            return BoardSection.fromJson(dataJson);
+          }).toList(),
+        );
+    return snapshot;
+  }
 }

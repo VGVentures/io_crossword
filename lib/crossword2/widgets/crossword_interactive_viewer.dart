@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart' as domain;
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -52,10 +53,8 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// [TransformationController] to its descendants.
   late TransformationController _transformationController;
 
-  late AnimationController? _animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 300),
-  );
+  late AnimationController _animationController;
+
   Animation<Matrix4>? _transformationAnimation;
 
   /// The minimum amount of translation allowed.
@@ -85,7 +84,6 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
   void _zoom(double value, BuildContext context) {
     final animationController = _animationController;
-    if (animationController == null) return;
     if (animationController.isAnimating) return;
 
     final viewport = _viewport;
@@ -139,9 +137,22 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _zoom(-0.2, context);
   }
 
+  void _centerSelectedSection(BuildContext context) {
+    final selectedWord = context.read<CrosswordBloc>().state.initialWord;
+
+    if (selectedWord == null) return;
+
+    final viewport = _viewport;
+    if (viewport == null) return;
+
+    final transformationEnd = _calculatorTransformationEnd(selectedWord);
+
+    _transformationController.value =
+        Matrix4.translation(transformationEnd.getTranslation());
+  }
+
   void _centerSelectedWord(BuildContext context) {
     final animationController = _animationController;
-    if (animationController == null) return;
     if (animationController.isAnimating) return;
 
     final selectedWord = context.read<WordSelectionBloc>().state.word;
@@ -150,8 +161,20 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewport = _viewport;
     if (viewport == null) return;
 
+    final transformationEnd = _calculatorTransformationEnd(selectedWord);
+
+    _playTransformation(
+      _transformationController.value,
+      transformationEnd,
+      animationController,
+    );
+  }
+
+  Matrix4 _calculatorTransformationEnd(SelectedWord selectedWord) {
     final layout = IoLayout.of(context);
     final crosswordLayout = CrosswordLayoutScope.of(context);
+
+    final viewport = _viewport!;
 
     _maxTranslation.setValues(
       -(crosswordLayout.crosswordSize.width +
@@ -207,14 +230,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         _maxTranslation.y,
       );
 
-    final transformationEnd = Matrix4.translation(translationEnd)
-      ..scale(scaleEnd);
-
-    _playTransformation(
-      _transformationController.value,
-      transformationEnd,
-      animationController,
-    );
+    return Matrix4.translation(translationEnd)..scale(scaleEnd);
   }
 
   void _playTransformation(
@@ -239,64 +255,72 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _centerSelectedSection(context);
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transformationController = DefaultTransformationController.of(context);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   @override
   void dispose() {
     _transformationAnimation?.removeListener(_onAnimateTransformation);
     _transformationAnimation = null;
-    _animationController?.dispose();
-    _animationController = null;
+    _animationController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WordSelectionBloc, WordSelectionState>(
-      listenWhen: (previous, current) =>
-          previous.word != current.word && current.word != null,
-      listener: (context, state) => _centerSelectedWord(context),
-      child: BlocBuilder<WordSelectionBloc, WordSelectionState>(
-        buildWhen: (previous, current) {
-          return (previous.word != null) != (current.word != null);
-        },
-        builder: (context, state) {
-          final layout = IoLayout.of(context);
-          return Stack(
-            children: [
-              InteractiveViewer.builder(
-                minScale: widget.zoomLimit,
-                maxScale: _maxScale,
-                panEnabled: state.word == null,
-                transformationController: _transformationController,
-                builder: (context, quad) {
-                  _viewport = quad;
+    return BlocBuilder<WordSelectionBloc, WordSelectionState>(
+      buildWhen: (previous, current) =>
+          previous.word != current.word || current.word == null,
+      builder: (context, state) {
+        final layout = IoLayout.of(context);
+        return Stack(
+          children: [
+            InteractiveViewer.builder(
+              minScale: widget.zoomLimit,
+              maxScale: _maxScale,
+              panEnabled: state.word == null,
+              transformationController: _transformationController,
+              builder: (context, quad) {
+                _viewport = quad;
 
+                if (state.word != null) {
                   _centerSelectedWord(context);
+                }
 
-                  return QuadScope(
-                    data: quad,
-                    child: widget.builder(context, quad),
-                  );
-                },
-              ),
-              if (layout == IoLayoutData.large)
-                Positioned(
-                  bottom: 120,
-                  right: 20,
-                  child: ZoomControls(
-                    zoomInPressed: () => _zoomIn(context),
-                    zoomOutPressed: () => _zoomOut(context),
-                  ),
+                return QuadScope(
+                  data: quad,
+                  child: widget.builder(context, quad),
+                );
+              },
+            ),
+            if (layout == IoLayoutData.large)
+              Positioned(
+                bottom: 120,
+                right: 20,
+                child: ZoomControls(
+                  zoomInPressed: () => _zoomIn(context),
+                  zoomOutPressed: () => _zoomOut(context),
                 ),
-            ],
-          );
-        },
-      ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

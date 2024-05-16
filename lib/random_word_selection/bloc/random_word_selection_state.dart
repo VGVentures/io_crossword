@@ -3,6 +3,7 @@ part of 'random_word_selection_bloc.dart';
 enum RandomWordSelectionStatus {
   initial,
   loading,
+  initialSuccess,
   success,
   notFound,
   failure,

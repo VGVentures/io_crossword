@@ -166,5 +166,38 @@ void main() {
         );
       });
     });
+
+    group('loadBoardSections', () {
+      test('returns all sections', () async {
+        final section = BoardSection(
+          id: 'id1',
+          position: Point(0, 1),
+          size: 10,
+          words: [
+            word,
+          ],
+          borderWords: const [],
+        );
+
+        final section2 = section.copyWith(id: 'id2');
+
+        await firebaseFirestore
+            .collection(sectionsCollection)
+            .doc(section.id)
+            .set(section.toJson());
+
+        await firebaseFirestore
+            .collection(sectionsCollection)
+            .doc(section2.id)
+            .set(section2.toJson());
+
+        expect(
+          crosswordRepository.loadBoardSections(),
+          emits(
+            [section, section2],
+          ),
+        );
+      });
+    });
   });
 }

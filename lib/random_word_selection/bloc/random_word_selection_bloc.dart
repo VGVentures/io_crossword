@@ -31,7 +31,9 @@ class RandomWordSelectionBloc
       if (randomSection != null) {
         emit(
           state.copyWith(
-            status: RandomWordSelectionStatus.success,
+            status: event.isInitial
+                ? RandomWordSelectionStatus.initialSuccess
+                : RandomWordSelectionStatus.success,
             uncompletedSection: randomSection,
           ),
         );

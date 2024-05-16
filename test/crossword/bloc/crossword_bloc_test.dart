@@ -10,13 +10,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/bloc/crossword_bloc.dart';
 import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
 
 class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
-
-class _MockStream extends Mock implements StreamSubscription<BoardSection?> {}
 
 void main() {
   group('CrosswordBloc', () {
@@ -78,172 +77,6 @@ void main() {
           boardInfoRepository: boardInfoRepository,
         ),
         isA<CrosswordBloc>(),
-      );
-    });
-
-    group('$LoadedSectionsSuspended', () {
-      late StreamSubscription<BoardSection?> subscription;
-
-      setUp(() {
-        subscription = _MockStream();
-        when(() => subscription.cancel()).thenAnswer((_) async => {});
-      });
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'pauses subscriptions for sections that are not visible',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-          subscriptionsMap: {(0, 0): subscription},
-        ),
-        setUp: () {
-          when(() => subscription.isPaused).thenReturn(false);
-        },
-        act: (bloc) => bloc.add(const LoadedSectionsSuspended({(1, 1)})),
-        verify: (bloc) {
-          verify(() => subscription.pause()).called(1);
-        },
-      );
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'does nothing for sections that are visible',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-          subscriptionsMap: {(0, 0): subscription},
-        ),
-        act: (bloc) => bloc.add(const LoadedSectionsSuspended({(0, 0)})),
-        verify: (bloc) {
-          verifyNever(() => subscription.pause());
-        },
-      );
-    });
-
-    group('BoardSectionRequested', () {
-      late StreamSubscription<BoardSection?> subscription;
-
-      setUp(() {
-        subscription = _MockStream();
-        when(() => subscription.cancel()).thenAnswer((_) async => {});
-      });
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits [failure] when watchSectionFromPosition returns error',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        setUp: () {
-          when(
-            () => crosswordRepository.watchSectionFromPosition(1, 1),
-          ).thenAnswer((_) => Stream.error(Exception()));
-        },
-        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.failure,
-          ),
-        ],
-      );
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'resumes subscription if is paused',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-          subscriptionsMap: {(1, 1): subscription},
-        ),
-        setUp: () {
-          when(() => subscription.isPaused).thenReturn(true);
-        },
-        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
-        verify: (_) {
-          verify(() => subscription.resume()).called(1);
-        },
-      );
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits [success] and adds first sections when BoardSectionRequested is '
-        'called for the first time',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        setUp: () {
-          when(
-            () => crosswordRepository.watchSectionFromPosition(1, 1),
-          ).thenAnswer((_) => Stream.value(section));
-        },
-        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: sectionSize,
-            sections: {
-              (1, 1): section,
-            },
-          ),
-        ],
-      );
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'does nothing if already requested',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        setUp: () {
-          when(
-            () => crosswordRepository.watchSectionFromPosition(1, 1),
-          ).thenAnswer((_) => Stream.value(section));
-        },
-        act: (bloc) => bloc
-          ..add(const BoardSectionRequested((1, 1)))
-          ..add(const BoardSectionRequested((1, 1))),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: sectionSize,
-            sections: {
-              (1, 1): section,
-            },
-          ),
-        ],
-        verify: (bloc) {
-          verify(() => crosswordRepository.watchSectionFromPosition(1, 1))
-              .called(1);
-        },
-      );
-
-      blocTest<CrosswordBloc, CrosswordState>(
-        'emits [success] and adds new sections '
-        'when BoardSectionRequested is added',
-        build: () => CrosswordBloc(
-          crosswordRepository: crosswordRepository,
-          boardInfoRepository: boardInfoRepository,
-        ),
-        setUp: () {
-          when(
-            () => crosswordRepository.watchSectionFromPosition(1, 1),
-          ).thenAnswer((_) => Stream.value(section));
-        },
-        seed: () => CrosswordState(
-          sectionSize: sectionSize,
-          sections: {
-            (0, 1): section,
-          },
-        ),
-        act: (bloc) => bloc.add(const BoardSectionRequested((1, 1))),
-        expect: () => <CrosswordState>[
-          CrosswordState(
-            status: CrosswordStatus.success,
-            sectionSize: sectionSize,
-            sections: {
-              (0, 1): section,
-              (1, 1): section,
-            },
-          ),
-        ],
       );
     });
 
@@ -434,6 +267,58 @@ void main() {
         expect: () => <CrosswordState>[
           CrosswordState(
             mascotVisible: false,
+          ),
+        ],
+      );
+    });
+
+    group('CrosswordSectionLoaded', () {
+      final selectedWord = SelectedWord(
+        section: (0, 0),
+        word: Word(
+          id: 'id',
+          position: Point(0, 0),
+          axis: Axis.horizontal,
+          clue: 'clue',
+          answer: 'answer',
+        ),
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [failure] state when loadBoardSections fails',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => crosswordRepository.loadBoardSections())
+              .thenAnswer((_) => Stream.error(Exception()));
+        },
+        act: (bloc) => bloc.add(CrosswordSectionsLoaded(selectedWord)),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.failure,
+          ),
+        ],
+      );
+
+      blocTest<CrosswordBloc, CrosswordState>(
+        'emits [success] state with sections when loadBoardSections succeeds',
+        build: () => CrosswordBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => crosswordRepository.loadBoardSections())
+              .thenAnswer((_) => Stream.value([section]));
+        },
+        act: (bloc) => bloc.add(CrosswordSectionsLoaded(selectedWord)),
+        expect: () => <CrosswordState>[
+          CrosswordState(
+            status: CrosswordStatus.ready,
+            sections: {(1, 1): section},
+            sectionSize: section.size,
+            initialWord: selectedWord,
           ),
         ],
       );

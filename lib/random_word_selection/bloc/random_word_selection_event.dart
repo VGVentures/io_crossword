@@ -5,8 +5,10 @@ abstract class RandomWordSelectionEvent extends Equatable {
 }
 
 class RandomWordRequested extends RandomWordSelectionEvent {
-  const RandomWordRequested();
+  const RandomWordRequested({this.isInitial = false});
+
+  final bool isInitial;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [isInitial];
 }
