@@ -37,7 +37,6 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
 
     _currentAnimationId = widget.animationItems[0].spriteData.path;
     widget.controller.currentAnimationId = _currentAnimationId;
-    widget.controller.currentPlayingAnimationId = _currentAnimationId;
 
     for (final animationItem in widget.animationItems) {
       final spriteAnimation = SpriteAnimation.fromFrameData(
@@ -84,7 +83,6 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
         if (_animationDataList[index].spriteAnimationTicker.isLastFrame) {
           setState(() {
             _currentAnimationId = nextAnimationId!;
-            widget.controller.currentPlayingAnimationId = nextAnimationId;
             widget.controller.updated = false;
             _animationDataList[index].onComplete?.call();
           });
@@ -112,16 +110,10 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
 /// Controller that manages the sprite animations.
 /// {@endtemplate}
 class SpriteListController extends ChangeNotifier {
-  /// The id of the animation that is currently playing.
-  String? currentPlayingAnimationId;
-
   /// The list of animations.
   List<AnimationData> animationDataList = [];
 
   /// The id of the current animation.
-  ///
-  /// This could be different from the [currentPlayingAnimationId] if
-  /// changeAnimation is called before the current animation completes.
   String? currentAnimationId;
 
   /// Whether the animation has been updated.
@@ -154,9 +146,7 @@ class SpriteListController extends ChangeNotifier {
     }
 
     currentAnimationId = animationDataList[nextIndex].id;
-
     updated = true;
-
     notifyListeners();
   }
 
