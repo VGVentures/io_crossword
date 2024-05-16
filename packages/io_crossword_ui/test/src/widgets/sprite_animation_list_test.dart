@@ -71,7 +71,7 @@ void main() {
       expect(find.byType(SpriteAnimationList), findsOneWidget);
     });
 
-    testWidgets('shows the second animation when changed', (tester) async {
+    testWidgets('plays next animation when playNext is called', (tester) async {
       final controller = SpriteListController();
 
       final spriteAnimationList = SpriteAnimationList(
@@ -84,12 +84,12 @@ void main() {
 
       await tester.pumpWidget(spriteAnimationList);
 
-      controller.changeAnimation(dropInSpriteData.path);
+      controller.playNext();
 
       controller.animationDataList.first.spriteAnimationTicker.setToLast();
 
       expect(
-        controller.currentPlayingAnimationId,
+        controller.currentAnimationId,
         equals(dropInSpriteData.path),
       );
     });

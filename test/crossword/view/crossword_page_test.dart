@@ -4,7 +4,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Axis;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -332,97 +331,43 @@ void main() {
       },
     );
 
-    testWidgets(
-        'dropIn animation is displayed when SpriteAnimationList '
-        'is tapped on mobile', (tester) async {
-      debugDefaultTargetPlatformOverride = TargetPlatform.android;
-
-      await tester.pumpSubject(
-        CrosswordView(),
-        crosswordBloc: crosswordBloc,
-      );
-
-      await tester.tap(find.byType(SpriteAnimationList));
-
-      final mascotAnimation = tester.widget<MascotAnimation>(
-        find.byType(MascotAnimation),
-      );
-
-      final spriteAnimationList = tester.widget<SpriteAnimationList>(
-        find.byType(SpriteAnimationList),
-      );
-
-      await tester.tap(find.byType(SpriteAnimationList));
-
-      expect(
-        spriteAnimationList.controller.currentAnimationId,
-        equals(mascotAnimation.mascot.teamMascot.dropInMobileAnimation.path),
-      );
-
-      debugDefaultTargetPlatformOverride = null;
-    });
-
-    testWidgets(
-        'dropIn animation is displayed when SpriteAnimationList '
-        'is tapped on desktop', (tester) async {
-      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-
-      await tester.pumpSubject(
-        CrosswordView(),
-        crosswordBloc: crosswordBloc,
-        layout: IoLayoutData.large,
-      );
-
-      await tester.tap(find.byType(SpriteAnimationList));
-
-      final mascotAnimation = tester.widget<MascotAnimation>(
-        find.byType(MascotAnimation),
-      );
-
-      final spriteAnimationList = tester.widget<SpriteAnimationList>(
-        find.byType(SpriteAnimationList),
-      );
-
-      await tester.tap(find.byType(SpriteAnimationList));
-
-      expect(
-        spriteAnimationList.controller.currentAnimationId,
-        equals(mascotAnimation.mascot.teamMascot.dropInAnimation.path),
-      );
-
-      debugDefaultTargetPlatformOverride = null;
-    });
-
     for (final layout in IoLayoutData.values) {
       testWidgets(
-          'verify MascotDropped is called with dropIn animation '
+          'verify MascotDropped is called when dropIn animation '
           'completes with $layout', (tester) async {
         await tester.runAsync(() async {
+          when(() => crosswordBloc.state).thenReturn(
+            const CrosswordState(
+              status: CrosswordStatus.ready,
+            ),
+          );
+
           await tester.pumpSubject(
             CrosswordView(),
             crosswordBloc: crosswordBloc,
             layout: layout,
           );
 
-          await tester.tap(find.byType(SpriteAnimationList));
-
-          await tester.pump();
-
           final spriteAnimationList = tester.widget<SpriteAnimationList>(
             find.byType(SpriteAnimationList),
           );
 
           await Future<void>.delayed(Duration(seconds: 3));
-
-          await tester.pump();
+          await tester.pump(Duration(seconds: 3));
 
           final controller = spriteAnimationList.controller;
 
-          controller.animationDataList[1].spriteAnimationTicker.setToLast();
+          await Future<void>.delayed(Duration(seconds: 3));
+          await tester.pump(Duration(seconds: 3));
 
-          await controller.animationDataList[1].spriteAnimationTicker.completed;
+          controller.animationDataList.last.spriteAnimationTicker.setToLast();
 
-          verify(() => crosswordBloc.add(const MascotDropped())).called(1);
+          await controller
+              .animationDataList.last.spriteAnimationTicker.completed;
+
+          await tester.pump(Duration(seconds: 3));
+
+          verify(() => crosswordBloc.add(MascotDropped())).called(1);
         });
       });
     }

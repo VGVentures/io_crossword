@@ -10,7 +10,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
-import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:io_crossword/random_word_selection/random_word_selection.dart';
@@ -26,7 +25,6 @@ class CrosswordPage extends StatelessWidget {
 
   static Route<void> route() {
     return PageRouteBuilder(
-      transitionDuration: const Duration(seconds: 3),
       settings: const RouteSettings(name: routeName),
       pageBuilder: (_, __, ___) => const CrosswordPage(),
     );
@@ -62,10 +60,23 @@ class CrosswordPage extends StatelessWidget {
   }
 }
 
-@visibleForTesting
-class CrosswordView extends StatelessWidget {
+class CrosswordView extends StatefulWidget {
   @visibleForTesting
   const CrosswordView({super.key});
+
+  @override
+  State<CrosswordView> createState() => _CrosswordViewState();
+}
+
+class _CrosswordViewState extends State<CrosswordView>
+    with SingleTickerProviderStateMixin {
+  final _controller = SpriteListController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +154,7 @@ class CrosswordView extends StatelessWidget {
             );
           },
         ),
-        body: BlocConsumer<CrosswordBloc, CrosswordState>(
+        body: BlocListener<CrosswordBloc, CrosswordState>(
           listenWhen: (previous, current) =>
               previous.gameStatus != current.gameStatus,
           listener: (context, state) {
@@ -151,35 +162,43 @@ class CrosswordView extends StatelessWidget {
               context.read<WordSelectionBloc>().add(const WordUnselected());
             }
           },
-          buildWhen: (previous, current) =>
-              previous.status != current.status ||
-              previous.mascotVisible != current.mascotVisible,
-          builder: (context, state) {
-            return Stack(
-              children: [
-                if (state.status == CrosswordStatus.failure)
-                  ErrorView(
-                    title: l10n.errorPromptText,
-                  )
-                else
-                  AnimatedSwitcher(
-                    duration: const Duration(seconds: 2),
-                    child: state.status == CrosswordStatus.ready
-                        ? const LoadedBoardView()
-                        : const SizedBox.shrink(),
-                  ),
-                if (state.mascotVisible)
-                  Align(
-                    child: Hero(
-                      tag: HowToPlayPage.dangleMascotHeroTag,
-                      child: MascotAnimation(
+          child: Stack(
+            children: [
+              BlocSelector<CrosswordBloc, CrosswordState, CrosswordStatus>(
+                selector: (state) => state.status,
+                builder: (context, status) {
+                  if (status == CrosswordStatus.failure) {
+                    return ErrorView(
+                      title: l10n.errorPromptText,
+                    );
+                  } else if (status == CrosswordStatus.ready) {
+                    return FadeInAnimation(
+                      onComplete: _controller.playNext,
+                      child: const LoadedBoardView(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BlocSelector<CrosswordBloc, CrosswordState, bool>(
+                  selector: (state) => state.mascotVisible,
+                  builder: (context, visible) {
+                    if (visible) {
+                      return MascotAnimation(
                         context.read<PlayerBloc>().state.mascot!,
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          },
+                        _controller,
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -200,7 +219,15 @@ class LoadedBoardView extends StatelessWidget {
     return DefaultWordInputController(
       child: Stack(
         children: [
-          const Crossword2View(),
+          BlocSelector<CrosswordBloc, CrosswordState, bool>(
+            selector: (state) => state.mascotVisible,
+            builder: (context, mascotVisible) {
+              return IgnorePointer(
+                ignoring: mascotVisible,
+                child: const Crossword2View(),
+              );
+            },
+          ),
           const WordSelectionPage(),
           if (boardStatus != BoardStatus.resetInProgress)
             const BottomBar()
@@ -293,82 +320,57 @@ class _BottomActions extends StatelessWidget {
   }
 }
 
-class MascotAnimation extends StatefulWidget {
+class MascotAnimation extends StatelessWidget {
   @visibleForTesting
   const MascotAnimation(
-    this.mascot, {
+    this.mascot,
+    this.controller, {
     super.key,
   });
 
   final Mascots mascot;
-
-  @override
-  State<MascotAnimation> createState() => _MascotAnimationState();
-}
-
-class _MascotAnimationState extends State<MascotAnimation> {
-  final _controller = SpriteListController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller.changeAnimation(
-      platformAwareAsset(
-        mobile: widget.mascot.teamMascot.dangleMobileAnimation.path,
-        desktop: widget.mascot.teamMascot.dangleAnimation.path,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final SpriteListController controller;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox.fromSize(
       size: platformAwareAsset(
         mobile: Size(
-          widget.mascot.teamMascot.dangleSpriteMobileData.width,
-          widget.mascot.teamMascot.dangleSpriteMobileData.height,
+          mascot.teamMascot.dangleSpriteMobileData.width,
+          mascot.teamMascot.dangleSpriteMobileData.height,
         ),
         desktop: Size(
-          widget.mascot.teamMascot.dangleSpriteDesktopData.width,
-          widget.mascot.teamMascot.dangleSpriteDesktopData.height,
+          mascot.teamMascot.dangleSpriteDesktopData.width,
+          mascot.teamMascot.dangleSpriteDesktopData.height,
         ),
       ),
-      child: GestureDetector(
-        onTap: () {
-          _controller.changeAnimation(
-            platformAwareAsset(
-              mobile: widget.mascot.teamMascot.dropInMobileAnimation.path,
-              desktop: widget.mascot.teamMascot.dropInAnimation.path,
+      child: SpriteAnimationList(
+        animationItems: [
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.pickUpSpriteMobileData,
+              desktop: mascot.teamMascot.pickUpSpriteDesktopData,
             ),
-          );
-        },
-        child: SpriteAnimationList(
-          animationItems: [
-            AnimationItem(
-              spriteData: platformAwareAsset(
-                mobile: widget.mascot.teamMascot.dangleSpriteMobileData,
-                desktop: widget.mascot.teamMascot.dangleSpriteDesktopData,
-              ),
+            loop: false,
+            onComplete: controller.playNext,
+          ),
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.dangleSpriteMobileData,
+              desktop: mascot.teamMascot.dangleSpriteDesktopData,
             ),
-            AnimationItem(
-              spriteData: platformAwareAsset(
-                mobile: widget.mascot.teamMascot.dropInSpriteMobileData,
-                desktop: widget.mascot.teamMascot.dropInSpriteDesktopData,
-              ),
-              loop: false,
-              onComplete: () =>
-                  context.read<CrosswordBloc>().add(const MascotDropped()),
+          ),
+          AnimationItem(
+            spriteData: platformAwareAsset(
+              mobile: mascot.teamMascot.dropInSpriteMobileData,
+              desktop: mascot.teamMascot.dropInSpriteDesktopData,
             ),
-          ],
-          controller: _controller,
-        ),
+            loop: false,
+            onComplete: () =>
+                context.read<CrosswordBloc>().add(const MascotDropped()),
+          ),
+        ],
+        controller: controller,
       ),
     );
   }

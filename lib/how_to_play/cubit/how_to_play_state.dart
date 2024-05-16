@@ -3,7 +3,6 @@ part of 'how_to_play_cubit.dart';
 enum HowToPlayStatus {
   idle,
   pickingUp,
-  complete,
 }
 
 enum AssetsLoadingStatus {

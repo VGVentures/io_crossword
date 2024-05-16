@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
@@ -23,12 +24,16 @@ class _MockRandomWordSelectionBloc
     extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
     implements RandomWordSelectionBloc {}
 
+class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
+    implements CrosswordBloc {}
+
 class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   group('$BottomBar', () {
     late WordSelectionBloc wordSelectionBloc;
     late RandomWordSelectionBloc randomWordSelectionBloc;
+    late CrosswordBloc crosswordBloc;
     late Widget widget;
     late AppLocalizations l10n;
     late AudioController audioController;
@@ -41,6 +46,12 @@ void main() {
       audioController = _MockAudioController();
       wordSelectionBloc = _MockWordSelectionBloc();
       randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+      crosswordBloc = _MockCrosswordBloc();
+
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(mascotVisible: false),
+      );
+
       widget = MultiBlocProvider(
         providers: [
           BlocProvider<WordSelectionBloc>(
@@ -48,6 +59,9 @@ void main() {
           ),
           BlocProvider<RandomWordSelectionBloc>(
             create: (_) => randomWordSelectionBloc,
+          ),
+          BlocProvider<CrosswordBloc>(
+            create: (_) => crosswordBloc,
           ),
         ],
         child: BottomBar(),
@@ -87,6 +101,11 @@ void main() {
         when(() => wordSelectionBloc.state).thenReturn(
           const WordSelectionState.initial(),
         );
+
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(mascotVisible: false),
+        );
+
         await tester.pumpApp(widget);
 
         await tester.tap(find.text(l10n.findNewWord));

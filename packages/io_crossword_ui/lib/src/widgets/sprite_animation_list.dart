@@ -36,7 +36,7 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
     super.initState();
 
     _currentAnimationId = widget.animationItems[0].spriteData.path;
-    widget.controller.currentPlayingAnimationId = _currentAnimationId;
+    widget.controller.currentAnimationId = _currentAnimationId;
 
     for (final animationItem in widget.animationItems) {
       final spriteAnimation = SpriteAnimation.fromFrameData(
@@ -70,8 +70,9 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
     widget.controller.animationDataList = _animationDataList;
 
     widget.controller.addListener(() {
-      if (widget.controller.currentAnimationId == null ||
-          _currentAnimationId == widget.controller.currentAnimationId) {
+      if (!widget.controller.updated &&
+          (widget.controller.currentAnimationId == null ||
+              _currentAnimationId == widget.controller.currentAnimationId)) {
         return;
       } else {
         final nextAnimationId = widget.controller.currentAnimationId;
@@ -80,9 +81,10 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
         );
 
         if (_animationDataList[index].spriteAnimationTicker.isLastFrame) {
-          widget.controller.currentPlayingAnimationId = nextAnimationId;
           setState(() {
             _currentAnimationId = nextAnimationId!;
+            widget.controller.updated = false;
+            _animationDataList[index].onComplete?.call();
           });
         }
       }
@@ -107,26 +109,38 @@ class _SpriteAnimationListState extends State<SpriteAnimationList> {
 /// Controller that manages the sprite animations.
 /// {@endtemplate}
 class SpriteListController extends ChangeNotifier {
-  String? _currentAnimationId;
-
-  /// The id of the animation that is currently playing.
-  String? currentPlayingAnimationId;
-
   /// The list of animations.
   List<AnimationData> animationDataList = [];
 
   /// The id of the current animation.
-  ///
-  /// This could be different from the [currentPlayingAnimationId] if
-  /// changeAnimation is called before the current animation completes.
-  String? get currentAnimationId => _currentAnimationId;
+  String? currentAnimationId;
 
-  /// Changes the current animation to the one with the given [id].
-  ///
-  /// The animation will update once the current animation reaches the last
-  /// frame in the current loop.
-  void changeAnimation(String id) {
-    _currentAnimationId = id;
+  /// Whether the animation has been updated.
+  bool updated = false;
+
+  /// Plays the next animation in the list.
+  void playNext() {
+    final index = animationDataList.indexWhere(
+      (element) => element.id == currentAnimationId,
+    );
+
+    if (index == -1) {
+      return;
+    }
+
+    final nextIndex = index + 1;
+
+    if (nextIndex >= animationDataList.length) {
+      return;
+    }
+
+    currentAnimationId = animationDataList[nextIndex].id;
+    update();
+  }
+
+  /// Notifies the listeners that the animation has been updated.
+  void update() {
+    updated = true;
     notifyListeners();
   }
 
