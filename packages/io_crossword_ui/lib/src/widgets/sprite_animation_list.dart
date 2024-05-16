@@ -119,16 +119,6 @@ class SpriteListController extends ChangeNotifier {
   /// Whether the animation has been updated.
   bool updated = false;
 
-  /// Changes the current animation to the one with the given [id].
-  ///
-  /// The animation will update once the current animation reaches the last
-  /// frame in the current loop.
-  void changeAnimation(String id) {
-    currentAnimationId = id;
-    updated = true;
-    notifyListeners();
-  }
-
   /// Plays the next animation in the list.
   void playNext() {
     final index = animationDataList.indexWhere(
@@ -146,8 +136,7 @@ class SpriteListController extends ChangeNotifier {
     }
 
     currentAnimationId = animationDataList[nextIndex].id;
-    updated = true;
-    notifyListeners();
+    update();
   }
 
   /// Notifies the listeners that the animation has been updated.
