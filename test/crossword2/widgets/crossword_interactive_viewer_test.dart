@@ -37,6 +37,12 @@ void main() {
 
       when(() => wordSelectionBloc.state)
           .thenReturn(const WordSelectionState.initial());
+
+      when(() => crosswordBloc.state).thenReturn(
+        const CrosswordState(
+          mascotVisible: false,
+        ),
+      );
     });
 
     testWidgets('pumps successfully', (tester) async {
@@ -52,10 +58,27 @@ void main() {
       expect(find.byType(CrosswordInteractiveViewer), findsOneWidget);
     });
 
-    testWidgets('pumps with zoom controls when layout is large',
+    testWidgets('pumps without zoom controls when layout is large',
         (tester) async {
       await tester.pumpSubject(
         layoutData: IoLayoutData.large,
+        CrosswordInteractiveViewer(
+          zoomLimit: 0.4,
+          builder: (context, position) {
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(find.byType(ZoomControls), findsNothing);
+    });
+
+    testWidgets(
+        'pumps with zoom controls when layout '
+        'is large when mascot is not visible', (tester) async {
+      await tester.pumpSubject(
+        layoutData: IoLayoutData.large,
+        crosswordBloc: crosswordBloc,
         CrosswordInteractiveViewer(
           zoomLimit: 0.4,
           builder: (context, position) {
@@ -84,6 +107,7 @@ void main() {
 
     testWidgets('zooms in when zoom in button is pressed', (tester) async {
       await tester.pumpSubject(
+        crosswordBloc: crosswordBloc,
         CrosswordInteractiveViewer(
           zoomLimit: 0.4,
           builder: (context, position) {
@@ -111,6 +135,7 @@ void main() {
         'does nothing when zoom in button is pressed and '
         'limit has been reached', (tester) async {
       await tester.pumpSubject(
+        crosswordBloc: crosswordBloc,
         CrosswordInteractiveViewer(
           zoomLimit: 0.4,
           builder: (context, position) {
@@ -141,6 +166,7 @@ void main() {
         'limit has been reached', (tester) async {
       const zoomLimit = 0.6;
       await tester.pumpSubject(
+        crosswordBloc: crosswordBloc,
         CrosswordInteractiveViewer(
           zoomLimit: zoomLimit,
           builder: (context, position) {
@@ -167,6 +193,7 @@ void main() {
 
     testWidgets('zooms out when zoom out button is pressed', (tester) async {
       await tester.pumpSubject(
+        crosswordBloc: crosswordBloc,
         CrosswordInteractiveViewer(
           zoomLimit: 0.6,
           builder: (context, position) {

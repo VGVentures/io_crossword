@@ -3,6 +3,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
@@ -190,6 +191,7 @@ class _CrosswordViewState extends State<CrosswordView>
                   builder: (context, visible) {
                     if (visible) {
                       return MascotAnimation(
+                        context.read<PlayerBloc>().state.mascot!,
                         _controller,
                       );
                     } else {
@@ -324,16 +326,16 @@ class _BottomActions extends StatelessWidget {
 class MascotAnimation extends StatelessWidget {
   @visibleForTesting
   const MascotAnimation(
+    this.mascot,
     this.controller, {
     super.key,
   });
 
+  final Mascots mascot;
   final SpriteListController controller;
 
   @override
   Widget build(BuildContext context) {
-    final mascot = context.read<PlayerBloc>().state.mascot!;
-
     return SizedBox.fromSize(
       size: platformAwareAsset(
         mobile: Size(

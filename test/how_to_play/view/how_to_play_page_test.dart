@@ -200,18 +200,12 @@ void main() {
           when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
               .thenAnswer((_) async {});
 
-          when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
           whenListen(
             howToPlayCubit,
             Stream.fromIterable(
               [
                 HowToPlayState(
                   status: HowToPlayStatus.pickingUp,
-                  assetsStatus: AssetsLoadingStatus.success,
-                ),
-                HowToPlayState(
-                  status: HowToPlayStatus.complete,
                   assetsStatus: AssetsLoadingStatus.success,
                 ),
               ],
@@ -225,9 +219,6 @@ void main() {
             MultiBlocProvider(
               providers: [
                 BlocProvider.value(
-                  value: gameIntroBloc,
-                ),
-                BlocProvider.value(
                   value: howToPlayCubit,
                 ),
                 BlocProvider.value(
@@ -239,6 +230,15 @@ void main() {
           );
 
           await tester.tap(find.byType(PlayNowButton), warnIfMissed: false);
+          await tester.pump();
+
+          final spriteAnimationList = tester.widget<SpriteAnimationList>(
+            find.byType(SpriteAnimationList),
+          );
+
+          final controller = spriteAnimationList.controller;
+
+          controller.animationDataList.last.spriteAnimationTicker.setToLast();
 
           final verification = verify(
             () => navigator.pushAndRemoveUntil<void>(
@@ -339,9 +339,6 @@ void main() {
           MultiBlocProvider(
             providers: [
               BlocProvider.value(
-                value: gameIntroBloc,
-              ),
-              BlocProvider.value(
                 value: howToPlayCubit,
               ),
               BlocProvider.value(
@@ -357,59 +354,15 @@ void main() {
             as SpriteAnimationList;
 
         expect(
-          widget.animationItems.contains(
-            AnimationItem(
-              spriteData: Mascots.dash.teamMascot.lookUpSpriteMobileData,
-            ),
+          widget.animationItems.first,
+          isA<AnimationItem>().having(
+            (item) => item.spriteData,
+            'spriteData',
+            Mascots.dash.teamMascot.lookUpSpriteMobileData,
           ),
-          isTrue,
         );
 
         debugDefaultTargetPlatformOverride = null;
-      });
-
-      testWidgets('complete status is called when pickUp animation is done',
-          (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
-
-        whenListen(
-          howToPlayCubit,
-          Stream.fromIterable(
-            [
-              HowToPlayState(
-                status: HowToPlayStatus.pickingUp,
-                assetsStatus: AssetsLoadingStatus.success,
-              ),
-            ],
-          ),
-          initialState: HowToPlayState(
-            assetsStatus: AssetsLoadingStatus.success,
-          ),
-        );
-
-        await tester.runAsync(() async {
-          await tester.pumpApp(
-            widget,
-            layout: IoLayoutData.large,
-          );
-
-          await Future<void>.delayed(Duration(seconds: 3));
-
-          await tester.pump();
-
-          final spriteAnimationList = tester.widget<SpriteAnimationList>(
-            find.byType(SpriteAnimationList),
-          );
-
-          final controller = spriteAnimationList.controller;
-
-          controller.animationDataList[1].spriteAnimationTicker.setToLast();
-
-          await controller.animationDataList[1].spriteAnimationTicker.completed;
-
-          verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.complete))
-              .called(1);
-        });
       });
     });
   });
