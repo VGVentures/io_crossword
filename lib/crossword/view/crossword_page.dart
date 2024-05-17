@@ -78,8 +78,6 @@ class _CrosswordViewState extends State<CrosswordView>
     super.dispose();
   }
 
-  bool started = false;
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -106,7 +104,6 @@ class _CrosswordViewState extends State<CrosswordView>
               case RandomWordSelectionStatus.failure:
                 break;
               case RandomWordSelectionStatus.initialSuccess:
-                started = true;
                 final position = (
                   state.uncompletedSection!.position.x,
                   state.uncompletedSection!.position.y
