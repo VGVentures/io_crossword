@@ -58,7 +58,7 @@ void main() {
 
     testWidgets(
         'keep playing button does nothing when pressed when '
-        'state is not BoardStatusResetInProgress', (tester) async {
+        'state is BoardStatusResetInProgress', (tester) async {
       when(() => boardStatusBloc.state)
           .thenReturn(BoardStatusResetInProgress());
 
