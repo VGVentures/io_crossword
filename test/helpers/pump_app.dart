@@ -98,6 +98,8 @@ extension PumpApp on WidgetTester {
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
+    when(mockedBoardInfoRepository.getGameStatus)
+        .thenAnswer((_) => Stream.value(GameStatus.inProgress));
 
     final child = Scaffold(body: widget);
 
@@ -241,6 +243,8 @@ extension PumpRoute on WidgetTester {
         .thenAnswer((_) => Future.value(20));
     when(mockedBoardInfoRepository.getZoomLimit)
         .thenAnswer((_) => Future.value(0.8));
+    when(mockedBoardInfoRepository.getGameStatus)
+        .thenAnswer((_) => Stream.value(GameStatus.inProgress));
 
     await pumpWidget(
       MultiRepositoryProvider(
