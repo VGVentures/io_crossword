@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/settings/settings.dart';
