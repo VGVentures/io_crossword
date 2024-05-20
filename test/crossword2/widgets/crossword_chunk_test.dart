@@ -60,7 +60,10 @@ void main() {
       await tester.pumpApp(
         CrosswordLayoutScope(
           data: layoutData,
-          child: const CrosswordChunk(index: (0, 0)),
+          child: const CrosswordChunk(
+            index: (0, 0),
+            chunkSize: 20,
+          ),
         ),
       );
     });
@@ -95,6 +98,7 @@ void main() {
               child: const CrosswordChunk(
                 debug: false,
                 index: (0, 0),
+                chunkSize: 20,
               ),
             ),
           );
@@ -114,7 +118,7 @@ void main() {
           CrosswordLayoutScope(
             data: layoutData,
             child: const CrosswordChunk(
-              index: (0, 0),
+              index: (0, 0), chunkSize: 20,
               // ignore: avoid_redundant_argument_values
               debug: true,
             ),
@@ -144,7 +148,11 @@ void main() {
           await tester.pumpApp(
             CrosswordLayoutScope(
               data: layoutData,
-              child: const CrosswordChunk(index: (0, 0), debug: false),
+              child: const CrosswordChunk(
+                index: (0, 0),
+                chunkSize: 20,
+                debug: false,
+              ),
             ),
           );
 
