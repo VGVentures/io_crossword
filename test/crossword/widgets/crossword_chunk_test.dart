@@ -17,7 +17,7 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
 class _GoldenFileComparator extends LocalFileComparator {
   _GoldenFileComparator()
       : super(
-          Uri.parse('test/crossword2/widgets/crossword_chunk_test.dart'),
+          Uri.parse('test/crossword/widgets/crossword_chunk_test.dart'),
         );
 
   @override
