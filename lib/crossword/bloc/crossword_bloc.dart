@@ -19,7 +19,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         _boardInfoRepository = boardInfoRepository,
         super(const CrosswordState()) {
     on<BoardLoadingInformationRequested>(_onBoardLoadingInformationRequested);
-    on<GameStatusRequested>(_onGameStatusRequested);
+    on<BoardStatusPaused>(_onBoardStatusPaused);
     on<BoardStatusResumed>(_onBoardStatusResumed);
     on<MascotDropped>(_onMascotDropped);
     on<CrosswordSectionsLoaded>(_onCrosswordSectionsLoaded);
@@ -57,28 +57,14 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     }
   }
 
-  Future<void> _onGameStatusRequested(
-    GameStatusRequested event,
+  void _onBoardStatusPaused(
+    BoardStatusPaused event,
     Emitter<CrosswordState> emit,
-  ) async {
-    return emit.forEach(
-      _boardInfoRepository.getGameStatus(),
-      onData: (status) {
-        if (status == GameStatus.resetInProgress) {
-          return state.copyWith(
-            gameStatus: status,
-            boardStatus: BoardStatus.resetInProgress,
-          );
-        }
-
-        return state.copyWith(gameStatus: status);
-      },
-      onError: (error, stackTrace) {
-        addError(error, stackTrace);
-        return state.copyWith(
-          status: CrosswordStatus.failure,
-        );
-      },
+  ) {
+    emit(
+      state.copyWith(
+        boardStatus: BoardStatus.resetInProgress,
+      ),
     );
   }
 
@@ -88,6 +74,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
   ) {
     emit(
       state.copyWith(
+        status: CrosswordStatus.initial,
         boardStatus: BoardStatus.inProgress,
       ),
     );

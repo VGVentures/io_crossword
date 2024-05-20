@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:board_generator/src/crossword_repository.dart';
+import 'package:board_uploader/src/crossword_repository.dart';
 import 'package:csv/csv.dart';
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:dart_firebase_admin/firestore.dart';

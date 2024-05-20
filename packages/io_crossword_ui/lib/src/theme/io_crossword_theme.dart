@@ -343,9 +343,6 @@ class IoCrosswordTheme {
   IoWordTheme get _wordTheme {
     final colorScheme = this.colorScheme;
 
-    // TODO(alestiago): Update text styles from new Design System when
-    // available:
-    // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6371389285
     return IoWordTheme(
       small: IoWordStyle(
         backgroundColor: colorScheme.primary,

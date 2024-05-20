@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:board_info_repository/board_info_repository.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Axis;
@@ -9,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
+import 'package:io_crossword/board_status/board_status.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/crossword2/crossword2.dart';
@@ -37,6 +37,9 @@ class _MockWordSelectionBloc
 class _MockRandomWordSelectionBloc
     extends MockBloc<RandomWordSelectionEvent, RandomWordSelectionState>
     implements RandomWordSelectionBloc {}
+
+class _MockBoardStatusBloc extends MockBloc<BoardStatusEvent, BoardStatusState>
+    implements BoardStatusBloc {}
 
 class _FakeUnsolvedWord extends Fake implements Word {
   @override
@@ -374,7 +377,7 @@ void main() {
 
     group('gameReset', () {
       testWidgets(
-          'renders $ResetDialogContent when boardStatus '
+          'renders $BoardResetView when boardStatus '
           'is resetInProgress', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
@@ -388,28 +391,30 @@ void main() {
           crosswordBloc: crosswordBloc,
         );
 
-        expect(find.byType(ResetDialogContent), findsOneWidget);
+        expect(find.byType(BoardResetView), findsOneWidget);
       });
 
       testWidgets(
-          'verify WordUnselected is added when gameStatus is resetInProgress',
-          (tester) async {
+          'verify WordUnselected is added when boardStatus '
+          'is BoardResetInProgress', (tester) async {
         final wordSelectionBloc = _MockWordSelectionBloc();
+        final boardStatusBloc = _MockBoardStatusBloc();
 
         whenListen(
-          crosswordBloc,
+          boardStatusBloc,
           Stream.fromIterable(
             [
-              CrosswordState(gameStatus: GameStatus.resetInProgress),
+              BoardStatusResetInProgress(),
             ],
           ),
-          initialState: CrosswordState(),
+          initialState: BoardStatusInitial(),
         );
 
         await tester.pumpSubject(
           CrosswordView(),
           crosswordBloc: crosswordBloc,
           wordSelectionBloc: wordSelectionBloc,
+          boardStatusBloc: boardStatusBloc,
         );
 
         verify(() => wordSelectionBloc.add(const WordUnselected())).called(1);
@@ -455,32 +460,6 @@ void main() {
       });
 
       testWidgets(
-          'keep playing button does nothing when pressed when '
-          'gameStatus is resetInProgress', (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          const CrosswordState(
-            status: CrosswordStatus.ready,
-            gameStatus: GameStatus.resetInProgress,
-            boardStatus: BoardStatus.resetInProgress,
-            mascotVisible: false,
-          ),
-        );
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        await tester.pumpAndSettle();
-
-        await tester.tap(
-          find.text(l10n.keepPlayingButtonLabel),
-        );
-
-        verifyNever(() => crosswordBloc.add(BoardStatusResumed()));
-      });
-
-      testWidgets(
           'verify that BoardStatusResumed is added when '
           'keep playing button is pressed', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
@@ -511,6 +490,7 @@ extension on WidgetTester {
     PlayerBloc? playerBloc,
     WordSelectionBloc? wordSelectionBloc,
     RandomWordSelectionBloc? randomWordSelectionBloc,
+    BoardStatusBloc? boardStatusBloc,
     IoLayoutData? layout = IoLayoutData.small,
   }) {
     final bloc = crosswordBloc ?? _MockCrosswordBloc();
@@ -539,6 +519,14 @@ extension on WidgetTester {
         const RandomWordSelectionState(),
       );
     }
+
+    final boardStatusBlocUpdate = boardStatusBloc ?? _MockBoardStatusBloc();
+    if (boardStatusBloc == null) {
+      when(() => boardStatusBlocUpdate.state).thenReturn(
+        const BoardStatusInitial(),
+      );
+    }
+
     return pumpApp(
       MultiBlocProvider(
         providers: [
@@ -553,6 +541,9 @@ extension on WidgetTester {
           ),
           BlocProvider<RandomWordSelectionBloc>(
             create: (_) => randomWordSelectionBlocUpdate,
+          ),
+          BlocProvider<BoardStatusBloc>(
+            create: (_) => boardStatusBlocUpdate,
           ),
         ],
         child: child,

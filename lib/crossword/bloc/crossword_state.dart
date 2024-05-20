@@ -15,7 +15,6 @@ enum BoardStatus {
 class CrosswordState extends Equatable {
   const CrosswordState({
     this.status = CrosswordStatus.initial,
-    this.gameStatus = GameStatus.inProgress,
     this.boardStatus = BoardStatus.inProgress,
     this.sectionSize = 0,
     this.sections = const {},
@@ -26,7 +25,6 @@ class CrosswordState extends Equatable {
   });
 
   final CrosswordStatus status;
-  final GameStatus gameStatus;
   final BoardStatus boardStatus;
   final int sectionSize;
   final Map<(int, int), BoardSection> sections;
@@ -37,7 +35,6 @@ class CrosswordState extends Equatable {
 
   CrosswordState copyWith({
     CrosswordStatus? status,
-    GameStatus? gameStatus,
     BoardStatus? boardStatus,
     int? sectionSize,
     Map<(int, int), BoardSection>? sections,
@@ -49,7 +46,6 @@ class CrosswordState extends Equatable {
   }) {
     return CrosswordState(
       status: status ?? this.status,
-      gameStatus: gameStatus ?? this.gameStatus,
       boardStatus: boardStatus ?? this.boardStatus,
       sectionSize: sectionSize ?? this.sectionSize,
       sections: sections ?? this.sections,
@@ -63,7 +59,6 @@ class CrosswordState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        gameStatus,
         boardStatus,
         sectionSize,
         sections,

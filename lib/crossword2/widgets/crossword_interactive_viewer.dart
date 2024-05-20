@@ -71,6 +71,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// The maximum scale to be used when the board is zoomed in.
   final _maxScale = 1.4;
 
+  /// The padding added when scaling the selected word.
+  final _padding = 20.0;
+
   @visibleForTesting
   double get maxScale => _maxScale;
 
@@ -189,8 +192,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * currentScale;
 
+    final wordSize = selectedWord.word.size(crosswordLayout);
     final requiredWordSize =
-        selectedWord.word.size(crosswordLayout) * _idealScale;
+        wordSize.addWordPadding(crosswordLayout, _padding) * _idealScale;
 
     final scaleEnd = math
         .min(
@@ -203,8 +207,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         )
         .roundTo(3);
 
-    final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
-    final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
+    final endWordSize = wordSize * scaleEnd;
+    final endWordRect =
+        (selectedWord.offset(crosswordLayout) & endWordSize).inflate(_padding);
     final endWordCenter = endWordRect.center;
 
     final endViewportCenter = Vector3(
@@ -425,4 +430,20 @@ extension on domain.Word {
 
 extension on double {
   double roundTo(int digits) => double.parse(toStringAsFixed(digits));
+}
+
+extension on Size {
+  Size addWordPadding(CrosswordLayoutData crosswordLayout, double padding) {
+    if (width > height) {
+      return Size(
+        width + padding * 2,
+        height,
+      );
+    } else {
+      return Size(
+        width,
+        height + padding * 2,
+      );
+    }
+  }
 }
