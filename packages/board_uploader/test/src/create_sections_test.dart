@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:board_generator/create_sections.dart';
+import 'package:board_uploader/upload_board.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:test/test.dart';
 
