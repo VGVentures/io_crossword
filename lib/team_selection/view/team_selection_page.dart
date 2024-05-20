@@ -195,9 +195,12 @@ class _TeamSelectorLarge extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: Text(
-                l10n.chooseYourTeam,
-                style: textTheme.heading1,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Text(
+                  l10n.chooseYourTeam,
+                  style: textTheme.heading1,
+                ),
               ),
             ),
             const Padding(
