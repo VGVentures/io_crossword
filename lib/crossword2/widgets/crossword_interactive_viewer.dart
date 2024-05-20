@@ -380,7 +380,7 @@ extension on Quad {
     return switch (layout) {
       IoLayoutData.small => Size(
           width,
-          height * 0.7,
+          height * 0.5,
         ),
       IoLayoutData.large => Size(
           width * (1 - WordSelectionLargeContainer.widthRatio),
