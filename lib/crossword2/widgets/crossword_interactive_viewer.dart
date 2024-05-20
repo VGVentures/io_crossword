@@ -71,6 +71,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// The maximum scale to be used when the board is zoomed in.
   final _maxScale = 1.4;
 
+  /// The padding added when scaling the selected word.
+  final _padding = 20.0;
+
   @visibleForTesting
   double get maxScale => _maxScale;
 
@@ -189,8 +192,10 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * currentScale;
 
-    final requiredWordSize =
-        selectedWord.word.size(crosswordLayout) * _idealScale;
+    final wordSize = selectedWord.word
+        .size(crosswordLayout)
+        .addWordPadding(crosswordLayout, _padding);
+    final requiredWordSize = wordSize * _idealScale;
 
     final scaleEnd = math
         .min(
@@ -203,8 +208,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
         )
         .roundTo(3);
 
-    final endWordSize = selectedWord.word.size(crosswordLayout) * scaleEnd;
-    final endWordRect = selectedWord.offset(crosswordLayout) & endWordSize;
+    final endWordSize = wordSize * scaleEnd;
+    final endWordRect =
+        selectedWord.offset(crosswordLayout, _padding) & endWordSize;
     final endWordCenter = endWordRect.center;
 
     final endViewportCenter = Vector3(
@@ -375,7 +381,7 @@ extension on Quad {
     return switch (layout) {
       IoLayoutData.small => Size(
           width,
-          height * 0.7,
+          height * 0.5,
         ),
       IoLayoutData.large => Size(
           width * (1 - WordSelectionLargeContainer.widthRatio),
@@ -393,7 +399,7 @@ extension on SelectedWord {
   /// Determines the absolute offset of the word in the crossword.
   ///
   /// The origin is based on the top-left corner of the crossword.
-  Offset offset(CrosswordLayoutData layout) {
+  Offset offset(CrosswordLayoutData layout, double padding) {
     final chunkOffset = Offset(
       (section.$1 * layout.chunkSize.width) + layout.padding.left,
       (section.$2 * layout.chunkSize.height) + layout.padding.top,
@@ -403,7 +409,12 @@ extension on SelectedWord {
       word.position.y * layout.cellSize.height,
     );
 
-    return chunkOffset + wordOffset;
+    final paddingOffset = switch (word.axis) {
+      domain.Axis.horizontal => Offset(padding, 0),
+      domain.Axis.vertical => Offset(0, padding),
+    };
+
+    return chunkOffset + wordOffset - paddingOffset;
   }
 }
 
@@ -425,4 +436,20 @@ extension on domain.Word {
 
 extension on double {
   double roundTo(int digits) => double.parse(toStringAsFixed(digits));
+}
+
+extension on Size {
+  Size addWordPadding(CrosswordLayoutData crosswordLayout, double padding) {
+    if (width > height) {
+      return Size(
+        width + padding * 2,
+        height,
+      );
+    } else {
+      return Size(
+        width,
+        height + padding * 2,
+      );
+    }
+  }
 }
