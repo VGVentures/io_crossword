@@ -14,6 +14,7 @@ import 'package:io_crossword/crossword2/crossword2.dart';
 class CrosswordChunk extends StatelessWidget {
   const CrosswordChunk({
     required this.index,
+    required this.chunkSize,
     this.debug = kDebugMode,
     super.key,
   });
@@ -33,10 +34,7 @@ class CrosswordChunk extends StatelessWidget {
   static const debugBorderKey = Key('CrosswordChunk.debugBorder');
 
   /// The size of a chunk.
-  // TODO(any): Retrieve the configuration from the `CrosswordBloc` instead of
-  // hard-coding it:
-  // https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6529725788
-  static const _chunkSize = 20;
+  final int chunkSize;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +53,8 @@ class CrosswordChunk extends StatelessWidget {
 
           final letters = CrosswordLetterData.fromChunk(chunk)
             ..removeWhere((position, letter) {
-              return (position.$1 < 0 || position.$1 >= _chunkSize) ||
-                  (position.$2 < 0 || position.$2 >= _chunkSize);
+              return (position.$1 < 0 || position.$1 >= chunkSize) ||
+                  (position.$2 < 0 || position.$2 >= chunkSize);
             });
 
           return Stack(

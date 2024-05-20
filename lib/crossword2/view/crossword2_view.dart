@@ -112,7 +112,10 @@ class _CrosswordStack extends StatelessWidget {
                   crosswordLayout.padding.left,
               top: (chunk.$2 * crosswordLayout.chunkSize.height) +
                   crosswordLayout.padding.top,
-              child: CrosswordChunk(index: chunk),
+              child: CrosswordChunk(
+                index: chunk,
+                chunkSize: configuration.chunkSize,
+              ),
             ),
           BlocSelector<WordSelectionBloc, WordSelectionState, SelectedWord?>(
             selector: (state) => state.word,
