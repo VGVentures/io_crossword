@@ -276,7 +276,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
@@ -296,7 +296,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
@@ -317,7 +317,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );

@@ -287,7 +287,7 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders $Crossword2View with ${CrosswordStatus.ready}',
+    testWidgets('renders $CrosswordBoardView with ${CrosswordStatus.ready}',
         (tester) async {
       when(() => crosswordBloc.state).thenReturn(
         const CrosswordState(
@@ -300,7 +300,7 @@ void main() {
         CrosswordView(),
       );
 
-      expect(find.byType(Crossword2View), findsOneWidget);
+      expect(find.byType(CrosswordBoardView), findsOneWidget);
     });
 
     testWidgets(

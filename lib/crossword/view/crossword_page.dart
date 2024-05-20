@@ -243,7 +243,7 @@ class LoadedBoardView extends StatelessWidget {
             builder: (context, mascotVisible) {
               return IgnorePointer(
                 ignoring: mascotVisible,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               );
             },
           ),

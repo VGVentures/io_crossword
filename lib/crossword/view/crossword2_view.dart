@@ -6,8 +6,8 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class Crossword2View extends StatelessWidget {
-  const Crossword2View({super.key});
+class CrosswordBoardView extends StatelessWidget {
+  const CrosswordBoardView({super.key});
 
   @override
   Widget build(BuildContext context) {

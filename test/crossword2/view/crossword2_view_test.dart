@@ -21,7 +21,7 @@ class _MockWordSelectionBloc
 class _MockWord extends Mock implements Word {}
 
 void main() {
-  group('$Crossword2View', () {
+  group('$CrosswordBoardView', () {
     late WordSelectionBloc wordSelectionBloc;
     late Word word;
 
@@ -50,12 +50,12 @@ void main() {
       await tester.pumpApp(
         BlocProvider<WordSelectionBloc>(
           create: (_) => wordSelectionBloc,
-          child: const Crossword2View(),
+          child: const CrosswordBoardView(),
         ),
         crosswordBloc: crosswordBloc,
       );
 
-      expect(find.byType(Crossword2View), findsOneWidget);
+      expect(find.byType(CrosswordBoardView), findsOneWidget);
     });
 
     group('$CrosswordBackdrop', () {
@@ -79,7 +79,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
@@ -106,7 +106,7 @@ void main() {
             layout: IoLayoutData.large,
             BlocProvider<WordSelectionBloc>(
               create: (_) => wordSelectionBloc,
-              child: const Crossword2View(),
+              child: const CrosswordBoardView(),
             ),
           );
 
@@ -131,7 +131,7 @@ void main() {
               layout: IoLayoutData.small,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -157,7 +157,7 @@ void main() {
               layout: IoLayoutData.small,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -182,7 +182,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -205,7 +205,7 @@ void main() {
               layout: IoLayoutData.small,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -238,7 +238,7 @@ void main() {
               DefaultWordInputController(
                 child: BlocProvider<WordSelectionBloc>(
                   create: (_) => wordSelectionBloc,
-                  child: const Crossword2View(),
+                  child: const CrosswordBoardView(),
                 ),
               ),
             );
@@ -272,7 +272,7 @@ void main() {
               DefaultWordInputController(
                 child: BlocProvider<WordSelectionBloc>(
                   create: (_) => wordSelectionBloc,
-                  child: const Crossword2View(),
+                  child: const CrosswordBoardView(),
                 ),
               ),
             );
@@ -306,7 +306,7 @@ void main() {
               layout: IoLayoutData.small,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -335,7 +335,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -358,7 +358,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -393,7 +393,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -417,7 +417,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -441,7 +441,7 @@ void main() {
               layout: IoLayoutData.large,
               BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             );
 
@@ -474,7 +474,7 @@ void main() {
                   data: themeData,
                   child: BlocProvider<WordSelectionBloc>(
                     create: (_) => wordSelectionBloc,
-                    child: const Crossword2View(),
+                    child: const CrosswordBoardView(),
                   ),
                 ),
               );
@@ -509,7 +509,7 @@ void main() {
                   data: themeData,
                   child: BlocProvider<WordSelectionBloc>(
                     create: (_) => wordSelectionBloc,
-                    child: const Crossword2View(),
+                    child: const CrosswordBoardView(),
                   ),
                 ),
               );
@@ -544,7 +544,7 @@ void main() {
                   data: themeData,
                   child: BlocProvider<WordSelectionBloc>(
                     create: (_) => wordSelectionBloc,
-                    child: const Crossword2View(),
+                    child: const CrosswordBoardView(),
                   ),
                 ),
               );
@@ -579,7 +579,7 @@ void main() {
                   data: themeData,
                   child: BlocProvider<WordSelectionBloc>(
                     create: (_) => wordSelectionBloc,
-                    child: const Crossword2View(),
+                    child: const CrosswordBoardView(),
                   ),
                 ),
               );
@@ -626,7 +626,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
