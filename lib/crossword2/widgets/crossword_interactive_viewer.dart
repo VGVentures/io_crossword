@@ -192,10 +192,9 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewportSize = viewport.reduced(layout);
     final beginViewportSize = viewportSize * currentScale;
 
-    final wordSize = selectedWord.word
-        .size(crosswordLayout)
-        .addWordPadding(crosswordLayout, _padding);
-    final requiredWordSize = wordSize * _idealScale;
+    final wordSize = selectedWord.word.size(crosswordLayout);
+    final requiredWordSize =
+        wordSize.addWordPadding(crosswordLayout, _padding) * _idealScale;
 
     final scaleEnd = math
         .min(
@@ -210,7 +209,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
 
     final endWordSize = wordSize * scaleEnd;
     final endWordRect =
-        selectedWord.offset(crosswordLayout, _padding) & endWordSize;
+        (selectedWord.offset(crosswordLayout) & endWordSize).inflate(_padding);
     final endWordCenter = endWordRect.center;
 
     final endViewportCenter = Vector3(
@@ -399,7 +398,7 @@ extension on SelectedWord {
   /// Determines the absolute offset of the word in the crossword.
   ///
   /// The origin is based on the top-left corner of the crossword.
-  Offset offset(CrosswordLayoutData layout, double padding) {
+  Offset offset(CrosswordLayoutData layout) {
     final chunkOffset = Offset(
       (section.$1 * layout.chunkSize.width) + layout.padding.left,
       (section.$2 * layout.chunkSize.height) + layout.padding.top,
@@ -409,12 +408,7 @@ extension on SelectedWord {
       word.position.y * layout.cellSize.height,
     );
 
-    final paddingOffset = switch (word.axis) {
-      domain.Axis.horizontal => Offset(padding, 0),
-      domain.Axis.vertical => Offset(0, padding),
-    };
-
-    return chunkOffset + wordOffset - paddingOffset;
+    return chunkOffset + wordOffset;
   }
 }
 
