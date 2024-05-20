@@ -5,7 +5,7 @@ import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
 part 'crossword_event.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/crossword2/widgets/default_transformation_controller.dart';
+import 'package:io_crossword/crossword/widgets/default_transformation_controller.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockTransformationController extends Mock

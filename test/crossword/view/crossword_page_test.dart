@@ -11,7 +11,6 @@ import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/board_status/board_status.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';

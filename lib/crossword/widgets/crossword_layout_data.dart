@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:io_crossword/crossword2/widgets/widgets.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 
 /// {@template crossword_layout_data}
 /// Defines data about the layout of a crossword.

@@ -2,7 +2,7 @@ import 'package:api_client/api_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 
 part 'word_selection_event.dart';
 part 'word_selection_state.dart';

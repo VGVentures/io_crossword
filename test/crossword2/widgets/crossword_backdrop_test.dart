@@ -6,7 +6,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/player/bloc/player_bloc.dart';
 import 'package:io_crossword/streak/streak.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
