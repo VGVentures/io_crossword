@@ -24,6 +24,7 @@ void main() {
   setUp(() async {
     final word = _MockWord();
     when(() => word.clue).thenReturn('clue');
+    when(() => word.length).thenReturn(5);
     when(() => word.id).thenReturn('1');
     when(() => word.solvedTimestamp).thenReturn(null);
     when(() => word.axis).thenReturn(Axis.horizontal);
