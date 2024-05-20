@@ -25,13 +25,13 @@ void main() {
       });
     });
 
-    group('GameStatusRequested', () {
+    group('BoardStatusPaused', () {
       test('can be instantiated', () {
-        expect(GameStatusRequested(), isA<GameStatusRequested>());
+        expect(BoardStatusPaused(), isA<BoardStatusPaused>());
       });
 
       test('supports value comparisons', () {
-        expect(GameStatusRequested(), equals(GameStatusRequested()));
+        expect(BoardStatusPaused(), equals(BoardStatusPaused()));
       });
     });
 
