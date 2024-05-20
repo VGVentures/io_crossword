@@ -156,8 +156,6 @@ class SymmetricalCrosswordGenerator extends CrosswordGenerator {
 
       if (crossword.overlaps(wordEntry) ||
           crossword.overlaps(symmetricalWordEntry)) {
-        // FIXME(Ayad): Investigate, this should not be reached, look into
-        // constraints and selection.
         invalidate(word.length);
         continue;
       }

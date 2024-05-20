@@ -20,7 +20,13 @@ class BottomBar extends StatelessWidget {
     final mascotVisible =
         context.select((CrosswordBloc bloc) => bloc.state.mascotVisible);
 
-    return selectionStatus != WordSelectionStatus.empty || mascotVisible
+    final boardStatus = context.select(
+      (CrosswordBloc bloc) => bloc.state.boardStatus,
+    );
+
+    return selectionStatus != WordSelectionStatus.empty ||
+            mascotVisible ||
+            boardStatus == BoardStatus.resetInProgress
         ? const SizedBox.shrink()
         : const BottomBarContent();
   }

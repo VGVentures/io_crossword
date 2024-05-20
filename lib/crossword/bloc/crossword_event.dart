@@ -11,8 +11,8 @@ class BoardLoadingInformationRequested extends CrosswordEvent {
   List<Object?> get props => [];
 }
 
-class GameStatusRequested extends CrosswordEvent {
-  const GameStatusRequested();
+class BoardStatusPaused extends CrosswordEvent {
+  const BoardStatusPaused();
 
   @override
   List<Object?> get props => [];
