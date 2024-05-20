@@ -183,10 +183,6 @@ class IoWordInput extends StatefulWidget {
   State<IoWordInput> createState() => _IoWordInputState();
 }
 
-// TODO(alestiago): Updating the widget does nothing yet, since the current
-// implementation is the first iteration and ignores `didUpdateWidget`. This
-// will be updated in the future, as soon as the following is resolved:
-// https://very-good-ventures-team.monday.com/boards/6004820050/pulses/6364673378
 class _IoWordInputState extends State<IoWordInput> {
   /// The index of the current character that is being inputted.
   ///
