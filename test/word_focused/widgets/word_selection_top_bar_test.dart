@@ -259,6 +259,19 @@ void main() {
       );
 
       testWidgets(
+        'the number of letters of the selected word'
+        ' if status is ${WordSelectionStatus.preSolving}',
+        (tester) async {
+          await tester.pumpApp(buildWidget(), crosswordBloc: crosswordBloc);
+
+          expect(
+            find.text(l10n.nLetters(_UnsolvedFakeWord().length).toUpperCase()),
+            findsOneWidget,
+          );
+        },
+      );
+
+      testWidgets(
         'ShareWordPage when icon ios_share tapped',
         (tester) async {
           when(() => wordSelectionBloc.state).thenReturn(

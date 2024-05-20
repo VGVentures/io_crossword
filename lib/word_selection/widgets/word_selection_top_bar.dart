@@ -83,10 +83,22 @@ class WordSelectionTopBar extends StatelessWidget {
                   ),
                 );
               }
-              return Text(
-                wordIdentifier(word.word),
-                style: themeData.io.textStyles.body5,
-                textAlign: TextAlign.center,
+
+              return Column(
+                children: [
+                  Text(
+                    wordIdentifier(word.word),
+                    style: themeData.io.textStyles.body5,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    l10n.nLetters(word.word.length).toUpperCase(),
+                    style: themeData.io.textStyles.body5.copyWith(
+                      color: IoCrosswordColors.softGray,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               );
             },
           ),

@@ -8,7 +8,16 @@
   "@welcome": {
     "description": "Welcome label"
   },
-  "settings": "Settings",
+  "nLetters": "{nb} letters",
+    "@nLetters": {
+      "description": "Close label",
+      "placeholders": {
+        "nb": {
+          "type": "int"
+        }
+    }
+  },
+"settings": "Settings",
   "@settings": {
     "description": "Settings label"
   },
