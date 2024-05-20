@@ -1,5 +1,5 @@
-name: board_generator
-description: Crossword board generator.
+name: board_uploader
+description: Crossword board uploader.
 version: 0.1.0+1
 publish_to: none
 
