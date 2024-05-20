@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/fixtures.dart';
@@ -18,7 +17,7 @@ class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
 class _GoldenFileComparator extends LocalFileComparator {
   _GoldenFileComparator()
       : super(
-          Uri.parse('test/crossword2/widgets/crossword_chunk_test.dart'),
+          Uri.parse('test/crossword/widgets/crossword_chunk_test.dart'),
         );
 
   @override

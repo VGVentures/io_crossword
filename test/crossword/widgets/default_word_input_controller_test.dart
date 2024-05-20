@@ -1,16 +1,17 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:io_crossword/crossword2/widgets/default_transformation_controller.dart';
+import 'package:io_crossword/crossword/crossword.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockTransformationController extends Mock
-    implements TransformationController {}
+class _MockIoWordInputController extends Mock
+    implements IoWordInputController {}
 
 void main() {
-  group('$DefaultTransformationController', () {
+  group('$DefaultWordInputController', () {
     group('of', () {
       testWidgets(
-        '''throws an AssertionError if no DefaultTransformationController is found in context''',
+        '''throws an AssertionError if no DefaultWordInputController is found in context''',
         (tester) async {
           late BuildContext buildContext;
 
@@ -24,12 +25,12 @@ void main() {
           );
 
           expect(
-            () => DefaultTransformationController.of(buildContext),
+            () => DefaultWordInputController.of(buildContext),
             throwsA(
               isA<AssertionError>().having(
                 (e) => e.message,
                 'message',
-                'No $DefaultTransformationController found in context',
+                'No $DefaultWordInputController found in context',
               ),
             ),
           );
@@ -37,12 +38,12 @@ void main() {
       );
 
       testWidgets(
-        '''retrieves the $TransformationController from the nearest ancestor $DefaultTransformationController''',
+        '''retrieves the $IoWordInputController from the nearest ancestor $DefaultWordInputController''',
         (tester) async {
           late BuildContext buildContext;
 
           await tester.pumpWidget(
-            DefaultTransformationController(
+            DefaultWordInputController(
               child: Builder(
                 builder: (context) {
                   buildContext = context;
@@ -52,22 +53,22 @@ void main() {
             ),
           );
 
-          final result = DefaultTransformationController.of(buildContext);
-          expect(result, isA<TransformationController>());
+          final result = DefaultWordInputController.of(buildContext);
+          expect(result, isA<IoWordInputController>());
         },
       );
     });
   });
 
-  group('$TransformationControllerScope', () {
+  group('$IoWordInputControllerScope', () {
     group('updateShouldNotify', () {
       test('is false when controller is the same', () {
-        final scope = TransformationControllerScope(
-          transformationController: _MockTransformationController(),
+        final scope = IoWordInputControllerScope(
+          wordInputController: _MockIoWordInputController(),
           child: const SizedBox(),
         );
-        final newScope = TransformationControllerScope(
-          transformationController: scope.transformationController,
+        final newScope = IoWordInputControllerScope(
+          wordInputController: scope.wordInputController,
           child: const SizedBox(),
         );
 
@@ -75,12 +76,12 @@ void main() {
       });
 
       test('is true when controller is not the same', () {
-        final scope = TransformationControllerScope(
-          transformationController: _MockTransformationController(),
+        final scope = IoWordInputControllerScope(
+          wordInputController: _MockIoWordInputController(),
           child: const SizedBox(),
         );
-        final newScope = TransformationControllerScope(
-          transformationController: _MockTransformationController(),
+        final newScope = IoWordInputControllerScope(
+          wordInputController: _MockIoWordInputController(),
           child: const SizedBox(),
         );
 

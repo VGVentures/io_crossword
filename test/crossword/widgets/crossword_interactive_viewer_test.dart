@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart' as domain;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -277,7 +276,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
@@ -297,7 +296,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );
@@ -318,7 +317,7 @@ void main() {
             DefaultWordInputController(
               child: BlocProvider<WordSelectionBloc>(
                 create: (_) => wordSelectionBloc,
-                child: const Crossword2View(),
+                child: const CrosswordBoardView(),
               ),
             ),
           );

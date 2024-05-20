@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/hint/hint.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';

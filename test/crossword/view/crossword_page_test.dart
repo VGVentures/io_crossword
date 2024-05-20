@@ -11,7 +11,6 @@ import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/board_status/board_status.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -288,7 +287,7 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders $Crossword2View with ${CrosswordStatus.ready}',
+    testWidgets('renders $CrosswordBoardView with ${CrosswordStatus.ready}',
         (tester) async {
       when(() => crosswordBloc.state).thenReturn(
         const CrosswordState(
@@ -301,7 +300,7 @@ void main() {
         CrosswordView(),
       );
 
-      expect(find.byType(Crossword2View), findsOneWidget);
+      expect(find.byType(CrosswordBoardView), findsOneWidget);
     });
 
     testWidgets(

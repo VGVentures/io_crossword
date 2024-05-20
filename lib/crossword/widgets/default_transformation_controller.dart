@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:io_crossword/crossword2/crossword2.dart';
+import 'package:io_crossword/crossword/crossword.dart';
 
 /// {@template default_transformation_controller}
 /// Creates a default [TransformationController] for the child widget.
