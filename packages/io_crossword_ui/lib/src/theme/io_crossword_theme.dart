@@ -27,6 +27,8 @@ class IoCrosswordTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      dialogBackgroundColor: colorScheme.surface,
       textTheme: _textTheme.textTheme,
       tabBarTheme: _tabBarTheme,
       cardColor: _cardTheme.plain.color,
