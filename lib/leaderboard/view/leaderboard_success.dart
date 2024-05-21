@@ -144,6 +144,7 @@ class CurrentUserPosition extends StatelessWidget {
                 '${l10n.you}:',
                 style: theme.io.textStyles.body4.copyWith(
                   color: IoCrosswordColors.softGray,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               UserLeaderboardRanking(
