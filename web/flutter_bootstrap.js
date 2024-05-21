@@ -1,4 +1,5 @@
-/** Keep in mind that this file is not a real javascript file, it is a template
+/**
+ * Keep in mind that this file is not a real javascript file, it is a template
  * that will be processed by the build system to generate the final javascript
  * file. Therefore, we use the {@link https://mustache.github.io/mustache.5.html mustache syntax} to inject
  * values and you might see some linter errors in this file.
