@@ -152,6 +152,7 @@ class _CrosswordViewState extends State<CrosswordView>
       ],
       child: Scaffold(
         endDrawer: const CrosswordDrawer(),
+        resizeToAvoidBottomInset: false,
         appBar: IoAppBar(
           title: const PlayerRankingInformation(),
           crossword: l10n.crossword,

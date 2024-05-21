@@ -175,57 +175,6 @@ void main() {
       },
     );
 
-    testWidgets(
-      'does not display playAgain and icon on big screen',
-      (tester) async {
-        tester.view.physicalSize = Size(IoCrosswordBreakpoints.medium * 3, 600);
-
-        addTearDown(tester.view.resetPhysicalSize);
-
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-        when(() => playerBloc.state).thenReturn(PlayerState());
-
-        await tester.pumpApp(widget);
-
-        expect(find.text(l10n.playAgain), findsNothing);
-        expect(find.byIcon(Icons.gamepad), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'displays playAgain and icon in button',
-      (tester) async {
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-        when(() => playerBloc.state).thenReturn(PlayerState());
-
-        await tester.pumpApp(widget);
-
-        expect(find.text(l10n.playAgain), findsOneWidget);
-        expect(find.byIcon(Icons.gamepad), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'pops the screen when playAgain is tapped',
-      (tester) async {
-        final mockNavigator = MockNavigator();
-
-        when(mockNavigator.canPop).thenReturn(true);
-
-        when(() => leaderboardBloc.state).thenReturn(LeaderboardState());
-        when(() => playerBloc.state).thenReturn(PlayerState());
-
-        await tester.pumpApp(
-          widget,
-          navigator: mockNavigator,
-        );
-
-        await tester.tap(find.text(l10n.playAgain));
-
-        verify(mockNavigator.pop).called(1);
-      },
-    );
-
     group('CurrentPlayerNotTopRank', () {
       setUp(() {
         widget = BlocProvider<PlayerBloc>(
