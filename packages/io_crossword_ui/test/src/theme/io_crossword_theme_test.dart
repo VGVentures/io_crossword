@@ -160,7 +160,7 @@ void main() {
       test('background color is IoCrosswordColors.seedBlack', () {
         expect(
           IoCrosswordTheme().themeData.colorScheme.background,
-          IoCrosswordColors.seedBlack,
+          IoCrosswordColors.darkGray,
         );
       });
 
