@@ -16,8 +16,6 @@ dependencies:
   dart_frog: ^1.1.0
   db_client:
     path: packages/db_client
-  encryption_middleware:
-    path: packages/encryption_middleware
   firebase_cloud_storage:
     path: packages/firebase_cloud_storage
   game_domain:

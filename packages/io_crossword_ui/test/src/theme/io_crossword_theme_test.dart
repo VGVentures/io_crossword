@@ -157,10 +157,10 @@ void main() {
         });
       });
 
-      test('background color is IoCrosswordColors.seedBlack', () {
+      test('surface color is IoCrosswordColors.darkGray', () {
         expect(
           IoCrosswordTheme().themeData.colorScheme.surface,
-          IoCrosswordColors.seedBlack,
+          IoCrosswordColors.darkGray,
         );
       });
 
