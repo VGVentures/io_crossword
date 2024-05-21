@@ -27,8 +27,8 @@ class CrosswordPlayingView extends StatelessWidget {
               );
             },
           ),
-          const WordSelectionPage(),
           const BottomBar(),
+          const WordSelectionPage(),
         ],
       ),
     );
