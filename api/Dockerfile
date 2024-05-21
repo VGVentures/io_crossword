@@ -6,7 +6,6 @@ WORKDIR /app
 
 # Copy Dependencies
 COPY packages/db_client ./packages/db_client
-COPY packages/encryption_middleware ./packages/encryption_middleware
 COPY packages/game_domain ./packages/game_domain
 COPY packages/jwt_middleware ./packages/jwt_middleware
 COPY packages/leaderboard_repository ./packages/leaderboard_repository
@@ -17,7 +16,6 @@ COPY packages/hint_repository ./packages/hint_repository
 
 # Install Dependencies
 RUN dart pub get -C packages/db_client
-RUN dart pub get -C packages/encryption_middleware
 RUN dart pub get -C packages/game_domain
 RUN dart pub get -C packages/jwt_middleware
 RUN dart pub get -C packages/leaderboard_repository
