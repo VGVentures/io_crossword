@@ -189,7 +189,7 @@ class UserLeaderboardRanking extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                width: 60,
+                width: 45,
                 child: Text(
                   rank.toDisplayNumber(),
                   style: themeData.io.textStyles.body4,
