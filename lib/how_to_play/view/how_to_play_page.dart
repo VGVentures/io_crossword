@@ -93,12 +93,7 @@ class _HowToPlaySmall extends StatelessWidget {
         ),
         if (status == HowToPlayStatus.idle)
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              20,
-              16,
-              20,
-              48,
-            ),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 48),
             child: Align(
               alignment: Alignment.topCenter,
               child: Column(
@@ -207,6 +202,12 @@ class _MascotAnimationState extends State<_MascotAnimation> {
   final SpriteListController _controller = SpriteListController();
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mascot = context.read<PlayerBloc>().state.mascot;
 
@@ -239,11 +240,5 @@ class _MascotAnimationState extends State<_MascotAnimation> {
               );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
