@@ -142,7 +142,9 @@ class CurrentUserPosition extends StatelessWidget {
             children: [
               Text(
                 '${l10n.you}:',
-                style: theme.io.textStyles.body4,
+                style: theme.io.textStyles.body4.copyWith(
+                  color: IoCrosswordColors.softGray,
+                ),
               ),
               UserLeaderboardRanking(
                 player: player,
@@ -186,9 +188,12 @@ class UserLeaderboardRanking extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                rank.toDisplayNumber(),
-                style: themeData.io.textStyles.body4,
+              SizedBox(
+                width: 60,
+                child: Text(
+                  rank.toDisplayNumber(),
+                  style: themeData.io.textStyles.body4,
+                ),
               ),
               IoWord(
                 player.initials,
