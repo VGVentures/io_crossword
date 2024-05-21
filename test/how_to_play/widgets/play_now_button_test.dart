@@ -4,15 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/player/player.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
-
-class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
-    implements GameIntroBloc {}
 
 class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
     implements HowToPlayCubit {}
@@ -24,13 +20,11 @@ class _MockAudioController extends Mock implements AudioController {}
 
 void main() {
   group('$PlayNowButton', () {
-    late GameIntroBloc gameIntroBloc;
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late AudioController audioController;
 
     setUp(() {
-      gameIntroBloc = _MockGameIntroBloc();
       howToPlayCubit = _MockHowToPlayCubit();
 
       playerBloc = _MockPlayerBloc();
@@ -51,8 +45,6 @@ void main() {
     testWidgets(
       'emits $PlayerCreateScoreRequested when pressed',
       (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(const GameIntroState());
-
         await tester.pumpApp(
           playerBloc: playerBloc,
           audioController: audioController,
@@ -74,8 +66,6 @@ void main() {
     testWidgets(
       'plays ${Assets.music.startButton1} when pressed',
       (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(const GameIntroState());
-
         await tester.pumpApp(
           playerBloc: playerBloc,
           audioController: audioController,

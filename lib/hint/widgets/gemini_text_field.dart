@@ -29,6 +29,13 @@ class _GeminiTextFieldState extends State<GeminiTextField> {
     });
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   void _onAskForHint(BuildContext context, String question) {
     final wordId = context.read<WordSelectionBloc>().state.word?.word.id;
     final hintBloc = context.read<HintBloc>();
