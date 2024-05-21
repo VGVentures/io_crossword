@@ -9,8 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
-import 'package:io_crossword/game_intro/bloc/game_intro_bloc.dart';
-import 'package:io_crossword/game_intro/game_intro.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/player/player.dart';
@@ -20,9 +18,6 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mockingjay/mockingjay.dart';
 
 import '../../helpers/helpers.dart';
-
-class _MockGameIntroBloc extends MockBloc<GameIntroEvent, GameIntroState>
-    implements GameIntroBloc {}
 
 class _MockHowToPlayCubit extends MockCubit<HowToPlayState>
     implements HowToPlayCubit {}
@@ -46,11 +41,9 @@ void main() {
   });
 
   group('$HowToPlayPage', () {
-    late GameIntroBloc gameIntroBloc;
     late PlayerBloc playerBloc;
 
     setUp(() {
-      gameIntroBloc = _MockGameIntroBloc();
       playerBloc = _MockPlayerBloc();
     });
 
@@ -113,16 +106,12 @@ void main() {
     });
 
     testWidgets('displays a $HowToPlayView', (tester) async {
-      when(() => gameIntroBloc.state).thenReturn(GameIntroState());
       when(() => playerBloc.state)
           .thenReturn(PlayerState(mascot: Mascots.dash));
 
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: gameIntroBloc,
-            ),
             BlocProvider.value(
               value: playerBloc,
             ),
@@ -137,13 +126,11 @@ void main() {
   });
 
   group('$HowToPlayView', () {
-    late GameIntroBloc gameIntroBloc;
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late Widget widget;
 
     setUp(() {
-      gameIntroBloc = _MockGameIntroBloc();
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
@@ -161,9 +148,6 @@ void main() {
       widget = MultiBlocProvider(
         providers: [
           BlocProvider.value(
-            value: gameIntroBloc,
-          ),
-          BlocProvider.value(
             value: howToPlayCubit,
           ),
           BlocProvider.value(
@@ -176,12 +160,6 @@ void main() {
 
     for (final layout in IoLayoutData.values) {
       testWidgets('displays IoAppBar with $layout', (tester) async {
-        when(() => gameIntroBloc.state).thenReturn(
-          GameIntroState(
-            status: GameIntroPlayerCreationStatus.inProgress,
-          ),
-        );
-
         await tester.pumpApp(
           widget,
           layout: layout,
@@ -277,12 +255,6 @@ void main() {
           ),
         );
 
-        when(() => gameIntroBloc.state).thenReturn(
-          GameIntroState(
-            status: GameIntroPlayerCreationStatus.inProgress,
-          ),
-        );
-
         await tester.pumpApp(
           widget,
           layout: layout,
@@ -316,8 +288,6 @@ void main() {
 
       testWidgets('localized playNow text', (tester) async {
         late final AppLocalizations l10n;
-
-        when(() => gameIntroBloc.state).thenReturn(GameIntroState());
 
         await tester.pumpApp(
           Builder(
