@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/board_status/board_status.dart';
-import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/drawer/drawer.dart';
 import 'package:io_crossword/l10n/l10n.dart';
@@ -179,7 +178,7 @@ class _CrosswordViewState extends State<CrosswordView>
                 } else if (status == CrosswordStatus.ready) {
                   return FadeInAnimation(
                     onComplete: _controller.playNext,
-                    child: const LoadedBoardView(),
+                    child: const CrosswordPlayingView(),
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -224,33 +223,6 @@ class _CrosswordViewState extends State<CrosswordView>
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-@visibleForTesting
-class LoadedBoardView extends StatelessWidget {
-  @visibleForTesting
-  const LoadedBoardView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultWordInputController(
-      child: Stack(
-        children: [
-          BlocSelector<CrosswordBloc, CrosswordState, bool>(
-            selector: (state) => state.mascotVisible,
-            builder: (context, mascotVisible) {
-              return IgnorePointer(
-                ignoring: mascotVisible,
-                child: const CrosswordBoardView(),
-              );
-            },
-          ),
-          const BottomBar(),
-          const WordSelectionPage(),
-        ],
       ),
     );
   }

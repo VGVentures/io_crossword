@@ -287,51 +287,39 @@ void main() {
       expect(find.byType(ErrorView), findsOneWidget);
     });
 
-    testWidgets('renders $CrosswordBoardView with ${CrosswordStatus.ready}',
-        (tester) async {
-      when(() => crosswordBloc.state).thenReturn(
-        const CrosswordState(
-          status: CrosswordStatus.ready,
-        ),
-      );
-
-      await tester.pumpSubject(
-        crosswordBloc: crosswordBloc,
-        CrosswordView(),
-      );
-
-      expect(find.byType(CrosswordBoardView), findsOneWidget);
-    });
-
-    testWidgets(
-      'does not render $WordSelectionPage when loaded',
-      (tester) async {
-        await tester.pumpSubject(
-          CrosswordView(),
-          crosswordBloc: crosswordBloc,
-        );
-
-        expect(find.byType(WordSelectionPage), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'renders $BottomBar',
-      (tester) async {
+    group('$CrosswordPlayingView', () {
+      testWidgets('renders when  ${CrosswordStatus.ready}', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          const CrosswordState(
-            status: CrosswordStatus.ready,
-          ),
+          const CrosswordState(status: CrosswordStatus.ready),
         );
 
         await tester.pumpSubject(
-          CrosswordView(),
           crosswordBloc: crosswordBloc,
+          CrosswordView(),
         );
 
-        expect(find.byType(BottomBar), findsOneWidget);
-      },
-    );
+        expect(find.byType(CrosswordPlayingView), findsOneWidget);
+      });
+
+      for (final crosswordStatus in CrosswordStatus.values.toSet()
+        ..remove(CrosswordStatus.ready)) {
+        testWidgets(
+          '''does not render $CrosswordPlayingView when status is $crosswordStatus''',
+          (tester) async {
+            when(() => crosswordBloc.state).thenReturn(
+              CrosswordState(status: crosswordStatus),
+            );
+
+            await tester.pumpSubject(
+              CrosswordView(),
+              crosswordBloc: crosswordBloc,
+            );
+
+            expect(find.byType(CrosswordPlayingView), findsNothing);
+          },
+        );
+      }
+    });
 
     for (final layout in IoLayoutData.values) {
       testWidgets(
