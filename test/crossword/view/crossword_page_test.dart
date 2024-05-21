@@ -304,7 +304,7 @@ void main() {
       for (final crosswordStatus in CrosswordStatus.values.toSet()
         ..remove(CrosswordStatus.ready)) {
         testWidgets(
-          'does not render $WordSelectionPage when status is $crosswordStatus',
+          '''does not render $CrosswordPlayingView when status is $crosswordStatus''',
           (tester) async {
             when(() => crosswordBloc.state).thenReturn(
               CrosswordState(status: crosswordStatus),
@@ -315,7 +315,7 @@ void main() {
               crosswordBloc: crosswordBloc,
             );
 
-            expect(find.byType(WordSelectionPage), findsNothing);
+            expect(find.byType(CrosswordPlayingView), findsNothing);
           },
         );
       }
