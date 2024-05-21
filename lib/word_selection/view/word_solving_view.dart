@@ -77,20 +77,17 @@ class WordSolvingLargeView extends StatelessWidget {
 }
 
 @visibleForTesting
-class WordSolvingSmallView extends StatefulWidget {
+class WordSolvingSmallView extends StatelessWidget {
   @visibleForTesting
   const WordSolvingSmallView({super.key});
 
   @override
-  State<WordSolvingSmallView> createState() => _WordSolvingSmallViewState();
-}
-
-class _WordSolvingSmallViewState extends State<WordSolvingSmallView> {
-  @override
   Widget build(BuildContext context) {
     final selectedWord =
         context.select((WordSelectionBloc bloc) => bloc.state.word);
+
     if (selectedWord == null) return const SizedBox.shrink();
+
     final isHintsEnabled =
         context.select((HintBloc bloc) => bloc.state.isHintsEnabled);
 
@@ -168,9 +165,7 @@ class IncorrectAnswerText extends StatelessWidget {
 @visibleForTesting
 class BottomPanel extends StatelessWidget {
   @visibleForTesting
-  const BottomPanel({super.key, this.controller});
-
-  final IoWordInputController? controller;
+  const BottomPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
