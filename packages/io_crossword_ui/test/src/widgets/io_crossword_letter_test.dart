@@ -290,7 +290,7 @@ class _GoldenSubject extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: ColoredBox(
-          color: themeData.colorScheme.background,
+          color: themeData.colorScheme.surface,
           child: Center(
             child: SizedBox.square(dimension: 50, child: child),
           ),

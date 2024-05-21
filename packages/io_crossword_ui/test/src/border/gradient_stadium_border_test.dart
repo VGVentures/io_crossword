@@ -166,7 +166,7 @@ class _GoldenSubject extends StatelessWidget {
       data: themeData,
       child: Material(
         child: ColoredBox(
-          color: themeData.colorScheme.background,
+          color: themeData.colorScheme.surface,
           child: Center(child: child),
         ),
       ),
