@@ -499,7 +499,7 @@ class IoCrosswordTheme {
     return ColorScheme.fromSeed(
       brightness: Brightness.dark,
       seedColor: IoCrosswordColors.seedBlue,
-      background: IoCrosswordColors.seedBlack,
+      background: IoCrosswordColors.darkGray,
       surface: IoCrosswordColors.darkGray,
       onSurface: IoCrosswordColors.seedWhite,
       surfaceTint: IoCrosswordColors.seedWhite,
