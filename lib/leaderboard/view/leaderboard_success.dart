@@ -13,8 +13,6 @@ class LeaderboardSuccess extends StatelessWidget {
     final players =
         context.select((LeaderboardBloc bloc) => bloc.state.players);
 
-    final layout = IoLayout.of(context);
-
     return Center(
       child: SingleChildScrollView(
         child: Padding(
@@ -83,23 +81,6 @@ class LeaderboardSuccess extends StatelessWidget {
                   },
                 ),
                 const CurrentPlayerNotTopRank(),
-                if (layout == IoLayoutData.small)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 17.5,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.gamepad),
-                      label: Text(l10n.playAgain),
-                    ),
-                  ),
               ],
             ),
           ),
