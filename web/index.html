@@ -188,11 +188,6 @@
       }
       
     </style>
-
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      var serviceWorkerVersion = null;
-    </script>
   </head>
   <body class="loading-mode">
     <img id="background" src="hero.png" />
@@ -213,62 +208,7 @@
       <button id="confirm-cookies">Ok, got it</button>
     </div>
     <script>
-      (function () {
-        const cookieBar = document.querySelector("#cookie-bar");
-        const cookieBarButton = document.querySelector("#confirm-cookies");
-        const splashCopy = document.querySelector("#splash_copy");
-
-        const additionalScripts = [];
-
-        let cookiesAcceptanceCompleter;
-        let hasUserAcceptedCookies = new Promise((resolve) => {
-          cookiesAcceptanceCompleter = resolve;
-        });
-
-        cookieBarButton.addEventListener("click", function () {
-            cookieBar.remove();
-            cookiesAcceptanceCompleter();
-        });
-
-        function injectScript(url) {
-          return new Promise(function (resolve) {
-            let scriptTag = document.createElement("script");
-            scriptTag.src = url;
-            scriptTag.type = "application/javascript";
-            scriptTag.onload = function () {
-              resolve();
-            };
-
-            document.body.append(scriptTag);
-          });
-        }
-
-        window.addEventListener("load", async function (ev) {
-          await injectScript("flutter.js");
-
-          _flutter.loader.loadEntrypoint({
-              serviceWorker: {
-                serviceWorkerVersion: serviceWorkerVersion,
-              },
-              onEntrypointLoaded: function (engineInitializer) {
-                engineInitializer
-                  .initializeEngine()
-                  .then(async function (appRunner) {
-                    await hasUserAcceptedCookies;
-                    window.addEventListener(
-                      "flutter-first-frame",
-                      function () {
-                        splashCopy.remove();
-                        document.body.classList.remove("loading-mode");
-                      }
-                    );
-
-                    appRunner.runApp();
-                });
-              },
-            });
-        });
-      })();
+      {{flutter_bootstrap_js}}
     </script>
   </body>
 </html>
