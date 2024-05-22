@@ -27,6 +27,8 @@ class IoCrosswordTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      dialogBackgroundColor: colorScheme.surface,
       textTheme: _textTheme.textTheme,
       tabBarTheme: _tabBarTheme,
       cardColor: _cardTheme.plain.color,
@@ -194,7 +196,7 @@ class IoCrosswordTheme {
           color: IoCrosswordColors.mediumGray,
         ),
       ).copyWith(
-        iconColor: MaterialStatePropertyAll(
+        iconColor: WidgetStatePropertyAll(
           colorScheme.primary,
         ),
       ),
@@ -269,9 +271,9 @@ class IoCrosswordTheme {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         textStyle: _textTheme.body2,
       ).copyWith(
-        shape: MaterialStateProperty.resolveWith(
+        shape: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) {
+            if (states.contains(WidgetState.disabled)) {
               return const StadiumBorder(side: BorderSide(width: 2));
             }
             return GradientStadiumBorder(
@@ -293,9 +295,9 @@ class IoCrosswordTheme {
           horizontal: 18,
         ),
       ).copyWith(
-        shape: MaterialStateProperty.resolveWith(
+        shape: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) {
+            if (states.contains(WidgetState.disabled)) {
               return const StadiumBorder(
                 side: BorderSide(
                   width: 2,
@@ -322,9 +324,9 @@ class IoCrosswordTheme {
           horizontal: 18,
         ),
       ).copyWith(
-        shape: MaterialStateProperty.resolveWith(
+        shape: WidgetStateProperty.resolveWith(
           (states) {
-            if (states.contains(MaterialState.disabled)) {
+            if (states.contains(WidgetState.disabled)) {
               return const StadiumBorder(side: BorderSide(width: 2));
             }
 
@@ -378,41 +380,41 @@ class IoCrosswordTheme {
   IoIconButtonTheme get _iconButtonTheme {
     return IoIconButtonTheme(
       flat: ButtonStyle(
-        iconSize: const MaterialStatePropertyAll<double>(20),
-        side: const MaterialStatePropertyAll<BorderSide>(BorderSide.none),
-        iconColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        iconSize: const WidgetStatePropertyAll<double>(20),
+        side: const WidgetStatePropertyAll<BorderSide>(BorderSide.none),
+        iconColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return IoCrosswordColors.mediumGray;
           }
           return IoCrosswordColors.seedWhite;
         }),
         backgroundColor:
-            const MaterialStatePropertyAll<Color>(Colors.transparent),
+            const WidgetStatePropertyAll<Color>(Colors.transparent),
       ),
       outlined: ButtonStyle(
-        iconSize: const MaterialStatePropertyAll<double>(20),
-        shape: const MaterialStatePropertyAll<OutlinedBorder>(
+        iconSize: const WidgetStatePropertyAll<double>(20),
+        shape: const WidgetStatePropertyAll<OutlinedBorder>(
           CircleBorder(side: BorderSide(color: IoCrosswordColors.mediumGray)),
         ),
-        iconColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        iconColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return IoCrosswordColors.mediumGray;
           }
           return IoCrosswordColors.seedWhite;
         }),
         backgroundColor:
-            const MaterialStatePropertyAll<Color>(Colors.transparent),
+            const WidgetStatePropertyAll<Color>(Colors.transparent),
       ),
       filled: ButtonStyle(
-        iconSize: const MaterialStatePropertyAll<double>(20),
-        iconColor: MaterialStateColor.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
+        iconSize: const WidgetStatePropertyAll<double>(20),
+        iconColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
             return IoCrosswordColors.mediumGray;
           }
           return IoCrosswordColors.seedWhite;
         }),
         backgroundColor:
-            const MaterialStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
+            const WidgetStatePropertyAll<Color>(IoCrosswordColors.mediumGray),
       ),
     );
   }
@@ -421,9 +423,9 @@ class IoCrosswordTheme {
     final textTheme = _textTheme;
     final colorScheme = this.colorScheme;
 
-    final border = Border.all(color: colorScheme.background);
+    final border = Border.all(color: colorScheme.surface);
     final textStyle = textTheme.h2.copyWith(
-      color: colorScheme.background,
+      color: colorScheme.surface,
       height: 1.1,
     );
 
@@ -481,9 +483,9 @@ class IoCrosswordTheme {
   static TabBarTheme get _tabBarTheme {
     return TabBarTheme(
       indicatorSize: TabBarIndicatorSize.tab,
-      labelColor: MaterialStateColor.resolveWith(
+      labelColor: WidgetStateColor.resolveWith(
         (states) {
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF2E3233);
           }
 
@@ -499,7 +501,6 @@ class IoCrosswordTheme {
     return ColorScheme.fromSeed(
       brightness: Brightness.dark,
       seedColor: IoCrosswordColors.seedBlue,
-      background: IoCrosswordColors.darkGray,
       surface: IoCrosswordColors.darkGray,
       onSurface: IoCrosswordColors.seedWhite,
       surfaceTint: IoCrosswordColors.seedWhite,

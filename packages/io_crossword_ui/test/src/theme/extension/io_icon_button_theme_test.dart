@@ -7,24 +7,24 @@ void main() {
     test('lerps', () {
       final from = IoIconButtonTheme(
         flat: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
         outlined: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
         filled: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
       );
       final to = IoIconButtonTheme(
         flat: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
         outlined: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff0000ff)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff0000ff)),
         ),
         filled: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff0000ff)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff0000ff)),
         ),
       );
 

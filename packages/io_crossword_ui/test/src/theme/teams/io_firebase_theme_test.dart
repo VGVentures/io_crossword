@@ -12,9 +12,9 @@ void main() {
       final outlinedBorder =
           IoFirebaseTheme().themeData.outlinedButtonTheme.style!.shape!;
 
-      test('displays StadiumBorder with ${MaterialState.disabled}', () {
+      test('displays StadiumBorder with ${WidgetState.disabled}', () {
         expect(
-          outlinedBorder.resolve({MaterialState.disabled}),
+          outlinedBorder.resolve({WidgetState.disabled}),
           equals(isA<StadiumBorder>()),
         );
       });
@@ -32,8 +32,8 @@ void main() {
         );
       });
 
-      for (final state in MaterialState.values.toList()
-        ..remove(MaterialState.disabled)) {
+      for (final state in WidgetState.values.toList()
+        ..remove(WidgetState.disabled)) {
         test('displays GradientOutlinedBorder with $state', () {
           expect(
             outlinedBorder.resolve({state}),

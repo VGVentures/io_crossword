@@ -4,8 +4,8 @@ version: 0.0.1+1
 publish_to: none
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   api_client:
@@ -21,7 +21,7 @@ dependencies:
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
-  firebase_app_check: ^0.2.2
+  firebase_app_check: ^0.2.2+5
   firebase_auth: ^4.19.4
   firebase_core: ^2.30.1
   flame: ^1.17.0
@@ -35,7 +35,7 @@ dependencies:
   game_domain:
     path: api/packages/game_domain
   http: ^1.2.1
-  intl: ^0.18.1
+  intl: ^0.19.0
   io_crossword_ui:
     path: packages/io_crossword_ui
   leaderboard_repository:

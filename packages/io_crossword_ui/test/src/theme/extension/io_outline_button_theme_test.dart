@@ -7,12 +7,12 @@ void main() {
     test('lerps', () {
       final from = IoOutlineButtonTheme(
         simpleBorder: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff00ff00)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
       );
       final to = IoOutlineButtonTheme(
         simpleBorder: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(const Color(0xff0000ff)),
+          backgroundColor: WidgetStateProperty.all(const Color(0xff0000ff)),
         ),
       );
 

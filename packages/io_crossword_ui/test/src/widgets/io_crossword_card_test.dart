@@ -73,7 +73,7 @@ class _GoldenSubject extends StatelessWidget {
     return Theme(
       data: themeData,
       child: ColoredBox(
-        color: themeData.colorScheme.background,
+        color: themeData.colorScheme.surface,
         child: Center(child: child),
       ),
     );

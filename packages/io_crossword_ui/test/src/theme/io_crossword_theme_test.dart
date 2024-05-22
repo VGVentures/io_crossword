@@ -19,9 +19,9 @@ void main() {
         final outlinedBorder =
             IoCrosswordTheme().themeData.outlinedButtonTheme.style!.shape!;
 
-        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+        test('displays StadiumBorder with ${WidgetState.disabled}', () {
           expect(
-            outlinedBorder.resolve({MaterialState.disabled}),
+            outlinedBorder.resolve({WidgetState.disabled}),
             equals(isA<StadiumBorder>()),
           );
         });
@@ -39,8 +39,8 @@ void main() {
           );
         });
 
-        for (final state in MaterialState.values.toList()
-          ..remove(MaterialState.disabled)) {
+        for (final state in WidgetState.values.toList()
+          ..remove(WidgetState.disabled)) {
           test('displays GradientOutlinedBorder with $state', () {
             expect(
               outlinedBorder.resolve({state}),
@@ -64,9 +64,9 @@ void main() {
             .simpleBorder
             .shape!;
 
-        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+        test('displays StadiumBorder with ${WidgetState.disabled}', () {
           expect(
-            outlinedBorder.resolve({MaterialState.disabled}),
+            outlinedBorder.resolve({WidgetState.disabled}),
             equals(isA<StadiumBorder>()),
           );
         });
@@ -84,8 +84,8 @@ void main() {
           );
         });
 
-        for (final state in MaterialState.values.toList()
-          ..remove(MaterialState.disabled)) {
+        for (final state in WidgetState.values.toList()
+          ..remove(WidgetState.disabled)) {
           test('displays mediumGray color with $state', () {
             expect(
               outlinedBorder.resolve({state}),
@@ -105,9 +105,9 @@ void main() {
         final outlinedBorder =
             IoCrosswordTheme.geminiOutlinedButtonThemeData.style!.shape!;
 
-        test('displays StadiumBorder with ${MaterialState.disabled}', () {
+        test('displays StadiumBorder with ${WidgetState.disabled}', () {
           expect(
-            outlinedBorder.resolve({MaterialState.disabled}),
+            outlinedBorder.resolve({WidgetState.disabled}),
             equals(isA<StadiumBorder>()),
           );
         });
@@ -125,8 +125,8 @@ void main() {
           );
         });
 
-        for (final state in MaterialState.values.toList()
-          ..remove(MaterialState.disabled)) {
+        for (final state in WidgetState.values.toList()
+          ..remove(WidgetState.disabled)) {
           test('displays GradientOutlinedBorder with $state', () {
             expect(
               outlinedBorder.resolve({state}),
@@ -157,9 +157,9 @@ void main() {
         });
       });
 
-      test('background color is IoCrosswordColors.seedBlack', () {
+      test('surface color is IoCrosswordColors.darkGray', () {
         expect(
-          IoCrosswordTheme().themeData.colorScheme.background,
+          IoCrosswordTheme().themeData.colorScheme.surface,
           IoCrosswordColors.darkGray,
         );
       });
@@ -351,18 +351,18 @@ void main() {
 
     group('iconButton', () {
       group('iconColor', () {
-        test('is mediumGray when ${MaterialState.disabled}', () {
+        test('is mediumGray when ${WidgetState.disabled}', () {
           final iconButtonTheme = IoCrosswordTheme().themeData.iconButtonTheme;
           final property = iconButtonTheme.style!.iconColor!;
 
           expect(
-            property.resolve({MaterialState.disabled}),
+            property.resolve({WidgetState.disabled}),
             IoCrosswordColors.mediumGray,
           );
         });
 
-        for (final state in MaterialState.values.toSet()
-          ..remove(MaterialState.disabled)) {
+        for (final state in WidgetState.values.toSet()
+          ..remove(WidgetState.disabled)) {
           test('is seedWhite when $state', () {
             final iconButtonTheme =
                 IoCrosswordTheme().themeData.iconButtonTheme;
