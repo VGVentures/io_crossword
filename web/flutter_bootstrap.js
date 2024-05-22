@@ -20,7 +20,6 @@ let hasUserAcceptedCookies = new Promise((resolve) => {
 });
 
 cookieBarButton.addEventListener("click", () => {
-  console.log("cookieBarButton clicked");
   cookieBar.remove();
   cookiesAcceptanceCompleter();
 });
