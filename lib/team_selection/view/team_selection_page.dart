@@ -25,7 +25,10 @@ class TeamSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamSelectionCubit()..loadAssets(),
+      create: (_) {
+        context.read<PlayerBloc>().add(MascotSelected(Mascots.values.first));
+        return TeamSelectionCubit()..loadAssets();
+      },
       child: const TeamSelectionView(),
     );
   }
@@ -422,6 +425,10 @@ class _TeamSelector extends StatelessWidget {
                         context
                             .read<TeamSelectionCubit>()
                             .selectTeam(index - 1);
+
+                        context
+                            .read<PlayerBloc>()
+                            .add(MascotSelected(Mascots.values[index - 1]));
                       }
                     : null,
                 icon: const Icon(Icons.chevron_left),
@@ -438,6 +445,10 @@ class _TeamSelector extends StatelessWidget {
                         context
                             .read<TeamSelectionCubit>()
                             .selectTeam(index + 1);
+
+                        context
+                            .read<PlayerBloc>()
+                            .add(MascotSelected(Mascots.values[index + 1]));
                       }
                     : null,
                 icon: const Icon(Icons.chevron_right),
@@ -462,9 +473,10 @@ class _SubmitButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return OutlinedButton(
+      style: Theme.of(context).io.outlineButtonTheme.googleBorder,
       onPressed: () {
         context.read<AudioController>().playSfx(Assets.music.startButton1);
-        context.read<PlayerBloc>().add(MascotSelected(mascot));
+
         Navigator.of(context).push(InitialsPage.route());
       },
       child: Text(

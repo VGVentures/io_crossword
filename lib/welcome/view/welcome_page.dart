@@ -140,6 +140,7 @@ class WelcomeBody extends StatelessWidget {
           const ChallengeProgressStatus(),
           const SizedBox(height: 48),
           OutlinedButton(
+            style: Theme.of(context).io.outlineButtonTheme.googleBorder,
             onPressed: () => _onGetStarted(context),
             child: Text(l10n.getStarted),
           ),
