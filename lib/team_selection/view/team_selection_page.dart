@@ -473,7 +473,7 @@ class _SubmitButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return OutlinedButton(
-      style: Theme.of(context).io.outlineButtonTheme.googleBorder,
+      key: UniqueKey(),
       onPressed: () {
         context.read<AudioController>().playSfx(Assets.music.startButton1);
 
