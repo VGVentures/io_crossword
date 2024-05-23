@@ -49,7 +49,15 @@ class TeamSelectionView extends StatelessWidget {
         crossword: l10n.crossword,
         actions: (context) => const MuteButton(),
       ),
-      body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
+      body: BlocConsumer<TeamSelectionCubit, TeamSelectionState>(
+        listenWhen: (previous, current) => previous.index != current.index,
+        listener: (context, state) {
+          context
+              .read<PlayerBloc>()
+              .add(MascotSelected(Mascots.values[state.index]));
+        },
+        buildWhen: (previous, current) =>
+            previous.assetsStatus != current.assetsStatus,
         builder: (context, state) =>
             state.assetsStatus == AssetsLoadingStatus.inProgress
                 ? const SizedBox.shrink()
@@ -425,10 +433,6 @@ class _TeamSelector extends StatelessWidget {
                         context
                             .read<TeamSelectionCubit>()
                             .selectTeam(index - 1);
-
-                        context
-                            .read<PlayerBloc>()
-                            .add(MascotSelected(Mascots.values[index - 1]));
                       }
                     : null,
                 icon: const Icon(Icons.chevron_left),
@@ -445,10 +449,6 @@ class _TeamSelector extends StatelessWidget {
                         context
                             .read<TeamSelectionCubit>()
                             .selectTeam(index + 1);
-
-                        context
-                            .read<PlayerBloc>()
-                            .add(MascotSelected(Mascots.values[index + 1]));
                       }
                     : null,
                 icon: const Icon(Icons.chevron_right),
