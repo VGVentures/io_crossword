@@ -201,11 +201,11 @@ void main() {
           playerBloc: playerBloc,
         );
 
-        final themeFinder = find.byType(Theme).last;
+        final themeFinder = find.byType(MaterialApp).last;
         expect(themeFinder, findsOneWidget);
 
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.flutterTheme);
+        final theme = tester.widget<MaterialApp>(themeFinder);
+        expect(theme.theme, MascotTheme.flutterTheme);
       });
 
       testWidgets('is Firebase when mascot is Sparky', (tester) async {
@@ -222,11 +222,11 @@ void main() {
           AppView(),
         );
 
-        final themeFinder = find.byType(Theme).last;
+        final themeFinder = find.byType(MaterialApp).last;
         expect(themeFinder, findsOneWidget);
 
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.firebaseTheme);
+        final theme = tester.widget<MaterialApp>(themeFinder);
+        expect(theme.theme, MascotTheme.firebaseTheme);
       });
 
       testWidgets('is Chrome when mascot is Dino', (tester) async {
@@ -243,11 +243,11 @@ void main() {
           AppView(),
         );
 
-        final themeFinder = find.byType(Theme).last;
+        final themeFinder = find.byType(MaterialApp).last;
         expect(themeFinder, findsOneWidget);
 
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.chromeTheme);
+        final theme = tester.widget<MaterialApp>(themeFinder);
+        expect(theme.theme, MascotTheme.chromeTheme);
       });
 
       testWidgets('is Android when mascot is Android', (tester) async {
@@ -264,30 +264,11 @@ void main() {
           AppView(),
         );
 
-        final themeFinder = find.byType(Theme).last;
+        final themeFinder = find.byType(MaterialApp).last;
         expect(themeFinder, findsOneWidget);
 
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.androidTheme);
-      });
-
-      testWidgets('is default when there is no mascot', (tester) async {
-        whenListen(
-          playerBloc,
-          Stream<PlayerState>.empty(),
-          initialState: PlayerState(),
-        );
-
-        await tester.pumpApp(
-          playerBloc: playerBloc,
-          AppView(),
-        );
-
-        final themeFinder = find.byType(Theme).last;
-        expect(themeFinder, findsOneWidget);
-
-        final theme = tester.widget<Theme>(themeFinder);
-        expect(theme.data, MascotTheme.defaultTheme);
+        final theme = tester.widget<MaterialApp>(themeFinder);
+        expect(theme.theme, MascotTheme.androidTheme);
       });
     });
   });

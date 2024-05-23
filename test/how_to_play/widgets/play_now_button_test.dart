@@ -30,7 +30,6 @@ void main() {
       playerBloc = _MockPlayerBloc();
       when(() => playerBloc.state).thenReturn(
         const PlayerState(
-          mascot: Mascots.dash,
           player: Player(
             id: '1',
             initials: 'AAA',

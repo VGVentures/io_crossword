@@ -32,7 +32,7 @@ class HowToPlayPage extends StatelessWidget {
       child: BlocProvider(
         create: (_) => HowToPlayCubit()
           ..loadAssets(
-            context.read<PlayerBloc>().state.mascot!,
+            context.read<PlayerBloc>().state.mascot,
           ),
         child: const HowToPlayView(),
       ),
@@ -79,7 +79,7 @@ class _HowToPlaySmall extends StatelessWidget {
             child: SizedBox.fromSize(
               size: platformAwareAsset(
                 mobile: Size(
-                  mascot!.teamMascot.dangleSpriteMobileData.width,
+                  mascot.teamMascot.dangleSpriteMobileData.width,
                   mascot.teamMascot.dangleSpriteMobileData.height,
                 ),
                 desktop: Size(
@@ -148,7 +148,7 @@ class _HowToPlayLarge extends StatelessWidget {
             child: SizedBox.fromSize(
               size: platformAwareAsset(
                 mobile: Size(
-                  mascot!.teamMascot.dangleSpriteMobileData.width,
+                  mascot.teamMascot.dangleSpriteMobileData.width,
                   mascot.teamMascot.dangleSpriteMobileData.height,
                 ),
                 desktop: Size(
@@ -224,7 +224,7 @@ class _MascotAnimationState extends State<_MascotAnimation> {
                 animationItems: [
                   AnimationItem(
                     spriteData: platformAwareAsset(
-                      mobile: mascot!.teamMascot.lookUpSpriteMobileData,
+                      mobile: mascot.teamMascot.lookUpSpriteMobileData,
                       desktop: mascot.teamMascot.lookUpSpriteDesktopData,
                     ),
                     onComplete: () {

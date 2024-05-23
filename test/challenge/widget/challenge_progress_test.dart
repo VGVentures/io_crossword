@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -133,6 +135,7 @@ class _Subject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = IoCrosswordTheme().themeData;
+
     return Localizations(
       delegates: AppLocalizations.localizationsDelegates,
       locale: const Locale('en'),

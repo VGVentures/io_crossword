@@ -48,8 +48,7 @@ void main() {
     });
 
     testWidgets('route builds a $HowToPlayPage', (tester) async {
-      when(() => playerBloc.state)
-          .thenReturn(PlayerState(mascot: Mascots.dash));
+      when(() => playerBloc.state).thenReturn(PlayerState());
 
       await tester.pumpRoute(
         playerBloc: playerBloc,
@@ -64,12 +63,7 @@ void main() {
       for (final status in PlayerStatus.values.toSet()
         ..removeAll({PlayerStatus.loading, PlayerStatus.playing})) {
         testWidgets('is true when status is $status', (tester) async {
-          when(() => playerBloc.state).thenReturn(
-            PlayerState(
-              status: status,
-              mascot: Mascots.dash,
-            ),
-          );
+          when(() => playerBloc.state).thenReturn(PlayerState(status: status));
 
           await tester.pumpApp(
             playerBloc: playerBloc,
@@ -85,12 +79,7 @@ void main() {
 
       for (final status in {PlayerStatus.loading, PlayerStatus.playing}) {
         testWidgets('is false when status is $status', (tester) async {
-          when(() => playerBloc.state).thenReturn(
-            PlayerState(
-              status: status,
-              mascot: Mascots.dash,
-            ),
-          );
+          when(() => playerBloc.state).thenReturn(PlayerState(status: status));
 
           await tester.pumpApp(
             playerBloc: playerBloc,
@@ -106,8 +95,7 @@ void main() {
     });
 
     testWidgets('displays a $HowToPlayView', (tester) async {
-      when(() => playerBloc.state)
-          .thenReturn(PlayerState(mascot: Mascots.dash));
+      when(() => playerBloc.state).thenReturn(PlayerState());
 
       await tester.pumpApp(
         MultiBlocProvider(
@@ -142,8 +130,7 @@ void main() {
         ),
       );
 
-      when(() => playerBloc.state)
-          .thenReturn(PlayerState(mascot: Mascots.dash));
+      when(() => playerBloc.state).thenReturn(PlayerState());
 
       widget = MultiBlocProvider(
         providers: [

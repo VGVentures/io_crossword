@@ -91,34 +91,34 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ).thenAnswer((_) async {});
         },
         seed: () => PlayerState(
-          mascot: Mascots.dash,
+          mascot: Mascots.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
         ],
         verify: (bloc) => verify(
           () => leaderboardResource.createScore(
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
           ),
         ).called(1),
       );
@@ -130,35 +130,35 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ).thenAnswer((_) async {});
         },
         seed: () => PlayerState(
           status: PlayerStatus.playing,
-          mascot: Mascots.dash,
+          mascot: Mascots.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
         ],
         verify: (bloc) => verify(
           () => leaderboardResource.createScore(
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
           ),
         ).called(1),
       );
@@ -170,36 +170,36 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ).thenThrow(Exception());
         },
         seed: () => PlayerState(
-          mascot: Mascots.dash,
+          mascot: Mascots.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
           PlayerState(
             status: PlayerStatus.failure,
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
         ],
@@ -211,11 +211,11 @@ void main() {
           build: () => bloc,
           seed: () => PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
           act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
@@ -226,27 +226,11 @@ void main() {
           'when player initials are empty',
           build: () => bloc,
           seed: () => PlayerState(
-            mascot: Mascots.dash,
+            mascot: Mascots.dino,
             player: Player(
               id: '1',
               initials: '',
-              mascot: Mascots.dash,
-            ),
-          ),
-          act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
-          expect: () => <PlayerState>[],
-        );
-
-        blocTest<PlayerBloc, PlayerState>(
-          'when there is no mascot',
-          build: () => bloc,
-          seed: () => PlayerState(
-            // ignore: avoid_redundant_argument_values
-            mascot: null,
-            player: Player(
-              id: '1',
-              initials: '',
-              mascot: Mascots.dash,
+              mascot: Mascots.dino,
             ),
           ),
           act: (bloc) => bloc.add(PlayerCreateScoreRequested()),

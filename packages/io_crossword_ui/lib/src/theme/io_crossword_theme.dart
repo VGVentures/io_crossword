@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 class IoCrosswordTheme {
   /// {@macro io_crossword_theme}
-  IoCrosswordTheme();
+  const IoCrosswordTheme();
 
   /// [ThemeData] for IO Crossword.
   ThemeData get themeData {

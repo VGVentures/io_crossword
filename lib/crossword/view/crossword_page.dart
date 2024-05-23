@@ -192,7 +192,7 @@ class _CrosswordViewState extends State<CrosswordView>
                 builder: (context, visible) {
                   if (visible) {
                     return MascotAnimation(
-                      context.read<PlayerBloc>().state.mascot!,
+                      context.read<PlayerBloc>().state.mascot,
                       _controller,
                     );
                   } else {
