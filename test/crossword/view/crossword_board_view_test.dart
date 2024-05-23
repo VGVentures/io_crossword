@@ -4,8 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
-import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -34,7 +33,7 @@ void main() {
 
       word = _MockWord();
       when(() => word.length).thenReturn(5);
-      when(() => word.axis).thenReturn(domain.Axis.horizontal);
+      when(() => word.axis).thenReturn(WordAxis.horizontal);
       when(() => word.position).thenReturn(const Point(0, 0));
       when(() => word.id).thenReturn('id');
       when(() => word.answer).thenReturn('word');
@@ -223,7 +222,7 @@ void main() {
           'horizontally when an horizontal word is to be solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(false);
-            when(() => word.axis).thenReturn(domain.Axis.horizontal);
+            when(() => word.axis).thenReturn(WordAxis.horizontal);
 
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
@@ -257,7 +256,7 @@ void main() {
           'vertically when a vertical word is to be solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(false);
-            when(() => word.axis).thenReturn(domain.Axis.vertical);
+            when(() => word.axis).thenReturn(WordAxis.vertical);
 
             when(() => wordSelectionBloc.state).thenReturn(
               WordSelectionState(
@@ -413,7 +412,7 @@ void main() {
             when(() => word.isSolved).thenReturn(true);
             when(() => word.mascot).thenReturn(Mascots.dash);
             when(() => word.solvedTimestamp).thenReturn(1);
-            when(() => word.axis).thenReturn(domain.Axis.horizontal);
+            when(() => word.axis).thenReturn(WordAxis.horizontal);
 
             await tester.pumpApp(
               layout: IoLayoutData.large,
@@ -437,7 +436,7 @@ void main() {
             when(() => word.isSolved).thenReturn(true);
             when(() => word.mascot).thenReturn(Mascots.dash);
             when(() => word.solvedTimestamp).thenReturn(1);
-            when(() => word.axis).thenReturn(domain.Axis.vertical);
+            when(() => word.axis).thenReturn(WordAxis.vertical);
 
             await tester.pumpApp(
               layout: IoLayoutData.large,

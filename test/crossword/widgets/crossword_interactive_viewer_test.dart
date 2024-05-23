@@ -3,10 +3,9 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' as domain;
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
@@ -248,7 +247,7 @@ void main() {
       setUp(() {
         word = _MockWord();
         when(() => word.id).thenReturn('id');
-        when(() => word.axis).thenReturn(domain.Axis.horizontal);
+        when(() => word.axis).thenReturn(WordAxis.horizontal);
         when(() => word.position).thenReturn(const Point(0, 0));
         wordSelectionBloc = _MockWordSelectionBloc();
         when(() => word.solvedCharacters).thenReturn({});
@@ -311,7 +310,7 @@ void main() {
         'with big vertical word',
         (tester) async {
           when(() => word.length).thenReturn(25);
-          when(() => word.axis).thenReturn(domain.Axis.vertical);
+          when(() => word.axis).thenReturn(WordAxis.vertical);
           await tester.pumpApp(
             layout: IoLayoutData.large,
             DefaultWordInputController(
@@ -336,7 +335,7 @@ void main() {
         word = _MockWord();
         when(() => word.id).thenReturn('id');
         when(() => word.length).thenReturn(5);
-        when(() => word.axis).thenReturn(domain.Axis.horizontal);
+        when(() => word.axis).thenReturn(WordAxis.horizontal);
         when(() => word.position).thenReturn(const Point(0, 0));
       });
 
@@ -463,7 +462,7 @@ void main() {
               word: Word(
                 id: 'id',
                 position: Point(0, 0),
-                axis: Axis.horizontal,
+                axis: WordAxis.horizontal,
                 clue: 'clue',
                 answer: 'answer',
               ),

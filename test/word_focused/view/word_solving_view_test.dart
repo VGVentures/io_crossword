@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_redundant_argument_values
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,7 +30,7 @@ class _FakeWord extends Fake implements Word {
   String get clue => 'clue';
 
   @override
-  Axis get axis => Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 
   @override
   int? get solvedTimestamp => null;
@@ -275,7 +275,7 @@ void main() {
             final word = Word(
               id: 'id',
               position: Point(1, 2),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               clue: '',
               answer: ' a  y',
             );

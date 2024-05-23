@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -28,7 +28,7 @@ class _UnsolvedFakeWord extends Fake implements Word {
   String get answer => 'answer';
 
   @override
-  Axis get axis => Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 
   @override
   int get length => 4;
@@ -48,7 +48,7 @@ class _SolvedFakeWord extends Fake implements Word {
   String get id => '11000';
 
   @override
-  Axis get axis => Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 
   @override
   int get length => 4;

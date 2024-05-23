@@ -3,7 +3,7 @@
 import 'package:api_client/api_client.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:board_info_repository/board_info_repository.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -37,7 +37,7 @@ class _FakeWord extends Fake implements Word {
   int get length => 3;
 
   @override
-  Axis get axis => Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 }
 
 void main() {

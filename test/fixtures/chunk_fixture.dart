@@ -16,14 +16,14 @@ BoardSection get chunkFixture1 {
     id: '0',
     answer: 'POLO',
     position: Point<int>(-1, 4),
-    axis: Axis.horizontal,
+    axis: WordAxis.horizontal,
     clue: '',
   );
   const hello = Word(
     id: '1',
     answer: 'HELLO',
     position: Point<int>(0, 0),
-    axis: Axis.horizontal,
+    axis: WordAxis.horizontal,
     clue: '',
     solvedTimestamp: 123,
   );
@@ -31,7 +31,7 @@ BoardSection get chunkFixture1 {
     id: '2',
     answer: 'OLD',
     position: Point<int>(4, 0),
-    axis: Axis.vertical,
+    axis: WordAxis.vertical,
     clue: '',
     solvedTimestamp: 123,
   );
@@ -39,7 +39,7 @@ BoardSection get chunkFixture1 {
     id: '3',
     answer: 'FOOD',
     position: Point<int>(1, 2),
-    axis: Axis.horizontal,
+    axis: WordAxis.horizontal,
     clue: '',
     solvedTimestamp: 123,
   );
@@ -47,7 +47,7 @@ BoardSection get chunkFixture1 {
     id: '4',
     answer: 'ELF',
     position: Point<int>(1, 0),
-    axis: Axis.vertical,
+    axis: WordAxis.vertical,
     clue: '',
     solvedTimestamp: 123,
   );
@@ -55,7 +55,7 @@ BoardSection get chunkFixture1 {
     id: '5',
     answer: Word.emptyCharacter * 3,
     position: const Point<int>(2, 2),
-    axis: Axis.vertical,
+    axis: WordAxis.vertical,
     clue: '',
   );
 

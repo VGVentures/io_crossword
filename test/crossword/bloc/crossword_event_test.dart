@@ -61,7 +61,7 @@ void main() {
         word: Word(
           id: 'id',
           position: Point(0, 0),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           clue: 'clue',
           answer: 'answer',
         ),

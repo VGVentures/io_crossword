@@ -55,7 +55,9 @@ void main(List<String> args) async {
         position: Point(row[0] as int, row[1] as int),
         answer: Word.emptyCharacter * answer.length,
         clue: row[3] as String,
-        axis: row[4] == Axis.horizontal.name ? Axis.horizontal : Axis.vertical,
+        axis: row[4] == WordAxis.horizontal.name
+            ? WordAxis.horizontal
+            : WordAxis.vertical,
       ),
     );
   }
@@ -236,7 +238,7 @@ extension WordExtension on Word {
     final sections = <Point<int>>[];
 
     switch (axis) {
-      case Axis.horizontal:
+      case WordAxis.horizontal:
         var i = 0;
 
         while (true) {
@@ -255,7 +257,7 @@ extension WordExtension on Word {
 
           i++;
         }
-      case Axis.vertical:
+      case WordAxis.vertical:
         var i = 0;
 
         while (true) {
@@ -281,7 +283,7 @@ extension WordExtension on Word {
 
   /// Returns all the letter positions of the word.
   List<(int, int)> get allLetters {
-    return axis == Axis.horizontal
+    return axis == WordAxis.horizontal
         ? [
             for (var i = 0; i < length; i++) (position.x + i, position.y),
           ]
@@ -305,13 +307,13 @@ extension WordExtension on Word {
   /// If there are no collisions returns null.
   (int, String)? getCollision(List<(int, int)> letters) {
     switch (axis) {
-      case Axis.horizontal:
+      case WordAxis.horizontal:
         for (var i = 0; i < length; i++) {
           if (letters.contains((position.x + i, position.y))) {
             return (i, answer[i]);
           }
         }
-      case Axis.vertical:
+      case WordAxis.vertical:
         for (var i = 0; i < length; i++) {
           if (letters.contains((position.x, position.y + i))) {
             return (i, answer[i]);

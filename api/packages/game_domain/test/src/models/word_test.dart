@@ -9,7 +9,7 @@ void main() {
       final word = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -47,7 +47,7 @@ void main() {
           Word(
             id: 'id',
             position: Point(1, 2),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'test',
             clue: 'clue',
             mascot: Mascots.sparky,
@@ -60,7 +60,7 @@ void main() {
       final firstWord = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -68,7 +68,7 @@ void main() {
       final secondWord = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -81,7 +81,7 @@ void main() {
       final firstWord = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -89,7 +89,7 @@ void main() {
       final secondWord = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -102,7 +102,7 @@ void main() {
       final firstWord = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
@@ -114,7 +114,7 @@ void main() {
       final word = Word(
         id: '1',
         position: Point(1, 2),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'test',
         clue: 'clue',
       );
@@ -140,7 +140,7 @@ void main() {
         final word = Word(
           id: '1',
           position: Point(1, 2),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: 'test',
           clue: 'clue',
           solvedTimestamp: 1234,
@@ -153,7 +153,7 @@ void main() {
         final word = Word(
           id: '1',
           position: Point(1, 2),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: '',
           clue: 'clue',
         );
@@ -167,7 +167,7 @@ void main() {
         final word = Word(
           id: '1',
           position: Point(1, 2),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: '                ',
           clue: 'clue',
         );
@@ -179,7 +179,7 @@ void main() {
         final word = Word(
           id: '1',
           position: Point(1, 2),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: ' ap y',
           clue: 'clue',
         );
