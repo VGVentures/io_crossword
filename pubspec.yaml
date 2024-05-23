@@ -5,7 +5,7 @@ publish_to: none
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.22.0-41.0.pre"
 
 dependencies:
   api_client:
@@ -16,14 +16,14 @@ dependencies:
   bloc: ^8.1.4
   board_info_repository:
     path: packages/board_info_repository
-  cloud_firestore: ^4.17.2
+  cloud_firestore: ^4.17.4
   collection: ^1.17.2
   crossword_repository:
     path: packages/crossword_repository
   equatable: ^2.0.5
   firebase_app_check: ^0.2.2+5
-  firebase_auth: ^4.19.4
-  firebase_core: ^2.30.1
+  firebase_auth: ^4.19.6
+  firebase_core: ^2.31.1
   flame: ^1.17.0
   flutter:
     sdk: flutter
@@ -47,8 +47,8 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
-  build_runner: ^2.4.9
-  flutter_gen_runner: ^5.4.0
+  build_runner: ^2.4.10
+  flutter_gen_runner: ^5.5.0+1
   flutter_test:
     sdk: flutter
   mockingjay: ^0.5.0
