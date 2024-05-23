@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
@@ -56,15 +56,16 @@ class CrosswordLetterData extends Equatable {
 
     for (final word in chunk.words) {
       for (var i = 0; i < word.length; i++) {
-        final index = word.axis == Axis.horizontal
+        final index = word.axis == WordAxis.horizontal
             ? (word.position.x + i, word.position.y)
             : (word.position.x, word.position.y + i);
 
         final character = letters[index]?.character ?? word.answer[i];
 
         var words = letters[index]?.words ?? (null, null);
-        words =
-            word.axis == Axis.horizontal ? (word, words.$2) : (words.$1, word);
+        words = word.axis == WordAxis.horizontal
+            ? (word, words.$2)
+            : (words.$1, word);
 
         letters[index] = CrosswordLetterData(
           chunkIndex: chunkIndex,

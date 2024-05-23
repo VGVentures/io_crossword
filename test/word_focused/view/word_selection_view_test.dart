@@ -39,7 +39,7 @@ class _FakeWord extends Fake implements Word {
   int get length => 3;
 
   @override
-  Axis get axis => Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 
   @override
   Map<int, String> get solvedCharacters => {};

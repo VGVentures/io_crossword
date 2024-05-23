@@ -15,7 +15,7 @@ void main() {
   const word = Word(
     id: '1',
     position: Point(0, 1),
-    axis: Axis.horizontal,
+    axis: WordAxis.horizontal,
     answer: 'answer',
     clue: 'clue',
   );

@@ -23,11 +23,11 @@ extension on List<Word> {
       minPositionX = math.min(minPositionX, word.position.x);
       minPositionY = math.min(minPositionY, word.position.y);
 
-      final sizeX = word.axis == Axis.horizontal
+      final sizeX = word.axis == WordAxis.horizontal
           ? word.position.x + word.length
           : word.position.x;
 
-      final sizeY = word.axis == Axis.vertical
+      final sizeY = word.axis == WordAxis.vertical
           ? word.position.y + word.length
           : word.position.y;
 
@@ -191,7 +191,7 @@ class BoardRenderer {
         word.position.y * cellSize,
       );
 
-      final isHorizontal = word.axis == Axis.horizontal;
+      final isHorizontal = word.axis == WordAxis.horizontal;
       final wordCharacters = word.answer.split('');
 
       for (var i = 0; i < wordCharacters.length; i++) {
@@ -287,10 +287,10 @@ class BoardRenderer {
         final charIndex = char.codeUnitAt(0) - 65;
 
         final (dstX, dstY) = (
-          word.axis == Axis.horizontal
+          word.axis == WordAxis.horizontal
               ? (position.$1 + c) * _textureCellSize
               : position.$1 * _textureCellSize,
-          word.axis == Axis.vertical
+          word.axis == WordAxis.vertical
               ? (position.$2 + c) * _textureCellSize
               : position.$2 * _textureCellSize
         );
@@ -445,10 +445,10 @@ class BoardRenderer {
         final charIndex = char.codeUnitAt(0) - 65;
 
         final (dstX, dstY) = (
-          word.axis == Axis.horizontal
+          word.axis == WordAxis.horizontal
               ? (position.$1 + c) * _textureCellSize
               : position.$1 * _textureCellSize,
-          word.axis == Axis.vertical
+          word.axis == WordAxis.vertical
               ? (position.$2 + c) * _textureCellSize
               : position.$2 * _textureCellSize
         );

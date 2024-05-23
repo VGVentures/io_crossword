@@ -22,7 +22,7 @@ void main() {
     final words = [
       Word(
         id: '1',
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         position: const Point(0, 0),
         answer: 'flutter',
         clue: 'flutter',
@@ -30,7 +30,7 @@ void main() {
       ),
       Word(
         id: '2',
-        axis: Axis.vertical,
+        axis: WordAxis.vertical,
         position: const Point(4, 1),
         answer: 'android',
         clue: 'flutter',
@@ -38,7 +38,7 @@ void main() {
       ),
       Word(
         id: '3',
-        axis: Axis.vertical,
+        axis: WordAxis.vertical,
         position: const Point(8, 3),
         answer: 'dino',
         clue: 'flutter',
@@ -47,7 +47,7 @@ void main() {
       Word(
         id: '4',
         position: const Point(4, 6),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'sparky',
         clue: 'flutter',
         solvedTimestamp: null,
@@ -235,7 +235,7 @@ void main() {
         word: Word(
           id: 'id',
           position: Point(0, 0),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           clue: 'clue',
           answer: 'answer',
         ),

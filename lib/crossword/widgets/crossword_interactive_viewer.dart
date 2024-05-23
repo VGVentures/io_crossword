@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' as domain;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -411,15 +411,15 @@ extension on SelectedWord {
   }
 }
 
-extension on domain.Word {
+extension on Word {
   /// The size of the word in the crossword.
   Size size(CrosswordLayoutData layout) {
     return switch (axis) {
-      domain.Axis.horizontal => Size(
+      WordAxis.horizontal => Size(
           length * layout.cellSize.width,
           layout.cellSize.height,
         ),
-      domain.Axis.vertical => Size(
+      WordAxis.vertical => Size(
           layout.cellSize.width,
           length * layout.cellSize.height,
         ),

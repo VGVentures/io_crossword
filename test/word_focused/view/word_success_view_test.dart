@@ -4,8 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
-import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -49,7 +48,7 @@ class _FakeWord extends Fake implements Word {
   String get answer => 'answer';
 
   @override
-  domain.Axis get axis => domain.Axis.horizontal;
+  WordAxis get axis => WordAxis.horizontal;
 
   @override
   int get length => 4;

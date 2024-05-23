@@ -44,7 +44,7 @@ class Word extends Equatable {
 
   /// The axis of the word in the board.
   @JsonKey()
-  final Axis axis;
+  final WordAxis axis;
 
   /// The clue to show users when guessing for the first time.
   @JsonKey()
@@ -91,7 +91,7 @@ class Word extends Equatable {
   Word copyWith({
     String? id,
     Point<int>? position,
-    Axis? axis,
+    WordAxis? axis,
     String? clue,
     String? answer,
     int? solvedTimestamp,
@@ -121,7 +121,7 @@ class Word extends Equatable {
 }
 
 /// The two possible axis for a word in the board.
-enum Axis {
+enum WordAxis {
   /// From left to right.
   horizontal,
 

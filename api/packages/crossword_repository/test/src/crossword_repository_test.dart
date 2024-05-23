@@ -149,7 +149,7 @@ void main() {
       final word = Word(
         id: '1',
         position: const Point(1, 1),
-        axis: Axis.vertical,
+        axis: WordAxis.vertical,
         answer: '       ',
         clue: '',
       );
@@ -157,7 +157,7 @@ void main() {
       final word2 = Word(
         id: '2',
         position: const Point(1, 1),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'b   ',
         clue: '',
       );
@@ -165,7 +165,7 @@ void main() {
       final word3 = Word(
         id: '3',
         position: const Point(1, 1),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'hap y',
         clue: '',
       );
@@ -173,7 +173,7 @@ void main() {
       final word4 = Word(
         id: '4',
         position: const Point(1, 4),
-        axis: Axis.horizontal,
+        axis: WordAxis.horizontal,
         answer: 'solved',
         clue: '',
         solvedTimestamp: 12343,

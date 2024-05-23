@@ -99,7 +99,7 @@ void main() {
         Word(
           id: '1',
           position: const Point(1, 1),
-          axis: Axis.vertical,
+          axis: WordAxis.vertical,
           answer: 'flutter',
           clue: '',
         ),
@@ -115,7 +115,7 @@ void main() {
         Word(
           id: '2',
           position: const Point(2, 1),
-          axis: Axis.vertical,
+          axis: WordAxis.vertical,
           answer: 'firebase',
           clue: '',
         ),
