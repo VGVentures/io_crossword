@@ -25,7 +25,10 @@ class TeamSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TeamSelectionCubit()..loadAssets(),
+      create: (_) {
+        context.read<PlayerBloc>().add(MascotSelected(Mascots.values.first));
+        return TeamSelectionCubit()..loadAssets();
+      },
       child: const TeamSelectionView(),
     );
   }
@@ -46,7 +49,15 @@ class TeamSelectionView extends StatelessWidget {
         crossword: l10n.crossword,
         actions: (context) => const MuteButton(),
       ),
-      body: BlocBuilder<TeamSelectionCubit, TeamSelectionState>(
+      body: BlocConsumer<TeamSelectionCubit, TeamSelectionState>(
+        listenWhen: (previous, current) => previous.index != current.index,
+        listener: (context, state) {
+          context
+              .read<PlayerBloc>()
+              .add(MascotSelected(Mascots.values[state.index]));
+        },
+        buildWhen: (previous, current) =>
+            previous.assetsStatus != current.assetsStatus,
         builder: (context, state) =>
             state.assetsStatus == AssetsLoadingStatus.inProgress
                 ? const SizedBox.shrink()
@@ -462,9 +473,10 @@ class _SubmitButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return OutlinedButton(
+      key: UniqueKey(),
       onPressed: () {
         context.read<AudioController>().playSfx(Assets.music.startButton1);
-        context.read<PlayerBloc>().add(MascotSelected(mascot));
+
         Navigator.of(context).push(InitialsPage.route());
       },
       child: Text(

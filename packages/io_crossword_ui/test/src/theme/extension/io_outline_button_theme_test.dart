@@ -9,10 +9,16 @@ void main() {
         simpleBorder: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(const Color(0xff00ff00)),
         ),
+        googleBorder: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(const Color(0xff000000)),
+        ),
       );
       final to = IoOutlineButtonTheme(
         simpleBorder: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(const Color(0xff0000ff)),
+        ),
+        googleBorder: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(const Color(0xff000040)),
         ),
       );
 

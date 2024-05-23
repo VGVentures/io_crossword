@@ -316,6 +316,19 @@ class IoCrosswordTheme {
 
   IoOutlineButtonTheme get _ioOutlineButtonTheme {
     return IoOutlineButtonTheme(
+      googleBorder: _outlinedButtonThemeData.style!.copyWith(
+        shape: WidgetStateProperty.resolveWith(
+          (states) {
+            if (states.contains(WidgetState.disabled)) {
+              return const StadiumBorder(side: BorderSide(width: 2));
+            }
+
+            return const GradientStadiumBorder(
+              gradient: IoCrosswordColors.googleGradient,
+            );
+          },
+        ),
+      ),
       simpleBorder: OutlinedButton.styleFrom(
         minimumSize: const Size(171, 56),
         foregroundColor: IoCrosswordColors.seedWhite,

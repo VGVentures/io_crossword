@@ -57,38 +57,62 @@ void main() {
       });
 
       group('IoOutlineButtonTheme', () {
-        final outlinedBorder = IoCrosswordTheme()
-            .themeData
-            .io
-            .outlineButtonTheme
-            .simpleBorder
-            .shape!;
+        final outlinedBorder =
+            IoCrosswordTheme().themeData.io.outlineButtonTheme;
 
-        test('displays StadiumBorder with ${WidgetState.disabled}', () {
-          expect(
-            outlinedBorder.resolve({WidgetState.disabled}),
-            equals(isA<StadiumBorder>()),
-          );
-        });
+        group('googleBorder', () {
+          final googleBorder = outlinedBorder.googleBorder.shape!;
 
-        test('displays mediumGray color when there are no states', () {
-          expect(
-            outlinedBorder.resolve({}),
-            equals(
-              isA<StadiumBorder>().having(
-                (border) => border.side.color,
-                'Medium gray gradient',
-                IoCrosswordColors.mediumGray,
-              ),
-            ),
-          );
-        });
-
-        for (final state in WidgetState.values.toList()
-          ..remove(WidgetState.disabled)) {
-          test('displays mediumGray color with $state', () {
+          test('displays StadiumBorder with ${WidgetState.disabled}', () {
             expect(
-              outlinedBorder.resolve({state}),
+              googleBorder.resolve({WidgetState.disabled}),
+              equals(isA<StadiumBorder>()),
+            );
+          });
+
+          test('displays googleGradient color when there are no states', () {
+            expect(
+              googleBorder.resolve({}),
+              equals(
+                isA<GradientStadiumBorder>().having(
+                  (border) => border.gradient,
+                  'google gradient',
+                  IoCrosswordColors.googleGradient,
+                ),
+              ),
+            );
+          });
+
+          for (final state in WidgetState.values.toList()
+            ..remove(WidgetState.disabled)) {
+            test('displays googleGradient color with $state', () {
+              expect(
+                googleBorder.resolve({state}),
+                equals(
+                  isA<GradientStadiumBorder>().having(
+                    (border) => border.gradient,
+                    'google gradient',
+                    IoCrosswordColors.googleGradient,
+                  ),
+                ),
+              );
+            });
+          }
+        });
+
+        group('simpleBorder', () {
+          final simpleBorder = outlinedBorder.simpleBorder.shape!;
+
+          test('displays StadiumBorder with ${WidgetState.disabled}', () {
+            expect(
+              simpleBorder.resolve({WidgetState.disabled}),
+              equals(isA<StadiumBorder>()),
+            );
+          });
+
+          test('displays mediumGray color when there are no states', () {
+            expect(
+              simpleBorder.resolve({}),
               equals(
                 isA<StadiumBorder>().having(
                   (border) => border.side.color,
@@ -98,7 +122,23 @@ void main() {
               ),
             );
           });
-        }
+
+          for (final state in WidgetState.values.toList()
+            ..remove(WidgetState.disabled)) {
+            test('displays mediumGray color with $state', () {
+              expect(
+                simpleBorder.resolve({state}),
+                equals(
+                  isA<StadiumBorder>().having(
+                    (border) => border.side.color,
+                    'Medium gray gradient',
+                    IoCrosswordColors.mediumGray,
+                  ),
+                ),
+              );
+            });
+          }
+        });
       });
 
       group('geminiOutlinedButtonThemeData', () {

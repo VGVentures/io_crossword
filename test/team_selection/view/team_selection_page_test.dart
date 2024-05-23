@@ -44,6 +44,12 @@ void main() {
   });
 
   group('$TeamSelectionPage', () {
+    late PlayerBloc playerBloc;
+
+    setUp(() {
+      playerBloc = _MockPlayerBloc();
+    });
+
     testWidgets('route builds a $TeamSelectionPage', (tester) async {
       await tester.pumpRoute(TeamSelectionPage.route());
       await tester.pump();
@@ -56,10 +62,21 @@ void main() {
 
       expect(find.byType(TeamSelectionView), findsOneWidget);
     });
+
+    testWidgets('calls MascotSelected with the first mascot', (tester) async {
+      await tester.pumpApp(
+        TeamSelectionPage(),
+        playerBloc: playerBloc,
+      );
+
+      verify(() => playerBloc.add(MascotSelected(Mascots.values.first)))
+          .called(1);
+    });
   });
 
   group('$TeamSelectionView', () {
     late AudioController audioController;
+    late PlayerBloc playerBloc;
     late TeamSelectionCubit teamSelectionCubit;
     late Widget widget;
     late AppLocalizations l10n;
@@ -74,85 +91,56 @@ void main() {
 
       when(() => teamSelectionCubit.loadAssets()).thenAnswer((_) async {});
 
-      widget = BlocProvider<TeamSelectionCubit>(
-        create: (_) => teamSelectionCubit,
+      playerBloc = _MockPlayerBloc();
+
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider<TeamSelectionCubit>(
+            create: (_) => teamSelectionCubit,
+          ),
+          BlocProvider<PlayerBloc>(
+            create: (_) => playerBloc,
+          ),
+        ],
         child: const TeamSelectionView(),
       );
     });
 
-    group('TeamSelectionView', () {
-      for (final layout in IoLayoutData.values) {
-        testWidgets('displays IoAppBar with $layout', (tester) async {
-          when(() => teamSelectionCubit.state).thenReturn(
-            TeamSelectionState(),
-          );
+    for (final layout in IoLayoutData.values) {
+      testWidgets('displays IoAppBar with $layout', (tester) async {
+        when(() => teamSelectionCubit.state).thenReturn(
+          TeamSelectionState(),
+        );
 
-          await tester.pumpApp(
-            widget,
-            layout: layout,
-          );
+        await tester.pumpApp(
+          widget,
+          layout: layout,
+        );
 
-          expect(find.byType(IoAppBar), findsOneWidget);
-        });
-      }
+        expect(find.byType(IoAppBar), findsOneWidget);
+      });
+    }
 
-      testWidgets('select Sparky when right button is tapped', (tester) async {
+    for (final mascot in Mascots.values) {
+      testWidgets(
+          'calls MascotSelected with $mascot with index '
+          '${Mascots.values[mascot.index]}', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
             assetsStatus: AssetsLoadingStatus.success,
           ),
         );
 
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.small,
-        );
-
-        await tester.tap(find.byIcon(Icons.chevron_right));
-
-        verify(() => teamSelectionCubit.selectTeam(1)).called(1);
-      });
-
-      testWidgets('select Dash when left button is tapped', (tester) async {
-        when(() => teamSelectionCubit.state).thenReturn(
-          TeamSelectionState(
-            index: 1,
-            assetsStatus: AssetsLoadingStatus.success,
-          ),
-        );
-
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.large,
-        );
-
-        await tester.tap(find.byIcon(Icons.chevron_left));
-
-        verify(() => teamSelectionCubit.selectTeam(0)).called(1);
-      });
-
-      testWidgets('ScrollController shows correct position', (tester) async {
         whenListen(
           teamSelectionCubit,
           Stream.fromIterable(
             [
               TeamSelectionState(
-                index: 1,
-                assetsStatus: AssetsLoadingStatus.success,
-              ),
-              TeamSelectionState(
-                index: 2,
-                assetsStatus: AssetsLoadingStatus.success,
-              ),
-              TeamSelectionState(
-                index: 3,
-                assetsStatus: AssetsLoadingStatus.success,
+                index: mascot.index,
               ),
             ],
           ),
-          initialState: TeamSelectionState(
-            assetsStatus: AssetsLoadingStatus.success,
-          ),
+          initialState: TeamSelectionState(index: -1),
         );
 
         await tester.pumpApp(
@@ -160,35 +148,98 @@ void main() {
           layout: IoLayoutData.small,
         );
 
-        await tester.tap(find.byIcon(Icons.chevron_right));
-        await tester.pump(Duration(milliseconds: 400));
-        await tester.tap(find.byIcon(Icons.chevron_right));
-        await tester.pump(Duration(milliseconds: 400));
-        await tester.tap(find.byIcon(Icons.chevron_right));
-        await tester.pump(Duration(milliseconds: 400));
-
-        final singleChildScrollView = find
-            .byType(SingleChildScrollView)
-            .evaluate()
-            .single
-            .widget as SingleChildScrollView;
-
-        // index * (tileWidth * 2)
-        expect(singleChildScrollView.controller!.offset, equals(3 * 366 * 2));
+        verify(() => playerBloc.add(MascotSelected(mascot))).called(1);
       });
+    }
+
+    testWidgets('select Sparky when right button is tapped', (tester) async {
+      when(() => teamSelectionCubit.state).thenReturn(
+        TeamSelectionState(
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
+
+      await tester.pumpApp(
+        widget,
+        layout: IoLayoutData.small,
+      );
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+
+      verify(() => teamSelectionCubit.selectTeam(1)).called(1);
+    });
+
+    testWidgets('select Dash when left button is tapped', (tester) async {
+      when(() => teamSelectionCubit.state).thenReturn(
+        TeamSelectionState(
+          index: 1,
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
+
+      await tester.pumpApp(
+        widget,
+        layout: IoLayoutData.large,
+      );
+
+      await tester.tap(find.byIcon(Icons.chevron_left));
+
+      verify(() => teamSelectionCubit.selectTeam(0)).called(1);
+    });
+
+    testWidgets('ScrollController shows correct position', (tester) async {
+      whenListen(
+        teamSelectionCubit,
+        Stream.fromIterable(
+          [
+            TeamSelectionState(
+              index: 1,
+              assetsStatus: AssetsLoadingStatus.success,
+            ),
+            TeamSelectionState(
+              index: 2,
+              assetsStatus: AssetsLoadingStatus.success,
+            ),
+            TeamSelectionState(
+              index: 3,
+              assetsStatus: AssetsLoadingStatus.success,
+            ),
+          ],
+        ),
+        initialState: TeamSelectionState(
+          assetsStatus: AssetsLoadingStatus.success,
+        ),
+      );
+
+      await tester.pumpApp(
+        widget,
+        layout: IoLayoutData.small,
+      );
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump(Duration(milliseconds: 400));
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump(Duration(milliseconds: 400));
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump(Duration(milliseconds: 400));
+
+      final singleChildScrollView = find
+          .byType(SingleChildScrollView)
+          .evaluate()
+          .single
+          .widget as SingleChildScrollView;
+
+      // index * (tileWidth * 2)
+      expect(singleChildScrollView.controller!.offset, equals(3 * 366 * 2));
     });
 
     group('joining a team', () {
-      late PlayerBloc playerBloc;
-
       setUp(() {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
             index: 2,
           ),
         );
-
-        playerBloc = _MockPlayerBloc();
       });
 
       testWidgets(
@@ -202,7 +253,6 @@ void main() {
         );
 
         await tester.pumpApp(
-          playerBloc: playerBloc,
           BlocProvider(
             create: (_) => teamSelectionCubit,
             child: TeamSelectionView(),
@@ -218,30 +268,6 @@ void main() {
         verify(
           () => audioController.playSfx(Assets.music.startButton1),
         ).called(1);
-      });
-
-      testWidgets('adds MascotSelected', (tester) async {
-        when(() => teamSelectionCubit.state).thenReturn(
-          TeamSelectionState(
-            index: 2,
-            assetsStatus: AssetsLoadingStatus.success,
-          ),
-        );
-
-        await tester.pumpApp(
-          playerBloc: playerBloc,
-          BlocProvider(
-            create: (_) => teamSelectionCubit,
-            child: TeamSelectionView(),
-          ),
-        );
-
-        final submitButtonFinder = find.text(l10n.joinTeam('Android'));
-        await tester.ensureVisible(submitButtonFinder);
-        await tester.tap(submitButtonFinder);
-        await tester.pump();
-
-        verify(() => playerBloc.add(MascotSelected(Mascots.android))).called(1);
       });
 
       testWidgets(
