@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:intl/intl.dart';
@@ -110,7 +110,7 @@ class WordSelectionTopBar extends StatelessWidget {
   }
 
   String wordIdentifier(Word word) {
-    final direction = word.axis == Axis.horizontal ? 'Across' : 'Down';
+    final direction = word.axis == WordAxis.horizontal ? 'Across' : 'Down';
     final formatter = NumberFormat('#,###');
     final id = int.tryParse(word.id);
     if (id == null) return '';

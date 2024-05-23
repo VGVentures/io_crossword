@@ -15,7 +15,7 @@ void main() {
           Word(
             id: 'id',
             position: Point(1, 2),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'answer',
             clue: 'clue',
             solvedTimestamp: 1234,
@@ -79,7 +79,7 @@ void main() {
               Word(
                 id: 'id',
                 position: Point(1, 2),
-                axis: Axis.horizontal,
+                axis: WordAxis.horizontal,
                 answer: 'answer',
                 clue: 'clue',
                 solvedTimestamp: 1234,
@@ -195,7 +195,7 @@ void main() {
           Word(
             id: '1',
             position: Point(1, 2),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'answer',
             clue: 'clue',
             solvedTimestamp: 1234,
@@ -208,7 +208,7 @@ void main() {
           Word(
             id: '2',
             position: Point(3, 4),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'newAnswer',
             clue: 'newClue',
             solvedTimestamp: 5678,
@@ -227,7 +227,7 @@ void main() {
               Word(
                 id: '2',
                 position: Point(3, 4),
-                axis: Axis.vertical,
+                axis: WordAxis.vertical,
                 answer: 'newAnswer',
                 clue: 'newClue',
                 solvedTimestamp: 5678,
@@ -251,7 +251,7 @@ void main() {
             Word(
               id: '1',
               position: Point(1, 2),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               answer: 'answer',
               clue: 'clue',
               solvedTimestamp: 1234,
@@ -263,7 +263,7 @@ void main() {
             Word(
               id: '2',
               position: Point(3, 4),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               answer: 'newAnswer',
               clue: 'newClue',
               solvedTimestamp: 5678,
@@ -283,7 +283,7 @@ void main() {
                 Word(
                   id: '2',
                   position: Point(3, 4),
-                  axis: Axis.vertical,
+                  axis: WordAxis.vertical,
                   answer: 'newAnswer',
                   clue: 'newClue',
                   solvedTimestamp: 5678,

@@ -12,7 +12,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           );
@@ -29,7 +29,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           );
@@ -44,7 +44,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           );
@@ -59,7 +59,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(100, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           );
@@ -76,7 +76,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           );
@@ -93,7 +93,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           );
@@ -108,7 +108,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           );
@@ -123,7 +123,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 100),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           );
@@ -142,7 +142,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -150,7 +150,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HAPPY',
           );
@@ -162,7 +162,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HAPPY',
           ).allLetters;
@@ -170,7 +170,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(1, -1),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'SAD',
           );
@@ -182,7 +182,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -190,7 +190,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(3, -2),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HALO',
           );
@@ -202,7 +202,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -210,7 +210,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(4, -3),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HALO',
           );
@@ -225,7 +225,7 @@ void main() {
             final letters = Word(
               id: 'id',
               position: Point(0, 0),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               clue: '',
               answer: 'HELLO',
             ).allLetters;
@@ -233,7 +233,7 @@ void main() {
             final word = Word(
               id: 'id',
               position: Point(4, -4),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               clue: '',
               answer: 'HALO',
             );
@@ -249,7 +249,7 @@ void main() {
             final letters = Word(
               id: 'id',
               position: Point(0, 0),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               clue: '',
               answer: 'HELLO',
             ).allLetters;
@@ -257,7 +257,7 @@ void main() {
             final word = Word(
               id: 'id',
               position: Point(0, 1),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               clue: '',
               answer: 'HALO',
             );
@@ -272,7 +272,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -280,7 +280,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HAPPY',
           );
@@ -292,7 +292,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HAPPY',
           ).allLetters;
@@ -300,7 +300,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(-1, 1),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'SAD',
           );
@@ -312,7 +312,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -320,7 +320,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(-2, 2),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HALO',
           );
@@ -332,7 +332,7 @@ void main() {
           final letters = Word(
             id: 'id',
             position: Point(0, 0),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             clue: '',
             answer: 'HELLO',
           ).allLetters;
@@ -340,7 +340,7 @@ void main() {
           final word = Word(
             id: 'id',
             position: Point(-3, 3),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             clue: '',
             answer: 'HALO',
           );
@@ -355,7 +355,7 @@ void main() {
             final letters = Word(
               id: 'id',
               position: Point(0, 0),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               clue: '',
               answer: 'HELLO',
             ).allLetters;
@@ -363,7 +363,7 @@ void main() {
             final word = Word(
               id: 'id',
               position: Point(-4, 3),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               clue: '',
               answer: 'HALO',
             );
@@ -379,7 +379,7 @@ void main() {
             final letters = Word(
               id: 'id',
               position: Point(0, 0),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               clue: '',
               answer: 'HELLO',
             ).allLetters;
@@ -387,7 +387,7 @@ void main() {
             final word = Word(
               id: 'id',
               position: Point(1, 0),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               clue: '',
               answer: 'HALO',
             );

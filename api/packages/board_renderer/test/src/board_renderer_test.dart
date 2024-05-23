@@ -60,14 +60,14 @@ void main() {
           Word(
             id: '1',
             position: Point(1, 1),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
           ),
           Word(
             id: '2',
             position: Point(2, 7),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -117,14 +117,14 @@ void main() {
           Word(
             id: '1',
             position: Point(1, 1),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
           ),
           Word(
             id: '2',
             position: Point(2, 7),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -175,7 +175,7 @@ void main() {
             Word(
               id: '1',
               position: Point(1, 1),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               answer: 'hello',
               clue: '',
             ),
@@ -249,14 +249,14 @@ void main() {
             Word(
               id: '1',
               position: Point(1, 1),
-              axis: Axis.horizontal,
+              axis: WordAxis.horizontal,
               answer: 'hello',
               clue: '',
             ),
             Word(
               id: '2',
               position: Point(2, 7),
-              axis: Axis.vertical,
+              axis: WordAxis.vertical,
               answer: 'there',
               clue: '',
             ),
@@ -289,14 +289,14 @@ void main() {
         Word(
           id: '1',
           position: Point(18, 12),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: 'hello',
           clue: '',
         ),
         Word(
           id: '2',
           position: Point(10, 11),
-          axis: Axis.vertical,
+          axis: WordAxis.vertical,
           answer: 'there',
           clue: '',
         ),
@@ -594,14 +594,14 @@ void main() {
           Word(
             id: '1',
             position: Point(18, 12),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
           ),
           Word(
             id: '2',
             position: Point(10, 11),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -617,14 +617,14 @@ void main() {
           Word(
             id: '1',
             position: Point(18, 12),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
           ),
           Word(
             id: '2',
             position: Point(10, 11),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -640,7 +640,7 @@ void main() {
           Word(
             id: '1',
             position: Point(18, 22),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
@@ -648,7 +648,7 @@ void main() {
           Word(
             id: '2',
             position: Point(10, 21),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -664,7 +664,7 @@ void main() {
           Word(
             id: '1',
             position: Point(28, 12),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
@@ -672,7 +672,7 @@ void main() {
           Word(
             id: '1',
             position: Point(20, 11),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -688,7 +688,7 @@ void main() {
           Word(
             id: '1',
             position: Point(28, 12),
-            axis: Axis.horizontal,
+            axis: WordAxis.horizontal,
             answer: 'hello',
             clue: '',
             solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
@@ -696,7 +696,7 @@ void main() {
           Word(
             id: '2',
             position: Point(20, 11),
-            axis: Axis.vertical,
+            axis: WordAxis.vertical,
             answer: 'there',
             clue: '',
           ),
@@ -1018,7 +1018,7 @@ void main() {
         Word(
           id: '1',
           position: Point(18, 12),
-          axis: Axis.horizontal,
+          axis: WordAxis.horizontal,
           answer: 'hello',
           clue: '',
           solvedTimestamp: DateTime.now().millisecondsSinceEpoch,
@@ -1026,7 +1026,7 @@ void main() {
         Word(
           id: '2',
           position: Point(10, 11),
-          axis: Axis.vertical,
+          axis: WordAxis.vertical,
           answer: 'there',
           clue: '',
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' as domain
-    show Axis, Mascots, Word;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -161,7 +160,7 @@ class _CrosswordStack extends StatelessWidget {
 class _WordInput extends StatelessWidget {
   const _WordInput({required this.word});
 
-  final domain.Word word;
+  final Word word;
 
   @override
   Widget build(BuildContext context) {
@@ -202,32 +201,28 @@ extension on Quad {
   Rect toRect() => Rect.fromLTRB(point0.x, point0.y, point2.x, point2.y);
 }
 
-extension on domain.Axis {
+extension on WordAxis {
   Axis toAxis() =>
-      this == domain.Axis.horizontal ? Axis.horizontal : Axis.vertical;
+      this == WordAxis.horizontal ? Axis.horizontal : Axis.vertical;
 }
 
-extension on domain.Mascots {
+extension on Mascots {
   IoWordStyle toIoWordStyle(ThemeData theme) {
     return theme.io.wordTheme.big.copyWith(
       borderRadius: BorderRadius.zero,
       margin: theme.io.wordInput.secondary.padding,
       boxSize: theme.io.wordInput.secondary.filled.size,
       textStyle: switch (this) {
-        domain.Mascots.dash => theme.io.crosswordLetterTheme.dash.textStyle,
-        domain.Mascots.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
-        domain.Mascots.dino => theme.io.crosswordLetterTheme.dino.textStyle,
-        domain.Mascots.android =>
-          theme.io.crosswordLetterTheme.android.textStyle,
+        Mascots.dash => theme.io.crosswordLetterTheme.dash.textStyle,
+        Mascots.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
+        Mascots.dino => theme.io.crosswordLetterTheme.dino.textStyle,
+        Mascots.android => theme.io.crosswordLetterTheme.android.textStyle,
       },
       backgroundColor: switch (this) {
-        domain.Mascots.dash =>
-          theme.io.crosswordLetterTheme.dash.backgroundColor,
-        domain.Mascots.sparky =>
-          theme.io.crosswordLetterTheme.sparky.backgroundColor,
-        domain.Mascots.dino =>
-          theme.io.crosswordLetterTheme.dino.backgroundColor,
-        domain.Mascots.android =>
+        Mascots.dash => theme.io.crosswordLetterTheme.dash.backgroundColor,
+        Mascots.sparky => theme.io.crosswordLetterTheme.sparky.backgroundColor,
+        Mascots.dino => theme.io.crosswordLetterTheme.dino.backgroundColor,
+        Mascots.android =>
           theme.io.crosswordLetterTheme.android.backgroundColor,
       },
     );

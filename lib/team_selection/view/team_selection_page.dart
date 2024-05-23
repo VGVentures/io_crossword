@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/initials/initials.dart';

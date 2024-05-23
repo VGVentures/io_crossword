@@ -42,7 +42,8 @@ void main(List<String> args) async {
       final x = int.parse(values[0]);
       final y = int.parse(values[1]);
       final answer = values[2];
-      final axis = values[3] == 'horizontal' ? Axis.horizontal : Axis.vertical;
+      final axis =
+          values[3] == 'horizontal' ? WordAxis.horizontal : WordAxis.vertical;
       final word = Word(
         id: '$x,$y',
         position: Point(x, y),

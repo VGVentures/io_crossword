@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart' hide Axis;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -27,7 +27,7 @@ void main() {
     when(() => word.length).thenReturn(5);
     when(() => word.id).thenReturn('1');
     when(() => word.solvedTimestamp).thenReturn(null);
-    when(() => word.axis).thenReturn(Axis.horizontal);
+    when(() => word.axis).thenReturn(WordAxis.horizontal);
 
     selectedWord = SelectedWord(section: (0, 0), word: word);
   });

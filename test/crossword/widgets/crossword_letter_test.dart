@@ -4,8 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart' as domain show Axis;
-import 'package:game_domain/game_domain.dart' hide Axis;
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
@@ -26,7 +25,7 @@ void main() {
       id: '1',
       position: Point<int>(0, 0),
       answer: Word.emptyCharacter * 3,
-      axis: domain.Axis.horizontal,
+      axis: WordAxis.horizontal,
       clue: '',
     );
 
