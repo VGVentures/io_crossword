@@ -26,8 +26,10 @@ class TeamSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        context.read<PlayerBloc>().add(MascotSelected(Mascots.values.first));
-        return TeamSelectionCubit()..loadAssets();
+        final index = context.read<PlayerBloc>().state.mascot.index;
+        return TeamSelectionCubit()
+          ..loadAssets()
+          ..selectTeam(index);
       },
       child: const TeamSelectionView(),
     );

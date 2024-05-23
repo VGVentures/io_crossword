@@ -65,8 +65,7 @@ void main() {
   group('$CrosswordPage', () {
     testWidgets('route builds a $CrosswordPage', (tester) async {
       final playerBloc = _MockPlayerBloc();
-      when(() => playerBloc.state)
-          .thenReturn(PlayerState(mascot: Mascots.dash));
+      when(() => playerBloc.state).thenReturn(PlayerState());
 
       await tester.pumpRoute(
         playerBloc: playerBloc,
@@ -487,8 +486,7 @@ extension on WidgetTester {
 
     final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
     if (playerBloc == null) {
-      when(() => playerBlocUpdate.state)
-          .thenReturn(const PlayerState(mascot: Mascots.dash));
+      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
     }
 
     final wordSelectionBlocUpdate =

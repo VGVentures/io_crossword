@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/challenge/challenge.dart';
 import 'package:io_crossword/end_game/end_game.dart';
@@ -47,7 +46,7 @@ class CrosswordDrawer extends StatelessWidget {
                   ),
                   child: SingleChildScrollView(
                     child: HowToPlayContent(
-                      mascot: mascot ?? Mascots.dash,
+                      mascot: mascot,
                       onDonePressed: () => Navigator.pop(context),
                     ),
                   ),

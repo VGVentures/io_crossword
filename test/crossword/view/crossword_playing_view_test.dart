@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/board_status/board_status.dart';
 import 'package:io_crossword/bottom_bar/bottom_bar.dart';
 import 'package:io_crossword/crossword/crossword.dart';
@@ -78,8 +77,7 @@ extension on WidgetTester {
 
     final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
     if (playerBloc == null) {
-      when(() => playerBlocUpdate.state)
-          .thenReturn(const PlayerState(mascot: Mascots.dash));
+      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
     }
 
     final wordSelectionBlocUpdate =

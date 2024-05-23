@@ -63,15 +63,28 @@ void main() {
       expect(find.byType(TeamSelectionView), findsOneWidget);
     });
 
-    testWidgets('calls MascotSelected with the first mascot', (tester) async {
-      await tester.pumpApp(
-        TeamSelectionPage(),
-        playerBloc: playerBloc,
-      );
+    for (final mascot in Mascots.values) {
+      testWidgets('updates index to ${mascot.index} with $mascot',
+          (tester) async {
+        when(() => playerBloc.state).thenReturn(PlayerState(mascot: mascot));
 
-      verify(() => playerBloc.add(MascotSelected(Mascots.values.first)))
-          .called(1);
-    });
+        await tester.pumpApp(
+          BlocProvider(
+            create: (_) => playerBloc,
+            child: TeamSelectionPage(),
+          ),
+        );
+
+        await tester.pumpAndSettle(Duration(seconds: 2));
+
+        final context = tester.element(find.byType(TeamSelectionView));
+
+        expect(
+          context.read<TeamSelectionCubit>().state.index,
+          equals(mascot.index),
+        );
+      });
+    }
   });
 
   group('$TeamSelectionView', () {

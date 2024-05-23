@@ -35,9 +35,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       return;
     }
 
-    if (state.mascot == null || state.player.initials.isEmpty) {
-      // There is no mascot or initials selected, hence we can't create a
-      // player score.
+    if (state.player.initials.isEmpty) {
+      // There is no initials selected, hence we can't create a player score.
       return;
     }
 
@@ -46,7 +45,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     try {
       await _leaderboardResource.createScore(
         initials: state.player.initials,
-        mascot: state.mascot!,
+        mascot: state.mascot,
       );
     } catch (_) {
       emit(state.copyWith(status: PlayerStatus.failure));

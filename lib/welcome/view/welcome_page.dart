@@ -120,32 +120,34 @@ class WelcomeBody extends StatelessWidget {
     final textTheme = Theme.of(context).io.textStyles;
     final l10n = context.l10n;
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 294),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 32),
-          Text(
-            l10n.welcome,
-            style: textTheme.heading1,
-          ),
-          const SizedBox(height: 32),
-          Text(
-            l10n.welcomeSubtitle,
-            style: textTheme.body,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          const ChallengeProgressStatus(),
-          const SizedBox(height: 48),
-          OutlinedButton(
-            style: Theme.of(context).io.outlineButtonTheme.googleBorder,
-            onPressed: () => _onGetStarted(context),
-            child: Text(l10n.getStarted),
-          ),
-          const SizedBox(height: 32),
-        ],
+    return Theme(
+      data: const IoCrosswordTheme().themeData,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 294),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 32),
+            Text(
+              l10n.welcome,
+              style: textTheme.heading1,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              l10n.welcomeSubtitle,
+              style: textTheme.body,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 48),
+            const ChallengeProgressStatus(),
+            const SizedBox(height: 48),
+            OutlinedButton(
+              onPressed: () => _onGetStarted(context),
+              child: Text(l10n.getStarted),
+            ),
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }
