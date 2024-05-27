@@ -351,6 +351,48 @@ void main() {
       }
     });
 
+    for (final layout in IoLayoutData.values) {
+      testWidgets(
+          'verify MascotDropped is called when dropIn animation '
+          'completes with $layout', (tester) async {
+        await tester.runAsync(() async {
+          when(() => crosswordBloc.state).thenReturn(
+            const CrosswordState(
+              status: CrosswordStatus.ready,
+            ),
+          );
+
+          await tester.pumpSubject(
+            CrosswordView(),
+            crosswordBloc: crosswordBloc,
+            playerBloc: playerBloc,
+            layout: layout,
+          );
+
+          final spriteAnimationList = tester.widget<SpriteAnimationList>(
+            find.byType(SpriteAnimationList),
+          );
+
+          await Future<void>.delayed(Duration(seconds: 3));
+          await tester.pump(Duration(seconds: 3));
+
+          final controller = spriteAnimationList.controller;
+
+          await Future<void>.delayed(Duration(seconds: 3));
+          await tester.pump(Duration(seconds: 3));
+
+          controller.animationDataList.last.spriteAnimationTicker.setToLast();
+
+          await controller
+              .animationDataList.last.spriteAnimationTicker.completed;
+
+          await tester.pump(Duration(seconds: 3));
+
+          verify(() => crosswordBloc.add(MascotDropped())).called(1);
+        });
+      });
+    }
+
     group('gameReset', () {
       testWidgets(
           'renders $BoardResetView when boardStatus '
@@ -476,11 +518,7 @@ extension on WidgetTester {
 
     final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
     if (playerBloc == null) {
-      when(() => playerBlocUpdate.state).thenReturn(
-        const PlayerState(
-          status: PlayerStatus.playing,
-        ),
-      );
+      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
     }
 
     final wordSelectionBlocUpdate =
