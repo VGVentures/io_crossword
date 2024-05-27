@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/how_to_play/how_to_play.dart';

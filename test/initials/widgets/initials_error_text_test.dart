@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/initials/initials.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 

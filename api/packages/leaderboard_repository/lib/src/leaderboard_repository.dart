@@ -13,25 +13,25 @@ class LeaderboardRepository {
   /// {@macro leaderboard_repository}
   const LeaderboardRepository({
     required DbClient dbClient,
-    required String blacklistDocumentId,
+    required String blocklistDocumentId,
   })  : _dbClient = dbClient,
-        _blacklistDocumentId = blacklistDocumentId;
+        _blocklistDocumentId = blocklistDocumentId;
 
   final DbClient _dbClient;
-  final String _blacklistDocumentId;
+  final String _blocklistDocumentId;
 
-  /// Retrieves the blacklist for player initials.
-  Future<List<String>> getInitialsBlacklist() async {
-    final blacklistData = await _dbClient.getById(
+  /// Retrieves the blocklist for player initials.
+  Future<List<String>> getInitialsBlocklist() async {
+    final blocklistData = await _dbClient.getById(
       'initialsBlacklist',
-      _blacklistDocumentId,
+      _blocklistDocumentId,
     );
 
-    if (blacklistData == null) {
+    if (blocklistData == null) {
       return [];
     }
 
-    return (blacklistData.data['blacklist'] as List).cast<String>();
+    return (blocklistData.data['blacklist'] as List).cast<String>();
   }
 
   /// Creates a score entry with the provided initials and mascot. The score
