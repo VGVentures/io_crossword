@@ -30,7 +30,7 @@ Future<void> init(InternetAddress ip, int port) async {
 
   leaderboardRepository = LeaderboardRepository(
     dbClient: dbClient,
-    blacklistDocumentId: _initialsBlacklistId,
+    blocklistDocumentId: _initialsBlacklistId,
   );
 
   firebaseCloudStorage = FirebaseCloudStorage(

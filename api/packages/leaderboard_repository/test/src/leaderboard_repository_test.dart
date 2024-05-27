@@ -14,7 +14,7 @@ void main() {
     late DbClient dbClient;
     late LeaderboardRepository leaderboardRepository;
 
-    const blacklistDocumentId = 'id';
+    const blocklistDocumentId = 'id';
 
     setUpAll(() {
       registerFallbackValue(DbEntityRecord(id: '', data: {}));
@@ -24,7 +24,7 @@ void main() {
       dbClient = _MockDbClient();
       leaderboardRepository = LeaderboardRepository(
         dbClient: dbClient,
-        blacklistDocumentId: blacklistDocumentId,
+        blocklistDocumentId: blocklistDocumentId,
       );
     });
 
@@ -32,28 +32,28 @@ void main() {
       expect(
         LeaderboardRepository(
           dbClient: dbClient,
-          blacklistDocumentId: blacklistDocumentId,
+          blocklistDocumentId: blocklistDocumentId,
         ),
         isNotNull,
       );
     });
 
-    group('getInitialsBlacklist', () {
-      const blacklist = ['AAA', 'BBB', 'CCC'];
+    group('getInitialsBlocklist', () {
+      const blocklist = ['AAA', 'BBB', 'CCC'];
 
-      test('returns the blacklist', () async {
-        when(() => dbClient.getById('initialsBlacklist', blacklistDocumentId))
+      test('returns the blocklist', () async {
+        when(() => dbClient.getById('initialsBlacklist', blocklistDocumentId))
             .thenAnswer(
           (_) async => DbEntityRecord(
-            id: blacklistDocumentId,
+            id: blocklistDocumentId,
             data: const {
               'blacklist': ['AAA', 'BBB', 'CCC'],
             },
           ),
         );
 
-        final response = await leaderboardRepository.getInitialsBlacklist();
-        expect(response, equals(blacklist));
+        final response = await leaderboardRepository.getInitialsBlocklist();
+        expect(response, equals(blocklist));
       });
 
       test('returns empty list if not found', () async {
@@ -61,7 +61,7 @@ void main() {
           (_) async => null,
         );
 
-        final response = await leaderboardRepository.getInitialsBlacklist();
+        final response = await leaderboardRepository.getInitialsBlocklist();
         expect(response, isEmpty);
       });
     });
