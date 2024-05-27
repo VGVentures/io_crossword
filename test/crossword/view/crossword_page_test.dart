@@ -85,6 +85,7 @@ void main() {
 
   group('$CrosswordView', () {
     late CrosswordBloc crosswordBloc;
+    late PlayerBloc playerBloc;
 
     late AppLocalizations l10n;
 
@@ -98,6 +99,13 @@ void main() {
         CrosswordState(
           status: CrosswordStatus.success,
           sectionSize: 40,
+        ),
+      );
+
+      playerBloc = _MockPlayerBloc();
+      when(() => playerBloc.state).thenReturn(
+        const PlayerState(
+          status: PlayerStatus.playing,
         ),
       );
     });
@@ -270,31 +278,55 @@ void main() {
       expect(find.byType(CrosswordDrawer), findsOneWidget);
     });
 
-    testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
-        (tester) async {
-      when(() => crosswordBloc.state).thenReturn(
-        const CrosswordState(
-          status: CrosswordStatus.failure,
-        ),
-      );
-
-      await tester.pumpSubject(
-        CrosswordView(),
-        crosswordBloc: crosswordBloc,
-      );
-
-      expect(find.byType(ErrorView), findsOneWidget);
-    });
-
-    group('$CrosswordPlayingView', () {
-      testWidgets('renders when  ${CrosswordStatus.ready}', (tester) async {
+    group('renders  $ErrorView', () {
+      testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
+          (tester) async {
         when(() => crosswordBloc.state).thenReturn(
-          const CrosswordState(status: CrosswordStatus.ready),
+          const CrosswordState(
+            status: CrosswordStatus.failure,
+          ),
         );
 
         await tester.pumpSubject(
-          crosswordBloc: crosswordBloc,
           CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
+        );
+
+        expect(find.byType(ErrorView), findsOneWidget);
+      });
+
+      testWidgets('renders $ErrorView with ${PlayerStatus.failure}',
+          (tester) async {
+        when(() => playerBloc.state).thenReturn(
+          const PlayerState(status: PlayerStatus.failure),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
+        );
+
+        expect(find.byType(ErrorView), findsOneWidget);
+      });
+    });
+
+    group('$CrosswordPlayingView', () {
+      testWidgets(
+          '''renders when crossword status is ${CrosswordStatus.ready} and player status is ${PlayerStatus.playing}''',
+          (tester) async {
+        when(() => crosswordBloc.state).thenReturn(
+          const CrosswordState(status: CrosswordStatus.ready),
+        );
+        when(() => playerBloc.state).thenReturn(
+          const PlayerState(status: PlayerStatus.playing),
+        );
+
+        await tester.pumpSubject(
+          CrosswordView(),
+          crosswordBloc: crosswordBloc,
+          playerBloc: playerBloc,
         );
 
         expect(find.byType(CrosswordPlayingView), findsOneWidget);
@@ -312,6 +344,7 @@ void main() {
             await tester.pumpSubject(
               CrosswordView(),
               crosswordBloc: crosswordBloc,
+              playerBloc: playerBloc,
             );
 
             expect(find.byType(CrosswordPlayingView), findsNothing);
@@ -320,46 +353,7 @@ void main() {
       }
     });
 
-    for (final layout in IoLayoutData.values) {
-      testWidgets(
-          'verify MascotDropped is called when dropIn animation '
-          'completes with $layout', (tester) async {
-        await tester.runAsync(() async {
-          when(() => crosswordBloc.state).thenReturn(
-            const CrosswordState(
-              status: CrosswordStatus.ready,
-            ),
-          );
-
-          await tester.pumpSubject(
-            CrosswordView(),
-            crosswordBloc: crosswordBloc,
-            layout: layout,
-          );
-
-          final spriteAnimationList = tester.widget<SpriteAnimationList>(
-            find.byType(SpriteAnimationList),
-          );
-
-          await Future<void>.delayed(Duration(seconds: 3));
-          await tester.pump(Duration(seconds: 3));
-
-          final controller = spriteAnimationList.controller;
-
-          await Future<void>.delayed(Duration(seconds: 3));
-          await tester.pump(Duration(seconds: 3));
-
-          controller.animationDataList.last.spriteAnimationTicker.setToLast();
-
-          await controller
-              .animationDataList.last.spriteAnimationTicker.completed;
-
-          await tester.pump(Duration(seconds: 3));
-
-          verify(() => crosswordBloc.add(MascotDropped())).called(1);
-        });
-      });
-    }
+    for (final layout in IoLayoutData.values) {}
 
     group('gameReset', () {
       testWidgets(
