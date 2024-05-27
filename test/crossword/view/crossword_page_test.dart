@@ -353,8 +353,6 @@ void main() {
       }
     });
 
-    for (final layout in IoLayoutData.values) {}
-
     group('gameReset', () {
       testWidgets(
           'renders $BoardResetView when boardStatus '
