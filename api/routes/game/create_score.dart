@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:jwt_middleware/jwt_middleware.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:logging/logging.dart';
@@ -27,9 +28,12 @@ Future<Response> _onPost(RequestContext context) async {
   }
 
   final initialsBlocklist = await leaderboardRepository.getInitialsBlocklist();
+  final initialsInput = InitialsInput.dirty(
+    initials,
+    blocklist: Blocklist(initialsBlocklist.toSet()),
+  );
 
-  if (initialsBlocklist.contains(initials.toUpperCase()) ||
-      initials.length != 3) {
+  if (initialsInput.isNotValid) {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
