@@ -215,7 +215,7 @@ class _CrosswordViewState extends State<CrosswordView>
 /// {@template _crossword_body}
 /// The main body of the crossword page.
 ///
-/// When the crossword is ready is displays the [CrosswordPlayingView], so that
+/// When the crossword is ready it displays the [CrosswordPlayingView], so that
 /// the user can play the crossword. When the mascot is being dropped in, it
 /// slowly fades in the crossword board.
 ///
