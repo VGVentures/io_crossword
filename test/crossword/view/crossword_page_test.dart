@@ -278,9 +278,8 @@ void main() {
       expect(find.byType(CrosswordDrawer), findsOneWidget);
     });
 
-    group('renders  $ErrorView', () {
-      testWidgets('renders $ErrorView with ${CrosswordStatus.failure}',
-          (tester) async {
+    group('renders $ErrorView', () {
+      testWidgets('with ${CrosswordStatus.failure}', (tester) async {
         when(() => crosswordBloc.state).thenReturn(
           const CrosswordState(
             status: CrosswordStatus.failure,
@@ -296,8 +295,7 @@ void main() {
         expect(find.byType(ErrorView), findsOneWidget);
       });
 
-      testWidgets('renders $ErrorView with ${PlayerStatus.failure}',
-          (tester) async {
+      testWidgets('with ${PlayerStatus.failure}', (tester) async {
         when(() => playerBloc.state).thenReturn(
           const PlayerState(status: PlayerStatus.failure),
         );
