@@ -26,9 +26,9 @@ Future<Response> _onPost(RequestContext context) async {
     return Response(statusCode: HttpStatus.badRequest);
   }
 
-  final unwantedInitials = await leaderboardRepository.getInitialsBlacklist();
+  final initialsBlocklist = await leaderboardRepository.getInitialsBlocklist();
 
-  if (unwantedInitials.contains(initials.toUpperCase()) ||
+  if (initialsBlocklist.contains(initials.toUpperCase()) ||
       initials.length != 3) {
     return Response(statusCode: HttpStatus.badRequest);
   }

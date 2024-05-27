@@ -36,7 +36,7 @@ void main() {
 
     test('responds with a 200', () async {
       when(() => request.method).thenReturn(HttpMethod.get);
-      when(() => leaderboardRepository.getInitialsBlacklist())
+      when(() => leaderboardRepository.getInitialsBlocklist())
           .thenAnswer((_) async => blacklist);
 
       final response = await route.onRequest(context);
@@ -55,7 +55,7 @@ void main() {
 
     test('responds with the blacklist', () async {
       when(() => request.method).thenReturn(HttpMethod.get);
-      when(() => leaderboardRepository.getInitialsBlacklist())
+      when(() => leaderboardRepository.getInitialsBlocklist())
           .thenAnswer((_) async => blacklist);
 
       final response = await route.onRequest(context);

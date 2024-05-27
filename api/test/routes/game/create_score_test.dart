@@ -50,7 +50,7 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
-        when(() => leaderboardRepository.getInitialsBlacklist())
+        when(() => leaderboardRepository.getInitialsBlocklist())
             .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = await route.onRequest(context);
@@ -67,7 +67,7 @@ void main() {
             .thenAnswer((_) async => {'initials': 'FUU', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
-        when(() => leaderboardRepository.getInitialsBlacklist())
+        when(() => leaderboardRepository.getInitialsBlocklist())
             .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = await route.onRequest(context);
@@ -84,7 +84,7 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
-        when(() => leaderboardRepository.getInitialsBlacklist())
+        when(() => leaderboardRepository.getInitialsBlocklist())
             .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = await route.onRequest(context);
@@ -101,7 +101,7 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AAAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenAnswer((_) async {});
-        when(() => leaderboardRepository.getInitialsBlacklist())
+        when(() => leaderboardRepository.getInitialsBlocklist())
             .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = await route.onRequest(context);
@@ -129,7 +129,7 @@ void main() {
             .thenAnswer((_) async => {'initials': 'AAA', 'mascot': 'dash'});
         when(() => leaderboardRepository.createScore(any(), any(), any()))
             .thenThrow(Exception());
-        when(() => leaderboardRepository.getInitialsBlacklist())
+        when(() => leaderboardRepository.getInitialsBlocklist())
             .thenAnswer((_) async => ['FUU', 'FAA']);
 
         final response = route.onRequest(context);
