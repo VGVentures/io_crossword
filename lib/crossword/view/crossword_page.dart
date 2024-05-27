@@ -168,23 +168,7 @@ class _CrosswordViewState extends State<CrosswordView>
         ),
         body: Stack(
           children: [
-            BlocSelector<CrosswordBloc, CrosswordState, CrosswordStatus>(
-              selector: (state) => state.status,
-              builder: (context, status) {
-                if (status == CrosswordStatus.failure) {
-                  return ErrorView(
-                    title: l10n.errorPromptText,
-                  );
-                } else if (status == CrosswordStatus.ready) {
-                  return FadeInAnimation(
-                    onComplete: _controller.playNext,
-                    child: const CrosswordPlayingView(),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
+            _CrosswordBody(controller: _controller),
             Align(
               alignment: Alignment.bottomCenter,
               child: BlocSelector<CrosswordBloc, CrosswordState, bool>(
@@ -225,6 +209,48 @@ class _CrosswordViewState extends State<CrosswordView>
         ),
       ),
     );
+  }
+}
+
+/// {@template _crossword_body}
+/// The main body of the crossword page.
+///
+/// When the crossword is ready it displays the [CrosswordPlayingView], so that
+/// the user can play the crossword. When the mascot is being dropped in, it
+/// slowly fades in the crossword board.
+///
+/// If for some reason the crossword fails to load or the user failed to be
+/// created, an [ErrorView] is displayed.
+/// {@endtemplate}
+class _CrosswordBody extends StatelessWidget {
+  /// {@macro _crossword_body}
+  const _CrosswordBody({
+    required SpriteListController controller,
+  }) : _spriteListController = controller;
+
+  final SpriteListController _spriteListController;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    final crosswordStatus = context.select<CrosswordBloc, CrosswordStatus>(
+      (bloc) => bloc.state.status,
+    );
+    final playerStatus = context.select<PlayerBloc, PlayerStatus>(
+      (bloc) => bloc.state.status,
+    );
+
+    return switch ((crosswordStatus, playerStatus)) {
+      (CrosswordStatus.failure, _) ||
+      (_, PlayerStatus.failure) =>
+        ErrorView(title: l10n.errorPromptText),
+      (CrosswordStatus.ready, PlayerStatus.playing) => FadeInAnimation(
+          onComplete: _spriteListController.playNext,
+          child: const CrosswordPlayingView(),
+        ),
+      _ => const SizedBox.shrink(),
+    };
   }
 }
 
