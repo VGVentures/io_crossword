@@ -31,7 +31,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.5
-  formz: ^0.7.0
   game_domain:
     path: api/packages/game_domain
   http: ^1.2.1
