@@ -24,6 +24,8 @@ class _MockWord extends Mock implements Word {}
 class _MockCrosswordBloc extends MockBloc<CrosswordEvent, CrosswordState>
     implements CrosswordBloc {}
 
+const boardPadding = 800.0;
+
 void main() {
   group('$CrosswordInteractiveViewer', () {
     late WordSelectionBloc wordSelectionBloc;
@@ -482,12 +484,8 @@ void main() {
         );
 
         // Viewport size 520x600.
-        // "answer" is 300x50.
-        final rect = Rect.fromCenter(
-          center: Offset(483.33333333333326, 358.3333333333333),
-          width: 300,
-          height: 50,
-        );
+        // "answer" is 300x50 and is placed in the 0,0 point of the 0,0 chunk.
+        final rect = Rect.fromLTWH(boardPadding, boardPadding, 300, 50);
 
         final center = rect.center;
 
@@ -534,6 +532,7 @@ extension on WidgetTester {
             chunkSize: 20,
           ),
           cellSize: const Size.square(50),
+          padding: const EdgeInsets.all(boardPadding),
         );
 
     return pumpApp(

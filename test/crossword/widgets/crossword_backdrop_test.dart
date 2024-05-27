@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:ui';
-
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -38,6 +37,7 @@ void main() {
           chunkSize: 20,
         ),
         cellSize: const Size.square(20),
+        padding: const EdgeInsets.all(20),
       );
     });
 

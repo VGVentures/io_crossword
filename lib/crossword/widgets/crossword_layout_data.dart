@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 
@@ -27,6 +28,7 @@ class CrosswordLayoutData extends Equatable {
   factory CrosswordLayoutData.fromConfiguration({
     required CrosswordConfiguration configuration,
     required Size cellSize,
+    required EdgeInsets padding,
   }) {
     final chunkSize = Size(
       cellSize.width * configuration.chunkSize,
@@ -41,10 +43,7 @@ class CrosswordLayoutData extends Equatable {
       cellSize: cellSize,
       chunkSize: chunkSize,
       crosswordSize: crosswordSize,
-      padding: EdgeInsets.symmetric(
-        horizontal: chunkSize.width / 3,
-        vertical: chunkSize.height / 3,
-      ),
+      padding: padding,
     );
   }
 

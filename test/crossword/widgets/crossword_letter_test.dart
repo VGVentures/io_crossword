@@ -38,6 +38,7 @@ void main() {
           chunkSize: 20,
         ),
         cellSize: const Size.square(20),
+        padding: const EdgeInsets.all(20),
       );
     });
 
