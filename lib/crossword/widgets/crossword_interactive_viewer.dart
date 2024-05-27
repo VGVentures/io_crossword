@@ -40,7 +40,7 @@ class CrosswordInteractiveViewer extends StatefulWidget {
 
 @visibleForTesting
 class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   /// The latest viewport reported by the [InteractiveViewer.builder].
   Quad? _viewport;
 
