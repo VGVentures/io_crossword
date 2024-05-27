@@ -478,7 +478,11 @@ extension on WidgetTester {
 
     final playerBlocUpdate = playerBloc ?? _MockPlayerBloc();
     if (playerBloc == null) {
-      when(() => playerBlocUpdate.state).thenReturn(const PlayerState());
+      when(() => playerBlocUpdate.state).thenReturn(
+        const PlayerState(
+          status: PlayerStatus.playing,
+        ),
+      );
     }
 
     final wordSelectionBlocUpdate =
