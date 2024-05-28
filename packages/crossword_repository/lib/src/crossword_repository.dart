@@ -24,33 +24,27 @@ class CrosswordRepository {
 
   final Random _rng;
 
-  // coverage:ignore-start
-  // Ignore coverage due to unhandled case in the fake_cloud_firestore package
-  // Expected tests are still created and commented in corresponding test file
   /// Returns the position of a random section that has empty words.
-  Future<BoardSection?> getRandomUncompletedSection() async {
+  Future<BoardSection?> getRandomUncompletedSection(
+    Point<int> bottomRight,
+  ) async {
     final docsCount = await sectionCollection.count().get();
     final sectionCount = docsCount.count;
     if (sectionCount == null) {
       return null;
     }
 
-    // Calculate the length of the board knowing that it's a square
-    final boardSize = sqrt(sectionCount).floor();
-
-    final maxPos = (boardSize / 2).floor();
-    final minPos = 0 - maxPos;
+    const minPos = Point(0, 0);
+    final maxPos = bottomRight;
 
     final positions = <(int, int)>[];
 
     // Get all the possible positions from top left to bottom right
-    for (var x = minPos; x < maxPos; x++) {
-      for (var y = minPos; y < maxPos; y++) {
+    for (var x = minPos.x; x <= maxPos.x; x++) {
+      for (var y = minPos.y; y <= maxPos.y; y++) {
         positions.add((x, y));
       }
     }
-
-    positions.shuffle(_rng);
 
     const batchSize = 20;
 
@@ -66,17 +60,14 @@ class CrosswordRepository {
       final result = await sectionCollection
           .where(
             'position',
-            whereIn: batchPositions
-                .map(
-                  (e) => {
-                    'x': e.$1,
-                    'y': e.$2,
-                  },
-                )
-                .toList(),
+            whereIn: batchPositions.map((e) => {'x': e.$1, 'y': e.$2}),
           )
           .get();
 
+      // The coverage is ignored due to a bug in the fake_cloud_firestore
+      // package. See the test/src/crossword_repository_test.dart file for
+      // more information.
+      // coverage:ignore-start
       final sections = result.docs.map((sectionDoc) {
         return BoardSection.fromJson({
           'id': sectionDoc.id,
@@ -84,17 +75,19 @@ class CrosswordRepository {
         });
       });
 
-      final section = sections.firstWhereOrNull(
+      final randomizedSections = sections.toList()..shuffle(_rng);
+
+      final section = randomizedSections.firstWhereOrNull(
         (section) => section.words.any((word) => word.solvedTimestamp == null),
       );
 
       if (section != null) {
         return section;
       }
+      // coverage:ignore-end
     }
     return null;
   }
-  // coverage:ignore-end
 
   /// Watches a section of the crossword board
   Stream<BoardSection> watchSection(String id) {

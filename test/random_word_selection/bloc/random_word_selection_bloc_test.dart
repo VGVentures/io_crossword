@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:board_info_repository/board_info_repository.dart';
 import 'package:crossword_repository/crossword_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
@@ -8,6 +9,8 @@ import 'package:io_crossword/random_word_selection/random_word_selection.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockCrosswordRepository extends Mock implements CrosswordRepository {}
+
+class _MockBoardInfoRepository extends Mock implements BoardInfoRepository {}
 
 class _FakeUnsolvedWord extends Fake implements Word {
   @override
@@ -17,9 +20,19 @@ class _FakeUnsolvedWord extends Fake implements Word {
 void main() {
   group('$RandomWordSelectionBloc', () {
     late CrosswordRepository crosswordRepository;
+    late BoardInfoRepository boardInfoRepository;
+
+    setUpAll(() {
+      registerFallbackValue(Point(0, 0));
+    });
 
     setUp(() {
       crosswordRepository = _MockCrosswordRepository();
+      boardInfoRepository = _MockBoardInfoRepository();
+
+      when(() => boardInfoRepository.getBottomRight()).thenAnswer(
+        (_) => Future.value(Point(2, 2)),
+      );
     });
 
     group('$RandomWordRequested', () {
@@ -37,11 +50,11 @@ void main() {
         ' getRandomUncompletedSection succeeds',
         build: () => RandomWordSelectionBloc(
           crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
-          when(crosswordRepository.getRandomUncompletedSection).thenAnswer(
-            (_) => Future.value(section),
-          );
+          when(() => crosswordRepository.getRandomUncompletedSection(any()))
+              .thenAnswer((_) => Future.value(section));
         },
         act: (bloc) => bloc.add(RandomWordRequested()),
         expect: () => <RandomWordSelectionState>[
@@ -58,9 +71,10 @@ void main() {
         ' getRandomUncompletedSection fails',
         build: () => RandomWordSelectionBloc(
           crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
-          when(crosswordRepository.getRandomUncompletedSection)
+          when(() => crosswordRepository.getRandomUncompletedSection(any()))
               .thenThrow(Exception());
         },
         act: (bloc) => bloc.add(RandomWordRequested()),
@@ -75,11 +89,11 @@ void main() {
         ' getRandomUncompletedSection returns null',
         build: () => RandomWordSelectionBloc(
           crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
-          when(crosswordRepository.getRandomUncompletedSection).thenAnswer(
-            (_) => Future.value(),
-          );
+          when(() => crosswordRepository.getRandomUncompletedSection(any()))
+              .thenAnswer((_) => Future.value());
         },
         act: (bloc) => bloc.add(RandomWordRequested()),
         expect: () => <RandomWordSelectionState>[

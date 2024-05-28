@@ -49,6 +49,7 @@ class CrosswordPage extends StatelessWidget {
           BlocProvider(
             create: (_) => RandomWordSelectionBloc(
               crosswordRepository: context.read<CrosswordRepository>(),
+              boardInfoRepository: context.read<BoardInfoRepository>(),
             ),
           ),
           BlocProvider(
