@@ -56,45 +56,6 @@ abstract class IoCrosswordColors {
   /// seedScrim
   static const Color seedScrim = Color(0xbf000000);
 
-  /// seedPaletteGreen0
-  static const Color seedPaletteGreen0 = Color(0xff000000);
-
-  /// seedPaletteGreen10
-  static const Color seedPaletteGreen10 = Color(0xff0f2e16);
-
-  /// seedPaletteGreen20
-  static const Color seedPaletteGreen20 = Color(0xff164120);
-
-  /// seedPaletteGreen30
-  static const Color seedPaletteGreen30 = Color(0xff236a34);
-
-  /// seedPaletteGreen40
-  static const Color seedPaletteGreen40 = Color(0xff38a852);
-
-  /// seedPaletteGreen50
-  static const Color seedPaletteGreen50 = Color(0xff4cc368);
-
-  /// seedPaletteGreen60
-  static const Color seedPaletteGreen60 = Color(0xff70cf87);
-
-  /// seedPaletteGreen70
-  static const Color seedPaletteGreen70 = Color(0xff94dba5);
-
-  /// seedPaletteGreen80
-  static const Color seedPaletteGreen80 = Color(0xffb7e7c3);
-
-  /// seedPaletteGreen90
-  static const Color seedPaletteGreen90 = Color(0xffdbf3e1);
-
-  /// seedPaletteGreen95
-  static const Color seedPaletteGreen95 = Color(0xffecf9ef);
-
-  /// seedPaletteGreen99
-  static const Color seedPaletteGreen99 = Color(0xfff7fcf9);
-
-  /// seedPaletteGreen100
-  static const Color seedPaletteGreen100 = Color(0xffffffff);
-
   /// seedPaletteYellow0
   static const Color seedPaletteYellow0 = Color(0xff000000);
 
