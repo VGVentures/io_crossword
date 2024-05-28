@@ -32,74 +32,8 @@ abstract class IoCrosswordColors {
   /// seedBlack
   static const Color seedBlack = Color(0xff202124);
 
-  /// seedGrey30
-  static const Color seedGrey30 = Color(0xff5f6368);
-
-  /// seedGrey50
-  static const Color seedGrey50 = Color(0xff80868b);
-
-  /// seedGrey70
-  static const Color seedGrey70 = Color(0xffbdc1c6);
-
-  /// seedGrey80
-  static const Color seedGrey80 = Color(0xffdadce0);
-
-  /// seedGrey90
-  static const Color seedGrey90 = Color(0xffe8eaed);
-
   /// seedWhite
   static const Color seedWhite = Color(0xffffffff);
-
-  /// seedPatternTint
-  static const Color seedPatternTint = Color(0x08e8eaed);
-
-  /// seedScrim
-  static const Color seedScrim = Color(0xbf000000);
-
-  /// seedPaletteNeutral0
-  static const Color seedPaletteNeutral0 = Color(0xff000000);
-
-  /// seedPaletteNeutral10
-  static const Color seedPaletteNeutral10 = Color(0xff202124);
-
-  /// seedPaletteNeutral20
-  static const Color seedPaletteNeutral20 = Color(0xff494d51);
-
-  /// seedPaletteNeutral30
-  static const Color seedPaletteNeutral30 = Color(0xff5f6368);
-
-  /// seedPaletteNeutral40
-  static const Color seedPaletteNeutral40 = Color(0xff747980);
-
-  /// seedPaletteNeutral50
-  static const Color seedPaletteNeutral50 = Color(0xff80868b);
-
-  /// seedPaletteNeutral60
-  static const Color seedPaletteNeutral60 = Color(0xffa2a6aa);
-
-  /// seedPaletteNeutral70
-  static const Color seedPaletteNeutral70 = Color(0xffbdc1c6);
-
-  /// seedPaletteNeutral80
-  static const Color seedPaletteNeutral80 = Color(0xffd0d2d5);
-
-  /// seedPaletteNeutral90
-  static const Color seedPaletteNeutral90 = Color(0xffe8e9ea);
-
-  /// seedPaletteNeutral95
-  static const Color seedPaletteNeutral95 = Color(0xfff2f2f3);
-
-  /// seedPaletteNeutral99
-  static const Color seedPaletteNeutral99 = Color(0xfffafafa);
-
-  /// seedPaletteNeutral100
-  static const Color seedPaletteNeutral100 = Color(0xffffffff);
-
-  /// seedArchiveGrey99
-  static const Color seedArchiveGrey99 = Color(0xfffafafa);
-
-  /// seedArchiveGrey95
-  static const Color seedArchiveGrey95 = Color(0xfff2f2f3);
 
   /// accessibleBlack
   static const Color accessibleBlack = Color(0xff202124);
