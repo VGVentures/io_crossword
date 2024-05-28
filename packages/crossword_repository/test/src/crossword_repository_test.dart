@@ -82,24 +82,17 @@ void main() {
         }
       }
 
-      test('returns a random section', () async {
+      test('returns normally', () async {
         await setUpSections(solveUntil: 1);
         when(() => rng.nextInt(any())).thenReturn(3);
 
-        final pos =
-            await crosswordRepository.getRandomUncompletedSection(bottomRight);
-
-        // The expectation is to return a section that is not null. However, the
-        // fake_cloud_firestore package does not handle the case where the
-        // whereIn query has to match a map, causing the test to fail.
-        // https://github.com/atn832/fake_cloud_firestore/issues/301
-        // expect(pos, isNotNull);
-        //
-        // This expectation is just a placeholder to keep the test running.
-        expect(pos, equals(pos));
+        await expectLater(
+          () => crosswordRepository.getRandomUncompletedSection(bottomRight),
+          returnsNormally,
+        );
       });
 
-      test('returns null if every sections only have solved words', () async {
+      test('returns null if all sections have been solved', () async {
         final totalSections = (bottomRight.x + 1) * (bottomRight.y + 1);
         await setUpSections(solveUntil: totalSections);
         when(() => rng.nextInt(any())).thenReturn(3);
@@ -111,7 +104,7 @@ void main() {
         expect(pos, isNull);
       });
 
-      test('returns null if no section found', () async {
+      test('returns null if no sections are found', () async {
         final pos = await crosswordRepository.getRandomUncompletedSection(
           bottomRight,
         );

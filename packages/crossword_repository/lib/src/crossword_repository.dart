@@ -65,8 +65,9 @@ class CrosswordRepository {
           .get();
 
       // The coverage is ignored due to a bug in the fake_cloud_firestore
-      // package. See the test/src/crossword_repository_test.dart file for
-      // more information.
+      // package. It does not handle the case when the whereIn query
+      // has to match a map, which makes not possible to test query results.
+      // https://github.com/atn832/fake_cloud_firestore/issues/301.
       // coverage:ignore-start
       final sections = result.docs.map((sectionDoc) {
         return BoardSection.fromJson({
