@@ -40,7 +40,7 @@ class CrosswordInteractiveViewer extends StatefulWidget {
 
 @visibleForTesting
 class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   /// The latest viewport reported by the [InteractiveViewer.builder].
   Quad? _viewport;
 
@@ -52,7 +52,10 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// [TransformationController] to its descendants.
   late TransformationController _transformationController;
 
-  late AnimationController _animationController;
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 300),
+  );
 
   Animation<Matrix4>? _transformationAnimation;
 
@@ -271,10 +274,6 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transformationController = DefaultTransformationController.of(context);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
   }
 
   @override
