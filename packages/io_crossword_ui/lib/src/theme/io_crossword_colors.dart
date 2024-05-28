@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Colors used in the I/O Crossword UI.
 abstract class IoCrosswordColors {
-  /// Gold
-  static const Color seedGold = Color(0xffffbb00);
-
-  /// Silver
-  static const Color seedSilver = Color(0xffdadce0);
-
-  /// Bronze
-  static const Color seedBronze = Color(0xffff5145);
-
-  /// seedLightBlue
-  static const Color seedLightBlue = Color(0xff54c5f8);
-
   /// seedBlue
   static const Color seedBlue = Color(0xff428eff);
 
@@ -26,9 +14,6 @@ abstract class IoCrosswordColors {
   /// seedGreen
   static const Color seedGreen = Color(0xff38a852);
 
-  /// seedBrown
-  static const Color seedBrown = Color(0xff94513d);
-
   /// seedBlack
   static const Color seedBlack = Color(0xff202124);
 
@@ -40,21 +25,6 @@ abstract class IoCrosswordColors {
 
   /// accessibleGrey
   static const Color accessibleGrey = Color(0xff5f6368);
-
-  /// accessibleBrandLightBlue
-  static const Color accessibleBrandLightBlue = Color(0xff076f9f);
-
-  /// accessibleBrandBlue
-  static const Color accessibleBrandBlue = Color(0xff0056d6);
-
-  /// accessibleBrandRed
-  static const Color accessibleBrandRed = Color(0xffda0f00);
-
-  /// accessibleBrandYellow
-  static const Color accessibleBrandYellow = Color(0xff8c6700);
-
-  /// accessibleBrandGreen
-  static const Color accessibleBrandGreen = Color(0xff236a34);
 
   /// mediumGray
   static const Color mediumGray = Color(0xff393B40);
