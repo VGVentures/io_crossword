@@ -2,35 +2,23 @@ import 'package:flutter/material.dart';
 
 /// Colors used in the I/O Crossword UI.
 abstract class IoCrosswordColors {
-  /// seedBlue
-  static const Color seedBlue = Color(0xff428eff);
-
-  /// seedRed
-  static const Color seedRed = Color(0xffff5145);
-
-  /// seedYellow
-  static const Color seedYellow = Color(0xffffbb00);
-
-  /// seedGreen
-  static const Color seedGreen = Color(0xff38a852);
-
-  /// seedBlack
-  static const Color seedBlack = Color(0xff202124);
-
   /// seedWhite
-  static const Color seedWhite = Color(0xffffffff);
+  static const seedWhite = Color(0xffffffff);
 
-  /// accessibleBlack
-  static const Color accessibleBlack = Color(0xff202124);
-
-  /// accessibleGrey
-  static const Color accessibleGrey = Color(0xff5f6368);
-
-  /// mediumGray
-  static const Color mediumGray = Color(0xff393B40);
+  /// black
+  static const black = Color(0xFF010101);
 
   /// darkGray
-  static const Color darkGray = Color(0xff212123);
+  static const darkGray = Color(0xff212123);
+
+  /// mediumGray
+  static const mediumGray = Color(0xff393B40);
+
+  /// accessibleGrey
+  static const accessibleGrey = Color(0xff5f6368);
+
+  /// soft gray
+  static const softGray = Color(0xFF80858B);
 
   /// color for the links
   static const linkBlue = Color(0xFF1A73E8);
@@ -42,7 +30,16 @@ abstract class IoCrosswordColors {
   static const darkGradientBlue = Color(0xFF337BFA);
 
   /// googleBlue
-  static const googleBlue = Color(0xFF3D96FF);
+  static const googleBlue = Color(0xFF4383F2);
+
+  /// googleBlue
+  static const googleGreen = Color(0xFF6AC76E);
+
+  /// googleBlue
+  static const googleYellow = Color(0xFFFFC10A);
+
+  /// googleBlue
+  static const googleRed = Color(0xFFFD2B25);
 
   /// flutterBlue
   static const flutterBlue = Color(0xFF5CA7FF);
@@ -55,12 +52,6 @@ abstract class IoCrosswordColors {
 
   /// chromeRed
   static const chromeRed = Color(0xFFFF6F5C);
-
-  /// black
-  static const black = Color(0xFF010101);
-
-  /// soft gray
-  static const softGray = Color(0xFF80858B);
 
   /// error red color
   static const redError = Color(0xFFEA4335);
@@ -78,9 +69,9 @@ abstract class IoCrosswordColors {
   static const LinearGradient googleGradient = LinearGradient(
     colors: [
       IoCrosswordColors.googleBlue,
-      IoCrosswordColors.androidGreen,
-      IoCrosswordColors.sparkyYellow,
-      IoCrosswordColors.redError,
+      IoCrosswordColors.googleGreen,
+      IoCrosswordColors.googleYellow,
+      IoCrosswordColors.googleRed,
     ],
     stops: [0.0, 0.33, 0.66, 1.0],
   );
