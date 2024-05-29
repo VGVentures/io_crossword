@@ -112,11 +112,11 @@ class _HowToPlaySmall extends StatelessWidget {
                           mascot: mascot,
                           onDonePressed: () {
                             context
-                                .read<HowToPlayCubit>()
-                                .updateStatus(HowToPlayStatus.pickingUp);
-                            context
                                 .read<AudioController>()
                                 .playSfx(Assets.music.startButton1);
+                            context
+                                .read<HowToPlayCubit>()
+                                .updateStatus(HowToPlayStatus.pickingUp);
                           },
                         ),
                       ),
@@ -176,11 +176,11 @@ class _HowToPlayLarge extends StatelessWidget {
                         mascot: mascot,
                         onDonePressed: () {
                           context
-                              .read<HowToPlayCubit>()
-                              .updateStatus(HowToPlayStatus.pickingUp);
-                          context
                               .read<AudioController>()
                               .playSfx(Assets.music.startButton1);
+                          context
+                              .read<HowToPlayCubit>()
+                              .updateStatus(HowToPlayStatus.pickingUp);
                         },
                       ),
                       const SizedBox(height: 40),
