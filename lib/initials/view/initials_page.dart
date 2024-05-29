@@ -113,10 +113,10 @@ class _InitialsViewState extends State<InitialsView> {
                     ),
                     InitialsSubmitButton(
                       onPressed: () {
-                        _onSubmit(context);
                         context
                             .read<AudioController>()
                             .playSfx(Assets.music.startButton1);
+                        _onSubmit(context);
                       },
                     ),
                   ],
