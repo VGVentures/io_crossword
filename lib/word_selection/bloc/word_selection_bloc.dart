@@ -12,7 +12,7 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     required CrosswordResource crosswordResource,
   })  : _crosswordResource = crosswordResource,
         super(const WordSelectionState.initial()) {
-    on<SectionSelected>(_onSectionSelected);
+    on<WordSelected>(_onWordSelected);
     on<LetterSelected>(_onLetterSelected);
     on<WordUnselected>(_onWordUnselected);
     on<WordSolveRequested>(_onWordSolveRequested);
@@ -21,24 +21,14 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
 
   final CrosswordResource _crosswordResource;
 
-  void _onSectionSelected(
-    SectionSelected event,
+  void _onWordSelected(
+    WordSelected event,
     Emitter<WordSelectionState> emit,
   ) {
-    final section = event.selectedSection;
-    final position = (section.position.x, section.position.y);
-
-    final randomWord = section.words.firstWhere(
-      (element) => element.solvedTimestamp == null,
-    );
-
     emit(
       WordSelectionState(
         status: WordSelectionStatus.preSolving,
-        word: SelectedWord(
-          section: position,
-          word: randomWord,
-        ),
+        word: event.selectedWord,
       ),
     );
   }

@@ -5,17 +5,20 @@ import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 
-class _FakeBoardSection extends Fake implements BoardSection {}
+class _FakeWord extends Fake implements Word {}
 
 class _FakeCrosswordLetterData extends Fake implements CrosswordLetterData {}
 
 void main() {
-  group('$SectionSelected', () {
+  group('$WordSelected', () {
     test('supports equality', () {
-      final section = _FakeBoardSection();
+      final word = SelectedWord(
+        word: _FakeWord(),
+        section: (0, 0),
+      );
       expect(
-        SectionSelected(selectedSection: section),
-        equals(SectionSelected(selectedSection: section)),
+        WordSelected(selectedWord: word),
+        equals(WordSelected(selectedWord: word)),
       );
     });
   });

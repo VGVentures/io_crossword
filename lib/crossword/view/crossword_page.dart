@@ -124,9 +124,19 @@ class _CrosswordViewState extends State<CrosswordView>
                     .read<CrosswordBloc>()
                     .add(CrosswordSectionsLoaded(initialWord));
               case RandomWordSelectionStatus.success:
+                final position = (
+                  state.uncompletedSection!.position.x,
+                  state.uncompletedSection!.position.y
+                );
+
                 context.read<WordSelectionBloc>().add(
-                      SectionSelected(
-                        selectedSection: state.uncompletedSection!,
+                      WordSelected(
+                        selectedWord: SelectedWord(
+                          section: position,
+                          word: state.uncompletedSection!.words.firstWhere(
+                            (element) => element.solvedTimestamp == null,
+                          ),
+                        ),
                       ),
                     );
             }

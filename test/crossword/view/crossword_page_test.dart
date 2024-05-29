@@ -124,7 +124,7 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(const CrosswordState());
       });
 
-      testWidgets('success, adds $SectionSelected event', (tester) async {
+      testWidgets('success, adds $WordSelected event', (tester) async {
         final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
         whenListen(
           randomWordSelectionBloc,
@@ -147,7 +147,9 @@ void main() {
 
         verify(
           () => wordSelectionBloc.add(
-            SectionSelected(selectedSection: section),
+            WordSelected(
+              selectedWord: SelectedWord(section: (1, 1), word: word),
+            ),
           ),
         ).called(1);
       });

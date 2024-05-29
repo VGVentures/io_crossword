@@ -9,23 +9,23 @@ sealed class WordSelectionEvent extends Equatable {
 ///
 /// The user is yet to decide if they want to solve the word or not.
 /// {@endtemplate}
-class SectionSelected extends WordSelectionEvent {
-  const SectionSelected({
-    required this.selectedSection,
+class WordSelected extends WordSelectionEvent {
+  const WordSelected({
+    required this.selectedWord,
   });
 
   /// The unique identifier of the word that the user has selected.
-  final BoardSection selectedSection;
+  final SelectedWord selectedWord;
 
   @override
-  List<Object> get props => [selectedSection];
+  List<Object> get props => [selectedWord];
 }
 
 /// {@template letter_selected}
 /// The user has selected a crossword letter.
 ///
 /// If the letter is part of a single word, the word is selected. Hence, the
-/// behavior is analogous to [SectionSelected].
+/// behavior is analogous to [WordSelected].
 ///
 /// However, a letter might be part of at most two words (horizontal and
 /// vertical). If so, the horizontal word is always preferred over the vertical
