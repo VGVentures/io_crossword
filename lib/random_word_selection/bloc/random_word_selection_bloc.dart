@@ -35,12 +35,23 @@ class RandomWordSelectionBloc
           await _crosswordRepository.getRandomUncompletedSection(bottomRight);
 
       if (randomSection != null) {
+        final sectionPosition = (
+          randomSection.position.x,
+          randomSection.position.y,
+        );
+
+        final randomizedWords = [...randomSection.words]..shuffle();
+        final randomWord = randomizedWords.firstWhere(
+          (element) => element.solvedTimestamp == null,
+        );
+
         emit(
           state.copyWith(
             status: event.isInitial
                 ? RandomWordSelectionStatus.initialSuccess
                 : RandomWordSelectionStatus.success,
-            uncompletedSection: randomSection,
+            randomWord: randomWord,
+            sectionPosition: sectionPosition,
           ),
         );
       } else {
