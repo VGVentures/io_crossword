@@ -12,21 +12,27 @@ import 'package:mocktail/mocktail.dart';
 class _MockWord extends Mock implements Word {
   @override
   String get id => 'id';
+
+  @override
+  int? get solvedTimestamp => null;
 }
+
+class _MockBoardSection extends Mock implements BoardSection {}
 
 class _MockCrosswordResource extends Mock implements CrosswordResource {}
 
 void main() {
   group('$WordSelectionBloc', () {
     late CrosswordResource crosswordResource;
+    late BoardSection boardSection;
     late SelectedWord selectedWord;
+    late Word word;
 
     setUp(() {
       crosswordResource = _MockCrosswordResource();
-      selectedWord = SelectedWord(
-        section: (0, 0),
-        word: _MockWord(),
-      );
+      boardSection = _MockBoardSection();
+      word = _MockWord();
+      selectedWord = SelectedWord(section: (0, 0), word: word);
     });
 
     test('initial state is WordSelectionState.initial', () {
@@ -36,13 +42,17 @@ void main() {
       expect(bloc.state, equals(WordSelectionState.initial()));
     });
 
-    group('$WordSelected', () {
+    group('$SectionSelected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
         'emits preSolving status',
+        setUp: () {
+          when(() => boardSection.position).thenReturn(Point<int>(0, 0));
+          when(() => boardSection.words).thenReturn([word]);
+        },
         build: () => WordSelectionBloc(
           crosswordResource: crosswordResource,
         ),
-        act: (bloc) => bloc.add(WordSelected(selectedWord: selectedWord)),
+        act: (bloc) => bloc.add(SectionSelected(selectedSection: boardSection)),
         expect: () => <WordSelectionState>[
           WordSelectionState(
             status: WordSelectionStatus.preSolving,
