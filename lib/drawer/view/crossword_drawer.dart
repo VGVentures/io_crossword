@@ -20,6 +20,7 @@ class CrosswordDrawer extends StatelessWidget {
     final l10n = context.l10n;
     final layout = IoLayout.of(context);
     final textTheme = Theme.of(context).io.textStyles;
+    const iconColor = IoCrosswordColors.softGray;
     final items = [
       DrawerItem(
         title: l10n.finishAndSubmitScore,
@@ -75,7 +76,9 @@ class CrosswordDrawer extends StatelessWidget {
       ),
       DrawerItem(
         title: l10n.googleIO,
-        svgIcon: Assets.icons.io.svg(),
+        svgIcon: Assets.icons.io.svg(
+          colorFilter: const ColorFilter.mode(iconColor, BlendMode.srcIn),
+        ),
         onPressed: () {
           context.launchUrl(ProjectDetailsLinks.googleIO);
         },
@@ -128,7 +131,9 @@ class CrosswordDrawer extends StatelessWidget {
           const SizedBox(height: 48),
           ...items.map(
             (item) => ListTile(
-              leading: Icon(item.icon),
+              leading: item.icon != null
+                  ? Icon(item.icon, color: iconColor)
+                  : item.svgIcon,
               title: Text(item.title, style: textTheme.body3),
               onTap: item.onPressed,
             ),
