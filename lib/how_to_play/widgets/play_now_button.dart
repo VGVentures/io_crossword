@@ -10,9 +10,9 @@ class PlayNowButton extends StatelessWidget {
   const PlayNowButton({super.key});
 
   void _onPressed(BuildContext context) {
+    context.read<AudioController>().playSfx(Assets.music.startButton1);
     context.read<PlayerBloc>().add(const PlayerCreateScoreRequested());
     context.read<HowToPlayCubit>().updateStatus(HowToPlayStatus.pickingUp);
-    context.read<AudioController>().playSfx(Assets.music.startButton1);
   }
 
   @override
