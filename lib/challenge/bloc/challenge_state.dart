@@ -13,7 +13,7 @@ class ChallengeState extends Equatable {
   });
 
   @visibleForTesting
-  static const fallbackTotalWords = 66666;
+  static const fallbackTotalWords = 350;
 
   @visibleForTesting
   static const fallbackSolvedWords = 0;
