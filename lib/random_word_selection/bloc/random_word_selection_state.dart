@@ -12,22 +12,26 @@ enum RandomWordSelectionStatus {
 class RandomWordSelectionState extends Equatable {
   const RandomWordSelectionState({
     this.status = RandomWordSelectionStatus.initial,
-    this.uncompletedSection,
+    this.randomWord,
+    this.sectionPosition,
   });
 
   final RandomWordSelectionStatus status;
-  final BoardSection? uncompletedSection;
+  final Word? randomWord;
+  final (int, int)? sectionPosition;
 
   RandomWordSelectionState copyWith({
     RandomWordSelectionStatus? status,
-    BoardSection? uncompletedSection,
+    Word? randomWord,
+    (int, int)? sectionPosition,
   }) {
     return RandomWordSelectionState(
       status: status ?? this.status,
-      uncompletedSection: uncompletedSection ?? this.uncompletedSection,
+      randomWord: randomWord ?? this.randomWord,
+      sectionPosition: sectionPosition ?? this.sectionPosition,
     );
   }
 
   @override
-  List<Object?> get props => [status, uncompletedSection];
+  List<Object?> get props => [status, randomWord, sectionPosition];
 }

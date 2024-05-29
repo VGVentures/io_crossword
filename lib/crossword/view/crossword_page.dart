@@ -108,34 +108,20 @@ class _CrosswordViewState extends State<CrosswordView>
               case RandomWordSelectionStatus.failure:
                 break;
               case RandomWordSelectionStatus.initialSuccess:
-                final position = (
-                  state.uncompletedSection!.position.x,
-                  state.uncompletedSection!.position.y
-                );
-
                 final initialWord = SelectedWord(
-                  section: position,
-                  word: state.uncompletedSection!.words.firstWhere(
-                    (element) => element.solvedTimestamp == null,
-                  ),
+                  section: state.sectionPosition!,
+                  word: state.randomWord!,
                 );
 
                 context
                     .read<CrosswordBloc>()
                     .add(CrosswordSectionsLoaded(initialWord));
               case RandomWordSelectionStatus.success:
-                final position = (
-                  state.uncompletedSection!.position.x,
-                  state.uncompletedSection!.position.y
-                );
-
                 context.read<WordSelectionBloc>().add(
                       WordSelected(
                         selectedWord: SelectedWord(
-                          section: position,
-                          word: state.uncompletedSection!.words.firstWhere(
-                            (element) => element.solvedTimestamp == null,
-                          ),
+                          section: state.sectionPosition!,
+                          word: state.randomWord!,
                         ),
                       ),
                     );

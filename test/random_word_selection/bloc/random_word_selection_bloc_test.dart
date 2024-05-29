@@ -61,7 +61,8 @@ void main() {
           RandomWordSelectionState(status: RandomWordSelectionStatus.loading),
           RandomWordSelectionState(
             status: RandomWordSelectionStatus.success,
-            uncompletedSection: section,
+            randomWord: word,
+            sectionPosition: (1, 1),
           ),
         ],
       );

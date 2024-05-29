@@ -131,7 +131,8 @@ void main() {
           Stream.fromIterable([
             RandomWordSelectionState(
               status: RandomWordSelectionStatus.success,
-              uncompletedSection: section,
+              randomWord: word,
+              sectionPosition: (1, 1),
             ),
           ]),
           initialState: RandomWordSelectionState(),
@@ -183,7 +184,8 @@ void main() {
             [
               RandomWordSelectionState(
                 status: RandomWordSelectionStatus.initialSuccess,
-                uncompletedSection: section,
+                randomWord: word,
+                sectionPosition: (1, 1),
               ),
             ],
           ),
