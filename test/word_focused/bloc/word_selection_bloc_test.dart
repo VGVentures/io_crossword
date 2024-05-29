@@ -44,7 +44,7 @@ void main() {
 
     group('$SectionSelected', () {
       blocTest<WordSelectionBloc, WordSelectionState>(
-        'emits preSolving status',
+        'emits preSolving status with a word selected',
         setUp: () {
           when(() => boardSection.position).thenReturn(Point<int>(0, 0));
           when(() => boardSection.words).thenReturn([word]);

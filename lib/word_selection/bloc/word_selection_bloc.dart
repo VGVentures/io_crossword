@@ -28,7 +28,8 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
     final section = event.selectedSection;
     final position = (section.position.x, section.position.y);
 
-    final randomWord = section.words.firstWhere(
+    final randomizedWords = [...section.words]..shuffle();
+    final randomWord = randomizedWords.firstWhere(
       (element) => element.solvedTimestamp == null,
     );
 
