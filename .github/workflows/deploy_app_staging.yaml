@@ -2,6 +2,9 @@ name: deploy_app_staging
 
 on: workflow_dispatch
 
+env:
+  CROSSWORD_URL: https://stg-e7b2896c65fabc0480edc6c0e.web.app
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -13,7 +16,7 @@ jobs:
           channel: master
           flutter-version: 3.22.0-41.0.pre
       - run: flutter packages get
-      - run: flutter build web -t lib/main_staging.dart --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY }} --wasm
+      - run: flutter build web -t lib/main_staging.dart --dart-define CROSSWORD_URL=${{ env.CROSSWORD_URL }} --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY }} --wasm
 
 
       - uses: FirebaseExtended/action-hosting-deploy@v0

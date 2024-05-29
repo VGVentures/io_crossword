@@ -2,6 +2,9 @@ name: deploy_app_prod
 
 on: workflow_dispatch
 
+env:
+  CROSSWORD_URL: https://crossword.withgoogle.com
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
         with:
           channel: "stable"
       - run: flutter packages get
-      - run: flutter build web -t lib/main_production.dart --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY_PROD }} --wasm
+      - run: flutter build web -t lib/main_production.dart --dart-define CROSSWORD_URL=${{ env.CROSSWORD_URL }} --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY_PROD }} --wasm
 
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
