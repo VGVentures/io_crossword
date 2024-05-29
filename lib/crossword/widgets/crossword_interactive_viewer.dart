@@ -52,7 +52,7 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   /// [TransformationController] to its descendants.
   late TransformationController _transformationController;
 
-  late AnimationController _animationController;
+  late final AnimationController _animationController;
 
   Animation<Matrix4>? _transformationAnimation;
 
@@ -261,6 +261,10 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _centerSelectedSection(context);
@@ -271,10 +275,6 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _transformationController = DefaultTransformationController.of(context);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
   }
 
   @override

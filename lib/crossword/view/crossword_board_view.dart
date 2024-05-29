@@ -11,6 +11,7 @@ class CrosswordBoardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final layout = IoLayout.of(context);
 
     final (sectionSize, bottomRight, zoomLimit) =
         context.select<CrosswordBloc, (int, (int, int), double)>(
@@ -26,15 +27,34 @@ class CrosswordBoardView extends StatelessWidget {
       chunkSize: sectionSize,
     );
 
+    final cellSize = Size(
+      theme.io.wordInput.secondary.empty.size.width +
+          theme.io.wordInput.secondary.padding.horizontal,
+      theme.io.wordInput.secondary.empty.size.height +
+          theme.io.wordInput.secondary.padding.vertical,
+    );
+
+    final chunkSize = Size(
+      cellSize.width * configuration.chunkSize,
+      cellSize.height * configuration.chunkSize,
+    );
+
+    final padding = switch (layout) {
+      IoLayoutData.large => EdgeInsets.symmetric(
+          horizontal: chunkSize.width * .8,
+          vertical: chunkSize.height * .35,
+        ),
+      IoLayoutData.small => EdgeInsets.symmetric(
+          horizontal: chunkSize.width * .35,
+          vertical: chunkSize.height * .35,
+        ),
+    };
+
     return CrosswordLayoutScope(
       data: CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
-        cellSize: Size(
-          theme.io.wordInput.secondary.empty.size.width +
-              theme.io.wordInput.secondary.padding.horizontal,
-          theme.io.wordInput.secondary.empty.size.height +
-              theme.io.wordInput.secondary.padding.vertical,
-        ),
+        cellSize: cellSize,
+        padding: padding,
       ),
       child: DefaultTransformationController(
         child: CrosswordInteractiveViewer(

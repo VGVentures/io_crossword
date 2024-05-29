@@ -40,10 +40,12 @@ void main() {
         chunkSize: 10,
       );
       const cellSize = Size(10, 10);
+      const padding = EdgeInsets.all(20);
 
       final layoutData = CrosswordLayoutData.fromConfiguration(
         configuration: configuration,
         cellSize: cellSize,
+        padding: padding,
       );
 
       expect(
@@ -53,7 +55,7 @@ void main() {
             cellSize: cellSize,
             chunkSize: const Size(100, 100),
             crosswordSize: const Size(300, 300),
-            padding: EdgeInsets.all(100 / 3),
+            padding: EdgeInsets.all(20),
           ),
         ),
       );
