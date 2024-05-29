@@ -6,19 +6,20 @@ import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bl
 
 void main() {
   group('$RandomWordSelectionState', () {
-    final section = BoardSection(
-      id: '',
-      position: Point(1, 1),
-      size: 10,
-      words: const [],
-      borderWords: const [],
+    final word = Word(
+      id: 'id',
+      answer: 'answer',
+      axis: WordAxis.horizontal,
+      clue: 'clue',
+      position: Point(0, 0),
     );
 
     test('initializes correctly', () {
       final state = RandomWordSelectionState();
 
       expect(state.status, RandomWordSelectionStatus.initial);
-      expect(state.uncompletedSection, isNull);
+      expect(state.randomWord, isNull);
+      expect(state.sectionPosition, isNull);
     });
 
     group('copyWith', () {
@@ -33,12 +34,14 @@ void main() {
         final state = RandomWordSelectionState();
         final newState = RandomWordSelectionState(
           status: RandomWordSelectionStatus.success,
-          uncompletedSection: section,
+          randomWord: word,
+          sectionPosition: (1, 1),
         );
 
         final copy = state.copyWith(
           status: newState.status,
-          uncompletedSection: newState.uncompletedSection,
+          randomWord: newState.randomWord,
+          sectionPosition: newState.sectionPosition,
         );
 
         expect(copy, equals(newState));
