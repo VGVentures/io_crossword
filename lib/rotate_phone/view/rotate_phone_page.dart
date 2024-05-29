@@ -8,14 +8,13 @@ class RotatePhonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: IoCrosswordColors.accessibleBlack,
       body: Center(
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: IoCrosswordSpacing.lg),
+          padding: const EdgeInsets.symmetric(
+            horizontal: IoCrosswordSpacing.lg,
+          ),
           child: Text(
             context.l10n.rotatePhoneToPortraitMessage,
-            style: const TextStyle(color: IoCrosswordColors.seedWhite),
           ),
         ),
       ),
