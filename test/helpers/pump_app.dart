@@ -75,7 +75,8 @@ extension PumpApp on WidgetTester {
     final mockedCrosswordResource = _MockCrosswordResource();
     final mockedCrosswordRepository = _MockCrosswordRepository();
     registerFallbackValue(Point(0, 0));
-    when(mockedCrosswordRepository.getRandomUncompletedSection).thenAnswer(
+    when(() => mockedCrosswordRepository.getRandomUncompletedSection(any()))
+        .thenAnswer(
       (_) => Future.value(
         BoardSection(
           id: '',
@@ -218,7 +219,8 @@ extension PumpRoute on WidgetTester {
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
-    when(mockedCrosswordRepository.getRandomUncompletedSection).thenAnswer(
+    when(() => mockedCrosswordRepository.getRandomUncompletedSection(any()))
+        .thenAnswer(
       (_) => Future.value(
         BoardSection(
           id: '',
