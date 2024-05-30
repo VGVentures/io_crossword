@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
@@ -20,7 +22,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String crossword;
 
   /// Display actions based on the [IoLayoutData] layout.
-  final WidgetBuilder? actions;
+  final List<Widget>? actions;
 
   /// The title of the app bar.
   ///
@@ -62,33 +64,47 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: switch (layout) {
               IoLayoutData.small => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: CustomMultiChildLayout(
+                    delegate: AppBarLayout(),
                     children: [
-                      if (title == null)
-                        _IoCrosswordLogo(
-                          crossword: crossword,
-                        )
-                      else
-                        titleWidget,
-                      if (actions != null) actions(context),
+                      LayoutId(
+                        id: _AppBarAlignment.start,
+                        child: title != null
+                            ? titleWidget
+                            : _IoCrosswordLogo(crossword: crossword),
+                      ),
+                      if (actions != null)
+                        LayoutId(
+                          id: _AppBarAlignment.end,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: actions,
+                          ),
+                        ),
                     ],
                   ),
                 ),
               IoLayoutData.large => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Stack(
+                  child: CustomMultiChildLayout(
+                    delegate: AppBarLayout(),
                     children: [
-                      Center(child: titleWidget),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _IoCrosswordLogo(
-                            crossword: crossword,
-                          ),
-                          if (actions != null) actions(context),
-                        ],
+                      LayoutId(
+                        id: _AppBarAlignment.start,
+                        child: _IoCrosswordLogo(crossword: crossword),
                       ),
+                      LayoutId(
+                        id: _AppBarAlignment.center,
+                        child: titleWidget,
+                      ),
+                      if (actions != null)
+                        LayoutId(
+                          id: _AppBarAlignment.end,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: actions,
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -127,16 +143,75 @@ class _IoCrosswordLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const IoLogo(),
         const SizedBox(width: 5),
         Text(
           crossword,
-          style: Theme.of(context).io.textStyles.h2.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          style: Theme.of(context).io.textStyles.h2.bold,
         ),
       ],
     );
   }
+}
+
+enum _AppBarAlignment {
+  start,
+  center,
+  end,
+}
+
+/// Layout delegate that positions 3 widgets along a horizontal axis in order to
+/// keep the middle widget centered and leading and trailing in the left and
+/// right side of the screen respectively, independently of which of the 3
+/// widgets are present.
+@visibleForTesting
+class AppBarLayout extends MultiChildLayoutDelegate {
+  /// The default spacing around the middle widget.
+  static const double kMiddleSpacing = 16;
+
+  @override
+  void performLayout(Size size) {
+    var leadingWidth = 0.0;
+    var trailingWidth = 0.0;
+
+    if (hasChild(_AppBarAlignment.start)) {
+      final constraints = BoxConstraints.loose(size);
+      final leadingSize = layoutChild(_AppBarAlignment.start, constraints);
+      const leadingX = 0.0;
+      final leadingY = (size.height - leadingSize.height) / 2;
+      leadingWidth = leadingSize.width;
+      positionChild(_AppBarAlignment.start, Offset(leadingX, leadingY));
+    }
+
+    if (hasChild(_AppBarAlignment.end)) {
+      final constraints = BoxConstraints.loose(size);
+      final trailingSize = layoutChild(_AppBarAlignment.end, constraints);
+
+      final trailingX = size.width - trailingSize.width;
+      final trailingY = (size.height - trailingSize.height) / 2;
+
+      trailingWidth = trailingSize.width;
+      positionChild(_AppBarAlignment.end, Offset(trailingX, trailingY));
+    }
+
+    if (hasChild(_AppBarAlignment.center)) {
+      final double maxWidth = math.max(
+        size.width - leadingWidth - trailingWidth - kMiddleSpacing * 2,
+        0,
+      );
+      final constraints =
+          BoxConstraints.loose(size).copyWith(maxWidth: maxWidth);
+      final middleSize = layoutChild(_AppBarAlignment.center, constraints);
+
+      final middleX = (size.width - middleSize.width) / 2;
+      final middleY = (size.height - middleSize.height) / 2;
+
+      positionChild(_AppBarAlignment.center, Offset(middleX, middleY));
+    }
+  }
+
+  @override
+  bool shouldRelayout(AppBarLayout oldDelegate) => false;
 }

@@ -330,11 +330,10 @@ class IoCrosswordTheme {
         ),
       ),
       simpleBorder: OutlinedButton.styleFrom(
-        minimumSize: const Size(171, 56),
+        minimumSize: const Size(168, 56),
         foregroundColor: IoCrosswordColors.seedWhite,
         padding: const EdgeInsets.symmetric(
-          vertical: 17,
-          horizontal: 18,
+          horizontal: 16,
         ),
       ).copyWith(
         shape: WidgetStateProperty.resolveWith(

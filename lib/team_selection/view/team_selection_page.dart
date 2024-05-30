@@ -49,7 +49,7 @@ class TeamSelectionView extends StatelessWidget {
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
-        actions: (context) => const MuteButton(),
+        actions: const [MuteButton()],
       ),
       body: BlocConsumer<TeamSelectionCubit, TeamSelectionState>(
         listenWhen: (previous, current) => previous.index != current.index,

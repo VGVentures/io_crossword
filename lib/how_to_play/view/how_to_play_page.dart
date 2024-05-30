@@ -53,7 +53,7 @@ class HowToPlayView extends StatelessWidget {
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
-        actions: (context) => const MuteButton(),
+        actions: const [MuteButton()],
       ),
       body: switch (layout) {
         IoLayoutData.small => const _HowToPlaySmall(),

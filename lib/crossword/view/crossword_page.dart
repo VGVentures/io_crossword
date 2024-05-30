@@ -143,15 +143,11 @@ class _CrosswordViewState extends State<CrosswordView>
         appBar: IoAppBar(
           title: const PlayerRankingInformation(),
           crossword: l10n.crossword,
-          actions: (context) {
-            return const Row(
-              children: [
-                MuteButton(),
-                SizedBox(width: 7),
-                EndDrawerButton(),
-              ],
-            );
-          },
+          actions: const [
+            MuteButton(),
+            SizedBox(width: 8),
+            EndDrawerButton(),
+          ],
         ),
         body: Stack(
           children: [
