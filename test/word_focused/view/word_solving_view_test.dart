@@ -201,6 +201,15 @@ void main() {
       );
 
       testWidgets(
+        'an $ErrorSection',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          expect(find.byType(ErrorSection), findsOneWidget);
+        },
+      );
+
+      testWidgets(
         'a $BottomPanel',
         (tester) async {
           await tester.pumpApp(widget);
@@ -361,6 +370,15 @@ void main() {
       );
 
       testWidgets(
+        'an $ErrorSection',
+        (tester) async {
+          await tester.pumpApp(widget);
+
+          expect(find.byType(ErrorSection), findsOneWidget);
+        },
+      );
+
+      testWidgets(
         'a $BottomPanel',
         (tester) async {
           await tester.pumpApp(widget);
@@ -418,6 +436,54 @@ void main() {
         ).called(1);
       },
     );
+  });
+
+  group('$ErrorSection', () {
+    late WordSelectionBloc wordSelectionBloc;
+    late Widget widget;
+
+    setUp(() {
+      wordSelectionBloc = _MockWordSolvingBloc();
+
+      widget = BlocProvider.value(
+        value: wordSelectionBloc,
+        child: ErrorSection(),
+      );
+    });
+
+    group('renders', () {
+      testWidgets(
+        'a $SizedBox when the status is not failure',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.solving,
+              word: selectedWord,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.byType(SizedBox), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'a submitError text when the status is failure',
+        (tester) async {
+          when(() => wordSelectionBloc.state).thenReturn(
+            WordSelectionState(
+              status: WordSelectionStatus.failure,
+              word: selectedWord,
+            ),
+          );
+
+          await tester.pumpApp(widget);
+
+          expect(find.text(l10n.submitError), findsOneWidget);
+        },
+      );
+    });
   });
 
   group('$BottomPanel', () {
