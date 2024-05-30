@@ -55,7 +55,7 @@ class WelcomeLarge extends StatelessWidget {
     return Scaffold(
       appBar: IoAppBar(
         crossword: l10n.crossword,
-        actions: (context) => const MuteButton(),
+        actions: const [MuteButton()],
       ),
       body: SelectionArea(
         child: Container(
@@ -93,7 +93,7 @@ class WelcomeSmall extends StatelessWidget {
       appBar: IoAppBar(
         crossword: l10n.crossword,
         bottom: const WelcomeHeaderImage(),
-        actions: (context) => const MuteButton(),
+        actions: const [MuteButton()],
       ),
       body: const SelectionArea(
         child: SingleChildScrollView(

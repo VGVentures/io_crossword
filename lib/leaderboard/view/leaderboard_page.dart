@@ -51,9 +51,7 @@ class LeaderboardView extends StatelessWidget {
           style: IoCrosswordTextStyles.mobile.h2,
         ),
         crossword: l10n.crossword,
-        actions: (context) {
-          return const CloseButton();
-        },
+        actions: const [CloseButton()],
       ),
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         buildWhen: (previous, current) => previous.status != current.status,
