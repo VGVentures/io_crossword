@@ -116,27 +116,34 @@ class WordSelectionBloc extends Bloc<WordSelectionEvent, WordSelectionState> {
       state.copyWith(status: WordSelectionStatus.validating),
     );
 
-    final points = await _crosswordResource.answerWord(
-      wordId: state.word!.word.id,
-      answer: event.answer,
-    );
-
-    final isCorrect = points > 0;
-    if (isCorrect) {
-      emit(
-        state.copyWith(
-          status: WordSelectionStatus.solved,
-          word: state.word!.copyWith(
-            word: state.word!.word.copyWith(answer: event.answer),
-          ),
-          wordPoints: points,
-        ),
+    try {
+      final points = await _crosswordResource.answerWord(
+        wordId: state.word!.word.id,
+        answer: event.answer,
       );
-    } else {
+
+      final isCorrect = points > 0;
+      if (isCorrect) {
+        emit(
+          state.copyWith(
+            status: WordSelectionStatus.solved,
+            word: state.word!.copyWith(
+              word: state.word!.word.copyWith(answer: event.answer),
+            ),
+            wordPoints: points,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: WordSelectionStatus.incorrect,
+          ),
+        );
+      }
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
       emit(
-        state.copyWith(
-          status: WordSelectionStatus.incorrect,
-        ),
+        state.copyWith(status: WordSelectionStatus.failure),
       );
     }
   }

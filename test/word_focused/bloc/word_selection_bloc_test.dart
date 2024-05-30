@@ -341,6 +341,39 @@ void main() {
           ),
         ],
       );
+
+      blocTest<WordSelectionBloc, WordSelectionState>(
+        'emits a state with failure if validating an answer fails',
+        build: () => WordSelectionBloc(
+          crosswordResource: crosswordResource,
+        ),
+        setUp: () {
+          answerWord = _MockWord();
+          when(() => selectedWord.word.copyWith(answer: 'correct'))
+              .thenReturn(answerWord);
+          when(
+            () => crosswordResource.answerWord(
+              wordId: selectedWord.word.id,
+              answer: 'correct',
+            ),
+          ).thenThrow(Exception('Oops'));
+        },
+        seed: () => WordSelectionState(
+          status: WordSelectionStatus.solving,
+          word: selectedWord,
+        ),
+        act: (bloc) => bloc.add(WordSolveAttempted(answer: 'correct')),
+        expect: () => <WordSelectionState>[
+          WordSelectionState(
+            status: WordSelectionStatus.validating,
+            word: selectedWord,
+          ),
+          WordSelectionState(
+            status: WordSelectionStatus.failure,
+            word: selectedWord,
+          ),
+        ],
+      );
     });
   });
 }
