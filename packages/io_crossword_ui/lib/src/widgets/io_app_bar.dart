@@ -180,7 +180,7 @@ class AppBarLayout extends MultiChildLayoutDelegate {
       final constraints = BoxConstraints.loose(size);
       final leadingSize = layoutChild(_AppBarAlignment.start, constraints);
       const leadingX = 0.0;
-      final leadingY = size.height - leadingSize.height;
+      final leadingY = (size.height - leadingSize.height) / 2;
       leadingWidth = leadingSize.width;
       positionChild(_AppBarAlignment.start, Offset(leadingX, leadingY));
     }
@@ -188,24 +188,25 @@ class AppBarLayout extends MultiChildLayoutDelegate {
     if (hasChild(_AppBarAlignment.end)) {
       final constraints = BoxConstraints.loose(size);
       final trailingSize = layoutChild(_AppBarAlignment.end, constraints);
-      final trailingX = size.width - trailingSize.width;
 
-      final trailingY = size.height - trailingSize.height;
+      final trailingX = size.width - trailingSize.width;
+      final trailingY = (size.height - trailingSize.height) / 2;
+
       trailingWidth = trailingSize.width;
       positionChild(_AppBarAlignment.end, Offset(trailingX, trailingY));
     }
 
     if (hasChild(_AppBarAlignment.center)) {
       final double maxWidth = math.max(
-        size.width - leadingWidth - trailingWidth - kMiddleSpacing * 2.0,
+        size.width - leadingWidth - trailingWidth - kMiddleSpacing * 2,
         0,
       );
       final constraints =
           BoxConstraints.loose(size).copyWith(maxWidth: maxWidth);
       final middleSize = layoutChild(_AppBarAlignment.center, constraints);
 
-      final middleX = (size.width - middleSize.width) / 2.0;
-      final middleY = size.height - middleSize.height;
+      final middleX = (size.width - middleSize.width) / 2;
+      final middleY = (size.height - middleSize.height) / 2;
 
       positionChild(_AppBarAlignment.center, Offset(middleX, middleY));
     }
