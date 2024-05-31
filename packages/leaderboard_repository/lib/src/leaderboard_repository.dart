@@ -107,7 +107,7 @@ class LeaderboardRepository {
 
     _playerRanked = BehaviorSubject<(Player, int)>();
 
-    getPlayer(userId).listen((player) async {
+    getPlayer(userId).listen((player) {
       // each time the player gets updated the ranking will also get updated
       getRankingPosition(player).listen((rank) {
         _playerRanked!.add((player, rank));
