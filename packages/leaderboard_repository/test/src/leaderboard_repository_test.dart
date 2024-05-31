@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('$LeaderboardRepository', () {
-    late FirebaseFirestore firestore;
+    late FakeFirebaseFirestore firestore;
     late LeaderboardRepository leaderboardRepository;
     late List<Player> players;
 
@@ -158,24 +157,28 @@ void main() {
         );
       });
 
-      test('does not call updateUsersRankingPosition when not in top 10',
-          () async {
-        await leaderboardRepository.getLeaderboardResults('id');
+      test(
+        'does not call updateUsersRankingPosition when not in top 10',
+        () async {
+          await leaderboardRepository.getLeaderboardResults('id');
 
-        expect(leaderboardRepository.userRankingPosition, emitsInOrder([]));
-      });
+          expect(leaderboardRepository.userRankingPosition, emitsInOrder([]));
+        },
+      );
 
-      test('calls updateUsersRankingPosition when the ranking gets updated',
-          () async {
-        leaderboardRepository.updateUsersRankingPosition(9);
+      test(
+        'calls updateUsersRankingPosition when the ranking gets updated',
+        () async {
+          leaderboardRepository.updateUsersRankingPosition(9);
 
-        await leaderboardRepository.getLeaderboardResults(players.first.id);
+          await leaderboardRepository.getLeaderboardResults(players.first.id);
 
-        expect(
-          leaderboardRepository.userRankingPosition.stream,
-          emits(1),
-        );
-      });
+          expect(
+            leaderboardRepository.userRankingPosition.stream,
+            emits(1),
+          );
+        },
+      );
     });
 
     group('getPlayer', () {

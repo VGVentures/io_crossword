@@ -85,7 +85,7 @@ void main() {
 
     group('$PlayerCreateScoreRequested', () {
       blocTest<PlayerBloc, PlayerState>(
-        'emits [loading] status when player can be created',
+        'emits [loading, playing] status when player can be created',
         build: () => bloc,
         setUp: () {
           when(
@@ -94,6 +94,9 @@ void main() {
               mascot: Mascots.dino,
             ),
           ).thenAnswer((_) async {});
+          when(
+            () => leaderboardRepository.getPlayerRanked('id'),
+          ).thenAnswer((_) => Stream.value((player, 3)));
         },
         seed: () => PlayerState(
           mascot: Mascots.dino,
@@ -103,7 +106,7 @@ void main() {
             mascot: Mascots.dino,
           ),
         ),
-        act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+        act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
@@ -113,6 +116,12 @@ void main() {
               initials: 'AAA',
               mascot: Mascots.dino,
             ),
+          ),
+          PlayerState(
+            status: PlayerStatus.playing,
+            mascot: Mascots.dino,
+            player: player,
+            rank: 3,
           ),
         ],
         verify: (bloc) => verify(
@@ -124,7 +133,7 @@ void main() {
       );
 
       blocTest<PlayerBloc, PlayerState>(
-        'emits [loading] status when player is already playing',
+        'emits [loading, playing] status when player is already playing',
         build: () => bloc,
         setUp: () {
           when(
@@ -133,6 +142,9 @@ void main() {
               mascot: Mascots.dino,
             ),
           ).thenAnswer((_) async {});
+          when(
+            () => leaderboardRepository.getPlayerRanked('id'),
+          ).thenAnswer((_) => Stream.value((player, 3)));
         },
         seed: () => PlayerState(
           status: PlayerStatus.playing,
@@ -143,7 +155,7 @@ void main() {
             mascot: Mascots.dino,
           ),
         ),
-        act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+        act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
@@ -153,6 +165,12 @@ void main() {
               initials: 'AAA',
               mascot: Mascots.dino,
             ),
+          ),
+          PlayerState(
+            status: PlayerStatus.playing,
+            mascot: Mascots.dino,
+            player: player,
+            rank: 3,
           ),
         ],
         verify: (bloc) => verify(
@@ -182,7 +200,7 @@ void main() {
             mascot: Mascots.dino,
           ),
         ),
-        act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+        act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
@@ -218,7 +236,7 @@ void main() {
               mascot: Mascots.dino,
             ),
           ),
-          act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+          act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
           expect: () => <PlayerState>[],
         );
 
@@ -233,7 +251,7 @@ void main() {
               mascot: Mascots.dino,
             ),
           ),
-          act: (bloc) => bloc.add(PlayerCreateScoreRequested()),
+          act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
           expect: () => <PlayerState>[],
         );
       });

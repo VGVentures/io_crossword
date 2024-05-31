@@ -14,10 +14,12 @@ class PlayerLoaded extends PlayerEvent {
 }
 
 class PlayerCreateScoreRequested extends PlayerEvent {
-  const PlayerCreateScoreRequested();
+  const PlayerCreateScoreRequested(this.userId);
+
+  final String userId;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [userId];
 }
 
 class MascotSelected extends PlayerEvent {

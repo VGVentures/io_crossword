@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
@@ -11,7 +12,9 @@ class PlayNowButton extends StatelessWidget {
 
   void _onPressed(BuildContext context) {
     context.read<AudioController>().playSfx(Assets.music.startButton1);
-    context.read<PlayerBloc>().add(const PlayerCreateScoreRequested());
+    context
+        .read<PlayerBloc>()
+        .add(PlayerCreateScoreRequested(context.read<User>().id));
     context.read<HowToPlayCubit>().updateStatus(HowToPlayStatus.pickingUp);
   }
 

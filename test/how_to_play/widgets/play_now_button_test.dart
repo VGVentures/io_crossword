@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -45,6 +48,7 @@ void main() {
       'emits $PlayerCreateScoreRequested when pressed',
       (tester) async {
         await tester.pumpApp(
+          user: User(id: 'user-id'),
           playerBloc: playerBloc,
           audioController: audioController,
           MultiBlocProvider(
@@ -57,7 +61,7 @@ void main() {
 
         await tester.tap(find.byType(PlayNowButton));
 
-        verify(() => playerBloc.add(const PlayerCreateScoreRequested()))
+        verify(() => playerBloc.add(PlayerCreateScoreRequested('user-id')))
             .called(1);
       },
     );
