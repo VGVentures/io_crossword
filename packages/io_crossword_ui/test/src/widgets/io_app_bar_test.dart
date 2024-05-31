@@ -26,7 +26,7 @@ void main() {
         expect(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => SizedBox(),
+            actions: const [SizedBox()],
             title: Text('Title'),
           ).preferredSize,
           equals(Size(double.infinity, 80)),
@@ -40,7 +40,7 @@ void main() {
         expect(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => SizedBox(),
+            actions: const [SizedBox()],
             bottom: _BottomWidget(),
             title: Text('Title'),
           ).preferredSize,
@@ -55,7 +55,7 @@ void main() {
         await tester.pumpApp(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => SizedBox(),
+            actions: const [SizedBox()],
             title: Text('Title'),
           ),
           layout: IoLayoutData.small,
@@ -71,7 +71,7 @@ void main() {
         await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => SizedBox(),
+            actions: const [SizedBox()],
             title: null,
           ),
           layout: IoLayoutData.small,
@@ -87,7 +87,7 @@ void main() {
         await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (_) => SizedBox(),
+            actions: const [SizedBox()],
             title: Text('Title'),
           ),
           layout: IoLayoutData.large,
@@ -104,7 +104,7 @@ void main() {
           await tester.pumpSubject(
             IoAppBar(
               crossword: 'Crossword',
-              actions: (_) => SizedBox(),
+              actions: const [SizedBox()],
               title: Text('Title'),
             ),
             layout: layout,
@@ -122,7 +122,7 @@ void main() {
           await tester.pumpSubject(
             IoAppBar(
               crossword: 'Crossword',
-              actions: (_) => SizedBox(),
+              actions: const [SizedBox()],
               title: Text('Title'),
               bottom: _BottomWidget(),
             ),
@@ -135,52 +135,36 @@ void main() {
     }
 
     testWidgets(
-      'display actions based on large layout',
+      'display all actions',
       (tester) async {
         await tester.pumpSubject(
           IoAppBar(
             crossword: 'Crossword',
-            actions: (context) {
-              final layout = IoLayout.of(context);
-
-              return switch (layout) {
-                IoLayoutData.small => Text('Small'),
-                IoLayoutData.large => Text('Large'),
-              };
-            },
+            actions: const [
+              Text('Action 1'),
+              Text('Action 2'),
+            ],
             title: Text('Title'),
           ),
           layout: IoLayoutData.large,
         );
 
-        expect(find.text('Large'), findsOneWidget);
-        expect(find.text('Small'), findsNothing);
+        expect(find.text('Action 1'), findsOneWidget);
+        expect(find.text('Action 2'), findsOneWidget);
       },
     );
+  });
 
-    testWidgets(
-      'display actions based on large layout',
-      (tester) async {
-        await tester.pumpSubject(
-          IoAppBar(
-            crossword: 'Crossword',
-            actions: (context) {
-              final layout = IoLayout.of(context);
+  group('AppBarLayout', () {
+    testWidgets('shouldRelayout method returns false', (tester) async {
+      final delegate = AppBarLayout();
+      final delegate2 = AppBarLayout();
+      await tester.pumpWidget(
+        CustomMultiChildLayout(delegate: delegate),
+      );
 
-              return switch (layout) {
-                IoLayoutData.small => Text('Small'),
-                IoLayoutData.large => Text('Large'),
-              };
-            },
-            title: Text('Title'),
-          ),
-          layout: IoLayoutData.small,
-        );
-
-        expect(find.text('Small'), findsOneWidget);
-        expect(find.text('Large'), findsNothing);
-      },
-    );
+      expect(delegate.shouldRelayout(delegate2), isFalse);
+    });
   });
 }
 

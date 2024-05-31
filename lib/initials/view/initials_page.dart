@@ -73,7 +73,7 @@ class _InitialsViewState extends State<InitialsView> {
       child: Scaffold(
         appBar: IoAppBar(
           crossword: l10n.crossword,
-          actions: (context) => const MuteButton(),
+          actions: const [MuteButton()],
         ),
         body: SelectionArea(
           child: SingleChildScrollView(
