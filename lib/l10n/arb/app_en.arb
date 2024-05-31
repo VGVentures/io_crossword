@@ -94,6 +94,10 @@
   "@submit": {
     "description": "Submit label"
   },
+  "submitError": "An error ocurred while submitting your answer.\nPlease try again.",
+  "@submitError": {
+    "description": "Error message when submitting an answer"
+  },
   "solveIt": "Solve it",
   "@solveIt": {
     "description": "Solve it label"

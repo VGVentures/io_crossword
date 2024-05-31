@@ -65,6 +65,7 @@ class WordSolvingLargeView extends StatelessWidget {
             ],
           ),
         ),
+        const ErrorSection(),
         const SizedBox(height: 24),
         if (isHintsEnabled) ...[
           const HintsTitle(),
@@ -128,6 +129,7 @@ class WordSolvingSmallView extends StatelessWidget {
             },
           ),
         ),
+        const ErrorSection(),
         const SizedBox(height: 24),
         if (isHintsEnabled) ...[
           const HintsTitle(),
@@ -158,6 +160,36 @@ class IncorrectAnswerText extends StatelessWidget {
       style: IoCrosswordTextStyles.mobile.body3
           .copyWith(color: theme.colorScheme.error),
       textAlign: TextAlign.center,
+    );
+  }
+}
+
+@visibleForTesting
+class ErrorSection extends StatelessWidget {
+  @visibleForTesting
+  const ErrorSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final hasError = context.select(
+      (WordSelectionBloc bloc) =>
+          bloc.state.status == WordSelectionStatus.failure,
+    );
+
+    if (!hasError) return const SizedBox.shrink();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 16),
+        Text(
+          context.l10n.submitError,
+          style: IoCrosswordTextStyles.mobile.body3
+              .copyWith(color: theme.colorScheme.error),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
