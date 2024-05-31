@@ -21,10 +21,15 @@ void main() {
     });
 
     group('$PlayerCreateScoreRequested', () {
-      test('supports value equality', () {
+      test('supports value comparisons', () {
         expect(
-          PlayerCreateScoreRequested(),
-          equals(PlayerCreateScoreRequested()),
+          PlayerCreateScoreRequested('id'),
+          equals(PlayerCreateScoreRequested('id')),
+        );
+
+        expect(
+          PlayerCreateScoreRequested('id'),
+          isNot(equals(PlayerCreateScoreRequested('other'))),
         );
       });
     });

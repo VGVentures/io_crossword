@@ -47,7 +47,19 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         initials: state.player.initials,
         mascot: state.mascot,
       );
-    } catch (_) {
+
+      final (player, rank) =
+          await _leaderboardRepository.getPlayerRanked(event.userId).first;
+
+      emit(
+        state.copyWith(
+          status: PlayerStatus.playing,
+          player: player,
+          rank: rank,
+        ),
+      );
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
       emit(state.copyWith(status: PlayerStatus.failure));
     }
   }

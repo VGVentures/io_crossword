@@ -23,6 +23,7 @@ class LeaderboardRepository {
   @visibleForTesting
   final BehaviorSubject<int> userRankingPosition;
   BehaviorSubject<Player>? _leaderboardPlayer;
+  BehaviorSubject<(Player, int)>? _playerRanked;
 
   /// Updates the [userRankingPosition] of the current user.
   @visibleForTesting
@@ -61,6 +62,7 @@ class LeaderboardRepository {
   }
 
   /// Returns a [Stream] with the users position in the ranking.
+  @visibleForTesting
   Stream<int> getRankingPosition(Player player) {
     _leaderboardCollection
         .where('score', isGreaterThan: player.score)
@@ -101,15 +103,17 @@ class LeaderboardRepository {
   /// Returns the [Player] with the ranking position in
   /// the leaderboard.
   Stream<(Player, int)> getPlayerRanked(String userId) {
-    final stream = BehaviorSubject<(Player, int)>();
+    if (_playerRanked != null) return _playerRanked!.stream;
 
-    getPlayer(userId).listen((player) {
+    _playerRanked = BehaviorSubject<(Player, int)>();
+
+    getPlayer(userId).listen((player) async {
       // each time the player gets updated the ranking will also get updated
       getRankingPosition(player).listen((rank) {
-        stream.add((player, rank));
+        _playerRanked!.add((player, rank));
       });
     });
 
-    return stream.stream;
+    return _playerRanked!.stream;
   }
 }
