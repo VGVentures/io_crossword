@@ -91,9 +91,7 @@ void main() {
             (0, 0): BoardSection(
               id: 'id',
               position: Point(0, 0),
-              size: 20,
               words: [_UnsolvedFakeWord()],
-              borderWords: const [],
             ),
           },
         ),
@@ -120,9 +118,7 @@ void main() {
         final section = BoardSection(
           id: 'id',
           position: Point(0, 0),
-          size: 20,
           words: [_UnsolvedFakeWord()],
-          borderWords: const [],
         );
         whenListen(
           crosswordBloc,
@@ -172,9 +168,7 @@ void main() {
         final section = BoardSection(
           id: 'id',
           position: Point(0, 0),
-          size: 20,
           words: [_SolvedFakeWord()],
-          borderWords: const [],
         );
         when(() => crosswordBloc.state).thenReturn(
           CrosswordState(

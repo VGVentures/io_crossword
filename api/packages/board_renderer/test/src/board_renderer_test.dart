@@ -305,9 +305,7 @@ void main() {
       final section = BoardSection(
         id: '',
         position: Point(1, 1),
-        size: 10,
         words: words,
-        borderWords: words,
       );
 
       test('render the received section words', () async {
@@ -367,9 +365,9 @@ void main() {
         when(command.execute).thenAnswer((_) async => command);
         when(() => command.outputBytes).thenReturn(Uint8List(0));
 
-        await renderer.renderSection(section);
+        await renderer.renderSection(section, 10);
 
-        expect(calls, 14);
+        expect(calls, 7);
       });
 
       test("throws when can't get the texture", () async {
@@ -433,7 +431,7 @@ void main() {
         when(() => command.outputBytes).thenReturn(Uint8List(0));
 
         await expectLater(
-          () => renderer.renderSection(section),
+          () => renderer.renderSection(section, 10),
           throwsA(
             isA<AssetResolutionFailure>().having(
               (e) => e.toString(),
@@ -499,7 +497,7 @@ void main() {
         when(() => command.outputBytes).thenReturn(Uint8List(0));
 
         await expectLater(
-          () => renderer.renderSection(section),
+          () => renderer.renderSection(section, 10),
           throwsA(
             isA<BoardRendererFailure>().having(
               (e) => e.toString(),
@@ -565,7 +563,7 @@ void main() {
         when(() => command.outputBytes).thenReturn(null);
 
         await expectLater(
-          () => renderer.renderSection(section),
+          () => renderer.renderSection(section, 10),
           throwsA(
             isA<BoardRendererFailure>().having(
               (e) => e.toString(),
@@ -589,7 +587,6 @@ void main() {
       final section1 = BoardSection(
         id: '',
         position: Point(1, 1),
-        size: 10,
         words: const [
           Word(
             id: '1',
@@ -606,13 +603,11 @@ void main() {
             clue: '',
           ),
         ],
-        borderWords: const [],
       );
 
       final section2 = BoardSection(
         id: '',
         position: Point(2, 1),
-        size: 10,
         words: const [
           Word(
             id: '1',
@@ -629,13 +624,11 @@ void main() {
             clue: '',
           ),
         ],
-        borderWords: const [],
       );
 
       final section3 = BoardSection(
         id: '',
         position: Point(1, 2),
-        size: 10,
         words: [
           Word(
             id: '1',
@@ -653,13 +646,11 @@ void main() {
             clue: '',
           ),
         ],
-        borderWords: const [],
       );
 
       final section4 = BoardSection(
         id: '',
         position: Point(2, 2),
-        size: 10,
         words: [
           Word(
             id: '1',
@@ -677,13 +668,11 @@ void main() {
             clue: '',
           ),
         ],
-        borderWords: const [],
       );
 
       final sectionWithNoNeighbor = BoardSection(
         id: '',
         position: Point(4, 9),
-        size: 10,
         words: [
           Word(
             id: '1',
@@ -701,7 +690,6 @@ void main() {
             clue: '',
           ),
         ],
-        borderWords: const [],
       );
 
       test('render the received sections and group them', () async {
@@ -768,6 +756,7 @@ void main() {
             section3,
             section4,
           ],
+          10,
         );
 
         expect(calls, 21);
@@ -836,6 +825,7 @@ void main() {
               section4,
               sectionWithNoNeighbor,
             ],
+            10,
           ),
           throwsA(
             isA<BoardRendererFailure>().having(
@@ -910,6 +900,7 @@ void main() {
               section3,
               section4,
             ],
+            10,
           ),
           throwsA(
             isA<BoardRendererFailure>().having(
@@ -993,6 +984,7 @@ void main() {
               section3,
               section4,
             ],
+            10,
           ),
           throwsA(
             isA<BoardRendererFailure>().having(

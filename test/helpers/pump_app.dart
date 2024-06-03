@@ -81,9 +81,7 @@ extension PumpApp on WidgetTester {
         BoardSection(
           id: '',
           position: Point(1, 1),
-          size: 10,
           words: [_FakeUnsolvedWord(), _FakeSolvedWord()],
-          borderWords: [_FakeUnsolvedWord(), _FakeSolvedWord()],
         ),
       ),
     );
@@ -225,9 +223,7 @@ extension PumpRoute on WidgetTester {
         BoardSection(
           id: '',
           position: Point(1, 1),
-          size: 10,
           words: [_FakeUnsolvedWord(), _FakeSolvedWord()],
-          borderWords: [_FakeUnsolvedWord(), _FakeSolvedWord()],
         ),
       ),
     );

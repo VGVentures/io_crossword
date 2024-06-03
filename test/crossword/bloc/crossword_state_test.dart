@@ -15,7 +15,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -25,7 +24,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         ),
@@ -40,7 +38,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -50,7 +47,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         ),
@@ -60,7 +56,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -70,7 +65,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         ),
@@ -85,7 +79,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -95,7 +88,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         );
@@ -109,7 +101,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -119,7 +110,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         );
@@ -134,7 +124,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -144,7 +133,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         );
@@ -153,7 +141,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -163,12 +150,10 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
             (0, 1): BoardSection(
               id: '2',
               position: Point(0, 1),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -178,7 +163,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         );
@@ -188,7 +172,6 @@ void main() {
             (0, 0): BoardSection(
               id: '1',
               position: Point(0, 0),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -198,12 +181,10 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
             (0, 1): BoardSection(
               id: '2',
               position: Point(0, 1),
-              size: 40,
               words: [
                 Word(
                   id: '1',
@@ -213,7 +194,6 @@ void main() {
                   clue: 'flutter',
                 ),
               ],
-              borderWords: const [],
             ),
           },
         );

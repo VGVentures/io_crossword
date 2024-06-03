@@ -95,6 +95,8 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
     CrosswordSectionsLoaded event,
     Emitter<CrosswordState> emit,
   ) async {
+    final sectionSize = await _boardInfoRepository.getSectionSize();
+
     return emit.forEach(
       _crosswordRepository.loadBoardSections(),
       onData: (sections) {
@@ -109,7 +111,7 @@ class CrosswordBloc extends Bloc<CrosswordEvent, CrosswordState> {
         return state.copyWith(
           status: CrosswordStatus.ready,
           sections: keySections,
-          sectionSize: keySections.entries.first.value.size,
+          sectionSize: sectionSize,
           initialWord: event.selectedWord,
         );
       },

@@ -14,10 +14,7 @@ class BoardSection extends Equatable {
   const BoardSection({
     required this.id,
     required this.position,
-    required this.size,
     required this.words,
-    required this.borderWords,
-    this.snapshotUrl,
   });
 
   /// {@macro board_section}
@@ -35,21 +32,9 @@ class BoardSection extends Equatable {
   @PointConverter()
   final Point<int> position;
 
-  /// Size of the squared board section.
-  @JsonKey()
-  final int size;
-
   /// The words that start in this board section.
   @JsonKey()
   final List<Word> words;
-
-  /// The words that end in this board section, but don't start in it.
-  @JsonKey()
-  final List<Word> borderWords;
-
-  /// The url of the snapshot of the board section.
-  @JsonKey()
-  final String? snapshotUrl;
 
   /// Returns a json representation from this instance.
   Map<String, dynamic> toJson() => _$BoardSectionToJson(this);
@@ -59,28 +44,15 @@ class BoardSection extends Equatable {
   BoardSection copyWith({
     String? id,
     Point<int>? position,
-    int? size,
     List<Word>? words,
-    List<Word>? borderWords,
-    String? snapshotUrl,
   }) {
     return BoardSection(
       id: id ?? this.id,
       position: position ?? this.position,
-      size: size ?? this.size,
       words: words ?? this.words,
-      borderWords: borderWords ?? this.borderWords,
-      snapshotUrl: snapshotUrl ?? this.snapshotUrl,
     );
   }
 
   @override
-  List<Object?> get props => [
-        id,
-        position,
-        size,
-        words,
-        borderWords,
-        snapshotUrl,
-      ];
+  List<Object?> get props => [id, position, words];
 }

@@ -113,8 +113,6 @@ void main(List<String> args) async {
       final section = BoardSection(
         id: '',
         position: Point(i, j),
-        // remove this field from model (size)
-        size: sectionSize,
         words: sectionWords
             .map(
               (e) => e.copyWith(
@@ -123,8 +121,6 @@ void main(List<String> args) async {
               ),
             )
             .toList(),
-        // remove this field from model (border words)
-        borderWords: const [],
       );
 
       sections.add(section);

@@ -330,7 +330,10 @@ class BoardRenderer {
   }
 
   /// Groups the sections of the board into a single image.
-  Future<Uint8List> groupSections(List<BoardSection> sections) async {
+  Future<Uint8List> groupSections(
+    List<BoardSection> sections,
+    int sectionSize,
+  ) async {
     // Map the sections by their index.
     final sectionMap = {
       for (final section in sections) section.position: section,
@@ -370,8 +373,8 @@ class BoardRenderer {
     final amountX = bottomRight.x - topLeft.x + 1;
     final amountY = bottomRight.y - topLeft.y + 1;
 
-    final totalWidth = amountX * sections.first.size * _textureCellSize;
-    final totalHeight = amountY * sections.first.size * _textureCellSize;
+    final totalWidth = amountX * sectionSize * _textureCellSize;
+    final totalHeight = amountY * sectionSize * _textureCellSize;
 
     final image = _createImage(
       width: totalWidth,
@@ -381,7 +384,7 @@ class BoardRenderer {
     );
 
     for (final section in sections) {
-      final sectionImage = await renderSection(section);
+      final sectionImage = await renderSection(section, sectionSize);
       final sectionImageDecoded = _decodePng(sectionImage);
 
       if (sectionImageDecoded == null) {
@@ -393,8 +396,8 @@ class BoardRenderer {
       _compositeImage(
         image,
         sectionImageDecoded,
-        dstX: sectionPosition.x * section.size * _textureCellSize,
-        dstY: sectionPosition.y * section.size * _textureCellSize,
+        dstX: sectionPosition.x * sectionSize * _textureCellSize,
+        dstY: sectionPosition.y * sectionSize * _textureCellSize,
       );
     }
     final createdCommand = _createCommand()
@@ -412,11 +415,11 @@ class BoardRenderer {
   }
 
   /// Renders a section of the board in an image.
-  Future<Uint8List> renderSection(BoardSection section) async {
-    final words = [...section.words, ...section.borderWords];
+  Future<Uint8List> renderSection(BoardSection section, int sectionSize) async {
+    final words = [...section.words];
 
-    final totalWidth = section.size * _textureCellSize;
-    final totalHeight = section.size * _textureCellSize;
+    final totalWidth = sectionSize * _textureCellSize;
+    final totalHeight = sectionSize * _textureCellSize;
 
     final image = _createImage(
       width: totalWidth,
@@ -433,8 +436,8 @@ class BoardRenderer {
     }
 
     for (final word in words) {
-      final x = word.position.x - section.position.x * section.size;
-      final y = word.position.y - section.position.y * section.size;
+      final x = word.position.x - section.position.x * sectionSize;
+      final y = word.position.y - section.position.y * sectionSize;
 
       final position = (x, y);
 

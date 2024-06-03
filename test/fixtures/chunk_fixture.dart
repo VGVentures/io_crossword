@@ -63,7 +63,5 @@ BoardSection get chunkFixture1 {
     id: '1',
     position: const Point<int>(0, 0),
     words: [polo, hello, old, food, elf, unknown],
-    size: 20,
-    borderWords: const [],
   );
 }

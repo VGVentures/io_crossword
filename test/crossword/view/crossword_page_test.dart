@@ -115,9 +115,7 @@ void main() {
       final section = BoardSection(
         id: '',
         position: Point(1, 1),
-        size: 10,
         words: [word],
-        borderWords: const [],
       );
 
       setUp(() {
