@@ -10,7 +10,6 @@ void main() {
       final boardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        size: 200,
         words: [
           Word(
             id: 'id',
@@ -22,7 +21,6 @@ void main() {
             mascot: Mascots.android,
           ),
         ],
-        borderWords: [],
       );
       final json = boardSection.toJson();
 
@@ -30,7 +28,6 @@ void main() {
         json,
         equals({
           'position': {'x': 1, 'y': 2},
-          'size': 200,
           'words': [
             {
               'id': 'id',
@@ -42,8 +39,6 @@ void main() {
               'mascot': 'android',
             },
           ],
-          'borderWords': <Map<String, dynamic>>[],
-          'snapshotUrl': null,
         }),
       );
     });
@@ -52,7 +47,6 @@ void main() {
       final json = {
         'id': 'id',
         'position': {'x': 1, 'y': 2},
-        'size': 200,
         'words': [
           {
             'id': 'id',
@@ -64,8 +58,6 @@ void main() {
             'mascot': 'android',
           },
         ],
-        'borderWords': <Map<String, dynamic>>[],
-        'snapshotUrl': null,
       };
       final boardSection = BoardSection.fromJson(json);
       expect(
@@ -74,7 +66,6 @@ void main() {
           BoardSection(
             id: 'id',
             position: Point(1, 2),
-            size: 200,
             words: [
               Word(
                 id: 'id',
@@ -86,7 +77,6 @@ void main() {
                 mascot: Mascots.android,
               ),
             ],
-            borderWords: [],
           ),
         ),
       );
@@ -96,16 +86,12 @@ void main() {
       final firstBoardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        size: 300,
         words: [],
-        borderWords: [],
       );
       final secondBoardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        size: 300,
         words: [],
-        borderWords: [],
       );
 
       expect(firstBoardSection, equals(secondBoardSection));
@@ -115,9 +101,7 @@ void main() {
       final boardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        size: 300,
         words: [],
-        borderWords: [],
       );
       final newBoardSection = boardSection.copyWith(id: 'newId');
 
@@ -127,9 +111,7 @@ void main() {
           BoardSection(
             id: 'newId',
             position: Point(1, 2),
-            size: 300,
             words: [],
-            borderWords: [],
           ),
         ),
       );
@@ -141,9 +123,7 @@ void main() {
         final boardSection = BoardSection(
           id: 'id',
           position: Point(1, 2),
-          size: 300,
           words: [],
-          borderWords: [],
         );
         final newBoardSection = boardSection.copyWith(position: Point(3, 4));
 
@@ -153,44 +133,17 @@ void main() {
             BoardSection(
               id: 'id',
               position: Point(3, 4),
-              size: 300,
               words: [],
-              borderWords: [],
             ),
           ),
         );
       },
     );
 
-    test('copyWith with a new size creates correct BoardSection object', () {
-      final boardSection = BoardSection(
-        id: 'id',
-        position: Point(1, 2),
-        size: 300,
-        words: [],
-        borderWords: [],
-      );
-      final newBoardSection = boardSection.copyWith(size: 400);
-
-      expect(
-        newBoardSection,
-        equals(
-          BoardSection(
-            id: 'id',
-            position: Point(1, 2),
-            size: 400,
-            words: [],
-            borderWords: [],
-          ),
-        ),
-      );
-    });
-
     test('copyWith with new words creates correct BoardSection object', () {
       final boardSection = BoardSection(
         id: 'id',
         position: Point(1, 2),
-        size: 300,
         words: [
           Word(
             id: '1',
@@ -201,7 +154,6 @@ void main() {
             solvedTimestamp: 1234,
           ),
         ],
-        borderWords: [],
       );
       final newBoardSection = boardSection.copyWith(
         words: [
@@ -222,7 +174,6 @@ void main() {
           BoardSection(
             id: 'id',
             position: Point(1, 2),
-            size: 300,
             words: [
               Word(
                 id: '2',
@@ -233,97 +184,9 @@ void main() {
                 solvedTimestamp: 5678,
               ),
             ],
-            borderWords: [],
           ),
         ),
       );
     });
-
-    test(
-      'copyWith with new borderWords creates correct BoardSection object',
-      () {
-        final boardSection = BoardSection(
-          id: 'id',
-          position: Point(1, 2),
-          size: 300,
-          words: [],
-          borderWords: [
-            Word(
-              id: '1',
-              position: Point(1, 2),
-              axis: WordAxis.horizontal,
-              answer: 'answer',
-              clue: 'clue',
-              solvedTimestamp: 1234,
-            ),
-          ],
-        );
-        final newBoardSection = boardSection.copyWith(
-          borderWords: [
-            Word(
-              id: '2',
-              position: Point(3, 4),
-              axis: WordAxis.vertical,
-              answer: 'newAnswer',
-              clue: 'newClue',
-              solvedTimestamp: 5678,
-            ),
-          ],
-        );
-
-        expect(
-          newBoardSection,
-          equals(
-            BoardSection(
-              id: 'id',
-              position: Point(1, 2),
-              size: 300,
-              words: [],
-              borderWords: [
-                Word(
-                  id: '2',
-                  position: Point(3, 4),
-                  axis: WordAxis.vertical,
-                  answer: 'newAnswer',
-                  clue: 'newClue',
-                  solvedTimestamp: 5678,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-
-    test(
-      'copyWith with new snapshotUrl creates correct BoardSection object',
-      () {
-        final boardSection = BoardSection(
-          id: 'id',
-          position: Point(1, 2),
-          size: 300,
-          words: [],
-          borderWords: [],
-          snapshotUrl: 'snapshotUrl',
-        );
-        final newBoardSection = boardSection.copyWith(
-          snapshotUrl: 'newSnapshotUrl',
-        );
-
-        expect(
-          newBoardSection,
-          equals(
-            BoardSection(
-              id: 'id',
-              position: Point(1, 2),
-              size: 300,
-              words: [],
-              borderWords: [],
-              snapshotUrl: 'newSnapshotUrl',
-            ),
-          ),
-        );
-      },
-    );
   });
 }

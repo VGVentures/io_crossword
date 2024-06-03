@@ -21,11 +21,7 @@ void main() {
     final boardSection = BoardSection(
       id: 'id',
       position: Point(1, 1),
-      size: 9,
-      words: [
-        word,
-      ],
-      borderWords: const [],
+      words: [word],
     );
     const sectionsCollection = 'boardChunks';
 
@@ -69,8 +65,6 @@ void main() {
                   solvedTimestamp: solvedIndex <= solveUntil ? 1 : null,
                 ),
               ],
-              size: 10,
-              borderWords: const [],
             );
 
             await firebaseFirestore
@@ -133,11 +127,7 @@ void main() {
       final section = BoardSection(
         id: 'id2',
         position: Point(0, 1),
-        size: 10,
-        words: [
-          word,
-        ],
-        borderWords: const [],
+        words: [word],
       );
 
       setUp(() async {
@@ -167,11 +157,7 @@ void main() {
         final section = BoardSection(
           id: 'id1',
           position: Point(0, 1),
-          size: 10,
-          words: [
-            word,
-          ],
-          borderWords: const [],
+          words: [word],
         );
 
         final section2 = section.copyWith(id: 'id2');

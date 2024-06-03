@@ -37,9 +37,7 @@ void main() {
       when(() => record.data).thenReturn(
         {
           'position': {'x': 1, 'y': 1},
-          'size': 300,
           'words': const <dynamic>[],
-          'borderWords': const <dynamic>[],
         },
       );
       when(() => dbClient.listAll(sectionsCollection))
@@ -50,9 +48,7 @@ void main() {
         BoardSection(
           id: 'id',
           position: Point(1, 1),
-          size: 300,
           words: const [],
-          borderWords: const [],
         ),
       ]);
     });
@@ -63,9 +59,7 @@ void main() {
       when(() => record.data).thenReturn(
         {
           'position': {'x': 1, 'y': 1},
-          'size': 300,
           'words': const <dynamic>[],
-          'borderWords': const <dynamic>[],
         },
       );
       when(
@@ -85,9 +79,7 @@ void main() {
         BoardSection(
           id: 'id',
           position: Point(1, 1),
-          size: 300,
           words: const [],
-          borderWords: const [],
         ),
       );
     });
@@ -119,9 +111,7 @@ void main() {
       final section = BoardSection(
         id: 'id',
         position: Point(1, 1),
-        size: 300,
         words: const [],
-        borderWords: const [],
       );
       await repository.updateSection(section);
       final captured = verify(
@@ -136,10 +126,7 @@ void main() {
         captured.data,
         {
           'position': {'x': 1, 'y': 1},
-          'size': 300,
           'words': <String>[],
-          'borderWords': <String>[],
-          'snapshotUrl': null,
         },
       );
     });
@@ -186,13 +173,11 @@ void main() {
         when(() => record.data).thenReturn(
           {
             'position': {'x': 1, 'y': 1},
-            'size': 300,
             'words': [
               {'id': '1', ...word.toJson()},
               {'id': '2', ...word2.toJson()},
               {'id': '3', ...word3.toJson()},
             ],
-            'borderWords': const <dynamic>[],
           },
         );
         when(
@@ -207,11 +192,9 @@ void main() {
         when(() => record2.data).thenReturn(
           {
             'position': {'x': 1, 'y': 2},
-            'size': 300,
             'words': [
               {'id': '2', ...word2.toJson()},
             ],
-            'borderWords': const <dynamic>[],
           },
         );
         when(
@@ -285,11 +268,9 @@ void main() {
         when(() => record.data).thenReturn(
           {
             'position': {'x': 1, 'y': 4},
-            'size': 300,
             'words': [
               {'id': '4', ...word4.toJson()},
             ],
-            'borderWords': const <dynamic>[],
           },
         );
         when(
@@ -337,12 +318,9 @@ void main() {
                 id: '2',
                 data: {
                   'position': {'x': 1, 'y': 2},
-                  'size': 300,
                   'words': [
                     word2.copyWith(answer: 'bl  ').toJson(),
                   ],
-                  'borderWords': <String>[],
-                  'snapshotUrl': null,
                 },
               ),
             ),
@@ -355,7 +333,6 @@ void main() {
                 id: '1',
                 data: {
                   'position': {'x': 1, 'y': 1},
-                  'size': 300,
                   'words': [
                     word3.toJson(),
                     word
@@ -367,8 +344,6 @@ void main() {
                         .toJson(),
                     word2.copyWith(answer: 'bl  ').toJson(),
                   ],
-                  'borderWords': <String>[],
-                  'snapshotUrl': null,
                 },
               ),
             ),

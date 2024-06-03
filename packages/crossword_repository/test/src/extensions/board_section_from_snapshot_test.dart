@@ -22,11 +22,7 @@ void main() {
   const boardSection1 = BoardSection(
     id: 'id',
     position: Point(1, 1),
-    size: 9,
-    words: [
-      word,
-    ],
-    borderWords: [],
+    words: [word],
   );
 
   group('BoardSectionFromSnapshot', () {

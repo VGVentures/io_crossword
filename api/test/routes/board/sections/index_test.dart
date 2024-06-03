@@ -36,16 +36,12 @@ void main() {
         BoardSection(
           id: '1',
           position: Point(1, 1),
-          size: 20,
           words: [],
-          borderWords: [],
         ),
         BoardSection(
           id: '2',
           position: Point(2, 1),
-          size: 20,
           words: [],
-          borderWords: [],
         ),
       ];
       when(() => crosswordRepository.listAllSections())

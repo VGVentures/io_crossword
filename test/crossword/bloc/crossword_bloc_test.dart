@@ -57,9 +57,7 @@ void main() {
     final section = BoardSection(
       id: '',
       position: const Point(1, 1),
-      size: sectionSize,
       words: words,
-      borderWords: const [],
     );
 
     late CrosswordRepository crosswordRepository;
@@ -248,6 +246,8 @@ void main() {
           boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
+          when(boardInfoRepository.getSectionSize)
+              .thenAnswer((_) => Future.value(20));
           when(() => crosswordRepository.loadBoardSections())
               .thenAnswer((_) => Stream.error(Exception()));
         },
@@ -266,6 +266,8 @@ void main() {
           boardInfoRepository: boardInfoRepository,
         ),
         setUp: () {
+          when(boardInfoRepository.getSectionSize)
+              .thenAnswer((_) => Future.value(20));
           when(() => crosswordRepository.loadBoardSections())
               .thenAnswer((_) => Stream.value([section]));
         },
@@ -274,7 +276,7 @@ void main() {
           CrosswordState(
             status: CrosswordStatus.ready,
             sections: {(1, 1): section},
-            sectionSize: section.size,
+            sectionSize: 20,
             initialWord: selectedWord,
           ),
         ],
