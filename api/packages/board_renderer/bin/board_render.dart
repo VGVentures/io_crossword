@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:board_renderer/board_renderer.dart';
+import 'package:csv/csv.dart';
 import 'package:game_domain/game_domain.dart';
 
 class RenderAssetResolver with AssetResolver {
@@ -36,14 +37,16 @@ void main(List<String> args) async {
   final boardFile = File(args[0]);
 
   if (boardFile.existsSync()) {
-    final boardRaw = boardFile.readAsLinesSync();
+    final boardRaw = boardFile.readAsStringSync();
+    final rows = const CsvToListConverter().convert(boardRaw);
 
-    final words = boardRaw.map((line) => line.split(',')).map((values) {
-      final x = int.parse(values[0]);
-      final y = int.parse(values[1]);
-      final answer = values[2];
-      final axis =
-          values[3] == 'horizontal' ? WordAxis.horizontal : WordAxis.vertical;
+    final words = rows.map((values) {
+      final x = values[0] as int;
+      final y = values[1] as int;
+      final answer = values[2] as String;
+      final axis = values[4] == WordAxis.horizontal.name
+          ? WordAxis.horizontal
+          : WordAxis.vertical;
       final word = Word(
         id: '$x,$y',
         position: Point(x, y),
