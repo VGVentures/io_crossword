@@ -555,11 +555,14 @@ class _LargeMascot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read<TeamSelectionCubit>().selectTeam(mascot.index);
-      },
-      child: TeamSelectionMascot(mascot),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          context.read<TeamSelectionCubit>().selectTeam(mascot.index);
+        },
+        child: TeamSelectionMascot(mascot),
+      ),
     );
   }
 }
