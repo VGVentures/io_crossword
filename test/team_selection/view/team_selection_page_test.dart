@@ -323,7 +323,9 @@ void main() {
       );
     });
 
-    testWidgets('select Sparky mascot when tapped', (tester) async {
+    testWidgets(
+        'select Sparky mascot when tapped '
+        'on large layout', (tester) async {
       tester.view.physicalSize = const Size(1600, 1600);
 
       when(() => teamSelectionCubit.state).thenReturn(
