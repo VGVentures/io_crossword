@@ -160,7 +160,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: mascotWidth,
                         height: mascotHeight,
-                        child: TeamSelectionMascot(Mascots.dash),
+                        child: _LargeMascot(Mascots.dash),
                       ),
                     ),
                     Positioned(
@@ -169,7 +169,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: mascotWidth,
                         height: mascotHeight,
-                        child: TeamSelectionMascot(Mascots.sparky),
+                        child: _LargeMascot(Mascots.sparky),
                       ),
                     ),
                     Positioned(
@@ -178,7 +178,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: mascotWidth,
                         height: mascotHeight,
-                        child: TeamSelectionMascot(Mascots.android),
+                        child: _LargeMascot(Mascots.android),
                       ),
                     ),
                     Positioned(
@@ -187,7 +187,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: mascotWidth,
                         height: mascotHeight,
-                        child: TeamSelectionMascot(Mascots.dino),
+                        child: _LargeMascot(Mascots.dino),
                       ),
                     ),
                   ],
@@ -545,5 +545,24 @@ class _SmallMascot extends StatelessWidget {
             mascot.teamMascot.idleUnselected.path,
             alignment: Alignment.bottomCenter,
           );
+  }
+}
+
+class _LargeMascot extends StatelessWidget {
+  const _LargeMascot(this.mascot);
+
+  final Mascots mascot;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          context.read<TeamSelectionCubit>().selectTeam(mascot.index);
+        },
+        child: TeamSelectionMascot(mascot),
+      ),
+    );
   }
 }
