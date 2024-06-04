@@ -101,7 +101,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            Align(
+            const Align(
               child: SizedBox(
                 width: tileWidth * 5,
                 height:
@@ -113,10 +113,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: tileWidth,
                         height: platformTileHeight,
-                        child: TeamSelectionMascotPlatform(
-                          mascot: Mascots.dash,
-                          selected: state.index == Mascots.dash.index,
-                        ),
+                        child: _TeamPlatform(Mascots.dash),
                       ),
                     ),
                     Positioned(
@@ -125,10 +122,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: tileWidth,
                         height: platformTileHeight,
-                        child: TeamSelectionMascotPlatform(
-                          mascot: Mascots.sparky,
-                          selected: state.index == Mascots.sparky.index,
-                        ),
+                        child: _TeamPlatform(Mascots.sparky),
                       ),
                     ),
                     Positioned(
@@ -137,10 +131,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: tileWidth,
                         height: platformTileHeight,
-                        child: TeamSelectionMascotPlatform(
-                          mascot: Mascots.android,
-                          selected: state.index == Mascots.android.index,
-                        ),
+                        child: _TeamPlatform(Mascots.android),
                       ),
                     ),
                     Positioned(
@@ -149,10 +140,7 @@ class _TeamSelectorLarge extends StatelessWidget {
                       child: SizedBox(
                         width: tileWidth,
                         height: platformTileHeight,
-                        child: TeamSelectionMascotPlatform(
-                          mascot: Mascots.dino,
-                          selected: state.index == Mascots.dino.index,
-                        ),
+                        child: _TeamPlatform(Mascots.dino),
                       ),
                     ),
                   ],
@@ -328,18 +316,34 @@ class _TeamSelectorSmallState extends State<_TeamSelectorSmall>
                           width: _TeamSelectorSmall.tileWidth * 7,
                           child: Stack(
                             children: [
-                              _SmallPlatform(Mascots.dash),
+                              SizedBox(
+                                width: _TeamSelectorSmall.tileWidth,
+                                height: _TeamSelectorSmall.platformTileHeight,
+                                child: _TeamPlatform(Mascots.dash),
+                              ),
                               Positioned(
                                 left: _TeamSelectorSmall.tileWidth * 2,
-                                child: _SmallPlatform(Mascots.sparky),
+                                child: SizedBox(
+                                  width: _TeamSelectorSmall.tileWidth,
+                                  height: _TeamSelectorSmall.platformTileHeight,
+                                  child: _TeamPlatform(Mascots.sparky),
+                                ),
                               ),
                               Positioned(
                                 left: _TeamSelectorSmall.tileWidth * 4,
-                                child: _SmallPlatform(Mascots.android),
+                                child: SizedBox(
+                                  width: _TeamSelectorSmall.tileWidth,
+                                  height: _TeamSelectorSmall.platformTileHeight,
+                                  child: _TeamPlatform(Mascots.android),
+                                ),
                               ),
                               Positioned(
                                 left: _TeamSelectorSmall.tileWidth * 6,
-                                child: _SmallPlatform(Mascots.dino),
+                                child: SizedBox(
+                                  width: _TeamSelectorSmall.tileWidth,
+                                  height: _TeamSelectorSmall.platformTileHeight,
+                                  child: _TeamPlatform(Mascots.dino),
+                                ),
                               ),
                             ],
                           ),
@@ -504,8 +508,8 @@ extension TeamMascot on Mascots {
   }
 }
 
-class _SmallPlatform extends StatelessWidget {
-  const _SmallPlatform(
+class _TeamPlatform extends StatelessWidget {
+  const _TeamPlatform(
     this.mascot,
   );
 
@@ -516,13 +520,9 @@ class _SmallPlatform extends StatelessWidget {
     final index =
         context.select((TeamSelectionCubit cubit) => cubit.state.index);
 
-    return SizedBox(
-      width: _TeamSelectorSmall.tileWidth,
-      height: _TeamSelectorSmall.platformTileHeight,
-      child: TeamSelectionMascotPlatform(
-        mascot: mascot,
-        selected: index == mascot.index,
-      ),
+    return TeamSelectionMascotPlatform(
+      mascot: mascot,
+      selected: index == mascot.index,
     );
   }
 }
