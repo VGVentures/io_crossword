@@ -217,6 +217,7 @@ extension PumpRoute on WidgetTester {
       ),
     );
     final mockedCrosswordRepository = _MockCrosswordRepository();
+    registerFallbackValue(Point(0, 0));
     when(() => mockedCrosswordRepository.getRandomUncompletedSection(any()))
         .thenAnswer(
       (_) => Future.value(

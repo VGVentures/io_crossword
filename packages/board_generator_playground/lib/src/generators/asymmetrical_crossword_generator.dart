@@ -31,7 +31,7 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
       invalidLengths: {},
       start: Location.zero,
       direction: Direction.across,
-      constraints: {0: 'a'},
+      constraints: {0: 'e'},
     );
     final word = pool.firstMatch(constraints)!;
     final entry = WordEntry(

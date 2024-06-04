@@ -24,7 +24,11 @@ void main({void Function(String) log = print}) {
 
   final generator = AsymmetricalCrosswordGenerator(
     pool: wordPool,
-    crossword: Crossword(bounds: Bounds.square(size: 78)),
+    crossword: Crossword(
+      bounds: Bounds.square(size: 78),
+      largestWordLength: wordPool.longestWordLength,
+      shortestWordLength: wordPool.shortestWordLength,
+    ),
   );
 
   final crossword = generator.populate();
@@ -49,7 +53,7 @@ void main({void Function(String) log = print}) {
 
   final notUsedWords = wordsList.where((w) => !wordsString.contains(w.word));
 
-  log('Unused words: ${notUsedWords.length}');
+  log('Unused words: ${notUsedWords.map((w) => w.word).toList()}');
 
   File('board_asymmetrical.txt')
       .writeAsStringSync(const ListToCsvConverter().convert(list));
