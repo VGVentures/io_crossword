@@ -322,5 +322,29 @@ void main() {
         },
       );
     });
+
+    testWidgets('select Sparky mascot when tapped', (tester) async {
+      tester.view.physicalSize = const Size(1600, 1600);
+
+      when(() => teamSelectionCubit.state).thenReturn(
+        TeamSelectionState(assetsStatus: AssetsLoadingStatus.success),
+      );
+
+      await tester.pumpApp(
+        widget,
+        layout: IoLayoutData.large,
+      );
+
+      await tester.pump();
+
+      await tester.tap(
+        find.byType(TeamSelectionMascot).at(Mascots.sparky.index),
+      );
+
+      verify(() => teamSelectionCubit.selectTeam(Mascots.sparky.index))
+          .called(1);
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
   });
 }
