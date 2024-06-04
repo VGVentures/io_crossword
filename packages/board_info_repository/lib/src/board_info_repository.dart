@@ -106,16 +106,16 @@ class BoardInfoRepository {
   /// Returns the limit at which the render mode should switch
   Future<double> getZoomLimit() async {
     try {
-      final isMobile = _targetPlatform == TargetPlatform.android ||
-          _targetPlatform == TargetPlatform.iOS;
-
-      final key = isMobile ? 'zoom_limit_mobile' : 'zoom_limit_desktop';
-
-      final results =
-          await boardInfoCollection.where('type', isEqualTo: key).get();
+      final results = await boardInfoCollection
+          .where('type', isEqualTo: 'zoom_limit')
+          .get();
 
       final data = results.docs.first.data();
-      return (data['value'] as num).toDouble();
+
+      final isMobile = _targetPlatform == TargetPlatform.android ||
+          _targetPlatform == TargetPlatform.iOS;
+      final key = isMobile ? 'mobile' : 'desktop';
+      return (data[key] as num).toDouble();
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }
