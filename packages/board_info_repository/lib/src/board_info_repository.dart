@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// {@template game_status}
@@ -50,12 +51,14 @@ class BoardInfoRepository {
   /// {@macro board_info_repository}
   BoardInfoRepository({
     required this.firestore,
-  }) {
+    TargetPlatform? targetPlatform,
+  }) : _targetPlatform = targetPlatform ?? defaultTargetPlatform {
     boardInfoCollection = firestore.collection('boardInfo');
   }
 
   /// The [FirebaseFirestore] instance.
   final FirebaseFirestore firestore;
+  final TargetPlatform _targetPlatform;
 
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
@@ -103,9 +106,13 @@ class BoardInfoRepository {
   /// Returns the limit at which the render mode should switch
   Future<double> getZoomLimit() async {
     try {
-      final results = await boardInfoCollection
-          .where('type', isEqualTo: 'zoom_limit')
-          .get();
+      final isMobile = _targetPlatform == TargetPlatform.android ||
+          _targetPlatform == TargetPlatform.iOS;
+
+      final key = isMobile ? 'zoom_limit_mobile' : 'zoom_limit_desktop';
+
+      final results =
+          await boardInfoCollection.where('type', isEqualTo: key).get();
 
       final data = results.docs.first.data();
       return (data['value'] as num).toDouble();
