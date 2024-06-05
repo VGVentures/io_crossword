@@ -33,7 +33,7 @@ void main() {
       widget = BlocProvider.value(
         value: howToPlayCubit,
         child: HowToPlayContent(
-          mascot: Mascots.dash,
+          mascot: Mascot.dash,
           onDonePressed: () {},
         ),
       );
@@ -283,7 +283,7 @@ void main() {
       (tester) async {
         when(() => howToPlayCubit.state).thenReturn(HowToPlayState());
 
-        for (final mascot in Mascots.values) {
+        for (final mascot in Mascot.values) {
           await tester.pumpApp(
             BlocProvider.value(
               value: howToPlayCubit,
@@ -307,7 +307,7 @@ void main() {
       (tester) async {
         when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 1));
 
-        for (final mascot in Mascots.values) {
+        for (final mascot in Mascot.values) {
           await tester.pumpApp(
             BlocProvider.value(
               value: howToPlayCubit,
@@ -331,7 +331,7 @@ void main() {
       (tester) async {
         when(() => howToPlayCubit.state).thenReturn(HowToPlayState(index: 2));
 
-        for (final mascot in Mascots.values) {
+        for (final mascot in Mascot.values) {
           await tester.pumpApp(
             BlocProvider.value(
               value: howToPlayCubit,

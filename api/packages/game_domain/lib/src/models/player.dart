@@ -25,7 +25,7 @@ class Player extends Equatable {
   static const empty = Player(
     id: '',
     initials: '',
-    mascot: Mascots.dash,
+    mascot: Mascot.dash,
   );
 
   /// Unique identifier of the leaderboard player object
@@ -47,14 +47,14 @@ class Player extends Equatable {
 
   /// The player mascot.
   @JsonKey()
-  final Mascots mascot;
+  final Mascot mascot;
 
   /// Returns a copy of [Player] this instance with the
   /// provided fields.
   Player copyWith({
     String? id,
     String? initials,
-    Mascots? mascot,
+    Mascot? mascot,
     int? score,
     int? streak,
   }) {

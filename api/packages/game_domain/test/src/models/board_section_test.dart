@@ -18,7 +18,7 @@ void main() {
             answer: 'answer',
             clue: 'clue',
             solvedTimestamp: 1234,
-            mascot: Mascots.android,
+            mascot: Mascot.android,
           ),
         ],
       );
@@ -74,7 +74,7 @@ void main() {
                 answer: 'answer',
                 clue: 'clue',
                 solvedTimestamp: 1234,
-                mascot: Mascots.android,
+                mascot: Mascot.android,
               ),
             ],
           ),

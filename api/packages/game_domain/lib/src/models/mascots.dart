@@ -1,7 +1,7 @@
 /// {@template mascots}
 /// Google Mascots enum.
 /// {@endtemplate}
-enum Mascots {
+enum Mascot {
   /// Flutter Dash mascot.
   dash,
 

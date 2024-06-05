@@ -174,10 +174,10 @@ class UserLeaderboardRanking extends StatelessWidget {
     final themeData = Theme.of(context);
     final style = themeData.io.wordTheme.small.copyWith(
       backgroundColor: switch (player.mascot) {
-        Mascots.dash => IoCrosswordColors.flutterBlue,
-        Mascots.sparky => IoCrosswordColors.sparkyYellow,
-        Mascots.dino => IoCrosswordColors.chromeRed,
-        Mascots.android => IoCrosswordColors.androidGreen,
+        Mascot.dash => IoCrosswordColors.flutterBlue,
+        Mascot.sparky => IoCrosswordColors.sparkyYellow,
+        Mascot.dino => IoCrosswordColors.chromeRed,
+        Mascot.android => IoCrosswordColors.androidGreen,
       },
     );
 

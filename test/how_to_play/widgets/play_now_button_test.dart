@@ -36,7 +36,7 @@ void main() {
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           ),
         ),
       );

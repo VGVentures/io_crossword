@@ -33,11 +33,11 @@ void main() {
   setUp(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      ...Mascots.dash.teamMascot.loadableHowToPlayDesktopAssets(),
-      ...Mascots.dash.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascot.dash.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascot.dash.teamMascot.loadableHowToPlayMobileAssets(),
     ]);
 
-    registerFallbackValue(Mascots.dash);
+    registerFallbackValue(Mascot.dash);
   });
 
   group('$HowToPlayPage', () {
@@ -315,7 +315,7 @@ void main() {
           isA<AnimationItem>().having(
             (item) => item.spriteData,
             'spriteData',
-            Mascots.dash.teamMascot.lookUpSpriteMobileData,
+            Mascot.dash.teamMascot.lookUpSpriteMobileData,
           ),
         );
 

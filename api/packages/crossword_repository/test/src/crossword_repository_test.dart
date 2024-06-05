@@ -164,7 +164,7 @@ void main() {
         answer: 'solved',
         clue: '',
         solvedTimestamp: 12343,
-        mascot: Mascots.sparky,
+        mascot: Mascot.sparky,
       );
 
       setUp(() {
@@ -296,8 +296,7 @@ void main() {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
-          final valid =
-              await repository.answerWord('4', Mascots.dino, 'solved');
+          final valid = await repository.answerWord('4', Mascot.dino, 'solved');
           expect(valid, (true, true));
         });
       });
@@ -308,7 +307,7 @@ void main() {
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
           final valid =
-              await repository.answerWord('1', Mascots.dino, 'flutter');
+              await repository.answerWord('1', Mascot.dino, 'flutter');
           expect(valid, (true, false));
 
           verify(
@@ -338,7 +337,7 @@ void main() {
                     word
                         .copyWith(
                           solvedTimestamp: time.millisecondsSinceEpoch,
-                          mascot: Mascots.dino,
+                          mascot: Mascot.dino,
                           answer: 'flutter',
                         )
                         .toJson(),
@@ -352,7 +351,7 @@ void main() {
       });
 
       test('returns (false, false) if answer is incorrect', () async {
-        final valid = await repository.answerWord('1', Mascots.dino, 'android');
+        final valid = await repository.answerWord('1', Mascot.dino, 'android');
         expect(valid, (false, false));
       });
 
@@ -363,7 +362,7 @@ void main() {
             () => dbClient.getById(answersCollection, 'fake'),
           ).thenAnswer((_) async => null);
           expect(
-            () => repository.answerWord('fake', Mascots.dino, 'flutter'),
+            () => repository.answerWord('fake', Mascot.dino, 'flutter'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -396,7 +395,7 @@ void main() {
           ).thenAnswer((_) async => answersRecord);
 
           expect(
-            () => repository.answerWord('3', Mascots.sparky, 'happy'),
+            () => repository.answerWord('3', Mascot.sparky, 'happy'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -413,7 +412,7 @@ void main() {
           ).thenAnswer((_) async => []);
 
           expect(
-            () => repository.answerWord('1', Mascots.dino, 'flutter'),
+            () => repository.answerWord('1', Mascot.dino, 'flutter'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -435,7 +434,7 @@ void main() {
             () => dbClient.getById(answersCollection, 'fake'),
           ).thenAnswer((_) async => answersRecord);
           expect(
-            () => repository.answerWord('fake', Mascots.dino, 'flutter'),
+            () => repository.answerWord('fake', Mascot.dino, 'flutter'),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },

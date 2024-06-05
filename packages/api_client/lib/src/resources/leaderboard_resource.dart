@@ -50,7 +50,7 @@ class LeaderboardResource {
   /// Post /game/leaderboard/create_score
   Future<void> createScore({
     required String initials,
-    required Mascots mascot,
+    required Mascot mascot,
   }) async {
     final response = await _apiClient.post(
       '/game/create_score',

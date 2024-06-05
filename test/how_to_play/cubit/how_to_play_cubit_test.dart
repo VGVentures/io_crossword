@@ -57,7 +57,7 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        cubit.loadAssets(Mascots.dash);
+        cubit.loadAssets(Mascot.dash);
 
         debugDefaultTargetPlatformOverride = null;
       });
@@ -76,7 +76,7 @@ void main() {
           emitsInOrder(expectedStates),
         );
 
-        cubit.loadAssets(Mascots.dash);
+        cubit.loadAssets(Mascot.dash);
 
         debugDefaultTargetPlatformOverride = null;
       });

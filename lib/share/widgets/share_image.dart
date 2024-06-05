@@ -13,10 +13,10 @@ class ShareImage extends StatelessWidget {
         context.select((PlayerBloc bloc) => bloc.state.player.mascot);
 
     final image = switch (mascot) {
-      Mascots.dash => Assets.images.shareDash,
-      Mascots.android => Assets.images.shareAndroid,
-      Mascots.dino => Assets.images.shareDino,
-      Mascots.sparky => Assets.images.shareSparky,
+      Mascot.dash => Assets.images.shareDash,
+      Mascot.android => Assets.images.shareAndroid,
+      Mascot.dino => Assets.images.shareDino,
+      Mascot.sparky => Assets.images.shareSparky,
     };
 
     return image.image(

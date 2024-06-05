@@ -51,14 +51,14 @@ void main() {
   setUpAll(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      ...Mascots.dash.teamMascot.loadableHowToPlayDesktopAssets(),
-      ...Mascots.dash.teamMascot.loadableHowToPlayMobileAssets(),
-      ...Mascots.android.teamMascot.loadableHowToPlayDesktopAssets(),
-      ...Mascots.android.teamMascot.loadableHowToPlayMobileAssets(),
-      ...Mascots.dino.teamMascot.loadableHowToPlayDesktopAssets(),
-      ...Mascots.dino.teamMascot.loadableHowToPlayMobileAssets(),
-      ...Mascots.sparky.teamMascot.loadableHowToPlayDesktopAssets(),
-      ...Mascots.sparky.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascot.dash.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascot.dash.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascot.android.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascot.android.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascot.dino.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascot.dino.teamMascot.loadableHowToPlayMobileAssets(),
+      ...Mascot.sparky.teamMascot.loadableHowToPlayDesktopAssets(),
+      ...Mascot.sparky.teamMascot.loadableHowToPlayMobileAssets(),
     ]);
   });
 

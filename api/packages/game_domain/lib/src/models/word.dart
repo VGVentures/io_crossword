@@ -66,7 +66,7 @@ class Word extends Equatable {
   /// The mascot of the user that first solved the word.
   /// If the word is not solved, this value is null.
   @JsonKey()
-  final Mascots? mascot;
+  final Mascot? mascot;
 
   /// Returns the solved characters with the index position and character
   /// solved.
@@ -95,7 +95,7 @@ class Word extends Equatable {
     String? clue,
     String? answer,
     int? solvedTimestamp,
-    Mascots? mascot,
+    Mascot? mascot,
   }) {
     return Word(
       id: id ?? this.id,

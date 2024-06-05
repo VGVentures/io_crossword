@@ -120,10 +120,10 @@ class EndGameImage extends StatelessWidget {
         context.select((PlayerBloc bloc) => bloc.state.player.mascot);
 
     final image = switch (mascot) {
-      Mascots.dash => Assets.images.endGameDash,
-      Mascots.android => Assets.images.endGameAndroid,
-      Mascots.dino => Assets.images.endGameDino,
-      Mascots.sparky => Assets.images.endGameSparky,
+      Mascot.dash => Assets.images.endGameDash,
+      Mascot.android => Assets.images.endGameAndroid,
+      Mascot.dino => Assets.images.endGameDino,
+      Mascot.sparky => Assets.images.endGameSparky,
     };
 
     return image.image(

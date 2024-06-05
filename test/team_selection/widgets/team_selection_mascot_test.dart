@@ -14,19 +14,19 @@ void main() {
     setUpAll(() async {
       Flame.images = Images(prefix: '');
       await Flame.images.loadAll([
-        Mascots.dash.teamMascot.idleAnimation.keyName,
-        Mascots.dash.teamMascot.platformAnimation.keyName,
-        Mascots.android.teamMascot.idleAnimation.keyName,
-        Mascots.android.teamMascot.platformAnimation.keyName,
-        Mascots.dino.teamMascot.idleAnimation.keyName,
-        Mascots.dino.teamMascot.platformAnimation.keyName,
-        Mascots.sparky.teamMascot.idleAnimation.keyName,
-        Mascots.sparky.teamMascot.platformAnimation.keyName,
+        Mascot.dash.teamMascot.idleAnimation.keyName,
+        Mascot.dash.teamMascot.platformAnimation.keyName,
+        Mascot.android.teamMascot.idleAnimation.keyName,
+        Mascot.android.teamMascot.platformAnimation.keyName,
+        Mascot.dino.teamMascot.idleAnimation.keyName,
+        Mascot.dino.teamMascot.platformAnimation.keyName,
+        Mascot.sparky.teamMascot.idleAnimation.keyName,
+        Mascot.sparky.teamMascot.platformAnimation.keyName,
       ]);
     });
 
     testWidgets('renders a SpriteAnimationWidget', (tester) async {
-      await tester.pumpApp(TeamSelectionMascot(Mascots.sparky));
+      await tester.pumpApp(TeamSelectionMascot(Mascot.sparky));
 
       expect(find.byType(SpriteAnimationWidget), findsOneWidget);
     });
