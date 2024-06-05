@@ -41,7 +41,7 @@ class LeaderboardRepository {
     String initials,
     String mascotName,
   ) async {
-    final mascot = Mascots.values.firstWhere((e) => e.name == mascotName);
+    final mascot = Mascot.values.firstWhere((e) => e.name == mascotName);
     final player = Player(
       id: userId,
       initials: initials,
