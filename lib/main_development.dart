@@ -43,6 +43,8 @@ void main() async {
           firebaseAuth: firebaseAuth,
         );
 
+        // Signing out first to refresh the auth token when reloading the page.
+        await authenticationRepository.signOut();
         await authenticationRepository.signInAnonymously();
         await authenticationRepository.idToken.first;
 
