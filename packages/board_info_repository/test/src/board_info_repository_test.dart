@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:board_info_repository/board_info_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -55,6 +56,18 @@ void main() {
       when(collection.snapshots).thenAnswer((_) => Stream.value(query));
       when(() => query.docs).thenReturn([doc]);
       when(doc.data).thenReturn({'value': value});
+    }
+
+    void mockZoomLimit({dynamic mobile, dynamic desktop}) {
+      final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
+      final query = _MockQuerySnapshot<Map<String, dynamic>>();
+      when(
+        () => collection.where('type', isEqualTo: 'zoom_limit'),
+      ).thenReturn(collection);
+
+      when(collection.get).thenAnswer((_) async => query);
+      when(() => query.docs).thenReturn([doc]);
+      when(doc.data).thenReturn({'mobile': mobile, 'desktop': desktop});
     }
 
     test('can be instantiated', () {
@@ -119,9 +132,27 @@ void main() {
     });
 
     group('getZoomLimit', () {
-      test('returns render mode limit from firebase', () async {
-        mockQueryResult(0.6);
-        final result = await boardInfoRepository.getZoomLimit();
+      test('returns render limit for desktop from firebase', () async {
+        final repository = BoardInfoRepository(
+          firestore: firestore,
+          targetPlatform: TargetPlatform.windows,
+        );
+        mockZoomLimit(mobile: 0.6, desktop: 0.2);
+
+        final result = await repository.getZoomLimit();
+
+        expect(result, equals(0.2));
+      });
+
+      test('returns render limit for mobile from firebase', () async {
+        final repository = BoardInfoRepository(
+          firestore: firestore,
+          targetPlatform: TargetPlatform.iOS,
+        );
+        mockZoomLimit(mobile: 0.6, desktop: 0.2);
+
+        final result = await repository.getZoomLimit();
+
         expect(result, equals(0.6));
       });
 
