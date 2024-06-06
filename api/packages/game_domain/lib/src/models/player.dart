@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:game_domain/src/models/mascots.dart';
+import 'package:game_domain/src/models/mascot.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'player.g.dart';
