@@ -12,7 +12,7 @@ class TeamSelectionMascotPlatform extends StatelessWidget {
     super.key,
   });
 
-  final Mascots mascot;
+  final Mascot mascot;
 
   final bool selected;
 

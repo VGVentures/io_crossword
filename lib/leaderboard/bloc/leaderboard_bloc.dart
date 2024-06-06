@@ -35,7 +35,7 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
               (index) => const Player(
                 id: '',
                 initials: 'AAA',
-                mascot: Mascots.dash,
+                mascot: Mascot.dash,
               ),
             ),
           ),

@@ -13,7 +13,7 @@ void main() {
         answer: 'test',
         clue: 'clue',
         solvedTimestamp: 0,
-        mascot: Mascots.sparky,
+        mascot: Mascot.sparky,
       );
       final json = word.toJson();
 
@@ -50,7 +50,7 @@ void main() {
             axis: WordAxis.horizontal,
             answer: 'test',
             clue: 'clue',
-            mascot: Mascots.sparky,
+            mascot: Mascot.sparky,
           ),
         ),
       );

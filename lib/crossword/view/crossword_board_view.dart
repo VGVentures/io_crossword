@@ -226,24 +226,23 @@ extension on WordAxis {
       this == WordAxis.horizontal ? Axis.horizontal : Axis.vertical;
 }
 
-extension on Mascots {
+extension on Mascot {
   IoWordStyle toIoWordStyle(ThemeData theme) {
     return theme.io.wordTheme.big.copyWith(
       borderRadius: BorderRadius.zero,
       margin: theme.io.wordInput.secondary.padding,
       boxSize: theme.io.wordInput.secondary.filled.size,
       textStyle: switch (this) {
-        Mascots.dash => theme.io.crosswordLetterTheme.dash.textStyle,
-        Mascots.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
-        Mascots.dino => theme.io.crosswordLetterTheme.dino.textStyle,
-        Mascots.android => theme.io.crosswordLetterTheme.android.textStyle,
+        Mascot.dash => theme.io.crosswordLetterTheme.dash.textStyle,
+        Mascot.sparky => theme.io.crosswordLetterTheme.sparky.textStyle,
+        Mascot.dino => theme.io.crosswordLetterTheme.dino.textStyle,
+        Mascot.android => theme.io.crosswordLetterTheme.android.textStyle,
       },
       backgroundColor: switch (this) {
-        Mascots.dash => theme.io.crosswordLetterTheme.dash.backgroundColor,
-        Mascots.sparky => theme.io.crosswordLetterTheme.sparky.backgroundColor,
-        Mascots.dino => theme.io.crosswordLetterTheme.dino.backgroundColor,
-        Mascots.android =>
-          theme.io.crosswordLetterTheme.android.backgroundColor,
+        Mascot.dash => theme.io.crosswordLetterTheme.dash.backgroundColor,
+        Mascot.sparky => theme.io.crosswordLetterTheme.sparky.backgroundColor,
+        Mascot.dino => theme.io.crosswordLetterTheme.dino.backgroundColor,
+        Mascot.android => theme.io.crosswordLetterTheme.android.backgroundColor,
       },
     );
   }

@@ -23,10 +23,10 @@ class TeamSelectionCubit extends Cubit<TeamSelectionState> {
     Flame.images.clearCache();
 
     await Flame.images.loadAll([
-      ...Mascots.dash.teamMascot.loadableTeamSelectionAssets(),
-      ...Mascots.sparky.teamMascot.loadableTeamSelectionAssets(),
-      ...Mascots.android.teamMascot.loadableTeamSelectionAssets(),
-      ...Mascots.dino.teamMascot.loadableTeamSelectionAssets(),
+      ...Mascot.dash.teamMascot.loadableTeamSelectionAssets(),
+      ...Mascot.sparky.teamMascot.loadableTeamSelectionAssets(),
+      ...Mascot.android.teamMascot.loadableTeamSelectionAssets(),
+      ...Mascot.dino.teamMascot.loadableTeamSelectionAssets(),
     ]);
 
     if (!isClosed) {

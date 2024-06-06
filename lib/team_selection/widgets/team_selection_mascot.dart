@@ -7,7 +7,7 @@ import 'package:io_crossword/team_selection/team_selection.dart';
 class TeamSelectionMascot extends StatelessWidget {
   const TeamSelectionMascot(this.mascot, {super.key});
 
-  final Mascots mascot;
+  final Mascot mascot;
 
   @override
   Widget build(BuildContext context) {

@@ -40,7 +40,7 @@ class _UnsolvedFakeWord extends Fake implements Word {
   int? get solvedTimestamp => null;
 
   @override
-  Mascots? get mascot => null;
+  Mascot? get mascot => null;
 }
 
 class _SolvedFakeWord extends Fake implements Word {
@@ -60,7 +60,7 @@ class _SolvedFakeWord extends Fake implements Word {
   int? get solvedTimestamp => 1;
 
   @override
-  Mascots? get mascot => Mascots.android;
+  Mascot? get mascot => Mascot.android;
 }
 
 void main() {

@@ -15,7 +15,7 @@ class HowToPlayContent extends StatefulWidget {
     super.key,
   });
 
-  final Mascots mascot;
+  final Mascot mascot;
   final VoidCallback onDonePressed;
 
   @override

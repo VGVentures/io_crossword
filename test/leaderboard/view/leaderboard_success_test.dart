@@ -109,7 +109,7 @@ void main() {
           initials: 'BBB',
           score: 500,
           streak: 2,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
         );
 
         when(() => leaderboardBloc.state).thenReturn(
@@ -121,7 +121,7 @@ void main() {
                 initials: 'AAA',
                 score: 50,
                 streak: 2,
-                mascot: Mascots.dash,
+                mascot: Mascot.dash,
               ),
             )..insert(2, currentPlayer),
           ),
@@ -157,7 +157,7 @@ void main() {
                 initials: 'AAA',
                 score: 50,
                 streak: 20,
-                mascot: Mascots.dash,
+                mascot: Mascot.dash,
               ),
             ),
           ),
@@ -192,7 +192,7 @@ void main() {
               initials: 'AAA',
               score: 50,
               streak: 2,
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
             );
 
             when(() => playerBloc.state).thenReturn(
@@ -217,7 +217,7 @@ void main() {
             initials: 'AAA',
             score: 50,
             streak: 2,
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           );
 
           when(() => playerBloc.state).thenReturn(
@@ -268,7 +268,7 @@ void main() {
       initials: 'ABC',
       score: 200,
       streak: 2,
-      mascot: Mascots.dash,
+      mascot: Mascot.dash,
     );
 
     setUpAll(() async {
@@ -307,7 +307,7 @@ void main() {
       initials: 'ABC',
       score: 200,
       streak: 25,
-      mascot: Mascots.dash,
+      mascot: Mascot.dash,
     );
 
     testWidgets(
@@ -354,7 +354,7 @@ void main() {
           initials: 'ABC',
           score: 23700,
           streak: 2,
-          mascot: Mascots.dash,
+          mascot: Mascot.dash,
         );
 
         await tester.pumpApp(CurrentUserPosition(player: player, rank: 4));
@@ -376,19 +376,19 @@ void main() {
 
     for (final mascot in [
       _MascotTester(
-        mascot: Mascots.dash,
+        mascot: Mascot.dash,
         color: IoCrosswordColors.flutterBlue,
       ),
       _MascotTester(
-        mascot: Mascots.sparky,
+        mascot: Mascot.sparky,
         color: IoCrosswordColors.sparkyYellow,
       ),
       _MascotTester(
-        mascot: Mascots.dino,
+        mascot: Mascot.dino,
         color: IoCrosswordColors.chromeRed,
       ),
       _MascotTester(
-        mascot: Mascots.android,
+        mascot: Mascot.android,
         color: IoCrosswordColors.androidGreen,
       ),
     ]) {
@@ -421,6 +421,6 @@ class _MascotTester {
     required this.color,
   });
 
-  final Mascots mascot;
+  final Mascot mascot;
   final Color color;
 }

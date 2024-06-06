@@ -245,7 +245,7 @@ class MascotAnimation extends StatelessWidget {
     super.key,
   });
 
-  final Mascots mascot;
+  final Mascot mascot;
   final SpriteListController controller;
 
   @override

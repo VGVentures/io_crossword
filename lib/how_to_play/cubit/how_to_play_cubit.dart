@@ -18,7 +18,7 @@ class HowToPlayCubit extends Cubit<HowToPlayState> {
     emit(state.copyWith(status: status));
   }
 
-  Future<void> loadAssets(Mascots mascot) async {
+  Future<void> loadAssets(Mascot mascot) async {
     emit(
       state.copyWith(
         assetsStatus: AssetsLoadingStatus.inProgress,

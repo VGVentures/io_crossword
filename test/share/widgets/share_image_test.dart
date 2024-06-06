@@ -21,10 +21,9 @@ void main() {
       playerBloc = _MockPlayerBloc();
     });
 
-    testWidgets('displays shareDash image with ${Mascots.dash}',
-        (tester) async {
+    testWidgets('displays shareDash image with ${Mascot.dash}', (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.dash)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.dash)),
       );
 
       await tester.pumpApp(
@@ -39,10 +38,10 @@ void main() {
       );
     });
 
-    testWidgets('displays shareAndroid image with ${Mascots.dino}',
+    testWidgets('displays shareAndroid image with ${Mascot.dino}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.dino)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.dino)),
       );
 
       await tester.pumpApp(
@@ -59,10 +58,10 @@ void main() {
       );
     });
 
-    testWidgets('displays shareDino image with ${Mascots.sparky}',
+    testWidgets('displays shareDino image with ${Mascot.sparky}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.sparky)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.sparky)),
       );
 
       await tester.pumpApp(
@@ -79,10 +78,10 @@ void main() {
       );
     });
 
-    testWidgets('displays shareSparky image with ${Mascots.android}',
+    testWidgets('displays shareSparky image with ${Mascot.android}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.android)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.android)),
       );
 
       await tester.pumpApp(

@@ -101,7 +101,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IoLayout(
-      child: BlocSelector<PlayerBloc, PlayerState, Mascots>(
+      child: BlocSelector<PlayerBloc, PlayerState, Mascot>(
         selector: (state) {
           return state.mascot;
         },
@@ -127,7 +127,7 @@ class AppView extends StatelessWidget {
 }
 
 @visibleForTesting
-extension MascotTheme on Mascots {
+extension MascotTheme on Mascot {
   static final flutterTheme = IoFlutterTheme().themeData;
   static final firebaseTheme = IoFirebaseTheme().themeData;
   static final chromeTheme = IoChromeTheme().themeData;
@@ -135,13 +135,13 @@ extension MascotTheme on Mascots {
 
   ThemeData theme() {
     switch (this) {
-      case Mascots.dash:
+      case Mascot.dash:
         return flutterTheme;
-      case Mascots.sparky:
+      case Mascot.sparky:
         return firebaseTheme;
-      case Mascots.dino:
+      case Mascot.dino:
         return chromeTheme;
-      case Mascots.android:
+      case Mascot.android:
         return androidTheme;
     }
   }
