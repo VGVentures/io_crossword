@@ -343,7 +343,7 @@
   "@aboutHowToPlayFourthInstructionsTitle": {
     "description": "The fourth step instruction title."
   },
-  "aboutHowToPlayFourthInstructions": "Stumped? Ask Gemini Yes or No questions to get hints in real time.",
+  "aboutHowToPlayFourthInstructions": "Stumped? Ask the Gemini API Yes or No questions to get hints in real time.",
   "@aboutHowToPlayFourthInstructions": {
     "description": "The Fourth step instruction on how to play."
   },
