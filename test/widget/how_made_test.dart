@@ -17,7 +17,7 @@ class _MockUrlLauncherPlatform extends Mock
 class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
 void main() {
-  group('$HowMadeAndOpenSource', () {
+  group('$HowItWasMade', () {
     late UrlLauncherPlatform urlLauncher;
 
     late AppLocalizations l10n;
@@ -38,28 +38,29 @@ void main() {
     });
 
     testWidgets(
-      'displays information how made and open source',
+      'displays information how made and join the gemini dev competition',
       (tester) async {
-        await tester.pumpApp(HowMadeAndOpenSource());
+        await tester.pumpApp(HowItWasMade());
 
         final text =
-            '${l10n.learn} ${l10n.howMade} ${l10n.and} ${l10n.openSourceCode}.';
+            '${l10n.learnHowThe} ${l10n.ioCrossword} ${l10n.wasMade}.\n'
+            '${l10n.joinThe} ${l10n.geminiCompetition}.';
 
         expect(find.text(text, findRichText: true), findsOneWidget);
       },
     );
 
     testWidgets(
-      'calls launchUrl when tapped on open source code',
+      'calls launchUrl when tapped on I/O Crossword',
       (tester) async {
-        await tester.pumpApp(HowMadeAndOpenSource());
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
               widget is RichText &&
               find.tapTextSpan(
                 widget,
-                l10n.openSourceCode,
+                l10n.ioCrossword,
               ),
         );
 
@@ -69,7 +70,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://github.com/VGVentures/io_crossword',
+            'https://developers.google.com/learn/pathways',
             any(),
           ),
         );
@@ -77,91 +78,14 @@ void main() {
     );
 
     testWidgets(
-      'calls launchUrl when tapped on "How crossword was made"',
+      'calls launchUrl when tapped on gemini dev competition',
       (tester) async {
-        await tester.pumpApp(HowMadeAndOpenSource());
-
-        final finder = find.byWidgetPredicate(
-          (widget) =>
-              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
-        );
-
-        await tester.tap(finder);
-        await tester.pumpAndSettle();
-
-        verify(
-          () => urlLauncher.launchUrl(
-            'https://flutter.dev/crossword',
-            any(),
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'displays error snack bar when cannot launch how made',
-      (tester) async {
-        when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => false);
-
-        await tester.pumpApp(HowMadeAndOpenSource());
-
-        final finder = find.byWidgetPredicate(
-          (widget) =>
-              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
-        );
-
-        await tester.tap(finder);
-        await tester.pumpAndSettle();
-
-        expect(find.byType(SnackBar), findsOneWidget);
-        expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
-      },
-    );
-  });
-
-  group('$HowMadeAndJoinCompetition', () {
-    late UrlLauncherPlatform urlLauncher;
-
-    late AppLocalizations l10n;
-
-    setUpAll(() async {
-      l10n = await AppLocalizations.delegate.load(Locale('en'));
-      registerFallbackValue(_FakeLaunchOptions());
-    });
-
-    setUp(() {
-      urlLauncher = _MockUrlLauncherPlatform();
-
-      UrlLauncherPlatform.instance = urlLauncher;
-
-      when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => true);
-      when(() => urlLauncher.launchUrl(any(), any()))
-          .thenAnswer((_) async => true);
-    });
-
-    testWidgets(
-      'displays information how made and the gemini dev competition',
-      (tester) async {
-        await tester.pumpApp(HowMadeAndJoinCompetition());
-
-        final text =
-            '${l10n.learn} ${l10n.howMade}.\n${l10n.joinGeminiCompetition}.';
-        expect(find.text(text, findRichText: true), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'calls launchUrl when tapped on join developer competition',
-      (tester) async {
-        await tester.pumpApp(HowMadeAndJoinCompetition());
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
               widget is RichText &&
-              find.tapTextSpan(
-                widget,
-                l10n.joinGeminiCompetition,
-              ),
+              find.tapTextSpan(widget, l10n.geminiCompetition),
         );
 
         await tester.tap(finder);
@@ -177,24 +101,22 @@ void main() {
     );
 
     testWidgets(
-      'calls launchUrl when tapped on "How crossword was made"',
+      'displays error snack bar when cannot launch how made',
       (tester) async {
-        await tester.pumpApp(HowMadeAndJoinCompetition());
+        when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => false);
+
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
-              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+              widget is RichText && find.tapTextSpan(widget, l10n.ioCrossword),
         );
 
         await tester.tap(finder);
         await tester.pumpAndSettle();
 
-        verify(
-          () => urlLauncher.launchUrl(
-            'https://flutter.dev/crossword',
-            any(),
-          ),
-        );
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(find.text(l10n.couldNotOpenUrl), findsOneWidget);
       },
     );
   });

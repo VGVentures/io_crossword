@@ -199,9 +199,17 @@
   "@alreadySolvedSubtitle": {
     "description": "Subtitle when a word gets solved while solving it."
   },
-  "learn": "Learn",
-  "@learn": {
-    "description": "learn label"
+  "learnHowThe": "Learn how the",
+  "@learnHowThe": {
+    "description": "'learn how the' label"
+  },
+  "ioCrossword": "I/O Crossword",
+  "@ioCrossword": {
+    "description": "'I/O Crossword' label"
+  },
+  "wasMade": "was made",
+  "@wasMade": {
+    "description": "'was made' label"
   },
   "howMade": "how I/O Crossword was made",
   "@howMade": {
@@ -215,8 +223,12 @@
   "@openSourceCode": {
     "description": "Open source code text to open link"
   },
-  "joinGeminiCompetition": "Join the Gemini API Developer Competition",
-  "@joinGeminiCompetition": {
+  "joinThe": "Join the",
+  "@joinThe": {
+    "description": "join the label"
+  },
+  "geminiCompetition": "Gemini API Developer Competition",
+  "@geminiCompetition": {
     "description": "Gemini API dev competition text to open link"
   },
   "otherLinks": "Other links",

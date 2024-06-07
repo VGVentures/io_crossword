@@ -53,7 +53,7 @@ void main() {
     testWidgets('displays HowMadeAndJoinCompetition', (tester) async {
       await tester.pumpApp(SingleChildScrollView(child: EndGameContent()));
 
-      expect(find.byType(HowMadeAndJoinCompetition), findsOneWidget);
+      expect(find.byType(HowItWasMade), findsOneWidget);
     });
 
     testWidgets('displays EndGameImage', (tester) async {
