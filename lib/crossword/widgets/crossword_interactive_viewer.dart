@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_domain/game_domain.dart';
@@ -84,6 +85,17 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     _transformationController.value = _transformationAnimation!.value;
   }
 
+  Rect _getBoardBoundaries(BuildContext context) {
+    final crosswordLayout = CrosswordLayoutScope.of(context);
+    final boardWidth = crosswordLayout.padding.left +
+        crosswordLayout.crosswordSize.width +
+        crosswordLayout.padding.right;
+    final boardHeight = crosswordLayout.padding.top +
+        crosswordLayout.crosswordSize.height +
+        crosswordLayout.padding.bottom;
+    return Rect.fromLTRB(0, 0, boardWidth, boardHeight);
+  }
+
   void _zoom(double value, BuildContext context) {
     final animationController = _animationController;
     if (animationController.isAnimating) return;
@@ -91,38 +103,53 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
     final viewport = _viewport;
     if (viewport == null) return;
 
-    final layout = IoLayout.of(context);
-    final viewportSize = viewport.reduced(layout);
+    final desiredScale = currentScale + value;
+    final clampedScale = clampDouble(desiredScale, widget.zoomLimit, _maxScale);
+    var scaleChange = clampedScale / currentScale;
 
-    final scaleEnd = currentScale + value;
+    // Calculate the tentative viewport after zooming.
+    final viewportCenter = viewport.center;
+    final zoomedViewport = viewport.scaled(scaleChange);
+    final end = zoomedViewport.center;
+    var delta = end - viewportCenter;
+    var newViewportRect = zoomedViewport.toRect().shift(-delta);
 
-    if (scaleEnd < widget.zoomLimit || scaleEnd > _maxScale) return;
+    final boundaries = _getBoardBoundaries(context);
 
-    final desiredScale = scaleEnd / currentScale;
+    // If the tentative viewport does not fit in the board, update the zooming
+    // level and recalculate the viewport to fit.
+    if (!boundaries.fits(newViewportRect)) {
+      final scaleRatio = newViewportRect.ratioToFitIn(boundaries);
+      scaleChange *= scaleRatio;
+      final fittedViewport = viewport.scaled(scaleChange);
+      delta = fittedViewport.center - viewportCenter;
+      newViewportRect = fittedViewport.toRect().shift(-delta);
+    }
 
-    final viewportCenter = Offset(
-      viewportSize.width / 2,
-      viewportSize.height / 2,
-    );
+    // If the new viewport is not entirely within the boundaries, move it.
+    if (!boundaries.containsComplete(newViewportRect)) {
+      var (dx, dy) = (0.0, 0.0);
 
-    final beginOffset = _transformationController.toScene(viewportCenter);
+      if (newViewportRect.left < boundaries.left) {
+        dx = boundaries.left - newViewportRect.left;
+      }
+      if (newViewportRect.top < boundaries.top) {
+        dy = boundaries.top - newViewportRect.top;
+      }
+      if (newViewportRect.right > boundaries.right) {
+        dx = boundaries.right - newViewportRect.right;
+      }
+      if (newViewportRect.bottom > boundaries.bottom) {
+        dy = boundaries.bottom - newViewportRect.bottom;
+      }
 
-    final newTransformation = Matrix4.copy(_transformationController.value)
-      ..scale(desiredScale);
+      delta -= Offset(dx, dy);
+    }
 
-    final inverseMatrix = Matrix4.inverted(newTransformation);
-    final untransformed = inverseMatrix.transform3(
-      Vector3(
-        viewportCenter.dx,
-        viewportCenter.dy,
-        0,
-      ),
-    );
-    final endOffset = Offset(untransformed.x, untransformed.y);
-    final dx = beginOffset.dx - endOffset.dx;
-    final dy = beginOffset.dy - endOffset.dy;
-
-    newTransformation.translate(-dx, -dy);
+    // Create the scale & translation transformation for the requested zoom.
+    final newTransformation = _transformationController.value.clone()
+      ..scale(scaleChange)
+      ..translate(delta.dx, delta.dy);
 
     _playTransformation(
       _transformationController.value,
@@ -391,6 +418,47 @@ extension on Quad {
   double get width => point2.x - point0.x;
 
   double get height => point2.y - point0.y;
+
+  /// The center of the [Quad] in absolute coordinates.
+  Offset get center => Offset(point0.x + width / 2, point0.y + height / 2);
+
+  /// Converts the [Quad] into a [Rect] assuming it is a rectangle defined by
+  /// `point0` as the top left and `point2` as the bottom right.
+  Rect toRect() => Rect.fromLTRB(point0.x, point0.y, point2.x, point2.y);
+
+  /// Returns a new [Quad] transformed scaling the current one by `scale`.
+  Quad scaled(double scale) => Quad.copy(this)
+    // We use the inverse of the scale because when the scale increases
+    // the viewport is smaller.
+    ..transform(Matrix4.identity().scaled(1 / scale));
+}
+
+extension on Rect {
+  /// Whether the passed `rect` is contained entirely by `this`.
+  bool containsComplete(Rect rect) {
+    return rect.left >= left &&
+        rect.top >= top &&
+        rect.right <= right &&
+        rect.bottom <= bottom;
+  }
+
+  /// Whether the passed `rect` can fit inside `this`.
+  bool fits(Rect rect) {
+    return rect.width <= width && rect.height <= height;
+  }
+
+  /// Scale ratio to fit `this` within `rect`.
+  double ratioToFitIn(Rect rect) {
+    if (rect.width >= width && rect.height >= height) {
+      return 1;
+    }
+
+    final widthRatio = width / rect.width;
+    final heightRatio = height / rect.height;
+    final overflowRatio = math.max(widthRatio, heightRatio);
+
+    return overflowRatio;
+  }
 }
 
 extension on SelectedWord {
