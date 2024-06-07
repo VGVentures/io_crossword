@@ -41,7 +41,7 @@
   "@shareWordSubtitle": {
     "description": "Subtitle of the share word modal"
   },
-  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with Gemini API.",
+  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with the Gemini API.",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
   },
@@ -303,7 +303,7 @@
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
-  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini API.",
+  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with the Gemini API.",
   "@claimBadgeDescription": {
     "description": "Developer Profile label"
   },
