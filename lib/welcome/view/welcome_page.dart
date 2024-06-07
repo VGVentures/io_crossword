@@ -123,7 +123,7 @@ class WelcomeBody extends StatelessWidget {
     return Theme(
       data: const IoCrosswordTheme().themeData,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 294),
+        constraints: const BoxConstraints(maxWidth: 320),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
