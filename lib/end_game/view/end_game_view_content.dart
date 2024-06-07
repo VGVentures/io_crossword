@@ -23,7 +23,7 @@ class EndGameContent extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        const HowMadeAndJoinCompetition(),
+        const HowItWasMade(),
         const SizedBox(height: 24),
         const Center(
           child: PlayerInitials(),

@@ -11,6 +11,7 @@ class ProjectDetailsLinks {
     'CROSSWORD_URL',
     defaultValue: 'https://crossword.withgoogle.com',
   );
-  static const blogPost = 'https://flutter.dev/crossword';
+  static const developerPathway =
+      'https://developers.google.com/learn/pathways';
   static const geminiDeveloperCompetition = 'https://ai.google.dev/competition';
 }

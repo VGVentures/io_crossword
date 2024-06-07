@@ -60,7 +60,7 @@ void main() {
         (tester) async {
           await tester.pumpApp(const ProjectDetailsContent());
 
-          expect(find.byType(HowMadeAndOpenSource), findsOneWidget);
+          expect(find.byType(HowItWasMade), findsOneWidget);
         },
       );
     });
