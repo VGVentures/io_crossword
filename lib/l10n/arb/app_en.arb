@@ -41,7 +41,7 @@
   "@shareWordSubtitle": {
     "description": "Subtitle of the share word modal"
   },
-  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with Gemini API.",
+  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with the Gemini API.",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
   },
@@ -61,7 +61,7 @@
   "@chooseYourTeam": {
     "description": "The title for the team selection page"
   },
-  "joinTeam": "Join {team} team",
+  "joinTeam": "Join team {team}",
   "@joinTeam": {
     "description": "Text for which team you are choosing",
     "placeholders": {
@@ -215,6 +215,10 @@
   "@openSourceCode": {
     "description": "Open source code text to open link"
   },
+  "joinGeminiCompetition": "Join the Gemini API Developer Competition",
+  "@joinGeminiCompetition": {
+    "description": "Gemini API dev competition text to open link"
+  },
   "otherLinks": "Other links",
   "@otherLinks": {
     "description": "Other links label"
@@ -303,7 +307,7 @@
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
-  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini API.",
+  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with the Gemini API.",
   "@claimBadgeDescription": {
     "description": "Developer Profile label"
   },
@@ -343,7 +347,7 @@
   "@aboutHowToPlayFourthInstructionsTitle": {
     "description": "The fourth step instruction title."
   },
-  "aboutHowToPlayFourthInstructions": "Stumped? Ask Gemini Yes or No questions to get hints in real time.",
+  "aboutHowToPlayFourthInstructions": "Stumped? Ask the Gemini API Yes or No questions to get hints in real time.",
   "@aboutHowToPlayFourthInstructions": {
     "description": "The Fourth step instruction on how to play."
   },

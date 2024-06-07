@@ -50,10 +50,10 @@ void main() {
       expect(find.text(l10n.thanksForContributing), findsOneWidget);
     });
 
-    testWidgets('displays HowMade', (tester) async {
+    testWidgets('displays HowMadeAndJoinCompetition', (tester) async {
       await tester.pumpApp(SingleChildScrollView(child: EndGameContent()));
 
-      expect(find.byType(HowMade), findsOneWidget);
+      expect(find.byType(HowMadeAndJoinCompetition), findsOneWidget);
     });
 
     testWidgets('displays EndGameImage', (tester) async {
