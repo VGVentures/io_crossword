@@ -93,7 +93,7 @@ class ProjectDetailsContent extends StatelessWidget {
                 if (layout == IoLayoutData.small)
                   Assets.images.hero.image(height: 200),
                 const SizedBox(height: 60),
-                const HowMade(),
+                const HowMadeAndOpenSource(),
               ],
             ),
           ),

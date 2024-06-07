@@ -23,7 +23,7 @@ class EndGameContent extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        const HowMade(),
+        const HowMadeAndJoinCompetition(),
         const SizedBox(height: 24),
         const Center(
           child: PlayerInitials(),
@@ -97,12 +97,23 @@ class ActionButtonsEndGame extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 24),
-        FilledButton.tonalIcon(
-          onPressed: () {
-            context.launchUrl(ProjectDetailsLinks.claimBadge);
-          },
-          label: Text(l10n.claimBadge),
-          icon: const Icon(IoIcons.google, size: 20),
+        SizedBox(
+          height: 56,
+          child: FilledButton.icon(
+            onPressed: () {
+              context.launchUrl(ProjectDetailsLinks.claimBadge);
+            },
+            label: Text(l10n.claimBadge),
+            style: Theme.of(context).filledButtonTheme.style?.copyWith(
+                  backgroundColor: const WidgetStatePropertyAll(
+                    IoCrosswordColors.developerBlue,
+                  ),
+                  foregroundColor: const WidgetStatePropertyAll(
+                    IoCrosswordColors.black,
+                  ),
+                ),
+            icon: const Icon(IoIcons.google, size: 20),
+          ),
         ),
       ],
     );
@@ -126,8 +137,11 @@ class EndGameImage extends StatelessWidget {
       Mascot.sparky => Assets.images.endGameSparky,
     };
 
-    return image.image(
-      fit: BoxFit.fitWidth,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: image.image(
+        fit: BoxFit.fitWidth,
+      ),
     );
   }
 }

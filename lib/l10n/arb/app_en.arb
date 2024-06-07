@@ -215,6 +215,10 @@
   "@openSourceCode": {
     "description": "Open source code text to open link"
   },
+  "joinGeminiCompetition": "Join the Gemini API Developer Competition",
+  "@joinGeminiCompetition": {
+    "description": "Gemini API dev competition text to open link"
+  },
   "otherLinks": "Other links",
   "@otherLinks": {
     "description": "Other links label"

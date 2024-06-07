@@ -29,6 +29,9 @@ abstract class IoCrosswordColors {
   /// light blue gradient
   static const darkGradientBlue = Color(0xFF337BFA);
 
+  /// developer blue
+  static const developerBlue = Color(0xFFB7D8FF);
+
   /// googleBlue
   static const googleBlue = Color(0xFF4383F2);
 
