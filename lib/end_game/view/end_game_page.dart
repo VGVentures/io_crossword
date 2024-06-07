@@ -44,11 +44,11 @@ class EndGameLargeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 502),
-          child: const SingleChildScrollView(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 502),
+            child: const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 32,
               ),
