@@ -61,7 +61,7 @@
   "@chooseYourTeam": {
     "description": "The title for the team selection page"
   },
-  "joinTeam": "Join {team} team",
+  "joinTeam": "Join team {team}",
   "@joinTeam": {
     "description": "Text for which team you are choosing",
     "placeholders": {
