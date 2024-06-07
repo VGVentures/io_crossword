@@ -162,34 +162,71 @@ void main() {
     });
 
     testWidgets(
-        'does nothing when zoom out button is pressed and '
-        'limit has been reached', (tester) async {
-      const zoomLimit = 0.6;
-      await tester.pumpSubject(
-        crosswordBloc: crosswordBloc,
-        CrosswordInteractiveViewer(
-          zoomLimit: zoomLimit,
-          builder: (context, position) {
-            return const SizedBox();
-          },
-        ),
-      );
+      'keeps same scale when zoom out button is pressed and zoom value limit '
+      'has been reached',
+      (tester) async {
+        const zoomLimit = 0.6;
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
 
-      final viewerState = tester.state<CrosswordInteractiveViewerState>(
-        find.byType(CrosswordInteractiveViewer),
-      );
+        final viewerState = tester.state<CrosswordInteractiveViewerState>(
+          find.byType(CrosswordInteractiveViewer),
+        );
 
-      while (viewerState.currentScale > zoomLimit) {
+        while (viewerState.currentScale > zoomLimit) {
+          await tester.tap(find.byIcon(Icons.remove));
+          await tester.pumpAndSettle();
+        }
+        expect(viewerState.currentScale, zoomLimit);
+
         await tester.tap(find.byIcon(Icons.remove));
         await tester.pumpAndSettle();
-      }
-      expect(viewerState.currentScale, zoomLimit);
 
-      await tester.tap(find.byIcon(Icons.remove));
-      await tester.pumpAndSettle();
+        expect(viewerState.currentScale, zoomLimit);
+      },
+    );
 
-      expect(viewerState.currentScale, zoomLimit);
-    });
+    testWidgets(
+      'keeps same scale when zoom out button is pressed and board size limit '
+      'has been reached',
+      (tester) async {
+        const zoomLimit = 0.2;
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
+
+        final viewerState = tester.state<CrosswordInteractiveViewerState>(
+          find.byType(CrosswordInteractiveViewer),
+        );
+
+        var previousScale = 0.0;
+        while (viewerState.currentScale != previousScale) {
+          previousScale = viewerState.currentScale;
+          await tester.tap(find.byIcon(Icons.remove));
+          await tester.pumpAndSettle();
+        }
+
+        expect(viewerState.currentScale >= zoomLimit, isTrue);
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        expect(viewerState.currentScale >= zoomLimit, isTrue);
+      },
+    );
 
     testWidgets('zooms out when zoom out button is pressed', (tester) async {
       await tester.pumpSubject(
