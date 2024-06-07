@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +12,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -225,6 +225,63 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(viewerState.currentScale >= zoomLimit, isTrue);
+      },
+    );
+
+    testWidgets(
+      'keeps board within boundaries when viewport is in the bottom right and '
+      'zoom out button is pressed',
+      (tester) async {
+        const zoomLimit = 0.2;
+        late double boardWidth;
+        late double boardHeight;
+        late Quad gameViewport;
+
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, viewport) {
+              gameViewport = viewport;
+              final crosswordLayout = CrosswordLayoutScope.of(context);
+              boardWidth = crosswordLayout.padding.left +
+                  crosswordLayout.crosswordSize.width +
+                  crosswordLayout.padding.right;
+              boardHeight = crosswordLayout.padding.top +
+                  crosswordLayout.crosswordSize.height +
+                  crosswordLayout.padding.bottom;
+              return SizedBox(
+                width: boardWidth,
+                height: boardHeight,
+              );
+            },
+          ),
+        );
+
+        tester
+            .state<CrosswordInteractiveViewerState>(
+              find.byType(CrosswordInteractiveViewer),
+            )
+            .transform(
+              Matrix4.identity()
+                ..translate2(
+                  Vector2(
+                    gameViewport.point2.x - boardWidth,
+                    gameViewport.point2.y - boardHeight,
+                  ),
+                ),
+            );
+
+        await tester.pumpAndSettle();
+
+        expect(gameViewport.point2.x, equals(boardWidth));
+        expect(gameViewport.point2.y, equals(boardHeight));
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        expect(gameViewport.point2.x.roundToDouble(), equals(boardWidth));
+        expect(gameViewport.point2.y.roundToDouble(), equals(boardHeight));
       },
     );
 

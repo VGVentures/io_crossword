@@ -81,6 +81,12 @@ class CrosswordInteractiveViewerState extends State<CrosswordInteractiveViewer>
   double get currentScale =>
       _transformationController.value.getMaxScaleOnAxis().roundTo(3);
 
+  @visibleForTesting
+  // ignore: use_setters_to_change_properties
+  void transform(Matrix4 transformation) {
+    _transformationController.value = transformation;
+  }
+
   void _onAnimateTransformation() {
     _transformationController.value = _transformationAnimation!.value;
   }
