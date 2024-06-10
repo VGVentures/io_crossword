@@ -10,7 +10,7 @@
 
 const cookieBar = document.querySelector("#cookie-bar");
 const cookieBarButton = document.querySelector("#confirm-cookies");
-const splashCopy = document.querySelector("#splash_copy");
+const modal = document.querySelector("#modal");
 
 const additionalScripts = [];
 
@@ -34,7 +34,7 @@ window.addEventListener("load", (event) => {
       await hasUserAcceptedCookies;
 
       window.addEventListener("flutter-first-frame", function () {
-        splashCopy.remove();
+        modal.remove();
         document.body.classList.remove("loading-mode");
       });
 
