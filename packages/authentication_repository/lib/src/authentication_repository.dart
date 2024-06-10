@@ -62,9 +62,7 @@ class AuthenticationRepository {
     }
   }
 
-  /// Sign in the user anonymously.
-  ///
-  /// If the sign in fails, an [AuthenticationException] is thrown.
+  /// Sign out the user.
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
 

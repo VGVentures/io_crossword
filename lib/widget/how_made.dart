@@ -5,8 +5,8 @@ import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/project_details/link/project_details_links.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 
-class HowMade extends StatelessWidget {
-  const HowMade({super.key});
+class HowItWasMade extends StatelessWidget {
+  const HowItWasMade({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,35 +19,30 @@ class HowMade extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        text: '${l10n.learn} ',
-        style: textTheme.body.copyWith(
-          color: textColor,
-        ),
+        style: textTheme.body.copyWith(color: textColor),
         children: [
+          TextSpan(text: '${l10n.learnHowThe} '),
           TextSpan(
-            text: l10n.howMade,
-            style: textTheme.body.copyWith(
-              color: linkColor,
-            ),
+            text: l10n.ioCrossword,
+            style: textTheme.body.copyWith(color: linkColor),
             recognizer: TapGestureRecognizer()
-              ..onTap = () => context.launchUrl(ProjectDetailsLinks.blogPost),
+              ..onTap = () => context.launchUrl(
+                    ProjectDetailsLinks.developerPathway,
+                  ),
+          ),
+          TextSpan(text: ' ${l10n.wasMade}.\n'),
+          TextSpan(
+            text: '${l10n.joinThe} ',
           ),
           TextSpan(
-            text: ' ${l10n.and} ',
-            style: textTheme.body,
-          ),
-          TextSpan(
-            text: l10n.openSourceCode,
-            style: textTheme.body.copyWith(
-              color: linkColor,
-            ),
+            text: l10n.geminiCompetition,
+            style: textTheme.body.copyWith(color: linkColor),
             recognizer: TapGestureRecognizer()
-              ..onTap = () => context.launchUrl(ProjectDetailsLinks.github),
+              ..onTap = () => context.launchUrl(
+                    ProjectDetailsLinks.geminiDeveloperCompetition,
+                  ),
           ),
-          TextSpan(
-            text: '.',
-            style: textTheme.body,
-          ),
+          const TextSpan(text: '.'),
         ],
       ),
     );

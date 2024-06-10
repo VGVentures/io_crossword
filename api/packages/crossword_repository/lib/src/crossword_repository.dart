@@ -82,7 +82,7 @@ class CrosswordRepository {
   /// The second value returns true if the answer was previously answered.
   Future<(bool, bool)> answerWord(
     String wordId,
-    Mascots mascot,
+    Mascot mascot,
     String userAnswer,
   ) async {
     final correctAnswer = await findAnswerById(wordId);

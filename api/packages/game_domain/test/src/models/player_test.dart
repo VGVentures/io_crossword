@@ -12,7 +12,7 @@ void main() {
           Player(
             id: '',
             initials: '',
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           ),
         ),
       );
@@ -24,7 +24,7 @@ void main() {
           id: 'id',
           initials: 'TST',
           score: 10,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 2,
         ),
         isNotNull,
@@ -35,7 +35,7 @@ void main() {
       id: 'id',
       initials: 'TST',
       score: 20,
-      mascot: Mascots.android,
+      mascot: Mascot.android,
       streak: 2,
     );
 
@@ -45,7 +45,7 @@ void main() {
         equals({
           'initials': 'TST',
           'score': 20,
-          'mascot': Mascots.android.name,
+          'mascot': Mascot.android.name,
           'streak': 2,
         }),
       );
@@ -57,7 +57,7 @@ void main() {
           'id': 'id',
           'initials': 'TST',
           'score': 20,
-          'mascot': Mascots.android.name,
+          'mascot': Mascot.android.name,
           'streak': 2,
         }),
         equals(leaderboardPlayer),
@@ -70,7 +70,7 @@ void main() {
           id: '',
           initials: 'TST',
           score: 20,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 2,
         ),
         equals(
@@ -78,7 +78,7 @@ void main() {
             id: '',
             initials: 'TST',
             score: 20,
-            mascot: Mascots.android,
+            mascot: Mascot.android,
             streak: 2,
           ),
         ),
@@ -89,7 +89,7 @@ void main() {
           id: '',
           initials: 'TST',
           score: 20,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 2,
         ),
         isNot(
@@ -102,7 +102,7 @@ void main() {
           id: 'id',
           initials: 'WOW',
           score: 20,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 2,
         ),
         isNot(
@@ -115,7 +115,7 @@ void main() {
           id: 'id',
           initials: 'TST',
           score: 20,
-          mascot: Mascots.dash,
+          mascot: Mascot.dash,
           streak: 2,
         ),
         isNot(
@@ -128,7 +128,7 @@ void main() {
           id: 'id',
           initials: 'TST',
           score: 20,
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 3,
         ),
         isNot(
@@ -142,7 +142,7 @@ void main() {
         Player(
           id: 'id',
           initials: 'AAA',
-          mascot: Mascots.android,
+          mascot: Mascot.android,
           streak: 10,
           score: 500,
         ).copyWith(),
@@ -150,11 +150,11 @@ void main() {
           Player(
             id: '',
             initials: '',
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           ).copyWith(
             id: 'id',
             initials: 'AAA',
-            mascot: Mascots.android,
+            mascot: Mascot.android,
             streak: 10,
             score: 500,
           ),

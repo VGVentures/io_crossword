@@ -36,17 +36,17 @@ void main() {
 
     group('MascotSelected', () {
       test('can be instantiated', () {
-        expect(MascotSelected(Mascots.sparky), isA<MascotSelected>());
+        expect(MascotSelected(Mascot.sparky), isA<MascotSelected>());
       });
 
       test('supports value comparisons', () {
         expect(
-          MascotSelected(Mascots.sparky),
-          equals(MascotSelected(Mascots.sparky)),
+          MascotSelected(Mascot.sparky),
+          equals(MascotSelected(Mascot.sparky)),
         );
         expect(
-          MascotSelected(Mascots.sparky),
-          isNot(equals(MascotSelected(Mascots.dash))),
+          MascotSelected(Mascot.sparky),
+          isNot(equals(MascotSelected(Mascot.dash))),
         );
       });
     });

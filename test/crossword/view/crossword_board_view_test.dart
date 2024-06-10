@@ -91,7 +91,7 @@ void main() {
         testWidgets('when a solved word is selected', (tester) async {
           when(() => word.solvedTimestamp).thenReturn(1);
           when(() => word.isSolved).thenReturn(true);
-          when(() => word.mascot).thenReturn(Mascots.dash);
+          when(() => word.mascot).thenReturn(Mascot.dash);
 
           when(() => wordSelectionBloc.state).thenReturn(
             WordSelectionState(
@@ -319,7 +319,7 @@ void main() {
           'when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
-            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.mascot).thenReturn(Mascot.dash);
 
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => wordSelectionBloc.state).thenReturn(
@@ -387,7 +387,7 @@ void main() {
           'with answer when word is solved',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
-            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.mascot).thenReturn(Mascot.dash);
             when(() => word.solvedTimestamp).thenReturn(1);
 
             await tester.pumpApp(
@@ -410,7 +410,7 @@ void main() {
           'horizontally when word is horizontal',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
-            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.mascot).thenReturn(Mascot.dash);
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => word.axis).thenReturn(WordAxis.horizontal);
 
@@ -434,7 +434,7 @@ void main() {
           'vertically when word is vertical',
           (tester) async {
             when(() => word.isSolved).thenReturn(true);
-            when(() => word.mascot).thenReturn(Mascots.dash);
+            when(() => word.mascot).thenReturn(Mascot.dash);
             when(() => word.solvedTimestamp).thenReturn(1);
             when(() => word.axis).thenReturn(WordAxis.vertical);
 
@@ -467,7 +467,7 @@ void main() {
           testWidgets(
             'when word is solved by Dash',
             (tester) async {
-              when(() => word.mascot).thenReturn(Mascots.dash);
+              when(() => word.mascot).thenReturn(Mascot.dash);
 
               await tester.pumpApp(
                 layout: IoLayoutData.large,
@@ -502,7 +502,7 @@ void main() {
           testWidgets(
             'when word is solved by Sparky',
             (tester) async {
-              when(() => word.mascot).thenReturn(Mascots.sparky);
+              when(() => word.mascot).thenReturn(Mascot.sparky);
 
               await tester.pumpApp(
                 layout: IoLayoutData.large,
@@ -537,7 +537,7 @@ void main() {
           testWidgets(
             'when word is solved by Dino',
             (tester) async {
-              when(() => word.mascot).thenReturn(Mascots.dino);
+              when(() => word.mascot).thenReturn(Mascot.dino);
 
               await tester.pumpApp(
                 layout: IoLayoutData.large,
@@ -572,7 +572,7 @@ void main() {
           testWidgets(
             'when word is solved by Android',
             (tester) async {
-              when(() => word.mascot).thenReturn(Mascots.android);
+              when(() => word.mascot).thenReturn(Mascot.android);
 
               await tester.pumpApp(
                 layout: IoLayoutData.large,

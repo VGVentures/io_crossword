@@ -32,14 +32,14 @@ void main() {
   setUpAll(() async {
     Flame.images = Images(prefix: '');
     await Flame.images.loadAll([
-      Mascots.dash.teamMascot.idleAnimation.keyName,
-      Mascots.dash.teamMascot.platformAnimation.keyName,
-      Mascots.android.teamMascot.idleAnimation.keyName,
-      Mascots.android.teamMascot.platformAnimation.keyName,
-      Mascots.dino.teamMascot.idleAnimation.keyName,
-      Mascots.dino.teamMascot.platformAnimation.keyName,
-      Mascots.sparky.teamMascot.idleAnimation.keyName,
-      Mascots.sparky.teamMascot.platformAnimation.keyName,
+      Mascot.dash.teamMascot.idleAnimation.keyName,
+      Mascot.dash.teamMascot.platformAnimation.keyName,
+      Mascot.android.teamMascot.idleAnimation.keyName,
+      Mascot.android.teamMascot.platformAnimation.keyName,
+      Mascot.dino.teamMascot.idleAnimation.keyName,
+      Mascot.dino.teamMascot.platformAnimation.keyName,
+      Mascot.sparky.teamMascot.idleAnimation.keyName,
+      Mascot.sparky.teamMascot.platformAnimation.keyName,
     ]);
   });
 
@@ -63,7 +63,7 @@ void main() {
       expect(find.byType(TeamSelectionView), findsOneWidget);
     });
 
-    for (final mascot in Mascots.values) {
+    for (final mascot in Mascot.values) {
       testWidgets('updates index to ${mascot.index} with $mascot',
           (tester) async {
         when(() => playerBloc.state).thenReturn(PlayerState(mascot: mascot));
@@ -134,10 +134,10 @@ void main() {
       });
     }
 
-    for (final mascot in Mascots.values) {
+    for (final mascot in Mascot.values) {
       testWidgets(
           'calls MascotSelected with $mascot with index '
-          '${Mascots.values[mascot.index]}', (tester) async {
+          '${Mascot.values[mascot.index]}', (tester) async {
         when(() => teamSelectionCubit.state).thenReturn(
           TeamSelectionState(
             assetsStatus: AssetsLoadingStatus.success,
@@ -321,6 +321,32 @@ void main() {
           ).called(1);
         },
       );
+    });
+
+    testWidgets(
+        'select Sparky mascot when tapped '
+        'on large layout', (tester) async {
+      tester.view.physicalSize = const Size(1600, 1600);
+
+      when(() => teamSelectionCubit.state).thenReturn(
+        TeamSelectionState(assetsStatus: AssetsLoadingStatus.success),
+      );
+
+      await tester.pumpApp(
+        widget,
+        layout: IoLayoutData.large,
+      );
+
+      await tester.pump();
+
+      await tester.tap(
+        find.byType(TeamSelectionMascot).at(Mascot.sparky.index),
+      );
+
+      verify(() => teamSelectionCubit.selectTeam(Mascot.sparky.index))
+          .called(1);
+
+      addTearDown(tester.view.resetPhysicalSize);
     });
   });
 }

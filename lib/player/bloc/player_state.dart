@@ -12,14 +12,14 @@ class PlayerState extends Equatable {
     this.status = PlayerStatus.onboarding,
     this.player = Player.empty,
     this.rank = 0,
-    this.mascot = Mascots.dash,
+    this.mascot = Mascot.dash,
   });
 
   PlayerState copyWith({
     PlayerStatus? status,
     Player? player,
     int? rank,
-    Mascots? mascot,
+    Mascot? mascot,
   }) {
     return PlayerState(
       status: status ?? this.status,
@@ -32,7 +32,7 @@ class PlayerState extends Equatable {
   final PlayerStatus status;
   final Player player;
   final int rank;
-  final Mascots mascot;
+  final Mascot mascot;
 
   @override
   List<Object?> get props => [status, player, rank, mascot];

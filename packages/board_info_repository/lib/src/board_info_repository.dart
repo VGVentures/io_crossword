@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// {@template game_status}
@@ -50,12 +51,14 @@ class BoardInfoRepository {
   /// {@macro board_info_repository}
   BoardInfoRepository({
     required this.firestore,
-  }) {
+    TargetPlatform? targetPlatform,
+  }) : _targetPlatform = targetPlatform ?? defaultTargetPlatform {
     boardInfoCollection = firestore.collection('boardInfo');
   }
 
   /// The [FirebaseFirestore] instance.
   final FirebaseFirestore firestore;
+  final TargetPlatform _targetPlatform;
 
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
@@ -108,7 +111,11 @@ class BoardInfoRepository {
           .get();
 
       final data = results.docs.first.data();
-      return (data['value'] as num).toDouble();
+
+      final isMobile = _targetPlatform == TargetPlatform.android ||
+          _targetPlatform == TargetPlatform.iOS;
+      final key = isMobile ? 'mobile' : 'desktop';
+      return (data[key] as num).toDouble();
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }

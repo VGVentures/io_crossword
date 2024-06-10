@@ -115,7 +115,7 @@ void main() {
         'with horizontal word mascot when solved and vertical is null',
         (tester) async {
           final word = ant.copyWith(
-            mascot: Mascots.android,
+            mascot: Mascot.android,
             solvedTimestamp: 1,
           );
           final letterData = CrosswordLetterData(
@@ -148,7 +148,7 @@ void main() {
         'with vertical word mascot when solved and horizontal is null',
         (tester) async {
           final word = ant.copyWith(
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
             solvedTimestamp: 1,
           );
           final letterData = CrosswordLetterData(
@@ -181,9 +181,9 @@ void main() {
         'with horizontal word mascot when solved before vertical word',
         (tester) async {
           final horizontalWord =
-              ant.copyWith(mascot: Mascots.sparky, solvedTimestamp: 1);
+              ant.copyWith(mascot: Mascot.sparky, solvedTimestamp: 1);
           final verticalWord =
-              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 2);
+              ant.copyWith(mascot: Mascot.dino, solvedTimestamp: 2);
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -214,9 +214,9 @@ void main() {
         'with vertical word mascot when solved before horizontal word',
         (tester) async {
           final horizontalWord =
-              ant.copyWith(mascot: Mascots.sparky, solvedTimestamp: 2);
+              ant.copyWith(mascot: Mascot.sparky, solvedTimestamp: 2);
           final verticalWord =
-              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
+              ant.copyWith(mascot: Mascot.dino, solvedTimestamp: 1);
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -246,8 +246,8 @@ void main() {
       testWidgets(
         'with empty style when both have not been solved',
         (tester) async {
-          final horizontalWord = ant.copyWith(mascot: Mascots.dash);
-          final verticalWord = ant.copyWith(mascot: Mascots.dino);
+          final horizontalWord = ant.copyWith(mascot: Mascot.dash);
+          final verticalWord = ant.copyWith(mascot: Mascot.dino);
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),
@@ -278,9 +278,9 @@ void main() {
         'with horizontal word mascot when both have the same timestamp',
         (tester) async {
           final horizontalWord =
-              ant.copyWith(mascot: Mascots.dash, solvedTimestamp: 1);
+              ant.copyWith(mascot: Mascot.dash, solvedTimestamp: 1);
           final verticalWord =
-              ant.copyWith(mascot: Mascots.dino, solvedTimestamp: 1);
+              ant.copyWith(mascot: Mascot.dino, solvedTimestamp: 1);
           final letterData = CrosswordLetterData(
             index: (0, 0),
             chunkIndex: (0, 0),

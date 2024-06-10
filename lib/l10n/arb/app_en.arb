@@ -41,7 +41,7 @@
   "@shareWordSubtitle": {
     "description": "Subtitle of the share word modal"
   },
-  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with Gemini API.",
+  "welcomeSubtitle": "Help solve the 2024 I/O Crossword, built with the Gemini API.",
   "@welcomeSubtitle": {
     "description": "Subtitle to be displayed in the welcome modal"
   },
@@ -61,7 +61,7 @@
   "@chooseYourTeam": {
     "description": "The title for the team selection page"
   },
-  "joinTeam": "Join {team} team",
+  "joinTeam": "Join team {team}",
   "@joinTeam": {
     "description": "Text for which team you are choosing",
     "placeholders": {
@@ -199,9 +199,17 @@
   "@alreadySolvedSubtitle": {
     "description": "Subtitle when a word gets solved while solving it."
   },
-  "learn": "Learn",
-  "@learn": {
-    "description": "learn label"
+  "learnHowThe": "Learn how the",
+  "@learnHowThe": {
+    "description": "'learn how the' label"
+  },
+  "ioCrossword": "I/O Crossword",
+  "@ioCrossword": {
+    "description": "'I/O Crossword' label"
+  },
+  "wasMade": "was made",
+  "@wasMade": {
+    "description": "'was made' label"
   },
   "howMade": "how I/O Crossword was made",
   "@howMade": {
@@ -214,6 +222,14 @@
   "openSourceCode": "grab the open source code",
   "@openSourceCode": {
     "description": "Open source code text to open link"
+  },
+  "joinThe": "Join the",
+  "@joinThe": {
+    "description": "join the label"
+  },
+  "geminiCompetition": "Gemini API Developer Competition",
+  "@geminiCompetition": {
+    "description": "Gemini API dev competition text to open link"
   },
   "otherLinks": "Other links",
   "@otherLinks": {
@@ -303,7 +319,7 @@
   "@finishAndSubmitScore": {
     "description": "Finish & submit score for menu label"
   },
-  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with Gemini API.",
+  "claimBadgeDescription": "Get a badge for your Developer Profile to show you helped solve the I/O Crossword built with the Gemini API.",
   "@claimBadgeDescription": {
     "description": "Developer Profile label"
   },
@@ -343,7 +359,7 @@
   "@aboutHowToPlayFourthInstructionsTitle": {
     "description": "The fourth step instruction title."
   },
-  "aboutHowToPlayFourthInstructions": "Stumped? Ask Gemini Yes or No questions to get hints in real time.",
+  "aboutHowToPlayFourthInstructions": "Stumped? Ask the Gemini API Yes or No questions to get hints in real time.",
   "@aboutHowToPlayFourthInstructions": {
     "description": "The Fourth step instruction on how to play."
   },

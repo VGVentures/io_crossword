@@ -192,7 +192,7 @@ void main() {
           playerBloc,
           Stream<PlayerState>.empty(),
           initialState: PlayerState(
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           ),
         );
 
@@ -213,7 +213,7 @@ void main() {
           playerBloc,
           Stream<PlayerState>.empty(),
           initialState: PlayerState(
-            mascot: Mascots.sparky,
+            mascot: Mascot.sparky,
           ),
         );
 
@@ -234,7 +234,7 @@ void main() {
           playerBloc,
           Stream<PlayerState>.empty(),
           initialState: PlayerState(
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         );
 
@@ -255,7 +255,7 @@ void main() {
           playerBloc,
           Stream<PlayerState>.empty(),
           initialState: PlayerState(
-            mascot: Mascots.android,
+            mascot: Mascot.android,
           ),
         );
 

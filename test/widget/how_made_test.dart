@@ -17,7 +17,7 @@ class _MockUrlLauncherPlatform extends Mock
 class _FakeLaunchOptions extends Fake implements LaunchOptions {}
 
 void main() {
-  group('$HowMade', () {
+  group('$HowItWasMade', () {
     late UrlLauncherPlatform urlLauncher;
 
     late AppLocalizations l10n;
@@ -38,28 +38,29 @@ void main() {
     });
 
     testWidgets(
-      'displays information how made and open source',
+      'displays information how made and join the gemini dev competition',
       (tester) async {
-        await tester.pumpApp(HowMade());
+        await tester.pumpApp(HowItWasMade());
 
         final text =
-            '${l10n.learn} ${l10n.howMade} ${l10n.and} ${l10n.openSourceCode}.';
+            '${l10n.learnHowThe} ${l10n.ioCrossword} ${l10n.wasMade}.\n'
+            '${l10n.joinThe} ${l10n.geminiCompetition}.';
 
         expect(find.text(text, findRichText: true), findsOneWidget);
       },
     );
 
     testWidgets(
-      'calls launchUrl when tapped on open source code',
+      'calls launchUrl when tapped on I/O Crossword',
       (tester) async {
-        await tester.pumpApp(HowMade());
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
               widget is RichText &&
               find.tapTextSpan(
                 widget,
-                l10n.openSourceCode,
+                l10n.ioCrossword,
               ),
         );
 
@@ -69,7 +70,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://github.com/VGVentures/io_crossword',
+            'https://developers.google.com/learn/pathways',
             any(),
           ),
         );
@@ -77,13 +78,14 @@ void main() {
     );
 
     testWidgets(
-      'calls launchUrl when tapped on "How crossword was made"',
+      'calls launchUrl when tapped on gemini dev competition',
       (tester) async {
-        await tester.pumpApp(HowMade());
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
-              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+              widget is RichText &&
+              find.tapTextSpan(widget, l10n.geminiCompetition),
         );
 
         await tester.tap(finder);
@@ -91,7 +93,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://flutter.dev/crossword',
+            'https://ai.google.dev/competition',
             any(),
           ),
         );
@@ -103,11 +105,11 @@ void main() {
       (tester) async {
         when(() => urlLauncher.canLaunch(any())).thenAnswer((_) async => false);
 
-        await tester.pumpApp(HowMade());
+        await tester.pumpApp(HowItWasMade());
 
         final finder = find.byWidgetPredicate(
           (widget) =>
-              widget is RichText && find.tapTextSpan(widget, l10n.howMade),
+              widget is RichText && find.tapTextSpan(widget, l10n.ioCrossword),
         );
 
         await tester.tap(finder);

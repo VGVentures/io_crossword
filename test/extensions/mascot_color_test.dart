@@ -8,23 +8,23 @@ import 'package:io_crossword_ui/io_crossword_ui.dart';
 void main() {
   group('MascotColor', () {
     test('returns seedBlue for dash', () {
-      expect(Mascots.dash.color, IoCrosswordColors.flutterBlue);
+      expect(Mascot.dash.color, IoCrosswordColors.flutterBlue);
     });
 
     test('returns seedYellow for sparky', () {
-      expect(Mascots.sparky.color, IoCrosswordColors.sparkyYellow);
+      expect(Mascot.sparky.color, IoCrosswordColors.sparkyYellow);
     });
 
     test('returns accessibleGrey for dino', () {
-      expect(Mascots.dino.color, IoCrosswordColors.accessibleGrey);
+      expect(Mascot.dino.color, IoCrosswordColors.accessibleGrey);
     });
 
     test('returns seedGreen for android', () {
-      expect(Mascots.android.color, IoCrosswordColors.androidGreen);
+      expect(Mascot.android.color, IoCrosswordColors.androidGreen);
     });
 
     test('returns seedBlue when the mascot is not defined', () {
-      final Mascots? nullMascot = null;
+      final Mascot? nullMascot = null;
       expect(nullMascot.color, IoCrosswordColors.flutterBlue);
     });
   });
