@@ -50,10 +50,10 @@ void main() {
       expect(find.text(l10n.thanksForContributing), findsOneWidget);
     });
 
-    testWidgets('displays HowMade', (tester) async {
+    testWidgets('displays HowMadeAndJoinCompetition', (tester) async {
       await tester.pumpApp(SingleChildScrollView(child: EndGameContent()));
 
-      expect(find.byType(HowMade), findsOneWidget);
+      expect(find.byType(HowItWasMade), findsOneWidget);
     });
 
     testWidgets('displays EndGameImage', (tester) async {
@@ -204,10 +204,10 @@ void main() {
       playerBloc = _MockPlayerBloc();
     });
 
-    testWidgets('displays endGameDash image with ${Mascots.dash}',
+    testWidgets('displays endGameDash image with ${Mascot.dash}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.dash)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.dash)),
       );
 
       await tester.pumpApp(
@@ -222,10 +222,10 @@ void main() {
       );
     });
 
-    testWidgets('displays endGameDash image with ${Mascots.dino}',
+    testWidgets('displays endGameDash image with ${Mascot.dino}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.dino)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.dino)),
       );
 
       await tester.pumpApp(
@@ -242,10 +242,10 @@ void main() {
       );
     });
 
-    testWidgets('displays endGameDash image with ${Mascots.sparky}',
+    testWidgets('displays endGameDash image with ${Mascot.sparky}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.sparky)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.sparky)),
       );
 
       await tester.pumpApp(
@@ -262,10 +262,10 @@ void main() {
       );
     });
 
-    testWidgets('displays endGameDash image with ${Mascots.android}',
+    testWidgets('displays endGameDash image with ${Mascot.android}',
         (tester) async {
       when(() => playerBloc.state).thenReturn(
-        PlayerState(player: Player.empty.copyWith(mascot: Mascots.android)),
+        PlayerState(player: Player.empty.copyWith(mascot: Mascot.android)),
       );
 
       await tester.pumpApp(

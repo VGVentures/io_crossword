@@ -47,7 +47,7 @@ class WordSelectionTopBar extends StatelessWidget {
               if (word == null) return const SizedBox.shrink();
 
               final l10n = context.l10n;
-              final mascot = context.select<CrosswordBloc, Mascots?>(
+              final mascot = context.select<CrosswordBloc, Mascot?>(
                 (bloc) {
                   final currentWord = bloc.state.sections[word.section]?.words
                       .firstWhere((element) => element.id == word.word.id);

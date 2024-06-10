@@ -426,7 +426,7 @@ void main() {
           player: Player(
             id: 'id',
             initials: 'VGV',
-            mascot: Mascots.sparky,
+            mascot: Mascot.sparky,
             score: 100,
             streak: 5,
           ),

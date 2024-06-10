@@ -73,13 +73,13 @@ void main() {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
             (_) async => Player(
               id: 'userId',
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
               initials: 'ABC',
             ),
           );
 
           when(
-            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
           ).thenAnswer((_) async => (true, true));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -106,13 +106,13 @@ void main() {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
             (_) async => Player(
               id: 'userId',
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
               initials: 'ABC',
             ),
           );
 
           when(
-            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
           ).thenAnswer((_) async => (true, true));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -138,7 +138,7 @@ void main() {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
             (_) async => Player(
               id: 'userId',
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
               initials: 'ABC',
             ),
           );
@@ -146,7 +146,7 @@ void main() {
             () => crosswordRepository.updateSolvedWordsCount(),
           ).thenAnswer((_) async {});
           when(
-            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
           ).thenAnswer((_) async => (true, false));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -172,12 +172,12 @@ void main() {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
             (_) async => Player(
               id: 'userId',
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
               initials: 'ABC',
             ),
           );
           when(
-            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
           ).thenAnswer((_) async => (false, false));
           when(() => request.json()).thenAnswer(
             (_) async => {
@@ -255,12 +255,12 @@ void main() {
           when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
             (_) async => Player(
               id: 'userId',
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
               initials: 'ABC',
             ),
           );
           when(
-            () => crosswordRepository.answerWord('id', Mascots.dash, 'sun'),
+            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
           ).thenThrow(Exception('Oops'));
 
           final response = await route.onRequest(requestContext);

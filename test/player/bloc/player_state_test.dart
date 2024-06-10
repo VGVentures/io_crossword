@@ -25,7 +25,7 @@ void main() {
             initials: 'AAA',
             score: 100,
             streak: 2,
-            mascot: Mascots.dash,
+            mascot: Mascot.dash,
           ),
         ),
         isNot(equals(PlayerState())),
@@ -57,8 +57,8 @@ void main() {
           rank: 20,
         );
 
-        final newState = state.copyWith(mascot: Mascots.dino);
-        expect(newState.mascot, equals(Mascots.dino));
+        final newState = state.copyWith(mascot: Mascot.dino);
+        expect(newState.mascot, equals(Mascot.dino));
       });
 
       test('returns an instance with new initials', () {
@@ -82,7 +82,7 @@ void main() {
               initials: 'AAA',
               score: 100,
               streak: 2,
-              mascot: Mascots.dash,
+              mascot: Mascot.dash,
             ),
           ),
           equals(
@@ -92,7 +92,7 @@ void main() {
                 initials: 'AAA',
                 score: 100,
                 streak: 2,
-                mascot: Mascots.dash,
+                mascot: Mascot.dash,
               ),
             ),
           ),

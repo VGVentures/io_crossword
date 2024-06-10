@@ -21,7 +21,7 @@ void main() {
 
     const player = Player(
       id: 'user-id',
-      mascot: Mascots.android,
+      mascot: Mascot.android,
       streak: 5,
       initials: 'ABC',
       score: 1200,
@@ -91,7 +91,7 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ).thenAnswer((_) async {});
           when(
@@ -99,27 +99,27 @@ void main() {
           ).thenAnswer((_) => Stream.value((player, 3)));
         },
         seed: () => PlayerState(
-          mascot: Mascots.dino,
+          mascot: Mascot.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
           PlayerState(
             status: PlayerStatus.playing,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: player,
             rank: 3,
           ),
@@ -127,7 +127,7 @@ void main() {
         verify: (bloc) => verify(
           () => leaderboardResource.createScore(
             initials: 'AAA',
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         ).called(1),
       );
@@ -139,7 +139,7 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ).thenAnswer((_) async {});
           when(
@@ -148,27 +148,27 @@ void main() {
         },
         seed: () => PlayerState(
           status: PlayerStatus.playing,
-          mascot: Mascots.dino,
+          mascot: Mascot.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
           PlayerState(
             status: PlayerStatus.playing,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: player,
             rank: 3,
           ),
@@ -176,7 +176,7 @@ void main() {
         verify: (bloc) => verify(
           () => leaderboardResource.createScore(
             initials: 'AAA',
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         ).called(1),
       );
@@ -188,36 +188,36 @@ void main() {
           when(
             () => leaderboardResource.createScore(
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ).thenThrow(Exception());
         },
         seed: () => PlayerState(
-          mascot: Mascots.dino,
+          mascot: Mascot.dino,
           player: Player(
             id: '1',
             initials: 'AAA',
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
           ),
         ),
         act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
           PlayerState(
             status: PlayerStatus.failure,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
         ],
@@ -229,11 +229,11 @@ void main() {
           build: () => bloc,
           seed: () => PlayerState(
             status: PlayerStatus.loading,
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: 'AAA',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
           act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
@@ -244,11 +244,11 @@ void main() {
           'when player initials are empty',
           build: () => bloc,
           seed: () => PlayerState(
-            mascot: Mascots.dino,
+            mascot: Mascot.dino,
             player: Player(
               id: '1',
               initials: '',
-              mascot: Mascots.dino,
+              mascot: Mascot.dino,
             ),
           ),
           act: (bloc) => bloc.add(PlayerCreateScoreRequested('id')),
@@ -266,14 +266,14 @@ void main() {
           status: PlayerStatus.playing,
           rank: 50,
         ),
-        act: (bloc) => bloc.add(MascotSelected(Mascots.android)),
+        act: (bloc) => bloc.add(MascotSelected(Mascot.android)),
         expect: () => <PlayerState>[
           PlayerState(
             status: PlayerStatus.playing,
             rank: 50,
-            mascot: Mascots.android,
+            mascot: Mascot.android,
             player: Player.empty.copyWith(
-              mascot: Mascots.android,
+              mascot: Mascot.android,
             ),
           ),
         ],

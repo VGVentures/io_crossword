@@ -98,7 +98,7 @@ void main() {
         when(() => response.statusCode).thenReturn(HttpStatus.created);
         await resource.createScore(
           initials: 'TST',
-          mascot: Mascots.dino,
+          mascot: Mascot.dino,
         );
 
         verify(
@@ -118,7 +118,7 @@ void main() {
         when(() => response.body).thenReturn('Oops');
 
         await expectLater(
-          () => resource.createScore(initials: 'TST', mascot: Mascots.dino),
+          () => resource.createScore(initials: 'TST', mascot: Mascot.dino),
           throwsA(
             isA<ApiClientError>().having(
               (e) => e.cause,

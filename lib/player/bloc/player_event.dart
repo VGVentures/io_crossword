@@ -25,7 +25,7 @@ class PlayerCreateScoreRequested extends PlayerEvent {
 class MascotSelected extends PlayerEvent {
   const MascotSelected(this.mascot);
 
-  final Mascots mascot;
+  final Mascot mascot;
 
   @override
   List<Object> get props => [mascot];

@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +12,6 @@ import 'package:io_crossword/crossword/crossword.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
 import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -162,34 +162,128 @@ void main() {
     });
 
     testWidgets(
-        'does nothing when zoom out button is pressed and '
-        'limit has been reached', (tester) async {
-      const zoomLimit = 0.6;
-      await tester.pumpSubject(
-        crosswordBloc: crosswordBloc,
-        CrosswordInteractiveViewer(
-          zoomLimit: zoomLimit,
-          builder: (context, position) {
-            return const SizedBox();
-          },
-        ),
-      );
+      'keeps same scale when zoom out button is pressed and zoom value limit '
+      'has been reached',
+      (tester) async {
+        const zoomLimit = 0.6;
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
 
-      final viewerState = tester.state<CrosswordInteractiveViewerState>(
-        find.byType(CrosswordInteractiveViewer),
-      );
+        final viewerState = tester.state<CrosswordInteractiveViewerState>(
+          find.byType(CrosswordInteractiveViewer),
+        );
 
-      while (viewerState.currentScale > zoomLimit) {
+        while (viewerState.currentScale > zoomLimit) {
+          await tester.tap(find.byIcon(Icons.remove));
+          await tester.pumpAndSettle();
+        }
+        expect(viewerState.currentScale, zoomLimit);
+
         await tester.tap(find.byIcon(Icons.remove));
         await tester.pumpAndSettle();
-      }
-      expect(viewerState.currentScale, zoomLimit);
 
-      await tester.tap(find.byIcon(Icons.remove));
-      await tester.pumpAndSettle();
+        expect(viewerState.currentScale, zoomLimit);
+      },
+    );
 
-      expect(viewerState.currentScale, zoomLimit);
-    });
+    testWidgets(
+      'keeps same scale when zoom out button is pressed and board size limit '
+      'has been reached',
+      (tester) async {
+        const zoomLimit = 0.2;
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, position) {
+              return const SizedBox();
+            },
+          ),
+        );
+
+        final viewerState = tester.state<CrosswordInteractiveViewerState>(
+          find.byType(CrosswordInteractiveViewer),
+        );
+
+        var previousScale = 0.0;
+        while (viewerState.currentScale != previousScale) {
+          previousScale = viewerState.currentScale;
+          await tester.tap(find.byIcon(Icons.remove));
+          await tester.pumpAndSettle();
+        }
+
+        expect(viewerState.currentScale >= zoomLimit, isTrue);
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        expect(viewerState.currentScale >= zoomLimit, isTrue);
+      },
+    );
+
+    testWidgets(
+      'keeps board within boundaries when viewport is in the bottom right and '
+      'zoom out button is pressed',
+      (tester) async {
+        const zoomLimit = 0.2;
+        late double boardWidth;
+        late double boardHeight;
+        late Quad gameViewport;
+
+        await tester.pumpSubject(
+          crosswordBloc: crosswordBloc,
+          CrosswordInteractiveViewer(
+            zoomLimit: zoomLimit,
+            builder: (context, viewport) {
+              gameViewport = viewport;
+              final crosswordLayout = CrosswordLayoutScope.of(context);
+              boardWidth = crosswordLayout.padding.left +
+                  crosswordLayout.crosswordSize.width +
+                  crosswordLayout.padding.right;
+              boardHeight = crosswordLayout.padding.top +
+                  crosswordLayout.crosswordSize.height +
+                  crosswordLayout.padding.bottom;
+              return SizedBox(
+                width: boardWidth,
+                height: boardHeight,
+              );
+            },
+          ),
+        );
+
+        tester
+            .state<CrosswordInteractiveViewerState>(
+              find.byType(CrosswordInteractiveViewer),
+            )
+            .transform(
+              Matrix4.identity()
+                ..translate2(
+                  Vector2(
+                    gameViewport.point2.x - boardWidth,
+                    gameViewport.point2.y - boardHeight,
+                  ),
+                ),
+            );
+
+        await tester.pumpAndSettle();
+
+        expect(gameViewport.point2.x, equals(boardWidth));
+        expect(gameViewport.point2.y, equals(boardHeight));
+
+        await tester.tap(find.byIcon(Icons.remove));
+        await tester.pumpAndSettle();
+
+        expect(gameViewport.point2.x.roundToDouble(), equals(boardWidth));
+        expect(gameViewport.point2.y.roundToDouble(), equals(boardHeight));
+      },
+    );
 
     testWidgets('zooms out when zoom out button is pressed', (tester) async {
       await tester.pumpSubject(

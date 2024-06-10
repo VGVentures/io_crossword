@@ -37,8 +37,14 @@ void main() async {
           firestore: firestore,
         );
 
+        // Signing out first to refresh the auth token when reloading the page.
+        final previousUser = await authenticationRepository.user.first;
+        if (previousUser != User.unauthenticated) {
+          await authenticationRepository.signOut();
+        }
         await authenticationRepository.signInAnonymously();
         await authenticationRepository.idToken.first;
+        final newUser = await authenticationRepository.user.first;
 
         final apiClient = ApiClient(
           baseUrl: 'https://io-crossword-api-u3emptgwka-uc.a.run.app',
@@ -53,7 +59,7 @@ void main() async {
           leaderboardRepository: leaderboardRepository,
           crosswordRepository: CrosswordRepository(db: firestore),
           boardInfoRepository: BoardInfoRepository(firestore: firestore),
-          user: await authenticationRepository.user.first,
+          user: newUser,
         );
       },
     ),

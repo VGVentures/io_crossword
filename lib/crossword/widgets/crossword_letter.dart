@@ -144,7 +144,7 @@ extension on CrosswordLetterWords {
   /// Returns the mascot of the first team that resolved the letter.
   ///
   /// If `null`, no team has yet resolved the letter.
-  Mascots? mascot() {
+  Mascot? mascot() {
     return switch (($1?.isSolved ?? false, $2?.isSolved ?? false)) {
       (false, false) => null,
       (true, false) => $1!.mascot,
@@ -156,13 +156,13 @@ extension on CrosswordLetterWords {
 }
 
 extension on IoCrosswordLetterTheme {
-  IoCrosswordLetterStyle fromMascot(Mascots? mascot) {
+  IoCrosswordLetterStyle fromMascot(Mascot? mascot) {
     return switch (mascot) // coverage:ignore-line
         {
-      Mascots.android => android,
-      Mascots.dash => dash,
-      Mascots.dino => dino,
-      Mascots.sparky => sparky,
+      Mascot.android => android,
+      Mascot.dash => dash,
+      Mascot.dino => dino,
+      Mascot.sparky => sparky,
       _ => empty,
     };
   }
