@@ -1,6 +1,7 @@
 name: deploy_app_dev
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -14,6 +15,20 @@ jobs:
     name: Deploy App Development
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node.js runtime environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Build landing page
+      - run: | 
+          cd landing
+          yarn install
+          yarn build
+          cd ..
+
+      - name: Setup Flutter & build game
       - uses: subosito/flutter-action@v2
         with:
           channel: beta
@@ -21,7 +36,14 @@ jobs:
       - run: flutter packages get
       - run: flutter build web -t lib/main_development.dart --dart-define CROSSWORD_URL=${{ env.CROSSWORD_URL }} --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY }} --wasm
 
+      - name: Move build files to public folder
+      - run: |
+          mkdir public
+          mkdir public/game
+          mv landing/dist/* public/
+          mv build/web/* public/game/
 
+      - name: Deploy landing page and game to Firebase Hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
