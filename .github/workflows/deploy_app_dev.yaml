@@ -21,7 +21,7 @@ jobs:
           node-version: '20.x'
 
       - name: Build landing page
-      - run: | 
+      - run: |
           cd landing
           yarn install
           yarn build
