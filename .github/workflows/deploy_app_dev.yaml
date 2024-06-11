@@ -1,6 +1,6 @@
 name: deploy_app_dev
 
-on: workflow_dispatch
+on: pull_request
 
 env:
   CROSSWORD_URL: https://e7b2896c65fabc0480edc6c0e.web.app
