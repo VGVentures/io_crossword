@@ -1,6 +1,9 @@
 name: deploy_app_dev
 
-on: pull_request
+on:
+  push:
+    branches:
+      - main
 
 env:
   CROSSWORD_URL: https://e7b2896c65fabc0480edc6c0e.web.app
@@ -24,8 +27,7 @@ jobs:
           yarn build
           cd ..
 
-      - name: Setup Flutter & build game
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           channel: beta
           flutter-version: 3.23.0-0.1.pre
