@@ -9,6 +9,7 @@ env:
   GAME_URL: https://prod-9961b3776301c37db86d9038f.web.app
   INITIALS_BLACKLIST_ID: CRORRJZBdf0rLLkHDr9j
   FB_STORAGE_BUCKET: io-crossword.appspot.com
+  HINT_FUNCTION_URL: gethintkit-u3emptgwka-uc.a.run.app
 
 jobs:
   deploy:
@@ -54,6 +55,7 @@ jobs:
             GAME_URL=${{ env.GAME_URL }}
             INITIALS_BLACKLIST_ID=${{ env.INITIALS_BLACKLIST_ID }}
             FB_STORAGE_BUCKET=${{ env.FB_STORAGE_BUCKET }}
+            HINT_FUNCTION_URL=${{ env.HINT_FUNCTION_URL }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
