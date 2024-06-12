@@ -39,10 +39,10 @@ jobs:
         run: |
           mkdir public
           mkdir public/game
-          cp -pRP build/web/index.html public/game/
-          cp -pRP build/web/{.,}* public/
-          cp -pRP landing/dist/index.html public/
-          cp -pRP landing/dist/assets/* public/assets/
+          cp -a build/web/index.html public/game/index.html
+          cp -a build/web/ public
+          cp -a landing/dist/index.html public/index.html
+          cp -a landing/dist/assets public/assets
 
       - name: Deploy landing page and game to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
