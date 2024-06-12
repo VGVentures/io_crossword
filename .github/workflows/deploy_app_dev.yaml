@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat/add-landing-page
 
 env:
   CROSSWORD_URL: https://e7b2896c65fabc0480edc6c0e.web.app
@@ -38,8 +39,10 @@ jobs:
         run: |
           mkdir public
           mkdir public/game
-          mv landing/dist/* public/
-          mv build/web/* public/game/
+          mv build/web/index.html public/game/
+          mv build/web/{.,}* public/
+          mv landing/dist/index.html public/
+          mv landing/dist/assets/* public/assets/
 
       - name: Deploy landing page and game to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
