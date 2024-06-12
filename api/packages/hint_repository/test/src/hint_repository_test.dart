@@ -218,7 +218,7 @@ void main() {
 
     group('getPreviousHints', () {
       test('returns an empty list when no hints are found', () async {
-        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
             .thenAnswer((_) async => null);
 
         final hints = await hintRepository.getPreviousHints(
@@ -230,7 +230,7 @@ void main() {
       });
 
       test('returns a list of hints', () async {
-        when(() => dbClient.getById('answers2/wordId/hints', 'userId'))
+        when(() => dbClient.getById('answers/wordId/hints', 'userId'))
             .thenAnswer(
           (_) async => DbEntityRecord(
             id: 'userId',
@@ -239,6 +239,7 @@ void main() {
                 {
                   'question': 'question',
                   'response': 'yes',
+                  'readableResponse': 'Yes, that is correct!',
                 },
               ],
             },
@@ -285,7 +286,7 @@ void main() {
 
         verify(
           () => dbClient.set(
-            'answers2/wordId/hints',
+            'answers/wordId/hints',
             DbEntityRecord(
               id: 'userId',
               data: const {
