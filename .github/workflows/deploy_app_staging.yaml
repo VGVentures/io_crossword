@@ -11,6 +11,19 @@ jobs:
     name: Deploy App Staging
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node.js runtime environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Build landing page
+        run: |
+          cd landing
+          yarn install
+          yarn build
+          cd ..
+
       - uses: subosito/flutter-action@v2
         with:
           channel: beta
@@ -18,8 +31,17 @@ jobs:
       - run: flutter packages get
       - run: flutter build web -t lib/main_staging.dart --dart-define CROSSWORD_URL=${{ env.CROSSWORD_URL }} --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY }} --wasm
 
+      - name: Move build files to public folder
+        run: |
+          mkdir public
+          mkdir public/game
+          cp -a build/web/index.html public/game/index.html
+          cp -a build/web/* public/
+          cp -a landing/dist/index.html public/index.html
+          cp -a landing/dist/assets/* public/assets/
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy landing page and game to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
