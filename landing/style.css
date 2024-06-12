@@ -1,0 +1,340 @@
+:root {
+  --ui-header-height: 88px;
+
+  --max-page-content-width: 1440px;
+
+  /* Colors */
+  --basic-white: #ffffff;
+  --basic-dark-gray: #212123;
+  --basic-medium-gray: #393b40;
+  --basic-soft-gray: #80858b;
+  --basic-light-gray: #eeeeee;
+  --button-gradient: linear-gradient(90deg, #3D96FF 0%, #6AC76E 34.5%, #FECD3C 66%, #EA4335 100%);
+  --text-gradient: linear-gradient(90.54deg, #3D96FF 14.28%, #6AC76E 38.18%, #FECD3C 60.01%, #EA4335 83.56%);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: var(--basic-dark-gray);
+  color: var(--basic-white);
+}
+
+* {
+  font-family: Google Sans Display, sans-serif, 'Roboto';
+}
+
+.eyebrow {
+  color: var(--basic-soft-gray);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+
+.gradient-title {
+  margin: 0;
+  font-size: 56px;
+  background: linear-gradient(90.54deg, #3D96FF 14.28%, #6AC76E 38.18%, #FECD3C 60.01%, #EA4335 83.56%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.gradient-button {
+  display: inline-block;
+  text-decoration: none;
+  text-wrap: nowrap;
+  cursor: pointer;
+  padding: 1rem 2.5rem;
+  color: var(--basic-white);
+  border: 2px solid transparent;
+  border-radius: 2.25rem;
+  background:
+    /* this is the background */
+    linear-gradient(var(--basic-dark-gray), var(--basic-dark-gray)) padding-box,
+    /* this is the border */
+    var(--button-gradient) border-box;
+}
+
+
+header {
+  position: sticky;
+  height: var(--ui-header-height);
+  background-color: var(--basic-dark-gray);
+  border-bottom: 1px solid var(--basic-medium-gray);
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header>.gradient-button {
+  padding: 1rem 1.5rem;
+}
+
+#hero {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--basic-dark-gray);
+  background-image: url('./assets/hero-image.png');
+  background-repeat: no-repeat;
+}
+
+.hero__content-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__content-inner-container {
+  max-width: var(--max-page-content-width);
+  width: 80%;
+  display: flex;
+}
+
+.hero__content {
+  height: fit-content;
+  width: fit-content;
+  margin: auto 0;
+}
+
+.hero__content>h1 {
+  margin: 0;
+  font-size: 56px;
+  background: linear-gradient(90.54deg, #3D96FF 14.28%, #6AC76E 38.18%, #FECD3C 60.01%, #EA4335 83.56%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero__content>h2 {
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.youtube-embed__video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10rem auto;
+  /* width: 850px; has to match the iframe width */
+  -webkit-mask-image: -webkit-radial-gradient(circle,
+      white 100%,
+      black 100%);
+  /*ios 7 border-radius-bug */
+  -webkit-transform: rotate(0.000001deg);
+  /*mac os 10.6 safari 5 border-radius-bug */
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.youtube-embed__video-container>iframe {
+  aspect-ratio: 16 / 9;
+  max-width: 850px;
+  width: 100%;
+  height: 100%;
+  margin: 0 5rem;
+}
+
+#building {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.building__how-we-built-title {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--max-page-content-width);
+  width: 80%;
+  margin: 0 auto;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 5rem auto;
+  max-width: var(--max-page-content-width);
+  width: 80%;
+}
+
+.feature>img {
+  max-width: 90%;
+}
+
+.feature.reverse {
+  flex-direction: column-reverse;
+}
+
+.feature-content.gradient-title {
+  text-align: left;
+}
+
+.feature-content>p {
+  color: var(--basic-light-gray);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+}
+
+#faq {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faq {
+  margin-bottom: auto;
+}
+
+/* Accordion */
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion-button {
+  background-color: transparent;
+  color: var(--basic-white);
+  cursor: pointer;
+  padding: 1.25rem 3.25rem 2rem 1.25rem;
+  font-size: 2rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+}
+
+.accordion-button:after {
+  content: url('./assets/plus-sign.svg');
+  font-size: 18px;
+  color: var(--basic-white);
+  float: right;
+  margin-left: 5px;
+  margin-right: -2rem;
+}
+
+.accordion-button.open:after {
+  color: var(--basic-white);
+  content: "\2796";
+  /* Unicode character for "minus" sign (-) */
+}
+
+.accordion-button.closed {
+  transition-delay: 0.5s;
+  border-bottom: 1px solid var(--basic-medium-gray);
+}
+
+.accordion-button.open {
+  border-bottom: none;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--basic-medium-gray);
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+
+.panel.open {
+  animation-name: slideDown;
+}
+
+.panel.closed {
+  animation-name: slideUp;
+  display: none;
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    color: rgba(255, 255, 255, 0);
+    display: none;
+  }
+
+  to {
+    max-height: 100px;
+    color: rgba(255, 255, 255, 1);
+    display: block;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    max-height: 100px;
+    opacity: 1;
+    display: block;
+  }
+
+  to {
+    max-height: 0;
+    display: none;
+    color: rgba(255, 255, 255, 0);
+  }
+}
+
+/* End Accordion */
+
+@media screen and (min-width: 640px) {
+  header {
+    padding: 0 5rem;
+  }
+
+  #hero {
+    background-position: right;
+  }
+
+  .building__how-we-built-title {
+    align-items: center;
+  }
+
+  .accordion-container {
+    max-width: 90%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .feature {
+    flex-direction: row;
+  }
+
+  .feature>img {
+    max-width: 50%;
+  }
+
+  .feature-content {
+    max-width: 45%;
+  }
+
+  .feature.reverse {
+    flex-direction: row-reverse;
+  }
+
+  .accordion-container {
+    max-width: 50%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .feature {
+    gap: 5rem;
+  }
+
+  .feature-content {
+    max-width: 35%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .feature-content {
+    max-width: 45%;
+  }
+}

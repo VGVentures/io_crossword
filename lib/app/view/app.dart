@@ -107,6 +107,7 @@ class AppView extends StatelessWidget {
         },
         builder: (context, mascot) {
           return MaterialApp(
+            title: 'I/O Crossword',
             theme: mascot.theme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

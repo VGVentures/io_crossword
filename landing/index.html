@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/SmallLogo.png" type="image/png">
+    <title>I/O Crossword</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="./main.js" type="module" defer></script>
+  </head>
+  <body>
+    <header>
+      <picture>
+        <source media="(min-width: 640px)" srcset="./assets/Logo.svg" />
+        <img src="./assets/SmallLogo.png" alt="Google IO Crossword Logo" />
+      </picture>
+      <a class="gradient-button" href="/game">Play Now</a>
+    </header>
+    <main>
+      <section id="hero">
+        <div class="hero__content-container">
+          <div class="hero__content-inner-container">
+            <div class="hero__content">
+              <h1>
+                World&apos;s Largest
+                <br />
+                Crossword
+              </h1>
+              <h2>
+                Built with Gemini, Flutter and Firebase for
+                <br />
+                Google I/O 2024. Let&apos;s break the record!
+              </h2>
+              <a class="gradient-button" href="/game">Play Now</a>
+            </div>
+          </div>
+        </div>
+        <img
+          src="./assets/hero-image.png"
+          alt="hero banner"
+          style="visibility: hidden; height: 700px; width: 100%"
+        />
+      </section>
+      <section>
+        <div class="youtube-embed__video-container">
+          <iframe
+            src="https://www.youtube.com/embed/tgbNymZ7vqY"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+      <section id="building">
+        <div class="building__how-we-built-title">
+          <h4 class="eyebrow">Building I/O Crossword</h4>
+          <h3 class="gradient-title">How we built it</h3>
+        </div>
+        <div class="feature">
+          <img src="./assets/how-we-built-it.png" alt="" />
+          <div class="feature-content">
+            <p>
+              The game is built in Flutter for the web, compiled to WASM, and
+              optimized for Chrome. Words and clues in the puzzle are
+              pre-generated with Gemini 1.5 Pro in Google AI Studio. The backend
+              is built on Firebase and Google Cloud using Gemini Extensions to
+              seamlessly create and connect AI generated content with the game.
+              Dive into the code with a new Gemini API template in IDX.
+            </p>
+            <a class="gradient-button" href="https://flutter.dev">Learn More</a>
+          </div>
+        </div>
+        <div class="feature reverse">
+          <img src="./assets/get-into-the-code.png" alt="" />
+          <div class="feature-content">
+            <div>
+              <h4 class="eyebrow">The Code</h4>
+              <h3 class="gradient-title">Get into the Code</h3>
+            </div>
+            <p>
+              Access the code that makes up the I/O Crossword and let it inspire
+              you to use all the tools in and more to create even more fun and
+              delightful innovations of your own.
+            </p>
+            <a class="gradient-button" href="https://flutter.dev">Dive In</a>
+          </div>
+        </div>
+        <section id="faq">
+          <div class="feature">
+            <div class="feature-content faq">
+              <div>
+                <h4 class="eyebrow">FAQ</h4>
+                <h3 class="gradient-title">Frequently Asked Questions</h3>
+              </div>
+            </div>
+            <div class="accordion-container feature-content">
+              <button class="accordion-button closed">What is this?</button>
+              <div class="panel closed">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Illum officia nihil natus, numquam animi accusamus consectetur
+                  quae voluptatum eligendi culpa ad quasi optio cupiditate
+                  corrupti porro quia possimus nobis tenetur!
+                </p>
+              </div>
+
+              <button class="accordion-button closed">How was AI used?</button>
+              <div class="panel closed">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Illum officia nihil natus, numquam animi accusamus consectetur
+                  quae voluptatum eligendi culpa ad quasi optio cupiditate
+                  corrupti porro quia possimus nobis tenetur!
+                </p>
+              </div>
+
+              <button class="accordion-button closed">
+                Are there prizes for the winners?
+              </button>
+              <div class="panel closed">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Illum officia nihil natus, numquam animi accusamus consectetur
+                  quae voluptatum eligendi culpa ad quasi optio cupiditate
+                  corrupti porro quia possimus nobis tenetur!
+                </p>
+              </div>
+
+              <button class="accordion-button closed">
+                What data is stored and publicly available when sharing?
+              </button>
+              <div class="panel closed">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Illum officia nihil natus, numquam animi accusamus consectetur
+                  quae voluptatum eligendi culpa ad quasi optio cupiditate
+                  corrupti porro quia possimus nobis tenetur!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
