@@ -26,6 +26,7 @@ void main() {
       httpClient = _MockHttpClient();
       hintRepository = HintRepository(
         dbClient: dbClient,
+        getHintUrl: 'example.com',
         httpClient: httpClient,
       );
     });
@@ -34,6 +35,7 @@ void main() {
       expect(
         HintRepository(
           dbClient: dbClient,
+          getHintUrl: 'example.com',
         ),
         isNotNull,
       );
