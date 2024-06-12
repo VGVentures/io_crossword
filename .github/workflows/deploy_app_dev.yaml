@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feat/add-landing-page
 
 env:
   CROSSWORD_URL: https://e7b2896c65fabc0480edc6c0e.web.app
