@@ -110,3 +110,6 @@ app.*.map.json
 
 # Firebase related
 .firebase/
+
+# Firebase hosting related
+public

@@ -1,21 +1,21 @@
 {
-    "name": "Io Crossword",
-    "short_name": "Io Crossword",
+    "name": "I/O Crossword",
+    "short_name": "I/O Crossword",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Google I/O Crossword game",
+    "description": "I/O Crossword, the crossword game built with the Gemini API, Flutter and Firebase for Google I/O 2024.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "icons/icon-64.png",
+            "src": "icon-64.png",
             "sizes": "64x64",
             "type": "image/png"
         },
         {
-            "src": "icons/icon-180.png",
+            "src": "icon-180.png",
             "sizes": "180x180",
             "type": "image/png"
         }

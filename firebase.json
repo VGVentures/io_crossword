@@ -2,16 +2,22 @@
   "hosting": [
     {
       "target": "app_dev",
-      "public": "build/web",
+      "public": "public",
       "ignore": [
         ".firebase",
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
       ],
+      "rewrites": [
+        {
+          "source": "/game{,/**}",
+          "destination": "/game"
+        }
+      ],
       "headers": [
         {
-          "source": "**",
+          "source": "/game{,/**}",
           "headers": [
             {
               "key": "Cross-Origin-Embedder-Policy",
