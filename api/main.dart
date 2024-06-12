@@ -25,6 +25,7 @@ Future<void> init(InternetAddress ip, int port) async {
   crosswordRepository = CrosswordRepository(dbClient: dbClient);
   hintRepository = HintRepository(
     dbClient: dbClient,
+    getHintUrl: _getHintUrl,
   );
   boardRenderer = const BoardRenderer();
 
@@ -82,6 +83,14 @@ String get _gameUrl {
   final value = Platform.environment['GAME_URL'];
   if (value == null) {
     throw ArgumentError('GAME_URL is required to run the API');
+  }
+  return value;
+}
+
+String get _getHintUrl {
+  final value = Platform.environment['HINT_FUNCTION_URL'];
+  if (value == null) {
+    throw ArgumentError('HINT_FUNCTION_URL is required to run the API');
   }
   return value;
 }

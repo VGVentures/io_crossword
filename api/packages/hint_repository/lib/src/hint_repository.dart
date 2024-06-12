@@ -13,11 +13,14 @@ class HintRepository {
   /// {@macro hint_repository}
   HintRepository({
     required DbClient dbClient,
+    required String getHintUrl,
     Dio? httpClient,
   })  : _dbClient = dbClient,
+        _getHintUrl = getHintUrl,
         _httpClient = httpClient ?? Dio();
 
   final DbClient _dbClient;
+  final String _getHintUrl;
   final Dio _httpClient;
 
   static const _answersCollection = 'answers';
@@ -70,7 +73,7 @@ class HintRepository {
     required String userToken,
   }) async {
     try {
-      final url = Uri.https('gethintkit-sea6y22h5q-uc.a.run.app');
+      final url = Uri.https(_getHintUrl);
       final body = {
         'data': {
           'word': wordAnswer,
