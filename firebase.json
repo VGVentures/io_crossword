@@ -33,16 +33,22 @@
     },
     {
       "target": "app_stg",
-      "public": "build/web",
+      "public": "public",
       "ignore": [
         ".firebase",
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
       ],
+      "rewrites": [
+        {
+          "source": "/game{,/**}",
+          "destination": "/game"
+        }
+      ],
       "headers": [
         {
-          "source": "**",
+          "source": "/game{,/**}",
           "headers": [
             {
               "key": "Cross-Origin-Embedder-Policy",
@@ -58,16 +64,22 @@
     },
     {
       "target": "app_prod",
-      "public": "build/web",
+      "public": "public",
       "ignore": [
         ".firebase",
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
       ],
+      "rewrites": [
+        {
+          "source": "/game{,/**}",
+          "destination": "/game"
+        }
+      ],
       "headers": [
         {
-          "source": "**",
+          "source": "/game{,/**}",
           "headers": [
             {
               "key": "Cross-Origin-Embedder-Policy",
