@@ -43,60 +43,70 @@ class WordSelectionSuccessLargeView extends StatelessWidget {
     final l10n = context.l10n;
     final themeData = Theme.of(context);
 
-    return Theme(
-      data: themeData.copyWith(
-        iconButtonTheme: IconButtonThemeData(
-          style: themeData.io.iconButtonTheme.filled,
-        ),
-      ),
-      child: Column(
-        children: [
-          const SuccessTopBar(),
-          const SizedBox(height: 32),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: IoWord(
-              selectedWord.word.answer,
-              style: themeData.io.wordTheme.big,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 440) {
+          return const WordSelectionSuccessSmallView();
+        }
+
+        return Theme(
+          data: themeData.copyWith(
+            iconButtonTheme: IconButtonThemeData(
+              style: themeData.io.iconButtonTheme.filled,
             ),
           ),
-          const SizedBox(height: 40),
-          Expanded(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 318),
-                child: const Column(
-                  children: [
-                    SuccessStats(),
-                    SizedBox(height: 40),
-                    ChallengeProgressStatus(),
-                    SizedBox(height: 24),
-                  ],
+          child: Column(
+            children: [
+              const SuccessTopBar(),
+              const SizedBox(height: 32),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: IoWord(
+                  selectedWord.word.answer,
+                  style: themeData.io.wordTheme.big,
                 ),
               ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 342),
-            child: Text(
-              l10n.claimBadgeDescription,
-              style: IoCrosswordTextStyles.desktop.body5
-                  .copyWith(color: IoCrosswordColors.softGray),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClaimBadgeButton(),
-              Spacer(),
-              KeepPlayingButton(),
+              const SizedBox(height: 40),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 318),
+                      child: const Column(
+                        children: [
+                          SuccessStats(),
+                          SizedBox(height: 40),
+                          ChallengeProgressStatus(),
+                          SizedBox(height: 24),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 342),
+                child: Text(
+                  l10n.claimBadgeDescription,
+                  style: IoCrosswordTextStyles.desktop.body5
+                      .copyWith(color: IoCrosswordColors.softGray),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClaimBadgeButton(),
+                  Spacer(),
+                  KeepPlayingButton(),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -127,40 +137,42 @@ class WordSelectionSuccessSmallView extends StatelessWidget {
           const SizedBox(height: 32),
           Expanded(
             child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 342),
-                child: Column(
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: IoWord(
-                        selectedWord.word.answer,
-                        style: themeData.io.wordTheme.big,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 342),
+                  child: Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: IoWord(
+                          selectedWord.word.answer,
+                          style: themeData.io.wordTheme.big,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                    const SuccessStats(),
-                    const SizedBox(height: 40),
-                    const ChallengeProgressStatus(),
-                    const SizedBox(height: 40),
-                    const KeepPlayingButton(),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.or,
-                      style: IoCrosswordTextStyles.mobile.body3
-                          .copyWith(color: IoCrosswordColors.softGray),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.claimBadgeDescription,
-                      style: IoCrosswordTextStyles.mobile.body3
-                          .copyWith(color: IoCrosswordColors.softGray),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    const ClaimBadgeButton(),
-                  ],
+                      const SizedBox(height: 40),
+                      const SuccessStats(),
+                      const SizedBox(height: 40),
+                      const ChallengeProgressStatus(),
+                      const SizedBox(height: 40),
+                      const KeepPlayingButton(),
+                      const SizedBox(height: 16),
+                      Text(
+                        l10n.or,
+                        style: IoCrosswordTextStyles.mobile.body3
+                            .copyWith(color: IoCrosswordColors.softGray),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        l10n.claimBadgeDescription,
+                        style: IoCrosswordTextStyles.mobile.body3
+                            .copyWith(color: IoCrosswordColors.softGray),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      const ClaimBadgeButton(),
+                    ],
+                  ),
                 ),
               ),
             ),
