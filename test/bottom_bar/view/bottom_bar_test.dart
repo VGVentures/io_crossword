@@ -12,6 +12,7 @@ import 'package:io_crossword/end_game/end_game.dart';
 import 'package:io_crossword/l10n/l10n.dart';
 import 'package:io_crossword/random_word_selection/bloc/random_word_selection_bloc.dart';
 import 'package:io_crossword/word_selection/word_selection.dart';
+import 'package:io_crossword_ui/io_crossword_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/helpers.dart';
@@ -95,47 +96,6 @@ void main() {
       },
     );
 
-    testWidgets(
-      'adds $RandomWordRequested event when find new word button is tapped',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          const WordSelectionState.initial(),
-        );
-
-        when(() => crosswordBloc.state).thenReturn(
-          const CrosswordState(mascotVisible: false),
-        );
-
-        await tester.pumpApp(widget);
-
-        await tester.tap(find.text(l10n.findNewWord));
-
-        await tester.pumpAndSettle();
-
-        verify(
-          () => randomWordSelectionBloc.add(RandomWordRequested()),
-        ).called(1);
-      },
-    );
-
-    testWidgets(
-      'plays ${Assets.music.startButton1} when find new word button is tapped',
-      (tester) async {
-        when(() => wordSelectionBloc.state).thenReturn(
-          const WordSelectionState.initial(),
-        );
-        await tester.pumpApp(widget, audioController: audioController);
-
-        await tester.tap(find.text(l10n.findNewWord));
-
-        await tester.pumpAndSettle();
-
-        verify(
-          () => audioController.playSfx(Assets.music.startButton1),
-        ).called(1);
-      },
-    );
-
     group('$BottomBarContent', () {
       testWidgets(
         'displays endGame',
@@ -178,6 +138,95 @@ void main() {
           ).called(1);
         },
       );
+    });
+
+    group('$FindWordButton', () {
+      setUp(() {
+        widget = MultiBlocProvider(
+          providers: [
+            BlocProvider<RandomWordSelectionBloc>(
+              create: (_) => randomWordSelectionBloc,
+            ),
+          ],
+          child: FindWordButton(),
+        );
+      });
+
+      group('for large layout', () {
+        testWidgets(
+          'adds $RandomWordRequested event when find new word button is tapped',
+          (tester) async {
+            await tester.pumpApp(
+              widget,
+              layout: IoLayoutData.large,
+            );
+
+            await tester.tap(find.text(l10n.findNewWord));
+            await tester.pumpAndSettle();
+
+            verify(
+              () => randomWordSelectionBloc.add(RandomWordRequested()),
+            ).called(1);
+          },
+        );
+
+        testWidgets(
+          'plays ${Assets.music.startButton1} when find new word button is '
+          'tapped',
+          (tester) async {
+            await tester.pumpApp(
+              widget,
+              layout: IoLayoutData.large,
+              audioController: audioController,
+            );
+
+            await tester.tap(find.text(l10n.findNewWord));
+            await tester.pumpAndSettle();
+
+            verify(
+              () => audioController.playSfx(Assets.music.startButton1),
+            ).called(1);
+          },
+        );
+      });
+
+      group('for small layout', () {
+        testWidgets(
+          'adds $RandomWordRequested event when find new word button is tapped',
+          (tester) async {
+            await tester.pumpApp(
+              widget,
+              layout: IoLayoutData.small,
+            );
+
+            await tester.tap(find.text(l10n.findWord));
+            await tester.pumpAndSettle();
+
+            verify(
+              () => randomWordSelectionBloc.add(RandomWordRequested()),
+            ).called(1);
+          },
+        );
+
+        testWidgets(
+          'plays ${Assets.music.startButton1} when find new word button is '
+          'tapped',
+          (tester) async {
+            await tester.pumpApp(
+              widget,
+              layout: IoLayoutData.small,
+              audioController: audioController,
+            );
+
+            await tester.tap(find.text(l10n.findWord));
+            await tester.pumpAndSettle();
+
+            verify(
+              () => audioController.playSfx(Assets.music.startButton1),
+            ).called(1);
+          },
+        );
+      });
     });
   });
 }
