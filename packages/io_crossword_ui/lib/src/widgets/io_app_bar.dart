@@ -63,7 +63,7 @@ class IoAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: 40,
             child: switch (layout) {
               IoLayoutData.small => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: CustomMultiChildLayout(
                     delegate: AppBarLayout(),
                     children: [

@@ -45,38 +45,56 @@ class BottomBarContent extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
         width: double.infinity,
+        height: 104,
         padding: const EdgeInsets.symmetric(vertical: 24),
         color: IoCrosswordColors.darkGray,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            OutlinedButton(
+            FilledButton(
               onPressed: () {
                 context
                     .read<AudioController>()
                     .playSfx(Assets.music.startButton1);
                 EndGameCheck.openDialog(context);
               },
-              child: Text(
-                l10n.endGame,
-              ),
+              child: Text(l10n.endGame),
             ),
             const SizedBox(width: 16),
-            OutlinedButton.icon(
-              onPressed: () {
-                context
-                    .read<AudioController>()
-                    .playSfx(Assets.music.startButton1);
-                context
-                    .read<RandomWordSelectionBloc>()
-                    .add(const RandomWordRequested());
-              },
-              icon: const Icon(Icons.location_searching),
-              label: Text(l10n.findNewWord),
-            ),
+            const FindWordButton(),
           ],
         ),
       ),
     );
+  }
+}
+
+class FindWordButton extends StatelessWidget {
+  const FindWordButton({super.key});
+
+  void _onPressed(BuildContext context) {
+    context.read<AudioController>().playSfx(Assets.music.startButton1);
+    context.read<RandomWordSelectionBloc>().add(const RandomWordRequested());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = IoLayout.of(context);
+    final l10n = context.l10n;
+
+    switch (layout) {
+      case IoLayoutData.large:
+        return OutlinedButton.icon(
+          onPressed: () => _onPressed(context),
+          icon: const Icon(Icons.location_searching),
+          label: Text(l10n.findNewWord),
+        );
+      case IoLayoutData.small:
+        return OutlinedButton.icon(
+          onPressed: () => _onPressed(context),
+          label: Text(l10n.findWord),
+        );
+    }
   }
 }

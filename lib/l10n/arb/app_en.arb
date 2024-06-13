@@ -305,7 +305,11 @@
   },
   "findNewWord": "Find a new word",
   "@findNewWord": {
-    "description": "Find new word label"
+    "description": "Longer label for Find new word button"
+  },
+  "findWord": "Find a word",
+  "@findWord": {
+    "description": "Shorter label for Find word button"
   },
   "totalScore": "Total score",
   "@totalScore": {
