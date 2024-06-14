@@ -96,7 +96,6 @@ class AsymmetricalCrosswordGenerator extends CrosswordGenerator {
             .add(WordCandidate(start: location, direction: Direction.down));
       }
     }
-    candidates.removeWhere(closed.contains);
 
     return candidates;
   }
