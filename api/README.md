@@ -9,13 +9,16 @@ Built with dart_frog.
 
 # Running
 
-To run the API the following arguments needs to be passed:
+To run the API you can use the helper [`start_local_api.sh`][start_api_script] script.
 
-```
+Alternatively, you can manually pass the following arguments:
+
+```sh
 FB_APP_ID=APP_ID \
-INITIALS_BLACKLIST_ID=ID \
+INITIALS_BLACKLIST_ID=DOCUMENT_ID \
 FB_STORAGE_BUCKET=FIREBASE_BUCKET_NAME \
 GAME_URL=http://localhost:24514 \
+HINT_FUNCTION_URL=FIREBASE_FUNCTION_URL \
 dart_frog dev
 ```
 
@@ -32,3 +35,4 @@ To configure it to be able to receive request, do the following:
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
+[start_api_script]: scripts/start_local_api.sh
