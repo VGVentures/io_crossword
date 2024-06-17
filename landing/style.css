@@ -216,93 +216,6 @@ header>.gradient-button {
   margin-bottom: auto;
 }
 
-/* Accordion */
-
-/* Style the buttons that are used to open and close the accordion panel */
-.accordion-button {
-  background-color: transparent;
-  color: var(--basic-white);
-  cursor: pointer;
-  padding: 1.25rem 3.25rem 2rem 1.25rem;
-  font-size: 2rem;
-  width: 100%;
-  text-align: left;
-  border: none;
-  outline: none;
-}
-
-.accordion-button:after {
-  content: url('./assets/plus-sign.svg');
-  font-size: 18px;
-  color: var(--basic-white);
-  float: right;
-  margin-left: 5px;
-  margin-right: -2rem;
-}
-
-.accordion-button.open:after {
-  color: var(--basic-white);
-  content: "\2796";
-  /* Unicode character for "minus" sign (-) */
-}
-
-.accordion-button.closed {
-  transition-delay: 0.5s;
-  border-bottom: 1px solid var(--basic-medium-gray);
-}
-
-.accordion-button.open {
-  border-bottom: none;
-}
-
-/* Style the accordion panel. Note: hidden by default */
-.panel {
-  padding: 0 18px;
-  overflow: hidden;
-  border-bottom: 1px solid var(--basic-medium-gray);
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in-out;
-}
-
-.panel.open {
-  animation-name: slideDown;
-}
-
-.panel.closed {
-  animation-name: slideUp;
-  display: none;
-}
-
-@keyframes slideDown {
-  from {
-    max-height: 0;
-    color: rgba(255, 255, 255, 0);
-    display: none;
-  }
-
-  to {
-    max-height: 100px;
-    color: rgba(255, 255, 255, 1);
-    display: block;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    max-height: 100px;
-    opacity: 1;
-    display: block;
-  }
-
-  to {
-    max-height: 0;
-    display: none;
-    color: rgba(255, 255, 255, 0);
-  }
-}
-
-/* End Accordion */
-
 footer {
   border-top: 1px solid var(--basic-medium-gray);
   margin-top: 5rem;
@@ -400,10 +313,6 @@ footer {
     align-items: center;
   }
 
-  .accordion-container {
-    max-width: 90%;
-  }
-
   .youtube-embed__video-container>iframe {
     margin: 0 5rem;
   }
@@ -443,10 +352,6 @@ footer {
 @media screen and (min-width: 768px) {
   .hero__image {
     width: 1024px;
-  }
-
-  .accordion-container {
-    max-width: 50%;
   }
 }
 
