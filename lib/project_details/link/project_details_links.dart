@@ -12,6 +12,6 @@ class ProjectDetailsLinks {
     defaultValue: 'https://crossword.withgoogle.com',
   );
   static const developerPathway =
-      'https://developers.google.com/learn/pathways';
+      'https://developers.google.com/learn/pathways/solution-crossword';
   static const geminiDeveloperCompetition = 'https://ai.google.dev/competition';
 }
