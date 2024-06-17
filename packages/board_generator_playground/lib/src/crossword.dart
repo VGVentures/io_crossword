@@ -11,9 +11,9 @@ typedef CharacterMap = Map<Location, CharacterData>;
 class Crossword {
   /// {@macro crossword}
   Crossword({
+    required this.largestWordLength,
+    required this.shortestWordLength,
     this.bounds,
-    this.largestWordLength = 18,
-    this.shortestWordLength = 3,
   });
 
   /// {@macro character_map}
