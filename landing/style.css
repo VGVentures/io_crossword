@@ -392,6 +392,7 @@ footer {
   .feature-content {
     display: block;
     max-width: 45%;
+    text-align: start;
   }
 
   .feature.reverse {
