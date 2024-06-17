@@ -11,7 +11,10 @@ void main() {
   group('$Crossword', () {
     group('add', () {
       test('adds a down word to the character map', () {
-        final board = Crossword();
+        final board = Crossword(
+          largestWordLength: 18,
+          shortestWordLength: 3,
+        );
 
         final url = WordEntry(
           word: 'url',
@@ -40,7 +43,10 @@ void main() {
       });
 
       test('adds an across word to the character map', () {
-        final board = Crossword();
+        final board = Crossword(
+          largestWordLength: 18,
+          shortestWordLength: 3,
+        );
 
         final url = WordEntry(
           word: 'url',
@@ -80,7 +86,10 @@ void main() {
           direction: Direction.across,
         );
 
-        final board = Crossword()
+        final board = Crossword(
+          largestWordLength: 18,
+          shortestWordLength: 3,
+        )
           ..add(behan)
           ..add(albus);
 
