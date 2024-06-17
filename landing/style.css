@@ -11,6 +11,7 @@
   --basic-medium-gray: #393b40;
   --basic-soft-gray: #80858b;
   --basic-light-gray: #eeeeee;
+  --blue-light: #c3deff;
   --button-gradient: linear-gradient(90deg, #3D96FF 0%, #6AC76E 34.5%, #FECD3C 66%, #EA4335 100%);
   --text-gradient: linear-gradient(90.54deg, #3D96FF 14.28%, #6AC76E 38.18%, #FECD3C 60.01%, #EA4335 83.56%);
 }
@@ -302,9 +303,76 @@ header>.gradient-button {
 
 /* End Accordion */
 
+footer {
+  border-top: 1px solid var(--basic-medium-gray);
+  margin-top: 5rem;
+  padding: 2rem 2rem;
+}
+
+.footer__logos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer__inner-logos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer__logos-container img {
+  width: min-content;
+}
+
+.footer__products-container {
+  display: flex;
+  gap: 3rem;
+}
+
+.footer__products-container>hr {
+  display: none;
+}
+
+.footer__socials-inner-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer__socials-inner-container>a {
+  align-self: center;
+}
+
+.footer__privacy-terms {
+  border-top: 1px solid var(--basic-medium-gray);
+  margin-top: 2rem;
+}
+
+
+.footer__privacy-terms>p {
+  color: var(--basic-soft-gray);
+  font-size: 0.875rem;
+}
+
+.footer__privacy-terms-links {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  color: var(--blue-light);
+}
+
+.footer__privacy-terms-links>a {
+  text-decoration: none;
+  color: var(--blue-light);
+}
+
 @media screen and (min-width: 640px) {
   header {
     padding: 0 5rem;
+  }
+
+  footer {
+    padding: 2rem 5rem;
   }
 
   #hero {
@@ -325,6 +393,32 @@ header>.gradient-button {
 
   .youtube-embed__video-container>iframe {
     margin: 0 5rem;
+  }
+
+
+  .footer__logos-container {
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 3rem 0;
+  }
+
+  .footer__socials-inner-container {
+    margin: 0 auto;
+  }
+
+  .footer__products-container>hr {
+    display: block;
+    border: 1px solid var(--basic-medium-gray);
+    background-color: var(--basic-medium-gray);
+    color: var(--basic-medium-gray);
+  }
+
+  .footer__inner-logos-container {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4rem;
+    margin: 0 auto;
   }
 }
 
@@ -389,5 +483,19 @@ header>.gradient-button {
 @media screen and (min-width: 1024px) {
   .feature-content {
     max-width: 45%;
+  }
+
+  .footer__socials-inner-container {
+    margin: 0;
+  }
+
+  .footer__inner-logos-container {
+    margin: 0;
+  }
+
+  .footer__privacy-terms {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
   }
 }
