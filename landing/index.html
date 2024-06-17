@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="./assets/SmallLogo.png" type="image/png">
+    <link rel="icon" href="./assets/SmallLogo.png" type="image/png" />
     <title>I/O Crossword</title>
     <link rel="stylesheet" href="./style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,7 +12,6 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <script src="./main.js" type="module" defer></script>
   </head>
   <body>
     <header>
@@ -27,27 +26,29 @@
         <div class="hero__content-container">
           <div class="hero__content-inner-container">
             <div class="hero__content">
-              <h1>
-                World&apos;s Largest
-                <br />
-                Crossword
-              </h1>
+              <h1>I/O Crossword</h1>
               <h2>
-                Built with Gemini, Flutter and Firebase for
-                <br />
-                Google I/O 2024. Let&apos;s break the record!
+                Built with the Gemini API, Flutter and Firebase<br />
+                Genkit in Project IDX for Google I/O 2024!
               </h2>
               <a class="gradient-button" href="/game">Play Now</a>
             </div>
           </div>
         </div>
-        <img
-          src="./assets/hero-image.png"
-          alt="hero banner"
-          style="visibility: hidden; height: 700px; width: 100%"
-        />
+        <picture>
+          <source media="(min-width: 1024px)" srcset="./assets/hero-image.png" />
+          <img
+            src="./assets/hero-image-mobile.png"
+            alt="hero banner"
+            class="hero__image"
+          />
+        </picture>
       </section>
-      <section>
+      <section class="youtube-embed">
+        <div class="youtube-embed__title">
+          <h4 class="eyebrow">The Google Developer mascots are back!</h4>
+          <h3 class="gradient-title">Watch the trailer</h3>
+        </div>
         <div class="youtube-embed__video-container">
           <iframe
             src="https://www.youtube.com/embed/tgbNymZ7vqY"
@@ -58,95 +59,83 @@
         </div>
       </section>
       <section id="building">
-        <div class="building__how-we-built-title">
-          <h4 class="eyebrow">Building I/O Crossword</h4>
-          <h3 class="gradient-title">How we built it</h3>
-        </div>
-        <div class="feature">
+        <div class="feature reverse">
           <img src="./assets/how-we-built-it.png" alt="" />
           <div class="feature-content">
+            <div>
+              <h4 class="eyebrow">Building the I/O Crossword</h4>
+              <h3 class="gradient-title">How it&apos;s made</h3>
+            </div>
             <p>
-              The game is built in Flutter for the web, compiled to WASM, and
-              optimized for Chrome. Words and clues in the puzzle are
-              pre-generated with Gemini 1.5 Pro in Google AI Studio. The backend
-              is built on Firebase and Google Cloud using Gemini Extensions to
-              seamlessly create and connect AI generated content with the game.
-              Dive into the code with a new Gemini API template in IDX.
+              Explore the Learning Pathway to learn how to recreate experiences
+              like the I/O Crossword using Flutter and Firebase Genkit with
+              Codelabs, Blogs, and Videos.
             </p>
             <a class="gradient-button" href="https://flutter.dev">Learn More</a>
           </div>
         </div>
-        <div class="feature reverse">
+        <div class="feature">
           <img src="./assets/get-into-the-code.png" alt="" />
           <div class="feature-content">
             <div>
-              <h4 class="eyebrow">The Code</h4>
-              <h3 class="gradient-title">Get into the Code</h3>
+              <h4 class="eyebrow">Build in Project IDX</h4>
+              <h3 class="gradient-title">Get into the code</h3>
             </div>
             <p>
-              Access the code that makes up the I/O Crossword and let it inspire
-              you to use all the tools in and more to create even more fun and
-              delightful innovations of your own.
+              Dive into the build on Project IDX to access the open source repo
+              for the I/O Crossword and let it inspire you to start building
+              with the Gemini API.
             </p>
-            <a class="gradient-button" href="https://flutter.dev">Dive In</a>
+            <a class="gradient-button" href="https://flutter.dev"
+              >Get Started</a
+            >
           </div>
         </div>
-        <section id="faq">
-          <div class="feature">
-            <div class="feature-content faq">
-              <div>
-                <h4 class="eyebrow">FAQ</h4>
-                <h3 class="gradient-title">Frequently Asked Questions</h3>
-              </div>
-            </div>
-            <div class="accordion-container feature-content">
-              <button class="accordion-button closed">What is this?</button>
-              <div class="panel closed">
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Illum officia nihil natus, numquam animi accusamus consectetur
-                  quae voluptatum eligendi culpa ad quasi optio cupiditate
-                  corrupti porro quia possimus nobis tenetur!
-                </p>
-              </div>
-
-              <button class="accordion-button closed">How was AI used?</button>
-              <div class="panel closed">
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Illum officia nihil natus, numquam animi accusamus consectetur
-                  quae voluptatum eligendi culpa ad quasi optio cupiditate
-                  corrupti porro quia possimus nobis tenetur!
-                </p>
-              </div>
-
-              <button class="accordion-button closed">
-                Are there prizes for the winners?
-              </button>
-              <div class="panel closed">
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Illum officia nihil natus, numquam animi accusamus consectetur
-                  quae voluptatum eligendi culpa ad quasi optio cupiditate
-                  corrupti porro quia possimus nobis tenetur!
-                </p>
-              </div>
-
-              <button class="accordion-button closed">
-                What data is stored and publicly available when sharing?
-              </button>
-              <div class="panel closed">
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Illum officia nihil natus, numquam animi accusamus consectetur
-                  quae voluptatum eligendi culpa ad quasi optio cupiditate
-                  corrupti porro quia possimus nobis tenetur!
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       </section>
     </main>
+    <footer>
+      <div class="footer__logos-container">
+        <div class="footer__inner-logos-container">
+          <img src="./assets/Logo.png" alt="Google IO Crossword Logo" />
+          <div class="footer__products-container">
+            <hr>
+            <a href="https://flutter.dev/">
+              <img src="./assets/flutter-logo.png" alt="Flutter Logo" />
+            </a>
+            <a href="https://firebase.google.com/">
+              <img src="./assets/firebase-logo.png" alt="Firebase Logo" />
+            </a>
+            <a href="https://idx.dev/">
+              <img src="./assets/idx-logo.png" alt="IDX Logo" />
+            </a>
+          </div>
+        </div>
+        <div class="footer__socials-inner-container">
+          <a href="https://www.youtube.com/flutterdev">
+            <img src="./assets/youtube-logo.png" alt="Youtube Logo" />
+          </a>
+          <a href="https://x.com/flutterdev">
+            <img src="./assets/x-logo.png" alt="X Logo" />
+          </a>
+          <a href="https://medium.com/flutter">
+            <img src="./assets/medium-logo.png" alt="Medium Logo" />
+          </a>
+          <a href="https://www.linkedin.com/showcase/flutterdevofficial/">
+            <img src="./assets/linkedin-logo.png" alt="LinkedIn Logo" />
+          </a>
+        </div>
+      </div>
+      <div class="footer__privacy-terms">
+        <p>
+          Except as otherwise noted, this work is licensed under a Creative
+          Commons Attribution 4.0 International License, and code samples are
+          licensed under the BSD License.
+        </p>
+        <div class="footer__privacy-terms-links">
+          <a href="https://policies.google.com/terms">Terms</a>
+          <a href="https://policies.google.com/privacy">Privacy</a>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
