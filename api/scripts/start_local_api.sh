@@ -11,4 +11,4 @@ echo ' ######################## '
 echo ' ## Starting dart frog ## '
 echo ' ######################## '
 
-cd api && dart_frog dev
+dart_frog dev
