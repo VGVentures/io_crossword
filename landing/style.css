@@ -196,6 +196,11 @@ header>.gradient-button {
   font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.75rem;
+  margin-top: 2.5rem;
+}
+
+.feature-content>a {
+  margin-top: 1.5rem;
 }
 
 #faq {
