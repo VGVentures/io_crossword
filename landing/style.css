@@ -379,6 +379,11 @@ footer {
     background-position: right;
   }
 
+  .hero__content {
+    max-width: 70%;
+    margin: auto;
+  }
+
   .feature>img {
     max-width: 90%;
   }
@@ -436,6 +441,16 @@ footer {
 }
 
 @media screen and (min-width: 768px) {
+  .hero__image {
+    width: 1024px;
+  }
+
+  .accordion-container {
+    max-width: 50%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
   #hero {
     flex-direction: row;
     align-items: normal;
@@ -445,6 +460,8 @@ footer {
 
   .hero__content {
     text-align: start;
+    width: fit-content;
+    margin: auto 0;
   }
 
   .hero__content>h2>br {
@@ -460,13 +477,7 @@ footer {
     height: 700px;
     width: unset;
   }
-
-  .accordion-container {
-    max-width: 50%;
-  }
-}
-
-@media screen and (min-width: 1024px) {
+  
   .feature {
     flex-direction: row;
     margin: 5rem auto;
