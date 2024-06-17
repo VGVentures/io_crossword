@@ -383,6 +383,14 @@ footer {
     max-width: 90%;
   }
 
+  .feature-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 70%;
+    text-align: center;
+  }
+
   .youtube-embed__title {
     align-items: center;
   }
@@ -394,7 +402,6 @@ footer {
   .youtube-embed__video-container>iframe {
     margin: 0 5rem;
   }
-
 
   .footer__logos-container {
     flex-direction: row;
@@ -419,6 +426,12 @@ footer {
     justify-content: space-between;
     gap: 4rem;
     margin: 0 auto;
+  }
+
+  .footer__privacy-terms-links {
+    flex-direction: column;
+    align-items: center;
+    margin: 3rem 0;
   }
 }
 
@@ -448,22 +461,6 @@ footer {
     width: unset;
   }
 
-  .feature {
-    flex-direction: row;
-  }
-
-  .feature>img {
-    max-width: 50%;
-  }
-
-  .feature-content {
-    max-width: 45%;
-  }
-
-  .feature.reverse {
-    flex-direction: row-reverse;
-  }
-
   .accordion-container {
     max-width: 50%;
   }
@@ -471,18 +468,22 @@ footer {
 
 @media screen and (min-width: 1024px) {
   .feature {
+    flex-direction: row;
     margin: 5rem auto;
     gap: 5rem;
   }
 
   .feature-content {
-    max-width: 35%;
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .feature-content {
+    display: block;
     max-width: 45%;
+  }
+
+  .feature.reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature>img {
+    max-width: 50%;
   }
 
   .footer__socials-inner-container {
@@ -497,5 +498,11 @@ footer {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  .footer__privacy-terms-links {
+    flex-direction: row;
+    align-items: start;
+    margin: 1rem 0 0;
   }
 }
