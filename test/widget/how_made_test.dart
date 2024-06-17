@@ -70,7 +70,7 @@ void main() {
 
         verify(
           () => urlLauncher.launchUrl(
-            'https://developers.google.com/learn/pathways',
+            'https://developers.google.com/learn/pathways/solution-crossword',
             any(),
           ),
         );
