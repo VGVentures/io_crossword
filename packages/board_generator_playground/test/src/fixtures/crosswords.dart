@@ -16,8 +16,9 @@ import 'package:board_generator_playground/src/models/models.dart';
 class Crossword1 extends Crossword {
   /// {@macro crossword1}
   Crossword1({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
     super.bounds,
-    super.largestWordLength,
   }) {
     add(
       WordEntry(
@@ -50,7 +51,10 @@ class Crossword1 extends Crossword {
 /// {@endtemplate}
 class Crossword2 extends Crossword {
   /// {@macro crossword2}
-  Crossword2() {
+  Crossword2({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'behan',
@@ -89,7 +93,10 @@ class Crossword2 extends Crossword {
 /// {@endtemplate}
 class Crossword3 extends Crossword {
   /// {@macro crossword3}
-  Crossword3() {
+  Crossword3({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'behan',
@@ -135,7 +142,10 @@ class Crossword3 extends Crossword {
 /// {@endtemplate}
 class Crossword4 extends Crossword {
   /// {@macro crossword4}
-  Crossword4() {
+  Crossword4({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'behan',
@@ -175,7 +185,10 @@ class Crossword4 extends Crossword {
 /// {@endtemplate}
 class Crossword5 extends Crossword {
   /// {@macro crossword5}
-  Crossword5() {
+  Crossword5({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'behan',
@@ -234,7 +247,10 @@ class Crossword5 extends Crossword {
 /// {@endtemplate}
 class Crossword6 extends Crossword {
   /// {@macro crossword6}
-  Crossword6() {
+  Crossword6({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'orchardbankcom',
@@ -322,7 +338,10 @@ class Crossword6 extends Crossword {
 /// {@endtemplate}
 class Crossword7 extends Crossword {
   /// {@macro crossword7}
-  Crossword7() {
+  Crossword7({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'libexec',
@@ -401,7 +420,10 @@ class Crossword7 extends Crossword {
 /// {@endtemplate}
 class Crossword8 extends Crossword {
   /// {@macro crossword8}
-  Crossword8() {
+  Crossword8({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'superman',
@@ -446,7 +468,10 @@ class Crossword8 extends Crossword {
 /// {@endtemplate}
 class Crossword9 extends Crossword {
   /// {@macro crossword9}
-  Crossword9() {
+  Crossword9({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'interchangeability',
@@ -499,7 +524,10 @@ class Crossword9 extends Crossword {
 /// {@endtemplate}
 class Crossword10 extends Crossword {
   /// {@macro crossword8}
-  Crossword10() {
+  Crossword10({
+    super.largestWordLength = 18,
+    super.shortestWordLength = 3,
+  }) {
     add(
       WordEntry(
         word: 'sos',
