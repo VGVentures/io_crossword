@@ -1,3 +1,5 @@
+@import url('./assets/fonts/fonts.css');
+
 :root {
   --ui-header-height: 88px;
 
@@ -21,7 +23,7 @@ body, html {
 }
 
 * {
-  font-family: Google Sans Display, sans-serif, 'Roboto';
+  font-family: 'Google Sans Display', sans-serif, 'Roboto';
 }
 
 .eyebrow {
@@ -322,14 +324,13 @@ header>.gradient-button {
 }
 
 @media screen and (min-width: 768px) {
-
   #hero {
     flex-direction: row;
     align-items: normal;
     background-image: url('./assets/hero-image.png');
     background-repeat: no-repeat;
   }
-  
+
   .hero__content {
     text-align: start;
   }
