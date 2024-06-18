@@ -1,5 +1,7 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_domain/game_domain.dart';
 import 'package:io_crossword/assets/assets.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/crossword/crossword.dart';
@@ -108,17 +110,7 @@ class _HowToPlaySmall extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 375),
                       child: SingleChildScrollView(
-                        child: HowToPlayContent(
-                          mascot: mascot,
-                          onDonePressed: () {
-                            context
-                                .read<AudioController>()
-                                .playSfx(Assets.music.startButton1);
-                            context
-                                .read<HowToPlayCubit>()
-                                .updateStatus(HowToPlayStatus.pickingUp);
-                          },
-                        ),
+                        child: HowToPlayPageContent(mascot: mascot),
                       ),
                     ),
                   ),
@@ -172,17 +164,7 @@ class _HowToPlayLarge extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      HowToPlayContent(
-                        mascot: mascot,
-                        onDonePressed: () {
-                          context
-                              .read<AudioController>()
-                              .playSfx(Assets.music.startButton1);
-                          context
-                              .read<HowToPlayCubit>()
-                              .updateStatus(HowToPlayStatus.pickingUp);
-                        },
-                      ),
+                      HowToPlayPageContent(mascot: mascot),
                       const SizedBox(height: 40),
                       const PlayNowButton(),
                     ],
@@ -192,6 +174,28 @@ class _HowToPlayLarge extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+@visibleForTesting
+class HowToPlayPageContent extends StatelessWidget {
+  @visibleForTesting
+  const HowToPlayPageContent({required this.mascot, super.key});
+
+  final Mascot mascot;
+
+  @override
+  Widget build(BuildContext context) {
+    return HowToPlayContent(
+      mascot: mascot,
+      onDonePressed: () {
+        context.read<AudioController>().playSfx(Assets.music.startButton1);
+        context
+            .read<PlayerBloc>()
+            .add(PlayerCreateScoreRequested(context.read<User>().id));
+        context.read<HowToPlayCubit>().updateStatus(HowToPlayStatus.pickingUp);
+      },
     );
   }
 }
