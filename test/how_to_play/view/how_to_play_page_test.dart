@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
@@ -117,44 +118,90 @@ void main() {
     late HowToPlayCubit howToPlayCubit;
     late PlayerBloc playerBloc;
     late Widget widget;
+    late AppLocalizations l10n;
+
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
 
     setUp(() {
       howToPlayCubit = _MockHowToPlayCubit();
       playerBloc = _MockPlayerBloc();
 
       when(() => howToPlayCubit.loadAssets(any())).thenAnswer((_) async {});
-
       when(() => howToPlayCubit.state).thenReturn(
-        HowToPlayState(
-          assetsStatus: AssetsLoadingStatus.success,
-        ),
+        HowToPlayState(assetsStatus: AssetsLoadingStatus.success),
       );
-
       when(() => playerBloc.state).thenReturn(PlayerState());
 
       widget = MultiBlocProvider(
         providers: [
-          BlocProvider.value(
-            value: howToPlayCubit,
-          ),
-          BlocProvider.value(
-            value: playerBloc,
-          ),
+          BlocProvider.value(value: howToPlayCubit),
+          BlocProvider.value(value: playerBloc),
         ],
         child: HowToPlayView(),
       );
     });
 
-    for (final layout in IoLayoutData.values) {
-      testWidgets('displays IoAppBar with $layout', (tester) async {
-        await tester.pumpApp(
-          widget,
-          layout: layout,
-        );
+    group('displays', () {
+      for (final layout in IoLayoutData.values) {
+        testWidgets('$IoAppBar with $layout', (tester) async {
+          await tester.pumpApp(widget, layout: layout);
 
-        expect(find.byType(IoAppBar), findsOneWidget);
-      });
-    }
+          expect(find.byType(IoAppBar), findsOneWidget);
+        });
+
+        testWidgets('$HowToPlayPageContent with $layout', (tester) async {
+          await tester.pumpApp(widget, layout: layout);
+
+          expect(find.byType(HowToPlayPageContent), findsOneWidget);
+        });
+
+        testWidgets('a $PlayNowButton with $layout', (tester) async {
+          await tester.pumpApp(widget, layout: layout);
+
+          expect(find.byType(PlayNowButton), findsOneWidget);
+        });
+
+        testWidgets('localized playNow text with $layout', (tester) async {
+          await tester.pumpApp(widget, layout: layout);
+
+          expect(find.text(l10n.playNow), findsOneWidget);
+        });
+
+        testWidgets('LookUp animation for dash with $layout', (tester) async {
+          debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+          await tester.pumpApp(
+            MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: howToPlayCubit),
+                BlocProvider.value(value: playerBloc),
+              ],
+              child: HowToPlayView(),
+            ),
+            layout: layout,
+          );
+
+          final widget = find
+              .byType(SpriteAnimationList)
+              .evaluate()
+              .single
+              .widget as SpriteAnimationList;
+
+          expect(
+            widget.animationItems.first,
+            isA<AnimationItem>().having(
+              (item) => item.spriteData,
+              'spriteData',
+              Mascot.dash.teamMascot.lookUpSpriteMobileData,
+            ),
+          );
+
+          debugDefaultTargetPlatformOverride = null;
+        });
+      }
+    });
 
     for (final layout in IoLayoutData.values) {
       testWidgets(
@@ -229,98 +276,72 @@ void main() {
           expect(capturedPredicate(secondRoute), isFalse);
         },
       );
+    }
+  });
 
-      testWidgets(
-          'verify status is updated to pickingUp '
-          'when done button is pressed', (tester) async {
-        final l10n = await AppLocalizations.delegate.load(Locale('en'));
+  group('$HowToPlayPageContent', () {
+    late HowToPlayCubit howToPlayCubit;
+    late PlayerBloc playerBloc;
+    late Widget widget;
+    late AppLocalizations l10n;
 
+    setUpAll(() async {
+      l10n = await AppLocalizations.delegate.load(Locale('en'));
+    });
+
+    setUp(() {
+      howToPlayCubit = _MockHowToPlayCubit();
+      playerBloc = _MockPlayerBloc();
+
+      when(() => howToPlayCubit.loadAssets(any())).thenAnswer((_) async {});
+      when(() => howToPlayCubit.state).thenReturn(
+        HowToPlayState(assetsStatus: AssetsLoadingStatus.success),
+      );
+      when(() => playerBloc.state).thenReturn(PlayerState());
+
+      widget = MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: howToPlayCubit),
+          BlocProvider.value(value: playerBloc),
+        ],
+        child: HowToPlayView(),
+      );
+    });
+
+    testWidgets(
+      'verify status is updated to pickingUp when done button is pressed',
+      (tester) async {
         when(() => howToPlayCubit.state).thenReturn(
           HowToPlayState(
             index: 4,
             assetsStatus: AssetsLoadingStatus.success,
           ),
         );
-
-        await tester.pumpApp(
-          widget,
-          layout: layout,
-        );
+        await tester.pumpApp(widget);
 
         await tester.tap(find.text(l10n.doneButtonLabel));
 
         verify(() => howToPlayCubit.updateStatus(HowToPlayStatus.pickingUp))
             .called(1);
-      });
-    }
+      },
+    );
 
-    group('displays', () {
-      testWidgets('a $PlayNowButton when small layout', (tester) async {
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.small,
-        );
-
-        expect(find.byType(PlayNowButton), findsOneWidget);
-      });
-
-      testWidgets('a $PlayNowButton when large layout', (tester) async {
-        await tester.pumpApp(
-          widget,
-          layout: IoLayoutData.large,
-        );
-
-        expect(find.byType(PlayNowButton), findsOneWidget);
-      });
-
-      testWidgets('localized playNow text', (tester) async {
-        late final AppLocalizations l10n;
-
-        await tester.pumpApp(
-          Builder(
-            builder: (context) {
-              l10n = context.l10n;
-              return widget;
-            },
-          ),
-          layout: IoLayoutData.small,
-        );
-
-        expect(find.text(l10n.playNow), findsOneWidget);
-      });
-
-      testWidgets('renders LookUp animation for dash', (tester) async {
-        debugDefaultTargetPlatformOverride = TargetPlatform.android;
-
-        await tester.pumpApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: howToPlayCubit,
-              ),
-              BlocProvider.value(
-                value: playerBloc,
-              ),
-            ],
-            child: HowToPlayView(),
-          ),
-          layout: IoLayoutData.small,
-        );
-
-        final widget = find.byType(SpriteAnimationList).evaluate().single.widget
-            as SpriteAnimationList;
-
-        expect(
-          widget.animationItems.first,
-          isA<AnimationItem>().having(
-            (item) => item.spriteData,
-            'spriteData',
-            Mascot.dash.teamMascot.lookUpSpriteMobileData,
+    testWidgets(
+      'verify $PlayerCreateScoreRequested is added when done button is pressed',
+      (tester) async {
+        when(() => howToPlayCubit.state).thenReturn(
+          HowToPlayState(
+            index: 4,
+            assetsStatus: AssetsLoadingStatus.success,
           ),
         );
+        await tester.pumpApp(widget, user: User(id: 'userId'));
 
-        debugDefaultTargetPlatformOverride = null;
-      });
-    });
+        await tester.tap(find.text(l10n.doneButtonLabel));
+
+        verify(() => playerBloc.add(PlayerCreateScoreRequested('userId')))
+            .called(1);
+      },
+    );
   });
 }

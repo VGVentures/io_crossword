@@ -142,8 +142,8 @@ class _TabSelector extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
-          onTap: index > 0
+        TextButton(
+          onPressed: index > 0
               ? () {
                   context
                       .read<AudioController>()
@@ -163,8 +163,8 @@ class _TabSelector extends StatelessWidget {
         TabPageSelector(
           controller: tabController,
         ),
-        GestureDetector(
-          onTap: () {
+        TextButton(
+          onPressed: () {
             if (index == tabController.length - 1) {
               onDonePressed();
             } else {
