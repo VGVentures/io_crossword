@@ -57,7 +57,7 @@ class AudioController {
   }
 
   /// Enables the [AudioController] to track changes to settings.
-  /// Namely, when  [SettingsController.muted] changes,
+  /// Namely, when [SettingsController.muted] changes,
   /// the audio controller will act accordingly.
   void attachSettings(SettingsController settingsController) {
     if (_settings == settingsController) {
