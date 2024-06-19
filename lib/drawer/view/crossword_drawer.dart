@@ -104,13 +104,6 @@ class CrosswordDrawer extends StatelessWidget {
           context.launchUrl(ProjectDetailsLinks.termsOfService);
         },
       ),
-      DrawerItem(
-        title: l10n.faqs,
-        icon: Icons.chat,
-        onPressed: () {
-          context.launchUrl(ProjectDetailsLinks.faqs);
-        },
-      ),
     ];
 
     return Drawer(

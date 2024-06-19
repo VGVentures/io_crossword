@@ -243,10 +243,6 @@
   "@termsOfService": {
     "description": "Terms of Service label"
   },
-  "faqs": "FAQs",
-  "@faqs": {
-    "description": "FAQs label"
-  },
   "type": "Type",
   "@type": {
     "description": "Type word."
@@ -344,7 +340,7 @@
     "description": "The first step instruction on how to play."
   },
   "aboutHowToPlaySecondInstructionsTitle": "Solve the Word, Earn Points",
-  "@aboutHowToPlaySecondInstructionstitle": {
+  "@aboutHowToPlaySecondInstructionsTitle": {
     "description": "The second step instruction title."
   },
   "aboutHowToPlaySecondInstructions": "Think you know the answer? Take a guess and solve it! You'll earn points for each word you solve.",

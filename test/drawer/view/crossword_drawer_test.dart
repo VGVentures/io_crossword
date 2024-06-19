@@ -260,27 +260,5 @@ void main() {
         );
       },
     );
-
-    testWidgets(
-      'FAQs is tapped',
-      (tester) async {
-        await tester.pumpApp(CrosswordDrawer());
-        await tester.dragUntilVisible(
-          find.text('FAQs'),
-          find.byType(CrosswordDrawer),
-          Offset(0, -50),
-        );
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('FAQs'));
-        await tester.pumpAndSettle();
-
-        verify(
-          () => urlLauncher.launchUrl(
-            ProjectDetailsLinks.faqs,
-            any(),
-          ),
-        );
-      },
-    );
   });
 }
