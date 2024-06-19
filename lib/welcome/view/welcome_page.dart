@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:io_crossword/assets/assets.gen.dart';
 import 'package:io_crossword/audio/audio.dart';
 import 'package:io_crossword/challenge/challenge.dart';
@@ -112,6 +113,7 @@ class WelcomeBody extends StatelessWidget {
   const WelcomeBody({super.key});
 
   void _onGetStarted(BuildContext context) {
+    context.read<AudioController>().startMusic();
     Navigator.of(context).push<void>(TeamSelectionPage.route());
   }
 
