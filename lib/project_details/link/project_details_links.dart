@@ -3,7 +3,6 @@ class ProjectDetailsLinks {
   static const googleIO = 'https://io.google/2024';
   static const privacyPolicy = 'https://policies.google.com/privacy';
   static const termsOfService = 'https://policies.google.com/terms';
-  static const faqs = 'https://flutter.dev/crossword';
   static const claimBadge =
       'https://developers.google.com/profile/badges/events/io/2024/crossword';
   static const googleAI = 'https://ai.google.dev/';
