@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/foundation.dart';
 
-/// An class that holds settings like [muted] or [musicOn],
+/// A class that holds settings like [muted].
 class SettingsController {
   /// Creates a new instance of [SettingsController] .
   SettingsController();
@@ -12,19 +12,7 @@ class SettingsController {
   /// and sound.
   ValueNotifier<bool> muted = ValueNotifier(false);
 
-  ValueNotifier<bool> soundsOn = ValueNotifier(true);
-
-  ValueNotifier<bool> musicOn = ValueNotifier(true);
-
-  void toggleMusicOn() {
-    musicOn.value = !musicOn.value;
-  }
-
   void toggleMuted() {
     muted.value = !muted.value;
-  }
-
-  void toggleSoundsOn() {
-    soundsOn.value = !soundsOn.value;
   }
 }

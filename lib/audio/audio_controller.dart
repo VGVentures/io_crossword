@@ -57,8 +57,7 @@ class AudioController {
   }
 
   /// Enables the [AudioController] to track changes to settings.
-  /// Namely, when any of [SettingsController.muted],
-  /// [SettingsController.musicOn] or [SettingsController.soundsOn] changes,
+  /// Namely, when  [SettingsController.muted] changes,
   /// the audio controller will act accordingly.
   void attachSettings(SettingsController settingsController) {
     if (_settings == settingsController) {
@@ -70,19 +69,37 @@ class AudioController {
     final oldSettings = _settings;
     if (oldSettings != null) {
       oldSettings.muted.removeListener(_mutedHandler);
-      oldSettings.musicOn.removeListener(_musicOnHandler);
-      oldSettings.soundsOn.removeListener(_soundsOnHandler);
     }
 
     _settings = settingsController;
 
     // Add handlers to the new settings controller
     settingsController.muted.addListener(_mutedHandler);
-    settingsController.musicOn.addListener(_musicOnHandler);
-    settingsController.soundsOn.addListener(_soundsOnHandler);
+  }
 
-    if (!settingsController.muted.value && settingsController.musicOn.value) {
-      _startMusic();
+  Future<void> _configureBackgroundMusicPlayer() async {
+    if (_musicPlayer.source != null) {
+      return;
+    }
+
+    await _musicPlayer.setSource(
+      AssetSource(
+        _replaceUrl(
+          Assets.music.backgroundMusicCrossword,
+        ),
+      ),
+    );
+
+    await _musicPlayer.setVolume(
+      0.3,
+    );
+  }
+
+  Future<void> startMusic() async {
+    await _configureBackgroundMusicPlayer();
+
+    if (_settings != null && !_settings!.muted.value) {
+      await _playBackgroundMusic();
     }
   }
 
@@ -113,8 +130,7 @@ class AudioController {
   /// Plays a single sound effect.
   ///
   /// The controller will ignore this call when the attached settings'
-  /// [SettingsController.muted] is `true` or if its
-  /// [SettingsController.soundsOn] is `false`.
+  /// [SettingsController.muted] is `true`.
   void playSfx(String sfx) {
     if (!Assets.music.values.contains(sfx)) {
       throw ArgumentError.value(
@@ -128,10 +144,6 @@ class AudioController {
     if (muted) {
       return;
     }
-    final soundsOn = _settings?.soundsOn.value ?? false;
-    if (!soundsOn) {
-      return;
-    }
 
     _sfxPlayers[_currentSfxPlayer].play(
       AssetSource(_replaceUrl(sfx)),
@@ -142,7 +154,7 @@ class AudioController {
   Future<void> _loopSound(void _) async {
     //Loop the sound forever.
 
-    await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
+    await _playBackgroundMusic();
   }
 
   void _handleAppLifecycle() {
@@ -152,7 +164,7 @@ class AudioController {
         _stopAllSound();
 
       case AppLifecycleState.resumed:
-        if (!_settings!.muted.value && _settings!.musicOn.value) {
+        if (!_settings!.muted.value) {
           _resumeMusic();
         }
 
@@ -163,35 +175,20 @@ class AudioController {
     }
   }
 
-  void _musicOnHandler() {
-    if (_settings!.musicOn.value) {
-      // Music got turned on.
-      if (!_settings!.muted.value) {
-        _resumeMusic();
-      }
-    } else {
-      // Music got turned off.
-      _stopMusic();
-    }
-  }
-
   void _mutedHandler() {
     if (_settings!.muted.value) {
       // All sound just got muted.
       _stopAllSound();
     } else {
       // All sound just got un-muted.
-      if (_settings!.musicOn.value) {
+      if (_musicPlayer.source != null) {
         _resumeMusic();
       }
     }
   }
 
-  Future<void> _playBackgroundSound(String sound) async {
-    await _musicPlayer.play(
-      AssetSource(_replaceUrl(sound)),
-      volume: 0.3,
-    );
+  Future<void> _playBackgroundMusic() async {
+    await _musicPlayer.resume();
   }
 
   Future<void> _resumeMusic() async {
@@ -200,31 +197,26 @@ class AudioController {
         try {
           await _musicPlayer.resume();
         } catch (e) {
-          await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
+          await _musicPlayer.play(
+            AssetSource(
+              _replaceUrl(
+                Assets.music.backgroundMusicCrossword,
+              ),
+            ),
+            volume: 0.3,
+          );
         }
       case PlayerState.stopped:
         await _musicPlayer.stop();
-        await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
+        await _playBackgroundMusic();
 
       case PlayerState.playing:
         break;
       case PlayerState.completed:
-        await _playBackgroundSound(Assets.music.backgroundMusicCrossword);
+        await _playBackgroundMusic();
       case PlayerState.disposed:
         break;
     }
-  }
-
-  void _soundsOnHandler() {
-    for (final player in _sfxPlayers) {
-      if (player.state == PlayerState.playing) {
-        player.stop();
-      }
-    }
-  }
-
-  void _startMusic() {
-    _playBackgroundSound(Assets.music.backgroundMusicCrossword);
   }
 
   void _stopAllSound() {
@@ -233,12 +225,6 @@ class AudioController {
     }
     for (final player in _sfxPlayers) {
       player.stop();
-    }
-  }
-
-  void _stopMusic() {
-    if (_musicPlayer.state == PlayerState.playing) {
-      _musicPlayer.pause();
     }
   }
 }

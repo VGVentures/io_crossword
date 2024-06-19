@@ -14,6 +14,8 @@ import '../../helpers/helpers.dart';
 
 class _MockChallengeBloc extends Mock implements ChallengeBloc {}
 
+class _MockAudioController extends Mock implements AudioController {}
+
 void main() {
   group('$WelcomePage', () {
     testWidgets('route builds a $WelcomePage', (tester) async {
@@ -103,8 +105,13 @@ void main() {
         when(navigator.canPop).thenReturn(true);
         when(() => navigator.push<void>(any())).thenAnswer((_) async {});
 
+        final audioController = _MockAudioController();
+
+        when(audioController.startMusic).thenAnswer((_) async {});
+
         await tester.pumpSubject(
           navigator: navigator,
+          audioController: audioController,
           const WelcomeBody(),
         );
 
@@ -193,6 +200,7 @@ extension on WidgetTester {
   /// Pumps the test subject with all its required ancestors.
   Future<void> pumpSubject(
     Widget child, {
+    AudioController? audioController,
     ChallengeBloc? welcomeBloc,
     MockNavigator? navigator,
   }) {
@@ -208,6 +216,7 @@ extension on WidgetTester {
 
     return pumpApp(
       navigator: navigator,
+      audioController: audioController,
       BlocProvider(
         create: (_) => bloc,
         child: child,
