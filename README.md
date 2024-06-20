@@ -11,6 +11,8 @@ _Built by [Very Good Ventures][very_good_ventures_link] in partnership with Goog
 
 _Created using [Very Good CLI][very_good_cli_link] 🤖_
 
+You can also check out how we used Genkit to power the hints feature in its dedicated [GitHub repository][crossword_backend_repo].
+
 ---
 
 ## Getting Started 🚀
@@ -205,3 +207,4 @@ Alternatively, run `flutter run` and code generation will take place automatical
 [app_check_link]: https://firebase.google.com/docs/app-check/flutter/default-providers
 [recaptcha_link]: https://www.google.com/recaptcha/admin/create
 [start_api_script]: api/scripts/start_local_api.sh
+[crossword_backend_repo]: https://github.com/VGVentures/io_crossword_backend
