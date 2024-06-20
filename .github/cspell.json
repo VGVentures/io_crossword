@@ -24,6 +24,7 @@
     "APPCHECK",
     "appspot",
     "Contador",
+    "genkit",
     "goldens",
     "gsutil",
     "Leaderboard",
