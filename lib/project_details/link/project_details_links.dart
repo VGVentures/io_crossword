@@ -4,7 +4,7 @@ class ProjectDetailsLinks {
   static const privacyPolicy = 'https://policies.google.com/privacy';
   static const termsOfService = 'https://policies.google.com/terms';
   static const claimBadge =
-      'https://developers.google.com/profile/badges/events/io/2024/crossword';
+      'https://developers.google.com/profile/badges/events/io/2024/crossword/award';
   static const googleAI = 'https://ai.google.dev/';
   static const crossword = String.fromEnvironment(
     'CROSSWORD_URL',
