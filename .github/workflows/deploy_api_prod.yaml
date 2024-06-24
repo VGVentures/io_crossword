@@ -6,7 +6,7 @@ env:
   PROJECT_ID: io-crossword
   SERVICE: io-crossword-api
   REGION: us-central1
-  GAME_URL: https://prod-9961b3776301c37db86d9038f.web.app
+  GAME_URL: https://crossword.withgoogle.com
   INITIALS_BLACKLIST_ID: CRORRJZBdf0rLLkHDr9j
   FB_STORAGE_BUCKET: io-crossword.appspot.com
   HINT_FUNCTION_URL: gethintkit-u3emptgwka-uc.a.run.app
