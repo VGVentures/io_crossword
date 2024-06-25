@@ -7,5 +7,5 @@ build/
 pubspec.lock
 
 **/**.csv
-/**_crossword.txt
-/board.txt
+**/**_crossword.txt
+**/board_**.txt
