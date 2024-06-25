@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "io-crossword-dev"
+    "default": "io-crossword"
   },
   "targets": {
     "io-crossword-dev": {
@@ -16,7 +16,7 @@
     "io-crossword": {
       "hosting": {
         "app_prod": [
-          "prod-9961b3776301c37db86d9038f"
+          "io-crossword"
         ]
       }
     }

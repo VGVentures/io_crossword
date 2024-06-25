@@ -11,6 +11,8 @@ _Built by [Very Good Ventures][very_good_ventures_link] in partnership with Goog
 
 _Created using [Very Good CLI][very_good_cli_link] 🤖_
 
+You can also check out how we used Genkit to power the hints feature in its dedicated [GitHub repository][crossword_backend_repo].
+
 ---
 
 ## Getting Started 🚀
@@ -20,7 +22,7 @@ This project has different entry points.
 - `main_local.dart` that targets a local api that should be run first (see how to do it [here][api_readme]).
 
 ```sh
-$ flutter run -d chrome --target lib/main_local.dart --web-port 24514 --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN> --dart-define CROSSWORD_URL=https://crossword.withgoogle.com
+$ flutter run -d chrome --target lib/main_local.dart --web-port 24514 --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
 ```
 
 The specified web port is just an example that matches with the one set in the [helper script][start_api_script] to run the api.
@@ -28,25 +30,25 @@ The specified web port is just an example that matches with the one set in the [
 - `main_development.dart` that targets the dev api.
 
 ```sh
-$ flutter run -d chrome --target lib/main_development.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN> --dart-define CROSSWORD_URL=https://crossword.withgoogle.com
+$ flutter run -d chrome --target lib/main_development.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
 ```
 
 - `main_debug.dart` that targets the dev api and adds a visual layer to debug the crossword sections, their position, fps and other items.
 
 ```sh
-$ flutter run -d chrome --target lib/main_debug.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN> --dart-define CROSSWORD_URL=https://crossword.withgoogle.com
+$ flutter run -d chrome --target lib/main_debug.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define APPCHECK_DEBUG_TOKEN=<APPCHECK_DEBUG_TOKEN>
 ```
 
 - `main_staging.dart` that targets the staging api.
 
 ```sh
-$ flutter run -d chrome --target lib/main_staging.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define CROSSWORD_URL=https://crossword.withgoogle.com
+$ flutter run -d chrome --target lib/main_staging.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY>
 ```
 
 - `main_production.dart` that targets the production api.
 
 ```sh
-$ flutter run -d chrome --target lib/main_production.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY> --dart-define CROSSWORD_URL=https://crossword.withgoogle.com
+$ flutter run -d chrome --target lib/main_production.dart --dart-define RECAPTCHA_KEY=<RECAPTCHA_KEY>
 ```
 
 _\*I/O Crossword works on Web._
@@ -205,3 +207,4 @@ Alternatively, run `flutter run` and code generation will take place automatical
 [app_check_link]: https://firebase.google.com/docs/app-check/flutter/default-providers
 [recaptcha_link]: https://www.google.com/recaptcha/admin/create
 [start_api_script]: api/scripts/start_local_api.sh
+[crossword_backend_repo]: https://github.com/VGVentures/io_crossword_backend
