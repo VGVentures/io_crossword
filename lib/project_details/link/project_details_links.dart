@@ -6,10 +6,7 @@ class ProjectDetailsLinks {
   static const claimBadge =
       'https://developers.google.com/profile/badges/events/io/2024/crossword/award';
   static const googleAI = 'https://ai.google.dev/';
-  static const crossword = String.fromEnvironment(
-    'CROSSWORD_URL',
-    defaultValue: 'https://crossword.withgoogle.com',
-  );
+  static const crossword = 'https://crossword.withgoogle.com';
   static const developerPathway =
       'https://developers.google.com/learn/pathways/solution-crossword';
   static const geminiDeveloperCompetition = 'https://ai.google.dev/competition';

@@ -2,9 +2,6 @@ name: deploy_app_prod
 
 on: workflow_dispatch
 
-env:
-  CROSSWORD_URL: https://crossword.withgoogle.com
-
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -29,7 +26,7 @@ jobs:
           channel: beta
           flutter-version: 3.23.0-0.1.pre
       - run: flutter packages get
-      - run: flutter build web -t lib/main_production.dart --dart-define CROSSWORD_URL=${{ env.CROSSWORD_URL }} --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY_PROD }} --wasm
+      - run: flutter build web -t lib/main_production.dart --dart-define RECAPTCHA_KEY=${{ secrets.RECAPTCHA_KEY_PROD }} --wasm
 
       - name: Move build files to public folder
         run: |
