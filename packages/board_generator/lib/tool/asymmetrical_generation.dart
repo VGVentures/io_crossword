@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:board_generator/board_generator.dart';
-import 'package:board_generator/scripts/model/model.dart';
+import 'package:board_generator/tool/model/model.dart';
 import 'package:csv/csv.dart';
 
 void main({void Function(String) log = print}) {
