@@ -2,7 +2,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:board_generator_playground/src/models/models.dart';
-import 'package:board_generator_playground/src/word_pool.dart';
 import 'package:test/test.dart';
 
 void main() {
