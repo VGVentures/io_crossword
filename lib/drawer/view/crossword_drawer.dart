@@ -42,14 +42,12 @@ class CrosswordDrawer extends StatelessWidget {
                   constraints: BoxConstraints(
                     maxWidth: switch (layout) {
                       IoLayoutData.small => 375,
-                      IoLayoutData.large => 375,
+                      IoLayoutData.large => 500,
                     },
                   ),
-                  child: SingleChildScrollView(
-                    child: HowToPlayContent(
-                      mascot: mascot,
-                      onDonePressed: () => Navigator.pop(context),
-                    ),
+                  child: HowToPlayContent(
+                    mascot: mascot,
+                    onDonePressed: () => Navigator.pop(context),
                   ),
                 ),
               ),

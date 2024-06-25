@@ -317,7 +317,7 @@ void main() {
             assetsStatus: AssetsLoadingStatus.success,
           ),
         );
-        await tester.pumpApp(widget);
+        await tester.pumpApp(widget, layout: IoLayoutData.large);
 
         await tester.tap(find.text(l10n.doneButtonLabel));
 
@@ -335,7 +335,11 @@ void main() {
             assetsStatus: AssetsLoadingStatus.success,
           ),
         );
-        await tester.pumpApp(widget, user: User(id: 'userId'));
+        await tester.pumpApp(
+          widget,
+          user: User(id: 'userId'),
+          layout: IoLayoutData.large,
+        );
 
         await tester.tap(find.text(l10n.doneButtonLabel));
 
