@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:board_generator/board_generator.dart';
-import 'package:board_generator/tool/model/model.dart';
 import 'package:csv/csv.dart';
 
-void main({
-  void Function(String) log = print,
-}) {
+import 'model/model.dart';
+
+void main({void Function(String) log = print}) {
   final fileString = File('words.csv').readAsStringSync();
   final rows = const CsvToListConverter().convert(fileString);
 
@@ -18,30 +17,25 @@ void main({
   }).toList()
     ..removeWhere((element) => !RegExp(r'^[a-zA-Z]*$').hasMatch(element.word));
 
-  final pool = wordsList.map((word) => word.word);
+  final pool = {...wordsList.map((word) => word.word)};
 
   log('Sorting ${pool.length} words');
   final wordPool = WordPool(words: pool);
   log('Sorted ${pool.length} words');
 
-  final generator = SymmetricalCrosswordGenerator(
+  final generator = AsymmetricalCrosswordGenerator(
     pool: wordPool,
     crossword: Crossword(
-      bounds: Bounds.square(size: 93),
+      bounds: Bounds.square(size: 78),
       largestWordLength: wordPool.longestWordLength,
       shortestWordLength: wordPool.shortestWordLength,
     ),
   );
 
-  final stopwatch = Stopwatch()..start();
   final crossword = generator.populate();
-  stopwatch.stop();
 
-  log('Elapsed time: ${stopwatch.elapsed.inSeconds} seconds');
-  log('Generated a crossword with: ${crossword.words.length}');
-
-  // Creates file to see the crossword
-  File('symmetrical_crossword.txt')
+  log('Placed words: ${crossword.words.length}');
+  File('asymmetrical_crossword.txt')
       .writeAsStringSync(crossword.toPrettyString());
 
   // Creates CSV file representing the crossword.
@@ -60,7 +54,8 @@ void main({
 
   final notUsedWords = wordsList.where((w) => !wordsString.contains(w.word));
 
-  log('Unused words: ${notUsedWords.length}');
+  log('Unused words: ${notUsedWords.map((w) => w.word).toList()}');
 
-  File('board.txt').writeAsStringSync(const ListToCsvConverter().convert(list));
+  File('board_asymmetrical.txt')
+      .writeAsStringSync(const ListToCsvConverter().convert(list));
 }
