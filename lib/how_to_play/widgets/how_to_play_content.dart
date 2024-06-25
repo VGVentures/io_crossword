@@ -198,9 +198,10 @@ class HowToPlayStep extends StatelessWidget {
 
   final String image;
 
-  static const double smallTextHeight = 88;
+  static const double smallTextHeight = 136;
 
-  static const double largeTextHeight = 66;
+  static const double largeTextHeight = 104;
+
   @override
   Widget build(BuildContext context) {
     final layout = IoLayout.of(context);
@@ -210,9 +211,12 @@ class HowToPlayStep extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).io.textStyles.h2,
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(
+              title,
+              style: Theme.of(context).io.textStyles.h2,
+            ),
           ),
           const SizedBox(height: 24),
           Container(
@@ -234,6 +238,7 @@ class HowToPlayStep extends StatelessWidget {
             child: Text(
               message,
               style: Theme.of(context).io.textStyles.body3,
+              textAlign: TextAlign.justify,
             ),
           ),
         ],
