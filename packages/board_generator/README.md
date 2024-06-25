@@ -7,7 +7,7 @@ Package used to experiment with the board generation process.
 To generate a board, you need a set of words and clues that will be used as an input. Create a `words.csv` file inside the `tool` directory with the following format:
 
 ```none
-word,clue
+word,"clue"
 flutter,"Open source framework to build multi-platform applications"
 firebase,"Mobile and web app development platform by Google"
 ```
