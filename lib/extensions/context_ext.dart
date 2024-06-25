@@ -27,7 +27,7 @@ extension ContextExt on BuildContext {
 
   Future<void> shareTwitter({required String shareUrl}) {
     final content = _encode([
-      'Check out IOCrossword #GoogleIO!',
+      'Check out #IOCrossword built for Google I/O 2024!',
       shareUrl,
     ]);
 

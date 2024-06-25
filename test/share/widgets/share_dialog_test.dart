@@ -97,7 +97,7 @@ void main() {
 
       verify(
         () => urlLauncher.launchUrl(
-          'https://twitter.com/intent/tweet?text=Check%20out%20IOCrossword%20%23GoogleIO!%0A$url',
+          'https://twitter.com/intent/tweet?text=Check%20out%20%23IOCrossword%20built%20for%20Google%20I/O%202024!%0A$url',
           any(),
         ),
       ).called(1);
