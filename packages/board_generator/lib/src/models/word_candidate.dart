@@ -112,7 +112,7 @@ class FixedLengthWordCandidate extends WordCandidate {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -1  0  1  2
   /// -3  -  -  -  -
   /// -2  -  B  U  S
@@ -130,7 +130,7 @@ class FixedLengthWordCandidate extends WordCandidate {
   /// If we label those surrounding locations with "*" we get:
   ///
   ///
-  /// ```
+  /// ```none
   ///    -1  0  1  2
   /// -3  -  *  -  -
   /// -2  *  B  *  S
