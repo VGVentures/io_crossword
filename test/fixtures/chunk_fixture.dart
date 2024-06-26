@@ -2,7 +2,7 @@ import 'package:game_domain/game_domain.dart';
 
 /// A fixture for a [BoardSection] instance.
 ///
-/// ```
+/// ```none
 ///   -1 0 1 2 3 4
 ///  0 - H E L L O
 ///  1 - - L - - L
