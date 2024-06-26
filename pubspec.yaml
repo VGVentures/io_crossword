@@ -47,7 +47,7 @@ dependencies:
 dev_dependencies:
   bloc_test: ^9.1.7
   build_runner: ^2.4.11
-  flutter_gen_runner: ^5.5.0+1
+  flutter_gen_runner: ^5.6.0
   flutter_test:
     sdk: flutter
   mockingjay: ^0.5.0
