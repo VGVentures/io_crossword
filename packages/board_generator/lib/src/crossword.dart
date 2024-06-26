@@ -64,7 +64,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
@@ -75,7 +75,7 @@ class Crossword {
   ///
   /// Adding the word "SUN" at (2, -2) would be connected:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  U
@@ -86,7 +86,7 @@ class Crossword {
   ///
   /// However, adding the word "SUN" at (-2, 0) would not be connected:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
@@ -115,7 +115,7 @@ class Crossword {
   ///
   /// For example, considering the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
@@ -126,7 +126,7 @@ class Crossword {
   ///
   /// Adding the word "USA" at (1, -2) would have five connections:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  S  -
@@ -137,7 +137,7 @@ class Crossword {
   ///
   /// If we label the connections with a "*" we would have:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  *  *  *
   /// -1  -  -  *  S  -
@@ -163,7 +163,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -5 -4 -3 -2 -1  0  1  2
   /// -2  -  -  -  A  L  B  U  S
   /// -1  -  -  -  -  -  E  -  -
@@ -174,7 +174,7 @@ class Crossword {
   ///
   /// Adding the word "USA" at (-5, -2) would overlap with "ALBUS":
   ///
-  /// ```
+  /// ```none
   ///    -5 -4 -3 -2 -1  0  1  2
   /// -2  U  S  A  A  L  B  U  S
   /// -1  -  -  -  -  -  E  -  -
@@ -185,7 +185,7 @@ class Crossword {
   ///
   /// However, adding the word "SUN" at (2, -2) would not overlap:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  U
@@ -232,7 +232,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  -  -  B  U  S
   /// -1  -  -  E  -  -
@@ -247,7 +247,7 @@ class Crossword {
   /// at (-2, -2) would override "BUS" partially.
   ///
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  W  E  B  S  S
   /// -1  -  -  E  -  -
@@ -282,7 +282,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
@@ -300,7 +300,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -
@@ -322,7 +322,7 @@ class Crossword {
   ///
   /// For example, consider the following board:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -2  A  L  B  U  S
   /// -1  -  -  E  -  -

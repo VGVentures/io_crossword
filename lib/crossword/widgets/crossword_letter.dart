@@ -24,7 +24,7 @@ typedef CrosswordLetterIndex = (int, int);
 ///
 /// For example, given:
 ///
-/// ```
+/// ```none
 /// F U N
 /// - - O
 /// ```

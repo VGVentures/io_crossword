@@ -21,4 +21,4 @@ dev_dependencies:
   built_value_generator: ^8.9.1
   mocktail: ^1.0.3
   test: ^1.25.2
-  very_good_analysis: ^5.1.0
+  very_good_analysis: ^6.0.0

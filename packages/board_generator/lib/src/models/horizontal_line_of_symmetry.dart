@@ -24,7 +24,7 @@ class HorizontalLineOfSymmetry {
   ///
   /// For example, consider an horizontal line of symmetry at y = 0:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -3  -  -  -  -  -
   /// -2  -  -  -  -  -
@@ -41,7 +41,7 @@ class HorizontalLineOfSymmetry {
   /// If new entries are added in such mirrored locations, the board's grid
   /// would be symmetrical horizontally:
   ///
-  /// ```
+  /// ```none
   ///    -2 -1  0  1  2
   /// -3  -  -  P  I  N
   /// -2  -  -  O  -  -

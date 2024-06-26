@@ -4,7 +4,7 @@ import 'package:board_generator/src/models/models.dart';
 /// {@template crossword1}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2
 /// -2  A  L  B  U  S
 /// -1  -  -  E  -  -
@@ -40,7 +40,7 @@ class Crossword1 extends Crossword {
 /// {@template crossword2}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2
 /// -2  A  L  B  U  S
 /// -1  -  -  E  -  -
@@ -82,7 +82,7 @@ class Crossword2 extends Crossword {
 /// {@template crossword3}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2
 /// -2  A  L  B  U  S
 /// -1  -  -  E  -  -
@@ -131,7 +131,7 @@ class Crossword3 extends Crossword {
 /// {@template crossword4}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2
 /// -2  A  L  B  U  S
 /// -1  -  -  E  -  -
@@ -174,7 +174,7 @@ class Crossword4 extends Crossword {
 /// {@template crossword5}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2  3  4  5  6  7
 /// -2  A  L  B  U  S  -  -  -  -  -
 /// -1  P  -  E  -  -  -  -  -  -  -
@@ -233,7 +233,7 @@ class Crossword5 extends Crossword {
 /// {@template crossword6}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2  3  4  5   6   7   8   9   10  11
 /// -2  O  R  C  H  A  R  D  B   A   N   K   C   O   M
 /// -1  C  -  O  -  T  -  C  -   P   -   -   -   -   -
@@ -328,7 +328,7 @@ class Crossword6 extends Crossword {
 /// {@template crossword7}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///    -2 -1  0  1  2  3  4  5   6   7
 /// -2  L  I  B  E  X  E  C  -   C   -
 /// -1  -  N  -  D  -  -  I  N   E   R
@@ -409,7 +409,7 @@ class Crossword7 extends Crossword {
 /// {@template crossword8}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///     -6 -5 -4 -3 -2 -1  0  1  2
 /// -2   S  U  P  E  R  M  A  N  -
 /// -1   O  -  -  -  -  -  -  E  -
@@ -458,7 +458,7 @@ class Crossword8 extends Crossword {
 /// {@template crossword9}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///     -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9  10  11  12  13  14  15
 /// -2   -  -  E  -  I  N  T  E  R  C  H  A  N  G  E  A  B   I   L   I   T   Y
 /// -1   I  -  N  -  O  -  -  -  -  -  -  -  -  -  -  -  -   -   -   -   -   -
@@ -513,7 +513,7 @@ class Crossword9 extends Crossword {
 /// {@template crossword8}
 /// A pre-defined crossword for testing.
 ///
-/// ```
+/// ```none
 ///      1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  19
 /// -2   S  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   -   C
 /// -1   O  -  -  -  -  -  -  -  -  -   -   -   -   -   -   -   -   -   A
