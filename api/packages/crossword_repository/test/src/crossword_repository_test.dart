@@ -455,7 +455,7 @@ void main() {
         ).thenAnswer((_) async {});
       });
 
-      test('updates the document in the database', () async {
+      test('creates a new document in the database', () async {
         when(
           () => dbClient.set('solvedWords', any()),
         ).thenAnswer((_) async {});

@@ -127,7 +127,7 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          verifyNever(() => crosswordRepository.updateSolvedWordsCount('id'));
+          verifyNever(() => crosswordRepository.updateSolvedWordsCount(any()));
         },
       );
 

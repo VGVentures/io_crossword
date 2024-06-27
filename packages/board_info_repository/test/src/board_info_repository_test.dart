@@ -48,9 +48,7 @@ void main() {
       when(solvedWordsCollection.snapshots)
           .thenAnswer((_) => Stream.value(query));
 
-      final docs = [
-        for (var i = 0; i < wordNumber; i++) doc,
-      ];
+      final docs = List.generate(wordNumber, (_) => doc);
       when(() => query.size).thenReturn(wordNumber);
       when(() => query.docs).thenReturn(docs);
     }
@@ -60,10 +58,6 @@ void main() {
       final query = _MockQuerySnapshot<Map<String, dynamic>>();
       when(
         () => boardInfoCollection.where('type', isEqualTo: 'total_words_count'),
-      ).thenReturn(boardInfoCollection);
-      when(
-        () =>
-            boardInfoCollection.where('type', isEqualTo: 'solved_words_count'),
       ).thenReturn(boardInfoCollection);
       when(
         () => boardInfoCollection.where('type', isEqualTo: 'zoom_limit'),
