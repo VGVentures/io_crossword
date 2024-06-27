@@ -81,6 +81,7 @@ class CrosswordRepository {
   /// solvedTimestamp attribute.
   /// The second value returns true if the answer was previously answered.
   Future<(bool, bool)> answerWord(
+    String userId,
     String wordId,
     Mascot mascot,
     String userAnswer,
@@ -134,6 +135,13 @@ class CrosswordRepository {
           );
         }
 
+        if (word.userId == userId) {
+          throw CrosswordRepositoryBadRequestException(
+            'Word with id $wordId was already solved by current user',
+            StackTrace.current,
+          );
+        }
+
         // The word has been solved previously
         if (word.solvedTimestamp != null) {
           return (true, true);
@@ -143,6 +151,7 @@ class CrosswordRepository {
           answer: correctAnswer.answer,
           solvedTimestamp: clock.now().millisecondsSinceEpoch,
           mascot: mascot,
+          userId: userId,
         );
         updatedSection = updatedSection.copyWith(
           words: [...section.words..remove(word), solvedWord],
