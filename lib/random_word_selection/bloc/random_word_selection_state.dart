@@ -6,6 +6,7 @@ enum RandomWordSelectionStatus {
   initialSuccess,
   success,
   notFound,
+  initialNotFound,
   failure,
 }
 
