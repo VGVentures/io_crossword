@@ -292,6 +292,42 @@ void main() {
           expect(response.statusCode, HttpStatus.internalServerError);
         },
       );
+
+      test(
+        'returns Response with status badRequest if answerWord throws '
+        'a $CrosswordRepositoryBadRequestException',
+        () async {
+          when(() => request.json()).thenAnswer(
+            (_) async => {
+              'wordId': 'id',
+              'answer': 'sun',
+            },
+          );
+          when(() => leaderboardRepository.getPlayer('userId')).thenAnswer(
+            (_) async => Player(
+              id: 'userId',
+              mascot: Mascot.dash,
+              initials: 'ABC',
+            ),
+          );
+          when(
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
+          ).thenThrow(
+            CrosswordRepositoryBadRequestException(
+              'Oops',
+              StackTrace.current,
+            ),
+          );
+
+          final response = await route.onRequest(requestContext);
+          expect(response.statusCode, HttpStatus.badRequest);
+        },
+      );
     });
   });
 }
