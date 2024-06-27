@@ -37,6 +37,7 @@ Future<Response> _onPost(RequestContext context) async {
 
   try {
     final (valid, preSolved) = await crosswordRepository.answerWord(
+      user.id,
       wordId,
       player.mascot,
       answer,

@@ -27,6 +27,7 @@ void main() {
           'clue': 'clue',
           'solvedTimestamp': 0,
           'mascot': 'sparky',
+          'userId': null,
         }),
       );
     });

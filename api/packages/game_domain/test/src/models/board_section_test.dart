@@ -19,6 +19,7 @@ void main() {
             clue: 'clue',
             solvedTimestamp: 1234,
             mascot: Mascot.android,
+            userId: 'userId',
           ),
         ],
       );
@@ -37,6 +38,7 @@ void main() {
               'clue': 'clue',
               'solvedTimestamp': 1234,
               'mascot': 'android',
+              'userId': 'userId',
             },
           ],
         }),
@@ -56,6 +58,7 @@ void main() {
             'clue': 'clue',
             'solvedTimestamp': 1234,
             'mascot': 'android',
+            'userId': 'userId',
           },
         ],
       };
@@ -75,6 +78,7 @@ void main() {
                 clue: 'clue',
                 solvedTimestamp: 1234,
                 mascot: Mascot.android,
+                userId: 'userId',
               ),
             ],
           ),
