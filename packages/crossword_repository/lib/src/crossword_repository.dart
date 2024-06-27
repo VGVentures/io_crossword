@@ -19,7 +19,7 @@ class CrosswordRepository {
   /// The [FirebaseFirestore] instance.
   final FirebaseFirestore db;
 
-  /// The [CollectionReference] for the matches.
+  /// The [CollectionReference] for the board sections.
   late final CollectionReference<Map<String, dynamic>> sectionCollection;
 
   final Random _rng;
@@ -88,6 +88,21 @@ class CrosswordRepository {
       // coverage:ignore-end
     }
     return null;
+  }
+
+  /// Returns the position of a random section. This section can have all words
+  /// solved or some unsolved.
+  Future<BoardSection> getRandomSection() async {
+    final result = await sectionCollection.get();
+
+    final sections = result.docs.map((sectionDoc) {
+      return BoardSection.fromJson({
+        'id': sectionDoc.id,
+        ...sectionDoc.data(),
+      });
+    }).toList();
+
+    return sections[_rng.nextInt(sections.length)];
   }
 
   /// Watches a section of the crossword board
