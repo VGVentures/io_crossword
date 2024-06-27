@@ -18,6 +18,7 @@ class Word extends Equatable {
     required this.answer,
     this.solvedTimestamp,
     this.mascot,
+    this.userId,
   });
 
   /// {@macro word}
@@ -68,6 +69,10 @@ class Word extends Equatable {
   @JsonKey()
   final Mascot? mascot;
 
+  /// The user id that first solved the word.
+  @JsonKey()
+  final String? userId;
+
   /// Returns the solved characters with the index position and character
   /// solved.
   Map<int, String> get solvedCharacters {
@@ -96,6 +101,7 @@ class Word extends Equatable {
     String? answer,
     int? solvedTimestamp,
     Mascot? mascot,
+    String? userId,
   }) {
     return Word(
       id: id ?? this.id,
@@ -105,6 +111,7 @@ class Word extends Equatable {
       answer: answer ?? this.answer,
       solvedTimestamp: solvedTimestamp ?? this.solvedTimestamp,
       mascot: mascot ?? this.mascot,
+      userId: userId ?? this.userId,
     );
   }
 
@@ -117,6 +124,7 @@ class Word extends Equatable {
         answer,
         solvedTimestamp,
         mascot,
+        userId,
       ];
 }
 

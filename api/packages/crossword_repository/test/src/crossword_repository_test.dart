@@ -155,6 +155,7 @@ void main() {
         axis: WordAxis.horizontal,
         answer: 'hap y',
         clue: '',
+        userId: 'userId',
       );
 
       final word4 = Word(
@@ -296,7 +297,12 @@ void main() {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
-          final valid = await repository.answerWord('4', Mascot.dino, 'solved');
+          final valid = await repository.answerWord(
+            'userId',
+            '4',
+            Mascot.dino,
+            'solved',
+          );
           expect(valid, (true, true));
         });
       });
@@ -306,8 +312,12 @@ void main() {
         final time = DateTime.now();
         final clock = Clock.fixed(time);
         await withClock(clock, () async {
-          final valid =
-              await repository.answerWord('1', Mascot.dino, 'flutter');
+          final valid = await repository.answerWord(
+            'userId',
+            '1',
+            Mascot.dino,
+            'flutter',
+          );
           expect(valid, (true, false));
 
           verify(
@@ -339,6 +349,7 @@ void main() {
                           solvedTimestamp: time.millisecondsSinceEpoch,
                           mascot: Mascot.dino,
                           answer: 'flutter',
+                          userId: 'userId',
                         )
                         .toJson(),
                     word2.copyWith(answer: 'bl  ').toJson(),
@@ -351,7 +362,12 @@ void main() {
       });
 
       test('returns (false, false) if answer is incorrect', () async {
-        final valid = await repository.answerWord('1', Mascot.dino, 'android');
+        final valid = await repository.answerWord(
+          'userId',
+          '1',
+          Mascot.dino,
+          'android',
+        );
         expect(valid, (false, false));
       });
 
@@ -362,7 +378,12 @@ void main() {
             () => dbClient.getById(answersCollection, 'fake'),
           ).thenAnswer((_) async => null);
           expect(
-            () => repository.answerWord('fake', Mascot.dino, 'flutter'),
+            () => repository.answerWord(
+              'userId',
+              'fake',
+              Mascot.dino,
+              'flutter',
+            ),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -395,7 +416,12 @@ void main() {
           ).thenAnswer((_) async => answersRecord);
 
           expect(
-            () => repository.answerWord('3', Mascot.sparky, 'happy'),
+            () => repository.answerWord(
+              'userId2',
+              '3',
+              Mascot.sparky,
+              'happy',
+            ),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -412,7 +438,12 @@ void main() {
           ).thenAnswer((_) async => []);
 
           expect(
-            () => repository.answerWord('1', Mascot.dino, 'flutter'),
+            () => repository.answerWord(
+              'userId',
+              '1',
+              Mascot.dino,
+              'flutter',
+            ),
             throwsA(isA<CrosswordRepositoryException>()),
           );
         },
@@ -434,8 +465,54 @@ void main() {
             () => dbClient.getById(answersCollection, 'fake'),
           ).thenAnswer((_) async => answersRecord);
           expect(
-            () => repository.answerWord('fake', Mascot.dino, 'flutter'),
+            () => repository.answerWord(
+              'userId',
+              'fake',
+              Mascot.dino,
+              'flutter',
+            ),
             throwsA(isA<CrosswordRepositoryException>()),
+          );
+        },
+      );
+
+      test(
+        'throws $CrosswordRepositoryBadRequestException if user '
+        'has already solved word',
+        () async {
+          final answersRecord = _MockDbEntityRecord();
+          when(() => answersRecord.id).thenReturn('3');
+          when(() => answersRecord.data).thenReturn({
+            'userId': 'userId',
+            'answer': 'happy',
+            'sections': [
+              {'x': 1, 'y': 1},
+            ],
+            'collidedWords': <Map<String, dynamic>>[
+              {
+                'wordId': '6',
+                'position': 1,
+                'character': 'l',
+                'sections': [
+                  {'x': 1, 'y': 1},
+                  {'x': 1, 'y': 2},
+                ],
+              }
+            ],
+          });
+
+          when(
+            () => dbClient.getById(answersCollection, '3'),
+          ).thenAnswer((_) async => answersRecord);
+
+          expect(
+            () => repository.answerWord(
+              'userId',
+              '3',
+              Mascot.sparky,
+              'happy',
+            ),
+            throwsA(isA<CrosswordRepositoryBadRequestException>()),
           );
         },
       );

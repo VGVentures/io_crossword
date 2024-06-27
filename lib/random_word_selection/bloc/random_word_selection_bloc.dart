@@ -55,7 +55,22 @@ class RandomWordSelectionBloc
           ),
         );
       } else {
-        emit(state.copyWith(status: RandomWordSelectionStatus.notFound));
+        final randomSection = await _crosswordRepository.getRandomSection();
+        final randomizedWords = [...randomSection.words]..shuffle();
+        final randomWord = randomizedWords.first;
+
+        emit(
+          state.copyWith(
+            status: event.isInitial
+                ? RandomWordSelectionStatus.initialNotFound
+                : RandomWordSelectionStatus.notFound,
+            randomWord: randomWord,
+            sectionPosition: (
+              randomSection.position.x,
+              randomSection.position.y
+            ),
+          ),
+        );
       }
     } catch (error, stackTrace) {
       addError(error, stackTrace);

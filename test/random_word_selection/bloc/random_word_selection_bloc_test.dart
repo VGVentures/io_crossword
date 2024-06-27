@@ -84,8 +84,8 @@ void main() {
       );
 
       blocTest<RandomWordSelectionBloc, RandomWordSelectionState>(
-        'emits state with status notFound when'
-        ' getRandomUncompletedSection returns null',
+        'emits state with status notFound when event is not initial and '
+        'getRandomUncompletedSection returns null',
         build: () => RandomWordSelectionBloc(
           crosswordRepository: crosswordRepository,
           boardInfoRepository: boardInfoRepository,
@@ -93,11 +93,41 @@ void main() {
         setUp: () {
           when(() => crosswordRepository.getRandomUncompletedSection(any()))
               .thenAnswer((_) => Future.value());
+          when(() => crosswordRepository.getRandomSection())
+              .thenAnswer((_) => Future.value(section));
         },
         act: (bloc) => bloc.add(RandomWordRequested()),
         expect: () => <RandomWordSelectionState>[
           RandomWordSelectionState(status: RandomWordSelectionStatus.loading),
-          RandomWordSelectionState(status: RandomWordSelectionStatus.notFound),
+          RandomWordSelectionState(
+            status: RandomWordSelectionStatus.notFound,
+            randomWord: word,
+            sectionPosition: (1, 1),
+          ),
+        ],
+      );
+
+      blocTest<RandomWordSelectionBloc, RandomWordSelectionState>(
+        'emits state with status initialNotFound when event is initial and '
+        'getRandomUncompletedSection returns null',
+        build: () => RandomWordSelectionBloc(
+          crosswordRepository: crosswordRepository,
+          boardInfoRepository: boardInfoRepository,
+        ),
+        setUp: () {
+          when(() => crosswordRepository.getRandomUncompletedSection(any()))
+              .thenAnswer((_) => Future.value());
+          when(() => crosswordRepository.getRandomSection())
+              .thenAnswer((_) => Future.value(section));
+        },
+        act: (bloc) => bloc.add(RandomWordRequested(isInitial: true)),
+        expect: () => <RandomWordSelectionState>[
+          RandomWordSelectionState(status: RandomWordSelectionStatus.loading),
+          RandomWordSelectionState(
+            status: RandomWordSelectionStatus.initialNotFound,
+            randomWord: word,
+            sectionPosition: (1, 1),
+          ),
         ],
       );
     });

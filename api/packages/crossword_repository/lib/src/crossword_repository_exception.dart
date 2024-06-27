@@ -21,3 +21,12 @@ stackTrace: $stackTrace
 ''';
   }
 }
+
+/// {@template crossword_repository_bad_request_exception}
+/// Exception thrown when a bad request is made to the [CrosswordRepository].
+/// {@endtemplate}
+class CrosswordRepositoryBadRequestException
+    extends CrosswordRepositoryException {
+  /// {@macro crossword_repository_bad_request_exception}
+  CrosswordRepositoryBadRequestException(super.cause, super.stackTrace);
+}
