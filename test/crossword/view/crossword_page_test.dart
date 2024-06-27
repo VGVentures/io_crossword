@@ -122,87 +122,159 @@ void main() {
         when(() => crosswordBloc.state).thenReturn(const CrosswordState());
       });
 
-      testWidgets('success, adds $WordSelected event', (tester) async {
-        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
-        whenListen(
-          randomWordSelectionBloc,
-          Stream.fromIterable([
-            RandomWordSelectionState(
-              status: RandomWordSelectionStatus.success,
-              randomWord: word,
-              sectionPosition: (1, 1),
-            ),
-          ]),
-          initialState: RandomWordSelectionState(),
-        );
-        final wordSelectionBloc = _MockWordSelectionBloc();
-
-        await tester.pumpSubject(
-          CrosswordView(),
-          wordSelectionBloc: wordSelectionBloc,
-          crosswordBloc: crosswordBloc,
-          randomWordSelectionBloc: randomWordSelectionBloc,
-        );
-
-        verify(
-          () => wordSelectionBloc.add(
-            WordSelected(
-              selectedWord: SelectedWord(section: (1, 1), word: word),
-            ),
-          ),
-        ).called(1);
-      });
-
-      testWidgets('initialSuccess, adds CrosswordSectionLoaded event',
-          (tester) async {
-        when(() => crosswordBloc.state).thenReturn(
-          const CrosswordState(
-            status: CrosswordStatus.success,
-          ),
-        );
-
-        whenListen(
-          crosswordBloc,
-          Stream.fromIterable(
-            [
-              CrosswordState(
-                status: CrosswordStatus.success,
+      testWidgets(
+        'success, adds $WordSelected event',
+        (tester) async {
+          final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+          whenListen(
+            randomWordSelectionBloc,
+            Stream.value(
+              RandomWordSelectionState(
+                status: RandomWordSelectionStatus.success,
+                randomWord: word,
+                sectionPosition: (1, 1),
               ),
-            ],
-          ),
-          initialState: CrosswordState(),
-        );
+            ),
+            initialState: RandomWordSelectionState(),
+          );
+          final wordSelectionBloc = _MockWordSelectionBloc();
 
-        final wordSelectionBloc = _MockWordSelectionBloc();
-        final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+          await tester.pumpSubject(
+            CrosswordView(),
+            wordSelectionBloc: wordSelectionBloc,
+            crosswordBloc: crosswordBloc,
+            randomWordSelectionBloc: randomWordSelectionBloc,
+          );
 
-        whenListen(
-          randomWordSelectionBloc,
-          Stream.fromIterable(
-            [
+          verify(
+            () => wordSelectionBloc.add(
+              WordSelected(
+                selectedWord: SelectedWord(section: (1, 1), word: word),
+              ),
+            ),
+          ).called(1);
+        },
+      );
+
+      testWidgets(
+        'notFound, adds $WordSelected event',
+        (tester) async {
+          final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+          whenListen(
+            randomWordSelectionBloc,
+            Stream.value(
+              RandomWordSelectionState(
+                status: RandomWordSelectionStatus.notFound,
+                randomWord: word,
+                sectionPosition: (1, 0),
+              ),
+            ),
+            initialState: RandomWordSelectionState(),
+          );
+          final wordSelectionBloc = _MockWordSelectionBloc();
+
+          await tester.pumpSubject(
+            CrosswordView(),
+            wordSelectionBloc: wordSelectionBloc,
+            crosswordBloc: crosswordBloc,
+            randomWordSelectionBloc: randomWordSelectionBloc,
+          );
+
+          verify(
+            () => wordSelectionBloc.add(
+              WordSelected(
+                selectedWord: SelectedWord(section: (1, 0), word: word),
+              ),
+            ),
+          ).called(1);
+        },
+      );
+
+      testWidgets(
+        'initialSuccess, adds $CrosswordSectionsLoaded event',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            const CrosswordState(status: CrosswordStatus.success),
+          );
+
+          whenListen(
+            crosswordBloc,
+            Stream.value(CrosswordState(status: CrosswordStatus.success)),
+            initialState: CrosswordState(),
+          );
+
+          final wordSelectionBloc = _MockWordSelectionBloc();
+          final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+
+          whenListen(
+            randomWordSelectionBloc,
+            Stream.value(
               RandomWordSelectionState(
                 status: RandomWordSelectionStatus.initialSuccess,
                 randomWord: word,
                 sectionPosition: (1, 1),
               ),
-            ],
-          ),
-          initialState: RandomWordSelectionState(),
-        );
+            ),
+            initialState: RandomWordSelectionState(),
+          );
 
-        await tester.pumpSubject(
-          CrosswordView(),
-          wordSelectionBloc: wordSelectionBloc,
-          crosswordBloc: crosswordBloc,
-          randomWordSelectionBloc: randomWordSelectionBloc,
-        );
+          await tester.pumpSubject(
+            CrosswordView(),
+            wordSelectionBloc: wordSelectionBloc,
+            crosswordBloc: crosswordBloc,
+            randomWordSelectionBloc: randomWordSelectionBloc,
+          );
 
-        final initialWord =
-            SelectedWord(section: (1, 1), word: section.words.first);
+          final initialWord =
+              SelectedWord(section: (1, 1), word: section.words.first);
 
-        verify(() => crosswordBloc.add(CrosswordSectionsLoaded(initialWord)))
-            .called(1);
-      });
+          verify(() => crosswordBloc.add(CrosswordSectionsLoaded(initialWord)))
+              .called(1);
+        },
+      );
+
+      testWidgets(
+        'initialNotFound, adds $CrosswordSectionsLoaded event',
+        (tester) async {
+          when(() => crosswordBloc.state).thenReturn(
+            const CrosswordState(status: CrosswordStatus.success),
+          );
+
+          whenListen(
+            crosswordBloc,
+            Stream.value(CrosswordState(status: CrosswordStatus.success)),
+            initialState: CrosswordState(),
+          );
+
+          final wordSelectionBloc = _MockWordSelectionBloc();
+          final randomWordSelectionBloc = _MockRandomWordSelectionBloc();
+
+          whenListen(
+            randomWordSelectionBloc,
+            Stream.value(
+              RandomWordSelectionState(
+                status: RandomWordSelectionStatus.initialNotFound,
+                randomWord: word,
+                sectionPosition: (1, 0),
+              ),
+            ),
+            initialState: RandomWordSelectionState(),
+          );
+
+          await tester.pumpSubject(
+            CrosswordView(),
+            wordSelectionBloc: wordSelectionBloc,
+            crosswordBloc: crosswordBloc,
+            randomWordSelectionBloc: randomWordSelectionBloc,
+          );
+
+          final initialWord =
+              SelectedWord(section: (1, 0), word: section.words.first);
+
+          verify(() => crosswordBloc.add(CrosswordSectionsLoaded(initialWord)))
+              .called(1);
+        },
+      );
     });
 
     testWidgets('when success, adds initial RandomWordRequested',
