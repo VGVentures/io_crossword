@@ -79,7 +79,12 @@ void main() {
           );
 
           when(
-            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
           ).thenAnswer((_) async => (true, true));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -112,7 +117,12 @@ void main() {
           );
 
           when(
-            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
           ).thenAnswer((_) async => (true, true));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -146,7 +156,12 @@ void main() {
             () => crosswordRepository.updateSolvedWordsCount(),
           ).thenAnswer((_) async {});
           when(
-            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
           ).thenAnswer((_) async => (true, false));
           when(
             () => leaderboardRepository.updateScore(user.id),
@@ -177,7 +192,12 @@ void main() {
             ),
           );
           when(
-            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
           ).thenAnswer((_) async => (false, false));
           when(() => request.json()).thenAnswer(
             (_) async => {
@@ -260,7 +280,12 @@ void main() {
             ),
           );
           when(
-            () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
+            () => crosswordRepository.answerWord(
+              'userId',
+              'id',
+              Mascot.dash,
+              'sun',
+            ),
           ).thenThrow(Exception('Oops'));
 
           final response = await route.onRequest(requestContext);

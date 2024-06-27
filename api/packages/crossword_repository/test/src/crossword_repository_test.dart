@@ -417,7 +417,7 @@ void main() {
 
           expect(
             () => repository.answerWord(
-              'userId',
+              'userId2',
               '3',
               Mascot.sparky,
               'happy',
