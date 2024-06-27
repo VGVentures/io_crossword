@@ -107,6 +107,45 @@ void main() {
       });
     });
 
+    group('getRandomSection', () {
+      const bottomRight = Point(2, 2);
+
+      Future<void> setUpSections() async {
+        for (var x = 0; x <= bottomRight.x; x++) {
+          for (var y = 0; y <= bottomRight.y; y++) {
+            final section = BoardSection(
+              id: '$x-$y',
+              position: Point(x, y),
+              words: [
+                word.copyWith(
+                  position: Point(x, y),
+                  solvedTimestamp: 1,
+                ),
+              ],
+            );
+
+            await firebaseFirestore
+                .collection(sectionsCollection)
+                .doc(section.id)
+                .set(section.toJson());
+          }
+        }
+      }
+
+      test('returns a valid section', () async {
+        await setUpSections();
+        when(() => rng.nextInt(any())).thenReturn(2);
+
+        final section = await crosswordRepository.getRandomSection();
+
+        expect(
+          section,
+          isA<BoardSection>()
+              .having((s) => s.position, 'position', equals(Point(0, 2))),
+        );
+      });
+    });
+
     group('watchSection', () {
       setUp(() async {
         await firebaseFirestore
