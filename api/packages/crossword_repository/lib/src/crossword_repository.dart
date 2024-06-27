@@ -17,7 +17,6 @@ class CrosswordRepository {
 
   static const _sectionsCollection = 'boardChunks';
   static const _answersCollection = 'answers';
-  static const _boardInfoCollection = 'boardInfo';
   static const _solvedWordCollection = 'solvedWords';
 
   /// Fetches all sections from the board.
