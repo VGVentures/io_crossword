@@ -64,7 +64,7 @@ class BoardInfoRepository {
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
 
-  /// The [CollectionReference] for the config.
+  /// The [CollectionReference] for the solved words.
   late final CollectionReference<Map<String, dynamic>> solvedWordsCollection;
 
   BehaviorSubject<bool>? _hintsEnabled;
