@@ -477,7 +477,8 @@ void main() {
       );
 
       test(
-        'throws $CrosswordRepositoryException if user has already solved word',
+        'throws $CrosswordRepositoryBadRequestException if user '
+        'has already solved word',
         () async {
           final answersRecord = _MockDbEntityRecord();
           when(() => answersRecord.id).thenReturn('3');
@@ -511,7 +512,7 @@ void main() {
               Mascot.sparky,
               'happy',
             ),
-            throwsA(isA<CrosswordRepositoryException>()),
+            throwsA(isA<CrosswordRepositoryBadRequestException>()),
           );
         },
       );

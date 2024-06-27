@@ -136,7 +136,7 @@ class CrosswordRepository {
         }
 
         if (word.userId == userId) {
-          throw CrosswordRepositoryException(
+          throw CrosswordRepositoryBadRequestException(
             'Word with id $wordId was already solved by current user',
             StackTrace.current,
           );
