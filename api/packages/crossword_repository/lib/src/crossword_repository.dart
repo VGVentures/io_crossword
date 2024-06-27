@@ -18,6 +18,7 @@ class CrosswordRepository {
   static const _sectionsCollection = 'boardChunks';
   static const _answersCollection = 'answers';
   static const _boardInfoCollection = 'boardInfo';
+  static const _solvedWordCollection = 'solvedWords';
 
   /// Fetches all sections from the board.
   Future<List<BoardSection>> listAllSections() async {
@@ -195,26 +196,10 @@ class CrosswordRepository {
   }
 
   /// Adds one to the solved words count in the crossword.
-  Future<void> updateSolvedWordsCount() async {
-    final snapshot = await _dbClient.find(
-      _boardInfoCollection,
-      {
-        'type': 'solved_words_count',
-      },
-    );
-
-    final document = snapshot.first;
-    final solvedWordsCount = (document.data['value'] as num).toInt();
-    final newValue = solvedWordsCount + 1;
-
-    await _dbClient.update(
-      _boardInfoCollection,
-      DbEntityRecord(
-        id: document.id,
-        data: {
-          'value': newValue,
-        },
-      ),
+  Future<void> updateSolvedWordsCount(String wordId) async {
+    await _dbClient.set(
+      _solvedWordCollection,
+      DbEntityRecord(id: wordId),
     );
   }
 }

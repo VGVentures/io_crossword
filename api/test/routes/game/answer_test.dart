@@ -127,7 +127,7 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          verifyNever(() => crosswordRepository.updateSolvedWordsCount());
+          verifyNever(() => crosswordRepository.updateSolvedWordsCount('id'));
         },
       );
 
@@ -143,7 +143,7 @@ void main() {
             ),
           );
           when(
-            () => crosswordRepository.updateSolvedWordsCount(),
+            () => crosswordRepository.updateSolvedWordsCount('id'),
           ).thenAnswer((_) async {});
           when(
             () => crosswordRepository.answerWord('id', Mascot.dash, 'sun'),
@@ -161,7 +161,9 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          verify(() => crosswordRepository.updateSolvedWordsCount()).called(1);
+          verify(
+            () => crosswordRepository.updateSolvedWordsCount('id'),
+          ).called(1);
         },
       );
 

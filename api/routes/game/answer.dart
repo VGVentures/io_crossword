@@ -47,7 +47,7 @@ Future<Response> _onPost(RequestContext context) async {
       points = await leaderboardRepository.updateScore(user.id);
 
       if (!preSolved) {
-        await crosswordRepository.updateSolvedWordsCount();
+        await crosswordRepository.updateSolvedWordsCount(wordId);
       }
     }
 
