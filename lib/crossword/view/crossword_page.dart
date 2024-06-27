@@ -103,10 +103,10 @@ class _CrosswordViewState extends State<CrosswordView>
           listener: (context, state) {
             switch (state.status) {
               case RandomWordSelectionStatus.loading:
-              case RandomWordSelectionStatus.notFound:
               case RandomWordSelectionStatus.initial:
               case RandomWordSelectionStatus.failure:
                 break;
+              case RandomWordSelectionStatus.initialNotFound:
               case RandomWordSelectionStatus.initialSuccess:
                 final initialWord = SelectedWord(
                   section: state.sectionPosition!,
@@ -116,6 +116,7 @@ class _CrosswordViewState extends State<CrosswordView>
                 context
                     .read<CrosswordBloc>()
                     .add(CrosswordSectionsLoaded(initialWord));
+              case RandomWordSelectionStatus.notFound:
               case RandomWordSelectionStatus.success:
                 context.read<WordSelectionBloc>().add(
                       WordSelected(
