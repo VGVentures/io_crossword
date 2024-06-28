@@ -63,9 +63,6 @@ class BoardInfoRepository {
   /// The [CollectionReference] for the config.
   late final CollectionReference<Map<String, dynamic>> boardInfoCollection;
 
-  /// The [CollectionReference] for the solved words.
-  late final CollectionReference<Map<String, dynamic>> solvedWordsCollection;
-
   BehaviorSubject<bool>? _hintsEnabled;
 
   /// Returns the total words count available in the crossword.
