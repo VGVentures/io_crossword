@@ -137,7 +137,7 @@ void main() {
           final response = await route.onRequest(requestContext);
 
           expect(response.statusCode, HttpStatus.ok);
-          verifyNever(() => crosswordRepository.updateSolvedWordsCount(any()));
+          verifyNever(() => crosswordRepository.saveSolvedWord(any()));
         },
       );
 
@@ -153,7 +153,7 @@ void main() {
             ),
           );
           when(
-            () => crosswordRepository.updateSolvedWordsCount('id'),
+            () => crosswordRepository.saveSolvedWord('id'),
           ).thenAnswer((_) async {});
           when(
             () => crosswordRepository.answerWord(
@@ -177,7 +177,7 @@ void main() {
 
           expect(response.statusCode, HttpStatus.ok);
           verify(
-            () => crosswordRepository.updateSolvedWordsCount('id'),
+            () => crosswordRepository.saveSolvedWord('id'),
           ).called(1);
         },
       );

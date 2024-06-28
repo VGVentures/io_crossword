@@ -203,8 +203,8 @@ class CrosswordRepository {
         oldString.substring(index + 1);
   }
 
-  /// Adds one to the solved words count in the crossword.
-  Future<void> updateSolvedWordsCount(String wordId) async {
+  /// Creates a new document for a solved word
+  Future<void> saveSolvedWord(String wordId) async {
     await _dbClient.set(
       _solvedWordCollection,
       DbEntityRecord(id: wordId),

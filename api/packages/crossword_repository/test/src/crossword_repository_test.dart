@@ -518,7 +518,7 @@ void main() {
       );
     });
 
-    group('updateSolvedWordsCount', () {
+    group('saveSolvedWord', () {
       late CrosswordRepository repository;
 
       setUp(() {
@@ -537,7 +537,7 @@ void main() {
           () => dbClient.set('solvedWords', any()),
         ).thenAnswer((_) async {});
 
-        await repository.updateSolvedWordsCount('id');
+        await repository.saveSolvedWord('id');
 
         verify(
           () => dbClient.set(
