@@ -518,7 +518,7 @@ void main() {
       );
     });
 
-    group('updateSolvedWordsCount', () {
+    group('saveSolvedWord', () {
       late CrosswordRepository repository;
 
       setUp(() {
@@ -532,25 +532,18 @@ void main() {
         ).thenAnswer((_) async {});
       });
 
-      test('updates the document in the database', () async {
-        final record = _MockDbEntityRecord();
-        when(() => record.id).thenReturn('id');
-        when(() => record.data).thenReturn({'value': 80});
+      test('creates a new document in the database', () async {
         when(
-          () => dbClient.find('boardInfo', {'type': 'solved_words_count'}),
-        ).thenAnswer((_) async => [record]);
-        when(
-          () => dbClient.update('boardInfo', any()),
+          () => dbClient.set('solvedWords', any()),
         ).thenAnswer((_) async {});
 
-        await repository.updateSolvedWordsCount();
+        await repository.saveSolvedWord('id');
 
         verify(
-          () => dbClient.update(
-            'boardInfo',
+          () => dbClient.set(
+            'solvedWords',
             DbEntityRecord(
               id: 'id',
-              data: {'value': 81},
             ),
           ),
         ).called(1);
