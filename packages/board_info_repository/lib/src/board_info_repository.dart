@@ -54,7 +54,6 @@ class BoardInfoRepository {
     TargetPlatform? targetPlatform,
   }) : _targetPlatform = targetPlatform ?? defaultTargetPlatform {
     boardInfoCollection = firestore.collection('boardInfo');
-    solvedWordsCollection = firestore.collection('solvedWords');
   }
 
   /// The [FirebaseFirestore] instance.
@@ -84,7 +83,10 @@ class BoardInfoRepository {
   /// Returns the solved words count in the crossword.
   Stream<int> getSolvedWordsCount() {
     try {
-      return solvedWordsCollection.snapshots().map((snapshot) => snapshot.size);
+      return boardInfoCollection
+          .where('type', isEqualTo: 'solved_words_count')
+          .snapshots()
+          .map((event) => (event.docs.first.data()['value'] as num).toInt());
     } catch (error, stackStrace) {
       throw BoardInfoException(error, stackStrace);
     }

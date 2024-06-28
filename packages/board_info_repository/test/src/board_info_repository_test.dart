@@ -21,57 +21,39 @@ class _MockQueryDocumentSnapshot<T> extends Mock
 void main() {
   group('BoardInfoRepository', () {
     late _MockFirebaseFirestore firestore;
-    late CollectionReference<Map<String, dynamic>> boardInfoCollection;
-    late CollectionReference<Map<String, dynamic>> solvedWordsCollection;
+    late CollectionReference<Map<String, dynamic>> collection;
     late BoardInfoRepository boardInfoRepository;
 
     setUp(() {
       firestore = _MockFirebaseFirestore();
-      boardInfoCollection = _MockCollectionReference();
-      solvedWordsCollection = _MockCollectionReference();
+      collection = _MockCollectionReference();
 
-      when(
-        () => firestore.collection('boardInfo'),
-      ).thenReturn(boardInfoCollection);
-      when(
-        () => firestore.collection('solvedWords'),
-      ).thenReturn(solvedWordsCollection);
+      when(() => firestore.collection('boardInfo')).thenReturn(collection);
 
       boardInfoRepository = BoardInfoRepository(firestore: firestore);
     });
-
-    void mockSolvedWords(int wordNumber) {
-      final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
-      final query = _MockQuerySnapshot<Map<String, dynamic>>();
-
-      when(boardInfoCollection.get).thenAnswer((_) async => query);
-      when(solvedWordsCollection.snapshots)
-          .thenAnswer((_) => Stream.value(query));
-
-      final docs = List.generate(wordNumber, (_) => doc);
-      when(() => query.size).thenReturn(wordNumber);
-      when(() => query.docs).thenReturn(docs);
-    }
 
     void mockQueryResult(dynamic value) {
       final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
       final query = _MockQuerySnapshot<Map<String, dynamic>>();
       when(
-        () => boardInfoCollection.where('type', isEqualTo: 'total_words_count'),
-      ).thenReturn(boardInfoCollection);
+        () => collection.where('type', isEqualTo: 'total_words_count'),
+      ).thenReturn(collection);
       when(
-        () => boardInfoCollection.where('type', isEqualTo: 'zoom_limit'),
-      ).thenReturn(boardInfoCollection);
+        () => collection.where('type', isEqualTo: 'solved_words_count'),
+      ).thenReturn(collection);
       when(
-        () => boardInfoCollection.where('type', isEqualTo: 'section_size'),
-      ).thenReturn(boardInfoCollection);
+        () => collection.where('type', isEqualTo: 'zoom_limit'),
+      ).thenReturn(collection);
       when(
-        () => boardInfoCollection.where('type', isEqualTo: 'bottom_right'),
-      ).thenReturn(boardInfoCollection);
+        () => collection.where('type', isEqualTo: 'section_size'),
+      ).thenReturn(collection);
+      when(
+        () => collection.where('type', isEqualTo: 'bottom_right'),
+      ).thenReturn(collection);
 
-      when(boardInfoCollection.get).thenAnswer((_) async => query);
-      when(boardInfoCollection.snapshots)
-          .thenAnswer((_) => Stream.value(query));
+      when(collection.get).thenAnswer((_) async => query);
+      when(collection.snapshots).thenAnswer((_) => Stream.value(query));
       when(() => query.docs).thenReturn([doc]);
       when(doc.data).thenReturn({'value': value});
     }
@@ -80,10 +62,10 @@ void main() {
       final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
       final query = _MockQuerySnapshot<Map<String, dynamic>>();
       when(
-        () => boardInfoCollection.where('type', isEqualTo: 'zoom_limit'),
-      ).thenReturn(boardInfoCollection);
+        () => collection.where('type', isEqualTo: 'zoom_limit'),
+      ).thenReturn(collection);
 
-      when(boardInfoCollection.get).thenAnswer((_) async => query);
+      when(collection.get).thenAnswer((_) async => query);
       when(() => query.docs).thenReturn([doc]);
       when(doc.data).thenReturn({'mobile': mobile, 'desktop': desktop});
     }
@@ -104,8 +86,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () =>
-              boardInfoCollection.where('type', isEqualTo: 'total_words_count'),
+          () => collection.where('type', isEqualTo: 'total_words_count'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getTotalWordsCount(),
@@ -116,14 +97,14 @@ void main() {
 
     group('getSolvedWordsCount', () {
       test('returns solved words count from firebase', () async {
-        mockSolvedWords(200);
+        mockQueryResult(66000);
         final result = boardInfoRepository.getSolvedWordsCount();
-        expect(result, emits(200));
+        expect(result, emits(66000));
       });
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => solvedWordsCollection.snapshots(),
+          () => collection.where('type', isEqualTo: 'solved_words_count'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getSolvedWordsCount(),
@@ -141,7 +122,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'section_size'),
+          () => collection.where('type', isEqualTo: 'section_size'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getSectionSize(),
@@ -177,7 +158,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'zoom_limit'),
+          () => collection.where('type', isEqualTo: 'zoom_limit'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getZoomLimit(),
@@ -195,7 +176,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'bottom_right'),
+          () => collection.where('type', isEqualTo: 'bottom_right'),
         ).thenThrow(Exception('oops'));
         expect(
           () => boardInfoRepository.getBottomRight(),
@@ -209,11 +190,9 @@ void main() {
         final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
         final query = _MockQuerySnapshot<Map<String, dynamic>>();
         when(
-          () =>
-              boardInfoCollection.where('type', isEqualTo: 'is_hints_enabled'),
-        ).thenReturn(boardInfoCollection);
-        when(boardInfoCollection.snapshots)
-            .thenAnswer((_) => Stream.value(query));
+          () => collection.where('type', isEqualTo: 'is_hints_enabled'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
         when(() => query.docs).thenReturn([doc]);
         when(doc.data).thenReturn({'value': true});
 
@@ -227,10 +206,9 @@ void main() {
         final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
         final query = _MockQuerySnapshot<Map<String, dynamic>>();
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'game_status'),
-        ).thenReturn(boardInfoCollection);
-        when(boardInfoCollection.snapshots)
-            .thenAnswer((_) => Stream.value(query));
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
         when(() => query.docs).thenReturn([doc]);
         when(doc.data).thenReturn({'value': 'in_progress'});
 
@@ -242,10 +220,9 @@ void main() {
         final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
         final query = _MockQuerySnapshot<Map<String, dynamic>>();
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'game_status'),
-        ).thenReturn(boardInfoCollection);
-        when(boardInfoCollection.snapshots)
-            .thenAnswer((_) => Stream.value(query));
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
         when(() => query.docs).thenReturn([doc]);
         when(doc.data).thenReturn({'value': 'reset_in_progress'});
 
@@ -259,10 +236,9 @@ void main() {
         final doc = _MockQueryDocumentSnapshot<Map<String, dynamic>>();
         final query = _MockQuerySnapshot<Map<String, dynamic>>();
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'game_status'),
-        ).thenReturn(boardInfoCollection);
-        when(boardInfoCollection.snapshots)
-            .thenAnswer((_) => Stream.value(query));
+          () => collection.where('type', isEqualTo: 'game_status'),
+        ).thenReturn(collection);
+        when(collection.snapshots).thenAnswer((_) => Stream.value(query));
         when(() => query.docs).thenReturn([doc]);
         when(doc.data).thenReturn({'value': 'unknown'});
 
@@ -272,7 +248,7 @@ void main() {
 
       test('throws BoardInfoException when fetching the info fails', () {
         when(
-          () => boardInfoCollection.where('type', isEqualTo: 'game_status'),
+          () => collection.where('type', isEqualTo: 'game_status'),
         ).thenThrow(Exception('oops'));
 
         expect(
