@@ -46,7 +46,7 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
-  build_runner: ^2.4.11
+  build_runner: ^2.4.12
   flutter_gen_runner: ^5.5.0+1
   flutter_test:
     sdk: flutter
